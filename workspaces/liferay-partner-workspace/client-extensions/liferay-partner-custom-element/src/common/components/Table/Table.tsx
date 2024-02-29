@@ -9,6 +9,8 @@ import TableColumn from '../../interfaces/tableColumn';
 
 import './index.css';
 
+import classNames from 'classnames';
+
 interface TableProps<T> {
 	className?: string;
 	columns: TableColumn<T>[];
@@ -24,7 +26,7 @@ const Table = <T extends unknown>({
 }: TableProps<T>) => (
 	<ClayTable
 		borderless
-		className={className}
+		className={classNames(className, 'table-min-width-content')}
 		noWrap
 		responsive
 		tableVerticalAlignment="middle"
