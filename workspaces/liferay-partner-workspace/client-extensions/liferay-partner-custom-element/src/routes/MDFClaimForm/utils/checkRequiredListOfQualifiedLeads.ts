@@ -11,8 +11,8 @@ export default function checkRequiredListOfQualifiedLeads(
 	typeActivity: LiferayPicklist
 ) {
 	return (
-		(typeActivity.key === TypeActivityKey.EVENT ||
-			typeActivity.key === TypeActivityKey.MISCELLANEOUS_MARKETING) &&
+		(typeActivity?.key === TypeActivityKey.EVENT ||
+			typeActivity?.key === TypeActivityKey.MISCELLANEOUS_MARKETING) &&
 		selected
 	);
 }

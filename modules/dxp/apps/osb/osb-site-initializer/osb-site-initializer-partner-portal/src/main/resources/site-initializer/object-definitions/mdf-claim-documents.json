@@ -1,0 +1,52 @@
+{
+	"accountEntryRestricted": true,
+	"accountEntryRestrictedObjectFieldName": "r_accToMDFClmActDocs_accountEntryId",
+	"externalReferenceCode": "ce4645e9-4773-46e8-89e6-5b061f0f901d",
+	"label": {
+		"en_US": "MDF Claim Document"
+	},
+	"name": "MDFClaimDocument",
+	"objectFields": [
+		{
+			"DBType": "Long",
+			"businessType": "Attachment",
+			"externalReferenceCode": "5fbd6bf7-56be-4250-95da-ee0f7cfab5e4",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Reimbursement Invoices"
+			},
+			"name": "reimbursementInvoices",
+			"objectFieldSettings": [
+				{
+					"name": "acceptedFileExtensions",
+					"value": "doc, docx, jpeg, jpg, pdf, tif, tiff, txt"
+				},
+				{
+					"name": "maximumFileSize",
+					"value": "3"
+				},
+				{
+					"name": "fileSource",
+					"value": "userComputer"
+				},
+				{
+					"name": "showFilesInDocumentsAndMedia",
+					"value": "true"
+				},
+				{
+					"name": "storageDLFolderPath",
+					"value": "/MDFClaimReimbursementInvoices"
+				}
+			],
+			"required": false,
+			"type": "Long"
+		}
+	],
+	"panelCategoryKey": "control_panel.object",
+	"pluralLabel": {
+		"en_US": "MDF Claim Documents"
+	},
+	"portlet": true,
+	"scope": "company"
+}

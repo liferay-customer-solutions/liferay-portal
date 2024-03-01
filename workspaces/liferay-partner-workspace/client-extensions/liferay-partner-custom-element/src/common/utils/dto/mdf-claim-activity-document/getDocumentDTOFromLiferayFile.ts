@@ -14,7 +14,7 @@ export default function getDocumentDTOFromLiferayFile(
 	dtoMDFClaimActivityId: number
 ): MDFClaimActivityDocumentDTO {
 	return {
-		id: liferayFile.activityDocumentId,
+		id: liferayFile.claimDocumentId,
 		proofOfPerformanceFile: liferayFile.documentId,
 		proofOfPerformanceType,
 		r_accToMDFClmActDocs_accountEntryId: companyId,

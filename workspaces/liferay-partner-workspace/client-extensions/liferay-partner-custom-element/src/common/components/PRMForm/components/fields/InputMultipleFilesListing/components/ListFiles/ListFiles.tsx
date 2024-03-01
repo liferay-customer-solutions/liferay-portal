@@ -15,6 +15,7 @@ import {ResourceName} from '../../../../../../../services/liferay/object/enum/re
 
 interface IProps {
 	arrayHelpers: ArrayHelpers;
+	fileResourseName: ResourceName;
 	files: LiferayFile[];
 	meta: {
 		error?: string[];
@@ -22,7 +23,7 @@ interface IProps {
 	};
 }
 
-const ListFiles = ({arrayHelpers, files, meta}: IProps) => {
+const ListFiles = ({arrayHelpers, fileResourseName, files, meta}: IProps) => {
 	return (
 		<div>
 			{files.map((file, index) => (
@@ -64,10 +65,10 @@ const ListFiles = ({arrayHelpers, files, meta}: IProps) => {
 									arrayHelpers.remove(index);
 								}
 
-								if (file.activityDocumentId) {
+								if (file.claimDocumentId) {
 									await deleteObjectEntry(
-										ResourceName.MDF_CLAIM_ACTIVITY_DOCUMENTS,
-										file.activityDocumentId
+										fileResourseName,
+										file.claimDocumentId
 									);
 								}
 							}}

@@ -10,6 +10,7 @@ import {useDropzone} from 'react-dropzone';
 
 import LiferayFile from '../../../../../interfaces/liferayFile';
 import MDFClaim from '../../../../../interfaces/mdfClaim';
+import {ResourceName} from '../../../../../services/liferay/object/enum/resourceName';
 import PRMFormik from '../../../../PRMFormik';
 import ListFiles from '../InputMultipleFilesListing/components/ListFiles';
 import PRMFormFieldStateProps from '../common/interfaces/prmFormFieldStateProps';
@@ -17,6 +18,7 @@ import PRMFormMultipleFilesProps from '../common/interfaces/prmFormMultipleFiles
 
 interface IProps {
 	acceptedFilesExtensions: string;
+	fileResourseName: ResourceName;
 	onAccept: (liferayFiles: LiferayFile[]) => void;
 	value?: LiferayFile[] | Object[];
 }
@@ -25,6 +27,7 @@ const InputMultipleFiles = ({
 	acceptedFilesExtensions,
 	description,
 	field,
+	fileResourseName,
 	form,
 	label,
 	meta,
@@ -113,6 +116,7 @@ const InputMultipleFiles = ({
 			{value && (
 				<PRMFormik.Array
 					component={ListFiles}
+					fileResourseName={fileResourseName}
 					files={value}
 					meta={meta}
 					name={field.name}
