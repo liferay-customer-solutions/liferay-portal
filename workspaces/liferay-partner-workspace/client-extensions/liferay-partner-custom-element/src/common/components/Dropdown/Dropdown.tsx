@@ -27,8 +27,8 @@ const DropDown = ({className, closeOnClick, icon, label, options}: Props) => (
 		className={className}
 		closeOnClick={closeOnClick}
 		trigger={
-			<ClayButton aria-label="Action Button" displayType="unstyled">
-				{label && (
+			<ClayButton displayType="unstyled">				
+			{label && (
 					<span className="dislay-inline-block mr-1"> {label} </span>
 				)}
 				{icon && <ClayIcon symbol={icon}></ClayIcon>}

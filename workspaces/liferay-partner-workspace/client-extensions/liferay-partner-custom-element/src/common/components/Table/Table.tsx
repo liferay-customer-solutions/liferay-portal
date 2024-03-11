@@ -39,13 +39,7 @@ const Table = <T extends unknown>({
 						key={index}
 						truncate
 					>
-						{column.label instanceof String ? (
-							<p className="mb-0 mt-4 text-neutral-10">
-								{column.label}
-							</p>
-						) : (
-							column.label
-						)}
+					<p className="mt-4 text-neutral-10">{column.label}</p>
 					</ClayTable.Cell>
 				))}
 			</ClayTable.Row>
@@ -60,9 +54,10 @@ const Table = <T extends unknown>({
 						return (
 							<ClayTable.Cell
 								align="left"
-								className="border-0 font-weight-normal py-4 text-truncate text-truncate-inline"
+								className="border-0 font-weight-normal py-4 text-neutral-10"
 								headingCell
 								key={colIndex}
+								noWrap
 								onClick={() => {
 									if (customClickOnRow) {
 										return customClickOnRow(row);

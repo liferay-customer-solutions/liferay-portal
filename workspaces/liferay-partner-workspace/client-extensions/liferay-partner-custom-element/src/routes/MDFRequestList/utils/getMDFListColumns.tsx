@@ -3,12 +3,11 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {ClayTooltipProvider} from '@clayui/tooltip';
 import {KeyedMutator, mutate} from 'swr';
 
 import Dropdown from '../../../common/components/Dropdown';
 import {DropdownOption} from '../../../common/components/Dropdown/Dropdown';
-import StatusLabel from '../../../common/components/StatusLabel';
+import StatusBadge from '../../../common/components/StatusBadge';
 import {MDFColumnKey} from '../../../common/enums/mdfColumnKey';
 import {PermissionActionType} from '../../../common/enums/permissionActionType';
 import {PRMPageRoute} from '../../../common/enums/prmPageRoute';
@@ -162,77 +161,47 @@ export default function getMDFListColumns(
 		{
 			columnKey: MDFColumnKey.STATUS,
 			label: 'Status',
-			render: (data) => <StatusLabel status={data as string} />,
-		},
-		{
-			columnKey: MDFColumnKey.NAME,
-			label: 'Campaign Name',
-			render: (_, row) => (
-				<ClayTooltipProvider>
-					<span
-						className="text-truncate"
-						data-tooltip-align="top"
-						title={row.NAME}
-					>
-						{row.NAME}
-					</span>
-				</ClayTooltipProvider>
-			),
+			render: (data) => <StatusBadge status={data as string} />,
 		},
 		{
 			columnKey: MDFColumnKey.ACTIVITY_PERIOD,
 			label: 'Activity Period',
 		},
 		{
+			columnKey: MDFColumnKey.PARTNER,
+			label: 'Partner',
+		},
+		{
+			columnKey: MDFColumnKey.TOTAL_COST,
+			label: 'Total Cost',
+		},
+		{
+			columnKey: MDFColumnKey.NAME,
+			label: 'Name',
+		},
+		{
 			columnKey: MDFColumnKey.REQUESTED,
 			label: 'Requested',
 		},
 		{
-			columnKey: MDFColumnKey.AMOUNT_CLAIMED,
-			label: (
-				<div>
-					<p className="mb-0 mt-4 text-neutral-10">Amount Claimed</p>
-					<p className="mt-0 text-neutral-5 text-paragraph-sm">
-						Amount Paid
-					</p>
-				</div>
-			),
-			render: (_, row) => (
-				<div>
-					<p className="border-0 font-weight-normal mb-0 text-truncate text-truncate-inline">
-						{row['AMOUNT-CLAIMED']}
-					</p>
-					<p className="mb-0 mt-0 text-neutral-7 text-paragraph-sm">
-						{row['AMOUNT-PAID']}
-					</p>
-				</div>
-			),
+			columnKey: MDFColumnKey.APPROVED,
+			label: 'Approved',
 		},
 		{
-			columnKey: MDFColumnKey.BALANCE,
-			label: 'Balance',
+			columnKey: MDFColumnKey.AMOUNT_CLAIMED,
+			label: 'Amout Claimed',
+		},
+		{
+			columnKey: MDFColumnKey.AMOUNT_PAID,
+			label: 'Amount Paid',
 		},
 		{
 			columnKey: MDFColumnKey.DATE_SUBMITTTED,
-			label: (
-				<div>
-					<p className="mb-0 mt-4 text-neutral-10">Submit Date</p>
-					<p className="mt-0 text-neutral-5 text-paragraph-sm">
-						Last Modified Date
-					</p>
-				</div>
-			),
-			render: (_, row) => (
-				<div>
-					{' '}
-					<p className="border-0 font-weight-normal mb-0 text-truncate text-truncate-inline">
-						{row['DATE-SUBMITTED']}
-					</p>
-					<p className="mb-0 mt-0 text-neutral-7 text-paragraph-sm">
-						{row['LAST-MODIFIED']}
-					</p>
-				</div>
-			),
+			label: 'Date Submitted',
+		},
+		{
+			columnKey: MDFColumnKey.LAST_MODIFIED,
+			label: 'Last Modified',
 		},
 		{
 			columnKey: MDFColumnKey.ACTION,
