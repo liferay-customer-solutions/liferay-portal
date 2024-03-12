@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {ClayTooltipProvider} from '@clayui/tooltip';
 import {KeyedMutator, mutate} from 'swr';
 
 import Dropdown from '../../../common/components/Dropdown';
@@ -152,7 +151,8 @@ export default function getMDFListColumns(
 							}?&returnurl=${Liferay.ThemeDisplay.getLayoutRelativeURL()}`
 						)
 					}
-				>{`Request-${data}`}</a>
+					style={{cursor: 'pointer'}}
+				>{`${data}`}</a>
 			),
 		},
 		{
@@ -168,20 +168,21 @@ export default function getMDFListColumns(
 			columnKey: MDFColumnKey.NAME,
 			label: 'Campaign Name',
 			render: (_, row) => (
-				<ClayTooltipProvider>
-					<span
-						className="text-truncate"
-						data-tooltip-align="top"
-						title={row.NAME}
-					>
-						{row.NAME}
-					</span>
-				</ClayTooltipProvider>
+				<span
+					className="campaign-name-column"
+					data-tooltip-align="top"
+					title={row.NAME}
+				>
+					{row.NAME}
+				</span>
 			),
 		},
 		{
 			columnKey: MDFColumnKey.ACTIVITY_PERIOD,
 			label: 'Activity Period',
+			render: (_, row) => (
+				<span className="text-wrap">{row['ACTIVITY-PERIOD']}</span>
+			),
 		},
 		{
 			columnKey: MDFColumnKey.REQUESTED,
@@ -199,7 +200,7 @@ export default function getMDFListColumns(
 			),
 			render: (_, row) => (
 				<div>
-					<p className="border-0 font-weight-normal mb-0 text-truncate text-truncate-inline">
+					<p className="border-0 font-weight-normal mb-0">
 						{row['AMOUNT-CLAIMED']}
 					</p>
 					<p className="mb-0 mt-0 text-neutral-7 text-paragraph-sm">
@@ -225,7 +226,7 @@ export default function getMDFListColumns(
 			render: (_, row) => (
 				<div>
 					{' '}
-					<p className="border-0 font-weight-normal mb-0 text-truncate text-truncate-inline">
+					<p className="border-0 font-weight-normal mb-0">
 						{row['DATE-SUBMITTED']}
 					</p>
 					<p className="mb-0 mt-0 text-neutral-7 text-paragraph-sm">
