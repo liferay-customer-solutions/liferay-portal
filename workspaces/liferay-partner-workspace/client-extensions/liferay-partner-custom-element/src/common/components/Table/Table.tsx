@@ -37,7 +37,6 @@ const Table = <T extends unknown>({
 						className="align-baseline border-neutral-2 rounded-0"
 						headingCell
 						key={index}
-						truncate
 					>
 						{column.label instanceof String ? (
 							<p className="mb-0 mt-4 text-neutral-10">
@@ -60,7 +59,7 @@ const Table = <T extends unknown>({
 						return (
 							<ClayTable.Cell
 								align="left"
-								className="border-0 font-weight-normal py-4 text-truncate text-truncate-inline"
+								className="border-0 font-weight-normal py-4 table-cell"
 								headingCell
 								key={colIndex}
 								onClick={() => {
@@ -68,7 +67,6 @@ const Table = <T extends unknown>({
 										return customClickOnRow(row);
 									}
 								}}
-								truncate
 							>
 								{column.render
 									? column.render(data, row, rowIndex)

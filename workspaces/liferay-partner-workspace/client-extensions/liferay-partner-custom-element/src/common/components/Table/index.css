@@ -1,3 +1,5 @@
-.table-cell-expand {
-	min-width: min-content !important;
+.table-cell {
+	.text-truncate {
+		width: 110px;
+	}
 }
