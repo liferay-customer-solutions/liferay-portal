@@ -155,6 +155,7 @@ export default function getMDFListColumns(
 		{
 			columnKey: MDFColumnKey.PARTNER,
 			label: 'Partner',
+			size: 'md',
 		},
 		{
 			columnKey: MDFColumnKey.STATUS,
@@ -164,6 +165,7 @@ export default function getMDFListColumns(
 		{
 			columnKey: MDFColumnKey.NAME,
 			label: 'Campaign Name',
+			size: 'sm',
 		},
 		{
 			columnKey: MDFColumnKey.ACTIVITY_PERIOD,
