@@ -9,16 +9,14 @@ if (backButton) {
 	const siteURL = Liferay.ThemeDisplay.getPortalURL().split('/l/')[0];
 
 	backButton.onclick = () => {
-		const urlParams = new URLSearchParams(window.location.href);
+		const urlParams = new URLSearchParams(window.location.href.split('?')[1]);
 
 		if (urlParams.has('returnurl')) {
 			const returnUrl = urlParams.get('returnurl');
 
-			if (urlParams.has('activepage')) {
-				location.assign(`${siteURL}${returnUrl}?&activepage=${urlParams.get('activepage')}`);
-			} else {
-				location.assign(`${siteURL}${returnUrl}`);
-			}
+			urlParams.delete('returnurl');
+
+			location.assign(`${siteURL}${returnUrl}?${urlParams.toString()}`);
 		}
 		else {
 			history.back();

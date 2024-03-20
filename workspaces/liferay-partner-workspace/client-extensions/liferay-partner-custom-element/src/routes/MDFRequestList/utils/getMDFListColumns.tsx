@@ -27,7 +27,6 @@ export default function getMDFListColumns(
 		index: number
 	) => boolean | undefined,
 	siteURL: string,
-	activePage: number,
 	actions?: PermissionActionType[],
 	mutated?: KeyedMutator<LiferayItems<MDFRequestDTO[]>>,
 	isChannel?: boolean
@@ -60,7 +59,9 @@ export default function getMDFListColumns(
 							Liferay.Util.navigate(
 								`${siteURL}/l/${
 									row[MDFColumnKey.ID]
-								}?&returnurl=${Liferay.ThemeDisplay.getLayoutRelativeURL()}`
+								}?&returnurl=${Liferay.ThemeDisplay.getLayoutRelativeURL()}&${new URLSearchParams(
+									window.location.href.split('?')[1]
+								)}`
 							),
 					});
 				}
@@ -187,7 +188,9 @@ export default function getMDFListColumns(
 						Liferay.Util.navigate(
 							`${siteURL}/l/${
 								row[MDFColumnKey.ID]
-							}?&returnurl=${Liferay.ThemeDisplay.getLayoutRelativeURL()}&activepage=${activePage}`
+							}?&returnurl=${Liferay.ThemeDisplay.getLayoutRelativeURL()}&${new URLSearchParams(
+								window.location.href.split('?')[1]
+							)}`
 						)
 					}
 				>{`Request-${data}`}</a>
