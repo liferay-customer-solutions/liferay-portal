@@ -14,7 +14,11 @@ if (backButton) {
 		if (urlParams.has('returnurl')) {
 			const returnUrl = urlParams.get('returnurl');
 
-			location.assign(`${siteURL}${returnUrl}`);
+			if (urlParams.has('activepage')) {
+				location.assign(`${siteURL}${returnUrl}?&activepage=${urlParams.get('activepage')}`);
+			} else {
+				location.assign(`${siteURL}${returnUrl}`);
+			}
 		}
 		else {
 			history.back();
