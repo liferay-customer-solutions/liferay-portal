@@ -205,8 +205,8 @@
 <div class="search-results" id="searchResults">
 	<#if entries?has_content>
 		<#list entries as searchEntry>
-			<#assign 
-				searchEntryContent=searchEntry.getContent()!languageUtil.get(locale, "no-content-preview", "No content preview" ) 
+			<#assign
+				searchEntryContent=searchEntry.getContent()!languageUtil.get(locale, "no-content-preview", "No content preview" )
 				searchEntryTitle=searchEntry.getTitle()!""
 				restArticle=restClient.get("/headless-delivery/v1.0/structured-contents/${searchEntry.getClassPK()}?fields=contentFields,relatedContents,taxonomyCategoryBriefs&nestedFields=embeddedTaxonomyCategory") />
 			<#if searchEntryTitle?has_content>
@@ -230,8 +230,8 @@
 
 						<div class="description search-results-entry-content">
 							<#list restArticle.contentFields as fieldData>
-                  				<#if fieldData.contentFieldValue.data?has_content>
-                    				<#assign webContentData=fieldData.contentFieldValue.data />
+				  				<#if fieldData.contentFieldValue.data?has_content>
+									<#assign webContentData = fieldData.contentFieldValue.data />
 
 									<div>${webContentData}</div>
 								</#if>
@@ -244,9 +244,9 @@
 							<div class="features-header">${languageUtil.get(locale, "features", "Features:")}</div>
 
 							<#list restArticle.relatedContents as relatedContents>
-								<#assign relatedContentsId=relatedContents.id
+								<#assign relatedContentsId = relatedContents.id
 									relatedContentsTitle=relatedContents.title />
-									
+
 								<div class="features-box">
 									<div class="features-container">
 										<@clay["icon"] symbol="check-square" />

@@ -119,7 +119,8 @@ function openTabPanel(event, i) {
 	if (!isEditable || !editMode) {
 		if (dropdownIsOpen) {
 			handleDropdown(event, currentTarget);
-		} else {
+		}
+		else {
 			handleDropdownButtonName(currentTarget);
 		}
 
