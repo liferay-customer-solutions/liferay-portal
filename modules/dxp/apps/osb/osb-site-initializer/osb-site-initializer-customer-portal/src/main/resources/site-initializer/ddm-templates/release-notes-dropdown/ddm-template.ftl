@@ -40,7 +40,7 @@
 				<#assign friendlyURL = (releaseCategory.taxonomyCategoryProperties?filter(taxonomyCategoryProperty -> stringUtil.equals(taxonomyCategoryProperty.key, "friendlyURL"))?first.value)! />
 
 				<li>
-					<a class="dropdown-item" href="${releaseCategory.id}?r=${releaseCategory.id}">
+					<div class="dropdown-item" onclick="buttonTab('${releaseCategory.id}?r=${releaseCategory.id}')">
 						${releaseCategory.name}
 
 						<#if (AssetCategory_name.getData())?? && releaseCategory.name == AssetCategory_name.getData()>
@@ -48,7 +48,7 @@
 								<@clay["icon"] symbol="check" />
 							</span>
 						</#if>
-					</a>
+					</div>
 				</li>
 			</#list>
 
@@ -64,3 +64,39 @@
 		</#if>
 	</ul>
 </div>
+
+<script>
+	const tabs = {
+		'tab1': 'RELEASE-NOTES-HIGHLIGHT-STRUCTURE',
+		'tab2': 'RELEASE-NOTES-FEATURE-STRUCTURE',
+		'tab3': 'RELEASE-NOTES-BREAKING-CHANGE-STRUCTURE',
+	};
+
+	function getValueForElementId(elementId) {
+		return tabs[elementId] || null;
+	}
+
+	function addURL(value) {
+		let currentURL = window.location.href;
+		const index = currentURL.indexOf('v/');
+
+		if (index !== -1) {
+			currentURL = currentURL.substring(0, index);
+		}
+
+		const newURL = currentURL + 'v/' + value;
+		window.location.href = newURL;
+	}
+
+	let value = 'RELEASE-NOTES-HIGHLIGHT-STRUCTURE';
+	document.addEventListener('DOMContentLoaded', function() {
+		document.querySelectorAll('.active').forEach(function(elemento) {
+				value = getValueForElementId(elemento.id);
+		});
+	});
+
+	function buttonTab(previousURL) {
+		let newValue = previousURL + '&t=' + value;
+		addURL(newValue);
+	}
+</script>
