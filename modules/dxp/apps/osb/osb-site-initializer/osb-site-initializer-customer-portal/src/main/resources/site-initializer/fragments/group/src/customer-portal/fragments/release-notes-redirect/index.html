@@ -1,0 +1,19 @@
+<div>
+	[#assign vocabularys = (restClient.get("/headless-admin-taxonomy/v1.0/taxonomy-categories/ranked?fields=parentTaxonomyVocabulary").items)!/]
+
+	[#if vocabularys?has_content]
+		[#list vocabularys as vocubulary]
+			[#if vocubulary.parentTaxonomyVocabulary.name == "Quarterly Releases"]
+				[#assign vocabularyID = vocubulary.parentTaxonomyVocabulary.id/]
+			[/#if]
+		[/#list]
+	[/#if]
+
+	[#assign releaseCategories = (restClient.get("/headless-admin-taxonomy/v1.0/taxonomy-vocabularies/${vocabularyID}/taxonomy-categories?pageSize=4&sort=dateCreated:desc").items)!/]
+
+	[#if releaseCategories?has_content]
+		<p data-release-category-id="${releaseCategories[0].id?js_string}">
+			<span aria-hidden="true" class="loading-animation loading-animation-secondary loading-animation-sm"></span>
+		</p>
+	[/#if]
+</div>
