@@ -2,32 +2,29 @@
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
+/* eslint-disable no-undef */
 
 const currentURL = window.location.href;
 const desiredValue = currentURL.match(/&t=([^&]*)/);
-const dropdown = Liferay.fragmentElement.querySelector('.navbar-collapse');
-const dropdownButton = Liferay.fragmentElement.querySelector(
-	'.navbar-toggler-link'
-);
-const editMode = Liferay.layoutMode === 'edit';
+const dropdown = fragmentElement.querySelector('.navbar-collapse');
+const dropdownButton = fragmentElement.querySelector('.navbar-toggler-link');
+const editMode = layoutMode === 'edit';
 const persistedTabKey = 'tabsFragment_' + '_persistedTabId';
 
 const tabItems = [].slice.call(
-	Liferay.fragmentElement.querySelectorAll(
-		'[data-fragment-namespace="' + Liferay.fragmentNamespace + '"].nav-link'
+	fragmentElement.querySelectorAll(
+		'[data-fragment-namespace="' + fragmentNamespace + '"].nav-link'
 	)
 );
 
 const tabPanelItems = [].slice.call(
-	Liferay.fragmentElement.querySelectorAll(
-		'[data-fragment-namespace="' +
-			Liferay.fragmentNamespace +
-			'"].tab-panel-item'
+	fragmentElement.querySelectorAll(
+		'[data-fragment-namespace="' + fragmentNamespace + '"].tab-panel-item'
 	)
 );
 
 const persistedTab = (function () {
-	if (!Liferay.configuration.persistSelectedTab) {
+	if (!configuration.persistSelectedTab) {
 		let persistedId;
 
 		return {
