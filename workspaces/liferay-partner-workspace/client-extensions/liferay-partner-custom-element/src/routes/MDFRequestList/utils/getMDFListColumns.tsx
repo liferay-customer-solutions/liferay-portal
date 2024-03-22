@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {ClayTooltipProvider} from '@clayui/tooltip';
 import {KeyedMutator, mutate} from 'swr';
 
 import Dropdown from '../../../common/components/Dropdown';
@@ -204,9 +205,19 @@ export default function getMDFListColumns(
 			render: (data) => <StatusLabel status={data as string} />,
 		},
 		{
-			columnKey: MDFColumnKey.NAME,
+			columnKey: MDFColumnKey.CAMPAIGN_NAME,
 			label: 'Campaign Name',
-			size: 'sm',
+			render: (_, row) => (
+				<ClayTooltipProvider>
+					<span
+						className="text-truncate"
+						data-tooltip-align="top"
+						title={row.CAMPAIGN_NAME}
+					>
+						{row.CAMPAIGN_NAME}
+					</span>
+				</ClayTooltipProvider>
+			),
 		},
 		{
 			columnKey: MDFColumnKey.ACTIVITY_PERIOD,
