@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-const editMode = layoutMode === 'edit';
-const previewMode = layoutMode === 'preview';
+const editMode = Liferay.layoutMode === 'edit';
+const previewMode = Liferay.layoutMode === 'preview';
 
 (function () {
 	if (typeof Storage !== 'undefined') {
@@ -28,6 +28,7 @@ function onRedirect(id) {
 
 	const newURL =
 		currentURL + 'v/' + id + '&t=' + 'RELEASE-NOTES-HIGHLIGHT-STRUCTURE';
+
 	window.location.href = newURL;
 }
 

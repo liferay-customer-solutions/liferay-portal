@@ -1,8 +1,8 @@
 <div>
-	[#assign vocabularys = (restClient.get("/headless-admin-taxonomy/v1.0/taxonomy-categories/ranked?fields=parentTaxonomyVocabulary").items)!/]
+	[#assign vocabularies = (restClient.get("/headless-admin-taxonomy/v1.0/taxonomy-categories/ranked?fields=parentTaxonomyVocabulary").items)!/]
 
-	[#if vocabularys?has_content]
-		[#list vocabularys as vocubulary]
+	[#if vocabularies?has_content]
+		[#list vocabularies as vocubulary]
 			[#if vocubulary.parentTaxonomyVocabulary.name == "Quarterly Releases"]
 				[#assign vocabularyID = vocubulary.parentTaxonomyVocabulary.id/]
 			[/#if]

@@ -85,18 +85,21 @@
 		}
 
 		const newURL = currentURL + 'v/' + value;
+
 		window.location.href = newURL;
 	}
 
 	let value = 'RELEASE-NOTES-HIGHLIGHT-STRUCTURE';
+
 	document.addEventListener('DOMContentLoaded', function() {
-		document.querySelectorAll('.active').forEach(function(elemento) {
-				value = getValueForElementId(elemento.id);
+		document.querySelectorAll('.active').forEach(function(element) {
+				value = getValueForElementId(element.id);
 		});
 	});
 
 	function buttonTab(previousURL) {
 		let newValue = previousURL + '&t=' + value;
+
 		addURL(newValue);
 	}
 </script>

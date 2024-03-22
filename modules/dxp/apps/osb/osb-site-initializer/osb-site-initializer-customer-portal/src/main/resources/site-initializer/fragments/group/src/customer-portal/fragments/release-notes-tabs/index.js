@@ -3,27 +3,31 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-const dropdown = fragmentElement.querySelector('.navbar-collapse');
-const dropdownButton = fragmentElement.querySelector('.navbar-toggler-link');
-const editMode = layoutMode === 'edit';
-const persistedTabKey = 'tabsFragment_' + '_persistedTabId';
 const currentURL = window.location.href;
 const desiredValue = currentURL.match(/&t=([^&]*)/);
+const dropdown = Liferay.fragmentElement.querySelector('.navbar-collapse');
+const dropdownButton = Liferay.fragmentElement.querySelector(
+	'.navbar-toggler-link'
+);
+const editMode = Liferay.layoutMode === 'edit';
+const persistedTabKey = 'tabsFragment_' + '_persistedTabId';
 
 const tabItems = [].slice.call(
-	fragmentElement.querySelectorAll(
-		'[data-fragment-namespace="' + fragmentNamespace + '"].nav-link'
+	Liferay.fragmentElement.querySelectorAll(
+		'[data-fragment-namespace="' + Liferay.fragmentNamespace + '"].nav-link'
 	)
 );
 
 const tabPanelItems = [].slice.call(
-	fragmentElement.querySelectorAll(
-		'[data-fragment-namespace="' + fragmentNamespace + '"].tab-panel-item'
+	Liferay.fragmentElement.querySelectorAll(
+		'[data-fragment-namespace="' +
+			Liferay.fragmentNamespace +
+			'"].tab-panel-item'
 	)
 );
 
 const persistedTab = (function () {
-	if (!configuration.persistSelectedTab) {
+	if (!Liferay.configuration.persistSelectedTab) {
 		let persistedId;
 
 		return {
@@ -144,6 +148,7 @@ function addURL(addition) {
 		}
 
 		const newURL = currentURL + '&t=' + addition;
+
 		window.location.href = newURL;
 	}
 }
