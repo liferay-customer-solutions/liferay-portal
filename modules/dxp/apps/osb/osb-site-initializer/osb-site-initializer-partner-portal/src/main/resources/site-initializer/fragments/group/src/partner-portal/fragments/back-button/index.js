@@ -17,8 +17,7 @@ if (backButton) {
 			urlParams.delete('returnurl');
 
 			location.assign(`${siteURL}${returnUrl}?${urlParams.toString()}`);
-		}
-		else {
+		} else {
 			history.back();
 		}
 	};
