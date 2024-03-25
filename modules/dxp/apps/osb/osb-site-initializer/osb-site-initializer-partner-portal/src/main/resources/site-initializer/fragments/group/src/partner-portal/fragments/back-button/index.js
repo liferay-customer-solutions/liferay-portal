@@ -9,7 +9,9 @@ if (backButton) {
 	const siteURL = Liferay.ThemeDisplay.getPortalURL().split('/l/')[0];
 
 	backButton.onclick = () => {
-		const urlParams = new URLSearchParams(window.location.href.split('?')[1]);
+		const urlParams = new URLSearchParams(
+			window.location.href.split('?')[1]
+		);
 
 		if (urlParams.has('returnurl')) {
 			const returnUrl = urlParams.get('returnurl');
@@ -17,7 +19,8 @@ if (backButton) {
 			urlParams.delete('returnurl');
 
 			location.assign(`${siteURL}${returnUrl}?${urlParams.toString()}`);
-		} else {
+		}
+		else {
 			history.back();
 		}
 	};
