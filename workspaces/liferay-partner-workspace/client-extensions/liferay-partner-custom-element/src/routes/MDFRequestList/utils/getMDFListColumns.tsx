@@ -218,6 +218,7 @@ export default function getMDFListColumns(
 					</span>
 				</ClayTooltipProvider>
 			),
+			size: 'sm',
 		},
 		{
 			columnKey: MDFColumnKey.ACTIVITY_PERIOD,
