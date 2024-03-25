@@ -366,7 +366,7 @@
 																	"frequenciesVisible": "false",
 																	"frequencyThreshold": "1",
 																	"maxTerms": "10",
-																	"order": "key:desc",
+																	"order": "key:asc",
 																	"parameterName": "category",
 																	"vocabularyIds": "[$TAXONOMY_VOCABULARY_ID:Product Capabilities$]"
 																},
@@ -568,7 +568,7 @@
 																	"frequenciesVisible": "false",
 																	"frequencyThreshold": "1",
 																	"maxTerms": "10",
-																	"order": "key:desc",
+																	"order": "key:asc",
 																	"parameterName": "category",
 																	"vocabularyIds": "[$TAXONOMY_VOCABULARY_ID:Product Capabilities$],[$TAXONOMY_VOCABULARY_ID:Release Status Previous$],[$TAXONOMY_VOCABULARY_ID:Release Status Current$]"
 																},
@@ -773,7 +773,7 @@
 																	"frequenciesVisible": "false",
 																	"frequencyThreshold": "1",
 																	"maxTerms": "10",
-																	"order": "key:desc",
+																	"order": "key:asc",
 																	"parameterName": "category",
 																	"vocabularyIds": "[$TAXONOMY_VOCABULARY_ID:Product Capabilities$],[$TAXONOMY_VOCABULARY_ID:Release Status Previous$],[$TAXONOMY_VOCABULARY_ID:Release Status Current$]"
 																},
