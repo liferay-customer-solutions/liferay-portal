@@ -5,24 +5,26 @@
 
 import {useState} from 'react';
 
-export default function usePagination(urlParams: URLSearchParams) {
-	if (!urlParams.has('activepage')) {
+export default function usePagination(urlParams?: URLSearchParams) {
+	if (urlParams && !urlParams.has('activepage')) {
 		urlParams.set('activepage', '1');
 	}
 
-	const [activeDelta, setActiveDelta] = useState<number>(20);
+	const [activeDelta, setActiveDelta] = useState<number>(1);
 	const [activePage, setActivePage] = useState<number>(
-		Number(urlParams.get('activepage'))
+		urlParams ? Number(urlParams.get('activepage')) : 1
 	);
 
 	const handlePageChange = (newPage: number) => {
-		urlParams.set('activepage', `${newPage}`);
+		if (urlParams) {
+			urlParams.set('activepage', `${newPage}`);
+		}
 		setActivePage(newPage);
 	};
 
 	const deltas = [
 		{
-			label: 20,
+			label: 1,
 		},
 		{
 			label: 50,
