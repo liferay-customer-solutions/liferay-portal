@@ -37,14 +37,12 @@ const Table = <T extends unknown>({
 					{columns.map((column: TableColumn<T>, index: number) => (
 						<ClayTable.Cell
 							align="left"
-							className="align-baseline border-neutral-2 rounded-0"
+							className="align-baseline border-neutral-2 rounded-0 text-neutral-10"
 							headingCell
 							key={index}
 						>
 							{column.label instanceof String ? (
-								<p className="mb-0 mt-4 text-neutral-10">
-									{column.label}
-								</p>
+								<p className="mb-0 mt-4">{column.label}</p>
 							) : (
 								column.label
 							)}
