@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import LiferayObject from "./liferayObject";
+import LiferayObject from './liferayObject';
 
 export default interface Currency extends Partial<LiferayObject> {
-    code: string;
-    rate: number;
+	code: string;
+	rate: number;
 }
