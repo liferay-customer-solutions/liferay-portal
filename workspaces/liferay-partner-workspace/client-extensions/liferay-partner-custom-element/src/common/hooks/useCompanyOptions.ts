@@ -41,7 +41,7 @@ export default function useCompanyOptions(
 
 	const {data: currencies} = useGet<Currencies>(
 		account &&
-		`/o/headless-commerce-admin-catalog/v1.0/currencies?filter=code eq '${account.currency}'`
+			`/o/headless-commerce-admin-catalog/v1.0/currencies?filter=code eq '${account.currency}'`
 	);
 
 	const {data: partnerLevel} = useGet<PartnerLevel>(
@@ -53,11 +53,11 @@ export default function useCompanyOptions(
 		account &&
 		currencyOptions &&
 		currencyOptions.find((options) => options.value === account.currency);
-	
-	const currencyExchangeRate = 
+
+	const currencyExchangeRate =
 		account &&
 		currencies &&
-		currencies.items.find((currency) => currency.code === account.currency)
+		currencies.items.find((currency) => currency.code === account.currency);
 
 	const countryPicklist =
 		account &&
@@ -100,7 +100,18 @@ export default function useCompanyOptions(
 				partnerLevel?.claimPercent || 0.5
 			);
 		}
-	}, [account?.externalReferenceCode, countryPicklist, currencyExchangeRate, currencyPicklist, currentCountry, currentCurrency, currentCurrencyExchangeRate, handleSelected, partnerLevel?.claimPercent, selectedAccountBrief]);
+	}, [
+		account?.externalReferenceCode,
+		countryPicklist,
+		currencyExchangeRate,
+		currencyPicklist,
+		currentCountry,
+		currentCurrency,
+		currentCurrencyExchangeRate,
+		handleSelected,
+		partnerLevel?.claimPercent,
+		selectedAccountBrief,
+	]);
 
 	const onCompanySelected = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const optionSelected = companyOptions?.find(
