@@ -43,7 +43,13 @@ const Goals = ({
 
 	const {companyOptions, onCompanySelected} = useCompanyOptions(
 		useCallback(
-			(partnerCountry, company, currency, currencyExchangeRate, claimPercent) => {
+			(
+				partnerCountry,
+				company,
+				currency,
+				currencyExchangeRate,
+				claimPercent
+			) => {
 				setFieldValue('company', company);
 				setFieldValue('partnerCountry', partnerCountry);
 				setFieldValue('currency', currency);
@@ -55,7 +61,9 @@ const Goals = ({
 		companiesEntries,
 		fieldEntries[LiferayPicklistName.CURRENCIES],
 		!isObjectEmpty(values.currency) ? values.currency : undefined,
-		values.currencyExchangeRate && values.currencyExchangeRate !== 0 ? values.currencyExchangeRate : 0,
+		values.currencyExchangeRate && values.currencyExchangeRate !== 0
+			? values.currencyExchangeRate
+			: 0,
 		fieldEntries[LiferayPicklistName.COUNTRIES],
 		!isObjectEmpty(values.partnerCountry)
 			? values.partnerCountry

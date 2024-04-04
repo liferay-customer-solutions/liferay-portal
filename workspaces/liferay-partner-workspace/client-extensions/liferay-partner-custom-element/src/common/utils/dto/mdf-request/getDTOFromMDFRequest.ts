@@ -16,13 +16,16 @@ export function getDTOFromMDFRequest(
 		additionalOption: mdfRequest.additionalOption,
 		claimPercent: mdfRequest.claimPercent,
 		companyName: mdfRequest.company?.name,
-		convertedTotalMDFRequestedAmount: mdfRequest.submitted === false
-		? 0
-		: mdfRequest.totalMDFRequestAmount / mdfRequest.currencyExchangeRate,
+		convertedTotalMDFRequestedAmount:
+			mdfRequest.submitted === false
+				? 0
+				: mdfRequest.totalMDFRequestAmount /
+				  mdfRequest.currencyExchangeRate,
 		currency: mdfRequest.currency,
-		currencyExchangeRate: mdfRequest.submitted === false
-			? 0
-			: mdfRequest.currencyExchangeRate,
+		currencyExchangeRate:
+			mdfRequest.submitted === false
+				? 0
+				: mdfRequest.currencyExchangeRate,
 		emailAddress: mdfRequest.id
 			? mdfRequest.emailAddress
 			: Liferay.ThemeDisplay.getUserEmailAddress(),
