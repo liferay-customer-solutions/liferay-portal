@@ -393,6 +393,32 @@
 			"type": "String"
 		},
 		{
+			"DBType": "BigDecimal",
+			"businessType": "PrecisionDecimal",
+			"externalReferenceCode": "MDF-REQUEST-CUR-EXCH-RATE",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Currency Exchange Rate"
+			},
+			"name": "currencyExchangeRate",
+			"required": false,
+			"type": "BigDecimal"
+		},
+		{
+			"DBType": "BigDecimal",
+			"businessType": "PrecisionDecimal",
+			"externalReferenceCode": "MDF-REQUEST-CONV-TOTAL-REQ-AMOUNT",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Converted Total MDF Requested Amount"
+			},
+			"name": "convertedTotalMDFRequestedAmount",
+			"required": false,
+			"type": "BigDecimal"
+		},
+		{
 			"DBType": "Boolean",
 			"externalReferenceCode": "69c32410-eae8-42a9-851a-cfceac620505",
 			"indexed": true,

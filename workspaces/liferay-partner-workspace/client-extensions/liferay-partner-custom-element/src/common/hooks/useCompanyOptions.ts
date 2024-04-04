@@ -6,6 +6,7 @@
 import {useEffect, useState} from 'react';
 
 import AccountEntry from '../interfaces/accountEntry';
+import Currencies from '../interfaces/currencies';
 import LiferayAccountBrief from '../interfaces/liferayAccountBrief';
 import LiferayPicklist from '../interfaces/liferayPicklist';
 import PartnerLevel from '../interfaces/partnerLevel';
@@ -18,11 +19,13 @@ export default function useCompanyOptions(
 		partnerCountry: LiferayPicklist,
 		company: LiferayAccountBrief,
 		currency: LiferayPicklist,
+		currencyExchangeRate: number,
 		claimPercent: number
 	) => void,
 	companyOptions?: React.OptionHTMLAttributes<HTMLOptionElement>[],
 	currencyOptions?: React.OptionHTMLAttributes<HTMLOptionElement>[],
 	currentCurrency?: LiferayPicklist,
+	currentCurrencyExchangeRate?: number,
 	countryOptions?: React.OptionHTMLAttributes<HTMLOptionElement>[],
 	currentCountry?: LiferayPicklist,
 	currentCompany?: LiferayAccountBrief
@@ -36,6 +39,11 @@ export default function useCompanyOptions(
 			`/o/${LiferayAPIs.HEADERLESS_ADMIN_USER}/accounts/by-external-reference-code/${selectedAccountBrief.externalReferenceCode}`
 	);
 
+	const {data: currencies} = useGet<Currencies>(
+		account &&
+		`/o/headless-commerce-admin-catalog/v1.0/currencies?filter=code eq '${account.currency}'`
+	);
+
 	const {data: partnerLevel} = useGet<PartnerLevel>(
 		account?.r_prtLvlToAcc_c_partnerLevelERC &&
 			`/o/${LiferayAPIs.OBJECT}/partnerlevels/by-external-reference-code/${account.r_prtLvlToAcc_c_partnerLevelERC}`
@@ -45,6 +53,11 @@ export default function useCompanyOptions(
 		account &&
 		currencyOptions &&
 		currencyOptions.find((options) => options.value === account.currency);
+	
+	const currencyExchangeRate = 
+		account &&
+		currencies &&
+		currencies.items.find((currency) => currency.code === account.currency)
 
 	const countryPicklist =
 		account &&
@@ -81,19 +94,13 @@ export default function useCompanyOptions(
 							name: currencyPicklist.label as string,
 					  }) ||
 							{},
+				currentCurrencyExchangeRate && currentCurrencyExchangeRate !== 0
+					? currentCurrencyExchangeRate
+					: (currencyExchangeRate && currencyExchangeRate.rate) || 0,
 				partnerLevel?.claimPercent || 0.5
 			);
 		}
-	}, [
-		account?.externalReferenceCode,
-		countryPicklist,
-		currencyPicklist,
-		currentCountry,
-		currentCurrency,
-		handleSelected,
-		partnerLevel?.claimPercent,
-		selectedAccountBrief,
-	]);
+	}, [account?.externalReferenceCode, countryPicklist, currencyExchangeRate, currencyPicklist, currentCountry, currentCurrency, currentCurrencyExchangeRate, handleSelected, partnerLevel?.claimPercent, selectedAccountBrief]);
 
 	const onCompanySelected = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const optionSelected = companyOptions?.find(
