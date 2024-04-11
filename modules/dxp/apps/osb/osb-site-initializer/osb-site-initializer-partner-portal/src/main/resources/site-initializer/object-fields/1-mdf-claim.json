@@ -318,6 +318,19 @@
 		{
 			"DBType": "BigDecimal",
 			"businessType": "PrecisionDecimal",
+			"externalReferenceCode": "MDF-REQUEST-CONV-TOTAL-CLAIM-AMOUNT",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Converted Total Claim Amount"
+			},
+			"name": "convertedTotalClaimAmount",
+			"required": false,
+			"type": "BigDecimal"
+		},
+		{
+			"DBType": "BigDecimal",
+			"businessType": "PrecisionDecimal",
 			"externalReferenceCode": "c69b1276-0ed0-11ee-be56-0242ac120002",
 			"indexed": true,
 			"indexedAsKeyword": false,
