@@ -15,6 +15,12 @@ export function getDTOFromMDFClaim(
 ): MDFClaimDTO {
 	return {
 		companyName: mdfRequest.r_accToMDFReqs_accountEntry?.name,
+		convertedTotalClaimAmount:
+			mdfClaim.submitted === false
+				? 0
+				: mdfClaim.totalClaimAmount
+				? mdfClaim.totalClaimAmount / mdfRequest.currencyExchangeRate
+				: 0,
 		currency: mdfClaim.currency,
 		externalReferenceCode: externalReferenceCodeFromSF,
 		mdfClaimStatus: mdfClaim.mdfClaimStatus,
