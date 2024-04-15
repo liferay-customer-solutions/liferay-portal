@@ -4,8 +4,38 @@
 		"pageElements": [
 			{
 				"definition": {
-					"fragment": {"key": "BASIC_COMPONENT-html"},
-					"fragmentConfig": {},
+					"fragment": {
+						"key": "BASIC_COMPONENT-html"
+					},
+					"fragmentConfig": {
+					},
+					"fragmentFields": [
+						{
+							"id": "element-html",
+							"value": {
+								"html": {
+									"mapping": {
+										"fieldKey": "_ddmTemplate_LEARN_ARTICLE_NAV",
+										"itemReference": {
+											"contextSource": "DisplayPageItem"
+										}
+									}
+								}
+							}
+						}
+					],
+					"indexed": true
+				},
+				"id": "ff648728-b2eb-220e-37b6-088e71c80851",
+				"type": "Fragment"
+			},
+			{
+				"definition": {
+					"fragment": {
+						"key": "BASIC_COMPONENT-html"
+					},
+					"fragmentConfig": {
+					},
 					"fragmentFields": [
 						{
 							"id": "element-html",
@@ -31,12 +61,14 @@
 	},
 	"settings": {
 		"colorSchemeName": "01",
-		"masterPage": {"key": "liferay-learn"},
+		"masterPage": {
+			"key": "liferay-learn"
+		},
 		"themeName": "Dialect",
 		"themeSettings": {
-			"lfr-theme:regular:show-header-search": "false",
-			"lfr-theme:regular:show-header": "false",
 			"lfr-theme:regular:show-footer": "false",
+			"lfr-theme:regular:show-header": "false",
+			"lfr-theme:regular:show-header-search": "false",
 			"lfr-theme:regular:wrap-widget-page-content": "false"
 		}
 	},
