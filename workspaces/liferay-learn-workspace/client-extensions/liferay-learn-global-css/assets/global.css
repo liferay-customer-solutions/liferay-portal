@@ -257,7 +257,7 @@ pre[class*='language-'] {
 				padding: 0 4px;
 			}
 		}
-
+		
 		.submit-feedback > a {
 			color: var(--color-brand-primary, #0b5fff);
 			font-family: 'Source Sans Pro', sans-serif;
@@ -335,6 +335,11 @@ pre[class*='language-'] {
 				}
 			}
 		}
+	}
+
+	.learn-article-wrapper {
+		display: flex;
+		justify-content: space-between;
 	}
 
 	.info-bar {
