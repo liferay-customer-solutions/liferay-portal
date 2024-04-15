@@ -1,5 +1,5 @@
 {
-	"contentSubtype": {"subtypeId": 32194},
+	"contentSubtype": {"subtypeKey": "LEARN-ARTICLE"},
 	"contentType": {"className": "com.liferay.journal.model.JournalArticle"},
 	"name": "Learn Article"
 }
