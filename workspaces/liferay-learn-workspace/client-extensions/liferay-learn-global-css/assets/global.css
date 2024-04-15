@@ -380,11 +380,11 @@ pre[class*='language-'] {
 	}
 
 	#articleTOC {
-		position: fixed;
+		align-items: flex-start;
 		display: flex;
 		flex-direction: column;
-		align-items: flex-start;
 		gap: 0.5rem;
+		position: fixed;
 
 		> li {
 			align-items: center;
