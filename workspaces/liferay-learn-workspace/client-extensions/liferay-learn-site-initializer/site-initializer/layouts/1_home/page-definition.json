@@ -4,9 +4,7 @@
 		"pageElements": [
 			{
 				"definition": {
-					"cssClasses": [
-						"learn-banner"
-					],
+					"cssClasses": ["learn-banner"],
 					"customCSS": ".[$FRAGMENT_CLASS$] {\n}",
 					"fragmentStyle": {
 						"paddingBottom": "3"
@@ -35,7 +33,8 @@
 								"paddingRight": 2,
 								"paddingTop": 4,
 								"widthType": "Fixed"
-							}
+							},
+							"name": "Search Container"
 						},
 						"id": "9326d5f3-f798-b333-c9ed-209bcf0a53c8",
 						"pageElements": [
@@ -53,8 +52,7 @@
 										{
 											"id": "element-text",
 											"value": {
-												"fragmentLink": {
-												},
+												"fragmentLink": {},
 												"text": {
 													"value_i18n": {
 														"en_US": "Welcome to Liferay Learn"
@@ -63,9 +61,7 @@
 											}
 										}
 									],
-									"fragmentStyle": {
-										"marginBottom": "4"
-									},
+									"fragmentStyle": {"marginBottom": "4"},
 									"indexed": true
 								},
 								"id": "b324bbca-4911-d8a7-2b0f-f32903a800e5",
@@ -85,8 +81,7 @@
 										{
 											"id": "element-text",
 											"value": {
-												"fragmentLink": {
-												},
+												"fragmentLink": {},
 												"text": {
 													"value_i18n": {
 														"en_US": "Practical resources for learning Liferay"
@@ -95,9 +90,7 @@
 											}
 										}
 									],
-									"fragmentStyle": {
-										"marginBottom": "4"
-									},
+									"fragmentStyle": {"marginBottom": "4"},
 									"indexed": true
 								},
 								"id": "f8233e91-dffb-dc0d-1a03-6ada321a4059",
@@ -105,9 +98,7 @@
 							},
 							{
 								"definition": {
-									"cssClasses": [
-										"learn-search"
-									],
+									"cssClasses": ["learn-search"],
 									"fragmentStyle": {
 										"marginLeft": "auto",
 										"marginRight": "auto",
@@ -171,8 +162,7 @@
 								{
 									"id": "mobile-title",
 									"value": {
-										"fragmentLink": {
-										},
+										"fragmentLink": {},
 										"text": {
 											"value_i18n": {
 												"en_US": "Browse By"
@@ -183,22 +173,19 @@
 								{
 									"id": "mobile-title-afcw",
 									"value": {
-										"fragmentLink": {
-										}
+										"fragmentLink": {}
 									}
 								},
 								{
 									"id": "mobile-text",
 									"value": {
-										"fragmentLink": {
-										}
+										"fragmentLink": {}
 									}
 								},
 								{
 									"id": "title1",
 									"value": {
-										"fragmentLink": {
-										},
+										"fragmentLink": {},
 										"text": {
 											"value_i18n": {
 												"en_US": "Browse By Capability"
@@ -209,8 +196,7 @@
 								{
 									"id": "mobile-tab",
 									"value": {
-										"fragmentLink": {
-										},
+										"fragmentLink": {},
 										"text": {
 											"value_i18n": {
 												"en_US": "Browse By"
@@ -221,8 +207,7 @@
 								{
 									"id": "title2",
 									"value": {
-										"fragmentLink": {
-										},
+										"fragmentLink": {},
 										"text": {
 											"value_i18n": {
 												"en_US": "Browse By Product"
@@ -313,8 +298,7 @@
 																				}
 																			}
 																		},
-																		"fragmentLink": {
-																		}
+																		"fragmentLink": {}
 																	}
 																}
 															],
@@ -350,8 +334,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Cloud"
@@ -384,8 +367,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Use Liferay's Cloud infrastructure to launch your solutions more quickly and securely."
@@ -452,8 +434,7 @@
 																				}
 																			}
 																		},
-																		"fragmentLink": {
-																		}
+																		"fragmentLink": {}
 																	}
 																}
 															],
@@ -489,8 +470,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Commerce"
@@ -523,8 +503,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Increase orders with enriching product information, easy ordering tools, and product recommendations."
@@ -591,8 +570,7 @@
 																				}
 																			}
 																		},
-																		"fragmentLink": {
-																		}
+																		"fragmentLink": {}
 																	}
 																}
 															],
@@ -628,8 +606,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Content Management System"
@@ -662,8 +639,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Create, publish, and manage content, pages, and multimedia across different channels faster."
@@ -730,8 +706,7 @@
 																				}
 																			}
 																		},
-																		"fragmentLink": {
-																		}
+																		"fragmentLink": {}
 																	}
 																}
 															],
@@ -767,8 +742,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Development and Tooling"
@@ -801,8 +775,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Use out-of-the-box features and development tools to deliver solutions to users faster."
@@ -869,8 +842,7 @@
 																				}
 																			}
 																		},
-																		"fragmentLink": {
-																		}
+																		"fragmentLink": {}
 																	}
 																}
 															],
@@ -906,8 +878,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Digital Asset Management"
@@ -940,8 +911,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Use Liferay's Cloud infrastructure to launch your solutions more quickly and securely."
@@ -1008,8 +978,7 @@
 																				}
 																			}
 																		},
-																		"fragmentLink": {
-																		}
+																		"fragmentLink": {}
 																	}
 																}
 															],
@@ -1045,8 +1014,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "DXP Self-Hosted Installation, Maintenance, and Administration"
@@ -1079,8 +1047,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Deploy, configure, and maintain Liferay DXP on your own infrastructure."
@@ -1147,8 +1114,7 @@
 																				}
 																			}
 																		},
-																		"fragmentLink": {
-																		}
+																		"fragmentLink": {}
 																	}
 																}
 															],
@@ -1184,8 +1150,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Integration"
@@ -1218,8 +1183,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Unify systems, applications, and data with a single platform."
@@ -1286,8 +1250,7 @@
 																				}
 																			}
 																		},
-																		"fragmentLink": {
-																		}
+																		"fragmentLink": {}
 																	}
 																}
 															],
@@ -1323,8 +1286,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Personalization"
@@ -1357,8 +1319,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Deliver more personalized and relevant content through enhanced segmentation, AI-generated recommendations, and A/B testing."
@@ -1425,8 +1386,7 @@
 																				}
 																			}
 																		},
-																		"fragmentLink": {
-																		}
+																		"fragmentLink": {}
 																	}
 																}
 															],
@@ -1462,8 +1422,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Platform"
@@ -1496,8 +1455,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Send email notifications, test content updates, deliver solutions across multiple channels, and more with out-of-the-box platform features."
@@ -1564,8 +1522,7 @@
 																				}
 																			}
 																		},
-																		"fragmentLink": {
-																		}
+																		"fragmentLink": {}
 																	}
 																}
 															],
@@ -1601,8 +1558,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Search"
@@ -1635,8 +1591,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Save users time with personalized, integrated, and organized search results."
@@ -1703,8 +1658,7 @@
 																				}
 																			}
 																		},
-																		"fragmentLink": {
-																		}
+																		"fragmentLink": {}
 																	}
 																}
 															],
@@ -1740,8 +1694,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Security"
@@ -1774,8 +1727,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Protect users, data, and solutions with a platform designed with security in mind."
@@ -1842,8 +1794,7 @@
 																				}
 																			}
 																		},
-																		"fragmentLink": {
-																		}
+																		"fragmentLink": {}
 																	}
 																}
 															],
@@ -1879,8 +1830,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Sites"
@@ -1913,8 +1863,7 @@
 																		{
 																			"id": "element-text",
 																			"value": {
-																				"fragmentLink": {
-																				},
+																				"fragmentLink": {},
 																				"text": {
 																					"value_i18n": {
 																						"en_US": "Deliver customized pages and sites on any device or channel."
@@ -2030,8 +1979,7 @@
 																						}
 																					}
 																				},
-																				"fragmentLink": {
-																				}
+																				"fragmentLink": {}
 																			}
 																		}
 																	],
@@ -2067,8 +2015,7 @@
 																				{
 																					"id": "element-text",
 																					"value": {
-																						"fragmentLink": {
-																						},
+																						"fragmentLink": {},
 																						"text": {
 																							"value_i18n": {
 																								"en_US": "Analytics Cloud"
@@ -2101,8 +2048,7 @@
 																				{
 																					"id": "element-text",
 																					"value": {
-																						"fragmentLink": {
-																						},
+																						"fragmentLink": {},
 																						"text": {
 																							"value_i18n": {
 																								"en_US": "Understand your audience with integrated analytics for Liferay DXP."
@@ -2176,8 +2122,7 @@
 																						}
 																					}
 																				},
-																				"fragmentLink": {
-																				}
+																				"fragmentLink": {}
 																			}
 																		}
 																	],
@@ -2213,8 +2158,7 @@
 																				{
 																					"id": "element-text",
 																					"value": {
-																						"fragmentLink": {
-																						},
+																						"fragmentLink": {},
 																						"text": {
 																							"value_i18n": {
 																								"en_US": "Commerce"
@@ -2247,8 +2191,7 @@
 																				{
 																					"id": "element-text",
 																					"value": {
-																						"fragmentLink": {
-																						},
+																						"fragmentLink": {},
 																						"text": {
 																							"value_i18n": {
 																								"en_US": "Launch modern B2B commerce experiences on Liferay DXP."
@@ -2322,8 +2265,7 @@
 																						}
 																					}
 																				},
-																				"fragmentLink": {
-																				}
+																				"fragmentLink": {}
 																			}
 																		}
 																	],
@@ -2359,8 +2301,7 @@
 																				{
 																					"id": "element-text",
 																					"value": {
-																						"fragmentLink": {
-																						},
+																						"fragmentLink": {},
 																						"text": {
 																							"value_i18n": {
 																								"en_US": "DXP"
@@ -2393,8 +2334,7 @@
 																				{
 																					"id": "element-text",
 																					"value": {
-																						"fragmentLink": {
-																						},
+																						"fragmentLink": {},
 																						"text": {
 																							"value_i18n": {
 																								"en_US": "Transition from legacy systems and build digital experiences on a single powerful platform."
@@ -2468,8 +2408,7 @@
 																						}
 																					}
 																				},
-																				"fragmentLink": {
-																				}
+																				"fragmentLink": {}
 																			}
 																		}
 																	],
@@ -2505,8 +2444,7 @@
 																				{
 																					"id": "element-text",
 																					"value": {
-																						"fragmentLink": {
-																						},
+																						"fragmentLink": {},
 																						"text": {
 																							"value_i18n": {
 																								"en_US": "Liferay Cloud"
@@ -2539,8 +2477,7 @@
 																				{
 																					"id": "element-text",
 																					"value": {
-																						"fragmentLink": {
-																						},
+																						"fragmentLink": {},
 																						"text": {
 																							"value_i18n": {
 																								"en_US": "Enterprise PaaS tailored for Liferay Digital Experience Platform."
@@ -2614,8 +2551,7 @@
 																						}
 																					}
 																				},
-																				"fragmentLink": {
-																				}
+																				"fragmentLink": {}
 																			}
 																		}
 																	],
@@ -2651,8 +2587,7 @@
 																				{
 																					"id": "element-text",
 																					"value": {
-																						"fragmentLink": {
-																						},
+																						"fragmentLink": {},
 																						"text": {
 																							"value_i18n": {
 																								"en_US": "Reference"
@@ -2685,8 +2620,7 @@
 																				{
 																					"id": "element-text",
 																					"value": {
-																						"fragmentLink": {
-																						},
+																						"fragmentLink": {},
 																						"text": {
 																							"value_i18n": {
 																								"en_US": "Documents and resources to further help implementation."
