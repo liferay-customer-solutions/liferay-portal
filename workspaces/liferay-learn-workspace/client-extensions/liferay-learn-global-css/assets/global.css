@@ -593,7 +593,7 @@ pre[class*='language-'] {
 	.form-group-item select {
 		align-items: center;
 		/* stylelint-disable-next-line function-url-quotes */
-		background: url("data:image/svg+xml;utf-8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><path d='M7 10l5 5 5-5z'/><path fill='rgba(11, 95, 255, 1)' d='M7 10l5 5 5-5z'/></svg>")
+		background-color: url("data:image/svg+xml;utf-8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><path d='M7 10l5 5 5-5z'/><path fill='rgba(11, 95, 255, 1)' d='M7 10l5 5 5-5z'/></svg>")
 			calc(100% - 2px) 50% no-repeat;
 		background-color: transparent;
 		border: none;
@@ -624,6 +624,19 @@ pre[class*='language-'] {
 		line-height: 16px;
 		margin-top: 1px;
 	}
+}
+
+.search-banner {
+	&::after {
+		top: 155px !important;
+	}
+
+	&::before {
+		top: 198px !important;
+	}
+
+	height: 198px !important;
+	padding-top: 24px !important;
 }
 
 .search-bar-suggestions
@@ -677,7 +690,7 @@ pre[class*='language-'] {
 	}
 
 	.search-results-entry .search-results-entry-title:hover {
-		background: var(--color-action-primary-hover-10, #edf3fe);
+		background-color: var(--color-action-primary-hover-10, #edf3fe);
 	}
 
 	.solid {
