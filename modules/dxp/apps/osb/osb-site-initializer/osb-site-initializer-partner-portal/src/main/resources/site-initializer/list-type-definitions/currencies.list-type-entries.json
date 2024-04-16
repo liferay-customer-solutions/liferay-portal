@@ -97,5 +97,14 @@
 			"en-US": "Chinese Yuan"
 		},
 		"type": "string"
+	},
+	{
+		"externalReferenceCode": "SGD",
+		"key": "SGD",
+		"name": "Singapore Dollar",
+		"name_i18n": {
+			"en-US": "Singapore Dollar"
+		},
+		"type": "string"
 	}
 ]
