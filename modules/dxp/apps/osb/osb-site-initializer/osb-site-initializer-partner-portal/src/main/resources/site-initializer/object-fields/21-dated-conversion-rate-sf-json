@@ -1,0 +1,45 @@
+{
+    "object-fields": [
+        {
+			"DBType": "String",
+			"businessType": "Picklist",
+			"externalReferenceCode": "IsoCode",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Iso Code"
+			},
+			"listTypeDefinitionId": "[$LIST_TYPE_DEFINITION_ID:Currencies$]",
+			"name": "isoCode",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "Date",
+			"businessType": "Date",
+			"externalReferenceCode": "NextStartDate",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Next Start Date"
+			},
+			"name": "nextStartDate",
+			"required": false,
+			"type": "Date"
+		},
+		{
+			"DBType": "Date",
+			"businessType": "Date",
+			"externalReferenceCode": "StartDate",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Start Date"
+			},
+			"name": "startDate",
+			"required": false,
+			"type": "Date"
+		}
+    ],
+    "objectDefinitionId": "[$OBJECT_DEFINITION_ID:DatedConversionRateSF$]"
+}
