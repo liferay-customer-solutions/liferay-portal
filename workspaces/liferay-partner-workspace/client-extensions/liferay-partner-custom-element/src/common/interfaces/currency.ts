@@ -4,8 +4,11 @@
  */
 
 import LiferayObject from './liferayObject';
+import LiferayPicklist from './liferayPicklist';
 
 export default interface Currency extends Partial<LiferayObject> {
-	code: string;
-	rate: number;
+	conversionRate: number;
+	isoCode: LiferayPicklist;
+	nextStartDate: Date;
+	startDate: Date;
 }
