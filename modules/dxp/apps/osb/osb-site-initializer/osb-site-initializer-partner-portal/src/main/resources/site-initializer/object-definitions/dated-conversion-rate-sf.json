@@ -1,0 +1,28 @@
+{
+	"externalReferenceCode": "DatedConversionRate",
+	"label": {
+		"en_US": "Dated Conversion Rate SF"
+	},
+	"name": "DatedConversionRateSF",
+	"objectFields": [
+		{
+			"DBType": "BigDecimal",
+			"businessType": "PrecisionDecimal",
+			"externalReferenceCode": "ConversionRate",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Conversion Rate"
+			},
+			"name": "conversionRate",
+			"required": false,
+			"type": "BigDecimal"
+		}
+	],
+	"panelCategoryKey": "control_panel.object",
+	"pluralLabel": {
+		"en_US": "Dated Conversion Rates SF"
+	},
+	"scope": "company",
+	"storageType": "salesforce"
+}
