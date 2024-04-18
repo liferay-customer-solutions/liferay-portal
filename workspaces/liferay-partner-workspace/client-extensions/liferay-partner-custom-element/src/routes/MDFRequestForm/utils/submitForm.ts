@@ -71,6 +71,12 @@ export default async function submitForm(
 					);
 				}
 				else {
+					if (values.currencyExchangeRate !== 0) {
+						mdfRequestActivity.convertedMDFRequestedAmount =
+							mdfRequestActivity.mdfRequestAmount /
+							values.currencyExchangeRate;
+					}
+
 					const dtoMDFRequestActivity =
 						values.mdfRequestStatus.key === Status.DRAFT.key
 							? await submitMDFRequestActivity(
