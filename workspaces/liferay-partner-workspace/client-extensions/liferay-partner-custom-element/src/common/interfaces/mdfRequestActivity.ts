@@ -13,6 +13,7 @@ export default interface MDFRequestActivity extends Partial<LiferayObject> {
 	activityStatus?: LiferayPicklist;
 	budgets: MDFRequestBudget[];
 	claimPercent: number;
+	convertedMDFRequestedAmount: number;
 	currency?: LiferayPicklist;
 	dateCreated?: string;
 	endDate?: string;

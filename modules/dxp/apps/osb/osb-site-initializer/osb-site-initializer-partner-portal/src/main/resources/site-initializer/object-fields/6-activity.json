@@ -273,6 +273,19 @@
 		{
 			"DBType": "BigDecimal",
 			"businessType": "PrecisionDecimal",
+			"externalReferenceCode": "ACT-CONV-MDF-REQ-AMOUNT",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Converted MDF Requested Amount"
+			},
+			"name": "convertedMDFRequestedAmount",
+			"required": false,
+			"type": "BigDecimal"
+		},
+		{
+			"DBType": "BigDecimal",
+			"businessType": "PrecisionDecimal",
 			"externalReferenceCode": "d5326d02-eef5-b42e-25a2-e46a9acac9d6",
 			"indexed": true,
 			"indexedAsKeyword": false,
