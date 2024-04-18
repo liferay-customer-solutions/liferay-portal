@@ -1,7 +1,7 @@
 a.liferay-nav-item,
 .liferay-nav-item a {
 	border: 1px solid transparent;
-	border-radius: var(--border-radius);
+	border-radius: var(--border-radius, 0.5rem);
 	color: var(--color-neutral-10);
 	display: block;
 	padding: var(--spacer-1) var(--spacer-2);
@@ -17,7 +17,7 @@ a.liferay-nav-item,
 code[class*='language-'],
 pre[class*='language-'] {
 	background: none;
-	border-radius: var(--border-radius);
+	border-radius: var(--border-radius, 0.5rem);
 	color: var(--white);
 	font-family: 'Roboto Mono', SFMono-Regular, monospace;
 	font-size: var(--code-font-size);
@@ -67,8 +67,8 @@ pre[class*='language-'] {
 
 .adm-block {
 	border-radius: var(--border-radius, 0.5rem);
-	margin: var(--spacer-3) 0;
-	padding: var(--spacer-3) var(--spacer-4);
+	margin: var(--spacer-3, 1rem) 0;
+	padding: var(--spacer-3, 1rem) var(--spacer-4);
 
 	&.adm-error {
 		background-color: var(--color-state-error-lighten-2, #fbe3e3);
@@ -448,6 +448,8 @@ pre[class*='language-'] {
 
 	.learn-article-nav-content {
 		background-color: var(--color-neutral-1, #f7f7f8);
+		border-radius: var(--border-radius, 0.5rem);
+		padding: var(--spacer-3, 1rem) 0;
 		&::-webkit-scrollbar {
 			background: transparent;
 			width: 18px;
@@ -468,20 +470,36 @@ pre[class*='language-'] {
 			border-bottom: solid;
 			border-color: var(--color-action-neutral-hover-10, #eaecee);
 		}
+
+		.learn-article-nav-item {
+			padding: 4.8px var(--spacer-3, 1rem);
+			> a:hover {
+				background-color: var(--color-action-primary-hover-10, #edf3fe);
+				color: var(--color-action-primary-hover, #0053f0);
+			}
+			&:nth-child(2) {
+				margin-top: var(--spacer-3, 0.5rem);
+			}
+		}
+
+		.learn-article-nav-item.selected > a {
+			background-color: var(--color-action-primary-active-20, #e6edfb);
+			color: var(--color-action-primary-active, #004ad7);
+		}
+
 		.learn-article-nav-parent {
+			border-bottom: solid;
+			border-color: var(--color-action-neutral-hover-10, #eaecee);
 			color: var(--color-neutral-10, #282934);
+			justify-content: flex-start;
 			&:hover {
 				text-decoration: none;
-			}
-
-			svg {
-				transform: rotate(90deg);
 			}
 		}
 	}
 
 	#parentTitle {
-		border-radius: 0.5rem;
+		border-radius: var(--border-radius, 0.5rem);
 		color: var(--color-neutral-10, #282934);
 		padding: 0.5rem;
 		&:hover {

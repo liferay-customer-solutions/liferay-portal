@@ -108,11 +108,11 @@
 						id="parentTitle"
 					>
 						<svg
-							class="lexicon-icon lexicon-icon-caret-bottom"
+							class="lexicon-icon lexicon-icon-angle-left"
 							role="presentation"
 							viewBox="0 0 512 512"
 						>
-							<use xlink:href="/o/admin-theme/images/clay/icons.svg#caret-bottom"></use>
+							<use xlink:href="/o/admin-theme/images/clay/icons.svg#angle-left"></use>
 						</svg>
 					</a>
 				</div>
