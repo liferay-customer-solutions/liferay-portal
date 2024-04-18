@@ -487,7 +487,7 @@ pre[class*='language-'] {
 		}
 
 		.learn-article-nav-item {
-			padding: 4.8px var(--spacer-3, 1rem);
+			padding: 5px var(--spacer-3, 1rem);
 			> a:hover {
 				background-color: var(--color-action-primary-hover-10, #edf3fe);
 				color: var(--color-action-primary-hover, #0053f0);
