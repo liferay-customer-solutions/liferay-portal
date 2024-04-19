@@ -510,7 +510,8 @@ pre[class*='language-'] {
 		}
 
 		.learn-article-nav-item {
-			padding: 4.8px var(--spacer-3, 1rem);
+			justify-content: flex-start;
+			padding: 5px var(--spacer-3, 1rem);
 
 			&:nth-child(2) {
 				margin-top: var(--spacer-3, 0.5rem);
@@ -645,6 +646,9 @@ pre[class*='language-'] {
 	color: var(--color-neutral-10, #282934);
 	font-weight: 600;
 	text-decoration: underline;
+	&:hover {
+		color: var(--color-action-primary-hover, #0053f0);
+	}
 }
 
 .learn-search {
