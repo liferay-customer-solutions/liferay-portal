@@ -15,6 +15,7 @@ import {status} from '../../../common/components/dashboard/utils/constants/statu
 import getFilteredRenewals from '../../../common/components/dashboard/utils/getFilteredRenewalsData';
 import {siteURL} from '../../../common/components/dashboard/utils/siteURL';
 import {Liferay} from '../../../common/services/liferay';
+import {ResourceName} from '../../../common/services/liferay/object/enum/resourceName';
 import {Filters} from '../../../common/utils/constants/filters';
 import {retry} from '../../../common/utils/retry';
 
@@ -28,7 +29,7 @@ export default function () {
 		// eslint-disable-next-line @liferay/portal/no-global-fetch
 		const opportunities = await retry<any>(() =>
 			fetch(
-				`/o/c/opportunitysfs?pageSize=200&sort=closeDate:asc&filter=${Filters.RENEWAL_DASHBOARD.renewals}`,
+				`/o/c/${ResourceName.OPPORTUNITIES_PARTNER_ROLE_SALESFORCE}?pageSize=200&sort=closeDate:asc&filter=${Filters.RENEWAL_DASHBOARD.renewals}`,
 				{
 					headers: {
 						'accept': 'application/json',
