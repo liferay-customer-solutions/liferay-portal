@@ -3,10 +3,14 @@
 		"pageElements": [
 			{
 				"definition": {
-					"cssClasses": ["learn-banner"],
-					"fragmentStyle": {},
+					"cssClasses": [
+						"learn-banner"
+					],
+					"fragmentStyle": {
+					},
 					"indexed": true,
-					"layout": {}
+					"layout": {
+					}
 				},
 				"pageElements": [
 					{
@@ -36,7 +40,8 @@
 										"textColor": ""
 									},
 									"indexed": true,
-									"layout": {}
+									"layout": {
+									}
 								},
 								"pageElements": [
 									{
@@ -53,7 +58,8 @@
 												{
 													"id": "element-text",
 													"value": {
-														"fragmentLink": {},
+														"fragmentLink": {
+														},
 														"text": {
 															"defaultFragmentInlineValue": {
 																"value": "Capability"
@@ -101,7 +107,8 @@
 														"paddingTop": "6px"
 													},
 													"indexed": true,
-													"layout": {}
+													"layout": {
+													}
 												},
 												"pageElements": [
 													{
@@ -128,7 +135,8 @@
 																				}
 																			}
 																		},
-																		"fragmentLink": {}
+																		"fragmentLink": {
+																		}
 																	}
 																}
 															],
@@ -153,7 +161,8 @@
 														{
 															"id": "element-text",
 															"value": {
-																"fragmentLink": {},
+																"fragmentLink": {
+																},
 																"text": {
 																	"defaultFragmentInlineValue": {
 																		"value": "DXP Self-Hosted Installation, Maintenance, and Administration"
@@ -181,13 +190,16 @@
 									},
 									{
 										"definition": {
-											"cssClasses": ["learn-search"],
+											"cssClasses": [
+												"learn-search"
+											],
 											"fragmentStyle": {
 												"marginTop": "4",
 												"maxWidth": "var(--container-max-sm, 600px)"
 											},
 											"widgetInstance": {
-												"widgetConfig": {},
+												"widgetConfig": {
+												},
 												"widgetName": "com_liferay_portal_search_web_search_bar_portlet_SearchBarPortlet"
 											}
 										},
@@ -204,7 +216,9 @@
 			},
 			{
 				"definition": {
-					"cssClasses": ["learn-category"],
+					"cssClasses": [
+						"learn-category"
+					],
 					"fragmentStyle": {
 						"maxWidth": "var(--container-max-xl)",
 						"paddingBottom": "4",
@@ -236,7 +250,8 @@
 								{
 									"id": "element-text",
 									"value": {
-										"fragmentLink": {},
+										"fragmentLink": {
+										},
 										"text": {
 											"defaultFragmentInlineValue": {
 												"value": "<p>In addition to SaaS and PaaS deployment approaches for Liferay DXP, you can also opt to self-host Liferay DXP. Self-hosting gives you flexibility to deploy Liferay DXP on-premises or to a cloud computing provider of your choice, giving you complete control over deployment, infrastructure, and maintenance.<div>Check these articles for an introduction:<ul><li><a href=/w/dxp/getting-started/starting-with-a-docker-image>Starting with a Docker Image</a><li><a href=/w/dxp/installation-and-upgrades/installing-liferay>Installing Liferay</a><li><a href=/w/dxp/installation-and-upgrades/installing-liferay/installing-a-liferay-tomcat-bundle>Installing a Liferay-Tomcat Bundle</a><li><a href=/w/dxp/installation-and-upgrades/installing-liferay/configuring-a-database>Configuring a Database</a><li><a href=/w/dxp/installation-and-upgrades/installing-liferay/running-liferay-for-the-first-time>Running Liferay for the First Time</a></ul></div>"
@@ -402,7 +417,8 @@
 										"width": "100%"
 									},
 									"indexed": true,
-									"layout": {}
+									"layout": {
+									}
 								},
 								"pageElements": [
 									{
