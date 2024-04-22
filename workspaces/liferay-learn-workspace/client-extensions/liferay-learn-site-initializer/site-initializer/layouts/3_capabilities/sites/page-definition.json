@@ -68,7 +68,7 @@
 																"fieldKey": "AssetCategory_vocabulary",
 																"itemReference": {
 																	"className": "com.liferay.asset.kernel.model.AssetCategory",
-																	"classPK": "[$CAPABILITY#COMMERCE$]"
+																	"classPK": "[$CAPABILITY#SITES$]"
 																}
 															}
 														}
@@ -131,7 +131,7 @@
 																			},
 																			"url": {
 																				"value_i18n": {
-																					"en_US": "/documents/d/liferay-learn/commerce-svg?imagePreview=1"
+																					"en_US": "/documents/d/liferay-learn/sites-svg?imagePreview=1"
 																				}
 																			}
 																		},
@@ -165,13 +165,13 @@
 																},
 																"text": {
 																	"defaultFragmentInlineValue": {
-																		"value": "Commerce"
+																		"value": "Sites"
 																	},
 																	"mapping": {
 																		"fieldKey": "AssetCategory_name",
 																		"itemReference": {
 																			"className": "com.liferay.asset.kernel.model.AssetCategory",
-																			"classPK": "[$CAPABILITY#COMMERCE$]"
+																			"classPK": "[$CAPABILITY#SITES$]"
 																		}
 																	}
 																}
@@ -254,13 +254,13 @@
 										},
 										"text": {
 											"defaultFragmentInlineValue": {
-												"value": "<p>Liferay DXP includes robust e-commerce capabilities. Liferay’s commerce capabilities integrate content management, digital asset management, and comprehensive commerce functionalities, empowering you to deliver diverse online shopping experiences.<p>Use Liferay’s Commerce features to set up a storefront, add and manage products and catalogs, configure multiple channels for sales, configure multiple forms of payment, and much more.<div>Check these articles for an introduction:<ul><li><a href=/w/commerce/starting-a-store/introduction-to-liferay-commerce>Introduction to Liferay Commerce</a><li><a href=/w/commerce/starting-a-store/store-setup-overview>Store Setup Overview</a><li><a href=/w/commerce/starting-a-store/introduction-to-the-admin-account>Introduction to the Admin Account</a><li><a href=/w/commerce/product-management/creating-and-managing-products/products/products-overview>Products Overview</a><li><a href=/w/commerce/product-management/catalogs>Catalogs</a> </ul></div>"
+												"value": "<p>Liferay sites are customizable spaces for building personalized digital experiences. Each site includes applications for creating content, designing pages, and more. With these features, you can bring your custom solutions to life, whether intranets, public sites, customer portals, or e-commerce storefronts. In fact, you can leverage Liferay's multi-site capabilities to create multiple such sites in the same Liferay instance.<div>Check these articles for an introduction:<ul><li><a href=/w/dxp/site-building/getting-started-with-site-building>Getting Started with Site Building</a><li><a href=/w/dxp/site-building/sites>Sites</a><li><a href=/w/dxp/site-building/creating-pages/understanding-pages/understanding-pages>Understanding Pages</a><li><a href=/w/dxp/site-building/creating-pages/page-fragments-and-widgets>Page Fragments and Widgets</a><li><a href=/w/dxp/site-building/site-appearance/site-appearance>Site Appearance</a></ul></div>"
 											},
 											"mapping": {
 												"fieldKey": "AssetCategory_description",
 												"itemReference": {
 													"className": "com.liferay.asset.kernel.model.AssetCategory",
-													"classPK": "[$CAPABILITY#COMMERCE$]"
+													"classPK": "[$CAPABILITY#SITES$]"
 												}
 											}
 										}

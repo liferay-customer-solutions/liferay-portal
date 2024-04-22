@@ -68,7 +68,7 @@
 																"fieldKey": "AssetCategory_vocabulary",
 																"itemReference": {
 																	"className": "com.liferay.asset.kernel.model.AssetCategory",
-																	"classPK": "[$CAPABILITY#COMMERCE$]"
+																	"classPK": "[$CAPABILITY#SEARCH$]"
 																}
 															}
 														}
@@ -131,7 +131,7 @@
 																			},
 																			"url": {
 																				"value_i18n": {
-																					"en_US": "/documents/d/liferay-learn/commerce-svg?imagePreview=1"
+																					"en_US": "/documents/d/liferay-learn/search-svg?imagePreview=1"
 																				}
 																			}
 																		},
@@ -165,13 +165,13 @@
 																},
 																"text": {
 																	"defaultFragmentInlineValue": {
-																		"value": "Commerce"
+																		"value": "Search"
 																	},
 																	"mapping": {
 																		"fieldKey": "AssetCategory_name",
 																		"itemReference": {
 																			"className": "com.liferay.asset.kernel.model.AssetCategory",
-																			"classPK": "[$CAPABILITY#COMMERCE$]"
+																			"classPK": "[$CAPABILITY#SEARCH$]"
 																		}
 																	}
 																}
@@ -254,13 +254,13 @@
 										},
 										"text": {
 											"defaultFragmentInlineValue": {
-												"value": "<p>Liferay DXP includes robust e-commerce capabilities. Liferay’s commerce capabilities integrate content management, digital asset management, and comprehensive commerce functionalities, empowering you to deliver diverse online shopping experiences.<p>Use Liferay’s Commerce features to set up a storefront, add and manage products and catalogs, configure multiple channels for sales, configure multiple forms of payment, and much more.<div>Check these articles for an introduction:<ul><li><a href=/w/commerce/starting-a-store/introduction-to-liferay-commerce>Introduction to Liferay Commerce</a><li><a href=/w/commerce/starting-a-store/store-setup-overview>Store Setup Overview</a><li><a href=/w/commerce/starting-a-store/introduction-to-the-admin-account>Introduction to the Admin Account</a><li><a href=/w/commerce/product-management/creating-and-managing-products/products/products-overview>Products Overview</a><li><a href=/w/commerce/product-management/catalogs>Catalogs</a> </ul></div>"
+												"value": "<p>Liferay Search is a fundamental component of Liferay DXP. Search obviously powers search results for your sites, but can also be tailored and configured to do much more! Use Search to build dynamic navigation menus based on categories, boost search results for important content, or use it to present a dynamic content experience for users.<p>Search features include Full-text Search, Indexing of all content types, Search Pages and Widgets, Search Results, and more.<div>Check these articles for an introduction:<ul><li><a href=/w/dxp/using-search/getting-started/search-overview>Search Overview</a><li><a href=/w/dxp/using-search/getting-started/searching-for-content>Searching for Content</a><li><a href=/w/dxp/using-search/search-pages-and-widgets/search-results/search-results>Search Results</a><li><a href=/w/dxp/using-search/search-pages-and-widgets>Search Pages and Widgets</a><li><a href=/w/dxp/using-search/installing-and-upgrading-a-search-engine/elasticsearch>Elasticsearch</a></ul></div>"
 											},
 											"mapping": {
 												"fieldKey": "AssetCategory_description",
 												"itemReference": {
 													"className": "com.liferay.asset.kernel.model.AssetCategory",
-													"classPK": "[$CAPABILITY#COMMERCE$]"
+													"classPK": "[$CAPABILITY#SEARCH$]"
 												}
 											}
 										}

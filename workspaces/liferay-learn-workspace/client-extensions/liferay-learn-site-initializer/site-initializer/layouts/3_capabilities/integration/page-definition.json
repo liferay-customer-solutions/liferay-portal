@@ -68,7 +68,7 @@
 																"fieldKey": "AssetCategory_vocabulary",
 																"itemReference": {
 																	"className": "com.liferay.asset.kernel.model.AssetCategory",
-																	"classPK": "[$CAPABILITY#COMMERCE$]"
+																	"classPK": "[$CAPABILITY#INTEGRATION$]"
 																}
 															}
 														}
@@ -131,7 +131,7 @@
 																			},
 																			"url": {
 																				"value_i18n": {
-																					"en_US": "/documents/d/liferay-learn/commerce-svg?imagePreview=1"
+																					"en_US": "/documents/d/liferay-learn/integration-svg?imagePreview=1"
 																				}
 																			}
 																		},
@@ -165,13 +165,13 @@
 																},
 																"text": {
 																	"defaultFragmentInlineValue": {
-																		"value": "Commerce"
+																		"value": "Integration"
 																	},
 																	"mapping": {
 																		"fieldKey": "AssetCategory_name",
 																		"itemReference": {
 																			"className": "com.liferay.asset.kernel.model.AssetCategory",
-																			"classPK": "[$CAPABILITY#COMMERCE$]"
+																			"classPK": "[$CAPABILITY#INTEGRATION$]"
 																		}
 																	}
 																}
@@ -254,13 +254,13 @@
 										},
 										"text": {
 											"defaultFragmentInlineValue": {
-												"value": "<p>Liferay DXP includes robust e-commerce capabilities. Liferay’s commerce capabilities integrate content management, digital asset management, and comprehensive commerce functionalities, empowering you to deliver diverse online shopping experiences.<p>Use Liferay’s Commerce features to set up a storefront, add and manage products and catalogs, configure multiple channels for sales, configure multiple forms of payment, and much more.<div>Check these articles for an introduction:<ul><li><a href=/w/commerce/starting-a-store/introduction-to-liferay-commerce>Introduction to Liferay Commerce</a><li><a href=/w/commerce/starting-a-store/store-setup-overview>Store Setup Overview</a><li><a href=/w/commerce/starting-a-store/introduction-to-the-admin-account>Introduction to the Admin Account</a><li><a href=/w/commerce/product-management/creating-and-managing-products/products/products-overview>Products Overview</a><li><a href=/w/commerce/product-management/catalogs>Catalogs</a> </ul></div>"
+												"value": "<p>Liferay is designed to be standards-compliant and highly interoperable. Connect Liferay DXP with external systems using SOAP, REST, GraphQL, and more  to unite third-party software, legacy systems, and data.<p>Headless APIs, Remote Apps (Client Extensions), API Builder, and integrations with SSO platforms are some of the examples of the features in this area.<div>Check these articles for an introduction:<ul><li><a href=/w/dxp/headless-delivery/using-liferay-as-a-headless-platform>Using Liferay as a Headless Platform</a><li><a href=/w/dxp/liferay-development/integrating-external-applications>Integrating External Applications</a><li><a href=/w/dxp/headless-delivery/api-builder>API Builder</a><li><a href=/w/dxp/installation-and-upgrades/securing-liferay/configuring-sso>Configuring Single Sign-On</a></ul></div>"
 											},
 											"mapping": {
 												"fieldKey": "AssetCategory_description",
 												"itemReference": {
 													"className": "com.liferay.asset.kernel.model.AssetCategory",
-													"classPK": "[$CAPABILITY#COMMERCE$]"
+													"classPK": "[$CAPABILITY#INTEGRATION$]"
 												}
 											}
 										}

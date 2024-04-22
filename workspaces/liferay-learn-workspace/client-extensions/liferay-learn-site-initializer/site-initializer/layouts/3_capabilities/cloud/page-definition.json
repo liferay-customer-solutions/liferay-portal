@@ -36,7 +36,7 @@
 							{
 								"definition": {
 									"fragmentStyle": {
-										"maxWidth": "var(--container-max-sm)",
+										"maxWidth": "75%",
 										"textColor": ""
 									},
 									"indexed": true,
@@ -91,6 +91,7 @@
 											"customCSS": ".[$FRAGMENT_CLASS$] {\ngap: var(--spacer-3);\n}",
 											"indexed": true,
 											"layout": {
+												"align": "Start",
 												"contentDisplay": "FlexRow"
 											}
 										},
@@ -116,7 +117,7 @@
 																"key": "BASIC_COMPONENT-image"
 															},
 															"fragmentConfig": {
-																"imageSize": "w-100"
+																"imageSize": "w-0"
 															},
 															"fragmentFields": [
 																{
@@ -193,7 +194,8 @@
 												"learn-search"
 											],
 											"fragmentStyle": {
-												"marginTop": "4"
+												"marginTop": "4",
+												"maxWidth": "var(--container-max-sm, 600px)"
 											},
 											"widgetInstance": {
 												"widgetConfig": {
@@ -266,7 +268,8 @@
 								}
 							],
 							"fragmentStyle": {
-								"backgroundColor": ""
+								"backgroundColor": "",
+								"maxWidth": "900px"
 							},
 							"indexed": true
 						},

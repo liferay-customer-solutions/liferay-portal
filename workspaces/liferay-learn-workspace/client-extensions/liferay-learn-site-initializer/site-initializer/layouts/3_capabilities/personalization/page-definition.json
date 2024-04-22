@@ -68,7 +68,7 @@
 																"fieldKey": "AssetCategory_vocabulary",
 																"itemReference": {
 																	"className": "com.liferay.asset.kernel.model.AssetCategory",
-																	"classPK": "[$CAPABILITY#COMMERCE$]"
+																	"classPK": "[$CAPABILITY#PERSONALIZATION$]"
 																}
 															}
 														}
@@ -131,7 +131,7 @@
 																			},
 																			"url": {
 																				"value_i18n": {
-																					"en_US": "/documents/d/liferay-learn/commerce-svg?imagePreview=1"
+																					"en_US": "/documents/d/liferay-learn/personalization-svg?imagePreview=1"
 																				}
 																			}
 																		},
@@ -165,13 +165,13 @@
 																},
 																"text": {
 																	"defaultFragmentInlineValue": {
-																		"value": "Commerce"
+																		"value": "Personalization"
 																	},
 																	"mapping": {
 																		"fieldKey": "AssetCategory_name",
 																		"itemReference": {
 																			"className": "com.liferay.asset.kernel.model.AssetCategory",
-																			"classPK": "[$CAPABILITY#COMMERCE$]"
+																			"classPK": "[$CAPABILITY#PERSONALIZATION$]"
 																		}
 																	}
 																}
@@ -254,13 +254,13 @@
 										},
 										"text": {
 											"defaultFragmentInlineValue": {
-												"value": "<p>Liferay DXP includes robust e-commerce capabilities. Liferay’s commerce capabilities integrate content management, digital asset management, and comprehensive commerce functionalities, empowering you to deliver diverse online shopping experiences.<p>Use Liferay’s Commerce features to set up a storefront, add and manage products and catalogs, configure multiple channels for sales, configure multiple forms of payment, and much more.<div>Check these articles for an introduction:<ul><li><a href=/w/commerce/starting-a-store/introduction-to-liferay-commerce>Introduction to Liferay Commerce</a><li><a href=/w/commerce/starting-a-store/store-setup-overview>Store Setup Overview</a><li><a href=/w/commerce/starting-a-store/introduction-to-the-admin-account>Introduction to the Admin Account</a><li><a href=/w/commerce/product-management/creating-and-managing-products/products/products-overview>Products Overview</a><li><a href=/w/commerce/product-management/catalogs>Catalogs</a> </ul></div>"
+												"value": "<p>Liferay provides powerful out-of-the-box features for building and delivering personalized experiences to users. Personalization features empower you to deliver novel site experiences that differ based on defined user segments, design and execute A/B Tests, and more.<div>Check these articles for an introduction:<ul><li><a href=/w/dxp/site-building/personalizing-site-experience>Personalizing Site Experience</a><li><a href=/w/dxp/site-building/personalizing-site-experience/segmentation/creating-and-managing-user-segments>Creating and Managing User Segments</a><li><a href=/w/dxp/site-building/optimizing-sites/ab-testing/ab-testing>A/B Testing</a><li><a href=/w/dxp/site-building/personalizing-site-experience/enabling-automated-live-chat-systems>Enabling Automated Live Chat Systems</a></ul></div>"
 											},
 											"mapping": {
 												"fieldKey": "AssetCategory_description",
 												"itemReference": {
 													"className": "com.liferay.asset.kernel.model.AssetCategory",
-													"classPK": "[$CAPABILITY#COMMERCE$]"
+													"classPK": "[$CAPABILITY#PERSONALIZATION$]"
 												}
 											}
 										}

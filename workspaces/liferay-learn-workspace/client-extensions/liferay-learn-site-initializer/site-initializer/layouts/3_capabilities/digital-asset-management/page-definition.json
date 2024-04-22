@@ -3,14 +3,10 @@
 		"pageElements": [
 			{
 				"definition": {
-					"cssClasses": [
-						"learn-banner"
-					],
-					"fragmentStyle": {
-					},
+					"cssClasses": ["learn-banner"],
+					"fragmentStyle": {},
 					"indexed": true,
-					"layout": {
-					}
+					"layout": {}
 				},
 				"pageElements": [
 					{
@@ -40,8 +36,7 @@
 										"textColor": ""
 									},
 									"indexed": true,
-									"layout": {
-									}
+									"layout": {}
 								},
 								"pageElements": [
 									{
@@ -58,8 +53,7 @@
 												{
 													"id": "element-text",
 													"value": {
-														"fragmentLink": {
-														},
+														"fragmentLink": {},
 														"text": {
 															"defaultFragmentInlineValue": {
 																"value": "Capability"
@@ -68,7 +62,7 @@
 																"fieldKey": "AssetCategory_vocabulary",
 																"itemReference": {
 																	"className": "com.liferay.asset.kernel.model.AssetCategory",
-																	"classPK": "[$CAPABILITY#COMMERCE$]"
+																	"classPK": "[$CAPABILITY#DIGITAL-ASSET-MANAGEMENT$]"
 																}
 															}
 														}
@@ -107,8 +101,7 @@
 														"paddingTop": "6px"
 													},
 													"indexed": true,
-													"layout": {
-													}
+													"layout": {}
 												},
 												"pageElements": [
 													{
@@ -131,12 +124,11 @@
 																			},
 																			"url": {
 																				"value_i18n": {
-																					"en_US": "/documents/d/liferay-learn/commerce-svg?imagePreview=1"
+																					"en_US": "/documents/d/liferay-learn/digital_ams-svg?imagePreview=1"
 																				}
 																			}
 																		},
-																		"fragmentLink": {
-																		}
+																		"fragmentLink": {}
 																	}
 																}
 															],
@@ -161,17 +153,16 @@
 														{
 															"id": "element-text",
 															"value": {
-																"fragmentLink": {
-																},
+																"fragmentLink": {},
 																"text": {
 																	"defaultFragmentInlineValue": {
-																		"value": "Commerce"
+																		"value": "Digital Asset Management"
 																	},
 																	"mapping": {
 																		"fieldKey": "AssetCategory_name",
 																		"itemReference": {
 																			"className": "com.liferay.asset.kernel.model.AssetCategory",
-																			"classPK": "[$CAPABILITY#COMMERCE$]"
+																			"classPK": "[$CAPABILITY#DIGITAL-ASSET-MANAGEMENT$]"
 																		}
 																	}
 																}
@@ -190,16 +181,13 @@
 									},
 									{
 										"definition": {
-											"cssClasses": [
-												"learn-search"
-											],
+											"cssClasses": ["learn-search"],
 											"fragmentStyle": {
 												"marginTop": "4",
 												"maxWidth": "var(--container-max-sm, 600px)"
 											},
 											"widgetInstance": {
-												"widgetConfig": {
-												},
+												"widgetConfig": {},
 												"widgetName": "com_liferay_portal_search_web_search_bar_portlet_SearchBarPortlet"
 											}
 										},
@@ -216,9 +204,7 @@
 			},
 			{
 				"definition": {
-					"cssClasses": [
-						"learn-category"
-					],
+					"cssClasses": ["learn-category"],
 					"fragmentStyle": {
 						"maxWidth": "var(--container-max-xl)",
 						"paddingBottom": "4",
@@ -250,17 +236,16 @@
 								{
 									"id": "element-text",
 									"value": {
-										"fragmentLink": {
-										},
+										"fragmentLink": {},
 										"text": {
 											"defaultFragmentInlineValue": {
-												"value": "<p>Liferay DXP includes robust e-commerce capabilities. Liferay’s commerce capabilities integrate content management, digital asset management, and comprehensive commerce functionalities, empowering you to deliver diverse online shopping experiences.<p>Use Liferay’s Commerce features to set up a storefront, add and manage products and catalogs, configure multiple channels for sales, configure multiple forms of payment, and much more.<div>Check these articles for an introduction:<ul><li><a href=/w/commerce/starting-a-store/introduction-to-liferay-commerce>Introduction to Liferay Commerce</a><li><a href=/w/commerce/starting-a-store/store-setup-overview>Store Setup Overview</a><li><a href=/w/commerce/starting-a-store/introduction-to-the-admin-account>Introduction to the Admin Account</a><li><a href=/w/commerce/product-management/creating-and-managing-products/products/products-overview>Products Overview</a><li><a href=/w/commerce/product-management/catalogs>Catalogs</a> </ul></div>"
+												"value": "<p>Liferay’s Digital Asset Management (DAM) tools simplify the organization and management of digital assets. Assets include images, videos, presentations, documents, and much more. <p>Additionally, the Asset Library feature enables you to manage and publish assets in one central repository for use across multiple distinct sites.<div>Check these articles for an introduction:<ul><li><a href=/w/dxp/content-authoring-and-management/asset-libraries>Asset Libraries</a><li><a href=/w/dxp/content-authoring-and-management/documents-and-media>Documents and Media</a><li><a href=/w/dxp/content-authoring-and-management/documents-and-media/uploading-and-managing/uploading-files>Uploading Files</a><li><a href=/w/dxp/system-administration/file-storage>File Storage</a><li><a href=/w/dxp/content-authoring-and-management/documents-and-media/publishing-and-sharing/using-adaptive-media>Using Adaptive Media</a><li><a href=/web/guest/w/dxp/content-authoring-and-management/documents-and-media/uploading-and-managing/managing-metadata/defining-document-types>Defining Document Types</a></ul></div>"
 											},
 											"mapping": {
 												"fieldKey": "AssetCategory_description",
 												"itemReference": {
 													"className": "com.liferay.asset.kernel.model.AssetCategory",
-													"classPK": "[$CAPABILITY#COMMERCE$]"
+													"classPK": "[$CAPABILITY#DIGITAL-ASSET-MANAGEMENT$]"
 												}
 											}
 										}
@@ -417,8 +402,7 @@
 										"width": "100%"
 									},
 									"indexed": true,
-									"layout": {
-									}
+									"layout": {}
 								},
 								"pageElements": [
 									{

@@ -1,8 +1,8 @@
 {
-	"friendlyURL": "/capabilities/commerce",
+	"friendlyURL": "/capabilities/search",
 	"hidden": false,
 	"name_i18n": {
-		"en_US": "Commerce"
+		"en_US": "Search"
 	},
 	"permissions": [
 		{
