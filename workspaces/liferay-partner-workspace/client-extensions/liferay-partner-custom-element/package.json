@@ -13,7 +13,7 @@
 		"@clayui/link": "*",
 		"@clayui/loading-indicator": "^3.60.0",
 		"@clayui/modal": "^3.80.0",
-		"@clayui/pagination-bar": "^3.70.0",
+		"@clayui/pagination-bar": "3.52.0",
 		"@clayui/panel": "^3.67.0",
 		"@clayui/shared": "^3.75.2",
 		"@clayui/table": "^3.56.0",
