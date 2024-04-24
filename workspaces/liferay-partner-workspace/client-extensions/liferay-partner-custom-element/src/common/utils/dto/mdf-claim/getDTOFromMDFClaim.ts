@@ -16,12 +16,7 @@ export function getDTOFromMDFClaim(
 	return {
 		companyName: mdfRequest.r_accToMDFReqs_accountEntry?.name,
 		convertedTotalClaimAmount:
-			mdfClaim.submitted === false
-				? 0
-				: mdfRequest.currencyExchangeRate !== 0 &&
-				  mdfClaim.totalClaimAmount
-				? mdfClaim.totalClaimAmount / mdfRequest.currencyExchangeRate
-				: 0,
+			mdfClaim.totalClaimAmount! / mdfRequest.currencyExchangeRate,
 		currency: mdfClaim.currency,
 		externalReferenceCode: externalReferenceCodeFromSF,
 		mdfClaimStatus: mdfClaim.mdfClaimStatus,
