@@ -41,6 +41,16 @@ const Activities = ({
 		...formikHelpers
 	} = useFormikContext<MDFRequest>();
 
+	useEffect(() => {
+		if (values.activities.length !== 0) {
+			for (const mdfRequestActivity of values.activities) {
+				mdfRequestActivity.convertedMDFRequestedAmount =
+					mdfRequestActivity.mdfRequestAmount /
+					values.currencyExchangeRate;
+			}
+		}
+	}, [values.activities, values.currencyExchangeRate]);
+
 	const [currentActivityIndex, setCurrentActivityIndex] = useState<
 		number | undefined
 	>();
