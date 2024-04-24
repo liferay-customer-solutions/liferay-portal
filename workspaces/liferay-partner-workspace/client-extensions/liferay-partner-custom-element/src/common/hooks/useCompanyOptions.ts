@@ -103,7 +103,7 @@ export default function useCompanyOptions(
 					? currentCurrencyExchangeRate
 					: (datedConversionRate &&
 							datedConversionRate.conversionRate) ||
-							-1,
+							0,
 				partnerLevel?.claimPercent || 0.5
 			);
 		}
