@@ -58,6 +58,7 @@ export default function getNewActivity(
 		activityStatus: Status.SUBMITTED,
 		budgets: [],
 		claimPercent,
+		convertedMDFRequestedAmount: 0,
 		currency,
 		endDate: undefined,
 		mdfRequestAmount: 0,
