@@ -106,7 +106,7 @@ export const Filters = {
 		open: `stage ne 'Closed Lost' and stage ne 'Closed Won' and stage ne 'Disqualified' and stage ne 'Rejected' and stage ne 'Rolled into Opportunity' and ((type eq 'New Business' or type eq 'New Project Existing Business') or (type eq 'Existing Business' and hasRenewal eq false))`,
 	},
 	RENEWAL_DASHBOARD: {
-		renewals: `stage ne 'Closed Won' and stage ne 'Closed Lost' and stage ne 'Disqualified' and stage ne 'Rejected' and stage ne 'Rolled into Opportunity' and type eq 'Existing Business' and closeDate le ${thirtyDaysFromToday}`,
+		renewals: `hasRenewal eq true and stage ne 'Closed Won' and stage ne 'Closed Lost' and stage ne 'Disqualified' and stage ne 'Rejected' and stage ne 'Rolled into Opportunity' and type eq 'Existing Business' and closeDate le ${thirtyDaysFromToday}`,
 	},
 	RENEWAL_LISTING: {
 		closed: `${fiscalYearFilterCloseDate} and (stage eq 'Closed Lost' or stage eq 'Closed Won') and type eq 'Existing Business' and hasRenewal eq true`,
