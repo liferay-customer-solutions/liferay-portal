@@ -408,6 +408,19 @@
 			],
 			"required": false,
 			"type": "DateTime"
+		},
+		{
+			"DBType": "BigDecimal",
+			"businessType": "PrecisionDecimal",
+			"externalReferenceCode": "MDF-CLAIM-CUR-EXCH-RATE",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Currency Exchange Rate"
+			},
+			"name": "currencyExchangeRate",
+			"required": false,
+			"type": "BigDecimal"
 		}
 	],
 	"objectDefinitionId": "[$OBJECT_DEFINITION_ID:MDFClaim$]"
