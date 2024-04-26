@@ -755,6 +755,7 @@ pre[class*='language-'] {
 
 	.pagination .page-item.active .page-link {
 		background: var(--color-action-neutral-active-20, #d5d8db);
+		z-index: 2;
 	}
 
 	.pagination-results {
