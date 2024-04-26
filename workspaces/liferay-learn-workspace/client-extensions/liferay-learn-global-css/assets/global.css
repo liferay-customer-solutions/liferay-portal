@@ -38,6 +38,7 @@ pre[class*='language-'] {
 	border-radius: var(--border-radius, 0.5rem);
 	color: var(--white);
 	font-family: var(--font-family-monospace);
+	font-family: var(--font-family-monospace);
 	font-size: var(--code-font-size);
 	font-weight: var(--font-weight-normal);
 	line-height: var(--code-line-height);
@@ -336,61 +337,6 @@ pre[class*='language-'] {
 
 		p {
 			color: var(--color-neutral-8, #54555f);
-		}
-
-		table {
-			border-spacing: 0;
-			color: var(--color-neutral-8, #54555f);
-			margin-bottom: 1rem;
-			width: 100%;
-			
-			td {
-				background-clip: padding-box;
-				border-bottom-width: 0.0625rem;
-				border-color: transparent;
-				border-left-width: 0;
-				border-right-width: 0;
-				border-style: solid;
-				border-top-width: 0.0625rem;
-				height: 56px;
-				padding: 0.5rem 1rem;
-				position: relative;
-				vertical-align: middle;
-			}
-
-			th {
-				color: var(--color-neutral-10, #282934);
-				font-size: 0.875rem;
-			}
-
-			thead {
-				color: var(--color-neutral-0, #fff);
-			}
-		}
-
-		table, .table {
-			td:first-child,
-			th:first-child,
-			.table-column-start {
-				padding-left: 1.25rem;
-			}
-	
-			thead td,
-			thead th {
-				border-bottom: calc(2 * 0.0625rem) solid #dee2e6;
-				border-top-width: 0;
-				vertical-align: middle;
-			}
-		}
-
-		table, .table-striped {
-			tbody tr:nth-of-type(odd):not(.table-active):not(.table-disabled):not(.table-divider) {
-				&,
-				td,
-				th {
-					background-color: var(--color-state-info-lighten-2, #e6ebf5);
-				}
-			}
 		}
 	}
 
