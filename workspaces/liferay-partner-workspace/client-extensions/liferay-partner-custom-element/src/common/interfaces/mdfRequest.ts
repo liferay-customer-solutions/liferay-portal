@@ -14,7 +14,8 @@ export default interface MDFRequest extends Partial<LiferayObject> {
 	additionalOption: LiferayPicklist;
 	claimPercent: number;
 	company?: LiferayAccountBrief;
-	convertedTotalMDFRequestedAmount: number;
+	convertedTotalCostOfExpense: number;
+	convertedTotalMDFRequestAmount: number;
 	currency: LiferayPicklist;
 	currencyExchangeRate: number;
 	emailAddress?: string;

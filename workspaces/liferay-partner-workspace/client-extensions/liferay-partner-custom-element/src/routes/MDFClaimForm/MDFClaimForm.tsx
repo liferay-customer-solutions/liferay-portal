@@ -142,6 +142,7 @@ const MDFClaimForm = () => {
 			initialValues={getInitialFormValues(
 				Number(mdfRequestId),
 				mdfRequest.currency,
+				mdfRequest.currencyExchangeRate,
 				mdfRequest.mdfReqToActs,
 				mdfRequest.totalMDFRequestAmount,
 				mdfClaim
