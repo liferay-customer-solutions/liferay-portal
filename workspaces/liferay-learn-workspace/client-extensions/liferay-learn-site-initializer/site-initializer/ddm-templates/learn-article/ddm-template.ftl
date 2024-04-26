@@ -86,13 +86,6 @@
 					${content.getData()}
 				</#if>
 
-				<#if showChildrenCards && childrenJSONArray.length() gt 0>
-					<div class="d-flex flex-row flex-wrap justify-content-center">
-						<#list childrenJSONArray.length()-1..0 as i>
-							<a class="learn-card" href='${childrenJSONArray.getJSONObject(i).getString("url")}'>${childrenJSONArray.getJSONObject(i).getString("title")}</a>
-						</#list>
-					</div>
-				</#if>
 				<div class="learn-article-categories-tags">
 					<#list taxonomyVocabularies as vocabulary>
 						<div class="align-items-baseline d-flex mt-2">

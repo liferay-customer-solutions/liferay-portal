@@ -292,6 +292,10 @@ pre[class*='language-'] {
 			text-decoration: none;
 		}
 
+		p {
+			color: var(--color-neutral-8, #54555f);
+		}
+
 		blockquote {
 			border-left: 2px solid var(--color-brand-primary, #0b5fff);
 			color: var(--color-neutral-8, #54555f);
@@ -300,6 +304,38 @@ pre[class*='language-'] {
 			line-height: 20px;
 			margin: 1.5rem 0;
 			padding-left: 1.5rem;
+		}
+		.landing-page {
+			display: flex;
+			flex-wrap: wrap;
+
+			.learn-card,
+			.section-card {
+				border: 1px solid rgba(9, 16, 24, 0.12);
+				border-radius: var(--border-radius-lg);
+				box-shadow: 0 6px 15px -6px rgba(9, 16, 29, 0.06);
+				cursor: pointer;
+				margin-left: 1rem;
+				margin-right: 0.5rem;
+				margin-top: 1.5rem;
+				padding: var(--spacer-3, 1rem);
+				transition: transform 0.2s ease;
+				width: 45%;
+				&:hover {
+					background-color: var(
+						--color-action-primary-hover-10,
+						#edf3fe
+					) !important;
+					border-color: var(
+						--color-brand-primary-darken-1,
+						#0053f0
+					) !important;
+				}
+				h4 {
+					font-size: 1.125rem;
+					margin-bottom: 0.5rem;
+				}
+			}
 		}
 	}
 
@@ -570,7 +606,7 @@ pre[class*='language-'] {
 
 .learn-banner {
 	background: linear-gradient(180deg, #00256c 0%, #6399ff 100%);
-	color: var(--color-neutral-0);
+	color: var(--color-neutral-0, #fff);
 	position: relative;
 
 	&::after {
@@ -597,20 +633,6 @@ pre[class*='language-'] {
 	p {
 		font-size: var(--text-paragraph-font-size, 1rem);
 		line-height: 24px;
-	}
-}
-
-.learn-card {
-	border: 1px solid var(--color-neutral-0);
-	border-radius: var(--border-radius-lg);
-	padding: var(--spacer-3, 1rem);
-
-	&:hover {
-		background-color: var(
-			--color-action-primary-hover-10,
-			#edf3fe
-		) !important;
-		border-color: var(--color-brand-primary-darken-1, #0053f0) !important;
 	}
 }
 
