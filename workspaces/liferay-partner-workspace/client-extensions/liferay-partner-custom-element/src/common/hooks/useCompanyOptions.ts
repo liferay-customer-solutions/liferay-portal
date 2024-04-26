@@ -41,7 +41,7 @@ export default function useCompanyOptions(
 	);
 
 	const {data: datedConversionRates} = useGet<LiferayItems<Currency[]>>(
-		account &&
+		account?.currency &&
 			`/o/c/datedconversionratesfs?filter=isoCode eq '${
 				account.currency
 			}' and nextStartDate gt ${new Date().toISOString().split('T')[0]}`

@@ -11,6 +11,7 @@ import {Status} from '../../../common/utils/constants/status';
 const getInitialFormValues = (
 	mdfRequestId: number,
 	currency: LiferayPicklist,
+	currencyExchangeRate: number,
 	activitiesDTO?: MDFRequestActivityDTO[],
 	totalMDFRequestAmount?: number,
 	mdfClaim?: MDFClaim
@@ -94,6 +95,9 @@ const getInitialFormValues = (
 		};
 	}),
 	currency: mdfClaim?.currency ? mdfClaim?.currency : currency,
+	currencyExchangeRate: mdfClaim?.currencyExchangeRate
+		? mdfClaim.currencyExchangeRate
+		: currencyExchangeRate,
 	mdfClaimStatus: mdfClaim?.mdfClaimStatus
 		? mdfClaim.mdfClaimStatus
 		: Status.PENDING,

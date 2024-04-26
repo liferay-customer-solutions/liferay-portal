@@ -82,14 +82,22 @@ const Activities = ({
 	useEffect(() => {
 		setFieldValue('maxDateActivity', maxDateActivity);
 		setFieldValue('minDateActivity', minDateActivity);
-		setFieldValue('totalCostOfExpense', totalCostOfExpense);
+		setFieldValue(
+			'convertedTotalCostOfExpense',
+			totalCostOfExpense / values.currencyExchangeRate
+		);
 		setFieldValue('totalMDFRequestAmount', totalMDFRequestAmount);
+		setFieldValue(
+			'convertedTotalMDFRequestAmount',
+			totalMDFRequestAmount / values.currencyExchangeRate
+		);
 	}, [
 		maxDateActivity,
 		minDateActivity,
 		setFieldValue,
 		totalCostOfExpense,
 		totalMDFRequestAmount,
+		values.currencyExchangeRate,
 	]);
 
 	const {isButtonClicked, setIsButtonClicked} = useSetTouchedOnForms(
@@ -195,6 +203,7 @@ const Activities = ({
 				<Form
 					claimPercent={values.claimPercent}
 					currency={values.currency}
+					currencyExchangeRate={values.currencyExchangeRate}
 					currentActivity={values.activities[currentActivityIndex]}
 					currentActivityIndex={currentActivityIndex}
 					isButtonClicked={isButtonClicked}

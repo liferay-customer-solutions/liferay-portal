@@ -29,6 +29,19 @@
 		{
 			"DBType": "BigDecimal",
 			"businessType": "PrecisionDecimal",
+			"externalReferenceCode": "ACT-CONV-MDF-TOTAL-COST-EXP",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Converted Total Cost of Expense"
+			},
+			"name": "convertedTotalCostOfExpense",
+			"required": false,
+			"type": "BigDecimal"
+		},
+		{
+			"DBType": "BigDecimal",
+			"businessType": "PrecisionDecimal",
 			"externalReferenceCode": "7891dd5d-adde-3c7b-5fc7-52bdd6547fab",
 			"indexed": true,
 			"indexedAsKeyword": false,
@@ -279,7 +292,7 @@
 			"label": {
 				"en_US": "Converted MDF Requested Amount"
 			},
-			"name": "convertedMDFRequestedAmount",
+			"name": "convertedMDFRequestAmount",
 			"required": false,
 			"type": "BigDecimal"
 		},

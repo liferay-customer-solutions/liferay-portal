@@ -24,6 +24,7 @@ interface IProps {
 	budgets: MDFRequestBudget[];
 	claimPercent: number;
 	currency: LiferayPicklist;
+	currencyExchangeRate: number;
 	currentActivityIndex: number;
 	expenseEntries: React.OptionHTMLAttributes<HTMLOptionElement>[];
 	isButtonClicked: boolean;
@@ -40,6 +41,7 @@ const BudgetBreakdownSection = ({
 	budgets = [],
 	claimPercent,
 	currency,
+	currencyExchangeRate,
 	currentActivityIndex,
 	expenseEntries,
 	isButtonClicked,
@@ -68,11 +70,26 @@ const BudgetBreakdownSection = ({
 				);
 
 				setFieldValue(
+					`activities[${currentActivityIndex}].convertedTotalCostOfExpense`,
+					amountValue / currencyExchangeRate
+				);
+
+				setFieldValue(
 					`activities[${currentActivityIndex}].mdfRequestAmount`,
 					amountValue * claimPercent
 				);
+
+				setFieldValue(
+					`activities[${currentActivityIndex}].convertedMDFRequestAmount`,
+					(amountValue * claimPercent) / currencyExchangeRate
+				);
 			},
-			[claimPercent, currentActivityIndex, setFieldValue]
+			[
+				claimPercent,
+				currencyExchangeRate,
+				currentActivityIndex,
+				setFieldValue,
+			]
 		)
 	);
 

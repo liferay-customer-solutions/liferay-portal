@@ -27,6 +27,7 @@ import useTypeActivityOptions from './hooks/useTypeActivityOptions';
 interface IProps {
 	claimPercent: number;
 	currency: LiferayPicklist;
+	currencyExchangeRate: number;
 	currentActivity: MDFRequestActivity;
 	currentActivityIndex: number;
 	isButtonClicked?: boolean;
@@ -44,6 +45,7 @@ type TypeActivityComponent = {
 const Form = ({
 	claimPercent,
 	currency,
+	currencyExchangeRate,
 	currentActivity,
 	currentActivityIndex,
 	isButtonClicked,
@@ -202,6 +204,7 @@ const Form = ({
 				claimPercent={claimPercent}
 				component={BudgetBreakdownSection}
 				currency={currency}
+				currencyExchangeRate={currencyExchangeRate}
 				currentActivityIndex={currentActivityIndex}
 				expenseEntries={
 					fieldEntries[LiferayPicklistName.BUDGET_EXPENSES]
