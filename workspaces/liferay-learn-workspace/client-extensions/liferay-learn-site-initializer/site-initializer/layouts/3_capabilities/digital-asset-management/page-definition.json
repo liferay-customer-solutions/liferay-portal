@@ -332,9 +332,9 @@
 								"pageElements": [
 									{
 										"definition": {
-                                            "widgetInstance": {
-                                                "widgetConfig": {
-                                                    "displayStyle": "ddmTemplate_LEARN_SEARCH_CATEGORY_FACET",
+											"widgetInstance": {
+												"widgetConfig": {
+													"displayStyle": "ddmTemplate_LEARN_SEARCH_CATEGORY_FACET",
 													"frequenciesVisible": "false",
 													"frequencyThreshold": "1",
 													"maxTerms": "100",
@@ -373,9 +373,9 @@
 								"pageElements": [
 									{
 										"definition": {
-                                            "widgetInstance": {
-                                                "widgetConfig": {
-                                                    "displayStyle": "ddmTemplate_LEARN_SEARCH_CATEGORY_FACET",
+											"widgetInstance": {
+												"widgetConfig": {
+													"displayStyle": "ddmTemplate_LEARN_SEARCH_CATEGORY_FACET",
 													"frequenciesVisible": "false",
 													"frequencyThreshold": "1",
 													"maxTerms": "100",
