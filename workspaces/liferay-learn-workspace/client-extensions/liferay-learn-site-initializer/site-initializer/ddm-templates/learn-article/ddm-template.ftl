@@ -1,3 +1,5 @@
+<#include "${templatesPath}/SVG">
+
 <#assign
 	journalArticleId = .vars["reserved-article-id"].data
 	navigationJSONObject = jsonFactoryUtil.createJSONObject(navigation.getData())
