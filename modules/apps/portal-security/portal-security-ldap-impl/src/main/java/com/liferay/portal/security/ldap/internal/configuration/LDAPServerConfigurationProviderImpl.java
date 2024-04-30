@@ -403,11 +403,11 @@ public class LDAPServerConfigurationProviderImpl
 			}
 
 			if (_isCustomMappingModified(
-					properties, configuration,
-					LDAPConstants.USER_CUSTOM_MAPPINGS) ||
+					configuration, LDAPConstants.CONTACT_CUSTOM_MAPPINGS,
+					properties) ||
 				_isCustomMappingModified(
-					properties, configuration,
-					LDAPConstants.CONTACT_CUSTOM_MAPPINGS)) {
+					configuration, LDAPConstants.USER_CUSTOM_MAPPINGS,
+					properties)) {
 
 				properties.put(
 					LDAPConstants.MODIFIED_DATE, String.valueOf(new Date()));
@@ -422,8 +422,8 @@ public class LDAPServerConfigurationProviderImpl
 	}
 
 	private boolean _isCustomMappingModified(
-		Dictionary<String, Object> properties, Configuration configuration,
-		String property) {
+		Configuration configuration, String key,
+		Dictionary<String, Object> properties) {
 
 		if (Validator.isNull(configuration.getProperties())) {
 			return false;
@@ -432,14 +432,9 @@ public class LDAPServerConfigurationProviderImpl
 		Dictionary<String, Object> oldProperties =
 			configuration.getProperties();
 
-		String[] oldPropertiesCustomMapping = GetterUtil.getStringValues(
-			oldProperties.get(property));
-
-		String[] propertiesCustomMapping = GetterUtil.getStringValues(
-			properties.get(property));
-
 		if (Arrays.equals(
-				oldPropertiesCustomMapping, propertiesCustomMapping)) {
+				GetterUtil.getStringValues(oldProperties.get(key)),
+				GetterUtil.getStringValues(properties.get(key)))) {
 
 			return false;
 		}
