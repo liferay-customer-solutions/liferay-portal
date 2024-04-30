@@ -43,29 +43,29 @@
 
 <@liferay_aui.script>
 	  function handleStyleTabs(event) {
-	    const targetButton = event.currentTarget;
-        const buttons = document.querySelectorAll('.tab-btn');
+		const targetButton = event.currentTarget;
+		const buttons = document.querySelectorAll('.tab-btn');
 
-        buttons.forEach(button => {
-            button.classList.remove('selected-tab-btn');
-        });
+		buttons.forEach(button => {
+			button.classList.remove('selected-tab-btn');
+		});
 
-        targetButton.classList.add('selected-tab-btn');
-	  } 
-	
-    function ${namespace}updateSelection(event) {
-        handleStyleTabs(event);
+		targetButton.classList.add('selected-tab-btn');
+	  }
 
-        const form = event.currentTarget.form;
-	
-        if (form) {
-            Liferay.Search.FacetUtil.selectTerms(form, []);
-	          
-	          if (event.target.value === "clear") {
-	              Liferay.Search.FacetUtil.clearSelections(event);
-	          }
-	
-            Liferay.Search.FacetUtil.changeSelection(event);
-        }
-    }	
+	function ${namespace}updateSelection(event) {
+		handleStyleTabs(event);
+
+		const form = event.currentTarget.form;
+
+		if (form) {
+			Liferay.Search.FacetUtil.selectTerms(form, []);
+
+			  if (event.target.value === "clear") {
+				  Liferay.Search.FacetUtil.clearSelections(event);
+			  }
+
+			Liferay.Search.FacetUtil.changeSelection(event);
+		}
+	}
 </@>
