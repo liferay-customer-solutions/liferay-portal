@@ -406,6 +406,19 @@ pre[class*='language-'] {
 		padding: 0;
 	}
 
+	.learn-dropdown-menu {
+		padding: var(--spacer-2);
+		width: 100%;
+		z-index: 1;
+		position: absolute;
+		left: 0;
+		top: 100%;
+		background-color: var(--color-neutral-0, #fff);
+		border: none;
+		border-radius: 0px 0px 8px 8px;
+		box-shadow: 0px 10px 5px rgba(0, 0, 0, 0.15);
+	}
+
 	.back-link {
 		align-items: center;
 		display: flex;
@@ -580,6 +593,13 @@ pre[class*='language-'] {
 			align-content: center;
 			color: var(--color-neutral-10, #282934);
 			font-weight: bolder;
+			display: flex;
+			align-items: center;
+		}
+
+		#dropdown-icon.up .lexicon-icon-caret-bottom {
+			transform: rotate(180deg);
+			fill: var(--color-brand-primary, #0b5fff);
 		}
 	}
 }

@@ -39,66 +39,42 @@
 />
 
 <div class="learn-article-nav">
-	<#if productJSONObject?has_content && productJSONObject.getString("title")?has_content && navigationMenuItems[productJSONObject.getString("title")]?has_content && navigationMenuItems[productJSONObject.getString("title")].title?has_content>
-		<div
-			class="dropdown learn-article-nav-root learn-dropdown"
-		>
-			<div class="learn-article-nav-item">
-				<div class="d-flex">
-					<div class="learn-article-nav-image">
-						<img
-							class="lexicon-icon lexicon-icon-caret-bottom product-icon"
-							role="presentation"
-							src='${navigationMenuItems[productJSONObject.getString("title")].image}'
-							viewBox="0 0 512 512"
-						/>
-					</div>
-
-					<span class="learn-article-nav-text">${navigationMenuItems[productJSONObject.getString("title")].title}</span>
-				</div>
-
-				<div id="dropdown-icon">
-					<svg
-						class="lexicon-icon lexicon-icon-caret-bottom"
-						role="presentation"
-						viewBox="0 0 512 512"
-					>
-						<use xlink:href="/o/admin-theme/images/clay/icons.svg#caret-bottom"></use>
-					</svg>
-				</div>
-			</div>
-
-			<ul class="dropdown-menu learn-dropdown-menu">
-				<#list navigationMenuItems as key, value>
-					<li>
-						<a
-							class="dropdown-item learn-article-nav-item"
-							href="/w/${navigationMenuItems[key].url}/index"
-							tabindex="4"
-						>
-							<span class="d-flex">
-								<span class="learn-article-nav-image">
-									<img
-										class="lexicon-icon lexicon-icon-caret-bottom product-icon mt-0 mr-2"
-										role="presentation"
-										src="${value.image}"height: 25px; margin-left: 5px; max-width: none; width: 25px;
-										viewBox="0 0 512 512"
-									/>
-								</span>
-								<span class="learn-article-nav-text">${value.title}</span>
-							</span>
-
-							<#if navigationMenuItems[productJSONObject.getString("title")].url == value.url>
-								<span>
-									<@clay["icon"] symbol="check" />
-								</span>
-							</#if>
-						</a>
-					</li>
-				</#list>
-			</ul>
-		</div>
-	</#if>
+	 <#if productJSONObject?has_content && productJSONObject.getString("title")?has_content && navigationMenuItems[productJSONObject.getString("title")]?has_content && navigationMenuItems[productJSONObject.getString("title")].title?has_content>
+        <div class="dropdown learn-article-nav-root learn-dropdown">
+            <div class="learn-article-nav-item" id="dropdown-button" onclick="toggleDropdown()">
+                <div class="d-flex">
+                    <div class="learn-article-nav-image">
+                        <img class="lexicon-icon lexicon-icon-caret-bottom product-icon" role="presentation" src='${navigationMenuItems[productJSONObject.getString("title")].image}' viewBox="0 0 512 512"/>
+                    </div>
+                    <span class="learn-article-nav-text">${navigationMenuItems[productJSONObject.getString("title")].title}</span>
+                </div>
+                <div id="dropdown-icon">
+                    <svg class="lexicon-icon lexicon-icon-caret-bottom" role="presentation" viewBox="0 0 512 512">
+                        <use xlink:href="/o/admin-theme/images/clay/icons.svg#caret-bottom"></use>
+                    </svg>
+                </div>
+            </div>
+            <ul class="learn-dropdown-menu" id="dropdown-menu" style="display: none;">
+                <#list navigationMenuItems as key, value>
+                    <li>
+                        <a class="dropdown-item learn-article-nav-item" href="/w/${navigationMenuItems[key].url}/index" tabindex="4">
+                            <span class="d-flex">
+                                <span class="learn-article-nav-image">
+                                    <img class="lexicon-icon lexicon-icon-caret-bottom product-icon mt-0 mr-2" role="presentation" src="${value.image}" height="25px" margin-left="5px" max-width="none" width="25px" viewBox="0 0 512 512"/>
+                                </span>
+                                <span class="learn-article-nav-text">${value.title}</span>
+                            </span>
+                            <#if navigationMenuItems[productJSONObject.getString("title")].url == value.url>
+                                <span>
+                                    <@clay["icon"] symbol="check"/>
+                                </span>
+                            </#if>
+                        </a>
+                    </li>
+                </#list>
+            </ul>
+        </div>
+    </#if>
 
 	<div class="learn-article-nav-content">
 		<#if parentJSONObject?has_content && parentJSONObject.getString("url")?has_content>
@@ -150,3 +126,18 @@
 		</#if>
 	</div>
 </div>
+
+<script>
+    function toggleDropdown() {
+        var dropdownMenu = document.querySelector('.learn-dropdown-menu');
+				var dropdownIcon = document.querySelector('#dropdown-icon');
+				
+        if (dropdownMenu.style.display === 'none') {
+            dropdownMenu.style.display = 'block';
+			dropdownIcon.classList.add('up'); 
+        } else {
+            dropdownMenu.style.display = 'none';
+			dropdownIcon.classList.remove('up');
+        }
+    }
+</script>
