@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.Validator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -127,8 +128,8 @@ public class SearchResultsMVCRenderCommand implements MVCRenderCommand {
 			for (ConfigurationScreen configurationScreen :
 					_configurationEntryRetriever.getAllConfigurationScreens()) {
 
-				if (!configurationScreen.isVisible() ||
-					!scope.equals(configurationScreen.getScope())) {
+				if (!Objects.equals(scope, configurationScreen.getScope()) ||
+					!configurationScreen.isVisible()) {
 
 					continue;
 				}
