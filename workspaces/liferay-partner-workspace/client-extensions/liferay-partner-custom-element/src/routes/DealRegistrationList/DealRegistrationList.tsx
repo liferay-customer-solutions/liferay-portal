@@ -23,9 +23,12 @@ import {DealRegistrationColumnKey} from '../../common/enums/dealRegistrationColu
 import {ObjectActionName} from '../../common/enums/objectActionName';
 import {PermissionActionType} from '../../common/enums/permissionActionType';
 import {PRMPageRoute} from '../../common/enums/prmPageRoute';
+import {SortableTable} from '../../common/enums/sortableTable';
+import useDebounce from '../../common/hooks/useDebounce';
 import useLiferayNavigate from '../../common/hooks/useLiferayNavigate';
 import usePagination from '../../common/hooks/usePagination';
 import usePermissionActions from '../../common/hooks/usePermissionActions';
+import useQueryParams from '../../common/hooks/useQueryParams';
 import {DealRegistrationListItem} from '../../common/interfaces/dealRegistrationListItem';
 import TableColumn from '../../common/interfaces/tableColumn';
 import {Liferay} from '../../common/services/liferay';
@@ -35,6 +38,7 @@ import {
 } from '../../common/utils/constants/filters';
 import getDoubleParagraph from '../../common/utils/getDoubleParagraph';
 import getDropDownFilterMenus from '../../common/utils/getDropDownFilterMenus';
+import setURLParams from '../../common/utils/setURLParams';
 import ModalContent from './components/ModalContent';
 import useFilters from './hooks/useFilters';
 import useGetListItemsFromDealRegistration from './hooks/useGetListItemsFromDealRegistration';
@@ -43,14 +47,7 @@ export type DealRegistrationItem = {
 	[key in DealRegistrationColumnKey]?: any;
 };
 
-interface IProps {
-	sort: string;
-}
-
-const BASE_PAGE = 1;
-const MAX_ITEMS = 200;
-
-const DealRegistrationList = ({sort}: IProps) => {
+const DealRegistrationList = () => {
 	const [submittedDealsFilter, setSubmittedDealsFilter] = useState(
 		JSON.parse(sessionStorage.getItem('submittedDealsFilter')!) === null
 			? true
@@ -70,22 +67,35 @@ const DealRegistrationList = ({sort}: IProps) => {
 		},
 	});
 
-	const pagination = usePagination();
+	const urlParams = useQueryParams();
+
+	const pagination = usePagination(urlParams);
 
 	const siteURL = useLiferayNavigate();
+
+	const [dealRegistrationTableSort, setDealRegistrationTableSort] = useState<
+		string
+	>('partnerAccountName:asc');
+
+	const debouncedDealRegistrationTableSort = useDebounce(
+		dealRegistrationTableSort,
+		1000
+	);
 
 	const {data, isValidating} = useGetListItemsFromDealRegistration(
 		pagination.activePage,
 		pagination.activeDelta,
-		filtersTerm,
-		sort
+		setURLParams({
+			filter: filtersTerm,
+			sort: debouncedDealRegistrationTableSort,
+			urlParams,
+		})
 	);
 
 	const {data: dataCSV} = useGetListItemsFromDealRegistration(
-		BASE_PAGE,
-		MAX_ITEMS,
-		filtersTerm,
-		sort
+		pagination.activePage,
+		pagination.maxItemsSF,
+		setURLParams({filter: filtersTerm, urlParams})
 	);
 
 	const actions = usePermissionActions(ObjectActionName.DEAL_REGISTRATION);
@@ -102,6 +112,7 @@ const DealRegistrationList = ({sort}: IProps) => {
 		{
 			columnKey: DealRegistrationColumnKey.PARTNER_NAME,
 			label: 'Partner Name',
+			size: 'md',
 		},
 		{
 			columnKey: DealRegistrationColumnKey.ACCOUNT_NAME,
@@ -109,7 +120,7 @@ const DealRegistrationList = ({sort}: IProps) => {
 			size: 'sm',
 		},
 		{
-			columnKey: DealRegistrationColumnKey.DATE_SUBMITTED,
+			columnKey: DealRegistrationColumnKey.DEAL_DATE_SUBMITTED,
 			label: 'Date Submitted',
 		},
 		{
@@ -125,6 +136,7 @@ const DealRegistrationList = ({sort}: IProps) => {
 		{
 			columnKey: DealRegistrationColumnKey.PRIMARY_PROSPECT_PHONE,
 			label: getDoubleParagraph('Primary Prospect', 'Phone'),
+			size: 'sm',
 		},
 		{
 			columnKey: DealRegistrationColumnKey.STATUS,
@@ -168,6 +180,13 @@ const DealRegistrationList = ({sort}: IProps) => {
 						columns={columns}
 						customClickOnRow={handleCustomClickOnRow}
 						rows={items}
+						setTableSort={setDealRegistrationTableSort}
+						sortable={[
+							SortableTable.ACCOUNT_NAME,
+							SortableTable.DATE_SUBMITTED,
+							SortableTable.PARTNER_ACCOUNT_NAME,
+							SortableTable.PARTNER_NAME,
+						]}
 						tableLayoutAuto
 					/>
 
