@@ -299,6 +299,12 @@ searchInput.addEventListener('click', function () {
 });
 
 window.addEventListener('keyup', (event) => {
+	const isSearchInputActive = document.activeElement.classList.contains(
+		'search-bar-keywords-input'
+	);
+	const isSearchDropdownOpened =
+		siteSearchWrapper.classList.contains('search-open');
+
 	if (event.code === 'Escape' || event.key === 'Escape') {
 		if (!siteSearchWrapper.classList.contains('search-open')) {
 			return;
@@ -308,17 +314,17 @@ window.addEventListener('keyup', (event) => {
 		siteSearchWrapper.classList.remove('search-open');
 	}
 
-	if (
-		event.code === 'Slash' &&
-		!document.activeElement.classList.contains('search-bar-keywords-input')
-	) {
-		searchInput.focus();
+	if (event.code === 'Slash' || event.key === 'Slash') {
+		if (isSearchInputActive) {
+			return;
+		}
 
-		if (siteSearchWrapper.classList.contains('search-open')) {
+		if (isSearchDropdownOpened) {
 			return;
 		}
 
 		siteSearchWrapper.classList.add('search-open');
+		searchInput.focus();
 		inputClicked = false;
 	}
 });
