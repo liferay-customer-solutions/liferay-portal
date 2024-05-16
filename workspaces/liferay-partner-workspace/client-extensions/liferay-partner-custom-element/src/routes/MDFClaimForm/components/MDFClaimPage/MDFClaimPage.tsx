@@ -14,6 +14,7 @@ import InputMultipleFilesListing from '../../../../common/components/PRMForm/com
 import PRMFormik from '../../../../common/components/PRMFormik';
 import PRMFormikPageProps from '../../../../common/components/PRMFormik/interfaces/prmFormikPageProps';
 import ResumeCard from '../../../../common/components/ResumeCard';
+import useAutoSave from '../../../../common/hooks/useAutoSave';
 import useSetTouchedOnForms from '../../../../common/hooks/useSetTouchedOnForms';
 import MDFRequestDTO from '../../../../common/interfaces/dto/mdfRequestDTO';
 import LiferayFile from '../../../../common/interfaces/liferayFile';
@@ -77,6 +78,10 @@ const MDFClaimPage = ({
 		useCallback(() => Boolean(values.id), [values.id]),
 		formikHelpers
 	);
+
+	const save = () => onSaveAsDraft(values, formikHelpers, true);
+
+	useAutoSave(save, 60000, values, !values.submitted);
 
 	const claimsFiltered = mdfRequest.mdfReqToMDFClms?.filter(
 		(mdfRequestToMdfClaim) => {

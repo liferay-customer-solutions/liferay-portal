@@ -133,7 +133,8 @@ const MDFRequestForm = () => {
 					formikHelpers: Omit<
 						FormikHelpers<MDFRequest>,
 						'setFieldValue'
-					>
+					>,
+					wasAutoSaved?: boolean
 				) =>
 					actions &&
 					submitForm(
@@ -147,7 +148,8 @@ const MDFRequestForm = () => {
 										action !==
 										PermissionActionType.UPDATE_WO_CHANGE_STATUS
 							  )
-							: true
+							: true,
+						wasAutoSaved
 					)
 				}
 				validationSchema={goalsSchema}
@@ -165,7 +167,8 @@ const MDFRequestForm = () => {
 					formikHelpers: Omit<
 						FormikHelpers<MDFRequest>,
 						'setFieldValue'
-					>
+					>,
+					wasAutoSaved?: boolean
 				) =>
 					actions &&
 					submitForm(
@@ -179,7 +182,8 @@ const MDFRequestForm = () => {
 										action !==
 										PermissionActionType.UPDATE_WO_CHANGE_STATUS
 							  )
-							: true
+							: true,
+						wasAutoSaved
 					)
 				}
 				validationSchema={activitiesSchema}
@@ -194,7 +198,8 @@ const MDFRequestForm = () => {
 					formikHelpers: Omit<
 						FormikHelpers<MDFRequest>,
 						'setFieldValue'
-					>
+					>,
+					wasAutoSaved?: boolean
 				) =>
 					actions &&
 					submitForm(
@@ -208,7 +213,8 @@ const MDFRequestForm = () => {
 										action !==
 										PermissionActionType.UPDATE_WO_CHANGE_STATUS
 							  )
-							: true
+							: true,
+						wasAutoSaved
 					)
 				}
 			/>

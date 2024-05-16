@@ -27,7 +27,8 @@ export default async function submitForm(
 	mdfRequest: MDFRequestDTO,
 	siteURL: string,
 	currentClaimStatus?: LiferayPicklist,
-	changeStatus?: boolean
+	changeStatus?: boolean,
+	wasAutoSaved?: boolean
 ) {
 	formikHelpers.setSubmitting(true);
 	formikHelpers.setStatus(true);
@@ -141,9 +142,15 @@ export default async function submitForm(
 		}
 
 		if (submitValues.mdfClaimStatus.key === Status.DRAFT.key) {
-			Liferay.Util.navigate(
-				`${siteURL}/${PRMPageRoute.MDF_CLAIM_LISTING}`
-			);
+			if (!wasAutoSaved) {
+				Liferay.Util.navigate(
+					`${siteURL}/${PRMPageRoute.MDF_CLAIM_LISTING}`
+				);
+			}
+			else {
+				formikHelpers.setSubmitting(false);
+				formikHelpers.setStatus(false);
+			}
 
 			Liferay.Util.openToast({
 				message: 'MDF Claim was successfully saved as draft.',
@@ -168,10 +175,12 @@ export default async function submitForm(
 		formikHelpers.setStatus(false);
 		formikHelpers.setSubmitting(false);
 
-		Liferay.Util.openToast({
-			message: 'MDF Claim could not be submitted. Please, try again.',
-			title: 'Error',
-			type: 'danger',
-		});
+		if (!wasAutoSaved) {
+			Liferay.Util.openToast({
+				message: 'MDF Claim could not be submitted. Please, try again.',
+				title: 'Error',
+				type: 'danger',
+			});
+		}
 	}
 }

@@ -18,6 +18,7 @@ export default interface MDFRequestStepProps {
 	onPrevious?: (previousStep: StepType) => void;
 	onSaveAsDraft?: (
 		values: MDFRequest,
-		formikHelpers: Omit<FormikHelpers<MDFRequest>, 'setFieldValue'>
+		formikHelpers: Omit<FormikHelpers<MDFRequest>, 'setFieldValue'>,
+		wasAutoSaved?: boolean
 	) => void;
 }

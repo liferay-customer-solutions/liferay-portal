@@ -12,6 +12,7 @@ import PRMForm from '../../../../common/components/PRMForm';
 import PRMFormik from '../../../../common/components/PRMFormik';
 import PRMFormikPageProps from '../../../../common/components/PRMFormik/interfaces/prmFormikPageProps';
 import {LiferayPicklistName} from '../../../../common/enums/liferayPicklistName';
+import useAutoSave from '../../../../common/hooks/useAutoSave';
 import useCompanyOptions from '../../../../common/hooks/useCompanyOptions';
 import useSetTouchedOnForms from '../../../../common/hooks/useSetTouchedOnForms';
 import MDFRequest from '../../../../common/interfaces/mdfRequest';
@@ -93,6 +94,10 @@ const Goals = ({
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [values.liferayBusinessSalesGoals]);
+
+	const save = () => onSaveAsDraft?.(values, formikHelpers, true);
+
+	useAutoSave(save, 60000, values, !values.submitted);
 
 	const {isButtonClicked, setIsButtonClicked} = useSetTouchedOnForms(
 		useCallback(() => Boolean(values.id), [values.id]),

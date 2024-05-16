@@ -24,7 +24,8 @@ export default async function submitForm(
 	formikHelpers: Omit<FormikHelpers<MDFRequest>, 'setFieldValue'>,
 	siteURL: string,
 	currentRequestStatus?: LiferayPicklist,
-	changeStatus?: boolean
+	changeStatus?: boolean,
+	wasAutoSaved?: boolean
 ) {
 	formikHelpers.setSubmitting(true);
 	formikHelpers.setStatus(true);
@@ -137,9 +138,15 @@ export default async function submitForm(
 		}
 
 		if (values.mdfRequestStatus.key === Status.DRAFT.key) {
-			Liferay.Util.navigate(
-				`${siteURL}/${PRMPageRoute.MDF_REQUESTS_LISTING}`
-			);
+			if (!wasAutoSaved) {
+				Liferay.Util.navigate(
+					`${siteURL}/${PRMPageRoute.MDF_REQUESTS_LISTING}`
+				);
+			}
+			else {
+				formikHelpers.setSubmitting(false);
+				formikHelpers.setStatus(false);
+			}
 
 			Liferay.Util.openToast({
 				message: 'MDF Request was successfully saved as draft.',
@@ -162,10 +169,13 @@ export default async function submitForm(
 		formikHelpers.setStatus(false);
 		formikHelpers.setSubmitting(false);
 
-		Liferay.Util.openToast({
-			message: 'MDF Request could not be submitted. Please, try again.',
-			title: 'Error',
-			type: 'danger',
-		});
+		if (!wasAutoSaved) {
+			Liferay.Util.openToast({
+				message:
+					'MDF Request could not be submitted. Please, try again.',
+				title: 'Error',
+				type: 'danger',
+			});
+		}
 	}
 }

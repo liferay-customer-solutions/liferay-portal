@@ -9,6 +9,7 @@ import {useFormikContext} from 'formik';
 
 import PRMFormikPageProps from '../../../../common/components/PRMFormik/interfaces/prmFormikPageProps';
 import ResumeCard from '../../../../common/components/ResumeCard';
+import useAutoSave from '../../../../common/hooks/useAutoSave';
 import MDFRequest from '../../../../common/interfaces/mdfRequest';
 import MDFRequestActivity from '../../../../common/interfaces/mdfRequestActivity';
 import getIntlNumberFormat from '../../../../common/utils/getIntlNumberFormat';
@@ -31,6 +32,10 @@ const Review = ({
 		values,
 		...formikHelpers
 	} = useFormikContext<MDFRequest>();
+
+	const save = () => onSaveAsDraft?.(values, formikHelpers, true);
+
+	useAutoSave(save, 60000, values, !values.submitted);
 
 	return (
 		<div className="d-flex flex-column">

@@ -11,6 +11,7 @@ export default interface MDFClaimProps {
 	onCancel: () => void;
 	onSaveAsDraft: (
 		values: MDFClaim,
-		formikHelpers: Omit<FormikHelpers<MDFClaim>, 'setFieldValue'>
+		formikHelpers: Omit<FormikHelpers<MDFClaim>, 'setFieldValue'>,
+		wasAutoSaved?: boolean
 	) => void;
 }

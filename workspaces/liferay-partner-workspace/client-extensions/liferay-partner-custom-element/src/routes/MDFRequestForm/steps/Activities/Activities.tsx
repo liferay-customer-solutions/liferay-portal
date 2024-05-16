@@ -11,6 +11,7 @@ import {useCallback, useEffect, useState} from 'react';
 
 import PRMForm from '../../../../common/components/PRMForm';
 import PRMFormikPageProps from '../../../../common/components/PRMFormik/interfaces/prmFormikPageProps';
+import useAutoSave from '../../../../common/hooks/useAutoSave';
 import useSetTouchedOnForms from '../../../../common/hooks/useSetTouchedOnForms';
 import MDFRequest from '../../../../common/interfaces/mdfRequest';
 import isObjectEmpty from '../../../../common/utils/isObjectEmpty';
@@ -51,6 +52,7 @@ const Activities = ({
 	>();
 
 	const [isDraft, setIsDraft] = useState(false);
+	const [isAutoSave, setIsAutoSave] = useState(false);
 
 	const activityErrors =
 		currentActivityIndex !== undefined &&
@@ -168,13 +170,21 @@ const Activities = ({
 		setIsDraft(true);
 	};
 
+	const save = () => {
+		setIsAutoSave(true);
+		onSaveAsDraftForm();
+	};
+
+	useAutoSave(save, 60000, values, !values.submitted);
+
 	useEffect(() => {
 		if (isDraft) {
-			onSaveAsDraft?.(values, formikHelpers);
+			onSaveAsDraft?.(values, formikHelpers, isAutoSave);
+			setIsAutoSave(false);
 			setIsDraft(false);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isDraft]);
+	}, [isAutoSave, isDraft]);
 
 	const handleOnClick = () => {
 		setIsButtonClicked(true);

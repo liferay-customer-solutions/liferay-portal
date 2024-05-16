@@ -169,7 +169,11 @@ const MDFClaimForm = () => {
 				hasPermissionShowForm={hasPermissionShowForm}
 				mdfRequest={mdfRequest}
 				onCancel={onCancel}
-				onSaveAsDraft={(values, formikHelpers) =>
+				onSaveAsDraft={(
+					values,
+					formikHelpers,
+					wasAutoSaved?: boolean
+				) =>
 					submitForm(
 						values,
 						formikHelpers,
@@ -183,7 +187,8 @@ const MDFClaimForm = () => {
 										action !==
 										PermissionActionType.UPDATE_WO_CHANGE_STATUS
 							  )
-							: true
+							: true,
+						wasAutoSaved
 					)
 				}
 				validationSchema={claimSchema}
