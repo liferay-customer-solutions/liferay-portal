@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {useEffect, useRef, useState} from 'react';
 import {Outlet, useLocation, useParams} from 'react-router-dom';
 import ProjectBreadcrumb from '../../components/ProjectBreadcrumb/ProjectBreadcrumb';
@@ -11,7 +12,8 @@ import SideMenu from '../../containers/SideMenu';
 import {useCustomerPortal} from '../../context';
 
 const Layout = () => {
-	const [{userProjectAccess}] = useCustomerPortal();
+	const contextAccount = useCustomerPortal();
+	const errorOccurred = contextAccount[2];
 
 	const [hasSideMenu, setHasSideMenu] = useState(true);
 
@@ -31,10 +33,18 @@ const Layout = () => {
 		}
 	}, [accountKey]);
 
-	if (userProjectAccess) {
-		if (userProjectAccess.denyAccess || !userProjectAccess.hasProjectAccess) {
-			return <ProjectErrorMessage />;
-		}
+	const isAccountAdministrator = contextAccount[0].userAccount.roleBriefs?.some(
+		(roleBrief) => roleBrief.name === 'Administrator'
+	);
+
+	const accountPermission = !errorOccurred || isAccountAdministrator;
+
+	if (!accountPermission) {
+		return <ProjectErrorMessage />;
+	}
+
+	if (!contextAccount[0]?.project && !isAccountAdministrator) {
+		return <ClayLoadingIndicator />;
 	}
 
 	return (
