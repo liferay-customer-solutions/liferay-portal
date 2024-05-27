@@ -81,7 +81,7 @@ const MDFClaimPage = ({
 
 	const save = () => onSaveAsDraft(values, formikHelpers, true);
 
-	useAutoSave(save, 60000, values, !values.submitted);
+	useAutoSave(save, 20000, values, !values.submitted);
 
 	const claimsFiltered = mdfRequest.mdfReqToMDFClms?.filter(
 		(mdfRequestToMdfClaim) => {

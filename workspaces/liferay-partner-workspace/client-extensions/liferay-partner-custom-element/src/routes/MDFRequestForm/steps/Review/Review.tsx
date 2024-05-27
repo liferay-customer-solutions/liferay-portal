@@ -35,7 +35,7 @@ const Review = ({
 
 	const save = () => onSaveAsDraft?.(values, formikHelpers, true);
 
-	useAutoSave(save, 60000, values, !values.submitted);
+	useAutoSave(save, 20000, values, !values.submitted);
 
 	return (
 		<div className="d-flex flex-column">

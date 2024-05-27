@@ -175,7 +175,7 @@ const Activities = ({
 		onSaveAsDraftForm();
 	};
 
-	useAutoSave(save, 60000, values, !values.submitted);
+	useAutoSave(save, 10000, values, !values.submitted);
 
 	useEffect(() => {
 		if (isDraft) {

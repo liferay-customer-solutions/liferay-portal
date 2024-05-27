@@ -97,7 +97,7 @@ const Goals = ({
 
 	const save = () => onSaveAsDraft?.(values, formikHelpers, true);
 
-	useAutoSave(save, 60000, values, !values.submitted);
+	useAutoSave(save, 10000, values, !values.submitted);
 
 	const {isButtonClicked, setIsButtonClicked} = useSetTouchedOnForms(
 		useCallback(() => Boolean(values.id), [values.id]),

@@ -169,13 +169,10 @@ export default async function submitForm(
 		formikHelpers.setStatus(false);
 		formikHelpers.setSubmitting(false);
 
-		if (!wasAutoSaved) {
-			Liferay.Util.openToast({
-				message:
-					'MDF Request could not be submitted. Please, try again.',
-				title: 'Error',
-				type: 'danger',
-			});
-		}
+		Liferay.Util.openToast({
+			message: 'MDF Request could not be submitted. Please, try again.',
+			title: 'Error',
+			type: 'danger',
+		});
 	}
 }
