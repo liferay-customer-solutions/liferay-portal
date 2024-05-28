@@ -81,7 +81,12 @@ const MDFClaimPage = ({
 
 	const save = () => onSaveAsDraft(values, formikHelpers, true);
 
-	useAutoSave(save, 20000, values, !values.submitted);
+	const autoSaveInterval = useAutoSave(
+		save,
+		20000,
+		values,
+		!values.submitted
+	);
 
 	const claimsFiltered = mdfRequest.mdfReqToMDFClms?.filter(
 		(mdfRequestToMdfClaim) => {
@@ -165,6 +170,9 @@ const MDFClaimPage = ({
 
 		const handleOnClick = () => {
 			setIsButtonClicked(true);
+
+			clearTimeout(autoSaveInterval.intervalId);
+
 			window.scrollTo({
 				behavior: (isValid ? 'instant' : 'smooth') as ScrollBehavior,
 				top: 0,
@@ -273,7 +281,10 @@ const MDFClaimPage = ({
 							className="inline-item inline-item-after pl-0"
 							disabled={isSubmitting || submitted}
 							displayType={null}
-							onClick={() => onSaveAsDraft(values, formikHelpers)}
+							onClick={() => {
+								clearTimeout(autoSaveInterval.intervalId);
+								onSaveAsDraft(values, formikHelpers);
+							}}
 						>
 							Save as Draft
 							{isSubmitting && (

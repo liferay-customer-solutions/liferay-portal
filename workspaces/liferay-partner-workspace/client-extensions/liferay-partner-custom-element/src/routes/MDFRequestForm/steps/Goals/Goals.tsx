@@ -97,7 +97,12 @@ const Goals = ({
 
 	const save = () => onSaveAsDraft?.(values, formikHelpers, true);
 
-	useAutoSave(save, 10000, values, !values.submitted);
+	const autoSaveInterval = useAutoSave(
+		save,
+		10000,
+		values,
+		!values.submitted
+	);
 
 	const {isButtonClicked, setIsButtonClicked} = useSetTouchedOnForms(
 		useCallback(() => Boolean(values.id), [values.id]),
@@ -222,9 +227,10 @@ const Goals = ({
 								!values.company?.externalReferenceCode
 							}
 							displayType={null}
-							onClick={() =>
-								onSaveAsDraft?.(values, formikHelpers)
-							}
+							onClick={() => {
+								clearTimeout(autoSaveInterval.intervalId);
+								onSaveAsDraft?.(values, formikHelpers);
+							}}
 						>
 							Save as Draft
 							{isSubmitting && (

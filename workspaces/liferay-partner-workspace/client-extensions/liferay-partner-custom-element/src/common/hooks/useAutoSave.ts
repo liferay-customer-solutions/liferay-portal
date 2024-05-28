@@ -11,18 +11,26 @@ export default function useAutoSave(
 	monitoredObject: object,
 	shouldMonitor: boolean
 ) {
+	const [interval, setInterval] = useState({
+		intervalId: 0,
+	});
+
 	const [url] = useState<string>(window.location.href);
 
 	useEffect(() => {
 		if (shouldMonitor) {
-			const interval = setTimeout(() => {
+			const newIntervalId = setTimeout(() => {
 				if (url === window.location.href) {
 					autoSaveFunction();
 				}
 			}, autoSaveTime);
 
-			return () => clearTimeout(interval);
+			setInterval({...interval, intervalId: newIntervalId});
+
+			return () => clearTimeout(newIntervalId);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [monitoredObject]);
+
+	return interval;
 }

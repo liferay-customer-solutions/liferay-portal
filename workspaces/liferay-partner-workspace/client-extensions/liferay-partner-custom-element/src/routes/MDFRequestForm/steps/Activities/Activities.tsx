@@ -175,7 +175,12 @@ const Activities = ({
 		onSaveAsDraftForm();
 	};
 
-	useAutoSave(save, 10000, values, !values.submitted);
+	const autoSaveInterval = useAutoSave(
+		save,
+		10000,
+		values,
+		!values.submitted
+	);
 
 	useEffect(() => {
 		if (isDraft) {
@@ -265,7 +270,10 @@ const Activities = ({
 						className="inline-item inline-item-after"
 						disabled={submitted || isSubmitting}
 						displayType={null}
-						onClick={onSaveAsDraftForm}
+						onClick={() => {
+							clearTimeout(autoSaveInterval.intervalId);
+							onSaveAsDraftForm();
+						}}
 					>
 						Save as Draft
 						{isSubmitting && (

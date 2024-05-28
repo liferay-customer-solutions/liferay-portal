@@ -35,7 +35,12 @@ const Review = ({
 
 	const save = () => onSaveAsDraft?.(values, formikHelpers, true);
 
-	useAutoSave(save, 20000, values, !values.submitted);
+	const autoSaveInterval = useAutoSave(
+		save,
+		10000,
+		values,
+		!values.submitted
+	);
 
 	return (
 		<div className="d-flex flex-column">
@@ -108,9 +113,10 @@ const Review = ({
 								className="inline-item inline-item-after pl-0"
 								disabled={submitted || isSubmitting}
 								displayType={null}
-								onClick={() =>
-									onSaveAsDraft?.(values, formikHelpers)
-								}
+								onClick={() => {
+									clearTimeout(autoSaveInterval.intervalId);
+									onSaveAsDraft?.(values, formikHelpers);
+								}}
 							>
 								Save as Draft
 								{isSubmitting && (
@@ -132,6 +138,9 @@ const Review = ({
 							<Button
 								className="inline-item inline-item-after"
 								disabled={submitted || isSubmitting}
+								onClick={() =>
+									clearTimeout(autoSaveInterval.intervalId)
+								}
 								type="submit"
 							>
 								Submit
