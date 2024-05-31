@@ -165,6 +165,7 @@ const MDFRequestList = () => {
 			{
 				component: (
 					<DateFilter
+						clearInputs={!filters?.activityPeriod?.dates.startDate?.length && !filters?.activityPeriod?.dates.endDate?.length}
 						dateFilters={(dates: {
 							endDate: string;
 							startDate: string;

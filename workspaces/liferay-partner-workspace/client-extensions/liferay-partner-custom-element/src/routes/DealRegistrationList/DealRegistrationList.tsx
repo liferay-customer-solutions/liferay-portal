@@ -219,6 +219,7 @@ const DealRegistrationList = () => {
 		{
 			component: (
 				<DateFilter
+					clearInputs={!filters?.dataSubmitted?.dates.startDate?.length && !filters?.dataSubmitted?.dates.endDate?.length}
 					dateFilters={(dates: {
 						endDate: string;
 						startDate: string;

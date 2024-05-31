@@ -217,6 +217,8 @@ const MDFClaimList = () => {
 							{
 								component: (
 									<DateFilter
+										clearInputs={!filters?.submitDate?.dates.startDate?.length && !filters?.submitDate?.dates.endDate?.length}
+
 										dateFilters={(dates: {
 											endDate: string;
 											startDate: string;
