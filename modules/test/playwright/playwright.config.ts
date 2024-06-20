@@ -111,6 +111,7 @@ export default defineConfig({
 		objectWebConfig,
 		openIdLinkConfig,
 		osbFaroWebConfig,
+		partnerConfig,
 		portalDefaultPermissionsWebConfig,
 		portalSearchAdminWebConfig,
 		portalSearchWebConfig,
