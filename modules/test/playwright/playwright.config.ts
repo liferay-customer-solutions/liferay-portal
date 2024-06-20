@@ -61,6 +61,7 @@ import {config as wikiWebConfig} from './tests/wiki-web/config';
 import {config as commerceWorkspaceConfig} from './tests/workspaces/liferay-workspace-commerce/config';
 import {config as jethr0Config} from './tests/workspaces/liferay-workspace-jethr0/config';
 import {config as marketplaceConfig} from './tests/workspaces/liferay-workspace-marketplace/config';
+import {config as partnerConfig} from './tests/workspaces/liferay-workspace-partner/config';
 
 const setupProjects = [wemSiteSetup, wemSiteTeardown];
 
@@ -108,6 +109,7 @@ export default defineConfig({
 		objectWebConfig,
 		openIdLinkConfig,
 		osbFaroWebConfig,
+		partnerConfig,
 		portalDefaultPermissionsWebConfig,
 		portalSearchAdminWebConfig,
 		portalSearchWebConfig,
