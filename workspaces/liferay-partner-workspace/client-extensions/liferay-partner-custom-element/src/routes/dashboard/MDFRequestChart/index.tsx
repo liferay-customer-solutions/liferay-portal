@@ -97,7 +97,7 @@ const MDFRequestChart = () => {
 		getMDFRequests();
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [isChannel]);
 
 	const chartData = {
 		colors: mdfChartColumnColors,
