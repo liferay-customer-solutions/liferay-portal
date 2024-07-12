@@ -5,15 +5,20 @@
 
 import {test} from '@playwright/test';
 
+import {DealRegistrationFormPage} from '../pages/DealRegistrationListPage';
 import {MDFRequestFormPage} from '../pages/MDFRequesListPage/MDFRequestFormPage';
 import {MDFRequestListPage} from '../pages/MDFRequesListPage/mdfRequestListPage';
 import {PartnerHomePage} from '../pages/partnerHomePage';
 
 const partnerPagesTest = test.extend<{
+	partnerDealRegistrationForm: DealRegistrationFormPage;
 	partnerHomePage: PartnerHomePage;
 	partnerMDFListPage: MDFRequestListPage;
 	partnerMDFRequestForm: MDFRequestFormPage;
 }>({
+	partnerDealRegistrationForm: async ({page}, use) => {
+		await use(new DealRegistrationFormPage(page));
+	},
 	partnerHomePage: async ({page}, use) => {
 		await use(new PartnerHomePage(page));
 	},
