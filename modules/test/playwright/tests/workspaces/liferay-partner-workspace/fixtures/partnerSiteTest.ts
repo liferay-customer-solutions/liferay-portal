@@ -19,10 +19,12 @@ export interface PartnerSite {
 
 export const partnerSiteTest = test.extend<PartnerSite>({
 	partnerSite: [
-		async ({partnerHelper}, use) => {
+		async ({page, partnerHelper}, use) => {
 			const site = await partnerHelper.apiHelpers.headlessSite.getSiteByERC('LIFERAY_PARTNER');
 
 			expect(site.id).toBeGreaterThan(0);
+
+			await page.goto(`web${site.friendlyUrlPath}`);
 
 			use(site);
 		},
