@@ -6,9 +6,15 @@
 import {Locator, Page, expect} from '@playwright/test';
 
 import {liferayConfig} from '../../../../../liferay.config';
-import { MDFRequestFormActivities, MDFRequestFormActivitiesContent } from './MDFRequestFormActivities';
-import { MDFRequestFormGoals, MDFRequestFormGoalsContent } from './MDFRequestFormGoals';
-import { MDFRequestFormReview } from './MDFRequestFormReview';
+import {
+	MDFRequestFormActivities,
+	MDFRequestFormActivitiesContent,
+} from './MDFRequestFormActivities';
+import {
+	MDFRequestFormGoals,
+	MDFRequestFormGoalsContent,
+} from './MDFRequestFormGoals';
+import {MDFRequestFormReview} from './MDFRequestFormReview';
 
 type FormContent = {
 	activities: MDFRequestFormActivitiesContent[];
@@ -69,7 +75,7 @@ export class MDFRequestFormPage {
 	async createNewRequest(form: FormContent) {
 		await this.form.goals.fillForm(form.goals);
 		await this.continue();
-		
+
 		for (const [index, activity] of form.activities.entries()) {
 			await this.form.activities.fillForm(index, activity);
 
@@ -80,9 +86,12 @@ export class MDFRequestFormPage {
 	}
 
 	async goto(siteUrl?: Site['friendlyUrlPath']) {
-		await this.page.goto(`${liferayConfig.environment.baseUrl}/web${siteUrl}/marketing/mdf-requests/new`, {
-			waitUntil: 'networkidle',
-		});
+		await this.page.goto(
+			`${liferayConfig.environment.baseUrl}/web${siteUrl}/marketing/mdf-requests/new`,
+			{
+				waitUntil: 'networkidle',
+			}
+		);
 	}
 
 	async reviewMDFRequest(activityContent) {
@@ -90,8 +99,10 @@ export class MDFRequestFormPage {
 	}
 
 	async statusDropDownOption(option: string) {
-		await this.page.getByRole('menuitem', {
-			name: option,
-		}).click();
+		await this.page
+			.getByRole('menuitem', {
+				name: option,
+			})
+			.click();
 	}
 }
