@@ -5,50 +5,26 @@
 
 import moment from 'moment';
 
-import {
-	EMDFRequestActivityExpenseTypes,
-	EMDFRequestActivityTactics,
-	EMDFRequestActivityTypes,
-	EMDFRequestLiferayBusinessSalesGoals,
-	EMDFRequestTargetAudienceRoles,
-	EMDFRequestTargetMarkets,
-} from './constants';
+import {mdfRequestMock} from '../mocks/mdfMock';
+import {TAccount} from '../types/account';
+import {TMDFRequest} from '../types/mdf';
+import {TUserAccount} from '../types/user';
 
-export function createMDFRequest(companyName: string) {
-	return {
-		activities: [
-			{
-				activityName: 'Test Activity',
-				claimPercent: 0.5,
-				endDate: moment().add(2, 'days').format('YYYY-MM-DD'),
-				expenses: [
-					{
-						type: EMDFRequestActivityExpenseTypes.BROADCAST_ADVERTISING,
-						value: 500,
-					},
-				],
-				leadGenerated: false,
-				marketingActivity: 'Marketing Description',
-				startDate: moment().add(1, 'days').format('YYYY-MM-DD'),
-				tactic: EMDFRequestActivityTactics.OTHER,
-				typeOfActivity: EMDFRequestActivityTypes.MISCELLANEOUS_MARKETING,
-			},
-		],
-		goals: {
-			companyName,
-			liferayBusinessSalesGoals: [
-				EMDFRequestLiferayBusinessSalesGoals.LEAD_GENERATION,
-			],
-			overallCampaignDescription: 'Campaign Description',
-			overallCampaignName: 'Campaign Name',
-			targetAudienceRoles: [
-				EMDFRequestTargetAudienceRoles.C_LEVEL_EXECUTIVE_VP,
-				EMDFRequestTargetAudienceRoles.ADMINISTRATOR,
-			],
-			targetMarkets: [
-				EMDFRequestTargetMarkets.AEROSPACE_DEFENSE,
-				EMDFRequestTargetMarkets.AGRICULTURE,
-			],
-		},
-	};
+export function generateMDFRequestData(
+	parnterAccount: TAccount,
+	userAccount: TUserAccount
+): TMDFRequest {
+	const mdfRequest = mdfRequestMock;
+
+	mdfRequest.activities[0].endDate = moment()
+		.add(2, 'days')
+		.format('YYYY-MM-DD');
+	mdfRequest.activities[0].startDate = moment()
+		.add(1, 'days')
+		.format('YYYY-MM-DD');
+	mdfRequest.goals.companyName = parnterAccount.name;
+	mdfRequest.submitDate = moment().format('YYYY-MM-DD');
+	mdfRequest.userId = Number(userAccount.id);
+
+	return mdfRequest;
 }
