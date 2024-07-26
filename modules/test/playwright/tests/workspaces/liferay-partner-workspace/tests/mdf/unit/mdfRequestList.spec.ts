@@ -23,15 +23,18 @@ test.describe('MDF Request List', () => {
 	let mdfRequest: TMDFRequest;
 
 	test.beforeEach(
-		async ({mdfRequestListPage, partnerHelper, partnerSite}) => {
+		async ({
+			apiHelpers,
+			mdfRequestListPage,
+			partnerHelper,
+			partnerSite,
+		}) => {
 			accountPlatinum =
-				await partnerHelper.apiHelpers.headlessAdminUser.postAccount(
+				await apiHelpers.headlessAdminUser.postAccount(
 					accountPlatinumMock
 				);
 			userCOM =
-				await partnerHelper.apiHelpers.headlessAdminUser.postUserAccount(
-					userCOMMock
-				);
+				await apiHelpers.headlessAdminUser.postUserAccount(userCOMMock);
 
 			await partnerHelper.assignUserToAccountRole(
 				accountPlatinum.id,
@@ -50,23 +53,21 @@ test.describe('MDF Request List', () => {
 		}
 	);
 
-	test.afterEach(async ({partnerHelper}) => {
+	test.afterEach(async ({apiHelpers}) => {
 		if (accountPlatinum) {
-			await partnerHelper.apiHelpers.headlessAdminUser.deleteAccount(
+			await apiHelpers.headlessAdminUser.deleteAccount(
 				accountPlatinum.id
 			);
 		}
 
 		if (userCOM) {
-			await partnerHelper.apiHelpers.headlessAdminUser.deleteUserAccount(
+			await apiHelpers.headlessAdminUser.deleteUserAccount(
 				Number(userCOM.id)
 			);
 		}
 
 		if (mdfRequest) {
-			await partnerHelper.apiHelpers.delete(
-				`/o/c/mdfrequests/${mdfRequest.id}`
-			);
+			await apiHelpers.delete(`/o/c/mdfrequests/${mdfRequest.id}`);
 		}
 	});
 
