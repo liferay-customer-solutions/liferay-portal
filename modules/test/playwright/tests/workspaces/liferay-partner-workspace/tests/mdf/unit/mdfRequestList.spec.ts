@@ -7,7 +7,7 @@ import {expect, mergeTests} from '@playwright/test';
 
 import {partnerPagesTest} from '../../../fixtures/partnerPagesTest';
 import {accountPlatinumMock} from '../../../mocks/accountMock';
-import {userCOMMock} from '../../../mocks/userMock';
+import {userAdminMock, userCOMMock} from '../../../mocks/userMock';
 import {TAccount} from '../../../types/account';
 import {TMDFRequest} from '../../../types/mdf';
 import {TUserAccount} from '../../../types/user';
@@ -22,38 +22,30 @@ test.describe('MDF Request List', () => {
 	let userCOM: TUserAccount;
 	let mdfRequest: TMDFRequest;
 
-	test.beforeEach(
-		async ({
-			apiHelpers,
-			mdfRequestListPage,
-			partnerHelper,
-			partnerSite,
-		}) => {
-			accountPlatinum =
-				await apiHelpers.headlessAdminUser.postAccount(
-					accountPlatinumMock
-				);
-			userCOM =
-				await apiHelpers.headlessAdminUser.postUserAccount(userCOMMock);
+	test.beforeEach(async ({apiHelpers, page, partnerHelper}) => {
+		await partnerHelper.performLogin(page, userAdminMock);
 
-			await partnerHelper.assignUserToAccountRole(
-				accountPlatinum.id,
-				EAccountRoles.PARTNER_MANAGER,
-				Number(userCOM.id)
-			);
+		accountPlatinum =
+			await apiHelpers.headlessAdminUser.postAccount(accountPlatinumMock);
+		userCOM =
+			await apiHelpers.headlessAdminUser.postUserAccount(userCOMMock);
 
-			const mdfRequestData = generateMDFRequestData(
-				accountPlatinum,
-				userCOM
-			);
+		await partnerHelper.assignUserToAccountRole(
+			accountPlatinum.id,
+			EAccountRoles.PARTNER_MANAGER,
+			Number(userCOM.id)
+		);
 
-			mdfRequest = await partnerHelper.createMDFRequest(mdfRequestData);
+		const mdfRequestData = generateMDFRequestData(accountPlatinum, userCOM);
 
-			await mdfRequestListPage.goto(partnerSite.friendlyUrlPath);
-		}
-	);
+		mdfRequest = await partnerHelper.createMDFRequest(mdfRequestData);
 
-	test.afterEach(async ({apiHelpers}) => {
+		await partnerHelper.performLogout(page);
+	});
+
+	test.afterEach(async ({apiHelpers, page, partnerHelper}) => {
+		await partnerHelper.performLogin(page, userAdminMock);
+
 		if (accountPlatinum) {
 			await apiHelpers.headlessAdminUser.deleteAccount(
 				accountPlatinum.id
@@ -66,12 +58,16 @@ test.describe('MDF Request List', () => {
 			);
 		}
 
+		await partnerHelper.performLogout(page);
+
 		if (mdfRequest) {
-			await apiHelpers.delete(`/o/c/mdfrequests/${mdfRequest.id}`);
+			await partnerHelper.deleteMDFRequest(mdfRequest.id);
 		}
 	});
 
-	test('Open MDF Request List', async ({page}) => {
+	test('Open MDF Request List', async ({mdfRequestListPage, page}) => {
+		await mdfRequestListPage.goto();
+
 		const heading = await page.getByRole('heading', {
 			name: 'MDF Requests',
 		});
