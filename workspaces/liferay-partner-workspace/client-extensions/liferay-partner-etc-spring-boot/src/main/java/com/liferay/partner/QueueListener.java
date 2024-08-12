@@ -68,7 +68,19 @@ public class QueueListener extends BaseRestController {
 			JSONObject koroneikiAccountJSONObject = jsonObject.getJSONObject(
 				"account");
 
-			if (!_isPartner(koroneikiAccountJSONObject)) {
+			String salesforceAccountKey = _getSalesforceAccountKey(
+				koroneikiAccountJSONObject);
+
+			if (_isPartner(koroneikiAccountJSONObject)) {
+				_createAccount(
+					koroneikiAccountJSONObject, salesforceAccountKey);
+
+				_assignUser(
+					salesforceAccountKey,
+					koroneikiAccountJSONObject.getString("name"), "",
+					_KORONEIKI_ROLE_PARTNER_MANAGER_NAME);
+			}
+			else {
 				channel.basicReject(deliveryTag, false);
 
 				if (_log.isInfoEnabled()) {
@@ -82,10 +94,7 @@ public class QueueListener extends BaseRestController {
 				return;
 			}
 
-			String salesforceAccountKey = _getSalesforceAccountKey(
-				koroneikiAccountJSONObject);
-
-			if (salesforceAccountKey.equals("")) {
+			if (salesforceAccountKey.isEmpty()) {
 				channel.basicReject(deliveryTag, false);
 
 				if (_log.isInfoEnabled()) {
@@ -299,6 +308,20 @@ public class QueueListener extends BaseRestController {
 			StringBundler.concat(
 				"/o/headless-admin-user/v1.0/roles/", roleId,
 				"/association/user-account/", userAccountId));
+	}
+
+	private void _createAccount(
+		JSONObject koroneikiAccountJSONObject, String salesforceAccountKey) {
+
+		JSONObject jsonObject = new JSONObject();
+
+		jsonObject.put(
+			"externalReferenceCode", salesforceAccountKey
+		).put(
+			"name", koroneikiAccountJSONObject.getString("name")
+		);
+
+		post(jsonObject.toString(), "/o/headless-admin-user/v1.0/accounts");
 	}
 
 	private long _getAccountRoleId(
