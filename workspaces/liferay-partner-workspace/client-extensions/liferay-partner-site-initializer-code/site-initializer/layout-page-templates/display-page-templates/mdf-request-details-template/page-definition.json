@@ -1308,7 +1308,7 @@
 																		},
 																		"text": {
 																			"mapping": {
-																				"fieldKey": "ObjectField_partnerCountry",
+																				"fieldKey": "ObjectField_partnerCountries",
 																				"itemReference": {
 																					"contextSource": "DisplayPageItem"
 																				}

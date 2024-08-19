@@ -56,6 +56,20 @@
 		},
 		{
 			"DBType": "String",
+			"businessType": "MultiselectPicklist",
+			"externalReferenceCode": "bd961419-bb00-4d69-8a02-86b9aac93a01",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Partner Countries"
+			},
+			"listTypeDefinitionId": "[$LIST_TYPE_DEFINITION_ID:Countries$]",
+			"name": "partnerCountries",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
 			"businessType": "Text",
 			"externalReferenceCode": "2892b7ec-1bbb-0a68-8724-f3cb8af12538",
 			"indexed": true,
