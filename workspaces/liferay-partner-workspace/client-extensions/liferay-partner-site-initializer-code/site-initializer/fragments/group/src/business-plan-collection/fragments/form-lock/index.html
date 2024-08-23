@@ -1,0 +1,6 @@
+[#assign displayObject = (request.getAttribute("LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER").getDisplayObject())!{} /]
+
+[#assign objectDefinitionId = (displayObject.getObjectDefinitionId())! /]
+[#assign objectEntryId = (displayObject.getObjectEntryId())! /]
+
+<span data-object-definition-id="${objectDefinitionId}" data-object-entry-id="${objectEntryId}" id="formLock_${fragmentEntryLinkNamespace}"></span>

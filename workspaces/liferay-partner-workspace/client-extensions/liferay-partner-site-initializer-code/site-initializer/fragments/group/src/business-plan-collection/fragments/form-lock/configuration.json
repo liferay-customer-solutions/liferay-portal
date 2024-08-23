@@ -1,0 +1,22 @@
+{
+	"fieldSets": [
+		{
+			"fields": [
+				{
+					"dataType": "string",
+					"defaultValue": "",
+					"label": "Status Field",
+					"name": "statusField",
+					"type": "text"
+				},
+				{
+					"dataType": "string",
+					"defaultValue": "",
+					"label": "Editable Statuses",
+					"name": "editableStatuses",
+					"type": "text"
+				}
+			]
+		}
+	]
+}

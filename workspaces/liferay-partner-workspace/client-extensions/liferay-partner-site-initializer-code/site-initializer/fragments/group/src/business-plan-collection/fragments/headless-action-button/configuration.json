@@ -1,0 +1,42 @@
+{
+	"fieldSets": [
+		{
+			"fields": [
+				{
+					"dataType": "string",
+					"defaultValue": "",
+					"label": "Action URL",
+					"name": "actionUrl",
+					"type": "text"
+				},
+				{
+					"dataType": "string",
+					"defaultValue": "",
+					"label": "Action Method",
+					"name": "actionMethod",
+					"type": "text"
+				},
+				{
+					"dataType": "string",
+					"defaultValue": "",
+					"label": "Action Body",
+					"name": "actionBody",
+					"type": "text"
+				},
+				{
+					"dataType": "string",
+					"defaultValue": "",
+					"label": "Redirect URL",
+					"name": "redirectUrl",
+					"type": "text"
+				},
+				{
+					"defaultValue": false,
+					"label": "Redirect Use Action Response",
+					"name": "redirectUseActionResponse",
+					"type": "checkbox"
+				}
+			]
+		}
+	]
+}

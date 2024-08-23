@@ -1,0 +1,8 @@
+[#assign displayObject = (request.getAttribute("LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER").getDisplayObject())!{} /]
+
+[#assign objectDefinitionId = (displayObject.getObjectDefinitionId())! /]
+[#assign objectEntryId = (displayObject.getObjectEntryId())! /]
+
+<a class="btn btn-outline-primary" data-object-definition-id="${objectDefinitionId}" data-object-entry-id="${objectEntryId}" href="javascript:;" id="modalButton_${fragmentEntryLinkNamespace}">
+	<span data-lfr-editable-id="text" data-lfr-editable-type="text">Open Modal</span>
+</a>

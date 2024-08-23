@@ -1,0 +1,15 @@
+{
+	"fieldSets": [
+		{
+			"fields": [
+				{
+					"dataType": "string",
+					"defaultValue": "",
+					"label": "Formula",
+					"name": "formula",
+					"type": "text"
+				}
+			]
+		}
+	]
+}

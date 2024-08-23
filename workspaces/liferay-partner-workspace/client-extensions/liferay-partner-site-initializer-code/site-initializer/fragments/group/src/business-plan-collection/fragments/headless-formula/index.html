@@ -1,0 +1,25 @@
+[#assign displayObject = (request.getAttribute("LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER").getDisplayObject())!{} /]
+
+[#assign objectDefinitionId = (displayObject.getObjectDefinitionId())! /]
+[#assign objectEntryId = (displayObject.getObjectEntryId())! /]
+
+[#assign objectDefinition = (restClient.get("/object-admin/v1.0/object-definitions/${objectDefinitionId}"))!{} /]
+
+[#assign objectEntry = (restClient.get("${objectDefinition.restContextPath?substring(2)}/${objectEntryId}"))!{} /]
+
+[#if objectEntry?has_content]
+	[#assign formula = configuration.formula /]
+	[#assign regex = r'\$\{([\w.]+)\}' /]
+
+	[#assign matches = formula?matches(regex)]
+
+	[#list matches as match]
+		[#assign matchValue = match?remove_beginning("${")?remove_ending("}") /]
+
+		[#assign formula = formula?replace(match, objectEntry[matchValue]!"0") /]
+	[/#list]
+
+	[#assign result = (formula?eval)! /]
+[/#if]
+
+<span id="headlessFormula_${fragmentEntryLinkNamespace}">${result!"-"}</span>
