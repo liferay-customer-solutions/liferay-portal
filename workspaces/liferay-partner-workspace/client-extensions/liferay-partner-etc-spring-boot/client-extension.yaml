@@ -1,7 +1,7 @@
 assemble:
     - fromTask: bootJar
 liferay-partner-etc-spring-boot-oauth-application-headless-server:
-    .serviceAddress: localhost:18080
+    .serviceAddress: localhost:8080
     .serviceScheme: http
     name: Liferay Partner Etc Spring Boot OAuth Application Headless Server
     scopes:
@@ -14,6 +14,13 @@ liferay-partner-etc-spring-boot-oauth-application-headless-server:
         - c_mdfrequest.everything.write
         - c_proxyaccount.everything.read
     type: oAuthApplicationHeadlessServer
+liferay-partner-etc-spring-boot-oauth-application-user-agent:
+    .serviceAddress: localhost:8080
+    .serviceScheme: http
+    name: Liferay Partner Etc Spring Boot OAuth Application User Agent
+    scopes:
+        - Liferay.Headless.Admin.User.read
+    type: oAuthApplicationUserAgent
 liferay-partner-etc-spring-boot-object-action-mdf-claim-status-management:
     name: Liferay Partner Etc Spring Boot Object Action MDF Claim Status Management
     oAuth2ApplicationExternalReferenceCode: liferay-partner-etc-spring-boot-oauth-application-headless-server
@@ -24,3 +31,8 @@ liferay-partner-etc-spring-boot-object-action-mdf-request-status-management:
     oAuth2ApplicationExternalReferenceCode: liferay-partner-etc-spring-boot-oauth-application-headless-server
     resourcePath: /object/action/mdf/request/status/management
     type: objectAction
+liferay-partner-etc-spring-boot-object-entry-manager-salesforce:
+    name: Liferay Partner Etc Spring Boot Object Entry Manager Salesforce
+    oAuth2ApplicationExternalReferenceCode: liferay-partner-etc-spring-boot-oauth-application-user-agent
+    resourcePath: /object/entry/manager/salesforce
+    type: objectEntryManager
