@@ -1,0 +1,353 @@
+{
+	"object-fields": [
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Account Name"
+			},
+			"name": "accountName",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "Boolean",
+			"businessType": "Boolean",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Active"
+			},
+			"name": "active",
+			"required": false,
+			"type": "Boolean"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Channel Owner Email"
+			},
+			"name": "channelOwnerEmail",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Channel Owner Id"
+			},
+			"name": "channelOwnerId",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Channel Owner Name"
+			},
+			"name": "channelOwnerName",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "Date",
+			"businessType": "Date",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Close Date"
+			},
+			"name": "closeDate",
+			"required": false,
+			"type": "Date"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Currency"
+			},
+			"name": "currency",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "External Reference Code"
+			},
+			"name": "externalReferenceCode",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Growth ARR"
+			},
+			"name": "growthArr",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "Boolean",
+			"businessType": "Boolean",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Has Renewal"
+			},
+			"name": "hasRenewal",
+			"required": false,
+			"type": "Boolean"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Opportunity"
+			},
+			"name": "opportunity",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Opportunity Name"
+			},
+			"name": "opportunityName",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Opportunity Owner Email"
+			},
+			"name": "opportunityOwnerEmail",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Opportunity Owner Id"
+			},
+			"name": "opportunityOwnerId",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Opportunity Owner Name"
+			},
+			"name": "opportunityOwnerName",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Opportunity Partner Account Name"
+			},
+			"name": "opportunityPartnerAccountName",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Owner Name"
+			},
+			"name": "ownerName",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Partner Account Name"
+			},
+			"name": "partnerAccountName",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Partner Email"
+			},
+			"name": "partnerEmail",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Partner First Name"
+			},
+			"name": "partnerFirstName",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Partner Last Name"
+			},
+			"name": "partnerLastName",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "Boolean",
+			"businessType": "Boolean",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Primary Seller"
+			},
+			"name": "primarySeller",
+			"required": false,
+			"type": "Boolean"
+		},
+		{
+			"DBType": "Date",
+			"businessType": "Date",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Project Subscription End Date"
+			},
+			"name": "projectSubscriptionEndDate",
+			"required": false,
+			"type": "Date"
+		},
+		{
+			"DBType": "Date",
+			"businessType": "Date",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Project Subscription Start Date"
+			},
+			"name": "projectSubscriptionStartDate",
+			"required": false,
+			"type": "Date"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Renewal ARR"
+			},
+			"name": "renewalArr",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Role"
+			},
+			"name": "role",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Stage"
+			},
+			"name": "stage",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Subscription ARR"
+			},
+			"name": "subscriptionArr",
+			"required": false,
+			"type": "String"
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Type"
+			},
+			"name": "type",
+			"required": false,
+			"type": "String"
+		}
+	],
+	"objectDefinitionId": "[$OBJECT_DEFINITION_ID:OpportunityPartnerRoleProxy$]"
+}

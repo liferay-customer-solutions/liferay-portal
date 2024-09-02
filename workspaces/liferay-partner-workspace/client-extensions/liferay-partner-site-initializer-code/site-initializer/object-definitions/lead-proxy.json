@@ -1,0 +1,30 @@
+{
+	"accountEntryRestricted": true,
+	"accountEntryRestrictedObjectFieldName": "accountExternalReferenceCode",
+	"externalReferenceCode": "LeadProxy",
+	"label": {
+		"en_US": "Lead Proxy"
+	},
+	"name": "LeadProxy",
+	"objectFields": [
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Account External Reference Code"
+			},
+			"name": "accountExternalReferenceCode",
+			"required": false,
+			"type": "String"
+		}
+	],
+	"panelCategoryKey": "applications_menu.applications.content",
+	"pluralLabel": {
+		"en_US": "Leads Proxy"
+	},
+	"portlet": true,
+	"scope": "company",
+	"storageType": "function#liferay-partner-etc-spring-boot-object-entry-manager-salesforce"
+}
