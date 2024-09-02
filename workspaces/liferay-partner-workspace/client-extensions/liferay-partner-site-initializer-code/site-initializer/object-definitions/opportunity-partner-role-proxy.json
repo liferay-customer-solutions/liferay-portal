@@ -1,0 +1,28 @@
+{
+	"externalReferenceCode": "OpportunityPartnerRoleProxy",
+	"label": {
+		"en_US": "Opportunity Partner Role Proxy"
+	},
+	"name": "OpportunityPartnerRoleProxy",
+	"objectFields": [
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en_US": "Account External Reference Code"
+			},
+			"name": "accountExternalReferenceCode",
+			"required": false,
+			"type": "String"
+		}
+	],
+	"panelCategoryKey": "applications_menu.applications.content",
+	"pluralLabel": {
+		"en_US": "Opportunities Partner Role Proxy"
+	},
+	"portlet": true,
+	"scope": "company",
+	"storageType": "function#liferay-partner-etc-spring-boot-object-entry-manager-salesforce"
+}
