@@ -5,7 +5,15 @@
 
 package com.liferay.partner;
 
+import com.liferay.partner.service.CloudFunctionsWebService;
+import com.liferay.partner.service.UserAccountWebService;
+import com.liferay.partner.utils.Constants;
+import com.liferay.petra.string.StringBundler;
+
 import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,125 +27,157 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.liferay.partner.service.CloudFunctionsWebService;
-import com.liferay.partner.service.UserAccountWebService;
-import com.liferay.partner.utils.Constants;
-import com.liferay.petra.string.StringBundler;
-
-import org.json.JSONObject;
-
 /**
  * @author Felipe Franca
  */
 @RequestMapping("/object/entry/manager/salesforce")
 @RestController
-public class ObjectEntryManagerSalesforceRestController extends BaseRestController {
+public class ObjectEntryManagerSalesforceRestController
+	extends BaseRestController {
 
 	@GetMapping("/{objectDefinitionExternalReferenceCode}")
-	public ResponseEntity<String> get(@AuthenticationPrincipal Jwt jwt,
+	public ResponseEntity<String> get(
+			@AuthenticationPrincipal Jwt jwt,
 			@PathVariable String objectDefinitionExternalReferenceCode,
-			@RequestParam Map<String, String> parameters) throws Exception {
+			@RequestParam Map<String, String> parameters)
+		throws Exception {
 
-		JSONObject userAccountJsonObject = _userAccountWebService.getUserAccount(jwt);
+		JSONObject userAccountJSONObject =
+			_userAccountWebService.getUserAccount(jwt);
 
-		String scope = _getScope(userAccountJsonObject);
+		String scope = _getScope(userAccountJSONObject);
 
 		if (scope.equals(Constants.UNAUTHORIZED)) {
-			return new ResponseEntity<String>(
-					"Access Denied",
-					HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>("Access Denied", HttpStatus.FORBIDDEN);
 		}
 
-		String scopeString = _getScopeString(objectDefinitionExternalReferenceCode, scope, userAccountJsonObject);
-
-		String stringParameters = _getStringParameters(parameters, scopeString);
+		String stringParameters = _getStringParameters(
+			parameters,
+			_getScopeString(
+				objectDefinitionExternalReferenceCode, scope,
+				userAccountJSONObject));
 
 		String endpoint = _getEndpoint(objectDefinitionExternalReferenceCode);
 
-		JSONObject itemsJsonObject = _cloudFunctionsWebService.getItems(endpoint + stringParameters);
+		JSONObject itemsJSONObject = _cloudFunctionsWebService.getItems(
+			endpoint + stringParameters);
 
-		return new ResponseEntity<String>(
-				new JSONObject().put(
-						"items", itemsJsonObject.getJSONArray("items")).put(
-								"totalCount", itemsJsonObject.getInt("totalCount"))
-						.toString(),
-				HttpStatus.OK);
+		return new ResponseEntity<>(
+			new JSONObject(
+			).put(
+				"items", itemsJSONObject.getJSONArray("items")
+			).put(
+				"totalCount", itemsJSONObject.getInt("totalCount")
+			).toString(),
+			HttpStatus.OK);
 	}
 
-	@GetMapping("/{objectDefinitionExternalReferenceCode}/{externalReferenceCode}")
-	public ResponseEntity<String> get(@AuthenticationPrincipal Jwt jwt,
-			@PathVariable String objectDefinitionExternalReferenceCode, @PathVariable String externalReferenceCode)
-			throws Exception {
+	@GetMapping(
+		"/{objectDefinitionExternalReferenceCode}/{externalReferenceCode}"
+	)
+	public ResponseEntity<String> get(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable String objectDefinitionExternalReferenceCode,
+			@PathVariable String externalReferenceCode)
+		throws Exception {
 
-		JSONObject userAccountJsonObject = _userAccountWebService.getUserAccount(jwt);
+		JSONObject userAccountJSONObject =
+			_userAccountWebService.getUserAccount(jwt);
 
-		String scope = _getScope(userAccountJsonObject);
+		String scope = _getScope(userAccountJSONObject);
 
 		if (scope.equals(Constants.UNAUTHORIZED)) {
-			return new ResponseEntity<String>(
-					"Access Denied",
-					HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>("Access Denied", HttpStatus.FORBIDDEN);
 		}
 
 		String endpoint = _getEndpoint(objectDefinitionExternalReferenceCode);
 
-		JSONObject itemJsonObject = _cloudFunctionsWebService.getItems(endpoint + "/" + externalReferenceCode);
+		JSONObject itemJSONObject = _cloudFunctionsWebService.getItems(
+			endpoint + "/" + externalReferenceCode);
 
-		if (_getSingleEntryPermission(itemJsonObject, objectDefinitionExternalReferenceCode, scope,
-				userAccountJsonObject)) {
-			return new ResponseEntity<String>(
-					itemJsonObject.toString(),
-					HttpStatus.OK);
+		if (_hasSingleEntryPermission(
+				itemJSONObject, objectDefinitionExternalReferenceCode, scope,
+				userAccountJSONObject)) {
+
+			return new ResponseEntity<>(
+				itemJSONObject.toString(), HttpStatus.OK);
 		}
 
-		return new ResponseEntity<String>(
-				"Access Denied",
-				HttpStatus.FORBIDDEN);
+		return new ResponseEntity<>("Access Denied", HttpStatus.FORBIDDEN);
 	}
 
 	private String _getEndpoint(String objectDefinitionExternalReferenceCode) {
-		if (objectDefinitionExternalReferenceCode.equals(Constants.LEAD_PROXY_EXTERNAL_REFERENCE_CODE))
-			return _leadProxyEndpoint;
+		if (objectDefinitionExternalReferenceCode.equals(
+				Constants.LEAD_PROXY_EXTERNAL_REFERENCE_CODE)) {
 
-		if (objectDefinitionExternalReferenceCode
-				.equals(Constants.OPPORTUNITY_PARTNER_ROLE_PROXY_EXTERNAL_REFERENCE_CODE))
+			return _leadProxyEndpoint;
+		}
+
+		if (objectDefinitionExternalReferenceCode.equals(
+				Constants.
+					OPPORTUNITY_PARTNER_ROLE_PROXY_EXTERNAL_REFERENCE_CODE)) {
+
 			return _opportunityPartnerRoleProxyEndpoint;
+		}
 
 		return null;
 	}
 
-	private String _getScope(JSONObject userAccountJsonObject) {
-		boolean isChannel = false;
-		boolean isPartner = false;
+	private String _getScope(JSONObject userAccountJSONObject) {
+		boolean channel = false;
+		boolean partner = false;
 
-		for (Object roleBriefObject : userAccountJsonObject.getJSONArray("roleBriefs")) {
-			JSONObject roleBriefJsonObject = new JSONObject(roleBriefObject.toString());
+		String roleName;
 
-			if (roleBriefJsonObject.getString("name").equals(Constants.ADMINISTRATOR)) {
+		for (Object roleBriefObject :
+				userAccountJSONObject.getJSONArray("roleBriefs")) {
+
+			JSONObject roleBriefJSONObject = new JSONObject(
+				roleBriefObject.toString());
+
+			roleName = roleBriefJSONObject.getString("name");
+
+			if (roleName.equals(Constants.ADMINISTRATOR)) {
 				return Constants.ADMINISTRATOR;
 			}
 
-			if (Constants.getChannelRoles().contains(roleBriefJsonObject.getString("name"))) {
-				isChannel = true;
+			if (Constants.getChannelRoles(
+				).contains(
+					roleName
+				)) {
+
+				channel = true;
+
 				continue;
 			}
 
-			if (Constants.getPartnerRoles().contains(roleBriefJsonObject.getString("name"))) {
-				isPartner = true;
+			if (Constants.getPartnerRoles(
+				).contains(
+					roleName
+				)) {
+
+				partner = true;
 			}
 		}
 
-		if (isChannel)
+		if (channel) {
 			return Constants.CHANNEL;
+		}
 
-		if (isPartner && userAccountJsonObject.getJSONArray("accountBriefs").length() > 0)
+		JSONArray accountBriefsJSONArray = userAccountJSONObject.getJSONArray(
+			"accountBriefs");
+
+		if (partner && (accountBriefsJSONArray.length() > 0)) {
 			return Constants.PARTNER;
+		}
 
 		return Constants.UNAUTHORIZED;
 	}
 
-	private String _getScopeString(String objectDefinitionExternalReferenceCode, String scope,
-			JSONObject userAccountJsonObject) {
+	private String _getScopeString(
+		String objectDefinitionExternalReferenceCode, String scope,
+		JSONObject userAccountJSONObject) {
+
 		StringBundler sb = new StringBundler();
 
 		if (scope.equals(Constants.ADMINISTRATOR)) {
@@ -145,18 +185,22 @@ public class ObjectEntryManagerSalesforceRestController extends BaseRestControll
 		}
 
 		if (scope.equals(Constants.CHANNEL)) {
-			if (objectDefinitionExternalReferenceCode.equals(Constants.LEAD_PROXY_EXTERNAL_REFERENCE_CODE)) {
+			if (objectDefinitionExternalReferenceCode.equals(
+					Constants.LEAD_PROXY_EXTERNAL_REFERENCE_CODE)) {
+
 				sb.append("partnerAccountOwnerEmail eq \'");
-				sb.append(userAccountJsonObject.getString("emailAddress"));
+				sb.append(userAccountJSONObject.getString("emailAddress"));
 				sb.append("\'");
 
 				return sb.toString();
 			}
 
-			if (objectDefinitionExternalReferenceCode
-					.equals(Constants.OPPORTUNITY_PARTNER_ROLE_PROXY_EXTERNAL_REFERENCE_CODE)) {
+			if (objectDefinitionExternalReferenceCode.equals(
+					Constants.
+						OPPORTUNITY_PARTNER_ROLE_PROXY_EXTERNAL_REFERENCE_CODE)) {
+
 				sb.append("channelOwnerEmail eq \'");
-				sb.append(userAccountJsonObject.getString("emailAddress"));
+				sb.append(userAccountJSONObject.getString("emailAddress"));
 				sb.append("\'");
 
 				return sb.toString();
@@ -164,19 +208,31 @@ public class ObjectEntryManagerSalesforceRestController extends BaseRestControll
 		}
 
 		int accountBriefsCounter = 1;
-		int accountBriefsSize = userAccountJsonObject.getJSONArray("accountBriefs").length();
+		int accountBriefsSize = userAccountJSONObject.getJSONArray(
+			"accountBriefs"
+		).length();
 
-		for (Object accountBriefObject : userAccountJsonObject.getJSONArray("accountBriefs")) {
-			JSONObject accountBriefJsonObject = new JSONObject(accountBriefObject.toString());
+		for (Object accountBriefObject :
+				userAccountJSONObject.getJSONArray("accountBriefs")) {
 
-			if (objectDefinitionExternalReferenceCode.equals(Constants.LEAD_PROXY_EXTERNAL_REFERENCE_CODE)){
+			JSONObject accountBriefJSONObject = new JSONObject(
+				accountBriefObject.toString());
+
+			if (objectDefinitionExternalReferenceCode.equals(
+					Constants.LEAD_PROXY_EXTERNAL_REFERENCE_CODE)) {
+
 				sb.append("partnerAccountId eq \'");
 			}
 
-			if (objectDefinitionExternalReferenceCode.equals(Constants.OPPORTUNITY_PARTNER_ROLE_PROXY_EXTERNAL_REFERENCE_CODE)){
+			if (objectDefinitionExternalReferenceCode.equals(
+					Constants.
+						OPPORTUNITY_PARTNER_ROLE_PROXY_EXTERNAL_REFERENCE_CODE)) {
+
 				sb.append("accountExternalReferenceCode eq \'");
 			}
-			sb.append(accountBriefJsonObject.getString("externalReferenceCode"));
+
+			sb.append(
+				accountBriefJSONObject.getString("externalReferenceCode"));
 			sb.append("\'");
 
 			if (accountBriefsCounter < accountBriefsSize) {
@@ -189,45 +245,9 @@ public class ObjectEntryManagerSalesforceRestController extends BaseRestControll
 		return sb.toString();
 	}
 
-	private boolean _getSingleEntryPermission(JSONObject itemJsonObject, String objectDefinitionExternalReferenceCode,
-			String scope, JSONObject userAccountJsonObject) {
-		if (scope.equals(Constants.ADMINISTRATOR)) {
-			return true;
-		}
+	private String _getStringParameters(
+		Map<String, String> parameters, String scopeString) {
 
-		if (scope.equals(Constants.CHANNEL)) {
-			if (objectDefinitionExternalReferenceCode.equals(Constants.LEAD_PROXY_EXTERNAL_REFERENCE_CODE)) {
-				return itemJsonObject.getString("partnerAccountOwnerEmail")
-						.equals(userAccountJsonObject.getString("emailAddress"));
-			}
-
-			if (objectDefinitionExternalReferenceCode
-					.equals(Constants.OPPORTUNITY_PARTNER_ROLE_PROXY_EXTERNAL_REFERENCE_CODE)) {
-				return itemJsonObject.getString("opportunityOwnerEmail")
-						.equals(userAccountJsonObject.getString("emailAddress"));
-			}
-		}
-
-		for (Object accountBriefObject : userAccountJsonObject.getJSONArray("accountBriefs")) {
-			JSONObject accountBriefJsonObject = new JSONObject(accountBriefObject.toString());
-
-			if (objectDefinitionExternalReferenceCode
-			.equals(Constants.LEAD_PROXY_EXTERNAL_REFERENCE_CODE) && itemJsonObject.getString("partnerAccountId")
-					.equals(accountBriefJsonObject.getString("externalReferenceCode"))) {
-				return true;
-			}
-
-			if (objectDefinitionExternalReferenceCode
-			.equals(Constants.OPPORTUNITY_PARTNER_ROLE_PROXY_EXTERNAL_REFERENCE_CODE) && itemJsonObject.getString("accountExternalReferenceCode")
-					.equals(accountBriefJsonObject.getString("externalReferenceCode"))) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private String _getStringParameters(Map<String, String> parameters, String scopeString) {
 		StringBundler sb = new StringBundler("?");
 
 		boolean addAmpersand = false;
@@ -240,12 +260,14 @@ public class ObjectEntryManagerSalesforceRestController extends BaseRestControll
 				sb.append(parameters.get("filter"));
 				sb.append(") and ");
 				sb.append(scopeString);
-			} else {
+			}
+			else {
 				sb.append(parameters.get("filter"));
 			}
 
 			addAmpersand = true;
-		} else if (!scopeString.isBlank()) {
+		}
+		else if (!scopeString.isBlank()) {
 			sb.append("filter=");
 			sb.append(scopeString);
 
@@ -292,23 +314,83 @@ public class ObjectEntryManagerSalesforceRestController extends BaseRestControll
 
 			sb.append("sort=");
 			sb.append(parameters.get("sort"));
-
-			addAmpersand = true;
 		}
 
 		return sb.toString();
 	}
 
-	@Autowired
-	private CloudFunctionsWebService _cloudFunctionsWebService;
+	private boolean _hasSingleEntryPermission(
+		JSONObject itemJSONObject, String objectDefinitionExternalReferenceCode,
+		String scope, JSONObject userAccountJSONObject) {
+
+		if (scope.equals(Constants.ADMINISTRATOR)) {
+			return true;
+		}
+
+		if (scope.equals(Constants.CHANNEL)) {
+			String userEmailAddress = userAccountJSONObject.getString(
+				"emailAddress");
+
+			if (objectDefinitionExternalReferenceCode.equals(
+					Constants.LEAD_PROXY_EXTERNAL_REFERENCE_CODE)) {
+
+				return userEmailAddress.equals(
+					itemJSONObject.getString("partnerAccountOwnerEmail"));
+			}
+
+			if (objectDefinitionExternalReferenceCode.equals(
+					Constants.
+						OPPORTUNITY_PARTNER_ROLE_PROXY_EXTERNAL_REFERENCE_CODE)) {
+
+				return userEmailAddress.equals(
+					itemJSONObject.getString("opportunityOwnerEmail"));
+			}
+		}
+
+		String accountBriefExternalReferenceCode;
+
+		for (Object accountBriefObject :
+				userAccountJSONObject.getJSONArray("accountBriefs")) {
+
+			JSONObject accountBriefJSONObject = new JSONObject(
+				accountBriefObject.toString());
+
+			accountBriefExternalReferenceCode =
+				accountBriefJSONObject.getString("externalReferenceCode");
+
+			if (objectDefinitionExternalReferenceCode.equals(
+					Constants.LEAD_PROXY_EXTERNAL_REFERENCE_CODE) &&
+				accountBriefExternalReferenceCode.equals(
+					itemJSONObject.getString("partnerAccountId"))) {
+
+				return true;
+			}
+
+			if (objectDefinitionExternalReferenceCode.equals(
+					Constants.
+						OPPORTUNITY_PARTNER_ROLE_PROXY_EXTERNAL_REFERENCE_CODE) &&
+				accountBriefExternalReferenceCode.equals(
+					itemJSONObject.getString("accountExternalReferenceCode"))) {
+
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	@Autowired
-	private UserAccountWebService _userAccountWebService;
+	private CloudFunctionsWebService _cloudFunctionsWebService;
 
 	@Value("${liferay.partner.cloud.functions.leadproxy.endpoint}")
 	private String _leadProxyEndpoint;
 
-	@Value("${liferay.partner.cloud.functions.opportunitypartnerroleproxy.endpoint}")
+	@Value(
+		"${liferay.partner.cloud.functions.opportunitypartnerroleproxy.endpoint}"
+	)
 	private String _opportunityPartnerRoleProxyEndpoint;
+
+	@Autowired
+	private UserAccountWebService _userAccountWebService;
 
 }
