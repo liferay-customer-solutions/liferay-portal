@@ -1,6 +1,6 @@
 {
-    "object-fields": [
-        {
+	"object-fields": [
+		{
 			"DBType": "String",
 			"businessType": "Picklist",
 			"externalReferenceCode": "IsoCode",
@@ -40,6 +40,6 @@
 			"required": false,
 			"type": "Date"
 		}
-    ],
-    "objectDefinitionId": "[$OBJECT_DEFINITION_ID:DatedConversionRateSF$]"
+	],
+	"objectDefinitionId": "[$OBJECT_DEFINITION_ID:DatedConversionRateSF$]"
 }
