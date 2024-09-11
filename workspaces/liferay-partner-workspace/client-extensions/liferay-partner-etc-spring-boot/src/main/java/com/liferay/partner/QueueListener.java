@@ -41,14 +41,18 @@ public class QueueListener extends BaseRestController {
 	@RabbitListener(
 		bindings = {
 			@QueueBinding(
-				exchange = @Exchange(type = ExchangeTypes.TOPIC, value = "koroneiki_exchange"),
-				value = @Queue("${spring.rabbitmq.template.default-receive-queue}")
+				exchange = @Exchange(type = ExchangeTypes.TOPIC, value = "test_exchange"),
+				value = @Queue("test_queue")
 			)
 		}
 	)
 	public void listener(
 		Message message, Channel channel,
 		@Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) {
+
+		System.out.println("Hey there!");
+		System.out.println(_springRabbitmqTemplateDefaultExchange);
+		System.out.println(_springRabbitmqTemplateDefaultReceiveQueue);
 
 		String routingKey = message.getMessageProperties(
 		).getReceivedRoutingKey();
@@ -64,6 +68,13 @@ public class QueueListener extends BaseRestController {
 			String body = new String(message.getBody(), "UTF-8");
 
 			JSONObject jsonObject = new JSONObject(body);
+
+			if (routingKey.equals("test_exchange")) {
+				_log.info(
+					StringBundler.concat(
+						"Recieved message from ", routingKey,
+						" with body: ", body));
+			}
 
 			JSONObject koroneikiAccountJSONObject = jsonObject.getJSONObject(
 				"account");
@@ -764,13 +775,10 @@ public class QueueListener extends BaseRestController {
 
 	private static final Log _log = LogFactory.getLog(QueueListener.class);
 
-	@Autowired
-	private LiferayOAuth2AccessTokenManager _liferayOAuth2AccessTokenManager;
+	@Value("${spring.rabbitmq.template.default-exchange}")
+	private String _springRabbitmqTemplateDefaultExchange;
 
-	@Value("${com.liferay.lxc.dxp.mainDomain}")
-	private String _lxcDXPMainDomain;
-
-	@Value("${com.liferay.lxc.dxp.server.protocol}")
-	private String _lxcDXPServerProtocol;
+	@Value("${spring.rabbitmq.template.default-receive-queue}")
+	private String _springRabbitmqTemplateDefaultReceiveQueue;
 
 }

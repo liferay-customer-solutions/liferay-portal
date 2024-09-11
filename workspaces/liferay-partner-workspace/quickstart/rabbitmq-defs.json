@@ -1,0 +1,63 @@
+{
+	"vhosts": [
+		{
+			"name": "/",
+			"users": [
+				{
+					"name": "test"
+				}
+			],
+			"permissions": [
+				{
+					"user": "test",
+					"permissions": [".*", ".*", ".*"]
+				}
+			]
+		}
+	],
+	"users": [
+		{
+			"name": "test",
+			"password": "test",
+			"tags": ["administrator"]
+		}
+	],
+	"permissions":[
+		{
+			"user":"test",
+			"vhost":"/",
+			"configure":".*",
+			"read":".*",
+			"write":".*"}
+	],
+	"exchanges": [
+		{
+			"name": "test_exchange",
+			"vhost": "/",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		}
+	],
+	"queues": [
+		{
+			"name": "test_queue",
+			"vhost": "/",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		}
+	],
+	"bindings": [
+		{
+			"source": "test_exchange",
+			"vhost": "/",
+			"destination": "test_queue",
+			"destination_type": "queue",
+			"routing_key": "*",
+			"arguments": {}
+		}
+	]
+}
