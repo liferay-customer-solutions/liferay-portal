@@ -10,10 +10,15 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.IdTokenCredentials;
 import com.google.auth.oauth2.IdTokenProvider;
+import com.google.cloud.functions.v2.Function;
+import com.google.cloud.functions.v2.FunctionName;
+import com.google.cloud.functions.v2.FunctionServiceClient;
+import com.google.cloud.functions.v2.FunctionServiceSettings;
 import com.google.common.io.CharStreams;
 
 import java.io.ByteArrayInputStream;
@@ -100,6 +105,18 @@ public class CloudFunctionsWebService {
 			}
 			finally {
 				httpResponse.disconnect();
+			}
+
+			//comment this and remove it from FunctionServiceClient.create() to test with your own account.
+			FunctionServiceSettings functionServiceSettings =
+    			FunctionServiceSettings.newBuilder()
+         			.setCredentialsProvider(FixedCredentialsProvider.create(credentials))
+         			.build();
+
+			try (FunctionServiceClient functionServiceClient = FunctionServiceClient.create(functionServiceSettings)) {
+				FunctionName name = FunctionName.of("is-sales-uat-20240208", "us-west2", "prm-api");
+				Function response = functionServiceClient.getFunction(name);
+				System.out.println(response.toString());
 			}
 
 			return jsonObject;
