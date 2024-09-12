@@ -28,5 +28,21 @@ services:
         ports:
             - 8000:8000
             - 8080:8080
+        user: liferay
         volumes:
-            - ../build/docker/client-extensions:/opt/liferay/osgi/client-extensions
+            - routes-dxp:/opt/liferay/routes/default/dxp
+            - routes-spring-boot:/opt/liferay/routes/default/liferay-partner-etc-spring-boot
+    spring-boot:
+        build: ../client-extensions/liferay-partner-etc-spring-boot/build/liferay-client-extension-build
+        container_name: liferay-partner-workspace-spring-boot
+        depends_on:
+            liferay:
+                condition: service_healthy
+        env_file: spring-boot.env
+        user: liferay
+        volumes:
+            - routes-dxp:/etc/liferay/lxc/dxp-metadata
+            - routes-spring-boot:/etc/liferay/lxc/ext-init-metadata
+volumes:
+    routes-dxp:
+    routes-spring-boot:

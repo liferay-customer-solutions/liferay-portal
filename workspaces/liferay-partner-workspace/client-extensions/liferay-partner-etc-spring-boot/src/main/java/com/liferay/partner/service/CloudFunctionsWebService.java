@@ -109,13 +109,19 @@ public class CloudFunctionsWebService {
 
 			//comment this and remove it from FunctionServiceClient.create() to test with your own account.
 			FunctionServiceSettings functionServiceSettings =
-    			FunctionServiceSettings.newBuilder()
-         			.setCredentialsProvider(FixedCredentialsProvider.create(credentials))
-         			.build();
+				FunctionServiceSettings.newBuilder(
+				).setCredentialsProvider(
+					FixedCredentialsProvider.create(credentials)
+				).build();
 
-			try (FunctionServiceClient functionServiceClient = FunctionServiceClient.create(functionServiceSettings)) {
-				FunctionName name = FunctionName.of("is-sales-uat-20240208", "us-west2", "prm-api");
+			try (FunctionServiceClient functionServiceClient =
+					FunctionServiceClient.create(functionServiceSettings)) {
+
+				FunctionName name = FunctionName.of(
+					"is-sales-uat-20240208", "us-west2", "prm-api");
+
 				Function response = functionServiceClient.getFunction(name);
+
 				System.out.println(response.toString());
 			}
 
