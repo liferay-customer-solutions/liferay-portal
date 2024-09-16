@@ -1,0 +1,8 @@
+a.headless-action-container {
+	color: unset;
+	text-decoration: none;
+
+	&:hover {
+		text-decoration: none;
+	}
+}

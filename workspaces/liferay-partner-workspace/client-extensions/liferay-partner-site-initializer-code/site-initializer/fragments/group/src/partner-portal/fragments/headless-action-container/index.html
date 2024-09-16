@@ -1,0 +1,52 @@
+[#assign displayObject = (request.getAttribute("LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER").getDisplayObject())!{} /]
+
+[#assign objectDefinitionId = (displayObject.getObjectDefinitionId())! /]
+[#assign objectEntryId = (displayObject.getObjectEntryId())! /]
+
+[#function parseAndReplaceVariables(string, jsonObject)]
+	[#assign regex = r"\$\{([\w.]+)\}" /]
+
+	[#assign matches = string?matches(regex) /]
+
+	[#list matches as match]
+		[#assign value = jsonObject.get(match[1]) /]
+
+		[#assign string = string?replace(match, value) /]
+	[/#list]
+
+	[#return string /]
+[/#function]
+
+[#assign objectEntryJSON = jsonFactoryUtil.createJSONObject() /]
+
+[#if validator.isNotNull(objectDefinitionId)]
+	[#assign objectDefinitionResponse = restClient.get("/o/object-admin/v1.0/object-definitions/" + objectDefinitionId) /]
+
+	[#assign objectDefinitionJSON = jsonFactoryUtil.createJSONObject(objectDefinitionResponse) /]
+
+	[#if validator.isNotNull(objectEntryId)]
+		[#assign objectEntryResponse = restClient.get(objectDefinitionJSON.restContextPath + "/" + objectEntryId) /]
+
+		[#assign objectEntryJSON = jsonFactoryUtil.createJSONObject(objectEntryResponse) /]
+	[/#if]
+[/#if]
+
+[#assign actionBody = configuration.actionBody /]
+[#assign actionUrl = configuration.actionUrl /]
+[#assign redirectUrl = configuration.redirectUrl /]
+
+[#if validator.isNotNull(actionBody)]
+	[#assign actionBody = parseAndReplaceVariables(actionBody, objectEntryJSON) /]
+[/#if]
+
+[#if validator.isNotNull(actionUrl)]
+	[#assign actionUrl = parseAndReplaceVariables(actionUrl, objectEntryJSON) /]
+[/#if]
+
+[#if validator.isNotNull(redirectUrl)]
+	[#assign redirectUrl = parseAndReplaceVariables(redirectUrl, objectEntryJSON) /]
+[/#if]
+
+<a class="headless-action-container" data-action-body="${actionBody}" data-action-callback="${configuration.actionCallback}" data-action-url="${actionUrl}" href="${redirectUrl}" id="headlessActionContainer_${fragmentEntryLinkNamespace}">
+	<lfr-drop-zone></lfr-drop-zone>
+</a>

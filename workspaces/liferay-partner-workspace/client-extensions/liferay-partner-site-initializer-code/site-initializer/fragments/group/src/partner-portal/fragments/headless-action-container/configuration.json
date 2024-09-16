@@ -1,0 +1,74 @@
+{
+	"fieldSets": [
+		{
+			"fields": [
+				{
+					"dataType": "string",
+					"defaultValue": "",
+					"label": "Redirect URL",
+					"name": "redirectUrl",
+					"type": "text"
+				}
+			],
+			"label": "Headless API"
+		},
+		{
+			"configurationRole": "advanced",
+			"fields": [
+				{
+					"dataType": "string",
+					"defaultValue": "",
+					"label": "Action URL",
+					"name": "actionUrl",
+					"type": "text"
+				},
+				{
+					"dataType": "string",
+					"defaultValue": "GET",
+					"label": "Action Method",
+					"name": "actionMethod",
+					"type": "select",
+					"typeOptions": {
+						"validValues": [
+							{
+								"label": "GET",
+								"value": "GET"
+							},
+							{
+								"label": "PUT",
+								"value": "PUT"
+							},
+							{
+								"label": "DELETE",
+								"value": "DELETE"
+							},
+							{
+								"label": "POST",
+								"value": "POST"
+							},
+							{
+								"label": "PATCH",
+								"value": "PATCH"
+							}
+						]
+					}
+				},
+				{
+					"dataType": "string",
+					"defaultValue": "",
+					"label": "Action Body",
+					"name": "actionBody",
+					"type": "text"
+				},
+				{
+					"dataType": "string",
+					"defaultValue": "",
+					"label": "Action Callback",
+					"name": "actionCallback",
+					"type": "text"
+				}
+			],
+			"label": "Headless API"
+		}
+	]
+}
