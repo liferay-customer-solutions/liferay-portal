@@ -1,0 +1,8 @@
+[#assign displayObject = (request.getAttribute("LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER").getDisplayObject())!{} /]
+
+[#assign objectDefinitionId = (displayObject.getObjectDefinitionId())! /]
+[#assign objectEntryId = (displayObject.getObjectEntryId())! /]
+
+<div data-object-definition-id="${objectDefinitionId}" data-object-entry-id="${objectEntryId}" id="conditional_container_${fragmentEntryLinkNamespace}">
+	<lfr-drop-zone></lfr-drop-zone>
+</div>

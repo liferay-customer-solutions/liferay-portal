@@ -1,0 +1,32 @@
+{
+	"fieldSets": [
+		{
+			"fields": [
+				{
+					"dataType": "string",
+					"defaultValue": "",
+					"description": "e.g. businessPlanStatus",
+					"label": "Field",
+					"name": "field",
+					"type": "text"
+				},
+				{
+					"dataType": "string",
+					"defaultValue": "",
+					"description": "Values to trigger condition. Comma separated.",
+					"label": "Values",
+					"name": "valuesToHide",
+					"type": "text"
+				},
+				{
+					"dataType": "string",
+					"defaultValue": false,
+					"description": "Otherwise, hide by default. Only show when values are true.",
+					"label": "Hide when Values are true",
+					"name": "hideOnMatch",
+					"type": "checkbox"
+				}
+			]
+		}
+	]
+}
