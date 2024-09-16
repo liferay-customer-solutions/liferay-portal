@@ -1,0 +1,30 @@
+.f-accordion {
+	border-radius: var(--border-radius);
+
+	input {
+		opacity: 0;
+		position: absolute;
+		z-index: -1;
+
+		&:checked ~ .accordion-item-content {
+			max-height: 100vh;
+		}
+	}
+
+	.accordion-item-content > div,
+	.accordion-item-label > div {
+		width: 100%;
+	}
+	
+	.accordion-item-content {
+		max-height: 0;
+		overflow: hidden;
+	}
+
+	.accordion-item-label {
+		border-radius: var(--border-radius);
+		display: flex;
+		margin: 0;
+		width: 100%;
+	}
+}
