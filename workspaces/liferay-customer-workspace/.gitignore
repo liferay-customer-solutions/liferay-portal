@@ -1,6 +1,7 @@
 .DS_Store
 /.idea
 /bundles
+/liferay/patching
 /poshi/poshi-ext.properties
 /poshi/test-results
 /poshi/tests
