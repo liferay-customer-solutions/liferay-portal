@@ -2,6 +2,9 @@
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
+
+/* eslint-disable no-undef */
+
 const isRTL = document.documentElement.classList.contains('rtl');
 
 const buttonElement = fragmentElement.querySelector('.btn');
@@ -9,33 +12,21 @@ const dropdownElement = fragmentElement.querySelector('.dropdown-menu');
 const optionListElement = fragmentElement.querySelector('.list-unstyled');
 
 const chooseOptionElement = document.getElementById(
-
-	// eslint-disable-next-line no-undef
 	`${fragmentEntryLinkNamespace}-choose-option-message`
 );
 const labelInputElement = document.getElementById(
-
-	// eslint-disable-next-line no-undef
 	`${fragmentEntryLinkNamespace}-label-input`
 );
 const loadingResultsElement = document.getElementById(
-
-	// eslint-disable-next-line no-undef
 	`${fragmentEntryLinkNamespace}-loading-results-message`
 );
 const noResultsElement = document.getElementById(
-
-	// eslint-disable-next-line no-undef
 	`${fragmentEntryLinkNamespace}-no-results-message`
 );
 const uiInputElement = document.getElementById(
-
-	// eslint-disable-next-line no-undef
 	`${fragmentEntryLinkNamespace}-select-from-list-input`
 );
 const valueInputElement = document.getElementById(
-
-	// eslint-disable-next-line no-undef
 	`${fragmentEntryLinkNamespace}-value-input`
 );
 
@@ -91,18 +82,15 @@ const KEYS = {
 	Enter: 'Enter',
 	Home: 'Home',
 };
-
 const optionList = (input.attributes.options || []).map((option) => ({
 	textContent: option.label,
 	textValue: option.label.toLowerCase(),
 	value: option.value,
 }));
-console.log(optionList);
-
 if (input.attributes.options?.length === 1) {
 	setSelectedOption({
-		textContent: options[0].label,
 		dataset: {optionValue: options[0].value},
+		textContent: options[0].label,
 	});
 }
 
@@ -195,23 +183,25 @@ function handleInputChange() {
 		chooseOptionElement.classList.add('d-none');
 		loadingResultsElement.classList.remove('d-none');
 
-		filterOptions(filterValue).then((filteredOptions) => {
-			loadingResultsElement.classList.add('d-none');
-			renderOptionList(filteredOptions);
+		filterOptions(filterValue)
+			.then((filteredOptions) => {
+				loadingResultsElement.classList.add('d-none');
+				renderOptionList(filteredOptions);
 
-			if (optionListElement.firstElementChild) {
-				chooseOptionElement.classList.remove('d-none');
-				noResultsElement.classList.add('d-none');
+				if (optionListElement.firstElementChild) {
+					chooseOptionElement.classList.remove('d-none');
+					noResultsElement.classList.add('d-none');
 
-				setFocusedOption(optionListElement.firstElementChild, {
-					scrollToElement: false,
-				});
-			}
-			else {
-				chooseOptionElement.classList.add('d-none');
-				noResultsElement.classList.remove('d-none');
-			}
-		});
+					setFocusedOption(optionListElement.firstElementChild, {
+						scrollToElement: false,
+					});
+				}
+				else {
+					chooseOptionElement.classList.add('d-none');
+					noResultsElement.classList.remove('d-none');
+				}
+			})
+			.catch((error) => console.error(error));
 	}
 }
 
@@ -220,7 +210,9 @@ function filterOptions(query) {
 		if (input.attributes.relationshipURL) {
 			lastSearchAbortController.abort();
 			lastSearchAbortController = new AbortController();
-			filterRemoteOptions(query, lastSearchAbortController).then(resolve);
+			filterRemoteOptions(query, lastSearchAbortController)
+				.then(resolve)
+				.catch((error) => console.error(error));
 		}
 		else if (query) {
 			resolve(filterLocalOptions(query));
@@ -351,7 +343,6 @@ function createOptionElement(option) {
 
 	optionElement.dataset.optionValue = option.value;
 
-	// eslint-disable-next-line no-undef
 	optionElement.id = `${fragmentEntryLinkNamespace}-option-${option.value}`;
 	optionElement.textContent = option.textContent;
 
@@ -377,8 +368,6 @@ function setSelectedOption(optionElement) {
 	closeDropdown();
 
 	const selectedOption = document.getElementById(
-
-		// eslint-disable-next-line no-undef
 		`${fragmentEntryLinkNamespace}-option-${valueInputElement.value}`
 	);
 
