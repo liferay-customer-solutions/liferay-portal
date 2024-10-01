@@ -106,6 +106,7 @@ const TeamMembersTableHeader = ({
 
 						{hasAdministratorRole && (
 							<Button
+								aria-label="Invite users"
 								className="bg-white ml-3 px-3 py-2"
 								displayType="primary"
 								onClick={() => {

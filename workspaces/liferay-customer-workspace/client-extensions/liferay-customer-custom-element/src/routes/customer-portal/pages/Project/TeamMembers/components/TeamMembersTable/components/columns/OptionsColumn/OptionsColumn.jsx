@@ -52,6 +52,7 @@ const OptionsColumn = ({
 				<ButtonDropDown
 					customDropDownButton={
 						<ButtonWithIcon
+							aria-label="User management options"
 							displayType="null"
 							small
 							symbol="ellipsis-v"

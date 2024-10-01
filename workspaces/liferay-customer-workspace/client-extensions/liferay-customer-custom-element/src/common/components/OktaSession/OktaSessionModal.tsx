@@ -20,9 +20,9 @@ const OktaSessionModal: React.FC<OktaSessionModalProps> = ({
 }) => (
 	<ClayModal center className="remove-user-modal" observer={observer}>
 		<ClayModal.Header className="h-100 p-4">
-			<h2 className="mb-0 text-neutral-10">
+			<span className="header-modal-title mb-0 text-neutral-10">
 				{i18n.translate('session-expired')}
-			</h2>
+			</span>
 		</ClayModal.Header>
 
 		<ClayModal.Body className="px-4 py-3">
@@ -35,6 +35,7 @@ const OktaSessionModal: React.FC<OktaSessionModalProps> = ({
 			className="p-4"
 			first={
 				<Button
+					aria-label="Exit Customer Portal"
 					className="font-weight-bold"
 					displayType="unstyled"
 					onClick={onClose}
@@ -43,7 +44,10 @@ const OktaSessionModal: React.FC<OktaSessionModalProps> = ({
 				</Button>
 			}
 			last={
-				<Button className="bg-danger d-flex ml-3" onClick={onClick}>
+				<Button
+					aria-label="Return to sign in"
+					className="bg-danger d-flex ml-3" onClick={onClick}
+				>
 					{i18n.translate('return-to-sign-in')}
 				</Button>
 			}

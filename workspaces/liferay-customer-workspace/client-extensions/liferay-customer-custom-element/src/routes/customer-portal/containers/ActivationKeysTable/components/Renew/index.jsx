@@ -92,7 +92,8 @@ const RenewButton = ({
 	return (
 		<>
 			<ClayButton
-				className={classNames('btn mx-2 px-3 py-2', {
+				aria-label="Renew button"
+				className={classNames('btn mx-2 px-3 py-2 guesslo', {
 					'btn-outline-dark cp-deactivate-button  text-dark':
 						!isVisibleModal && !isRenewTable,
 				})}

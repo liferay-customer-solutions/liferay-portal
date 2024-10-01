@@ -47,7 +47,6 @@ const DropzoneUpload = ({
 						<span className="dropzone-upload-text">{title}</span>
 
 						<Button
-							aria-label="Select file"
 							className="btn btn-outline-primary d-flex dropzone-upload-button ml-2"
 						>
 							<span>{buttonText}</span>

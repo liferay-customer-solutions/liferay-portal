@@ -47,6 +47,7 @@ const Search: React.FC<SearchProps> = ({setSearchTerm}) => {
 					tag="span"
 				>
 					<Button
+						aria-label="Search"
 						displayType="unstyled"
 						onClick={() =>
 							setValue((previousValue) =>

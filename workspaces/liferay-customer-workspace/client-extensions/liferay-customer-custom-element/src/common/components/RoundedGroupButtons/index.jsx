@@ -20,6 +20,7 @@ const RoundedGroupButtons = ({groupButtons, handleOnChange, id, ...props}) => {
 		>
 			{groupButtons?.map(({label, value}, index) => (
 				<Button
+					aria-label={`Select ${value} keys`}
 					className={classNames('btn px-4 py-1 rounded-pill', {
 						'bg-transparent text-neutral-4':
 							selectedButton !== value,

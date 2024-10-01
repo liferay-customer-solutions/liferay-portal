@@ -26,6 +26,7 @@ const AccountSubscriptionGroupsDropdown = ({
 			onActiveChange={setActive}
 			trigger={
 				<ClayButton
+					aria-label="Select the subscription product"
 					borderless
 					className="align-items-center d-flex px-2"
 					data-testid="subscriptionDropDown"

@@ -11,14 +11,23 @@ import TablePagination from './Pagination';
 import TableSkeleton from './Skeleton';
 
 const Table = ({
-	checkboxConfig,
+	checkboxConfig = { checkboxesChecked: [], setCheckboxesChecked: () => {} },
 	columns,
 	handleSortChange,
 	hasCheckbox,
 	hasPagination,
 	hasSorting,
 	isLoading = false,
-	paginationConfig,
+	paginationConfig = {
+		activePage: 1,
+		itemsPerPage: 5,
+		labels: '',
+		listItemsPerPage: [],
+		setActivePage: () => {},
+		setItemsPerPage: () => {},
+		showDeltasDropDown: false,
+		totalCount: 1,
+	},
 	rows,
 	...props
 }) => {
@@ -60,7 +69,7 @@ const Table = ({
 
 		setCheckboxesChecked((previousCheckboxesChecked) =>
 			previousCheckboxesChecked.filter(
-				(CheckboxChecked) => CheckboxChecked !== id
+				(checkboxChecked) => checkboxChecked !== id
 			)
 		);
 	};
@@ -86,6 +95,7 @@ const Table = ({
 						{hasCheckbox && (
 							<ClayTable.Cell className="text-center">
 								<input
+									aria-label='Select All'
 									checked={isAllCheckboxsSelected}
 									onChange={handleToggleAllCheckboxsSelected}
 									type="checkbox"
@@ -121,6 +131,7 @@ const Table = ({
 										{hasSorting &&
 											column.filterIdentifier && (
 												<FilterIcon
+													aria-label='Filter items'
 													columnName={
 														column.filterIdentifier
 													}
@@ -155,6 +166,7 @@ const Table = ({
 										key={`checkbox-${rowIndex}`}
 									>
 										<input
+											aria-label={`Select ${row.id}`}
 											checked={checkboxesChecked.includes(
 												row.id
 											)}
@@ -171,6 +183,7 @@ const Table = ({
 
 								{columns.map((column, columnIndex) => (
 									<ClayTable.Cell
+										aria-label='hehe'
 										align={column.align}
 										className={column.bodyClass}
 										columnTextAlignment={column.align}
@@ -216,20 +229,6 @@ const Table = ({
 			)}
 		</>
 	);
-};
-
-Table.defaultProps = {
-	checkboxConfig: {checkboxesChecked: [], setCheckboxesChecked: () => {}},
-	paginationConfig: {
-		activePage: 1,
-		itemsPerPage: 5,
-		labels: '',
-		listItemsPerPage: [],
-		setActivePage: () => {},
-		setItemsPerPage: () => {},
-		showDeltasDropDown: false,
-		totalCount: 1,
-	},
 };
 
 export default Table;

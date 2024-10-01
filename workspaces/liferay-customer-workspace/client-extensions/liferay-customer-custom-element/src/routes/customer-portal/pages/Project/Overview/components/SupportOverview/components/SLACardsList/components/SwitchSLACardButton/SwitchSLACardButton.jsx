@@ -7,6 +7,7 @@ import {ClayButtonWithIcon} from '@clayui/button';
 
 const SwitchSLACardButton = ({handleClick}) => (
 	<ClayButtonWithIcon
+		aria-label="Switch SLA Card"
 		className="bg-white cp-switch-sla-card-button d-none p-1 position-absolute rounded-circle shadow-lg"
 		displayType="primary"
 		onClick={handleClick}

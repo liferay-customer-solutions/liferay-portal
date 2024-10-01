@@ -78,6 +78,7 @@ const DeactivateButton = ({
 				))}
 
 			<ClayButton
+				aria-label="Deactivate keys button"
 				className="btn-outline-danger cp-deactivate-button mx-2 px-3 py-2"
 				onClick={() => setIsVisibleModal(true)}
 			>

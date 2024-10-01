@@ -134,6 +134,7 @@ const ActivationStatusAnalyticsCloud = () => {
 					align={Align.BottomRight}
 					customDropDownButton={
 						<ButtonWithIcon
+							aria-label="Set to active"
 							displayType="null"
 							small
 							symbol="caret-bottom"
@@ -160,6 +161,7 @@ const ActivationStatusAnalyticsCloud = () => {
 			buttonLink: userAccount.isAccountAdmin && (
 				<Button
 					appendIcon="order-arrow-right"
+					aria-label="Finish Analytics Cloud activation"
 					className="btn btn-link font-weight-semi-bold p-0 text-brand-primary text-paragraph"
 					displayType="link"
 					onClick={() => setIsVisible(true)}

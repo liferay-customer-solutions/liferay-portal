@@ -544,7 +544,7 @@ const SelectSubscription = ({
 				leftButton: (
 					<Link to={urlPreviousPage}>
 						<Button
-							aria-label={i18n.translate('cancel')}
+							aria-label="Cancel"
 							className="btn btn-borderless btn-style-neutral"
 							displayType="secondary"
 						>
@@ -554,7 +554,7 @@ const SelectSubscription = ({
 				),
 				middleButton: (
 					<Button
-						aria-label={i18n.translate('next')}
+						aria-label="Next"
 						disabled={
 							(keyCount >
 								availableActivationKeysTotal &&

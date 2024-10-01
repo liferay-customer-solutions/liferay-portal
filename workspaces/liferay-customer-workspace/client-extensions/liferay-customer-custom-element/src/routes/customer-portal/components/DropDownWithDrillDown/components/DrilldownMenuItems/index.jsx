@@ -44,6 +44,7 @@ const DrilldownMenuItems = ({
 							onClick={onBack}
 						>
 							<ClayButtonWithIcon
+								aria-label={header}
 								className="component-action dropdown-item-indicator-start text-neutral-2"
 								onClick={onBack}
 								symbol="angle-left-small"
@@ -85,6 +86,7 @@ const DrilldownMenuItems = ({
 								) : (
 									<li key={`${j}-${title}`}>
 										<Button
+											aria-label=""
 											className={classNames(
 												'dropdown-item',
 												className

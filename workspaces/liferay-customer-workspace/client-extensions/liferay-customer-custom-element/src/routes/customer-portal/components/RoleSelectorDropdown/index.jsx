@@ -98,6 +98,7 @@ const RoleSelectorDropdown = ({
 			onActiveChange={setActive}
 			trigger={
 				<Button
+					aria-label={selectedAccountRoleName[0]}
 					className="align-items-center bg-white d-flex justify-content-between w-100"
 					displayType="secondary"
 					outline
@@ -130,7 +131,7 @@ const RoleSelectorDropdown = ({
 									<RadioRoles
 										className="pr-6"
 										key={index}
-										onClick={() => {
+										onChange={() => {
 											const newObject = {...radioOptions};
 
 											Object.keys(radioOptions).forEach(
@@ -169,7 +170,7 @@ const RoleSelectorDropdown = ({
 													.active
 											}
 											key={accountRoleIndex}
-											onClick={() => {
+											onChange={() => {
 												const newObject = {
 													...radioOptions,
 												};
@@ -226,7 +227,7 @@ const RoleSelectorDropdown = ({
 							<RadioRoles
 								className="pr-6"
 								disabled={accountRole.disabled}
-								onClick={() => {
+								onChange={() => {
 									const newObject = {...radioOptions};
 
 									Object.keys(radioOptions).forEach(
@@ -273,6 +274,7 @@ const RoleSelectorDropdown = ({
 
 			<ClayTooltipProvider>
 				<Button
+					aria-label="Apply changes"
 					className="btn btn-sm px-2 py-2 w-100"
 					data-tooltip-align="right"
 					disabled={!atLeastOneFieldIsFilled}
@@ -286,10 +288,9 @@ const RoleSelectorDropdown = ({
 						setActive(false);
 					}}
 					title={
-						!atLeastOnePartnerMemberSelected &&
-						i18n.translate(
-							'partner-members-must-have-at-least-one-role-assigned'
-						)
+						!atLeastOnePartnerMemberSelected 
+						  ? i18n.translate('partner-members-must-have-at-least-one-role-assigned') 
+						  : undefined
 					}
 				>
 					{i18n.translate('apply')}

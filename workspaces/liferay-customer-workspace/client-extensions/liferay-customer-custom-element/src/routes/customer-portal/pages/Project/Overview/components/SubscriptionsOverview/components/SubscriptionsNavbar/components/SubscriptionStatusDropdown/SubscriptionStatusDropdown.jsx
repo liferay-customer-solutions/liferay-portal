@@ -83,6 +83,7 @@ const SubscriptionStatusDropdown = ({disabled, loading, onClick}) => {
 				onActiveChange={setActive}
 				trigger={
 					<Button
+						aria-label="Select subscription status"
 						borderless
 						className="align-items-center d-flex px-2"
 						disabled={disabled || loading}
