@@ -10,7 +10,7 @@ import i18n from '../../../../common/I18n';
 import useIntersectionObserver from '../../../../common/hooks/useIntersectionObserver';
 import {Liferay} from '../../../../common/services/liferay';
 import routerPath from '../../../../common/utils/routerPath';
-import ProjectCard from './components/ProjectCard';
+import ProjectCard from '../ProjectCard';
 
 const RenderResults = ({compressed, koroneikiAccounts, loading}) => {
 	const pageRoutes = routerPath();

@@ -6,14 +6,14 @@
 import ClayCard from '@clayui/card';
 import classNames from 'classnames';
 import {memo} from 'react';
-import i18n from '../../../../../../common/I18n';
-import {Skeleton, StatusTag} from '../../../../../../common/components';
+import i18n from '../../../../common/I18n';
+import {Skeleton, StatusTag} from '../../../../common/components';
 import {
 	FORMAT_DATE_TYPES,
 	SLA_STATUS_TYPES,
-} from '../../../../../../common/utils/constants';
-import getDateCustomFormat from '../../../../../../common/utils/getDateCustomFormat';
-import getKebabCase from '../../../../../../common/utils/getKebabCase';
+} from '../../../../common/utils/constants';
+import getDateCustomFormat from '../../../../common/utils/getDateCustomFormat';
+import getKebabCase from '../../../../common/utils/getKebabCase';
 
 const statusReport = {
 	[SLA_STATUS_TYPES.active]: i18n.translate('ends-on'),
