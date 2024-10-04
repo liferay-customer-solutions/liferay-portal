@@ -4,14 +4,27 @@
  */
 
 import {useState} from 'react';
+
 import i18n from '../../../../common/I18n';
 import Skeleton from '../../../../common/components/Skeleton';
-import SearchBar from './components/SearchBar/SearchBar';
+import SearchBar from '../SearchBar/SearchBar';
 
-const SearchHeader = ({count, loading, onSearchSubmit, search}) => {
+interface IProps {
+	count: number;
+	loading: boolean;
+	onSearchSubmit: Function;
+	search: string;
+}
+
+const SearchHeader: React.FC<IProps> = ({
+	count,
+	loading,
+	onSearchSubmit,
+	search,
+}) => {
 	const [hasTerm, setHasTerm] = useState(false);
 
-	const getCounter = () => {
+	const getCounter = (): string => {
 		return `${count} ${
 			hasTerm
 				? i18n.pluralize(count, 'result')
@@ -30,7 +43,7 @@ const SearchHeader = ({count, loading, onSearchSubmit, search}) => {
 			/>
 
 			{loading ? (
-				<Skeleton height={22} width={85} />
+				<Skeleton align="left" height={22} width={85} />
 			) : (
 				<h5 className="m-0 text-neutral-7">{getCounter()}</h5>
 			)}

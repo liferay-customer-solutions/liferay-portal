@@ -6,30 +6,28 @@
 import {ApolloClient} from '@apollo/client';
 import {createContext, useContext} from 'react';
 
-export const AppPropertiesContext = createContext({
-	accountSettingsURL: '',
-	articleAccountSupportURL: '',
-	articleDeactivateKey: '',
-	articleDeployingActivationKeysURL: '',
-	articleGettingStartedWithLiferayEnterpriseSearchURL: '',
-	articleNotifiedWhenMyActivationKeyIsAboutToExpireURL: '',
-	articleWhatIsMyInstanceSizingValueURL: '',
-	client: null,
-	featureFlags: [],
-	gravatarAPI: '',
-	importDate: null,
-	oktaSessionAPI: '',
-	provisioningServerAPI: '',
-	submitSupportTicketURL: '',
-	theOverviewPageURL: '',
-});
+export interface IProps {
+	accountSettingsURL: string;
+	articleAccountSupportURL: string;
+	articleDeactivateKey: string;
+	articleDeployingActivationKeysURL: string;
+	articleGettingStartedWithLiferayEnterpriseSearchURL: string;
+	articleNotifiedWhenMyActivationKeyIsAboutToExpireURL: string;
+	articleWhatIsMyInstanceSizingValueURL: string;
+	client: ApolloClient<any>;
+	featureFlags: string[];
+	gravatarAPI: string;
+	importDate: string | null;
+	oktaSessionAPI: string;
+	provisioningServerAPI: string;
+	submitSupportTicketURL: string;
+	theOverviewPageURL: string;
+}
+
+export const AppPropertiesContext = createContext<IProps>({} as IProps);
 
 export function useAppPropertiesContext() {
 	const context = useContext(AppPropertiesContext);
 
-	type ContextType = Omit<typeof context, 'client'> & {
-		client: ApolloClient<any>;
-	};
-
-	return context as unknown as ContextType;
+	return context;
 }
