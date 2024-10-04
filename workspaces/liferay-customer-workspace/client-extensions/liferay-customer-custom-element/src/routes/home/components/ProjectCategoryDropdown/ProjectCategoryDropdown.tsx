@@ -9,7 +9,19 @@ import {useState} from 'react';
 import i18n from '~/common/I18n';
 import {Skeleton} from '~/common/components';
 
-const ProjectCategoryDropdown = ({
+interface IProps {
+	loading: boolean;
+	onSelect: (key: string) => void;
+	projectCategoryItems: ProjectCategoryItem[];
+	selectedProjectCategoryKey: string;
+}
+
+interface ProjectCategoryItem {
+	key: string;
+	label: string;
+}
+
+const ProjectCategoryDropdown: React.FC<IProps> = ({
 	loading,
 	onSelect,
 	projectCategoryItems,
@@ -21,7 +33,7 @@ const ProjectCategoryDropdown = ({
 		<div className="align-items-center d-flex mb-4 ml-4 mt-2">
 			<div className="font-weight-bold pr-1 text-paragraph-sm">
 				{loading ? (
-					<Skeleton height={18} width={40} />
+					<Skeleton align="left" height={18} width={40} />
 				) : (
 					`${i18n.translate('filter-by-my-role')}:`
 				)}
@@ -40,7 +52,7 @@ const ProjectCategoryDropdown = ({
 						size="sm"
 					>
 						{loading ? (
-							<Skeleton height={18} width={46} />
+							<Skeleton align="left" height={18} width={46} />
 						) : (
 							projectCategoryItems.find(
 								({key}) => key === selectedProjectCategoryKey
@@ -53,17 +65,19 @@ const ProjectCategoryDropdown = ({
 					</Button>
 				}
 			>
-				{projectCategoryItems?.map((item, index) => (
+				{projectCategoryItems.map((item, index) => (
 					<DropDown.Item
 						className="pr-6"
 						disabled={item.key === selectedProjectCategoryKey}
-						key={`${index}-${index}`}
+						key={`${index}-${item.key}`}
 						onClick={() => {
 							onSelect(item.key);
 							setActive(false);
 						}}
 						symbolRight={
-							item.key === selectedProjectCategoryKey && 'check'
+							item.key === selectedProjectCategoryKey
+								? 'check'
+								: undefined
 						}
 					>
 						{item.label}

@@ -13,7 +13,6 @@ type UseKoroneikiAccountsProps = {
 	selectedFilterCategory: {
 		filter: any;
 		key: string;
-		label: string;
 		pageSize: number;
 	};
 };
