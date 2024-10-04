@@ -5,16 +5,23 @@
 
 import {useState} from 'react';
 
-export default function useSearchTerm(onSearch: (searchTerm: string) => void) {
-	const [lastSearchedTerm, setLastSearchedTerm] = useState('');
+type SearchTermHandler = (searchTerm: string) => void;
 
-	return [
-		lastSearchedTerm,
-		(searchTerm: string) => {
-			if (searchTerm !== lastSearchedTerm) {
-				onSearch(searchTerm);
-				setLastSearchedTerm(searchTerm);
-			}
-		},
-	];
-}
+const useSearchTerm = (
+	onSearch: SearchTermHandler
+): [string, SearchTermHandler] => {
+	const [lastSearchedTerm, setLastSearchedTerm] = useState<string>('');
+
+	const handleSearchTermChange: SearchTermHandler = (
+		searchTerm: string
+	): void => {
+		if (searchTerm !== lastSearchedTerm) {
+			onSearch(searchTerm);
+			setLastSearchedTerm(searchTerm);
+		}
+	};
+
+	return [lastSearchedTerm, handleSearchTermChange];
+};
+
+export default useSearchTerm;

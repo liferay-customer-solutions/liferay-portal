@@ -4,24 +4,22 @@
  */
 
 import ClayLayout from '@clayui/layout';
+import {FC, useMemo, useState} from 'react';
 import {useAppPropertiesContext} from '~/common/contexts/AppPropertiesContext';
+import useKoroneikiAccounts from '~/common/hooks/useKoroneikiAccounts';
+
+import ProjectCategoryDropdown from './components/ProjectCategoryDropdown';
 import ProjectList from './components/ProjectsList';
 import SearchHeader from './components/SearchHeader';
+import useProjectCategoryItems from './hooks/useProjectCategoryItems';
 
 import './app.scss';
 
-import {useMemo, useState} from 'react';
-import useKoroneikiAccounts from '~/common/hooks/useKoroneikiAccounts';
-import ProjectCategoryDropdown from './components/ProjectCategoryDropdown';
-import useProjectCategoryItems from './hooks/useProjectCategoryItems';
-
 const THRESHOLD_COUNT = 4;
 
-const Home = () => {
-	const [
-		selectedProjectCategoryKey,
-		setSelectedProjectCategoryKey,
-	] = useState('all-projects');
+const Home: FC = () => {
+	const [selectedProjectCategoryKey, setSelectedProjectCategoryKey] =
+		useState<string>('all-projects');
 
 	const projectCategoryItems = useProjectCategoryItems();
 
@@ -36,16 +34,17 @@ const Home = () => {
 		searching,
 	} = useKoroneikiAccounts({
 		selectedFilterCategory: {
-			...projectCategoryItems.find(
-				({key}) => key === selectedProjectCategoryKey
-			),
+			filter:
+				projectCategoryItems.find(
+					({key}) => key === selectedProjectCategoryKey
+				)?.filter || '',
+			key: selectedProjectCategoryKey,
 			pageSize: 20,
 		},
 	});
 
-	const handleOnSelect = (key) => {
+	const handleOnSelect = (key: string): void => {
 		setSelectedProjectCategoryKey(key);
-		onSearch('');
 	};
 
 	const {featureFlags} = useAppPropertiesContext();
@@ -56,9 +55,9 @@ const Home = () => {
 	const koroneikiCount =
 		firstKoroneikiAccountsTotal[selectedProjectCategoryKey];
 
-	const hasManyProjects = koroneikiCount > THRESHOLD_COUNT;
+	const hasManyProjects: boolean = koroneikiCount > THRESHOLD_COUNT;
 
-	const hasAvailableCategoriesToDisplay = useMemo(
+	const hasAvailableCategoriesToDisplay: boolean = useMemo(
 		() =>
 			projectCategoryItems
 				.filter((projectCategoryItem) =>
@@ -84,6 +83,10 @@ const Home = () => {
 
 			<ClayLayout.ContainerFluid
 				className="cp-home-wrapper"
+				hidden={!hasManyProjects || loading}
+				onPointerEnterCapture={() => {}}
+				onPointerLeaveCapture={() => {}}
+				placeholder=""
 				size={hasManyProjects && !loading ? 'md' : 'xl'}
 			>
 				<ClayLayout.Row>
