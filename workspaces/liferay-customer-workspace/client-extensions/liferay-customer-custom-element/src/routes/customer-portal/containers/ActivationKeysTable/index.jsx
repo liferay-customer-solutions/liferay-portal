@@ -54,25 +54,21 @@ const ActivationKeysTable = ({
 	const {provisioningServerAPI} = useAppPropertiesContext();
 	const [isVisibleModal, setIsVisibleModal] = useState(false);
 	const [downloadStatus, setDownloadStatus] = useState('');
-	const [
-		activationKeysFilteredByRenewable,
-		setActivationKeysFilteredByRenewable,
-	] = useState([]);
 	const {state} = useLocation();
 	const {setHasSideMenu} = useOutletContext();
 
 	const messageNewKeyGeneratedAlertForComplimentary = i18n.translate(
-		state?.isMultipleKeys
-			? 'complimentary-keys-were-generated-successfully'
-			: 'complimentary-key-was-generated-successfully'
+		state?.isMultipleKeys ? 'complimentary-keys-were-generated-successfully' : 'complimentary-key-was-generated-successfully'
 	);
 
 	useEffect(() => {
 		setHasSideMenu(true);
 	}, [setHasSideMenu]);
 
-	const [newKeyGeneratedAlertStatus, setNewKeyGeneratedAlertStatus] =
-		useState(state?.newKeyGeneratedAlert ? 'success' : '');
+	const [
+		newKeyGeneratedAlertStatus,
+		setNewKeyGeneratedAlertStatus,
+	] = useState(state?.newKeyGeneratedAlert ? 'success' : '');
 
 	const [deactivatedKeyAlertStatus, setDeactivatedKeyAlertStatus] = useState(
 		state?.deactivateKeyAlert ? 'success' : ''
@@ -83,20 +79,6 @@ const ActivationKeysTable = ({
 		loading,
 		setFilterTerm,
 	} = useGetActivationKeysData(project, initialFilter);
-
-	useEffect(() => {
-		if (activationKeys) {
-			const filteredKeys = activationKeys.filter((activationKey) => {
-				const isPermanentLicenseKey = getLicenseKeyPermanentStatus(
-					activationKey?.startDate,
-					activationKey?.expirationDate
-				);
-
-				return !isPermanentLicenseKey;
-			});
-			setActivationKeysFilteredByRenewable(filteredKeys);
-		}
-	}, [activationKeys]);
 
 	const {
 		navigationGroupButtons,
@@ -112,9 +94,10 @@ const ActivationKeysTable = ({
 	);
 
 	const {activationKeysByStatusPaginated, paginationConfig} = usePagination(
-		isRenewTable ? activationKeysFilteredByRenewable : activationKeys,
-		statusFilter,
-		setAllActivationKeys
+		activationKeys,
+		isRenewTable,
+		setAllActivationKeys,
+		statusFilter
 	);
 
 	const [currentActivationKey, setCurrentActivationKey] = useState();
@@ -161,7 +144,11 @@ const ActivationKeysTable = ({
 				)
 		);
 
-		setHasRenewalSubscription(hasRenewSubscription);
+		if (hasRenewSubscription) {
+			setHasRenewalSubscription(true);
+		} else {
+			setHasRenewalSubscription(false);
+		}
 	}, [allActivationKeys]);
 
 	const handleAlertStatus = useCallback((hasSuccessfullyDownloadedKeys) => {
@@ -237,10 +224,7 @@ const ActivationKeysTable = ({
 					<div className="align-center cp-activation-key-container d-flex justify-content-between mb-2">
 						<h3 className="m-0">
 							{isRenewTable
-								? i18n.sub(
-										'renew-x-activation-key',
-										productName
-									)
+								? i18n.sub('renew-x-activation-key', productName)
 								: i18n.translate('activation-keys')}
 						</h3>
 
@@ -268,9 +252,7 @@ const ActivationKeysTable = ({
 								activationKeysByStatusPaginatedChecked
 							}
 							activationKeysState={[
-								isRenewTable
-									? activationKeysFilteredByRenewable
-									: activationKeys,
+								activationKeys,
 								setActivationKeys,
 							]}
 							filterState={[filters, setFilters]}
@@ -290,8 +272,7 @@ const ActivationKeysTable = ({
 						<Table
 							checkboxConfig={{
 								checkboxesChecked: activationKeysIdChecked,
-								setCheckboxesChecked:
-									setActivationKeysIdChecked,
+								setCheckboxesChecked: setActivationKeysIdChecked,
 							}}
 							className="border-0 cp-activation-key-table"
 							columns={ACTIVATE_COLUMNS}
