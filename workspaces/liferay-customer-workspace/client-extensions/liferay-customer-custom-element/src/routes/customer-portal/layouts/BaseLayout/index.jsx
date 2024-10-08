@@ -21,10 +21,9 @@ const Layout = () => {
 	const location = useLocation();
 	const routeParams = location.pathname;
 
-	const isRenewOrDeactivatePage =
+	const isRenewTablePage =
 		routeParams?.endsWith('dxp-renew') ||
-		routeParams?.endsWith('portal-renew') ||
-		routeParams?.endsWith('deactivate');
+		routeParams?.endsWith('portal-renew');
 
 	useEffect(() => {
 		if (accountKey !== firstAccountKeyRef.current) {
@@ -33,17 +32,14 @@ const Layout = () => {
 	}, [accountKey]);
 
 	if (userProjectAccess) {
-		if (
-			userProjectAccess.denyAccess ||
-			!userProjectAccess.hasProjectAccess
-		) {
+		if (userProjectAccess.denyAccess || !userProjectAccess.hasProjectAccess) {
 			return <ProjectErrorMessage />;
 		}
 	}
 
 	return (
 		<div className="d-flex position-relative w-100">
-			{!isRenewOrDeactivatePage && (
+			{!isRenewTablePage && (
 				<div>
 					<div className="align-items-center cp-layout-header d-flex justify-content-between ml-4 mt-4">
 						<ProjectBreadcrumb />
