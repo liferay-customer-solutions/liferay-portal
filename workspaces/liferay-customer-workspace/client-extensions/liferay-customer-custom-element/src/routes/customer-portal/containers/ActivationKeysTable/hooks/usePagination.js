@@ -5,12 +5,14 @@
 
 import {useEffect, useMemo, useState} from 'react';
 import i18n from '../../../../../common/I18n';
+import {getLicenseKeyPermanentStatus} from '../../GenerateNewKey/utils/licenseKeyPermanentStatus';
 import {ACTIVATION_KEYS_LICENSE_FILTER_TYPES} from '../utils/constants';
 
 export default function usePagination(
 	activationKeys,
-	statusFilter,
-	setAllActivationKeys = () => {}
+	isRenewTable,
+	setAllActivationKeys,
+	statusFilter
 ) {
 	const [activePage, setActivePage] = useState(1);
 	const [itemsPerPage, setItemsPerPage] = useState(5);
@@ -21,20 +23,6 @@ export default function usePagination(
 			setActivePage(1);
 		}
 	}, [statusFilter]);
-
-	const activationKeysFilteredByStatus = useMemo(() => {
-		return (
-			activationKeys?.filter((activationKey) =>
-				ACTIVATION_KEYS_LICENSE_FILTER_TYPES[statusFilter](
-					activationKey
-				)
-			) || []
-		);
-	}, [activationKeys, statusFilter]);
-
-	useEffect(() => {
-		setAllActivationKeys(activationKeysFilteredByStatus);
-	}, [activationKeysFilteredByStatus, setAllActivationKeys]);
 
 	const paginationConfig = useMemo(
 		() => ({
@@ -60,18 +48,65 @@ export default function usePagination(
 	);
 
 	const activationKeysByStatusPaginated = useMemo(() => {
-		setCurrentTotalCount(activationKeysFilteredByStatus.length);
+		const activationKeysFilteredByStatus = activationKeys?.filter(
+			(activationKey) =>
+				ACTIVATION_KEYS_LICENSE_FILTER_TYPES[statusFilter](
+					activationKey
+				)
+		);
 
-		const activationKeysFilteredByStatusPerPage =
-			activationKeysFilteredByStatus.slice(
-				itemsPerPage * activePage - itemsPerPage,
-				itemsPerPage * activePage
-			);
+		setAllActivationKeys(activationKeysFilteredByStatus);
 
-		return activationKeysFilteredByStatusPerPage?.length
-			? activationKeysFilteredByStatusPerPage
-			: activationKeysFilteredByStatus;
-	}, [activationKeysFilteredByStatus, activePage, itemsPerPage]);
+		if (activationKeysFilteredByStatus) {
+			if (isRenewTable) {
+				const activationKeysFilteredbyRenewable =
+					activationKeysFilteredByStatus?.filter((activationKey) => {
+						const isPermanentLicenseKey =
+							getLicenseKeyPermanentStatus(
+								activationKey?.startDate,
+								activationKey?.expirationDate
+							);
+
+						if (!isPermanentLicenseKey) {
+							return activationKey;
+						}
+					});
+
+				setCurrentTotalCount(activationKeysFilteredbyRenewable.length);
+
+				const activationKeysFilteredByRenewablePerPage =
+					activationKeysFilteredbyRenewable.slice(
+						itemsPerPage * activePage - itemsPerPage,
+						itemsPerPage * activePage
+					);
+
+				return activationKeysFilteredByRenewablePerPage?.length
+					? activationKeysFilteredByRenewablePerPage
+					: activationKeysFilteredbyRenewable;
+			}
+
+			setCurrentTotalCount(activationKeysFilteredByStatus.length);
+
+			const activationKeysFilteredByStatusPerPage =
+				activationKeysFilteredByStatus.slice(
+					itemsPerPage * activePage - itemsPerPage,
+					itemsPerPage * activePage
+				);
+
+			return activationKeysFilteredByStatusPerPage?.length
+				? activationKeysFilteredByStatusPerPage
+				: activationKeysFilteredByStatus;
+		}
+
+		return [];
+	}, [
+		activationKeys,
+		activePage,
+		isRenewTable,
+		itemsPerPage,
+		setAllActivationKeys,
+		statusFilter,
+	]);
 
 	return {activationKeysByStatusPaginated, paginationConfig};
 }
