@@ -13,11 +13,17 @@ const WelcomeSkeleton = () => {
 			footerProps={{
 				middleButton: <Skeleton.Rounded height={48} width={110} />,
 			}}
+			headerProps={{}}
 			headerSkeleton={
 				<div className="p-4">
-					<Skeleton className="mb-4" height={8} width={105} />
+					<Skeleton
+						align="left"
+						className="mb-4"
+						height={8}
+						width={105}
+					/>
 
-					<Skeleton height={16} width={425} />
+					<Skeleton align="left" height={16} width={425} />
 				</div>
 			}
 		>
