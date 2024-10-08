@@ -4,6 +4,7 @@
  */
 
 import useUserAccountsByAccountExternalReferenceCode from '~/routes/customer-portal/pages/Project/TeamMembers/components/TeamMembersTable/hooks/useUserAccountsByAccountExternalReferenceCode';
+
 import i18n from '../../../common/I18n';
 import InviteTeamMembersForm from '../../../common/containers/setup-forms/InviteTeamMembersForm';
 import SetupAnalyticsCloudForm from '../../../common/containers/setup-forms/SetupAnalyticsCloudForm';
@@ -19,7 +20,7 @@ import {ONBOARDING_STEP_TYPES} from '../utils/constants';
 import SuccessCloud from './SuccessCloud';
 import Welcome from './Welcome';
 
-const Pages = () => {
+const Pages: React.FC = () => {
 	const [
 		{
 			analyticsCloudActivationSubmittedStatus,
@@ -54,7 +55,9 @@ const Pages = () => {
 	);
 
 	const pageHandle = () => {
-		window.location.href = PAGE_ROUTER_TYPES.project(project.accountKey);
+		window.location.href = PAGE_ROUTER_TYPES.project(
+			project?.accountKey || ''
+		);
 	};
 
 	const invitesPageHandle = () => {
@@ -67,7 +70,8 @@ const Pages = () => {
 				payload: ONBOARDING_STEP_TYPES.liferayExperienceCloud,
 				type: actionTypes.CHANGE_STEP,
 			});
-		} else {
+		}
+		else {
 			if (subscriptionDXPCloud && !dxpCloudActivationSubmittedStatus) {
 				return dispatch({
 					payload: ONBOARDING_STEP_TYPES.dxpCloud,
@@ -104,11 +108,15 @@ const Pages = () => {
 	};
 
 	let availableSupportSeatsCount =
-		project && project.maxRequestors - supportSeatsCount;
-	availableSupportSeatsCount =
-		availableSupportSeatsCount < 0 ? 0 : availableSupportSeatsCount;
+		(project &&
+			Number(project.maxRequestors) - Number(supportSeatsCount)) ||
+		0;
 
-	const StepsLayout = {
+	if (availableSupportSeatsCount < 0) {
+		availableSupportSeatsCount = 0;
+	}
+
+	const StepsLayout: Record<string, {Component: JSX.Element}> = {
 		[ONBOARDING_STEP_TYPES.invites]: {
 			Component: (
 				<InviteTeamMembersForm
@@ -136,25 +144,21 @@ const Pages = () => {
 			),
 		},
 		[ONBOARDING_STEP_TYPES.successliferayExperienceCloud]: {
-			Component: (
-				<ConfirmationMessageModal
-					handleChangeForm={() => pageHandle()}
-					productType={PRODUCT_TYPES.liferayExperienceCloud}
-				/>
-			),
+			Component: <ConfirmationMessageModal onClose={pageHandle} />,
 		},
 		[ONBOARDING_STEP_TYPES.dxpCloud]: {
 			Component: (
 				<SetupDXPCloudForm
 					client={client}
 					dxpVersion={project?.dxpVersion}
-					handlePage={(isSuccess) => {
+					handlePage={(isSuccess: boolean) => {
 						if (isSuccess) {
 							return dispatch({
 								payload: ONBOARDING_STEP_TYPES.successDxpCloud,
 								type: actionTypes.CHANGE_STEP,
 							});
 						}
+
 						dxpCloudPageHandle();
 					}}
 					leftButton={i18n.translate('skip-for-now')}
@@ -176,13 +180,12 @@ const Pages = () => {
 		},
 		[ONBOARDING_STEP_TYPES.welcome]: {
 			Component: <Welcome />,
-			Skeleton: <Welcome.Skeleton />,
 		},
 		[ONBOARDING_STEP_TYPES.analyticsCloud]: {
 			Component: (
 				<SetupAnalyticsCloudForm
 					client={client}
-					handlePage={(isSuccess) => {
+					handlePage={(isSuccess: boolean) => {
 						if (isSuccess) {
 							return dispatch({
 								payload:
@@ -190,6 +193,7 @@ const Pages = () => {
 								type: actionTypes.CHANGE_STEP,
 							});
 						}
+
 						pageHandle();
 					}}
 					leftButton={i18n.translate('skip-for-now')}
@@ -214,7 +218,7 @@ const Pages = () => {
 		return StepsLayout[step].Component;
 	}
 
-	return StepsLayout[ONBOARDING_STEP_TYPES.welcome].Skeleton;
+	return <Welcome.Skeleton />;
 };
 
 export default Pages;

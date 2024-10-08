@@ -29,9 +29,16 @@ const successTexts = {
 	},
 };
 
-const SuccessCloud = ({handlePage, productType}) => {
+const SuccessCloud = ({
+	handlePage,
+	productType,
+}: {
+	handlePage: Function;
+	productType: string;
+}) => {
 	return (
 		<Layout
+			className=""
 			footerProps={{
 				middleButton: (
 					<Button displayType="primary" onClick={handlePage}>
@@ -43,6 +50,7 @@ const SuccessCloud = ({handlePage, productType}) => {
 				helper: successTexts[productType].helper,
 				title: successTexts[productType].title,
 			}}
+			headerSkeleton={{}}
 		>
 			<div className="container font-weight-bold pl-6 pr-6 pt-9 text-center">
 				{successTexts[productType].paragraph}

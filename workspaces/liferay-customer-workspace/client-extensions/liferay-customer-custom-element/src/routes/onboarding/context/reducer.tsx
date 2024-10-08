@@ -17,7 +17,7 @@ export const actionTypes = {
 	UPDATE_USER_ACCOUNT: 'UPDATE_USER_ACCOUNT',
 };
 
-const reducer = (state, action) => {
+const reducer = (state: any, action: {payload: any; type: any}) => {
 	switch (action.type) {
 		case actionTypes.CHANGE_STEP: {
 			return {

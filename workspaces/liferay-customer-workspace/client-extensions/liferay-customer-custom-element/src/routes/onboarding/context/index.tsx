@@ -4,6 +4,12 @@
  */
 
 import {createContext, useContext, useEffect, useReducer} from 'react';
+import IAccountBrief from '~/common/interfaces/accountBrief';
+import IAccountSubscriptionGroup from '~/common/interfaces/accountSubscriptionGroup';
+import IKoroneikiAccount from '~/common/interfaces/koroneikiAccount';
+import IOrganizationBrief from '~/common/interfaces/organizationBrief';
+import IUserAccount from '~/common/interfaces/userAccount';
+
 import {useAppPropertiesContext} from '../../../common/contexts/AppPropertiesContext';
 import {Liferay} from '../../../common/services/liferay';
 import {
@@ -22,14 +28,47 @@ import {isValidPage} from '../../../common/utils/page.validation';
 import {ONBOARDING_STEP_TYPES} from '../utils/constants';
 import reducer, {actionTypes} from './reducer';
 
-const AppContext = createContext();
+interface IProps {
+	children: any;
+}
 
-const AppContextProvider = ({children}) => {
+interface OnboardingAction {
+	payload: any;
+	type: string;
+}
+
+interface OnboardingState {
+	analyticsCloudActivationSubmittedStatus: boolean | undefined;
+	dxpCloudActivationSubmittedStatus: boolean | undefined;
+	koroneikiAccount: IKoroneikiAccount;
+	liferayExperienceCloudActivationSubmittedStatus: boolean | undefined;
+	project: IKoroneikiAccount | undefined;
+	sessionId: string;
+	step: number;
+	subscriptionGroups: IAccountSubscriptionGroup[] | undefined;
+	userAccount: IUserAccount | undefined;
+}
+
+type OnboardingContextType = [
+	OnboardingState,
+	React.Dispatch<OnboardingAction>,
+];
+
+const AppContext = createContext<OnboardingContextType | null>(null);
+
+const AppContextProvider: React.FC<IProps> = ({children}) => {
 	const {client, oktaSessionAPI} = useAppPropertiesContext();
-	const [state, dispatch] = useReducer(reducer, {
+	const [state, dispatch] = useReducer<
+		React.Reducer<OnboardingState, OnboardingAction>
+	>(reducer, {
 		analyticsCloudActivationSubmittedStatus: undefined,
 		dxpCloudActivationSubmittedStatus: undefined,
-		koroneikiAccount: {},
+		koroneikiAccount: {
+			accountKey: '',
+			dxpVersion: '',
+			id: 0,
+			name: '',
+		} as IKoroneikiAccount,
 		liferayExperienceCloudActivationSubmittedStatus: undefined,
 		project: undefined,
 		sessionId: '',
@@ -39,7 +78,9 @@ const AppContextProvider = ({children}) => {
 	});
 
 	useEffect(() => {
-		const getUser = async (projectExternalReferenceCode) => {
+		const getUser = async (
+			projectExternalReferenceCode: string
+		): Promise<IUserAccount | undefined> => {
 			const {data} = await client.query({
 				query: getUserAccount,
 				variables: {
@@ -48,38 +89,56 @@ const AppContextProvider = ({children}) => {
 			});
 
 			if (data) {
-				const isAccountAdministrator = Boolean(data.userAccount?.accountBriefs
-					?.find(
-						({externalReferenceCode}) =>
-							externalReferenceCode ===
-							projectExternalReferenceCode
-					)
-					?.roleBriefs?.find(
-						({name}) => name === ROLE_TYPES.admin.key
-					));
-
-				const isAccountProvisioning = Boolean(data.userAccount?.accountBriefs
-					?.find(
-						({externalReferenceCode}) =>
-							externalReferenceCode ===
-							projectExternalReferenceCode
-					)
-					?.roleBriefs?.find(({name}) => name === 'Provisioning'));
-
-				const isOmniAdmin = Boolean(data.userAccount?.roleBriefs?.find(
-					({name}) => name === 'Administrator'
-				));	
-
-				const isStaff = data.userAccount?.organizationBriefs?.some(
-					(organization) => organization.name === 'Liferay Staff'
+				const isAccountAdministrator = Boolean(
+					data.userAccount?.accountBriefs
+						?.find(
+							({
+								externalReferenceCode,
+							}: {
+								externalReferenceCode: string;
+							}) =>
+								externalReferenceCode ===
+								projectExternalReferenceCode
+						)
+						?.roleBriefs?.find(
+							({name}: {name: string}) =>
+								name === ROLE_TYPES.admin.key
+						)
 				);
 
-				const userAccount = {
+				const isAccountProvisioning = Boolean(
+					data.userAccount?.accountBriefs
+						?.find(
+							({
+								externalReferenceCode,
+							}: {
+								externalReferenceCode: string;
+							}) =>
+								externalReferenceCode ===
+								projectExternalReferenceCode
+						)
+						?.roleBriefs?.find(
+							({name}: {name: string}) => name === 'Provisioning'
+						)
+				);
+
+				const isOmniAdmin = Boolean(
+					data.userAccount?.roleBriefs?.find(
+						({name}: {name: string}) => name === 'Administrator'
+					)
+				);
+
+				const isStaff = data.userAccount?.organizationBriefs?.some(
+					(organization: IOrganizationBrief) =>
+						organization.name === 'Liferay Staff'
+				);
+
+				const userAccount: IUserAccount = {
 					...data.userAccount,
 					isAccountAdmin: isAccountAdministrator,
 					isOmniAdmin,
 					isProvisioning: isAccountProvisioning,
-					isStaff
+					isStaff,
 				};
 
 				dispatch({
@@ -89,9 +148,14 @@ const AppContextProvider = ({children}) => {
 
 				return userAccount;
 			}
+
+			return undefined;
 		};
 
-		const getProject = async (externalReferenceCode, accountBrief) => {
+		const getProject = async (
+			externalReferenceCode: string,
+			accountBrief: IAccountBrief
+		): Promise<void> => {
 			const {data: projects} = await client.query({
 				query: getKoroneikiAccounts,
 				variables: {
@@ -111,7 +175,7 @@ const AppContextProvider = ({children}) => {
 			}
 		};
 
-		const getSessionId = async () => {
+		const getSessionId = async (): Promise<void> => {
 			const session = await getCurrentSession(oktaSessionAPI);
 
 			if (session) {
@@ -122,7 +186,9 @@ const AppContextProvider = ({children}) => {
 			}
 		};
 
-		const getSubscriptionGroups = async (accountKey) => {
+		const getSubscriptionGroups = async (
+			accountKey: string
+		): Promise<void> => {
 			const {data} = await client.query({
 				query: getAccountSubscriptionGroups,
 				variables: {
@@ -139,7 +205,9 @@ const AppContextProvider = ({children}) => {
 			}
 		};
 
-		const getDXPCloudActivationStatus = async (accountKey) => {
+		const getDXPCloudActivationStatus = async (
+			accountKey: string
+		): Promise<void> => {
 			const {data} = await client.query({
 				query: getDXPCloudEnvironment,
 				variables: {
@@ -149,17 +217,20 @@ const AppContextProvider = ({children}) => {
 			});
 
 			if (data) {
-				const status = Boolean(data.c?.dXPCloudEnvironments?.items?.length);
+				const status = Boolean(
+					data.c?.dXPCloudEnvironments?.items?.length
+				);
 
 				dispatch({
 					payload: status,
-					type:
-						actionTypes.UPDATE_DXP_CLOUD_ACTIVATION_SUBMITTED_STATUS,
+					type: actionTypes.UPDATE_DXP_CLOUD_ACTIVATION_SUBMITTED_STATUS,
 				});
 			}
 		};
 
-		const getAnalyticsCloudActivationStatus = async (accountKey) => {
+		const getAnalyticsCloudActivationStatus = async (
+			accountKey: string
+		): Promise<void> => {
 			const {data} = await client.query({
 				query: getAnalyticsCloudWorkspace,
 				variables: {
@@ -169,20 +240,20 @@ const AppContextProvider = ({children}) => {
 			});
 
 			if (data) {
-				const status = Boolean(data.c?.analyticsCloudWorkspaces?.items
-					?.length);
+				const status = Boolean(
+					data.c?.analyticsCloudWorkspaces?.items?.length
+				);
 
 				dispatch({
 					payload: status,
-					type:
-						actionTypes.UPDATE_ANALYTICS_CLOUD_ACTIVATION_SUBMITTED_STATUS,
+					type: actionTypes.UPDATE_ANALYTICS_CLOUD_ACTIVATION_SUBMITTED_STATUS,
 				});
 			}
 		};
 
 		const getLiferayExperienceCloudActivationStatus = async (
-			accountKey
-		) => {
+			accountKey: string
+		): Promise<void> => {
 			const {data} = await client.query({
 				query: getLiferayExperienceCloudEnvironments,
 				variables: {
@@ -191,18 +262,18 @@ const AppContextProvider = ({children}) => {
 			});
 
 			if (data) {
-				const status = Boolean(data.c?.liferayExperienceCloudEnvironments
-					?.items?.length);
+				const status = Boolean(
+					data.c?.liferayExperienceCloudEnvironments?.items?.length
+				);
 
 				dispatch({
 					payload: status,
-					type:
-						actionTypes.UPDATE_LIFERAY_EXPERIENCE_CLOUD_ACTIVATION_SUBMITTED_STATUS,
+					type: actionTypes.UPDATE_LIFERAY_EXPERIENCE_CLOUD_ACTIVATION_SUBMITTED_STATUS,
 				});
 			}
 		};
 
-		const fetchData = async () => {
+		const fetchData = async (): Promise<void> => {
 			const projectExternalReferenceCode = getAccountKey();
 
 			const user = await getUser(projectExternalReferenceCode);
@@ -221,15 +292,12 @@ const AppContextProvider = ({children}) => {
 			if (user && isValid) {
 				const accountBrief = user.accountBriefs?.find(
 					(accountBrief) =>
-						accountBrief.externalReferenceCode ===
+						accountBrief?.externalReferenceCode ===
 						projectExternalReferenceCode
-				);
+				) as IAccountBrief;
 
 				if (accountBrief) {
-					const project = await getProject(
-						projectExternalReferenceCode,
-						accountBrief
-					);
+					getProject(projectExternalReferenceCode, accountBrief);
 					getSubscriptionGroups(projectExternalReferenceCode);
 					getDXPCloudActivationStatus(projectExternalReferenceCode);
 					getAnalyticsCloudActivationStatus(
@@ -248,12 +316,12 @@ const AppContextProvider = ({children}) => {
 						mutation: addAccountFlag,
 						variables: {
 							accountFlag: {
-								accountEntryId: project?.id,
+								accountEntryId: state.project?.id,
 								accountKey: projectExternalReferenceCode,
 								finished: true,
 								name: ROUTE_TYPES.onboarding,
 								r_accountEntryToAccountFlag_accountEntryId:
-									accountBrief?.id,
+									accountBrief.id,
 							},
 						},
 					});
@@ -262,7 +330,7 @@ const AppContextProvider = ({children}) => {
 		};
 
 		fetchData();
-	}, [client, oktaSessionAPI]);
+	}, [client, oktaSessionAPI, state.project?.id]);
 
 	return (
 		<AppContext.Provider value={[state, dispatch]}>
@@ -271,6 +339,16 @@ const AppContextProvider = ({children}) => {
 	);
 };
 
-const useOnboarding = () => useContext(AppContext);
+const useOnboarding = (): OnboardingContextType => {
+	const context = useContext(AppContext);
+
+	if (!context) {
+		throw new Error(
+			'useOnboarding must be used within an AppContextProvider'
+		);
+	}
+
+	return context;
+};
 
 export {AppContext, AppContextProvider, useOnboarding};
