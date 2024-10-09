@@ -6,6 +6,9 @@
 export default interface IKoroneikiAccount {
 	accountKey: string;
 	code: string;
+	dxpVersion?: string;
+	id: number;
+	maxRequestors?: number;
 	name: string;
 	partnershipCurrent?: string;
 	partnershipCurrentEndDate?: string;
