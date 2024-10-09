@@ -41,7 +41,6 @@ const Welcome = () => {
 		>
 			<IntroOnboarding
 				className="mb-4 pb-1"
-				draggable={false}
 				height={237}
 				width={331}
 			/>
