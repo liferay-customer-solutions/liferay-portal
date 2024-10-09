@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {ApolloClient, InMemoryCache} from '@apollo/client';
+import {ApolloClient, InMemoryCache, TypePolicies} from '@apollo/client';
 import {BatchHttpLink} from '@apollo/client/link/batch-http';
 import {setContext} from '@apollo/client/link/context';
 import {onError} from '@apollo/client/link/error';
@@ -39,10 +39,14 @@ const liferayAuthLink = setContext((_, {headers, ...context}) => ({
 }));
 
 const raySourceErrorLink = onError(({forward, networkError, operation}) => {
+	if (!networkError || !('statusCode' in networkError)) {
+		return;
+	}
+
 	if (
 		networkError.statusCode === 401 ||
 		networkError.statusCode === 403 ||
-		networkError.statusCode === 405
+		networkError?.statusCode === 405
 	) {
 		operation.setContext({
 			sessionOperation: 'refresh',
@@ -52,33 +56,22 @@ const raySourceErrorLink = onError(({forward, networkError, operation}) => {
 	}
 });
 
-const getRaysourceAuthLink = (oktaSessionAPI) =>
+const getRaysourceAuthLink = (oktaSessionAPI: string) =>
 	setContext(async (_, {headers, sessionOperation, ...context}) => {
-		let sessionId = Liferay.Util.SessionStorage.getItem(
-			'okta-session-id',
-			Liferay.Util.SessionStorage.TYPES.NECESSARY
-		);
+		let sessionId = Liferay.Util.SessionStorage.getItem('okta-session-id');
 
 		if (sessionOperation === 'refresh') {
 			const session = await refreshCurrentSession(oktaSessionAPI);
 
-			sessionId = session.id;
-			Liferay.Util.SessionStorage.setItem(
-				'okta-session-id',
-				session.id,
-				Liferay.Util.SessionStorage.TYPES.NECESSARY
-			);
+			sessionId = session.id as string;
+			Liferay.Util.SessionStorage.setItem('okta-session-id', sessionId);
 		}
 
 		if (!sessionId) {
 			const session = await getCurrentSession(oktaSessionAPI);
 
-			sessionId = session.id;
-			Liferay.Util.SessionStorage.setItem(
-				'okta-session-id',
-				sessionId,
-				Liferay.Util.SessionStorage.TYPES.NECESSARY
-			);
+			sessionId = session.id as string;
+			Liferay.Util.SessionStorage.setItem('okta-session-id', sessionId);
 		}
 
 		return {
@@ -91,12 +84,15 @@ const getRaysourceAuthLink = (oktaSessionAPI) =>
 		};
 	});
 
-const getRaysourceRestLink = (uri) =>
+const getRaysourceRestLink = (uri: string) =>
 	new RestLink({
 		uri,
 	});
 
-export default function useApollo(provisioningServerAPI, oktaSessionAPI) {
+export default function useApollo(
+	provisioningServerAPI: string,
+	oktaSessionAPI: string
+) {
 	const [client, setClient] = useState();
 	const networkStatus = useApolloNetworkStatusReducer(reducer, initialState);
 
@@ -104,7 +100,7 @@ export default function useApollo(provisioningServerAPI, oktaSessionAPI) {
 		const init = async () => {
 			const cache = new InMemoryCache({
 				typePolicies: {
-					...liferayTypePolicies,
+					...(liferayTypePolicies as unknown as TypePolicies),
 				},
 			});
 
@@ -137,7 +133,7 @@ export default function useApollo(provisioningServerAPI, oktaSessionAPI) {
 				),
 			});
 
-			setClient(apolloClient);
+			setClient(apolloClient as any);
 		};
 
 		init();

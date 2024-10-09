@@ -11,8 +11,11 @@ import useDebounce from './useDebounce';
 
 const FETCH_DELAY_AFTER_TYPING = 500;
 
-export default function useBannedDomains(value) {
-	const debouncedValue = useDebounce(value, FETCH_DELAY_AFTER_TYPING);
+export default function useBannedDomains(value: string, fetchDelay?: number) {
+	const debouncedValue = useDebounce(
+		value,
+		fetchDelay ?? FETCH_DELAY_AFTER_TYPING
+	);
 	const [bannedDomains, setBannedDomains] = useState([]);
 
 	const [fetchBannedDomain, {data}] = useLazyQuery(getBannedEmailDomains);
@@ -24,7 +27,7 @@ export default function useBannedDomains(value) {
 
 		if (splittedDomains.length > 1) {
 			filterDomains = splittedDomains.reduce(
-				(accumulatorFilter, domain, index) => {
+				(accumulatorFilter: any, domain: string, index: number) => {
 					return `${accumulatorFilter}${
 						index > 0 ? ' or ' : ''
 					}domain eq '${domain.replace('@', '').trim()}'`;
@@ -55,7 +58,9 @@ export default function useBannedDomains(value) {
 	useEffect(
 		() =>
 			setBannedDomains(
-				bannedDomainsItems?.map((item) => item.domain) || []
+				bannedDomainsItems?.map(
+					(item: {domain: string}) => item.domain
+				) || []
 			),
 		[bannedDomainsItems]
 	);
