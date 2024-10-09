@@ -63,8 +63,8 @@ const CustomerPortalApp: React.FC<CustomerPortalAppProps> = ({
 	...properties
 }) => {
 	const {client, networkStatus} = useApollo(
-		apis.provisioningServerAPI,
-		apis.oktaSessionAPI
+		apis.provisioningServerAPI as string,
+		apis.oktaSessionAPI as string
 	);
 
 	useGlobalNetworkIndicator(networkStatus);

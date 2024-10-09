@@ -5,7 +5,10 @@
 
 import {Liferay} from '../services/liferay';
 
-export default function getDateCustomFormat(rawDate, format) {
+export default function getDateCustomFormat(
+	rawDate: string | Date,
+	format: Intl.DateTimeFormatOptions | undefined
+) {
 	if (rawDate) {
 		const date =
 			typeof rawDate === 'string'

@@ -73,7 +73,7 @@ const ProjectCard: React.FC<IProps> = ({
 
 		const formattedDate = getDateCustomFormat(
 			displayDate[koroneikiAccount.status] || '',
-			FORMAT_DATE_TYPES.day2DMonthSYearN
+			FORMAT_DATE_TYPES.day2DMonthSYearN as Intl.DateTimeFormatOptions
 		);
 
 		return (
@@ -105,7 +105,9 @@ const ProjectCard: React.FC<IProps> = ({
 			<div className="text-align-end text-neutral-5 text-paragraph-sm">
 				{i18n.translate('support-region')}
 				<span className="font-weight-bold ml-1">
-					{i18n.translate(getKebabCase(koroneikiAccount.region))}
+					{i18n.translate(
+						getKebabCase(koroneikiAccount.region) as string
+					)}
 				</span>
 			</div>
 		);

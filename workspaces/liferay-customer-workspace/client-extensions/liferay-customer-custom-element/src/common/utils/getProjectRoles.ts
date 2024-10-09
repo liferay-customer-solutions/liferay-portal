@@ -3,16 +3,21 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {ApolloClient} from '@apollo/client';
+
 import {getAccountRoles} from '../services/liferay/graphql/queries';
 import {ROLE_TYPES, SLA_TYPES} from './constants';
 
-const getCurrentRoleType = (roleKey) => {
+const getCurrentRoleType = (roleKey: string) => {
 	const roleValues = Object.values(ROLE_TYPES);
 
 	return roleValues.find((roleType) => roleType.key === roleKey);
 };
 
-export function getRolesFiltered(items, project) {
+export function getRolesFiltered(
+	items: any[],
+	project: {id?: string; partner?: any; slaCurrent?: string}
+) {
 	const projectHasSLAGoldPlatinum =
 		project?.slaCurrent?.includes(SLA_TYPES.gold) ||
 		project?.slaCurrent?.includes(SLA_TYPES.platinum);
@@ -63,7 +68,10 @@ export function getRolesFiltered(items, project) {
 	}
 }
 
-export default async function getProjectRoles(client, project) {
+export default async function getProjectRoles(
+	client: ApolloClient<any>,
+	project: {id?: string; partner?: any; slaCurrent?: string}
+) {
 	const {data} = await client.query({
 		fetchPolicy: 'network-only',
 		query: getAccountRoles,
