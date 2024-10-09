@@ -2,6 +2,7 @@
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
+
 import i18n from '../I18n';
 
 const EMAIL_REGEX =
@@ -9,19 +10,19 @@ const EMAIL_REGEX =
 const LOWCASE_NUMBERS_REGEX = /^[0-9a-z]+$/;
 const FRIENDLY_URL_REGEX = /^\/[^. "]+[0-9a-z]+[^A-Z]$/;
 
-const required = (value) => {
+const required = (value: string) => {
 	if (!value) {
 		return i18n.translate('this-field-is-required');
 	}
 };
 
-const maxLength = (value, max) => {
+const maxLength = (value: string, max: number) => {
 	if (value.length > max) {
 		return i18n.sub('this-field-exceeded-x-characters', [max]);
 	}
 };
 
-const isValidEmail = (value, bannedEmailDomains) => {
+const isValidEmail = (value: string, bannedEmailDomains: string[]) => {
 	if (value && !EMAIL_REGEX.test(value)) {
 		return i18n.translate('please-insert-a-valid-email');
 	}
@@ -31,7 +32,7 @@ const isValidEmail = (value, bannedEmailDomains) => {
 	}
 };
 
-const isLiferayDomain = (liferayDomain) => {
+const isLiferayDomain = (liferayDomain: string) => {
 	if (liferayDomain) {
 		return i18n.translate(
 			'this-liferay-contact-does-not-exist-please-enter-a-correct-email-address'
@@ -39,19 +40,19 @@ const isLiferayDomain = (liferayDomain) => {
 	}
 };
 
-const isValidEmailDomain = (bannedEmailDomains) => {
+const isValidEmailDomain = (bannedEmailDomains: string[]) => {
 	if (bannedEmailDomains.length) {
 		return i18n.translate('domain-not-allowed');
 	}
 };
 
-const isLowercaseAndNumbers = (value) => {
+const isLowercaseAndNumbers = (value: string) => {
 	if (value && !LOWCASE_NUMBERS_REGEX.test(value)) {
 		return i18n.translate('lowercase-letters-and-numbers-only');
 	}
 };
 
-const isValidFriendlyURL = (value) => {
+const isValidFriendlyURL = (value: string) => {
 	if (value && value[0] !== '/') {
 		return i18n.translate('the-workspace-url-should-start-with-/');
 	}
@@ -65,13 +66,13 @@ const isValidFriendlyURL = (value) => {
 	}
 };
 
-const isValidHost = (value) => {
+const isValidHost = (value: string) => {
 	if (value.indexOf(' ') > 0) {
 		return i18n.translate('the-workspace-host-must-not-have-spaces');
 	}
 };
 
-const isValidIp = (value) => {
+const isValidIp = (value: string) => {
 	if (!value) {
 		return;
 	}
@@ -91,7 +92,7 @@ const isValidIp = (value) => {
 	}
 };
 
-const isValidMac = (value) => {
+const isValidMac = (value: string) => {
 	if (!value) {
 		return;
 	}
@@ -109,7 +110,7 @@ const isValidMac = (value) => {
 	}
 };
 
-const validate = (validations, value) => {
+const validate = (validations: Function[], value: string | string[]) => {
 	let error;
 
 	if (validations) {
@@ -125,11 +126,14 @@ const validate = (validations, value) => {
 	return error;
 };
 
-const validateEmailsArray = (emailArray, emailsAvailable) => {
+const validateEmailsArray = (
+	emailArray: string[],
+	emailsAvailable: {email: string}[]
+) => {
 	const seenEmails = new Set();
-	const invalidEmails = [];
-	const repeatedEmails = [];
-	const errorMessages = [];
+	const invalidEmails: string[] = [];
+	const repeatedEmails: string[] = [];
+	const errorMessages: string[] = [];
 
 	for (const email of emailArray) {
 		if (!emailsAvailable.find((item) => item.email === email)) {
