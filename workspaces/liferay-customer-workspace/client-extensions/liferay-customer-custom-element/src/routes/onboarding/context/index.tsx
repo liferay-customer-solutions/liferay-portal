@@ -8,6 +8,7 @@ import IAccountBrief from '~/common/interfaces/accountBrief';
 import IAccountSubscriptionGroup from '~/common/interfaces/accountSubscriptionGroup';
 import IKoroneikiAccount from '~/common/interfaces/koroneikiAccount';
 import IOrganizationBrief from '~/common/interfaces/organizationBrief';
+import IProject from '~/common/interfaces/project';
 import IUserAccount from '~/common/interfaces/userAccount';
 
 import {useAppPropertiesContext} from '../../../common/contexts/AppPropertiesContext';
@@ -28,38 +29,35 @@ import {isValidPage} from '../../../common/utils/page.validation';
 import {ONBOARDING_STEP_TYPES} from '../utils/constants';
 import reducer, {actionTypes} from './reducer';
 
-interface IProps {
-	children: any;
-}
-
-interface OnboardingAction {
+interface IOnboardingAction {
 	payload: any;
 	type: string;
 }
 
-interface OnboardingState {
+interface IOnboardingState {
 	analyticsCloudActivationSubmittedStatus: boolean | undefined;
 	dxpCloudActivationSubmittedStatus: boolean | undefined;
 	koroneikiAccount: IKoroneikiAccount;
 	liferayExperienceCloudActivationSubmittedStatus: boolean | undefined;
-	project: IKoroneikiAccount | undefined;
+	project: IProject | undefined;
 	sessionId: string;
 	step: number;
 	subscriptionGroups: IAccountSubscriptionGroup[] | undefined;
 	userAccount: IUserAccount | undefined;
 }
 
-type OnboardingContextType = [
-	OnboardingState,
-	React.Dispatch<OnboardingAction>,
-];
+interface IProps {
+	children: any;
+}
 
-const AppContext = createContext<OnboardingContextType | null>(null);
+type OnboardingContext = [IOnboardingState, React.Dispatch<IOnboardingAction>];
+
+const AppContext = createContext<OnboardingContext | null>(null);
 
 const AppContextProvider: React.FC<IProps> = ({children}) => {
 	const {client, oktaSessionAPI} = useAppPropertiesContext();
 	const [state, dispatch] = useReducer<
-		React.Reducer<OnboardingState, OnboardingAction>
+		React.Reducer<IOnboardingState, IOnboardingAction>
 	>(reducer, {
 		analyticsCloudActivationSubmittedStatus: undefined,
 		dxpCloudActivationSubmittedStatus: undefined,
@@ -339,16 +337,7 @@ const AppContextProvider: React.FC<IProps> = ({children}) => {
 	);
 };
 
-const useOnboarding = (): OnboardingContextType => {
-	const context = useContext(AppContext);
-
-	if (!context) {
-		throw new Error(
-			'useOnboarding must be used within an AppContextProvider'
-		);
-	}
-
-	return context;
-};
+const useOnboarding = (): OnboardingContext =>
+	useContext(AppContext) as OnboardingContext;
 
 export {AppContext, AppContextProvider, useOnboarding};

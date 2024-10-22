@@ -6,14 +6,21 @@
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 
-const Badge = ({badgeClassName, children, ...props}) => {
+const Badge = ({
+	badgeClassName,
+	children,
+	...props
+}: {
+	badgeClassName?: string;
+	children?: any;
+}) => {
 	return (
 		<div
 			{...props}
 			className={classNames(
 				'alert alert-danger p-sm-2 text-danger text-paragraph-sm',
 				{
-					[badgeClassName]: badgeClassName,
+					[badgeClassName || '']: badgeClassName,
 				}
 			)}
 		>

@@ -7,21 +7,38 @@ import ClayForm, {ClaySelect} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 import {useField} from 'formik';
+
 import {Badge} from '../..';
 import {required, validate} from '../../../utils/validations.form';
 
-const Select = ({
+interface IOption {
+	disabled?: boolean;
+	label: string;
+	value: string | number;
+}
+
+interface IProps {
+	groupStyle?: string;
+	helper?: string;
+	label: string;
+	name: string;
+	options: IOption[];
+	required?: boolean;
+	validations?: Function[];
+}
+
+const Select: React.FC<IProps> = ({
 	groupStyle,
 	helper,
 	label,
 	options,
-	validations,
+	validations = [],
 	...props
 }) => {
 	if (props.required) {
 		validations = validations
-			? [...validations, (value) => required(value)]
-			: [(value) => required(value)];
+			? [...validations, (value: string) => required(value)]
+			: [(value: string) => required(value)];
 	}
 
 	const [field, meta] = useField({

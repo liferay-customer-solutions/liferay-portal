@@ -4,9 +4,21 @@
  */
 
 import ClayTable from '@clayui/table';
+import React from 'react';
+
 import Skeleton from '../Skeleton';
 
-const TableSkeleton = ({hasCheckbox, totalColumns, totalItems}) => {
+interface IProps {
+	hasCheckbox: boolean;
+	totalColumns: number;
+	totalItems: number;
+}
+
+const TableSkeleton: React.FC<IProps> = ({
+	hasCheckbox,
+	totalColumns,
+	totalItems,
+}) => {
 	return (
 		<ClayTable.Body>
 			{[...new Array(totalItems)].map((_, rowIndex) => (

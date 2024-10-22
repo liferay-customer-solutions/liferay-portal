@@ -4,10 +4,26 @@
  */
 
 import classNames from 'classnames';
+import React from 'react';
+
 import Footer from './Footer';
 import Header from './Header';
 
-const Layout = ({
+interface IProps {
+	children: React.ReactNode;
+	className?: string;
+	footerProps?: React.PropsWithChildren<any>;
+	headerProps?: {
+		greetings?: string;
+		headerClass?: string;
+		helper?: string;
+		title: string;
+	};
+	headerSkeleton?: React.ReactNode;
+	layoutType?: string;
+}
+
+const Layout: React.FC<IProps> = ({
 	children,
 	className,
 	footerProps,
@@ -27,7 +43,7 @@ const Layout = ({
 			{children}
 		</main>
 
-		<Footer {...footerProps} />
+		{footerProps && <Footer {...footerProps} />}
 	</div>
 );
 export default Layout;

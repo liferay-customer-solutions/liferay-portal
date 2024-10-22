@@ -5,9 +5,10 @@
 
 import ClayLabel from '@clayui/label';
 import classNames from 'classnames';
+
 import {STATUS_DISPLAY} from './utils/constants/statusDisplays';
 
-const StatusTag = ({currentStatus}) => {
+const StatusTag = ({currentStatus}: {currentStatus: string}) => {
 	const statusDisplay = STATUS_DISPLAY[currentStatus];
 
 	return (
@@ -15,7 +16,8 @@ const StatusTag = ({currentStatus}) => {
 			className={classNames(
 				'px-2 m-0 font-weight-normal text-paragraph-sm',
 				{
-					[`label-tonal-${statusDisplay?.displayType}`]: statusDisplay?.displayType,
+					[`label-tonal-${statusDisplay?.displayType}`]:
+						statusDisplay?.displayType,
 				}
 			)}
 		>

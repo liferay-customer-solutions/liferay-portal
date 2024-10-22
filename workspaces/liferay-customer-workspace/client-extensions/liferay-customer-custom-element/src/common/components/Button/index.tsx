@@ -6,8 +6,19 @@
 import {Button as ClayButton} from '@clayui/core';
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
-import {forwardRef, useMemo} from 'react';
+import {ReactNode, forwardRef, useMemo} from 'react';
 import {navigationIcons} from '~/routes/customer-portal/containers/SideMenu/utils/navigationIcons';
+
+interface IProps extends React.ComponentPropsWithoutRef<typeof ClayButton> {
+	appendIcon?: string;
+	appendIconClassName?: string;
+	children?: ReactNode;
+	iconKey?: string;
+	isImagePrependIcon?: boolean;
+	isLoading?: boolean;
+	prependIcon?: string;
+	prependIconClassName?: string;
+}
 
 const ButtonBase = (
 	{
@@ -20,30 +31,33 @@ const ButtonBase = (
 		prependIcon,
 		prependIconClassName,
 		...props
-	},
-	ref
+	}: IProps,
+	ref: React.ForwardedRef<HTMLButtonElement>
 ) => {
 	const Icon = useMemo(() => {
 		try {
 			if (iconKey) {
-				const [activeIcon] = navigationIcons[iconKey];
+				const [activeIcon] =
+					navigationIcons[iconKey as keyof typeof navigationIcons] ??
+					[];
 
 				return activeIcon;
 			}
-		} catch (error) {
+		}
+		catch (error) {
 			console.error('Error:', error);
 		}
+
+		return undefined;
 	}, [iconKey]);
 
 	return (
 		<ClayButton
-			aria-label={
-				typeof props.children === 'string' ? props.children : ''
-			}
+			aria-label={typeof children === 'string' ? children : ''}
 			ref={ref}
 			{...props}
 		>
-			{iconKey && <Icon className="mr-2" />}
+			{iconKey && Icon && <Icon className="mr-2" />}
 
 			{prependIcon && (
 				<span
@@ -70,7 +84,7 @@ const ButtonBase = (
 					)}
 				>
 					<ClayIcon
-						aria-label={`Icon ${appendIcon}}`}
+						aria-label={`Icon ${appendIcon}`}
 						symbol={appendIcon}
 					/>
 				</span>
@@ -83,4 +97,5 @@ const ButtonBase = (
 	);
 };
 const Button = forwardRef(ButtonBase);
+
 export default Button;

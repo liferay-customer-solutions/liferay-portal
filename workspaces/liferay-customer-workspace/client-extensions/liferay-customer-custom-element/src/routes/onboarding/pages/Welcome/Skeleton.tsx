@@ -11,9 +11,11 @@ const WelcomeSkeleton = () => {
 		<Layout
 			className="align-items-center d-flex flex-column pt-5 px-6"
 			footerProps={{
-				middleButton: <Skeleton.Rounded height={48} width={110} />,
+				middleButton: (
+					<Skeleton height={48} shape="rounded" width={110} />
+				),
 			}}
-			headerProps={{}}
+			headerProps={{title: ''}}
 			headerSkeleton={
 				<div className="p-4">
 					<Skeleton
@@ -27,7 +29,7 @@ const WelcomeSkeleton = () => {
 				</div>
 			}
 		>
-			<Skeleton.Square height={200} width={320} />
+			<Skeleton height={200} shape="square" width={320} />
 
 			<Skeleton
 				align="center"

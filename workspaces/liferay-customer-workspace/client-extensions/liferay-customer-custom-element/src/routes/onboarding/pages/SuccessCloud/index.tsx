@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {MouseEventHandler} from 'react';
+
 import i18n from '../../../../common/I18n';
 import {Button} from '../../../../common/components';
 import Layout from '../../../../common/containers/setup-forms/Layout';
@@ -33,7 +35,7 @@ const SuccessCloud = ({
 	handlePage,
 	productType,
 }: {
-	handlePage: Function;
+	handlePage: MouseEventHandler<HTMLButtonElement>;
 	productType: string;
 }) => {
 	return (
@@ -50,7 +52,7 @@ const SuccessCloud = ({
 				helper: successTexts[productType].helper,
 				title: successTexts[productType].title,
 			}}
-			headerSkeleton={{}}
+			headerSkeleton={null}
 		>
 			<div className="container font-weight-bold pl-6 pr-6 pt-9 text-center">
 				{successTexts[productType].paragraph}

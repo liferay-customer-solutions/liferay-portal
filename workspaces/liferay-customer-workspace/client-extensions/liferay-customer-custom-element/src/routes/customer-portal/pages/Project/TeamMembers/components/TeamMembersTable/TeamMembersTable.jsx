@@ -83,18 +83,16 @@ const TeamMembersTable = ({
 	const isUnlimitedSupportSeats =
 		koroneikiAccount?.maxRequestors === MAXIMUM_SUPPORT_SEATS_DEFAULT;
 
-	const [
+	const {
+		data: userAccountsData,
+		loading: userAccountsLoading,
+		remove,
+		search,
+		searching,
 		supportSeatsCount,
-		{
-			data: userAccountsData,
-			loading: userAccountsLoading,
-			remove,
-			search,
-			searching,
-			update,
-			updating,
-		},
-	] = useUserAccountsByAccountExternalReferenceCode(
+		update,
+		updating,
+		} = useUserAccountsByAccountExternalReferenceCode(
 		koroneikiAccount?.accountKey,
 		koroneikiAccountLoading
 	);

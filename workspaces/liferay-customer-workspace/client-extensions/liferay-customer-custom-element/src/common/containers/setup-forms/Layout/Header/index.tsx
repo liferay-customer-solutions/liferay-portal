@@ -4,8 +4,16 @@
  */
 
 import classNames from 'classnames';
+import React from 'react';
 
-const Header = ({greetings, headerClass, helper, title}) => {
+interface IProps {
+	greetings?: string;
+	headerClass?: string;
+	helper?: string;
+	title: string;
+}
+
+const Header: React.FC<IProps> = ({greetings, headerClass, helper, title}) => {
 	return (
 		<header className={classNames('p-4', headerClass)}>
 			{greetings && (

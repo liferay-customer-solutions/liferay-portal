@@ -49,13 +49,13 @@ const AnalyticsCloudStatusModal: React.FC<AnalyticsCloudStatusModalProps> = ({
 			</p>
 
 			<div className="d-flex my-4 px-4">
-				<Button displayType="secondary ml-auto mt-2" onClick={onClose}>
+				<Button displayType="secondary" onClick={onClose}>
 					{i18n.translate('cancel')}
 				</Button>
 
 				<Button
 					disabled={!groupIdValue}
-					displayType="primary ml-3 mt-2"
+					displayType="primary"
 					onClick={() => updateCardStatus()}
 				>
 					{i18n.translate('confirm')}

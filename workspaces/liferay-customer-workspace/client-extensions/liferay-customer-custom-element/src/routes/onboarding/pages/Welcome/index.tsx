@@ -37,13 +37,9 @@ const Welcome = () => {
 				greetings: i18n.translate('ready-set-go'),
 				title: i18n.translate('let-s-set-up-your-project'),
 			}}
-			headerSkeleton={{}}
+			headerSkeleton={null}
 		>
-			<IntroOnboarding
-				className="mb-4 pb-1"
-				height={237}
-				width={331}
-			/>
+			<IntroOnboarding className="mb-4 pb-1" height={237} width={331} />
 
 			<p className="mb-0 px-1 text-center text-neutral-8">
 				{i18n.translate(

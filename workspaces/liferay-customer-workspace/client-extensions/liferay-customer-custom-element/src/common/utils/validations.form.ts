@@ -112,7 +112,10 @@ const isValidMac = (value: string) => {
 	}
 };
 
-const validate = (validations: Function[], value: string | string[]) => {
+const validate = (
+	validations: Function[] | undefined,
+	value: string | string[]
+) => {
 	let error;
 
 	if (validations) {

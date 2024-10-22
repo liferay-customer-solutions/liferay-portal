@@ -8,18 +8,20 @@ import IOrganizationBrief from './organizationBrief';
 import IRoleBrief from './rolelBrief';
 
 export default interface IUserAccount {
-	accountBriefs: IAccountBrief[] | undefined;
-	accountKey: string | undefined;
+	accountBriefs?: IAccountBrief[];
+	accountKey?: string;
 	code?: string;
-	email: string | undefined;
-	firstName: string | undefined;
-	id: number | undefined;
+	email?: string;
+	familyName?: string;
+	firstName?: string;
+	givenName?: string;
+	id?: number;
 	isAccountAdmin: boolean;
 	isOmniAdmin: boolean;
 	isProvisioning: boolean;
 	isStaff: boolean;
-	lastName: string | undefined;
-	organizationBriefs: IOrganizationBrief[] | undefined;
+	lastName?: string;
+	organizationBriefs?: IOrganizationBrief[];
 	partnershipCurrent?: string;
 	partnershipCurrentEndDate?: string;
 	partnershipExpired?: string;
@@ -27,8 +29,8 @@ export default interface IUserAccount {
 	partnershipFuture?: string;
 	partnershipFutureStartDate?: string;
 	region: string;
-	roleBriefs: IRoleBrief[] | undefined;
-	screenName: string | undefined;
+	roleBriefs?: IRoleBrief[];
+	screenName?: string;
 	slaCurrent?: string;
 	slaCurrentEndDate?: string;
 	slaExpired?: string;
@@ -36,7 +38,7 @@ export default interface IUserAccount {
 	slaFuture?: string;
 	slaFutureStartDate?: string;
 	status: string;
-	userId: number | undefined;
-	userName: string | undefined;
-	uuid: string | undefined;
+	userId?: number;
+	userName?: string;
+	uuid?: string;
 }

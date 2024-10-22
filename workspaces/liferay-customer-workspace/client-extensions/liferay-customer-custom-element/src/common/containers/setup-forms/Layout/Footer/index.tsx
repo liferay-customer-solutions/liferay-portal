@@ -4,8 +4,21 @@
  */
 
 import classNames from 'classnames';
+import React from 'react';
 
-const Footer = ({footerClass, leftButton, middleButton, rightButton}) => {
+interface IProps {
+	footerClass?: string;
+	leftButton?: React.ReactNode;
+	middleButton?: React.ReactNode;
+	rightButton?: React.ReactNode;
+}
+
+const Footer: React.FC<IProps> = ({
+	footerClass,
+	leftButton,
+	middleButton,
+	rightButton,
+}) => {
 	const isCornerButton = leftButton || rightButton;
 
 	return (

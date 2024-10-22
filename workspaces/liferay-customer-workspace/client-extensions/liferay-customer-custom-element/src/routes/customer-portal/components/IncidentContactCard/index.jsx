@@ -34,10 +34,8 @@ const IncidentContactCard = ({
 		loading,
 		project?.accountKey
 	);
-	const [
-		,
-		{data: userAccountsData, refetch},
-	] = useUserAccountsByAccountExternalReferenceCode(project?.accountKey);
+	const {data: userAccountsData, refetch} = 
+		useUserAccountsByAccountExternalReferenceCode(project?.accountKey);
 
 	const [userAccount, setUserAccount] = useState(userAccountsData);
 	const loggedUserAccount = myUserAccountData?.myUserAccount;

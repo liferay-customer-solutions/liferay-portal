@@ -41,7 +41,11 @@ const ProjectCard: React.FC<IProps> = ({
 			return <Skeleton align="left" height={20} width={54} />;
 		}
 
-		return <StatusTag currentStatus={koroneikiAccount?.status} />;
+		return (
+			<StatusTag
+				currentStatus={koroneikiAccount?.status as unknown as string}
+			/>
+		);
 	};
 	const renderSLAStatusDate = () => {
 		if (loading) {

@@ -388,19 +388,16 @@ export default function useUserAccountsByAccountExternalReferenceCode(
 		}
 	};
 
-	return [
+	return {
+		data,
+		loading:
+			koroneikiAccountLoading || networkStatus === NetworkStatus.loading,
+		refetch,
+		remove,
+		search: onSearch,
+		searching: networkStatus === NetworkStatus.setVariables,
 		supportSeatsCount,
-		{
-			data,
-			loading:
-				koroneikiAccountLoading ||
-				networkStatus === NetworkStatus.loading,
-			refetch,
-			remove,
-			search: onSearch,
-			searching: networkStatus === NetworkStatus.setVariables,
-			update,
-			updating: updating || removing,
-		},
-	];
+		update,
+		updating: updating || removing,
+	};
 }

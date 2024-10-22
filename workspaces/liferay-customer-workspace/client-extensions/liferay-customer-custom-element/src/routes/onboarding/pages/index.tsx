@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import IProject from '~/common/interfaces/project';
 import useUserAccountsByAccountExternalReferenceCode from '~/routes/customer-portal/pages/Project/TeamMembers/components/TeamMembersTable/hooks/useUserAccountsByAccountExternalReferenceCode';
 
 import i18n from '../../../common/I18n';
@@ -34,7 +35,7 @@ const Pages: React.FC = () => {
 		dispatch,
 	] = useOnboarding();
 
-	const [supportSeatsCount] = useUserAccountsByAccountExternalReferenceCode(
+	const {supportSeatsCount} = useUserAccountsByAccountExternalReferenceCode(
 		project?.accountKey
 	);
 
@@ -123,7 +124,7 @@ const Pages: React.FC = () => {
 					availableSupportSeatsCount={availableSupportSeatsCount}
 					handlePage={invitesPageHandle}
 					leftButton={i18n.translate('skip-for-now')}
-					project={project}
+					project={project as unknown as IProject}
 					sessionId={sessionId}
 				/>
 			),
@@ -196,7 +197,9 @@ const Pages: React.FC = () => {
 
 						pageHandle();
 					}}
+					initialValues={{}}
 					leftButton={i18n.translate('skip-for-now')}
+					onSubmit={() => {}}
 					project={project}
 					subscriptionGroupId={
 						subscriptionAnalyticsCloud?.accountSubscriptionGroupId

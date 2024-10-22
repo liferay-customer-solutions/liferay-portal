@@ -6,11 +6,65 @@
 import ClayTable from '@clayui/table';
 import classNames from 'classnames';
 import {useEffect, useState} from 'react';
+
 import {FilterIcon} from '../../icons/filter_icon';
 import TablePagination from './Pagination';
 import TableSkeleton from './Skeleton';
 
-const Table = ({
+interface IColumn {
+	accessor: string;
+	align?: 'center' | 'left' | 'right' | undefined;
+	bodyClass?: string;
+	disableCustomClickOnRow?: boolean;
+	expanded?: boolean;
+	filterIdentifier?: string;
+	header: {
+		description?: string;
+		name: string;
+		noWrap?: boolean;
+		styles?: string;
+	};
+	noWrap?: boolean;
+	truncate?: boolean;
+}
+
+interface IRow {
+	customClickOnRow?: () => void;
+	id: string | number;
+	[key: string]: any;
+}
+
+interface ICheckboxConfig {
+	checkboxesChecked: (string | number)[];
+	setCheckboxesChecked: React.Dispatch<
+		React.SetStateAction<(string | number)[]>
+	>;
+}
+
+interface IPaginationConfig {
+	activePage: number;
+	itemsPerPage: number;
+	labels?: any;
+	listItemsPerPage?: number[];
+	setActivePage: (page: number) => void;
+	setItemsPerPage: (itemsPerPage: number) => void;
+	showDeltasDropDown: boolean;
+	totalCount: number;
+}
+
+interface IProps {
+	checkboxConfig: ICheckboxConfig;
+	columns: IColumn[];
+	handleSortChange: Function;
+	hasCheckbox: boolean;
+	hasPagination: boolean;
+	hasSorting?: boolean;
+	isLoading?: boolean;
+	paginationConfig: IPaginationConfig;
+	rows: IRow[];
+}
+
+const Table: React.FC<IProps> = ({
 	checkboxConfig,
 	columns,
 	handleSortChange,
@@ -48,7 +102,10 @@ const Table = ({
 		return setIsAllCheckboxsSelected(false);
 	}, [checkboxesChecked, hasCheckbox, rows]);
 
-	const handleCheckboxClick = (event, id) => {
+	const handleCheckboxClick = (
+		event: React.ChangeEvent<HTMLInputElement>,
+		id: string | number
+	) => {
 		const {checked} = event.target;
 
 		if (checked) {
@@ -75,7 +132,7 @@ const Table = ({
 
 			return;
 		}
-		setCheckboxesChecked(rows.map((row) => row.id));
+		setCheckboxesChecked(rows.map((row) => row.id as string | number));
 	};
 
 	return (
@@ -141,10 +198,11 @@ const Table = ({
 						{rows.map((row, rowIndex) => (
 							<ClayTable.Row
 								className={classNames({
-									'cp-common-table-active-row': checkboxesChecked.find(
-										(checkboxChecked) =>
-											checkboxChecked === row.id
-									),
+									'cp-common-table-active-row':
+										checkboxesChecked.find(
+											(checkboxChecked) =>
+												checkboxChecked === row.id
+										),
 								})}
 								key={row.id || rowIndex}
 							>
@@ -173,7 +231,9 @@ const Table = ({
 									<ClayTable.Cell
 										align={column.align}
 										className={column.bodyClass}
-										columnTextAlignment={column.align}
+										columnTextAlignment={
+											column.align as any
+										}
 										expanded={column.expanded}
 										key={`${rowIndex}-${columnIndex}`}
 										noWrap={column.noWrap}
@@ -220,6 +280,8 @@ const Table = ({
 
 Table.defaultProps = {
 	checkboxConfig: {checkboxesChecked: [], setCheckboxesChecked: () => {}},
+	hasSorting: false,
+	isLoading: false,
 	paginationConfig: {
 		activePage: 1,
 		itemsPerPage: 5,

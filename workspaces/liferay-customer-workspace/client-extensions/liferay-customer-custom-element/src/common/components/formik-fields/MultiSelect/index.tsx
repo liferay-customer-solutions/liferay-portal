@@ -6,26 +6,50 @@
 import ClayForm from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import ClayMultiSelect from '@clayui/multi-select';
+import {InternalDispatch} from '@clayui/shared';
 import ClaySticker from '@clayui/sticker';
 import classNames from 'classnames';
-import {useField, useFormikContext} from 'formik';
+import {FieldHookConfig, useField, useFormikContext} from 'formik';
 import {useEffect} from 'react';
 import i18n from '~/common/I18n';
+
 import {Badge} from '../..';
 import {validateEmailsArray} from '../../../utils/validations.form';
+
+interface IItem {
+	email?: string;
+	label: string;
+	value: string | number;
+}
+
+interface IProps
+	extends React.ComponentPropsWithoutRef<typeof ClayMultiSelect> {
+	filteredSourceItems: IItem[];
+	groupStyle?: string;
+	items: IItem[];
+	label: string;
+	metaErrorCallback: (error: string | undefined) => void;
+	name?: string;
+	onChange?: InternalDispatch<string> | undefined;
+	required?: boolean;
+	sourceItems: {email: string}[];
+	validations?: Function[];
+	values: IItem[];
+}
 
 const MultiSelect = ({
 	filteredSourceItems,
 	groupStyle,
 	items,
 	label,
+	name,
 	metaErrorCallback,
 	onChange,
+	required = false,
 	sourceItems,
-	validations,
+	validations = [],
 	values,
-	...props
-}) => {
+}: IProps) => {
 	const formik = useFormikContext();
 
 	const validateMultiSelect = () => {
@@ -42,34 +66,40 @@ const MultiSelect = ({
 	};
 
 	const [field, meta] = useField({
-		...props,
 		validate: validateMultiSelect,
-	});
+	} as unknown as FieldHookConfig<IItem[]>);
 
 	useEffect(() => {
-		formik.setFieldValue(props.name, values);
-		formik.validateField(props.name);
+		formik.setFieldValue(field.name, values);
+		formik.validateField(field.name);
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [values]);
 
 	useEffect(() => {
 		metaErrorCallback(meta.error);
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [meta.error]);
 
-	const requiredMultiSelect = (value) => {
+	const requiredMultiSelect = (value: number) => {
 		if (!value) {
 			return i18n.sub(
 				'one-or-more-contacts-are-required-please-select-a-contact-for-x',
 				[label]
 			);
 		}
+
+		return undefined;
 	};
 
-	if (props.required) {
+	if (required) {
 		validations = validations
-			? [...validations, () => requiredMultiSelect(values.length)]
-			: [() => requiredMultiSelect(values.length)];
+			? [
+					...validations,
+					(value: string) => requiredMultiSelect(value.length),
+				]
+			: [(value: string) => requiredMultiSelect(value.length)];
 	}
 
 	return (
@@ -84,7 +114,7 @@ const MultiSelect = ({
 				<label className="ml-0">
 					{`${label} `}
 
-					{props.required && (
+					{required && (
 						<span className="inline-item-after reference-mark text-warning">
 							<ClayIcon symbol="asterisk" />
 						</span>
@@ -92,17 +122,26 @@ const MultiSelect = ({
 				</label>
 
 				<ClayMultiSelect
-					{...field}
-					{...props}
+					inputName={name}
 					items={items}
-					onChange={(event) => onChange(event?.target?.value)}
+					onChange={(event: any) => onChange?.(event?.target?.value)}
 					sourceItems={filteredSourceItems}
-					value={items?.value}
+					value={
+						items?.map((item) => ({
+							...item,
+							value: `${item.value}`,
+						})) as unknown as string
+					}
 				>
 					{(item, index) => (
 						<ClayMultiSelect.Item
 							key={index}
+							onChange={() => {}}
+							onPointerEnterCapture={() => {}}
+							onPointerLeaveCapture={() => {}}
+							placeholder={item?.label}
 							textValue={item?.label}
+							value={`${item?.value}`}
 						>
 							<div className="autofit-row autofit-row-center">
 								<div className="autofit-col mr-3">
@@ -124,13 +163,11 @@ const MultiSelect = ({
 					)}
 				</ClayMultiSelect>
 
-				{(typeof meta.error === 'string' ||
-					meta.error instanceof String) &&
-					meta.touched && (
-						<Badge>
-							<span className="pl-1">{meta.error}</span>
-						</Badge>
-					)}
+				{meta.touched && meta.error && (
+					<Badge>
+						<span className="pl-1">{meta.error}</span>
+					</Badge>
+				)}
 			</ClayForm.Group>
 		</div>
 	);

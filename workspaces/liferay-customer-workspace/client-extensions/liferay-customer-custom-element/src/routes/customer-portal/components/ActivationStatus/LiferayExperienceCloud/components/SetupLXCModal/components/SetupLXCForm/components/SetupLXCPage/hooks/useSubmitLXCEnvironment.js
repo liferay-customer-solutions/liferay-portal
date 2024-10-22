@@ -159,10 +159,10 @@ export default function useSubmitLXCEnvironment(
 								const lastName = lastNames.join(' ');
 
 								return `
-                                <strong>First Name -</strong> ${firstName}<br>
-                                <strong>Last Name - </strong>${lastName}<br>
-                                <strong>Email Address - </strong>${email}
-                                <br><br>`;
+								<strong>First Name -</strong> ${firstName}<br>
+								<strong>Last Name - </strong>${lastName}<br>
+								<strong>Email Address - </strong>${email}
+								<br><br>`;
 							}
 						);
 

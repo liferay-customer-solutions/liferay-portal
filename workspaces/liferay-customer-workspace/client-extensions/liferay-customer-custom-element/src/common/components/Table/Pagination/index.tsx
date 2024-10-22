@@ -5,17 +5,31 @@
 
 import {ClayPaginationBarWithBasicItems} from '@clayui/pagination-bar';
 import classNames from 'classnames';
+import React from 'react';
+
 import i18n from '../../../I18n';
 import getIconSpriteMap from '../../../utils/getIconSpriteMap';
 
-const TablePagination = ({
+interface IProps {
+	activePage: number;
+	ellipsisBuffer?: number;
+	itemsPerPage: number;
+	labels?: any;
+	listItemsPerPage?: number[];
+	setActivePage: (page: number) => void;
+	setItemsPerPage: (itemsPerPage: number) => void;
+	showDeltasDropDown: boolean;
+	totalItems: number;
+}
+
+const TablePagination: React.FC<IProps> = ({
 	activePage,
 	ellipsisBuffer = 3,
 	itemsPerPage = 5,
 	setActivePage,
 	labels,
 	setItemsPerPage,
-	showDeltasDropDown = false,
+	showDeltasDropDown,
 	listItemsPerPage = [],
 	totalItems,
 }) => {
@@ -35,7 +49,7 @@ const TablePagination = ({
 						'cp-hide-pagination-activation-keys':
 							itemsPerPage >= totalItems,
 					})}
-					deltas={listItemsPerPage}
+					deltas={listItemsPerPage.map((item) => ({label: item}))}
 					ellipsisBuffer={ellipsisBuffer}
 					labels={labels || defaultLabels}
 					onDeltaChange={setItemsPerPage}
@@ -52,9 +66,9 @@ const TablePagination = ({
 		<>
 			<p className="mb-4 mx-4 pagination-results">
 				{i18n.sub('showing-x-to-x-of-x-entries', [
-					`${itemsPerPage * activePage + 1 - itemsPerPage}`,
-					totalItems,
-					totalItems,
+					(itemsPerPage * activePage + 1 - itemsPerPage).toString(),
+					totalItems.toString(),
+					totalItems.toString(),
 				])}
 			</p>
 		</>
