@@ -4,17 +4,17 @@
  */
 
 import ClayLoadingIndicator from '@clayui/loading-indicator';
-import {useEffect, useState} from 'react';
-import {HashRouter, Route, Routes} from 'react-router-dom';
-import {useAppPropertiesContext} from '~/common/contexts/AppPropertiesContext';
+import { useEffect, useState } from 'react';
+import { HashRouter, Route, Routes } from 'react-router-dom';
+import { useAppPropertiesContext } from '~/common/contexts/AppPropertiesContext';
 import getKebabCase from '../../../../../common/utils/getKebabCase';
 import DeactivateKeysTable from '../../../containers/DeactivateKeysTable';
 import GenerateNewKey from '../../../containers/GenerateNewKey';
-import {useCustomerPortal} from '../../../context';
-import {actionTypes} from '../../../context/reducer';
+import { useCustomerPortal } from '../../../context';
+import { actionTypes } from '../../../context/reducer';
 import Layout from '../../../layouts/BaseLayout';
-import {PRODUCT_TYPES} from '../../../utils/constants';
-import {getWebContents} from '../../../utils/getWebContents';
+import { PRODUCT_TYPES } from '../../../utils/constants';
+import { getWebContents } from '../../../utils/getWebContents';
 import Commerce from '../ActivationKeys/Commerce';
 import EnterpriseSearch from '../ActivationKeys/EnterpriseSearch';
 import AnalyticsCloud from '../AnalyticsCloud';
@@ -28,12 +28,24 @@ import RenewTable from '../RenewTable';
 import TeamMembers from '../TeamMembers';
 import ActivationOutlet from './Outlets/ActivationOutlet';
 import ProductOutlet from './Outlets/ProductOutlet';
+import ProjectUsage from '../ProjectUsage';
 
 const ProjectRoutes = () => {
-	const [{project, subscriptionGroups}, dispatch] = useCustomerPortal();
-	const {featureFlags} = useAppPropertiesContext();
-
 	const [hasComplimentaryKey, setHasComplimentaryKey] = useState(false);
+
+	const [{ project, subscriptionGroups }, dispatch] = useCustomerPortal();
+	const { featureFlags } = useAppPropertiesContext();
+
+	const { data: koroneikiData, loading: koroneikiAccountLoading } = useCurrentKoroneikiAccount();
+	const koroneikiAccount = koroneikiData?.koroneikiAccountByExternalReferenceCode;
+
+	const { data: myUserAccountData, loading: myUserAccountLoading } =
+		useMyUserAccountByAccountExternalReferenceCode(
+			koroneikiAccountLoading,
+			koroneikiAccount?.accountKey
+		);
+	const loggedUserAccount = myUserAccountData?.myUserAccount;
+
 
 	useEffect(() => {
 		if (project && subscriptionGroups) {
@@ -82,9 +94,9 @@ const ProjectRoutes = () => {
 							/>
 						}
 					>
-						<Route 
-							element={<DXPCloud />} 
-							path={getKebabCase(PRODUCT_TYPES.dxpCloud)} 
+						<Route
+							element={<DXPCloud />}
+							path={getKebabCase(PRODUCT_TYPES.dxpCloud)}
 						/>
 					</Route>
 
@@ -241,6 +253,11 @@ const ProjectRoutes = () => {
 					)}
 
 					<Route element={<TeamMembers />} path="team-members" />
+
+					{featureFlags.includes('LRSD-6322') &&
+						loggedUserAccount?.isLiferayStaff &&
+						<Route element={<ProjectUsage />} path="project-usage" />
+					}
 
 					<Route element={<h3>Page not found</h3>} path="*" />
 				</Route>
