@@ -5,6 +5,7 @@
 
 package com.liferay.customer;
 
+import com.liferay.client.extension.util.spring.boot.BaseRestController;
 import com.liferay.customer.model.AccountUsage;
 import com.liferay.customer.service.GoogleCloudFunctionWebService;
 import com.liferay.headless.admin.user.client.dto.v1_0.Account;
@@ -20,6 +21,7 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -86,6 +88,12 @@ public class AccountUsageRestController extends BaseRestController {
 				exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	@Value("${com.liferay.lxc.dxp.mainDomain}")
+	protected String lxcDXPMainDomain;
+
+	@Value("${com.liferay.lxc.dxp.server.protocol}")
+	protected String lxcDXPServerProtocol;
 
 	private AccountResource _getAccountResource(Jwt jwt) throws Exception {
 		return AccountResource.builder(
