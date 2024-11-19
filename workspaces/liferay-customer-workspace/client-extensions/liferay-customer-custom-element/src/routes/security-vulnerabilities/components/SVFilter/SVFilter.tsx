@@ -65,7 +65,7 @@ const SVFilter = ({filterOptions, filters, onChange}: IProps) => {
 						<ClayRadio
 							aria-label={sort}
 							checked={filters.sort === sort}
-							key="sort"
+							key={sort}
 							label={i18n.translate(sort)}
 							onChange={() => {
 								toggleFilterValue('sort', sort);
