@@ -12,6 +12,7 @@ interface IProps {
 	children?: ReactNode;
 	className?: string;
 	classNameCard?: string;
+	displayUsage?: boolean;
 	infoButtonText?: string;
 }
 
@@ -19,6 +20,7 @@ const CardContainer: React.FC<IProps> = ({
 	children,
 	className,
 	classNameCard,
+	displayUsage,
 	infoButtonText,
 }) => {
 	return (
@@ -26,7 +28,7 @@ const CardContainer: React.FC<IProps> = ({
 			<div
 				className={`card-container px-3 py-4 position-relative rounded ${classNameCard}`}
 			>
-				{infoButtonText && (
+				{infoButtonText && displayUsage && (
 					<div className="align-items-center d-flex info-button justify-content-center position-absolute">
 						<PopoverIconButton
 							iconSize="xs"
