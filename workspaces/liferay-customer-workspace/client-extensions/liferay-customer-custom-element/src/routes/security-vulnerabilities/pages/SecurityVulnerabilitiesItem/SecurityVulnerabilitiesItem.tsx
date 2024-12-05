@@ -11,15 +11,15 @@ import {JiraEnum} from '../../utils/constants/jiraEnum';
 
 import './SecurityVulnerabilitiesItem.css';
 
+import {ClayPaginationBarWithBasicItems} from '@clayui/pagination-bar/lib/PaginationBarWithBasicItems';
 import {useMemo} from 'react';
 import {SVWaves} from '~/common/icons/sv_waves';
 
 import SVTable from '../../components/SVTable';
 import {IRow} from '../../components/SVTable/SVTable';
 import SVAffectedVersions from '../../components/SVTable/components/SVAffectedVersions';
-import useJiraSearch from '../../hooks/useJiraSearch';
-import { ClayPaginationBarWithBasicItems } from '@clayui/pagination-bar/lib/PaginationBarWithBasicItems';
 import usePagination from '../../components/SVTable/hooks/usePaginationSV';
+import useJiraSearch from '../../hooks/useJiraSearch';
 
 const SecurityVulnerabilitiesItem = () => {
 	const {id} = useParams();
@@ -27,7 +27,10 @@ const SecurityVulnerabilitiesItem = () => {
 	const pagination = usePagination();
 
 	const {jiraIssue, loading: issueLoading} = useJiraIssue(id);
-	const {jiraSearch, loading: searchLoading} = useJiraSearch(pagination.activePage, pagination.activeDelta);
+	const {jiraSearch, loading: searchLoading} = useJiraSearch(
+		pagination.activePage,
+		pagination.activeDelta
+	);
 
 	const columns = [
 		{
@@ -264,9 +267,9 @@ const SecurityVulnerabilitiesItem = () => {
 								/>
 
 								<ClayPaginationBarWithBasicItems
-											{...pagination}
-											totalItems={jiraSearch?.[JiraEnum.TOTAL]!}
-										/>
+									{...pagination}
+									totalItems={jiraSearch?.[JiraEnum.TOTAL]!}
+								/>
 							</>
 						) : (
 							<div className="py-2">

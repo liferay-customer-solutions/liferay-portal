@@ -7,11 +7,11 @@ import {useState} from 'react';
 import i18n from '~/common/I18n';
 
 export default function usePagination() {
-    const labels = {
-        paginationResults: i18n.translate('showing-x-to-x-of-x-entries'),
-        perPageItems: i18n.translate('x-entries'),
-        selectPerPageItems: i18n.translate('x-entries')
-    }
+	const labels = {
+		paginationResults: i18n.translate('showing-x-to-x-of-x-entries'),
+		perPageItems: i18n.translate('x-entries'),
+		selectPerPageItems: i18n.translate('x-entries'),
+	};
 
 	const [pageSize, setPageSize] = useState<number>(15);
 
@@ -36,7 +36,7 @@ export default function usePagination() {
 		activeDelta: pageSize,
 		activePage: page,
 		deltas,
-        labels,
+		labels,
 		onDeltaChange: setPageSize,
 		onPageChange: setPage,
 	};

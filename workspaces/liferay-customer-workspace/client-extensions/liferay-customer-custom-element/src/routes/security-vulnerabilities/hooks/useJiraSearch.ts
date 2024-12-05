@@ -31,39 +31,38 @@ export interface IProps {
 	[JiraEnum.SORT_ORDER]?: string;
 }
 
-const useJiraSearch = (
-		page: number,
-		pageSize:number
-	) => {
-
+const useJiraSearch = (page: number, pageSize: number) => {
 	const [jiraSearch, setJiraSearch] = useState<IJiraResponse>();
 	const [loading, setLoading] = useState(true);
 	const [searchParams, setSearchParams] = useSearchParams();
 
-	const fetchJiraSearch = useCallback(async (page:number, pageSize:number, params: URLSearchParams) => {
-		setLoading(true);
+	const fetchJiraSearch = useCallback(
+		async (page: number, pageSize: number, params: URLSearchParams) => {
+			setLoading(true);
 
-		const queryString = getFilterParams(params.toString());
+			const queryString = getFilterParams(params.toString());
 
-		try {
-			const response: IJiraResponse =
-				await Liferay.OAuth2Client.FromUserAgentApplication(
-					'liferay-customer-etc-spring-boot-oaua'
-				)
-					.fetch(
-						`/jira/security-vulnerabilities/search?${queryString}&page=${page}&pageSize=${pageSize}`
+			try {
+				const response: IJiraResponse =
+					await Liferay.OAuth2Client.FromUserAgentApplication(
+						'liferay-customer-etc-spring-boot-oaua'
 					)
-					.then((response) => response.json());
+						.fetch(
+							`/jira/security-vulnerabilities/search?${queryString}&page=${page}&pageSize=${pageSize}`
+						)
+						.then((response) => response.json());
 
-			setJiraSearch(response);
-		}
-		catch (error) {
-			console.error('Error fetching Jira data:', error);
-		}
-		finally {
-			setLoading(false);
-		}
-	}, []);
+				setJiraSearch(response);
+			}
+			catch (error) {
+				console.error('Error fetching Jira data:', error);
+			}
+			finally {
+				setLoading(false);
+			}
+		},
+		[]
+	);
 
 	const updateSearchParams = useCallback(
 		(newParams?: IProps) => {

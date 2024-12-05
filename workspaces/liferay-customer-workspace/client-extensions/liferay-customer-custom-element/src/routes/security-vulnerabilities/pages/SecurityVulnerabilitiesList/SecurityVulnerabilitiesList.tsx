@@ -6,11 +6,13 @@
 import i18n from '~/common/I18n';
 
 import SVFilter from '../../components/SVFilter';
+import SVPanel from '../../components/SVPanel';
 import SVSearch from '../../components/SVSearch';
 import SVTable from '../../components/SVTable';
 
 import './SecurityVulnerabilitiesList.css';
 
+import {ClayPaginationBarWithBasicItems} from '@clayui/pagination-bar/lib/PaginationBarWithBasicItems';
 import {useMemo} from 'react';
 import {Link} from 'react-router-dom';
 import {SVWaves} from '~/common/icons/sv_waves';
@@ -18,16 +20,14 @@ import {getFormattedDate} from '~/routes/customer-portal/utils/getFormattedDate'
 
 import {IRow} from '../../components/SVTable/SVTable';
 import SVAffectedVersions from '../../components/SVTable/components/SVAffectedVersions';
+import usePagination from '../../components/SVTable/hooks/usePaginationSV';
 import {IJiraIssue} from '../../hooks/useJiraIssue';
 import useJiraSearch from '../../hooks/useJiraSearch';
 import {FILTER_OPTIONS} from '../../utils/constants/filterOptions';
 import {JiraEnum} from '../../utils/constants/jiraEnum';
 import {SORT_OPTIONS} from '../../utils/constants/sortOptions';
-import { ClayPaginationBarWithBasicItems } from '@clayui/pagination-bar/lib/PaginationBarWithBasicItems';
-import usePagination from '../../components/SVTable/hooks/usePaginationSV';
 
 const SecurityVulnerabilitiesList = () => {
-
 	const pagination = usePagination();
 
 	const {jiraSearch, loading, searchParams, updateSearchParams} =
@@ -142,6 +142,8 @@ const SecurityVulnerabilitiesList = () => {
 								params={searchParams}
 								sortOptions={SORT_OPTIONS}
 							/>
+
+							<SVPanel text="for-information-on-previously-addressed-cves-fixed-in-dxp-2024-q1-1-or-earlier-please-visit-our-help-center" />
 						</div>
 
 						<div className="col-9">
@@ -156,7 +158,9 @@ const SecurityVulnerabilitiesList = () => {
 
 									<ClayPaginationBarWithBasicItems
 										{...pagination}
-										totalItems={jiraSearch?.[JiraEnum.TOTAL]!}
+										totalItems={
+											jiraSearch?.[JiraEnum.TOTAL]!
+										}
 									/>
 								</>
 							) : (
