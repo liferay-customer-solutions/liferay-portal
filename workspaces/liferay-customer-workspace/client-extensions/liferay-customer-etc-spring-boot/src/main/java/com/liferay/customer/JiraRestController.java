@@ -479,7 +479,7 @@ public class JiraRestController extends BaseRestController {
 			_flattenJSONArray(
 				issueFieldsJSONObject.getJSONArray(_FIELD_VERSIONS))
 		).put(
-			"category",
+			"categories",
 			_flattenJSONArray(
 				issueFieldsJSONObject.optJSONArray(
 					_jiraSecurityVulnerabilityFieldCategory))
