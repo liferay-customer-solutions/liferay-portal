@@ -6,7 +6,7 @@
 export enum JiraEnum {
 	AFFECTED_VERSIONS = 'affectedVersions',
 	AFFECTS = 'affects',
-	CATEGORY = 'category',
+	CATEGORIES = 'categories',
 	CLASSIFICATION = 'issueClassification',
 	CVE_IDS = 'cveIds',
 	DESCRIPTION = 'customerPortalDescription',

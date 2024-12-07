@@ -11,7 +11,7 @@ import {JiraEnum} from '../utils/constants/jiraEnum';
 export interface IJiraFields {
 	[JiraEnum.AFFECTED_VERSIONS]?: string[];
 	[JiraEnum.AFFECTS]?: string;
-	[JiraEnum.CATEGORY]?: string;
+	[JiraEnum.CATEGORIES]?: string[];
 	[JiraEnum.CLASSIFICATION]?: string;
 	[JiraEnum.CVE_IDS]?: string;
 	[JiraEnum.DESCRIPTION]?: string;

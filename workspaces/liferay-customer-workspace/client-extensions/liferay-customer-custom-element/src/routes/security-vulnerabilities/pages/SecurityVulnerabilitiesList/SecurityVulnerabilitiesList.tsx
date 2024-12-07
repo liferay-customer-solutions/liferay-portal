@@ -60,8 +60,8 @@ const SecurityVulnerabilitiesList = () => {
 			label: i18n.translate('priority-summary'),
 		},
 		{
-			columnKey: 'category',
-			label: i18n.translate('category'),
+			columnKey: 'categories',
+			label: i18n.translate('categories'),
 		},
 		{
 			columnKey: 'classification',
@@ -91,7 +91,9 @@ const SecurityVulnerabilitiesList = () => {
 						/>
 					</div>
 				),
-				category: issue[JiraEnum.FIELDS]?.[JiraEnum.CATEGORY],
+				categories: issue[JiraEnum.FIELDS]?.[JiraEnum.CATEGORIES]
+					?.map(String)
+					.join(', '),
 				classification:
 					issue[JiraEnum.FIELDS]?.[JiraEnum.CLASSIFICATION],
 				link: `/${issue?.[JiraEnum.KEY]}`,

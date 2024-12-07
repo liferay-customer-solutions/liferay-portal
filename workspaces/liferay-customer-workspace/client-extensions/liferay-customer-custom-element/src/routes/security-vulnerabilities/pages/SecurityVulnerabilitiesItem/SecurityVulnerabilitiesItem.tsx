@@ -66,8 +66,8 @@ const SecurityVulnerabilitiesItem = () => {
 			label: i18n.translate('priority-summary'),
 		},
 		{
-			columnKey: 'category',
-			label: i18n.translate('category'),
+			columnKey: 'categories',
+			label: i18n.translate('categories'),
 		},
 		{
 			columnKey: 'classification',
@@ -93,7 +93,9 @@ const SecurityVulnerabilitiesItem = () => {
 						/>
 					</div>
 				),
-				category: issue[JiraEnum.FIELDS]?.[JiraEnum.CATEGORY],
+				categories: issue[JiraEnum.FIELDS]?.[JiraEnum.CATEGORIES]
+					?.map(String)
+					.join(', '),
 				classification:
 					issue[JiraEnum.FIELDS]?.[JiraEnum.CLASSIFICATION],
 				link: `/${issue?.[JiraEnum.KEY]}`,
@@ -206,15 +208,15 @@ const SecurityVulnerabilitiesItem = () => {
 							</div>
 						)}
 
-						{jiraIssue[JiraEnum.FIELDS]?.[JiraEnum.CATEGORY] && (
+						{jiraIssue[JiraEnum.FIELDS]?.[JiraEnum.CATEGORIES] && (
 							<div className="mb-4">
 								<h5 className="text-neutral-10">
-									{i18n.translate('category')}
+									{i18n.translate('categories')}
 								</h5>
 
 								{
 									jiraIssue[JiraEnum.FIELDS]?.[
-										JiraEnum.CATEGORY
+										JiraEnum.CATEGORIES
 									]
 								}
 							</div>

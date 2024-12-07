@@ -126,7 +126,7 @@ const SVFilter = ({filterOptions, onChange, params, sortOptions}: IProps) => {
 			</div>
 
 			{renderFilterSection(JiraEnum.SEVERITY, 'severity')}
-			{renderFilterSection(JiraEnum.CATEGORY, 'category')}
+			{renderFilterSection(JiraEnum.CATEGORIES, 'category')}
 			{renderFilterSection(
 				JiraEnum.CLASSIFICATION,
 				'issue-classification'
