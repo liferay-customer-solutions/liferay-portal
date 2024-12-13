@@ -1,0 +1,90 @@
+jobs:
+    build_and_deploy:
+        if: (github.repository == 'liferay-customer-solutions/liferay-portal')
+        env:
+            WORKING_DIR: workspaces/${{inputs.workspace-name}}
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Branch
+              uses: actions/checkout@v3
+            - name: Check for Changes in client-extensions
+              run: |
+                  if git diff --quiet origin/prd..HEAD -- client-extensions
+                  then
+                      echo "has_changes=false" >> $GITHUB_ENV
+                  else
+                      echo "has_changes=true" >> $GITHUB_ENV
+                  fi
+              working-directory: ${{env.WORKING_DIR}}
+            - name: Cache JDK
+              if: env.has_changes == 'true'
+              uses: actions/cache@v3
+              with:
+                path: ~/.jdk
+                key: ${{runner.os}}-jdk-${{matrix.java-version}}-zulu
+                restore-keys: |
+                  ${{runner.os}}-jdk-${{matrix.java-version}}-
+                  ${{runner.os}}-jdk-
+            - name: Set up JDK
+              if: env.has_changes == 'true'
+              uses: actions/setup-java@v3
+              with:
+                  distribution: 'zulu'
+                  java-version: '17'
+            - name: Cache Gradle
+              if: env.has_changes == 'true'
+              uses: actions/cache@v3
+              with:
+                path: |
+                  ~/.gradle/caches
+                  ~/.gradle/wrapper
+                key: ${{runner.os}}-gradle-${{hashFiles('**/build.gradle.kts', '**/settings.gradle.kts')}}
+                restore-keys: |
+                  ${{runner.os}}-gradle-
+            - name: Build Extensions
+              if: env.has_changes == 'true'
+              run: |
+                  ./gradlew clean deploy
+              working-directory: ${{env.WORKING_DIR}}
+            - name: Cache LCP
+              if: env.has_changes == 'true'
+              uses: actions/cache@v3
+              with:
+                path: ~/.lcp
+                key: ${{ runner.os }}-lcp-${{hashFiles('**/install.sh')}}
+                restore-keys: ${{runner.os}}-lcp-
+            - name: Set up LCP
+              if: env.has_changes == 'true'
+              run: |
+                  curl -fsSL https://cdn.liferay.cloud/lcp/stable/latest/install.sh | bash
+            - name: LCP Login and Set Remote
+              if: env.has_changes == 'true'
+              run: |
+                  echo "${{secrets.LCP_USER}} ${{secrets.LCP_PASS}}" | lcp login
+                  lcp remote set liferay.sh https://api.liferay.cloud
+                  lcp remote default liferay.sh
+            - name: Deploy to DXP Cloud
+              if: env.has_changes == 'true'
+              run: |
+                  echo "Found changes in ${{env.WORKING_DIR}}/client-extensions"
+                  CHANGED_FILES=$(git diff --name-only origin/${{github.ref_name}}..HEAD -- client-extensions)
+                  CHANGED_DIRS=$(echo "${CHANGED_FILES}" | sed 's/\/[^/]*$//' | sort -u)
+                  for DIR in ${CHANGED_DIRS}; do
+                      echo "Deploying: ${DIR}"
+                      lcp deploy --ext "build/docker/client-extensions/${DIR}.zip" --project "${{secrets.LCP_PROJECT_NAME}}-ext${{github.ref_name}}"
+                  done
+              working-directory: ${{env.WORKING_DIR}}
+name: CI Deploy Workspace
+on:
+    workflow_call:
+        inputs:
+            workspace-name:
+                required: true
+                type: string
+        secrets:
+            LCP_USER:
+                required: true
+            LCP_PASS:
+                required: true
+            LCP_PROJECT_NAME:
+                required: true

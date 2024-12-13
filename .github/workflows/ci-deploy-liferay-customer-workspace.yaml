@@ -1,0 +1,14 @@
+jobs:
+    deploy-liferay-clarity-workspace:
+        secrets: inherit
+        uses: ./.github/workflows/ci-deploy-workspace.yaml
+        with:
+            workspace-name: liferay-customer-workspace
+name: CI Deploy liferay-customer-workspace
+on:
+    push:
+        branches:
+            - uat
+        paths:
+            - workspaces/liferay-customer-workspace/**
+    workflow_dispatch:
