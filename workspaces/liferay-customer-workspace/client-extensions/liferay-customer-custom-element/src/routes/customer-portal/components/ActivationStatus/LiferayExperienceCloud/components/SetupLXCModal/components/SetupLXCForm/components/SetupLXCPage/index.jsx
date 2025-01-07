@@ -42,11 +42,13 @@ const SetupLiferayExperienceCloudPage = ({
 	const [inputErrors, setInputErrors] = useState({});
 	const [step, setStep] = useState(1);
 	const [addHighPriorityContact, setAddHighPriorityContact] = useState({
+		analyticsCloudOwner: [],
 		criticalIncident: [],
 		privacyBreach: [],
 		securityBreach: [],
 	});
 	const [removeHighPriorityContact, setRemoveHighPriorityContact] = useState({
+		analyticsCloudOwner: [],
 		criticalIncident: [],
 		privacyBreach: [],
 		securityBreach: [],
@@ -291,6 +293,27 @@ const SetupLiferayExperienceCloudPage = ({
 
 			{step === 2 && (
 				<div>
+					<SetupHighPriorityContactForm
+						addContactList={(contactList) =>
+							handleHighPriorityContacts(
+								contactList,
+								'analyticsCloudOwner',
+								setAddHighPriorityContact
+							)
+						}
+						disableSubmit={updateMultiSelectEmpty}
+						filter={
+							HIGH_PRIORITY_CONTACT_CATEGORIES.analyticsCloudOwner
+						}
+						removedContactList={(contactList) =>
+							handleHighPriorityContacts(
+								contactList,
+								'analyticsCloudOwner',
+								setRemoveHighPriorityContact
+							)
+						}
+					/>
+
 					<SetupHighPriorityContactForm
 						addContactList={(contactList) =>
 							handleHighPriorityContacts(

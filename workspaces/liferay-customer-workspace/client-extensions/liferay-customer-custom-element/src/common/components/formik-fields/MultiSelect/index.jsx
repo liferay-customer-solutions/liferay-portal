@@ -72,6 +72,9 @@ const MultiSelect = ({
 			: [() => requiredMultiSelect(values.length)];
 	}
 
+	const isDisabled =
+		label === 'Analytics Cloud Owner Contact' && items.length > 0;
+
 	return (
 		<div className="multi-select-container">
 			<ClayForm.Group
@@ -94,6 +97,7 @@ const MultiSelect = ({
 				<ClayMultiSelect
 					{...field}
 					{...props}
+					disabled={isDisabled}
 					items={items}
 					onChange={(event) => onChange(event?.target?.value)}
 					sourceItems={filteredSourceItems}

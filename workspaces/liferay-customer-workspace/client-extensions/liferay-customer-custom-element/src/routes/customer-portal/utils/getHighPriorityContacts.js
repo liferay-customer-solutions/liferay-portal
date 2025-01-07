@@ -61,6 +61,10 @@ const getAccountRolesId = async (project, client) => {
 };
 
 const getContactRoleByFilter = (filter) => {
+	if (filter.includes('analytics')) {
+		return 'Analytics Cloud Owner';
+	}
+
 	if (filter.includes('privacy')) {
 		return 'Data Breach Contact';
 	}
@@ -75,6 +79,7 @@ const getContactRoleByFilter = (filter) => {
 };
 
 const HIGH_PRIORITY_CONTACT_CATEGORIES = {
+	analyticsCloudOwner: i18n.translate('analytics-cloud-owner'),
 	criticalIncident: i18n.translate('critical-incident'),
 	privacyBreach: i18n.translate('privacy-breach'),
 	securityBreach: i18n.translate('security-breach'),
@@ -110,6 +115,7 @@ const removeContactRoleRaysource = async (
 };
 
 const rolesHighPriorityContacts = [
+	'Analytics Cloud Owner',
 	'Data Breach Contact',
 	'Security Incident Contact',
 	'Critical Incident Contact',
