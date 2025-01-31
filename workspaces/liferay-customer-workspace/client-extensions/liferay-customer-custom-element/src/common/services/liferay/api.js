@@ -58,4 +58,20 @@ const getTicketAttachments = async (filter) => {
 	);
 };
 
-export {getHighPriorityContacts, getTicketAttachments, fetchHeadless};
+const getBusinessEvents = async () => {
+	return fetcher(`${HEADLESS_BASE_URL}${`c/businessevents`}`, {
+		headers: {
+			'Accept-Language': Liferay.ThemeDisplay.getBCP47LanguageId(),
+			'Content-Type': 'application/json',
+			'x-csrf-token': Liferay.authToken,
+		},
+		method: 'GET',
+	});
+};
+
+export {
+	getBusinessEvents,
+	getHighPriorityContacts,
+	getTicketAttachments,
+	fetchHeadless,
+};
