@@ -4,48 +4,29 @@
  */
 
 import {Badge} from '..';
-import ClayForm, {ClaySelect} from '@clayui/form';
+import ClayForm from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 import {useField} from 'formik';
 import {required, validate} from '~/utils/validations.form';
 
-import './Select.css';
+import './TimePicker.css';
 
-import PopoverIconButton from '~/features/project/components/PopoverIconButton';
-import i18n from '~/utils/I18n';
-
-interface IOption {
-	disabled?: boolean;
-	label: string;
-	value: string | number;
-}
+import ClayTimePicker from '@clayui/time-picker';
 
 interface IProps {
-	badgeClassName?: string;
 	groupStyle?: string;
 	helper?: string;
 	label: string;
 	name: string;
-	options: IOption[];
 	required?: boolean;
-	link?: string;
-	linkText?: string;
-	showPopover?: boolean;
-	text?: string;
 	validations?: Function[];
 }
 
-const Select: React.FC<IProps> = ({
-	badgeClassName,
+const TimePicker: React.FC<IProps> = ({
 	groupStyle,
 	helper,
 	label,
-	options,
-	link,
-	linkText,
-	showPopover,
-	text,
 	validations = [],
 	...props
 }) => {
@@ -72,7 +53,7 @@ const Select: React.FC<IProps> = ({
 		<ClayForm.Group
 			className={classNames('w-100', getStyleStatus(), groupStyle)}
 		>
-			<label>
+			<label className="date-picker">
 				{label}
 
 				{props.required && (
@@ -81,39 +62,11 @@ const Select: React.FC<IProps> = ({
 					</span>
 				)}
 
-				{showPopover && (
-					<PopoverIconButton
-						alignPosition="top"
-						formatedHTML={i18n.sub(text || '', [
-							'<a href="' +
-								link +
-								'" target="_blank">' +
-								i18n.translate(linkText || '') +
-								'</a>',
-						])}
-						iconSize="xs"
-						isSubscriptionCard
-					/>
-				)}
-
-				<div className="position-relative">
-					<ClayIcon className="select-icon" symbol="caret-bottom" />
-
-					<ClaySelect {...field} {...props}>
-						{options.map(({disabled, label, value}, index) => (
-							<ClaySelect.Option
-								disabled={disabled}
-								key={`${value}-${index}`}
-								label={label}
-								value={value}
-							/>
-						))}
-					</ClaySelect>
-				</div>
+				<ClayTimePicker {...field} {...props} />
 			</label>
 
 			{meta.touched && meta.error && props.required && (
-				<Badge badgeClassName={badgeClassName}>
+				<Badge>
 					<span className="pl-1">{meta.error}</span>
 				</Badge>
 			)}
@@ -127,4 +80,4 @@ const Select: React.FC<IProps> = ({
 	);
 };
 
-export default Select;
+export default TimePicker;

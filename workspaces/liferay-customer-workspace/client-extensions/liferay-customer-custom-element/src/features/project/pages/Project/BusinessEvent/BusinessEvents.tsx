@@ -13,14 +13,11 @@ import {ButtonDropDown} from '~/components';
 import {IFilterOption} from '~/components/Filter/Filter';
 import Table, {IRow} from '~/components/Table';
 import TableHeader from '~/components/Table/TableHeader';
-import {hasAdminUserAccount} from '~/features/project/containers/ActivationKeysTable/utils/hasAdminUserAccount';
 import {getFormattedDate} from '~/features/project/utils/getFormattedDate';
-import useCurrentKoroneikiAccount from '~/hooks/useCurrentKoroneikiAccount';
 import {getBusinessEvents} from '~/services/liferay/api';
 import {getFormattedTime} from '~/utils/getFormattedTime';
-import {IOrganizationBrief} from '~/utils/types';
 
-import useMyUserAccountByAccountExternalReferenceCode from '../TeamMembers/components/TeamMembersTable/hooks/useMyUserAccountByAccountExternalReferenceCode';
+import useHasAllEventsPermissions from './hooks/useHasAllEventsPermissions';
 import {INITIAL_FILTER} from './utils/constants/initialFilter';
 
 interface IBusinessEventTicket {
@@ -77,34 +74,7 @@ const BusinessEvents = () => {
 		selectedFilters: [],
 	});
 
-	const {data, loading} = useCurrentKoroneikiAccount();
-	const koroneikiAccount = data?.koroneikiAccountByExternalReferenceCode;
-
-	const {data: myUserAccountData} =
-		useMyUserAccountByAccountExternalReferenceCode(
-			loading,
-			koroneikiAccount?.accountKey
-		);
-	const loggedUserAccount = myUserAccountData?.myUserAccount;
-
-	const isAdminUserAccount = hasAdminUserAccount(myUserAccountData);
-	const hasProjectAdminOrRequesterRole =
-		loggedUserAccount?.selectedAccountSummary?.hasSupportSeatRole;
-	const isLiferayStaff = loggedUserAccount?.isLiferayStaff;
-
-	const hasFLSOrganizationAssociated = useMemo<boolean>(
-		() =>
-			loggedUserAccount?.organizationBriefs?.some(
-				(orgBrief: IOrganizationBrief) => orgBrief.name.includes('FLS')
-			) ?? false,
-		[loggedUserAccount?.organizationBriefs]
-	);
-
-	const hasAllEventsPermissions =
-		isAdminUserAccount ||
-		hasProjectAdminOrRequesterRole ||
-		isLiferayStaff ||
-		hasFLSOrganizationAssociated;
+	const hasAllEventsPermissions = useHasAllEventsPermissions();
 
 	const generateFilterQuery = (filters: IState) => {
 		const queryParams = Object.entries(filters)

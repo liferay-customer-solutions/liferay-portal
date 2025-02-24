@@ -5,7 +5,7 @@
 
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {useEffect, useMemo, useState} from 'react';
-import {HashRouter, Route, Routes} from 'react-router-dom';
+import {HashRouter, Outlet, Route, Routes} from 'react-router-dom';
 import {useAppPropertiesContext} from '~/contexts/AppPropertiesContext';
 import getKebabCase from '~/utils/getKebabCase';
 import DeactivateKeysTable from '~/features/project/containers/DeactivateKeysTable';
@@ -32,6 +32,7 @@ import ProjectUsage from '../ProjectUsage';
 import useCurrentKoroneikiAccount from '~/hooks/useCurrentKoroneikiAccount';
 import useMyUserAccountByAccountExternalReferenceCode from '~/features/project/pages/Project/TeamMembers/components/TeamMembersTable/hooks/useMyUserAccountByAccountExternalReferenceCode';
 import BusinessEvents from '../BusinessEvent';
+import BusinessEventForm from '~/features/project/containers/BusinessEventForm';
 
 const ProjectRoutes = () => {
 	const [hasComplimentaryKey, setHasComplimentaryKey] = useState(false);
@@ -267,7 +268,11 @@ const ProjectRoutes = () => {
 					<Route element={<TeamMembers />} path="team-members" />
 					
 					{featureFlags.includes('LRSD-5119') && (
-						<Route element={<BusinessEvents />} path="business-events" />
+						<Route element={<Outlet/>} path="business-events">
+							<Route element={<BusinessEvents />} index/>
+
+							<Route element={<BusinessEventForm />} path="new"/>
+						</Route>
 					)}
 
 					{((featureFlags.includes('LRSD-6322') && loggedUserAccount?.isLiferayStaff) ||
