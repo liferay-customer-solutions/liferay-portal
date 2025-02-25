@@ -33,6 +33,7 @@ import useCurrentKoroneikiAccount from '~/hooks/useCurrentKoroneikiAccount';
 import useMyUserAccountByAccountExternalReferenceCode from '~/features/project/pages/Project/TeamMembers/components/TeamMembersTable/hooks/useMyUserAccountByAccountExternalReferenceCode';
 import BusinessEvents from '../BusinessEvent';
 import BusinessEventForm from '~/features/project/containers/BusinessEventForm';
+import BusinessEventsItem from '../BusinessEvent/pages/BusinessEventsItem/BusinessEventsItem';
 
 const ProjectRoutes = () => {
 	const [hasComplimentaryKey, setHasComplimentaryKey] = useState(false);
@@ -270,7 +271,7 @@ const ProjectRoutes = () => {
 					{featureFlags.includes('LRSD-5119') && (
 						<Route element={<Outlet/>} path="business-events">
 							<Route element={<BusinessEvents />} index/>
-
+							<Route path="/:id" element={<BusinessEventsItem accountKey={project?.accountKey}/>} />
 							<Route element={<BusinessEventForm />} path="new"/>
 						</Route>
 					)}
