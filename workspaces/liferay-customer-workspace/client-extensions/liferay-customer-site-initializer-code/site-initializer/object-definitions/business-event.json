@@ -6,6 +6,48 @@
 		"en_US": "Business Event"
 	},
 	"name": "BusinessEvent",
+	"objectActions": [
+		{
+			"active": true,
+			"errorMessage": {
+			},
+			"externalReferenceCode": "BUSINESS-EVENT-ZENDESK-INTEGRATION-ON-AFTER-ADD-ACTION",
+			"label": {
+				"en_US": "Business Event Zendesk Integration On After Add"
+			},
+			"name": "businessEventZendeskIntegrationOnAfterAdd",
+			"objectActionExecutorKey": "function#liferay-customer-etc-spring-boot-object-action-business-event-zendesk-integration",
+			"objectActionTriggerKey": "onAfterAdd",
+			"parameters": {
+			},
+			"status": {
+				"code": 1,
+				"label": "success",
+				"label_i18n": "Success"
+			},
+			"system": false
+		},
+		{
+			"active": true,
+			"errorMessage": {
+			},
+			"externalReferenceCode": "BUSINESS-EVENT-ZENDESK-INTEGRATION-ON-AFTER-UPDATE-ACTION",
+			"label": {
+				"en_US": "Business Event Zendesk Integration On After Update"
+			},
+			"name": "businessEventZendeskIntegrationOnAfterUpdate",
+			"objectActionExecutorKey": "function#liferay-customer-etc-spring-boot-object-action-business-event-zendesk-integration",
+			"objectActionTriggerKey": "onAfterUpdate",
+			"parameters": {
+			},
+			"status": {
+				"code": 1,
+				"label": "success",
+				"label_i18n": "Success"
+			},
+			"system": false
+		}
+	],
 	"objectFields": [
 		{
 			"DBType": "String",
@@ -212,6 +254,27 @@
 			},
 			"localized": false,
 			"name": "feedback",
+			"objectFieldSettings": [
+			],
+			"readOnly": "false",
+			"readOnlyConditionExpression": "",
+			"required": false,
+			"state": false,
+			"system": false,
+			"type": "String",
+			"unique": false
+		},
+		{
+			"DBType": "String",
+			"businessType": "Text",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"indexedLanguageId": "en_US",
+			"label": {
+				"en_US": "Impacted Zendesk Ticket Ids"
+			},
+			"localized": false,
+			"name": "impactedZendeskTicketIds",
 			"objectFieldSettings": [
 			],
 			"readOnly": "false",
