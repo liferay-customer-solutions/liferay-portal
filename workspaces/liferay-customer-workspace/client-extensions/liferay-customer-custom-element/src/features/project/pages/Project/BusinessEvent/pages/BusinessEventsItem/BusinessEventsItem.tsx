@@ -8,11 +8,12 @@ import {Link, useParams} from 'react-router-dom';
 
 import './BusinessEventsItem.css';
 
+import {Button as ClayButton} from '@clayui/core';
 import {Nav} from '@clayui/core';
 import ClayIcon from '@clayui/icon';
 import NavigationBar from '@clayui/navigation-bar';
 import {ButtonDropDown, Skeleton} from '~/components';
-import {getBusinessEventsById} from '~/services/liferay/api';
+import {getBusinessEventById} from '~/services/liferay/api';
 import i18n from '~/utils/I18n';
 import {IProject} from '~/utils/types';
 
@@ -30,12 +31,13 @@ const BusinessEventsItem = ({accountKey}: IProject) => {
 	const [activeTab, setActiveTab] = useState('event-details');
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [isEditing, setIsEditing] = useState(false);
+	const [submitTriggered, setSubmitTriggered] = useState(false);
 
 	useEffect(() => {
 		if (id) {
 			const fetchEvent = async () => {
 				try {
-					const eventData = await getBusinessEventsById(id);
+					const eventData = await getBusinessEventById(id);
 					setEventTicket(eventData);
 				}
 				catch (error) {
@@ -80,6 +82,10 @@ const BusinessEventsItem = ({accountKey}: IProject) => {
 			onClick: () => {},
 		},
 	];
+
+	const handleSubmitEventForm = () => {
+		setSubmitTriggered(true);
+	};
 
 	const handleOnClick = (index: number) => {
 		setCurrentIndex(index);
@@ -137,9 +143,35 @@ const BusinessEventsItem = ({accountKey}: IProject) => {
 						<h3>{eventTicket.name}</h3>
 					</div>
 
-					<div>
-						<ButtonDropDown items={userOptions} label="Actions" />
-					</div>
+					{isEditing ? (
+						<div className="d-flex">
+							<ClayButton
+								className="btn btn-secondary mr-2"
+								displayType="secondary"
+								onClick={() => {
+									setIsEditing(false);
+								}}
+								type="button"
+							>
+								{i18n.translate('cancel')}
+							</ClayButton>
+
+							<ClayButton
+								className="btn btn-primary"
+								onClick={handleSubmitEventForm}
+								type="button"
+							>
+								{i18n.translate('submit')}
+							</ClayButton>
+						</div>
+					) : (
+						<div>
+							<ButtonDropDown
+								items={userOptions}
+								label="Actions"
+							/>
+						</div>
+					)}
 				</div>
 			</div>
 
@@ -160,7 +192,11 @@ const BusinessEventsItem = ({accountKey}: IProject) => {
 					(!isEditing ? (
 						<BusinessEventsItemDetails eventTicket={eventTicket} />
 					) : (
-						<BusinessEventsItemEdition />
+						<BusinessEventsItemEdition
+							setSubmitTriggered={setSubmitTriggered}
+							submitTriggered={submitTriggered}
+							ticketID={id}
+						/>
 					))}
 				{activeTab === 'activity-history' && (
 					<div>

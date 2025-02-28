@@ -18,7 +18,8 @@ export default function useGetGMTTimeZonesList() {
 	const gmtTimeZonesList = useMemo(
 		() =>
 			(
-				(data?.listTypeDefinitions?.items[0].listTypeEntries ?? []) as {
+				(data?.listTypeDefinitions?.items[0]?.listTypeEntries ??
+					[]) as {
 					key: string;
 					name: string;
 				}[]

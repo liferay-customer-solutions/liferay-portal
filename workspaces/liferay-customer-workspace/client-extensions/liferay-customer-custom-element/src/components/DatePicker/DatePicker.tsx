@@ -16,12 +16,16 @@ import ClayDatePicker from '@clayui/date-picker';
 
 interface IProps {
 	badgeClassName?: string;
+	dateFormat?: string;
 	groupStyle?: string;
 	helper?: string;
 	label: string;
 	name: string;
+	onChange?: (value: any) => void;
+	placeholder: string;
 	required?: boolean;
 	validations?: Function[];
+	value: any;
 }
 
 const DatePicker: React.FC<IProps> = ({
@@ -64,7 +68,12 @@ const DatePicker: React.FC<IProps> = ({
 					</span>
 				)}
 
-				<ClayDatePicker {...field} {...props} />
+				<ClayDatePicker
+					{...field}
+					{...props}
+					dateFormat={props.dateFormat}
+					onChange={props.onChange}
+				/>
 			</label>
 
 			{meta.touched && meta.error && props.required && (

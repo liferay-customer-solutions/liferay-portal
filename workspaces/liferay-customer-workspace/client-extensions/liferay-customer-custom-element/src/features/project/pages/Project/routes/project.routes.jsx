@@ -271,7 +271,7 @@ const ProjectRoutes = () => {
 					{featureFlags.includes('LRSD-5119') && (
 						<Route element={<Outlet/>} path="business-events">
 							<Route element={<BusinessEvents />} index/>
-							<Route path="/:id" element={<BusinessEventsItem accountKey={project?.accountKey}/>} />
+							<Route element={<BusinessEventsItem accountKey={project?.accountKey}/>} path=":id"/>
 							<Route element={<BusinessEventForm />} path="new"/>
 						</Route>
 					)}

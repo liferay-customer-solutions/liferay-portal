@@ -25,12 +25,13 @@ interface IProps {
 	badgeClassName?: string;
 	groupStyle?: string;
 	helper?: string;
+	id?: string;
 	label: string;
+	link?: string;
+	linkText?: string;
 	name: string;
 	options: IOption[];
 	required?: boolean;
-	link?: string;
-	linkText?: string;
 	showPopover?: boolean;
 	text?: string;
 	validations?: Function[];

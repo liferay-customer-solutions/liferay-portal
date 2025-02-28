@@ -19,8 +19,10 @@ interface IProps {
 	helper?: string;
 	label: string;
 	name: string;
+	onChange?: (value: any) => void;
 	required?: boolean;
 	validations?: Function[];
+	value: any;
 }
 
 const TimePicker: React.FC<IProps> = ({
