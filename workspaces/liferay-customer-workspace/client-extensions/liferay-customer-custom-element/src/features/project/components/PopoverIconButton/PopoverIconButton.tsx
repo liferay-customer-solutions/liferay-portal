@@ -37,18 +37,17 @@ const PopoverIconButton: React.FC<PopoverIconButtonProps> = ({
 					aria-labelledby="Info Icon"
 					className="text-brand-primary-darken-2"
 					displayType={null}
+					monospaced
 					onClick={(event) => event.stopPropagation()}
 					size={iconSize}
 				>
-					<span>
-						<ClayIcon
-							symbol={
-								isSubscriptionCard
-									? 'question-circle'
-									: 'info-circle'
-							}
-						/>
-					</span>
+					<ClayIcon
+						symbol={
+							isSubscriptionCard
+								? 'question-circle'
+								: 'info-circle'
+						}
+					/>
 				</Button>
 			}
 		>
