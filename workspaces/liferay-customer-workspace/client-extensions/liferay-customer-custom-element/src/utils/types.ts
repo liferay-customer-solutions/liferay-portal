@@ -47,7 +47,6 @@ export interface IBusinessEvent {
 		name: string;
 	};
 	id?: number;
-	impactedZendeskTicketIds: any;
 	name?: string;
 	newLiferayVersion?: {
 		key: string;

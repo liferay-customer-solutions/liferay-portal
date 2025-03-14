@@ -16,12 +16,16 @@ import {getFormattedDate} from '~/utils/getFormattedDate';
 import {getFormattedTime} from '~/utils/getFormattedTime';
 import {IBusinessEvent} from '~/utils/types';
 
+import './BusinessEventsItemDetails.css';
+import useHasAllEventsPermissions from '../../../hooks/useHasAllEventsPermissions';
+
 const BusinessEventsItemDetails = () => {
 	const {accountKey, id} = useParams<{accountKey: string; id: string}>();
 	const [businessEvent, setBusinessEvent] = useState<IBusinessEvent | null>(
 		null
 	);
 	const [loading, setLoading] = useState(true);
+	const {hasAllEventsPermissions} = useHasAllEventsPermissions();
 
 	useEffect(() => {
 		if (id) {
@@ -77,7 +81,7 @@ const BusinessEventsItemDetails = () => {
 			onClick: () => {},
 		},
 		{
-			customOptionStyle: 'pr-5',
+			customOptionStyle: 'cancel-event-option pr-5',
 			icon: <ClayIcon symbol="trash" />,
 			label: i18n.translate('cancel-event'),
 			onClick: () => {},
@@ -107,8 +111,13 @@ const BusinessEventsItemDetails = () => {
 					<div className="font-weight-bold text-neutral-10">
 						<h3>{businessEvent.name}</h3>
 					</div>
-					<div>
-						<ButtonDropDown items={userOptions} label="Actions" />
+					<div className="be-actions">
+						{hasAllEventsPermissions && (
+							<ButtonDropDown
+								items={userOptions}
+								label="Actions"
+							/>
+						)}
 					</div>
 				</div>
 			</div>
