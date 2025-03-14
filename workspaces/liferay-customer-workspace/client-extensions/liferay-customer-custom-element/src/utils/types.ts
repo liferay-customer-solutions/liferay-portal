@@ -47,6 +47,7 @@ export interface IBusinessEvent {
 		name: string;
 	};
 	id?: number;
+	impactedZendeskTicketIds: any;
 	name?: string;
 	newLiferayVersion?: {
 		key: string;
@@ -112,6 +113,11 @@ export interface IProject {
 
 export interface IRoleBrief {
 	name: string;
+}
+
+export interface ITimeInput {
+	hours: string;
+	minutes: string;
 }
 
 export interface IUserAccount {
