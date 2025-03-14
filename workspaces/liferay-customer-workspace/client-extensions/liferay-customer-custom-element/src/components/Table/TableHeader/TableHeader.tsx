@@ -4,6 +4,7 @@
  */
 
 import Button from '@clayui/button';
+import ClayIcon from '@clayui/icon';
 
 import './TableHeader.css';
 
@@ -38,13 +39,17 @@ const TableHeader = ({
 			<div className="be-table-header p-3">
 				<div className="d-flex justify-content-between">
 					<div className="d-flex">
-						<SearchBar
-							clearSearchTerm={() => onSearchChange('')}
-							isBusinessEvent={true}
-							onSearchSubmit={(term: string) => {
-								onSearchChange(term);
-							}}
-						/>
+						<div className="search-container">
+							<SearchBar
+								clearSearchTerm={() => onSearchChange('')}
+								isBusinessEvent={true}
+								onSearchSubmit={(term: string) => {
+									onSearchChange(term);
+								}}
+							/>
+
+							<ClayIcon className="search-icon" symbol="search" />
+						</div>
 
 						<Filter
 							availableFilters={availableFilters}
