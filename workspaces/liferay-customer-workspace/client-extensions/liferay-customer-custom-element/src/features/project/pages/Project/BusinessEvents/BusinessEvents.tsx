@@ -167,7 +167,7 @@ const BusinessEvents = () => {
 							onClick: () => {},
 						},
 						{
-							customOptionStyle: 'pr-5 be-cancel-event-option',
+							customOptionStyle: 'be-cancel-event-option pr-5',
 							label: i18n.translate('cancel-event'),
 							onClick: () => {},
 						}
