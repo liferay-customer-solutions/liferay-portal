@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {ButtonWithIcon} from '@clayui/core';
+import ClayButton from '@clayui/button';
+import ClayDropDown from '@clayui/drop-down';
+import ClayIcon from '@clayui/icon';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import i18n from '~/utils/I18n';
-import {ButtonDropDown} from '~/components';
 import MenuUserActions from './components/MenuUserActions';
 
 const OptionsColumn = ({
@@ -48,24 +49,30 @@ const OptionsColumn = ({
 		/>
 	) : (
 		<ClayTooltipProvider>
-			<span>
-				<ButtonDropDown
-					customDropDownButton={
-						<ButtonWithIcon
-							aria-label={i18n.translate('manage-user-options')}
-							displayType="null"
-							small
-							symbol="ellipsis-v"
-						/>
-					}
-					items={userOptions}
-					menuElementAttrs={{
-						className: 'p-0',
-					}}
-					menuWidth="shrink"
-				/>
-			</span>
-		</ClayTooltipProvider>
+        			<ClayDropDown
+        				trigger={
+        					<ClayButton
+        						aria-label={i18n.translate('manage-user-options')}
+        						displayType="unstyled"
+        						small
+        					>
+        						<ClayIcon symbol="ellipsis-v" />
+        					</ClayButton>
+        				}
+        				menuElementAttrs={{className: 'p-0'}}
+        				menuWidth="shrink"
+        			>
+        				{userOptions.map(({label, onClick, disabled, tooltip}, index) => (
+        					<ClayDropDown.Item key={index} onClick={onClick} disabled={disabled}>
+        						{tooltip ? (
+        							<span title={tooltip}>{label}</span>
+        						) : (
+        							label
+        						)}
+        					</ClayDropDown.Item>
+        				))}
+        			</ClayDropDown>
+        		</ClayTooltipProvider>
 	);
 };
 
