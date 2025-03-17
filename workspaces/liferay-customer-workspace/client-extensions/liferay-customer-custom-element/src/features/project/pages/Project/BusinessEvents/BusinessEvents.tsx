@@ -16,6 +16,7 @@ import {IFilterOption} from '~/components/Filter/Filter';
 import Table, {IRow} from '~/components/Table';
 import TableHeader from '~/components/Table/TableHeader';
 import {useCustomerPortal} from '~/features/project/context';
+import {PRODUCT_TYPES} from '~/features/project/utils/constants';
 import {getBusinessEvents} from '~/services/liferay/api';
 import {getFormattedDate} from '~/utils/getFormattedDate';
 import {getFormattedTime} from '~/utils/getFormattedTime';
@@ -59,7 +60,7 @@ const columns = [
 ];
 
 const BusinessEvents = () => {
-	const [{project}] = useCustomerPortal();
+	const [{project, subscriptionGroups}] = useCustomerPortal();
 
 	const [filters, setFilters] = useState<IState>({
 		availableFilters: INITIAL_FILTER,
@@ -101,6 +102,14 @@ const BusinessEvents = () => {
 			if (filters.searchTerm?.trim()) {
 				queryParams.push(`(contains(name, '${filters.searchTerm}'))`);
 			}
+
+			const oneYearAgo = new Date();
+			oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+			const oneYearAgoString = oneYearAgo.toISOString();
+
+			queryParams.push(
+				`(eventStatus ne 'canceled' or (eventStatus eq 'canceled' and dateModified ge ${oneYearAgoString}))`
+			);
 
 			return queryParams.length
 				? `filter=${queryParams.join(' and ')}`
@@ -156,6 +165,13 @@ const BusinessEvents = () => {
 		fetchBusinessEvents();
 	}, [filterQuery, project]);
 
+	const isSaasOnly = useMemo(
+		() =>
+			subscriptionGroups?.length === 1 &&
+			subscriptionGroups[0].name === PRODUCT_TYPES.liferayExperienceCloud,
+		[subscriptionGroups]
+	);
+
 	const rows = useMemo(() => {
 		if (businessEvents?.length > 0) {
 			return businessEvents.map((businessEvent) => {
@@ -195,6 +211,55 @@ const BusinessEvents = () => {
 					);
 				}
 
+				const isOtherEventType =
+					businessEvent?.eventType?.key === 'otherEvent';
+				const isGoLiveType = businessEvent?.eventType?.key === 'goLive';
+
+				const DetailsColumn = () => {
+					if (isOtherEventType) {
+						return (
+							<div className="text-neutral-10">
+								{businessEvent?.description}
+							</div>
+						);
+					}
+
+					if (isGoLiveType && !isSaasOnly) {
+						return (
+							<div className="text-neutral-10">
+								{businessEvent?.currentLiferayVersion?.name}
+							</div>
+						);
+					}
+
+					if (!isGoLiveType && !isOtherEventType) {
+						if (isSaasOnly) {
+							return (
+								<div className="text-neutral-10">
+									{businessEvent?.newLiferayVersion?.name}
+								</div>
+							);
+						}
+
+						return (
+							<div className="align-items-center d-flex">
+								<div className="text-neutral-10">
+									{businessEvent?.currentLiferayVersion?.name}
+								</div>
+								<ClayIcon
+									className="mx-2 text-neutral-4"
+									symbol="order-arrow-right"
+								/>
+								<div className="text-neutral-10">
+									{businessEvent?.newLiferayVersion?.name}
+								</div>
+							</div>
+						);
+					}
+
+					return null;
+				};
+
 				return {
 					actions: (
 						<div className="d-flex justify-content-center">
@@ -222,11 +287,7 @@ const BusinessEvents = () => {
 							{businessEvent?.associatedTickets}
 						</div>
 					),
-					details: (
-						<div className="text-neutral-10">
-							{businessEvent?.description}
-						</div>
-					),
+					details: <DetailsColumn />,
 					eventName: (
 						<div>
 							<div className="font-weight-semi-bold text-neutral-10">
@@ -273,6 +334,7 @@ const BusinessEvents = () => {
 	}, [
 		businessEvents,
 		hasAllEventsPermissions,
+		isSaasOnly,
 		navigate,
 		project?.accountKey,
 	]);

@@ -36,6 +36,7 @@ export interface IBusinessEvent {
 		key: string;
 		name: string;
 	};
+	dateModified: string;
 	description?: string;
 	details?: string;
 	eventStatus?: {
