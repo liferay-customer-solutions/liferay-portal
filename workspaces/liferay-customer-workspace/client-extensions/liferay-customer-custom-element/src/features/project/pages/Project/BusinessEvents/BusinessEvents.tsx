@@ -68,34 +68,46 @@ const BusinessEvents = () => {
 	});
 
 	const [businessEvents, setBusinessEvents] = useState<IBusinessEvent[]>([]);
+	const [loading, setLoading] = useState(true);
 
 	const {hasAllEventsPermissions} = useHasAllEventsPermissions();
 
 	const navigate = useNavigate();
 
-	const generateFilterQuery = useCallback((filters: IState) => {
-		const queryParams: string[] = [];
+	const generateFilterQuery = useCallback(
+		(filters: IState) => {
+			const queryParams: string[] = [];
 
-		if (filters.selectedFilters && !!filters.selectedFilters.length) {
-			filters.selectedFilters.forEach((filter) => {
-				if (filter.values && !!filter.values.length) {
-					const filterQuery = `(${filter.values
-						.map(
-							(value: {key: string; name: string}) =>
-								`${filter.key} eq '${value.key}'`
-						)
-						.join(' or ')})`;
-					queryParams.push(filterQuery);
-				}
-			});
-		}
+			if (project?.id) {
+				queryParams.push(
+					`r_accountEntryToBusinessEvents_accountEntryId eq '${project.id}'`
+				);
+			}
 
-		if (filters.searchTerm?.trim()) {
-			queryParams.push(`(contains(name, '${filters.searchTerm}'))`);
-		}
+			if (filters.selectedFilters && !!filters.selectedFilters.length) {
+				filters.selectedFilters.forEach((filter) => {
+					if (filter.values && !!filter.values.length) {
+						const filterQuery = `(${filter.values
+							.map(
+								(value: {key: string; name: string}) =>
+									`${filter.key} eq '${value.key}'`
+							)
+							.join(' or ')})`;
+						queryParams.push(filterQuery);
+					}
+				});
+			}
 
-		return queryParams.length ? `filter=${queryParams.join(' and ')}` : '';
-	}, []);
+			if (filters.searchTerm?.trim()) {
+				queryParams.push(`(contains(name, '${filters.searchTerm}'))`);
+			}
+
+			return queryParams.length
+				? `filter=${queryParams.join(' and ')}`
+				: '';
+		},
+		[project?.id]
+	);
 
 	const filterQuery = useMemo(
 		() => generateFilterQuery(filters),
@@ -120,20 +132,29 @@ const BusinessEvents = () => {
 	}, []);
 
 	useEffect(() => {
+		if (!project?.id) {
+			setLoading(true);
+
+			return;
+		}
+
 		const fetchBusinessEvents = async () => {
+			setLoading(true);
 			try {
 				const businessEventsResponse =
 					await getBusinessEvents(filterQuery);
-
 				setBusinessEvents(businessEventsResponse.items);
 			}
 			catch (error) {
-				console.error('Error', error);
+				console.error('Error fetching business events:', error);
+			}
+			finally {
+				setLoading(false);
 			}
 		};
 
 		fetchBusinessEvents();
-	}, [filterQuery]);
+	}, [filterQuery, project]);
 
 	const rows = useMemo(() => {
 		if (businessEvents?.length > 0) {
@@ -256,7 +277,9 @@ const BusinessEvents = () => {
 		project?.accountKey,
 	]);
 
-	return (
+	return loading ? (
+		<div className="py-4">{i18n.translate('loading')}</div>
+	) : (
 		<div className="py-4">
 			<div>
 				<h1 className="font-weight-bold text-neutral-10">
@@ -283,7 +306,13 @@ const BusinessEvents = () => {
 			</div>
 
 			<div>
-				<Table columns={columns} rows={rows as unknown as IRow[]} />
+				{businessEvents.length ? (
+					<Table columns={columns} rows={rows as unknown as IRow[]} />
+				) : (
+					<div className="p-3">
+						{i18n.translate('no-business-events-were-found')}
+					</div>
+				)}
 			</div>
 		</div>
 	);
