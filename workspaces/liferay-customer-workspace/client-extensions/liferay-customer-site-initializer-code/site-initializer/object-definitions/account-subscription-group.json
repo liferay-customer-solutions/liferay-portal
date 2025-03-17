@@ -17,16 +17,6 @@
 			"required": true
 		},
 		{
-			"DBType": "Boolean",
-			"indexed": true,
-			"indexedAsKeyword": false,
-			"label": {
-				"en-US": "Has Activation"
-			},
-			"name": "hasActivation",
-			"required": false
-		},
-		{
 			"DBType": "String",
 			"indexed": true,
 			"indexedAsKeyword": false,
@@ -47,13 +37,13 @@
 			"required": false
 		},
 		{
-			"DBType": "Integer",
+			"DBType": "Boolean",
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
-				"en-US": "Menu Order"
+				"en-US": "Has Activation"
 			},
-			"name": "menuOrder",
+			"name": "hasActivation",
 			"required": false
 		},
 		{
@@ -64,6 +54,16 @@
 				"en-US": "Manage Contacts URL"
 			},
 			"name": "manageContactsURL",
+			"required": false
+		},
+		{
+			"DBType": "Integer",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en-US": "Menu Order"
+			},
+			"name": "menuOrder",
 			"required": false
 		},
 		{

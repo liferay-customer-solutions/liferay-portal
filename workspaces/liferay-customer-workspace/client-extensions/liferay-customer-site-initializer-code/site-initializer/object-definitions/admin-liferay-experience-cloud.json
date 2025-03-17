@@ -1,19 +1,39 @@
 {
 	"accountEntryRestricted": true,
-	"accountEntryRestrictedObjectFieldName": "r_accountEntryToAdminLiferayExperienceCloud_accountEntryId",
+	"accountEntryRestrictedObjectFieldName": "r_accountEntryToAdminDXPCloud_accountEntryId",
 	"label": {
-		"en-US": "Admin Liferay Experience Cloud"
+		"en-US": "Admin DXP Cloud"
 	},
-	"name": "AdminLiferayExperienceCloud",
+	"name": "AdminDXPCloud",
 	"objectFields": [
 		{
 			"DBType": "String",
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
-				"en-US": "Full Name"
+				"en-US": "DXP Cloud Environment"
 			},
-			"name": "fullName",
+			"name": "dxpCloudEnvironmentId",
+			"required": true
+		},
+		{
+			"DBType": "String",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en-US": "Email Address"
+			},
+			"name": "emailAddress",
+			"required": true
+		},
+		{
+			"DBType": "String",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en-US": "First Name"
+			},
+			"name": "firstName",
 			"required": true
 		},
 		{
@@ -31,25 +51,15 @@
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
-				"en-US": "Email Address"
+				"en-US": "Last Name"
 			},
-			"name": "emailAddress",
-			"required": true
-		},
-		{
-			"DBType": "Long",
-			"indexed": true,
-			"indexedAsKeyword": false,
-			"label": {
-				"en-US": "Liferay Experience Cloud Environment"
-			},
-			"name": "liferayExperienceCloudEnvironmentId",
+			"name": "lastName",
 			"required": true
 		}
 	],
 	"panelCategoryKey": "applications_menu.applications.content",
 	"pluralLabel": {
-		"en_US": "Admins Liferay Experience Cloud"
+		"en-US": "Admins DXP Cloud"
 	},
 	"portlet": true,
 	"scope": "company",

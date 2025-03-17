@@ -16,36 +16,6 @@
 			"required": true
 		},
 		{
-			"DBType": "Long",
-			"indexed": true,
-			"indexedAsKeyword": false,
-			"label": {
-				"en-US": "Zendesk Ticket"
-			},
-			"name": "zendeskTicketId",
-			"required": true
-		},
-		{
-			"DBType": "String",
-			"indexed": true,
-			"indexedAsKeyword": false,
-			"label": {
-				"en-US": "Storage Provider"
-			},
-			"name": "storageProvider",
-			"required": true
-		},
-		{
-			"DBType": "String",
-			"indexed": true,
-			"indexedAsKeyword": false,
-			"label": {
-				"en-US": "Google Cloud Storage Bucket Name"
-			},
-			"name": "gcsBucketName",
-			"required": true
-		},
-		{
 			"DBType": "String",
 			"indexed": true,
 			"indexedAsKeyword": false,
@@ -70,6 +40,16 @@
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
+				"en-US": "Google Cloud Storage Bucket Name"
+			},
+			"name": "gcsBucketName",
+			"required": true
+		},
+		{
+			"DBType": "String",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
 				"en-US": "MD5 Checksum"
 			},
 			"name": "md5Checksum",
@@ -80,15 +60,35 @@
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
+				"en-US": "Storage Provider"
+			},
+			"name": "storageProvider",
+			"required": true
+		},
+		{
+			"DBType": "String",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
 				"en-US": "Type"
 			},
 			"name": "type",
 			"required": false
+		},
+		{
+			"DBType": "Long",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en-US": "Zendesk Ticket"
+			},
+			"name": "zendeskTicketId",
+			"required": true
 		}
 	],
 	"panelCategoryKey": "applications_menu.applications.content",
 	"pluralLabel": {
-		"en_US": "Ticket Attachments"
+		"en-US": "Ticket Attachments"
 	},
 	"scope": "company",
 	"system": false

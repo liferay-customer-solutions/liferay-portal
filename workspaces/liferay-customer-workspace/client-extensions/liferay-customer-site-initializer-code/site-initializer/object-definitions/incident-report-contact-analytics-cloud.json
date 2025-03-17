@@ -7,16 +7,6 @@
 	"name": "IncidentReportContactAnalyticsCloud",
 	"objectFields": [
 		{
-			"DBType": "String",
-			"indexed": true,
-			"indexedAsKeyword": false,
-			"label": {
-				"en-US": "Email Address"
-			},
-			"name": "emailAddress",
-			"required": true
-		},
-		{
 			"DBType": "Long",
 			"indexed": true,
 			"indexedAsKeyword": false,
@@ -24,6 +14,16 @@
 				"en-US": "Analytics Cloud Workspace"
 			},
 			"name": "analyticsCloudWorkspaceId",
+			"required": true
+		},
+		{
+			"DBType": "String",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en-US": "Email Address"
+			},
+			"name": "emailAddress",
 			"required": true
 		}
 	],

@@ -17,16 +17,6 @@
 			"required": true
 		},
 		{
-			"DBType": "String",
-			"indexed": true,
-			"indexedAsKeyword": false,
-			"label": {
-				"en-US": "Name"
-			},
-			"name": "name",
-			"required": true
-		},
-		{
 			"DBType": "Boolean",
 			"indexed": true,
 			"indexedAsKeyword": false,
@@ -35,6 +25,16 @@
 			},
 			"name": "finished",
 			"required": false
+		},
+		{
+			"DBType": "String",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en-US": "Name"
+			},
+			"name": "name",
+			"required": true
 		}
 	],
 	"panelCategoryKey": "applications_menu.applications.content",

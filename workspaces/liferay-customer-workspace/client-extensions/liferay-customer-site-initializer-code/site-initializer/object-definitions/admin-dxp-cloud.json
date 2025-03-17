@@ -11,9 +11,9 @@
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
-				"en-US": "First Name"
+				"en-US": "DXP Cloud Environment"
 			},
-			"name": "firstName",
+			"name": "dxpCloudEnvironmentId",
 			"required": true
 		},
 		{
@@ -21,9 +21,19 @@
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
-				"en-US": "Last Name"
+				"en-US": "Email Address"
 			},
-			"name": "lastName",
+			"name": "emailAddress",
+			"required": true
+		},
+		{
+			"DBType": "String",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en-US": "First Name"
+			},
+			"name": "firstName",
 			"required": true
 		},
 		{
@@ -41,19 +51,9 @@
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
-				"en-US": "Email Address"
+				"en-US": "Last Name"
 			},
-			"name": "emailAddress",
-			"required": true
-		},
-		{
-			"DBType": "Long",
-			"indexed": true,
-			"indexedAsKeyword": false,
-			"label": {
-				"en-US": "DXP Cloud Environment"
-			},
-			"name": "dxpCloudEnvironmentId",
+			"name": "lastName",
 			"required": true
 		}
 	],

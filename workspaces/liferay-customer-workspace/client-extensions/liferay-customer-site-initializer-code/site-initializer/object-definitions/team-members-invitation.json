@@ -1,53 +1,64 @@
 {
+	"active": true,
 	"label": {
-		"en-US": "Team Members Invitation"
+		"en_US": "Support Ticket Escalation"
 	},
-	"name": "TeamMembersInvitation",
+	"name": "SupportTicketEscalation",
 	"objectFields": [
 		{
-			"DBType": "String",
+			"DBType": "Clob",
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
-				"en-US": "Given Name"
+				"en_US": "Description"
 			},
-			"name": "givenName",
-			"required": false
+			"name": "description",
+			"objectFieldSettings": [
+				{
+					"name": "showCounter",
+					"value": false
+				}
+			],
+			"required": true,
+			"type": "Clob"
 		},
 		{
 			"DBType": "String",
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
-				"en-US": "Family Name"
+				"en-US": "If opening on behalf of another user, please share the appropriate email address to contact:"
 			},
-			"name": "familyName",
-			"required": false
+			"name": "customerEmailAddress",
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
-				"en-US": "Email"
+				"en-US": "Phone Number"
 			},
-			"name": "email",
-			"required": false
+			"name": "phoneNumber",
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
-				"en-US": "Role"
+				"en_US": "Tickets ID's"
 			},
-			"name": "role",
-			"required": false
+			"name": "ticketsIDs",
+			"required": true,
+			"type": "String"
 		}
 	],
 	"panelCategoryKey": "applications_menu.applications.content",
 	"pluralLabel": {
-		"en_US": "Team Members Invitation"
+		"en_US": "Support Ticket Escalations"
 	},
 	"portlet": true,
 	"scope": "company",

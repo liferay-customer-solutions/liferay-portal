@@ -31,9 +31,9 @@
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
-				"en-US": "Project ID"
+				"en-US": "Disaster Data Center Region"
 			},
-			"name": "projectId",
+			"name": "disasterDataCenterRegion",
 			"required": false
 		},
 		{
@@ -41,15 +41,15 @@
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
-				"en-US": "Disaster Data Center Region"
+				"en-US": "Project ID"
 			},
-			"name": "disasterDataCenterRegion",
+			"name": "projectId",
 			"required": false
 		}
 	],
 	"panelCategoryKey": "applications_menu.applications.content",
 	"pluralLabel": {
-		"en_US": "DXP Cloud Environments"
+		"en-US": "DXP Cloud Environments"
 	},
 	"portlet": true,
 	"scope": "company",

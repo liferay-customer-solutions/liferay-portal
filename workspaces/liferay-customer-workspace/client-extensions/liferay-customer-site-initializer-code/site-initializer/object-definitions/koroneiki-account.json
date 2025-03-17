@@ -67,6 +67,36 @@
 			"required": false
 		},
 		{
+			"DBType": "String",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en-US": "Liferay Contact Email Address"
+			},
+			"name": "liferayContactEmailAddress",
+			"required": false
+		},
+		{
+			"DBType": "String",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en-US": "Liferay Contact Name"
+			},
+			"name": "liferayContactName",
+			"required": false
+		},
+		{
+			"DBType": "String",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en-US": "Liferay Contact Role"
+			},
+			"name": "liferayContactRole",
+			"required": false
+		},
+		{
 			"DBType": "Integer",
 			"indexed": true,
 			"indexedAsKeyword": false,
@@ -304,36 +334,6 @@
 				"en-US": "SLA Future End Date"
 			},
 			"name": "slaFutureEndDate",
-			"required": false
-		},
-		{
-			"DBType": "String",
-			"indexed": true,
-			"indexedAsKeyword": false,
-			"label": {
-				"en-US": "Liferay Contact Name"
-			},
-			"name": "liferayContactName",
-			"required": false
-		},
-		{
-			"DBType": "String",
-			"indexed": true,
-			"indexedAsKeyword": false,
-			"label": {
-				"en-US": "Liferay Contact Role"
-			},
-			"name": "liferayContactRole",
-			"required": false
-		},
-		{
-			"DBType": "String",
-			"indexed": true,
-			"indexedAsKeyword": false,
-			"label": {
-				"en-US": "Liferay Contact Email Address"
-			},
-			"name": "liferayContactEmailAddress",
 			"required": false
 		}
 	],

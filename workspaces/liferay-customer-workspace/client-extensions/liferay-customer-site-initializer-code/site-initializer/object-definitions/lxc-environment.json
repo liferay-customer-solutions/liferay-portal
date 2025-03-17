@@ -31,9 +31,9 @@
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
-				"en-US": "Incident Management Full Name"
+				"en-US": "Incident Management Email Address"
 			},
-			"name": "incidentManagementFullName",
+			"name": "incidentManagementEmailAddress",
 			"required": false
 		},
 		{
@@ -41,9 +41,9 @@
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
-				"en-US": "Incident Management Email Address"
+				"en-US": "Incident Management Full Name"
 			},
-			"name": "incidentManagementEmailAddress",
+			"name": "incidentManagementFullName",
 			"required": false
 		},
 		{
@@ -69,7 +69,7 @@
 	],
 	"panelCategoryKey": "applications_menu.applications.content",
 	"pluralLabel": {
-		"en_US": "Liferay Experience Cloud Environments"
+		"en-US": "Liferay Experience Cloud Environments"
 	},
 	"portlet": true,
 	"scope": "company",

@@ -21,19 +21,9 @@
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
-				"en-US": "Owner Email Address"
+				"en-US": "Allowed Email Domains"
 			},
-			"name": "ownerEmailAddress",
-			"required": false
-		},
-		{
-			"DBType": "String",
-			"indexed": true,
-			"indexedAsKeyword": false,
-			"label": {
-				"en-US": "Workspace Name"
-			},
-			"name": "workspaceName",
+			"name": "allowedEmailDomains",
 			"required": false
 		},
 		{
@@ -51,19 +41,9 @@
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
-				"en-US": "Workspace Friendly URL"
+				"en-US": "Owner Email Address"
 			},
-			"name": "workspaceFriendlyUrl",
-			"required": false
-		},
-		{
-			"DBType": "String",
-			"indexed": true,
-			"indexedAsKeyword": false,
-			"label": {
-				"en-US": "Allowed Email Domains"
-			},
-			"name": "allowedEmailDomains",
+			"name": "ownerEmailAddress",
 			"required": false
 		},
 		{
@@ -81,15 +61,35 @@
 			"indexed": true,
 			"indexedAsKeyword": false,
 			"label": {
+				"en-US": "Workspace Friendly URL"
+			},
+			"name": "workspaceFriendlyUrl",
+			"required": false
+		},
+		{
+			"DBType": "String",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
 				"en-US": "Workspace Group ID"
 			},
 			"name": "workspaceGroupId",
+			"required": false
+		},
+		{
+			"DBType": "String",
+			"indexed": true,
+			"indexedAsKeyword": false,
+			"label": {
+				"en-US": "Workspace Name"
+			},
+			"name": "workspaceName",
 			"required": false
 		}
 	],
 	"panelCategoryKey": "applications_menu.applications.content",
 	"pluralLabel": {
-		"en_US": "Analytics Cloud Workspaces"
+		"en-US": "Analytics Cloud Workspaces"
 	},
 	"portlet": true,
 	"scope": "company",
