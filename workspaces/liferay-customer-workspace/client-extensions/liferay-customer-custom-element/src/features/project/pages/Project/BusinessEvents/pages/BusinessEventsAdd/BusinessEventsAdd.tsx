@@ -293,7 +293,7 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 				render={() => (
 					<>
 						<Input
-							badgeClassName="ml-3 mr-3"
+							badgeClassName="mx-3"
 							groupStyle="pb-1"
 							label={i18n.translate('event-name')}
 							name="businessEvent.name"
@@ -303,7 +303,7 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 						/>
 
 						<Select
-							badgeClassName="ml-3 mr-3"
+							badgeClassName="mx-3"
 							groupStyle="pb-1"
 							label={i18n.translate('event-type')}
 							link="https://help.liferay.com/hc"
@@ -317,7 +317,7 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 
 						{subscriptionGroups && !isSaasOnly && (
 							<Select
-								badgeClassName="ml-3 mr-3"
+								badgeClassName="mx-3"
 								groupStyle="pb-1"
 								label={i18n.translate(
 									'your-current-liferay-version'
@@ -330,7 +330,7 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 
 						{isNewLiferayVersionRequired && (
 							<Select
-								badgeClassName="ml-3 mr-3"
+								badgeClassName="mx-3"
 								groupStyle="pb-1"
 								label={i18n.translate('new-version')}
 								name="businessEvent.newLiferayVersion.key"
@@ -341,7 +341,7 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 
 						{isDescriptionRequired && (
 							<Input
-								badgeClassName="ml-3 mr-3"
+								badgeClassName="mx-3"
 								component="textarea"
 								groupStyle="pb-1"
 								label={i18n.translate('event-description')}
@@ -357,7 +357,7 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 						<ClayInput.Group className="m-0">
 							<ClayInput.GroupItem className="m-0">
 								<DatePicker
-									badgeClassName="ml-3 mr-3"
+									badgeClassName="mx-3"
 									dateFormat="MM-dd-yyyy"
 									groupStyle="pb-1"
 									label={i18n.translate(

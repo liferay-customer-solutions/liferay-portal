@@ -9,7 +9,7 @@ import './BusinessEvents.css';
 
 import Button from '@clayui/button';
 import ClayIcon from '@clayui/icon';
-import ClayModal, {useModal} from '@clayui/modal';
+import {useModal} from '@clayui/modal';
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {ButtonDropDown} from '~/components';
@@ -25,7 +25,7 @@ import {getFormattedDate} from '~/utils/getFormattedDate';
 import {getFormattedTime} from '~/utils/getFormattedTime';
 import {IBusinessEvent} from '~/utils/types';
 
-import CancelEventForm from './components/CancelEventForm';
+import ManageEventModal from './components/ManageEventModal';
 import useHasAllEventsPermissions from './hooks/useHasAllEventsPermissions';
 import {INITIAL_FILTER} from './utils/constants/initialFilter';
 
@@ -73,6 +73,7 @@ const BusinessEvents = () => {
 	});
 
 	const [businessEvents, setBusinessEvents] = useState<IBusinessEvent[]>([]);
+	const [modalType, setModalType] = useState('');
 	const [loading, setLoading] = useState(true);
 
 	const {client} = useAppPropertiesContext();
@@ -235,12 +236,17 @@ const BusinessEvents = () => {
 						{
 							customOptionStyle: 'pr-5',
 							label: i18n.translate('record-actual-go-live'),
-							onClick: () => {},
+							onClick: () => {
+								setModalType('goLiveEvent');
+								onOpenChange(true);
+								setSelectedBusinessEvent(businessEvent);
+							},
 						},
 						{
 							customOptionStyle: 'be-cancel-event-option pr-5',
 							label: i18n.translate('cancel-event'),
 							onClick: () => {
+								setModalType('cancelEvent');
 								onOpenChange(true);
 								setSelectedBusinessEvent(businessEvent);
 							},
@@ -416,18 +422,14 @@ const BusinessEvents = () => {
 						/>
 
 						{selectedBusinessEvent && open && (
-							<ClayModal
-								center
-								disableAutoClose
+							<ManageEventModal
+								businessEvent={selectedBusinessEvent}
+								client={client}
+								closeFunction={onOpenChange}
+								modalType={modalType}
 								observer={observer}
-							>
-								<CancelEventForm
-									businessEvent={selectedBusinessEvent}
-									client={client}
-									closeFunction={onOpenChange}
-									onCancel={handleEventCanceled}
-								/>
-							</ClayModal>
+								onCancel={handleEventCanceled}
+							/>
 						)}
 					</>
 				) : (

@@ -6,7 +6,7 @@
 import {Nav} from '@clayui/core';
 import ClayIcon from '@clayui/icon';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
-import ClayModal, {useModal} from '@clayui/modal';
+import {useModal} from '@clayui/modal';
 import NavigationBar from '@clayui/navigation-bar';
 import {useCallback, useEffect, useState} from 'react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
@@ -19,7 +19,7 @@ import {getFormattedDate} from '~/utils/getFormattedDate';
 import {getFormattedTime} from '~/utils/getFormattedTime';
 import {IBusinessEvent} from '~/utils/types';
 
-import CancelEventForm from '../../../components/CancelEventForm';
+import CancelEventForm from '../../../components/ManageEventModal';
 
 import './BusinessEventsItemDetails.css';
 import useHasAllEventsPermissions from '../../../hooks/useHasAllEventsPermissions';
@@ -33,6 +33,7 @@ const BusinessEventsItemDetails = () => {
 
 	const {client} = useAppPropertiesContext();
 
+	const [modalType, setModalType] = useState('');
 	const [loading, setLoading] = useState(true);
 	const {hasAllEventsPermissions} = useHasAllEventsPermissions();
 
@@ -98,13 +99,17 @@ const BusinessEventsItemDetails = () => {
 			customOptionStyle: 'pr-5',
 			icon: <ClayIcon symbol="check-circle" />,
 			label: i18n.translate('record-actual-go-live'),
-			onClick: () => {},
+			onClick: () => {
+				setModalType('goLiveEvent');
+				onOpenChange(true);
+			},
 		},
 		{
 			customOptionStyle: 'cancel-event-option pr-5',
 			icon: <ClayIcon symbol="trash" />,
 			label: i18n.translate('cancel-event'),
 			onClick: () => {
+				setModalType('cancelEvent');
 				onOpenChange(true);
 			},
 		},
@@ -291,14 +296,14 @@ const BusinessEventsItemDetails = () => {
 			</div>
 
 			{businessEvent && open && (
-				<ClayModal center disableAutoClose observer={observer}>
-					<CancelEventForm
-						businessEvent={businessEvent}
-						client={client}
-						closeFunction={onOpenChange}
-						onCancel={handleEventCanceled}
-					/>
-				</ClayModal>
+				<CancelEventForm
+					businessEvent={businessEvent}
+					client={client}
+					closeFunction={onOpenChange}
+					modalType={modalType}
+					observer={observer}
+					onCancel={handleEventCanceled}
+				/>
 			)}
 		</div>
 	);
