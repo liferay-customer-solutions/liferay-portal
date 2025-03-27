@@ -13,8 +13,8 @@ import {updateBusinessEvent} from '~/services/liferay/graphql/queries';
 import i18n from '~/utils/I18n';
 import {IBusinessEvent} from '~/utils/types';
 
-import BusinessEventsModal from '../../BusinessEventsModal/BusinessEventsModal';
 import useUpdateZendeskOrg from '../../../hooks/useUpdateZendeskOrg';
+import BusinessEventsModal from '../../BusinessEventsModal/BusinessEventsModal';
 
 interface IProps {
 	accountExternalReferenceCode: string;
