@@ -18,5 +18,7 @@
 }
 
 .match-parent {
+	height: 100%;
+	max-width: 1024px;
 	width: 100%;
 }
