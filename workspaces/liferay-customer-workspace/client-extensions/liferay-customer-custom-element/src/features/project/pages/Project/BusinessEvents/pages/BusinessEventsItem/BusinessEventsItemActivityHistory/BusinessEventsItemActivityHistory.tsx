@@ -75,26 +75,6 @@ const BusinessEventsItemActivityHistory = () => {
 		}
 	}, [id]);
 
-	const handleOnCancel = useCallback(() => {
-		fetchBusinessEvent();
-
-		Liferay.Util.openToast({
-			message: i18n.translate('business-event-canceled-successfully'),
-			type: 'success',
-		});
-	}, [fetchBusinessEvent]);
-
-	const handleOnCompleted = useCallback(() => {
-		fetchBusinessEvent();
-
-		Liferay.Util.openToast({
-			message: i18n.translate(
-				'business-event-actual-go-live-date-recorded-successfully'
-			),
-			type: 'success',
-		});
-	}, [fetchBusinessEvent]);
-
 	useEffect(() => {
 		if (id) {
 			fetchBusinessEvent();
@@ -140,6 +120,30 @@ const BusinessEventsItemActivityHistory = () => {
 			setLoading(false);
 		}
 	}, [filterQuery]);
+
+	const handleOnCancel = useCallback(() => {
+		fetchBusinessEvent();
+
+		fetchBusinessEventsVersions();
+
+		Liferay.Util.openToast({
+			message: i18n.translate('business-event-canceled-successfully'),
+			type: 'success',
+		});
+	}, [fetchBusinessEvent, fetchBusinessEventsVersions]);
+
+	const handleOnCompleted = useCallback(() => {
+		fetchBusinessEvent();
+
+		fetchBusinessEventsVersions();
+
+		Liferay.Util.openToast({
+			message: i18n.translate(
+				'business-event-actual-go-live-date-recorded-successfully'
+			),
+			type: 'success',
+		});
+	}, [fetchBusinessEvent, fetchBusinessEventsVersions]);
 
 	useEffect(() => {
 		if (!project?.id) {
