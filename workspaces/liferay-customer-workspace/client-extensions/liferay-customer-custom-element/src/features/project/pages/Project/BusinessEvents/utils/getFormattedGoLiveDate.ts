@@ -14,6 +14,7 @@ function getFormattedGoLiveDateTime(
 	}
 
 	const [month, day, year] = targetGoLiveDate.split('-');
+
 	if (!year || !month || !day) {
 		return undefined;
 	}
@@ -25,15 +26,18 @@ function getFormattedGoLiveDateTime(
 
 	if (typeof targetGoLiveTime === 'string') {
 		const splittedTime = targetGoLiveTime.split(':');
+
 		if (splittedTime.length !== 2) {
 			return undefined;
 		}
+
 		[hours, minutes] = splittedTime;
 	}
 	else {
 		hours = targetGoLiveTime?.hours?.includes('-')
 			? '00'
 			: targetGoLiveTime?.hours ?? '00';
+
 		minutes = targetGoLiveTime?.minutes?.includes('-')
 			? '00'
 			: targetGoLiveTime?.minutes ?? '00';

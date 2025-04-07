@@ -99,7 +99,7 @@ public class ObjectActionBusinessEvent extends BaseRestController {
 			).put(
 				"key", "goLive"
 			).put(
-				"name", "Go-Live"
+				"name", "Go Live"
 			);
 		}
 
