@@ -49,7 +49,7 @@ public class ObjectActionBusinessEvent extends BaseRestController {
 			_getChangeJSONObject(jsonObject, businessEventPropertiesJSONObject)
 		).put(
 			"comment",
-			_getCommentJSONObject(jsonObject, businessEventPropertiesJSONObject)
+			_getComment(jsonObject, businessEventPropertiesJSONObject)
 		).put(
 			"r_accountEntryToBusinessEventVersions_accountEntryId",
 			businessEventPropertiesJSONObject.getString(
@@ -94,6 +94,15 @@ public class ObjectActionBusinessEvent extends BaseRestController {
 			);
 		}
 
+		if (_isCanceledEvent(propertiesJSONObject)) {
+			return new JSONObject(
+			).put(
+				"key", "eventCanceled"
+			).put(
+				"name", "Event Canceled"
+			);
+		}
+
 		if (_isGoLive(propertiesJSONObject)) {
 			return new JSONObject(
 			).put(
@@ -111,25 +120,27 @@ public class ObjectActionBusinessEvent extends BaseRestController {
 		);
 	}
 
-	private JSONObject _getCommentJSONObject(
+	private String _getComment(
 		JSONObject jsonObject, JSONObject propertiesJSONObject) {
 
 		if (_isNewEntry(jsonObject)) {
-			return new JSONObject(
-			).put(
-				"comment", "New business event has been created."
-			);
+			return "New business event has been created.";
 		}
 
-		return new JSONObject(
-		).put(
-			"comment", propertiesJSONObject.optString("lastComment")
-		);
+		return propertiesJSONObject.optString("lastComment");
+	}
+
+	private boolean _isCanceledEvent(JSONObject jsonObject) {
+		JSONObject eventStatusJSONObject = jsonObject.getJSONObject(
+			"eventStatus");
+
+		return StringUtil.equalsIgnoreCase(
+			eventStatusJSONObject.getString("key"), "canceled");
 	}
 
 	private boolean _isGoLive(JSONObject jsonObject) {
 		return !StringUtil.equalsIgnoreCase(
-			jsonObject.getString("actualGoLiveDateTime"), "");
+			jsonObject.optString("actualGoLiveDateTime"), "");
 	}
 
 	private boolean _isNewEntry(JSONObject jsonObject) {

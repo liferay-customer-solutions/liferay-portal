@@ -16,6 +16,14 @@
 		"type": "string"
 	},
 	{
+		"key": "eventCanceled",
+		"name": "Event Canceled",
+		"name_i18n": {
+			"en-US": "Event Canceled"
+		},
+		"type": "string"
+	},
+	{
 		"key": "goLive",
 		"name": "Go Live",
 		"name_i18n": {
