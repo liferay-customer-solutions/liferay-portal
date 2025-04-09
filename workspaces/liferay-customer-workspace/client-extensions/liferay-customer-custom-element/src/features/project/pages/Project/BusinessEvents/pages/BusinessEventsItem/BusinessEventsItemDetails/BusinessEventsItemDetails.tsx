@@ -37,9 +37,7 @@ const BusinessEventsItemDetails = () => {
 	const [modalType, setModalType] = useState('');
 	const {hasAllEventsPermissions} = useHasAllEventsPermissions();
 
-	const {loading: loadingTickets, tickets} = useAccountTickets(
-		accountKey || '', businessEvent
-	);
+	const {loading: loadingTickets, tickets} = useAccountTickets(accountKey);
 
 	const navigate = useNavigate();
 
@@ -95,6 +93,10 @@ const BusinessEventsItemDetails = () => {
 			type: 'success',
 		});
 	}, [fetchBusinessEvent]);
+
+	const openTicket = useCallback((ticket: ITicket) => {
+		window.open(ticket.link, '_blank', 'noreferrer');
+	}, []);
 
 	useEffect(() => {
 		if (businessEvent && tickets) {
@@ -316,7 +318,10 @@ const BusinessEventsItemDetails = () => {
 									</div>
 
 									<div className="w-50">
-										<TicketList tickets={ticketOptions} />
+										<TicketList
+											primaryAction={openTicket}
+											tickets={ticketOptions}
+										/>
 									</div>
 								</div>
 							)
