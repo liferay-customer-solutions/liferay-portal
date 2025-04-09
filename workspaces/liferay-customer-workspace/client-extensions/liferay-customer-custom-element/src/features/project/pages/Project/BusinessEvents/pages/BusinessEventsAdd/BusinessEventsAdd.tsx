@@ -527,7 +527,7 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 														hasImpactingEvents ===
 														'no'
 													}
-													label="No"
+													label={i18n.translate('no')}
 													onChange={() =>
 														handleRadioChange('no')
 													}
@@ -539,7 +539,9 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 														hasImpactingEvents ===
 														'yes'
 													}
-													label="Yes"
+													label={i18n.translate(
+														'yes'
+													)}
 													onChange={() =>
 														handleRadioChange('yes')
 													}
