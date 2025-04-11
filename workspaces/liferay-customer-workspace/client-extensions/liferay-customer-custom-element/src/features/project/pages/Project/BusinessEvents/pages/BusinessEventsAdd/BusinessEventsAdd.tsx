@@ -18,6 +18,7 @@ import {addBusinessEvent} from '~/services/liferay/graphql/queries';
 import i18n from '~/utils/I18n';
 import getInitialEvent from '~/utils/getInitialEvent';
 import {IBusinessEvent, IOption, ITicket} from '~/utils/types';
+import {isValidDate} from '~/utils/validations.form';
 
 import Layout from '../../../../../../../components/FormLayout';
 import AssociatedTicketsContainer from '../../components/AssociatedTicketsContainer';
@@ -41,6 +42,8 @@ interface IProps {
 	touched?: any;
 	values: any;
 }
+
+const NAVIGATION_YEARS_RANGE = 2;
 
 const BusinessEventsAddPage: React.FC<IProps> = ({
 	businessEvent,
@@ -98,6 +101,13 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 	const {loading, tickets} = useAccountTickets(project?.accountKey || '');
 
 	const navigate = useNavigate();
+
+	const now = new Date();
+
+	const years = {
+		end: now.getFullYear() + NAVIGATION_YEARS_RANGE,
+		start: now.getFullYear(),
+	};
 
 	const {updateAccountBusinessEvents} = useAccountBusinessEvents(
 		project?.accountKey || '',
@@ -524,6 +534,12 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 												'mm-dd-yyyy'
 											)}
 											required
+											validations={[
+												(value) =>
+													isValidDate(value, years),
+											]}
+											years={years}
+											yearsCheck
 										/>
 									</ClayInput.GroupItem>
 
