@@ -35,6 +35,7 @@ import useHasAllEventsPermissions from '../../../hooks/useHasAllEventsPermission
 import {getFormattedGoLiveDateTime} from '../../../utils/getFormattedGoLiveDate';
 import useIsSaasOnly from '../../../utils/useIsSaasOnly';
 import BusinessEventsConfirmationPage from './components/BusinessEventsConfirmationPage';
+import { containsOption } from '../../../utils/containsOption';
 
 interface IProps {
 	businessEvent: IBusinessEvent;
@@ -279,34 +280,44 @@ const BusinessEventsItemEditPage: React.FC<IProps> = ({
 	useEffect(() => {
 		if (!isNewLiferayVersionRequired) {
 			setFieldValue('businessEvent.newLiferayVersion.key', '');
+			return;
 		}
-		else {
-			originalBusinessEvent.newLiferayVersion
-				? setFieldValue(
-						'businessEvent.newLiferayVersion.key',
-						originalBusinessEvent.newLiferayVersion.key
-					)
-				: setFieldValue('businessEvent.newLiferayVersion.key', '');
+
+		if(businessEvent.newLiferayVersion?.key && containsOption(newLiferayVersionOptions, businessEvent.newLiferayVersion)) {
+			return;
 		}
+
+		if(originalBusinessEvent.newLiferayVersion && containsOption(newLiferayVersionOptions, originalBusinessEvent.newLiferayVersion)){
+			setFieldValue('businessEvent.newLiferayVersion.key', originalBusinessEvent.newLiferayVersion.key);
+			return;
+		}
+
+		setFieldValue('businessEvent.newLiferayVersion.key', '');
 	}, [
 		isNewLiferayVersionRequired,
+		newLiferayVersionOptions,
 		originalBusinessEvent.newLiferayVersion,
 		setFieldValue,
 	]);
+
 	useEffect(() => {
 		if (dxpMinorVersionsAndPortalMajorVersions?.length) {
 			setNewLiferayVersionOptions([
 				...dxpMinorVersionsAndPortalMajorVersions.filter(
 					(version, index, versions) => {
-						return (
-							index <
-							versions.findIndex((version) => {
-								return (
-									version.value ===
-									businessEvent.currentLiferayVersion?.key
-								);
-							})
-						);
+						if (businessEvent.currentLiferayVersion?.key) {
+							return (
+								index <
+								versions.findIndex((version) => {
+									return (
+										version.value ===
+										businessEvent.currentLiferayVersion?.key
+									);
+								})
+							);
+						}
+
+						return true;
 					}
 				),
 			]);

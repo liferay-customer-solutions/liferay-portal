@@ -87,11 +87,11 @@ const AssociatedTicketsContainer: React.FC<IProps> = ({
 										!ticket.selected &&
 										ticket.status !== 'closed' &&
 										ticket.status !== 'solved' &&
-										(String(ticket.ticketId).includes(
-											searchTerm
+										(String(ticket.ticketId).toLowerCase().includes(
+											searchTerm.toLowerCase()
 										) ||
-											ticket.subject?.includes(
-												searchTerm
+											ticket.subject?.toLowerCase().includes(
+												searchTerm.toLowerCase()
 											))
 								)}
 								type="option"

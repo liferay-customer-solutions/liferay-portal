@@ -30,6 +30,7 @@ import useGetLiferayVersions from '../../hooks/useGetLiferayVersions';
 import useHasAllEventsPermissions from '../../hooks/useHasAllEventsPermissions';
 import {getFormattedGoLiveDateTime} from '../../utils/getFormattedGoLiveDate';
 import useIsSaasOnly from '../../utils/useIsSaasOnly';
+import { containsOption } from '../../utils/containsOption';
 
 interface IProps {
 	businessEvent: IBusinessEvent;
@@ -282,15 +283,19 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 			setNewLiferayVersionOptions([
 				...dxpMinorVersionsAndPortalMajorVersions.filter(
 					(version, index, versions) => {
-						return (
-							index <
-							versions.findIndex((version) => {
-								return (
-									version.value ===
-									businessEvent.currentLiferayVersion?.key
-								);
-							})
-						);
+						if (businessEvent.currentLiferayVersion?.key) {
+							return (
+								index <
+								versions.findIndex((version) => {
+									return (
+										version.value ===
+										businessEvent.currentLiferayVersion?.key
+									);
+								})
+							);
+						}
+
+						return true;
 					}
 				),
 			]);
@@ -308,10 +313,10 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 	}, [isDescriptionRequired, setFieldValue]);
 
 	useEffect(() => {
-		if (!isNewLiferayVersionRequired) {
+		if (!isNewLiferayVersionRequired || !containsOption(newLiferayVersionOptions, businessEvent.newLiferayVersion)) {
 			setFieldValue('businessEvent.newLiferayVersion.key', '');
 		}
-	}, [isNewLiferayVersionRequired, setFieldValue]);
+	}, [isNewLiferayVersionRequired, newLiferayVersionOptions, setFieldValue]);
 
 	useEffect(() => {
 		setFieldValue(
