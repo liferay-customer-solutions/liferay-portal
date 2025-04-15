@@ -1,22 +1,43 @@
-<div style="padding: 20px">
+<style>
+	.activation-key-request-notification-template-container {
+		padding: 20px;
+	}
+
+	.activation-key-request-notification-template-table {
+		width: 100%;
+		border-spacing: 15px;
+	}
+
+	.activation-key-request-notification-template-bold-label {
+		font-weight: bold;
+		white-space: nowrap;
+	}
+
+	.activation-key-request-notification-template-wide-label {
+		font-weight: bold;
+		width: 60%;
+	}
+</style>
+
+<div class="activation-key-request-notification-template-container">
 	<h2>Replacement Activation Key Acknowledgement Request</h2>
 
-	<table style="width: 100%; border-spacing: 15px">
+	<table class="activation-key-request-notification-template-table">
 		<tbody>
 			<tr>
-				<td style="font-weight: bold; white-space: nowrap">
+				<td class="activation-key-request-notification-template-bold-label">
 					Contact Email Address:
 				</td>
 				<td>[%REPLACEMENTACTIVATIONKEYREQUEST_CONTACTEMAILADDRESS%]</td>
 			</tr>
 			<tr>
-				<td style="font-weight: bold; white-space: nowrap">
+				<td class="activation-key-request-notification-template-bold-label">
 					Company Name:
 				</td>
 				<td>[%REPLACEMENTACTIVATIONKEYREQUEST_COMPANYNAME%]</td>
 			</tr>
 			<tr>
-				<td style="font-weight: bold; white-space: nowrap">
+				<td class="activation-key-request-notification-template-bold-label">
 					Active Liferay Subscription?
 				</td>
 				<td>
@@ -24,13 +45,13 @@
 				</td>
 			</tr>
 			<tr>
-				<td style="font-weight: bold; white-space: nowrap">
+				<td class="activation-key-request-notification-template-bold-label">
 					Support Region:
 				</td>
 				<td>[%REPLACEMENTACTIVATIONKEYREQUEST_SUPPORTREGION%]</td>
 			</tr>
 			<tr>
-				<td style="font-weight: bold; width: 60%">
+				<td class="activation-key-request-notification-template-wide-label">
 					Please explain why you need a replacement activation key:
 				</td>
 				<td>
@@ -38,19 +59,19 @@
 				</td>
 			</tr>
 			<tr>
-				<td style="font-weight: bold; white-space: nowrap">
+				<td class="activation-key-request-notification-template-bold-label">
 					Type of Server:
 				</td>
 				<td>[%REPLACEMENTACTIVATIONKEYREQUEST_TYPEOFSERVER%]</td>
 			</tr>
 			<tr>
-				<td style="font-weight: bold; white-space: nowrap">
+				<td class="activation-key-request-notification-template-bold-label">
 					Clustered?
 				</td>
 				<td>[%REPLACEMENTACTIVATIONKEYREQUEST_CLUSTERED%]</td>
 			</tr>
 			<tr>
-				<td style="font-weight: bold; white-space: nowrap">
+				<td class="activation-key-request-notification-template-bold-label">
 					Version of Liferay Software:
 				</td>
 				<td>
@@ -58,14 +79,14 @@
 				</td>
 			</tr>
 			<tr>
-				<td style="font-weight: bold; width: 60%">
+				<td class="activation-key-request-notification-template-wide-label">
 					Provided server information, as applicable, depending on
 					your version of Liferay Portal or Liferay DXP:
 				</td>
 				<td>[%REPLACEMENTACTIVATIONKEYREQUEST_SERVERINFORMATION%]</td>
 			</tr>
 			<tr>
-				<td style="font-weight: bold; white-space: nowrap">
+				<td class="activation-key-request-notification-template-bold-label">
 					Acknowledgement:
 				</td>
 				<td>[%REPLACEMENTACTIVATIONKEYREQUEST_ACKNOWLEDGEMENT%]</td>
