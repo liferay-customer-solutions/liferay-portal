@@ -11,8 +11,14 @@ import com.liferay.osb.spring.boot.client.zendesk.model.ZendeskTicket;
 import com.liferay.osb.spring.boot.client.zendesk.search.SearchHits;
 import com.liferay.osb.spring.boot.client.zendesk.search.ZendeskTicketQuery;
 import com.liferay.osb.spring.boot.client.zendesk.service.ZendeskService;
+import com.liferay.petra.string.StringBundler;
 
 import java.text.SimpleDateFormat;
+
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 import java.util.Date;
 
@@ -25,7 +31,10 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
@@ -40,9 +49,31 @@ public class CustomerCommandLineRunner
 	@Override
 	public void run(String... args) throws Exception {
 		if (_log.isInfoEnabled()) {
-			_log.info("Cleaning up Zendesk ticket large file attachments");
+			_log.info("Starting CustomerCommandLineRunner");
 		}
 
+		_runAtInterval(
+			"weekly",
+			() -> {
+				try {
+					_cleanTicketAttachments();
+				}
+				catch (Exception exception) {
+					_log.error("Error cleaning ticket attachments", exception);
+				}
+			});
+
+		if (_log.isInfoEnabled()) {
+			_log.info("Finished running all tasks. Shutting down application.");
+		}
+
+		ConfigurableApplicationContext configurableApplicationContext =
+			(ConfigurableApplicationContext)_applicationContext;
+
+		configurableApplicationContext.close();
+	}
+
+	private void _cleanTicketAttachments() throws Exception {
 		ZendeskTicketQuery zendeskTicketQuery = new ZendeskTicketQuery();
 
 		zendeskTicketQuery.addCriterion("status:closed");
@@ -116,8 +147,79 @@ public class CustomerCommandLineRunner
 			"liferay-customer-etc-cron-oahs");
 	}
 
+	private void _runAtInterval(String interval, Runnable task) {
+		if (!interval.equals("quarter-hourly") && !interval.equals("hourly") &&
+			!interval.equals("daily") && !interval.equals("weekly") &&
+			!interval.equals("monthly")) {
+
+			_log.error(
+				"Invalid interval. Expected values are 'quarter-hourly', " +
+					"'hourly', 'daily', 'weekly', or 'monthly'.");
+
+			return;
+		}
+
+		ZonedDateTime zonedDateTime = Instant.now(
+		).atZone(
+			ZoneOffset.UTC
+		);
+
+		int currentDayOfMonth = zonedDateTime.getDayOfMonth();
+		DayOfWeek currentDayOfWeek = zonedDateTime.getDayOfWeek();
+		int currentHour = zonedDateTime.getHour();
+		int currentMinute = zonedDateTime.getMinute();
+
+		boolean shouldRun = false;
+
+		if (interval.equals("quarter-hourly")) {
+			shouldRun = (currentMinute % 15) == 0;
+		}
+		else if (interval.equals("hourly")) {
+			shouldRun = currentMinute == 0;
+		}
+		else if (interval.equals("daily")) {
+			shouldRun = (currentHour == 1) && (currentMinute == 0);
+		}
+		else if (interval.equals("weekly")) {
+			shouldRun =
+				(currentDayOfWeek == DayOfWeek.SUNDAY) && (currentHour == 1) &&
+				(currentMinute == 0);
+		}
+		else if (interval.equals("monthly")) {
+			shouldRun =
+				(currentDayOfMonth == 1) && (currentHour == 1) &&
+				(currentMinute == 0);
+		}
+
+		if (shouldRun) {
+			if (_log.isInfoEnabled()) {
+				_log.info("It is time to run the " + interval + " tasks.");
+			}
+
+			try {
+				_taskExecutor.execute(task);
+			}
+			catch (Exception exception) {
+				_log.error("Error running " + interval + " tasks", exception);
+			}
+		}
+		else {
+			if (_log.isInfoEnabled()) {
+				_log.info(
+					StringBundler.concat(
+						"Not the time to run the ", interval,
+						" tasks. Current time is: ", currentHour, ":",
+						currentMinute, " and day is: ", currentDayOfWeek,
+						" and day of month is: ", currentDayOfMonth));
+			}
+		}
+	}
+
 	private static final Log _log = LogFactory.getLog(
 		CustomerCommandLineRunner.class);
+
+	@Autowired
+	private ApplicationContext _applicationContext;
 
 	private final DefaultUriBuilderFactory _defaultUriBuilderFactory =
 		new DefaultUriBuilderFactory();
@@ -133,6 +235,12 @@ public class CustomerCommandLineRunner
 
 	@Value("${com.liferay.lxc.dxp.server.protocol}")
 	private String _lxcDXPServerProtocol;
+
+	@Value("${liferay.customer.releases.url}")
+	private String _releasesURL;
+
+	@Autowired
+	private TaskExecutor _taskExecutor;
 
 	@Autowired
 	private ZendeskService _zendeskService;
