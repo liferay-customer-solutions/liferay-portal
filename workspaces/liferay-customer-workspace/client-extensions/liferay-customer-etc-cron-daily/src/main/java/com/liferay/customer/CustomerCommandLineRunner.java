@@ -40,9 +40,13 @@ public class CustomerCommandLineRunner
 	@Override
 	public void run(String... args) throws Exception {
 		if (_log.isInfoEnabled()) {
-			_log.info("Cleaning up Zendesk ticket large file attachments");
+			_log.info("Running daily cron job");
 		}
 
+		_cleanTicketAttachments();
+	}
+
+	private void _cleanTicketAttachments() throws Exception {
 		ZendeskTicketQuery zendeskTicketQuery = new ZendeskTicketQuery();
 
 		zendeskTicketQuery.addCriterion("status:closed");
