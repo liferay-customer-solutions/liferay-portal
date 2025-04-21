@@ -5,5 +5,5 @@ liferay-customer-etc-cron-weekly-oahs:
     .serviceScheme: http
     name: Liferay Customer Etc Cron Weekly OAuth Application Headless Server
     scopes:
-        -   c_ticketattachment.everything
+        -   Liferay.Headless.Admin.List.Type.everything
     type: oAuthApplicationHeadlessServer
