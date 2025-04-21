@@ -1,9 +1,9 @@
 assemble:
     -   fromTask: bootJar
-liferay-customer-etc-cron-oahs:
+liferay-customer-etc-cron-weekly-oahs:
     .serviceAddress: localhost:18080
     .serviceScheme: http
-    name: Liferay Customer Etc Cron OAuth Application Headless Server
+    name: Liferay Customer Etc Cron Weekly OAuth Application Headless Server
     scopes:
         -   c_ticketattachment.everything
     type: oAuthApplicationHeadlessServer
