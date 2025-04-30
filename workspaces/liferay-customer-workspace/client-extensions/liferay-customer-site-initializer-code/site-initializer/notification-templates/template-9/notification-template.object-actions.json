@@ -1,0 +1,13 @@
+[
+	{
+		"active": false,
+		"externalReferenceCode": "BUSINESS-EVENT-OBJECT-ACTION-UPDATED",
+		"label": {
+			"en_US": "Send Business Event Update Notification"
+		},
+		"name": "sendBusinessEventUpdateNotification",
+		"objectActionExecutorKey": "notification",
+		"objectActionTriggerKey": "onAfterUpdate",
+		"objectDefinitionId": "[$OBJECT_DEFINITION_ID:BusinessEvent$]"
+	}
+]

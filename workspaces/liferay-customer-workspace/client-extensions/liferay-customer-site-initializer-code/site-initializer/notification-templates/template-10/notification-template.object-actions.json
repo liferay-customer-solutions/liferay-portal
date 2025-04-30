@@ -1,0 +1,13 @@
+[
+	{
+		"active": false,
+		"externalReferenceCode": "BUSINESS-EVENT-OBJECT-ACTION-CANCELED",
+		"label": {
+			"en_US": "Send Business Event Canceled Notification"
+		},
+		"name": "sendBusinessEventCanceledNotification",
+		"objectActionExecutorKey": "notification",
+		"objectActionTriggerKey": "onAfterUpdate",
+		"objectDefinitionId": "[$OBJECT_DEFINITION_ID:BusinessEvent$]"
+	}
+]
