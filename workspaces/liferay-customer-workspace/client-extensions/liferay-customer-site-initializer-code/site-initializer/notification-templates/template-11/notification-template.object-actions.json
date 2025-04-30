@@ -1,0 +1,13 @@
+[
+	{
+		"active": false,
+		"externalReferenceCode": "BUSINESS-EVENT-OBJECT-ACTION-COMPLETED",
+		"label": {
+			"en_US": "Send Business Event Completed Notification"
+		},
+		"name": "sendBusinessEventCompletedNotification",
+		"objectActionExecutorKey": "notification",
+		"objectActionTriggerKey": "onAfterUpdate",
+		"objectDefinitionId": "[$OBJECT_DEFINITION_ID:BusinessEvent$]"
+	}
+]
