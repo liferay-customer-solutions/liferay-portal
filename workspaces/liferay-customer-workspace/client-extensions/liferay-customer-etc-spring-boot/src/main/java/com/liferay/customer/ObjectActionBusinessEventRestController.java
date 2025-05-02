@@ -9,7 +9,7 @@ import com.liferay.client.extension.util.spring.boot3.BaseRestController;
 import com.liferay.client.extension.util.spring.boot3.client.LiferayOAuth2AccessTokenManager;
 import com.liferay.customer.constants.NotificationTemplateERCConstants;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.petra.string.StringUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -79,9 +79,10 @@ public class ObjectActionBusinessEventRestController
 		}
 
 		try {
-			JSONObject koroneikiAccountJSONObject = _getKoroneikiAccount(
-				businessEventPropertiesJSONObject.getString(
-					"accountEntryToBusinessEventsERC"));
+			JSONObject koroneikiAccountJSONObject =
+				_getKoroneikiAccountJSONObject(
+					businessEventPropertiesJSONObject.getString(
+						"accountEntryToBusinessEventsERC"));
 
 			_sendNotification(
 				businessEventJSONObject, businessEventPropertiesJSONObject,
@@ -151,13 +152,12 @@ public class ObjectActionBusinessEventRestController
 	}
 
 	private String _getCXLeadEmail(String region) throws Exception {
-		String emailName =
-			region.toUpperCase(
-			).replace(
-				" ", "_"
-			) + "_CX_LEAD";
+		String emailName = region.toUpperCase(
+		).replace(
+			" ", "_"
+		);
 
-		return _getEmailByName(emailName);
+		return _getEmailByName(emailName + "_CX_LEAD");
 	}
 
 	private String _getEmailByName(String name) throws Exception {
@@ -224,7 +224,8 @@ public class ObjectActionBusinessEventRestController
 		throw new Exception(sb.toString());
 	}
 
-	private JSONObject _getKoroneikiAccount(String externalReferenceCode)
+	private JSONObject _getKoroneikiAccountJSONObject(
+			String externalReferenceCode)
 		throws Exception {
 
 		return new JSONObject(
@@ -232,16 +233,6 @@ public class ObjectActionBusinessEventRestController
 				_getAuthorization(),
 				"/o/c/koroneikiaccounts/by-external-reference-code/" +
 					externalReferenceCode));
-	}
-
-	private JSONObject _getKoroneikiAccountJSONObject(
-		String externalReferenceCode) {
-
-		String url =
-			"/o/c/koroneikiaccounts/by-external-reference-code/" +
-				externalReferenceCode;
-
-		return new JSONObject(get(_getAuthorization(), url));
 	}
 
 	private String _getNotificationTemplateERC(
@@ -273,8 +264,8 @@ public class ObjectActionBusinessEventRestController
 
 	private JSONObject _getNotificationTemplateJSONObject(String erc) {
 		String url =
-			"/o/notification/v1.0/notification-templates/by-external-reference-code/" +
-				erc;
+			"/o/notification/v1.0/notification-templates" +
+				"/by-external-reference-code/" + erc;
 
 		return new JSONObject(get(_getAuthorization(), url));
 	}
@@ -330,28 +321,27 @@ public class ObjectActionBusinessEventRestController
 		if (hasTAMServiceSubscription) {
 			String cxLeadEmail = _getCXLeadEmail(region);
 
-			String recipientsTo = rsmEmail + ", " + cxLeadEmail;
-
-			return recipientsTo;
+			return rsmEmail + ", " + cxLeadEmail;
 		}
 
 		return rsmEmail;
 	}
 
 	private String _getRSMEmail(String region) throws Exception {
-		String emailName =
-			region.toUpperCase(
-			).replace(
-				" ", "_"
-			) + "_RSM";
+		String emailName = region.toUpperCase(
+		).replace(
+			" ", "_"
+		);
 
-		return _getEmailByName(emailName);
+		return _getEmailByName(emailName + "_RSM");
 	}
 
 	private boolean _hasTAMServiceSubscription(String externalReferenceCode) {
-		String url =
-			"/o/c/accountsubscriptions/?filter=(name eq 'Technical Account Management Services' or name eq 'Technical Account Management Services - LATAM') and accountKey eq '" +
-				externalReferenceCode + "'";
+		String url = StringBundler.concat(
+			"/o/c/accountsubscriptions/?filter=(name eq 'Technical Account ",
+			"Management Services' or name eq 'Technical Account Management ",
+			"Services - LATAM') and accountKey eq '", externalReferenceCode,
+			"'");
 
 		JSONObject accountSubscriptionsJSONObject = new JSONObject(
 			get(_getAuthorization(), url));
@@ -391,15 +381,13 @@ public class ObjectActionBusinessEventRestController
 
 		JSONObject recipientJSONObject = recipientsJSONArray.getJSONObject(0);
 
-		JSONObject recipientFromName = recipientJSONObject.getJSONObject(
-			"fromName");
-
-		String recipientsTo = _getRecipientsTo(koroneikiAccountJSONObject);
+		JSONObject recipientFromNameJSONObject =
+			recipientJSONObject.getJSONObject("fromName");
 
 		recipientJSONObject.put(
-			"fromName", recipientFromName.getString("en_US")
+			"fromName", recipientFromNameJSONObject.getString("en_US")
 		).put(
-			"to", recipientsTo
+			"to", _getRecipientsTo(koroneikiAccountJSONObject)
 		);
 
 		return new JSONArray(
@@ -413,17 +401,17 @@ public class ObjectActionBusinessEventRestController
 		JSONObject businessEventPropertiesJSONObject,
 		JSONObject koroneikiAccountJSONObject, String string) {
 
-		StringBundler sb = new StringBundler(2);
+		StringBundler sb = new StringBundler(4);
 
 		sb.append("https://support.liferay.com/project/#/");
 		sb.append(
 			businessEventPropertiesJSONObject.getString(
-				"accountEntryToBusinessEventsERC") + "/business-events/" +
-					businessEventJSONObject.getString("id"));
+				"accountEntryToBusinessEventsERC"));
+		sb.append("/business-events/");
 
-		String parsedString;
+		sb.append(businessEventJSONObject.getString("id"));
 
-		parsedString = StringUtil.replace(
+		String parsedString = StringUtil.replace(
 			string, "[%BUSINESS_EVENT_LINK]", sb.toString());
 
 		parsedString = StringUtil.replace(
@@ -496,12 +484,13 @@ public class ObjectActionBusinessEventRestController
 			throw new Exception(errorMessage);
 		}
 
-		JSONObject payloadJSONObject = _getPayloadJSONObject(
-			businessEventJSONObject, businessEventPropertiesJSONObject,
-			koroneikiAccountJSONObject, notificationTemplateJSONObject);
+		String payload = String.valueOf(
+			_getPayloadJSONObject(
+				businessEventJSONObject, businessEventPropertiesJSONObject,
+				koroneikiAccountJSONObject, notificationTemplateJSONObject));
 
 		post(
-			_getAuthorization(), payloadJSONObject.toString(),
+			_getAuthorization(), payload,
 			"/o/notification/v1.0/notification-queue-entries");
 	}
 
@@ -559,10 +548,10 @@ public class ObjectActionBusinessEventRestController
 	@Value("${liferay.customer.emails.spain.rsm}")
 	private String _spainRSM;
 
-	@Value("${liferay.customer.emails.united_states.cx.lead}")
+	@Value("${liferay.customer.emails.united.states.cx.lead}")
 	private String _unitedStatesCXLead;
 
-	@Value("${liferay.customer.emails.united_states.rsm}")
+	@Value("${liferay.customer.emails.united.states.rsm}")
 	private String _unitedStatesRSM;
 
 }
