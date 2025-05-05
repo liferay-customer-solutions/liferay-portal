@@ -41,8 +41,7 @@ public class ObjectActionBusinessEventRestController
 		method = RequestMethod.POST, path = "/object/action/business/event"
 	)
 	public ResponseEntity<String> post(
-			@AuthenticationPrincipal Jwt jwt,
-			@RequestBody String json) {
+		@AuthenticationPrincipal Jwt jwt, @RequestBody String json) {
 
 		try {
 			JSONObject jsonObject = new JSONObject(json);
@@ -54,14 +53,16 @@ public class ObjectActionBusinessEventRestController
 				businessEventJSONObject.getJSONObject("properties");
 
 			_businessEventPermission.check(
-					jwt, propertiesJSONObject.getString("accountEntryToBusinessEventsERC"), ActionKeys.UPDATE);
-			
+				jwt,
+				propertiesJSONObject.getString(
+					"accountEntryToBusinessEventsERC"),
+				ActionKeys.UPDATE);
+
 			_createBusinessEventVersion(jsonObject);
 
 			_sendNotification(jsonObject);
 		}
 		catch (Exception exception) {
-
 			_log.error(exception, exception);
 
 			return new ResponseEntity(
@@ -71,30 +72,30 @@ public class ObjectActionBusinessEventRestController
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	private void _createBusinessEventVersion(JSONObject jsonObject) throws Exception {
+	private void _createBusinessEventVersion(JSONObject jsonObject)
+		throws Exception {
+
 		String action = _getAction(jsonObject);
 
 		JSONObject businessEventJSONObject = jsonObject.getJSONObject(
 			"objectEntryDTOBusinessEvent");
 
-		JSONObject propertiesJSONObject =
-			businessEventJSONObject.getJSONObject("properties");
-			
+		JSONObject propertiesJSONObject = businessEventJSONObject.getJSONObject(
+			"properties");
+
 		JSONObject businessEventVersionJSONObject = new JSONObject(
-			).put(
-				"change",
-				_getChangeJSONObject(action, propertiesJSONObject)
-			).put(
-				"comment",
-				_getComment(action, propertiesJSONObject)
-			).put(
-				"r_accountEntryToBusinessEventVersions_accountEntryId",
-				propertiesJSONObject.getString(
-					"r_accountEntryToBusinessEvents_accountEntryId")
-			).put(
-				"r_businessEventToBusinessEventVersions_c_businessEventId",
-				businessEventJSONObject.getString("id")
-			);
+		).put(
+			"change", _getChangeJSONObject(action, propertiesJSONObject)
+		).put(
+			"comment", _getComment(action, propertiesJSONObject)
+		).put(
+			"r_accountEntryToBusinessEventVersions_accountEntryId",
+			propertiesJSONObject.getString(
+				"r_accountEntryToBusinessEvents_accountEntryId")
+		).put(
+			"r_businessEventToBusinessEventVersions_c_businessEventId",
+			businessEventJSONObject.getString("id")
+		);
 
 		_postBusinessEventVersion(businessEventVersionJSONObject);
 	}
@@ -102,7 +103,9 @@ public class ObjectActionBusinessEventRestController
 	private String _getAction(JSONObject jsonObject) throws Exception {
 		String action = jsonObject.getString("objectActionTriggerKey");
 
-		if (!StringUtil.equals(action, "onAfterAdd") && !StringUtil.equals(action, "onAfterUpdate")) {
+		if (!StringUtil.equals(action, "onAfterAdd") &&
+			!StringUtil.equals(action, "onAfterUpdate")) {
+
 			throw new Exception("Invalid action: " + action);
 		}
 
@@ -152,9 +155,7 @@ public class ObjectActionBusinessEventRestController
 		);
 	}
 
-	private String _getComment(
-		String action, JSONObject propertiesJSONObject) {
-
+	private String _getComment(String action, JSONObject propertiesJSONObject) {
 		if (StringUtil.equals(action, "onAfterAdd")) {
 			return "New business event has been created.";
 		}
@@ -163,11 +164,12 @@ public class ObjectActionBusinessEventRestController
 	}
 
 	private String _getCXLeadEmail(String region) throws Exception {
-		String emailName =
-			region.toUpperCase(
-			).replace(
-				" ", "_"
-			) + "_CX_LEAD";
+		String formattedRegion = region.toUpperCase(
+		).replace(
+			" ", "_"
+		);
+
+		String emailName = formattedRegion + "_CX_LEAD";
 
 		return _getEmailByName(emailName);
 	}
@@ -236,7 +238,8 @@ public class ObjectActionBusinessEventRestController
 		throw new Exception(sb.toString());
 	}
 
-	private JSONObject _getKoroneikiAccountJSONObject(String externalReferenceCode)
+	private JSONObject _getKoroneikiAccountJSONObject(
+			String externalReferenceCode)
 		throws Exception {
 
 		JSONObject koroneikyAccountJSONObject = new JSONObject(
@@ -246,7 +249,9 @@ public class ObjectActionBusinessEventRestController
 					externalReferenceCode));
 
 		if (koroneikyAccountJSONObject.isEmpty()) {
-			throw new Exception("No koroneiki account found for external reference code " + externalReferenceCode);
+			throw new Exception(
+				"No koroneiki account found for external reference code " +
+					externalReferenceCode);
 		}
 
 		return koroneikyAccountJSONObject;
@@ -279,21 +284,26 @@ public class ObjectActionBusinessEventRestController
 			BUSINESS_EVENT_COMPLETED_NOTIFICATION_TEMPLATE;
 	}
 
-	private JSONObject _getNotificationTemplateJSONObject(String externalReferenceCode) throws Exception {
+	private JSONObject _getNotificationTemplateJSONObject(
+			String externalReferenceCode)
+		throws Exception {
+
 		JSONObject notificationTemplateJSONObject = new JSONObject(
 			get(
 				_getAuthorization(),
-				"/o/notification/v1.0/notification-templates/by-external-reference-code/" +
-					externalReferenceCode));
+				"/o/notification/v1.0/notification-templates" +
+					"/by-external-reference-code/" + externalReferenceCode));
 
 		if (notificationTemplateJSONObject.isEmpty()) {
-			throw new Exception("No notification template found for external reference code " + externalReferenceCode);
+			throw new Exception(
+				"No notification template found for external reference code " +
+					externalReferenceCode);
 		}
 
 		return notificationTemplateJSONObject;
 	}
 
-	private JSONObject _getPayloadJSONObject(
+	private String _getPayload(
 			JSONObject businessEventJSONObject,
 			JSONObject koroneikiAccountJSONObject,
 			JSONObject notificationTemplateJSONObject,
@@ -305,18 +315,21 @@ public class ObjectActionBusinessEventRestController
 
 		String notificationTemplateBody = _parseString(
 			businessEventJSONObject, koroneikiAccountJSONObject,
-			propertiesJSONObject, notificationTemplateBodyJSONObject.getString("en_US"));
-		
-		JSONArray notificationTemplateRecipientsJSONArray = _parseRecipientsJSONArray(
-			koroneikiAccountJSONObject,
-			notificationTemplateJSONObject.getJSONArray("recipients"));
+			propertiesJSONObject,
+			notificationTemplateBodyJSONObject.getString("en_US"));
+
+		JSONArray notificationTemplateRecipientsJSONArray =
+			_parseRecipientsJSONArray(
+				koroneikiAccountJSONObject,
+				notificationTemplateJSONObject.getJSONArray("recipients"));
 
 		JSONObject notificationTemplateSubjectJSONObject =
 			notificationTemplateJSONObject.getJSONObject("subject");
 
 		String notificationTemplateSubject = _parseString(
 			businessEventJSONObject, koroneikiAccountJSONObject,
-			propertiesJSONObject, notificationTemplateSubjectJSONObject.getString("en_US"));
+			propertiesJSONObject,
+			notificationTemplateSubjectJSONObject.getString("en_US"));
 
 		return new JSONObject(
 		).put(
@@ -327,7 +340,7 @@ public class ObjectActionBusinessEventRestController
 			"subject", notificationTemplateSubject
 		).put(
 			"type", "email"
-		);
+		).toString();
 	}
 
 	private String _getRecipientsTo(JSONObject koroneikiAccountJSONObject)
@@ -343,28 +356,37 @@ public class ObjectActionBusinessEventRestController
 		if (hasTAMServiceSubscription) {
 			String cxLeadEmail = _getCXLeadEmail(region);
 
-			String recipientsTo = rsmEmail + ", " + cxLeadEmail;
-
-			return recipientsTo;
+			return rsmEmail + ", " + cxLeadEmail;
 		}
 
 		return rsmEmail;
 	}
 
 	private String _getRSMEmail(String region) throws Exception {
-		String emailName =
-			region.toUpperCase(
-			).replace(
-				" ", "_"
-			) + "_RSM";
+		String formattedRegion = region.toUpperCase(
+		).replace(
+			" ", "_"
+		);
+
+		String emailName = formattedRegion + "_RSM";
 
 		return _getEmailByName(emailName);
 	}
 
-	private boolean _hasTAMServiceSubscription(String externalReferenceCode) throws Exception {
+	private boolean _hasTAMServiceSubscription(String externalReferenceCode)
+		throws Exception {
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append("/o/c/accountsubscriptions/?filter=");
+		sb.append("(name eq 'Technical Account Management Services' or name ");
+		sb.append("eq 'Technical Account Management Services - LATAM') and ");
+		sb.append("accountKey eq '");
+		sb.append(externalReferenceCode);
+		sb.append("'");
+
 		JSONObject accountSubscriptionsJSONObject = new JSONObject(
-			get(_getAuthorization(), "/o/c/accountsubscriptions/?filter=(name eq 'Technical Account Management Services' or name eq 'Technical Account Management Services - LATAM') and accountKey eq '" +
-				externalReferenceCode + "'"));
+			get(_getAuthorization(), sb.toString()));
 
 		JSONArray accountSubscriptionsJSONArray =
 			accountSubscriptionsJSONObject.getJSONArray("items");
@@ -396,15 +418,13 @@ public class ObjectActionBusinessEventRestController
 
 		JSONObject recipientJSONObject = recipientsJSONArray.getJSONObject(0);
 
-		JSONObject recipientFromName = recipientJSONObject.getJSONObject(
+		JSONObject fromNameJSONObject = recipientJSONObject.getJSONObject(
 			"fromName");
 
-		String recipientsTo = _getRecipientsTo(koroneikiAccountJSONObject);
-
 		recipientJSONObject.put(
-			"fromName", recipientFromName.getString("en_US")
+			"fromName", fromNameJSONObject.getString("en_US")
 		).put(
-			"to", recipientsTo
+			"to", _getRecipientsTo(koroneikiAccountJSONObject)
 		);
 
 		return new JSONArray(
@@ -415,28 +435,26 @@ public class ObjectActionBusinessEventRestController
 
 	private String _parseString(
 		JSONObject businessEventJSONObject,
-		JSONObject koroneikiAccountJSONObject, 
-		JSONObject propertiesJSONObject, String string) {
+		JSONObject koroneikiAccountJSONObject, JSONObject propertiesJSONObject,
+		String string) {
 
-		StringBundler sb = new StringBundler(2);
+		StringBundler sb = new StringBundler(4);
 
 		sb.append("https://support.liferay.com/project/#/");
 		sb.append(
-			propertiesJSONObject.getString(
-				"accountEntryToBusinessEventsERC") + "/business-events/" +
-					businessEventJSONObject.getString("id"));
+			propertiesJSONObject.getString("accountEntryToBusinessEventsERC"));
+		sb.append("/business-events/");
+		sb.append(businessEventJSONObject.getString("id"));
 
-		String parsedString;
-
-		parsedString = StringUtil.replace(
+		String parsedString = StringUtil.replace(
 			string, "[%BUSINESS_EVENT_LINK]", sb.toString());
 
 		parsedString = StringUtil.replace(
 			parsedString, "[%EVENT_NAME]",
 			propertiesJSONObject.getString("name"));
 
-		JSONObject eventTypeJSONObject =
-		propertiesJSONObject.getJSONObject("eventType");
+		JSONObject eventTypeJSONObject = propertiesJSONObject.getJSONObject(
+			"eventType");
 
 		parsedString = StringUtil.replace(
 			parsedString, "[%EVENT_TYPE]",
@@ -446,47 +464,42 @@ public class ObjectActionBusinessEventRestController
 			parsedString, "[%PROJECT_NAME]",
 			koroneikiAccountJSONObject.getString("name"));
 
-		String feedback = propertiesJSONObject.optString(
-			"feedback");
+		String lastComment = propertiesJSONObject.optString("lastComment");
 
-		if (StringUtil.equalsIgnoreCase(feedback, "")) {
+		if (StringUtil.equalsIgnoreCase(lastComment, "")) {
+			parsedString = StringUtil.removeSubstring(
+				parsedString, "[%REASON_IF_ANY]");
+
 			parsedString = StringUtil.removeSubstring(
 				parsedString, "[%SUPPORT_FEEDBACK_IF_ANY]");
 		}
 		else {
 			parsedString = StringUtil.replace(
+				parsedString, "[%REASON_IF_ANY]", "<p>" + lastComment + "</p>");
+
+			parsedString = StringUtil.replace(
 				parsedString, "[%SUPPORT_FEEDBACK_IF_ANY]",
-				"<p>" + feedback + "</p>");
+				"<p>" + lastComment + "</p>");
 		}
 
-		String targetGoLiveDateTime =
-		propertiesJSONObject.getString("targetGoLiveDateTime");
+		String targetGoLiveDateTime = propertiesJSONObject.getString(
+			"targetGoLiveDateTime");
 
-		parsedString = StringUtil.replace(
+		return StringUtil.replace(
 			parsedString, "[%TARGET_GO_LIVE_DATE]",
 			targetGoLiveDateTime.split("T")[0]);
-
-		String reason = propertiesJSONObject.optString(
-			"lastComment");
-
-		if (StringUtil.equalsIgnoreCase(reason, "")) {
-			parsedString = StringUtil.removeSubstring(
-				parsedString, "[%REASON_IF_ANY]");
-		}
-		else {
-			parsedString = StringUtil.replace(
-				parsedString, "[%REASON_IF_ANY]", "<p>" + reason + "</p>");
-		}
-
-		return parsedString;
 	}
 
-	private void _postBusinessEventVersion (JSONObject businessEventVersionJSONObject) throws Exception {
+	private void _postBusinessEventVersion(
+			JSONObject businessEventVersionJSONObject)
+		throws Exception {
+
 		try {
 			post(
 				_getAuthorization(), businessEventVersionJSONObject.toString(),
 				"/o/c/businesseventversions");
-		} catch (Exception exception) {
+		}
+		catch (Exception exception) {
 			StringBundler sb = new StringBundler(2);
 
 			sb.append("Unable to create business event version:\n");
@@ -499,27 +512,21 @@ public class ObjectActionBusinessEventRestController
 	private void _sendNotification(JSONObject jsonObject) throws Exception {
 		JSONObject businessEventJSONObject = jsonObject.getJSONObject(
 			"objectEntryDTOBusinessEvent");
-		
-		JSONObject propertiesJSONObject =
-			businessEventJSONObject.getJSONObject("properties");
-		
-		JSONObject koroneikiAccountJSONObject = _getKoroneikiAccountJSONObject(
-				propertiesJSONObject.getString(
-					"accountEntryToBusinessEventsERC"));
-		
-		String action = _getAction(jsonObject);
-		
-		String notificationTemplateERC = _getNotificationTemplateERC(
-			action, propertiesJSONObject);
 
-		JSONObject notificationTemplateJSONObject =
-			_getNotificationTemplateJSONObject(notificationTemplateERC);
-
-		JSONObject payloadJSONObject = _getPayloadJSONObject(
-			businessEventJSONObject, koroneikiAccountJSONObject, notificationTemplateJSONObject, propertiesJSONObject);
+		JSONObject propertiesJSONObject = businessEventJSONObject.getJSONObject(
+			"properties");
 
 		post(
-			_getAuthorization(), payloadJSONObject.toString(),
+			_getAuthorization(),
+			_getPayload(
+				businessEventJSONObject,
+				_getKoroneikiAccountJSONObject(
+					propertiesJSONObject.getString(
+						"accountEntryToBusinessEventsERC")),
+				_getNotificationTemplateJSONObject(
+					_getNotificationTemplateERC(
+						_getAction(jsonObject), propertiesJSONObject)),
+				propertiesJSONObject),
 			"/o/notification/v1.0/notification-queue-entries");
 	}
 
