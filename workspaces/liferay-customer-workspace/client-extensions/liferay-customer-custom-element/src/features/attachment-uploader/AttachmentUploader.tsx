@@ -7,6 +7,7 @@ import {Button as ClayButton} from '@clayui/core';
 import {ClayCheckbox, ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import {useCallback, useEffect, useState} from 'react';
+import SparkMD5 from 'spark-md5';
 import {Liferay} from '~/services/liferay';
 import i18n from '~/utils/I18n';
 
@@ -25,10 +26,56 @@ const AttachmentUploader = () => {
 	const [attachment, setAttachment] = useState<IAttachment>();
 	const [gcsSessionURL, setGcsSessionURL] = useState<string>();
 	const [ticketAttachmentId, setTicketAttachmentId] = useState<string>();
+	const [abortController, setAbortController] =
+		useState<AbortController | null>(null);
+	const [uploadedFile, setUploadedFile] = useState<{progress: number}>({
+		progress: 0,
+	});
+	const [showProgress, setShowProgress] = useState(false);
 
 	const urlParams = new URLSearchParams(window.location.search);
-
 	const ticketId = urlParams.get('ticketId');
+
+	async function generateFileMd5(file: File): Promise<string> {
+		const chunkSize = 2 * 1024 * 1024;
+		const chunks = Math.ceil(file.size / chunkSize);
+		let currentChunk = 0;
+
+		const spark = new SparkMD5.ArrayBuffer();
+		const fileReader = new FileReader();
+
+		return new Promise((resolve, reject) => {
+			const loadNext = () => {
+				const chunkStart = currentChunk * chunkSize;
+				const chunkEnd = Math.min(chunkStart + chunkSize, file.size);
+				const blob = file.slice(chunkStart, chunkEnd);
+				fileReader.readAsArrayBuffer(blob);
+			};
+
+			fileReader.onload = (error) => {
+				if (error.target?.result) {
+					spark.append(error.target.result as ArrayBuffer);
+					currentChunk++;
+
+					if (currentChunk < chunks) {
+						loadNext();
+					}
+					else {
+						resolve(spark.end());
+					}
+				}
+				else {
+					reject(new Error('Failed to read file chunk'));
+				}
+			};
+
+			fileReader.onerror = () => {
+				reject(fileReader.error);
+			};
+
+			loadNext();
+		});
+	}
 
 	const completeUpload = useCallback(async () => {
 		try {
@@ -57,6 +104,8 @@ const AttachmentUploader = () => {
 	}, [attachment?.comment, ticketAttachmentId]);
 
 	const initiateUpload = async (attachment: IAttachment) => {
+		const fileMd5 = await generateFileMd5(attachment.file);
+
 		try {
 			const response: Response =
 				(await Liferay.OAuth2Client.FromUserAgentApplication(
@@ -65,6 +114,7 @@ const AttachmentUploader = () => {
 					body: JSON.stringify({
 						fileName: attachment.file.name,
 						fileSize: String(attachment.file.size),
+						md5Checksum: fileMd5,
 						zendeskTicketId: ticketId,
 					}),
 					method: 'POST',
@@ -77,7 +127,6 @@ const AttachmentUploader = () => {
 			}
 
 			const responseText = await response.text();
-
 			const responseJson = JSON.parse(responseText);
 
 			setGcsSessionURL(responseJson.gcsSessionURL || '');
@@ -88,29 +137,92 @@ const AttachmentUploader = () => {
 		}
 	};
 
+	async function getUploadOffset(
+		sessionUrl: string,
+		totalSize: number
+	): Promise<number> {
+		const response = await fetch(sessionUrl, {
+			headers: {
+				'Content-Length': '0',
+				'Content-Range': `bytes */${totalSize}`,
+			},
+			method: 'PUT',
+		});
+
+		if (response.status === 200) {
+			return totalSize;
+		}
+
+		if (response.status === 308) {
+			const range = response.headers.get('Range');
+
+			if (range) {
+				const match = range.match(/bytes=0-(\d+)/);
+
+				if (match && match[1]) {
+					return parseInt(match[1], 10) + 1;
+				}
+			}
+		}
+
+		return 0;
+	}
+
 	const uploadFileToGcs = useCallback(async () => {
 		if (!attachment || !gcsSessionURL) {
 			return;
 		}
 
-		try {
-			const response = await fetch(gcsSessionURL, {
-				body: attachment.file,
-				headers: {
-					'Content-Length': attachment.file.size.toString(),
-				},
-				method: 'PUT',
-			});
+		const file = attachment.file;
+		const chunkSize = 25 * 1024 * 1024;
+		const totalSize = file.size;
 
-			if (!response.ok) {
-				throw new Error(
-					`Failed to upload file to GCS: ${response.statusText}`
+		setShowProgress(true);
+
+		const startOffset = await getUploadOffset(gcsSessionURL, totalSize);
+
+		let chunkStart = startOffset;
+		let chunkEnd = Math.min(chunkStart + chunkSize, totalSize);
+
+		const controller = new AbortController();
+		setAbortController(controller);
+
+		while (chunkStart < totalSize) {
+			const chunk = file.slice(chunkStart, chunkEnd);
+			const contentRange = `bytes ${chunkStart}-${chunkEnd - 1}/${totalSize}`;
+
+			try {
+				const response = await fetch(gcsSessionURL, {
+					body: chunk,
+					headers: {
+						'Content-Length': chunk.size.toString(),
+						'Content-Range': contentRange,
+					},
+					method: 'PUT',
+					signal: controller.signal,
+				});
+
+				if (!response.ok && response.status !== 308) {
+					throw new Error(`Chunk error: ${response.statusText}`);
+				}
+
+				chunkStart = chunkEnd;
+				chunkEnd = Math.min(chunkStart + chunkSize, totalSize);
+
+				const uploadPercentage = Math.round(
+					(chunkStart / totalSize) * 100
 				);
+				setUploadedFile({progress: uploadPercentage});
+			}
+			catch (error) {
+				console.error('Upload failed:', error);
+
+				break;
 			}
 		}
-		catch (error) {
-			console.error(error);
-		}
+
+		setShowProgress(false);
+		setAbortController(null);
 	}, [attachment, gcsSessionURL]);
 
 	const _handleCloseOnClick = () => {
@@ -136,6 +248,16 @@ const AttachmentUploader = () => {
 		if (attachment) {
 			await initiateUpload(attachment);
 		}
+	};
+
+	const _handleCancelUpload = () => {
+		if (abortController) {
+			abortController.abort();
+			setAbortController(null);
+		}
+
+		setAttachment(undefined);
+		setShowProgress(false);
 	};
 
 	useEffect(() => {
@@ -200,9 +322,15 @@ const AttachmentUploader = () => {
 						<div className="file-list-item">
 							<FileList
 								attachment={attachment}
-								onDelete={() => {
-									setAttachment(undefined);
-								}}
+								isUploading={showProgress}
+								onDelete={
+									showProgress
+										? _handleCancelUpload
+										: () => {
+												setAttachment(undefined);
+											}
+								}
+								uploadedFile={uploadedFile}
 							/>
 						</div>
 					)}
@@ -214,6 +342,7 @@ const AttachmentUploader = () => {
 					<div className="attach-input mb-4">
 						<ClayInput
 							component="textarea"
+							disabled={showProgress}
 							onChange={(event) =>
 								attachment &&
 								setAttachment({
@@ -249,6 +378,7 @@ const AttachmentUploader = () => {
 						<ClayButton
 							aria-label="Close"
 							className="ml-auto mt-2"
+							disabled={showProgress}
 							displayType="secondary"
 							onClick={_handleCloseOnClick}
 						>
@@ -259,12 +389,16 @@ const AttachmentUploader = () => {
 							aria-label="Upload"
 							className="ml-3 mt-2"
 							disabled={
-								!attachment || !attachment.hasPersonalData
+								!attachment ||
+								!attachment.hasPersonalData ||
+								showProgress
 							}
 							displayType="primary"
 							onClick={_handleUploadOnClick}
 						>
-							{i18n.translate('upload')}
+							{showProgress
+								? `${i18n.translate('uploading')}...`
+								: i18n.translate('upload')}
 						</ClayButton>
 					</div>
 				</div>
