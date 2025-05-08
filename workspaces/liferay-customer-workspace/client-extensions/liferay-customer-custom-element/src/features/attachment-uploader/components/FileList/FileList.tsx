@@ -11,23 +11,46 @@ import i18n from '~/utils/I18n';
 import {IAttachment} from '../../AttachmentUploader';
 
 import './FileList.css';
+import CircularProgress from './components/CircularProgress';
 
 interface IProps {
 	attachment: IAttachment;
-	onDelete: Function;
+	isUploading: boolean;
+	onDelete: (attachment: IAttachment) => void;
+	uploadedFile: IPropsUploadedFile;
+}
+interface IPropsUploadedFile {
+	progress: number;
 }
 
-const FileList = ({attachment, onDelete}: IProps) => {
+const FileList = ({
+	attachment,
+	isUploading,
+	onDelete,
+	uploadedFile,
+}: IProps) => {
 	return (
 		<div className="file-list-container">
 			<div className="file-list-item-container">
 				<div className="file-list-item-left-content">
 					<div className="file-list-item-left-content-icon-container">
-						<ClayIcon
-							aria-label="Document Icon"
-							className="file-list-item-left-content-icon"
-							symbol="document-default"
-						/>
+						{isUploading ? (
+							<div className="image-file-item-loading-container">
+								<CircularProgress
+									height={80}
+									pathColor="#ffffff"
+									progress={uploadedFile.progress}
+									progressColor="#0B5FFF"
+									width={80}
+								/>
+							</div>
+						) : (
+							<ClayIcon
+								aria-label="Document Icon"
+								className="file-list-item-left-content-icon"
+								symbol="document-default"
+							/>
+						)}
 					</div>
 
 					<div className="file-list-item-left-content-text-container">
@@ -42,11 +65,13 @@ const FileList = ({attachment, onDelete}: IProps) => {
 				</div>
 
 				<ClayButton
-					aria-label="Remove"
+					aria-label={isUploading ? 'Cancel Upload' : 'Remove'}
 					className="file-list-item-button"
 					onClick={() => onDelete(attachment)}
 				>
-					{i18n.translate('remove')}
+					{isUploading
+						? i18n.translate('cancel-upload')
+						: i18n.translate('remove')}
 				</ClayButton>
 			</div>
 		</div>
