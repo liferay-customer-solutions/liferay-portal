@@ -239,7 +239,7 @@
 							},
 							{
 								"externalReferenceCode": "escalateATicketMenuItem",
-								"friendlyURL": "/support-ticket-escalation",
+								"friendlyURL": "/escalation-request",
 								"type": "layout"
 							}
 						],
