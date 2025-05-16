@@ -1,0 +1,75 @@
+{
+	"pageElement": {
+		"pageElements": [
+			{
+				"definition": {
+					"fragmentStyle": {
+						"borderWidth": "0",
+						"marginLeft": "5",
+						"marginTop": "3",
+						"paddingLeft": "2",
+						"paddingTop": "3"
+					},
+					"indexed": true,
+					"layout": {
+						"marginLeft": 4,
+						"marginTop": 1,
+						"paddingTop": 1
+					}
+				},
+				"pageElements": [
+					{
+						"definition": {
+							"fragment": {
+								"key": "welcome-banner",
+								"siteKey": "Customer Portal"
+							},
+							"fragmentConfig": {
+							},
+							"fragmentFields": [
+							],
+							"indexed": true
+						},
+						"type": "Fragment"
+					},
+					{
+						"definition": {
+							"fragment": {
+								"key": "BASIC_COMPONENT-spacer"
+							},
+							"fragmentConfig": {
+								"height": "py-3"
+							},
+							"fragmentFields": [
+							],
+							"indexed": true
+						},
+						"type": "Fragment"
+					},
+					{
+						"definition": {
+							"widgetInstance": {
+								"widgetConfig": {
+									"portletSetupPortletDecoratorId": "barebone",
+									"properties": "route=projects"
+								},
+								"widgetName": "[$CLIENT_EXTENSION_ENTRY_ERC:LXC:liferay-customer-custom-element$]"
+							}
+						},
+						"type": "Widget"
+					}
+				],
+				"type": "Section"
+			}
+		],
+		"type": "Root"
+	},
+	"settings": {
+		"colorSchemeName": "01",
+		"masterPage": {
+			"key": "home"
+		},
+		"themeName": "Dialect"
+	},
+	"version": 1.1
+}
