@@ -4,13 +4,13 @@
  */
 
 import {useEffect, useState} from 'react';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import ActivationKeysLayout from '~/features/project/layouts/ActivationKeysLayout';
 import {getOrRequestToken} from '~/services/liferay/security/auth/getOrRequestToken';
 
 const EnterpriseSearch = () => {
 	const [oAuthToken, setOAuthToken] = useState<string | null>(null);
-	const [{project}] = useCustomerPortal();
+	const [{project}] = useAppContext();
 
 	useEffect(() => {
 		const fetchToken = async () => {

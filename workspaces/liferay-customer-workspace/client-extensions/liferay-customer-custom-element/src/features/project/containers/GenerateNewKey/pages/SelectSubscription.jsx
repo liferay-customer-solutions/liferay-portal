@@ -21,7 +21,7 @@ import {
 } from '~/services/liferay/rest/raysource/LicenseKeys';
 import {FORMAT_DATE_TYPES} from '~/utils/constants';
 import getDateCustomFormat from '~/utils/getDateCustomFormat';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import {has100YearsDifference} from '../../ActivationKeysTable/utils';
 import GenerateNewKeySkeleton from '../GenerateNewKeySkeleton';
 import {getLicenseKeyEndDatesByLicenseType} from '../utils/licenseKeyEndDate';
@@ -42,7 +42,7 @@ const SelectSubscription = ({
 	state,
 	urlPreviousPage,
 }) => {
-	const [{subscriptionGroups}] = useCustomerPortal();
+	const [{subscriptionGroups}] = useAppContext();
 	const {articleDeactivateKey, client, featureFlags, provisioningServerAPI} =
 		useAppPropertiesContext();
 

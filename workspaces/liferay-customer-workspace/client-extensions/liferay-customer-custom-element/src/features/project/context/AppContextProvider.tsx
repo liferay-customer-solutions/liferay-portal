@@ -303,7 +303,7 @@ const AppContextProvider = ({children}: {children: React.ReactNode}) => {
 			const projectExternalReferenceCode = getAccountKey();
 
 			if (!projectExternalReferenceCode) {
-				Liferay.Util.navigate(pageRoutes.home());
+				Liferay.Util.navigate(pageRoutes.projects());
 
 				return;
 			}
@@ -377,6 +377,6 @@ const AppContextProvider = ({children}: {children: React.ReactNode}) => {
 	);
 };
 
-const useCustomerPortal = () => useContext(AppContext);
+const useAppContext = () => useContext(AppContext);
 
-export {AppContext, AppContextProvider, useCustomerPortal};
+export {AppContext, AppContextProvider, useAppContext};

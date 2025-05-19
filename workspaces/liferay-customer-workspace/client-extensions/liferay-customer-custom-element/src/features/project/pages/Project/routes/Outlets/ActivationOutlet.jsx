@@ -14,10 +14,10 @@ import {
 } from 'react-router-dom';
 import i18n from '~/utils/I18n';
 import getKebabCase from '~/utils/getKebabCase';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 
 const ActivationOutlet = () => {
-	const [{subscriptionGroups}] = useCustomerPortal();
+	const [{subscriptionGroups}] = useAppContext();
 	const {setHasSideMenu} = useOutletContext();
 
 	const isCurrentActivationRoute = !!useMatch({

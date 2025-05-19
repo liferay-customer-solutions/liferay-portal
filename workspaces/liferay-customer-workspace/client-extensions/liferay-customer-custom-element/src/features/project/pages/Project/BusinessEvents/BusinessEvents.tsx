@@ -17,7 +17,7 @@ import {ButtonDropDown} from '~/components';
 import Table, {IRow} from '~/components/Table';
 import TableHeader from '~/components/Table/TableHeader';
 import {useAppPropertiesContext} from '~/contexts/AppPropertiesContext';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import {Liferay} from '~/services/liferay';
 import {getFormattedDate} from '~/utils/getFormattedDate';
 import {getFormattedTime} from '~/utils/getFormattedTime';
@@ -59,7 +59,7 @@ const columns = [
 ];
 
 const BusinessEvents = () => {
-	const [{project, subscriptionGroups}] = useCustomerPortal();
+	const [{project, subscriptionGroups}] = useAppContext();
 
 	const {filterQuery, filters, handleFilterChange, handleSearchChange} =
 		useFilters(project);
