@@ -4,7 +4,7 @@
  */
 
 import {useModal} from '@clayui/core';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import {actionTypes} from '~/features/project/context/reducer';
 import {STATUS_TAG_TYPE_NAMES} from '~/features/project/utils/constants';
 
@@ -13,7 +13,7 @@ export default function useOnCloseSetupModal(
 	handleOncloseSetupModal,
 	setStatusLxcActivation
 ) {
-	const [, dispatch] = useCustomerPortal();
+	const [, dispatch] = useAppContext();
 	const {observer, onClose} = useModal({
 		onClose: () => handleOncloseSetupModal(),
 	});

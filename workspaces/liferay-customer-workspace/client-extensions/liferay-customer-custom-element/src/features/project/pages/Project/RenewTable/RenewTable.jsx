@@ -8,7 +8,7 @@ import {useGetMyUserAccount} from '~/services/liferay/graphql/user-accounts';
 import RenewTableFooter from '~/features/project/containers/ActivationKeysTable/components/RenewTableFooter';
 import {hasAdminUserAccount} from '~/features/project/containers/ActivationKeysTable/utils/hasAdminUserAccount';
 import ActivationKeysTable from '~/features/project/containers/ActivationKeysTable';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import {getOrRequestToken} from '~/services/liferay/security/auth/getOrRequestToken';
 
 import './RenewTable.css';
@@ -16,7 +16,7 @@ import './RenewTable.css';
 const RenewTable = ({hasComplimentaryKey, isDXPTable, isRenewTable}) => {
 	const productName = isDXPTable ? 'DXP' : 'Portal';
 
-	const [{project}] = useCustomerPortal();
+	const [{project}] = useAppContext();
 	const {data: myAccount} = useGetMyUserAccount();
 	const [oAuthToken, setOAuthToken] = useState();
 

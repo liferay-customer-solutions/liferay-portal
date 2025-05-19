@@ -9,7 +9,7 @@ import i18n from '~/utils/I18n';
 import {Table} from '~/components';
 import {fetchHeadless} from '~/services/liferay/api';
 import {getOrRequestToken} from '~/services/liferay/security/auth/getOrRequestToken';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import ActivationKeysLayout from '~/features/project/layouts/ActivationKeysLayout';
 
 const columns = [
@@ -45,7 +45,7 @@ const Commerce = () => {
 		setIsLoadingActivationInstructions,
 	] = useState(false);
 
-	const [{project}] = useCustomerPortal();
+	const [{project}] = useAppContext();
 
 	useEffect(() => {
 		const fetchToken = async () => {

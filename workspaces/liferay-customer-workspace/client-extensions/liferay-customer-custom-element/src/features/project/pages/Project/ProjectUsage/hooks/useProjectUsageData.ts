@@ -4,7 +4,7 @@
  */
 
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import {Liferay} from '~/services/liferay';
 import {useGetAccountSubscriptions} from '~/services/liferay/graphql/account-subscriptions';
 import i18n from '~/utils/I18n';
@@ -102,7 +102,7 @@ const useProjectUsageData = () => {
 	);
 	const [isLoading, setIsLoading] = useState(true);
 
-	const [{project}] = useCustomerPortal();
+	const [{project}] = useAppContext();
 
 	const {data: subscriptionsData} = useGetAccountSubscriptions({
 		filter: `name in (${formatedSubscriptions()}) and accountSubscriptionGroupERC eq '${

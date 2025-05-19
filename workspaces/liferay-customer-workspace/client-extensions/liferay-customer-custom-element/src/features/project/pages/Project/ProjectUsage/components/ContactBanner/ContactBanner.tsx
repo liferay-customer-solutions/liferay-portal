@@ -8,7 +8,7 @@ import React from 'react';
 import './ContactBanner.css';
 
 import {BannerWaves} from '~/assets/BannerWaves';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import i18n from '~/utils/I18n';
 
 interface IProps {
@@ -18,7 +18,7 @@ interface IProps {
 }
 
 const ContactBanner: React.FC<IProps> = ({className, description, title}) => {
-	const [{project}] = useCustomerPortal();
+	const [{project}] = useAppContext();
 
 	return (
 		<div

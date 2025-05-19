@@ -11,7 +11,7 @@ import classNames from 'classnames';
 import {useEffect, useState} from 'react';
 import i18n from '~/utils/I18n';
 import useCurrentKoroneikiAccount from '~/hooks/useCurrentKoroneikiAccount';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import useMyUserAccountByAccountExternalReferenceCode from '~/features/project/pages/Project/TeamMembers/components/TeamMembersTable/hooks/useMyUserAccountByAccountExternalReferenceCode';
 import useUserAccountsByAccountExternalReferenceCode from '~/features/project/pages/Project/TeamMembers/components/TeamMembersTable/hooks/useUserAccountsByAccountExternalReferenceCode';
 import {
@@ -27,7 +27,7 @@ const IncidentContactCard = ({
 	accountSubscriptionGroupsNames,
 	hasActiveProduct,
 }) => {
-	const [{project}] = useCustomerPortal();
+	const [{project}] = useAppContext();
 	const incidentContactStandard = 2;
 
 	const {

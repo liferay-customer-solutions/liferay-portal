@@ -11,7 +11,7 @@ import getKebabCase from '~/utils/getKebabCase';
 import BusinessEventAdd from '~/features/project/pages/Project/BusinessEvents/pages/BusinessEventsAdd';
 import DeactivateKeysTable from '~/features/project/containers/DeactivateKeysTable';
 import GenerateNewKey from '~/features/project/containers/GenerateNewKey';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import {actionTypes} from '~/features/project/context/reducer';
 import Layout from '~/features/project/layouts/BaseLayout';
 import {PRODUCT_TYPES} from '~/features/project/utils/constants';
@@ -41,7 +41,7 @@ import BusinessEventsItemEdit from '../BusinessEvents/pages/BusinessEventsItem/B
 const ProjectRoutes = () => {
 	const [hasComplimentaryKey, setHasComplimentaryKey] = useState(false);
 
-	const [{project, subscriptionGroups}, dispatch] = useCustomerPortal();
+	const [{project, subscriptionGroups}, dispatch] = useAppContext();
 	const {featureFlags} = useAppPropertiesContext();
 
 	const {data: koroneikiData, loading: koroneikiAccountLoading} =

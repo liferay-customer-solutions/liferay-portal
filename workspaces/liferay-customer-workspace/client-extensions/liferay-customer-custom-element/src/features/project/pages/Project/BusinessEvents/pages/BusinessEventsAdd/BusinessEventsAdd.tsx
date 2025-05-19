@@ -12,7 +12,7 @@ import {Button, Input, Select} from '~/components';
 import DatePicker from '~/components/DatePicker/DatePicker';
 import TimePicker from '~/components/TimePicker/TimePicker';
 import {useAppPropertiesContext} from '~/contexts/AppPropertiesContext';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import {Liferay} from '~/services/liferay';
 import {addBusinessEvent} from '~/services/liferay/graphql/queries';
 import i18n from '~/utils/I18n';
@@ -55,7 +55,7 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 }) => {
 	const {client} = useAppPropertiesContext();
 
-	const [{project, subscriptionGroups}] = useCustomerPortal();
+	const [{project, subscriptionGroups}] = useAppContext();
 
 	const [baseButtonDisabled, setBaseButtonDisabled] = useState<boolean>(true);
 

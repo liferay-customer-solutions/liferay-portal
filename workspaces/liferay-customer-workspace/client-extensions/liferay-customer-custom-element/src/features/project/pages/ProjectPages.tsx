@@ -5,11 +5,11 @@
 
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 
-import {useCustomerPortal} from '../context';
+import {useAppContext} from '../context';
 import ProjectRoutes from './Project/routes/project.routes';
 
 const ProjectPages = () => {
-	const [{userAccount}] = useCustomerPortal();
+	const [{userAccount}] = useAppContext();
 
 	if (userAccount) {
 		return <ProjectRoutes />;

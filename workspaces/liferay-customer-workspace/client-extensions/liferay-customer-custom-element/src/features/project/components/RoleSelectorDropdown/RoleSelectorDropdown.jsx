@@ -12,7 +12,7 @@ import {Fragment, useMemo, useState} from 'react';
 import i18n from '~/utils/I18n';
 import getKebabCase from '~/utils/getKebabCase';
 import {useOnboarding} from '~/features/onboarding/context';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import RadioRoles from '../RadioRoles';
 
 import './/RoleSelectorDropdown.css';
@@ -31,7 +31,7 @@ const RoleSelectorDropdown = ({
 		useState(false);
 	const [active, setActive] = useState(false);
 
-	const projectPortal = useCustomerPortal();
+	const projectPortal = useAppContext();
 	const projectOnboarding = useOnboarding();
 
 	const project = useMemo(

@@ -7,7 +7,7 @@ import {useEffect, useRef, useState} from 'react';
 import {Outlet, useLocation, useParams} from 'react-router-dom';
 import InformationBanner from '~/components/InformationBanner';
 import {useAppPropertiesContext} from '~/contexts/AppPropertiesContext';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import i18n from '~/utils/I18n';
 
 import ProjectBreadcrumb from '../../components/ProjectBreadcrumb/ProjectBreadcrumb';
@@ -24,7 +24,7 @@ import useHasAllEventsPermissions from '../../pages/Project/BusinessEvents/hooks
 const Layout = () => {
 	const {featureFlags} = useAppPropertiesContext();
 	const [{businessEvents, subscriptions, userProjectAccess}] =
-		useCustomerPortal();
+		useAppContext();
 
 	const [hasSideMenu, setHasSideMenu] = useState(true);
 	const [showBanner, setShowBanner] = useState(true);

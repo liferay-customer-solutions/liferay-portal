@@ -6,11 +6,11 @@
 import {useMemo} from 'react';
 import {Navigate, Outlet, useOutletContext} from 'react-router-dom';
 import i18n from '~/utils/I18n';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 
 const ProductOutlet = ({product}) => {
 	const {setHasSideMenu} = useOutletContext();
-	const [{project, subscriptionGroups}] = useCustomerPortal();
+	const [{project, subscriptionGroups}] = useAppContext();
 
 	const hasProduct = useMemo(
 		() => !!subscriptionGroups?.find(({activationProductName, name}) => activationProductName === product || name === product),

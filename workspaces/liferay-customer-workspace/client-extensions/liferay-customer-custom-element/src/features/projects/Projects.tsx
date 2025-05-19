@@ -3,26 +3,22 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {NetworkStatus} from '@apollo/client';
 import ClayLayout from '@clayui/layout';
+import ClayLoadingIndicator from '@clayui/loading-indicator';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useAppPropertiesContext} from '~/contexts/AppPropertiesContext';
-
-import ProjectList from './components/ProjectsList';
-import SearchHeader from './components/SearchHeader';
-
-import './Home.css';
-
-import {NetworkStatus} from '@apollo/client';
-import ClayLoadingIndicator from '@clayui/loading-indicator';
 import useKoroneikiAccounts from '~/hooks/useKoroneikiAccounts';
 import SearchBuilder from '~/lib/SearchBuilder';
 
 import ProjectCategoryDropdown from './components/ProjectCategoryDropdown';
+import ProjectList from './components/ProjectsList';
+import SearchHeader from './components/SearchHeader';
 import useProjectCategoryItems from './hooks/useProjectCategoryItems';
 
 const THRESHOLD_COUNT = 4;
 
-const Home: React.FC = () => {
+const Projects = () => {
 	const [accountTotal, setAccountTotal] = useState<number | null>(null);
 	const [filter, setFilter] = useState('');
 	const [selectedProjectCategoryKey, setSelectedProjectCategoryKey] =
@@ -115,7 +111,7 @@ const Home: React.FC = () => {
 				)}
 
 			<ClayLayout.ContainerFluid
-				className="cp-home-wrapper"
+				className="cp-projects-wrapper"
 				onPointerEnterCapture={() => {}}
 				onPointerLeaveCapture={() => {}}
 				placeholder=""
@@ -148,4 +144,4 @@ const Home: React.FC = () => {
 	);
 };
 
-export default Home;
+export default Projects;
