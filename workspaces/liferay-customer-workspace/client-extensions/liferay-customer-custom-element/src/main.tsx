@@ -11,10 +11,10 @@ import {Root, createRoot} from 'react-dom/client';
 import {SWRConfig} from 'swr';
 
 import {AppPropertiesContext} from './contexts/AppPropertiesContext';
-import AttachmentFileUploader from './features/attachment-uploader';
-import Home from './features/home';
+import AttachmentUploader from './features/attachment-uploader';
 import Onboarding from './features/onboarding';
-import CustomerPortal from './features/project';
+import Project from './features/project';
+import Projects from './features/projects';
 import SecurityVulnerabilities from './features/security-vulnerabilities';
 import useApollo from './hooks/useApollo';
 import useGlobalNetworkIndicator from './hooks/useGlobalNetworkIndicator';
@@ -27,10 +27,10 @@ import './main.css';
 const ELEMENT_ID = 'liferay-customer-custom-element';
 
 const AppRoutes = {
-	attachmentFileUploader: AttachmentFileUploader,
-	home: Home,
+	attachmentUploader: AttachmentUploader,
 	onboarding: Onboarding,
-	portal: CustomerPortal,
+	project: Project,
+	projects: Projects,
 	securityVulnerabilities: SecurityVulnerabilities,
 };
 

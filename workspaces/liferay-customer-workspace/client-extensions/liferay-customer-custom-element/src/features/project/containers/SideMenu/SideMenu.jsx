@@ -9,7 +9,7 @@ import {useAppPropertiesContext} from '~/contexts/AppPropertiesContext';
 import i18n from '~/utils/I18n';
 import {Button} from '~/components';
 import getKebabCase from '~/utils/getKebabCase';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import {MENU_TYPES, PRODUCT_TYPES} from '~/features/project/utils/constants';
 import SideMenuSkeleton from './SideMenuSkeleton';
 import MenuItem from './components/MenuItem';
@@ -21,7 +21,7 @@ import './SideMenu.css';
 const ACTIVATION_PATH = 'activation';
 
 const SideMenu = () => {
-	const [{project, subscriptionGroups}] = useCustomerPortal();
+	const [{project, subscriptionGroups}] = useAppContext();
 	const [isOpenedProductsMenu, setIsOpenedProductsMenu] = useState(false);
 	const [menuItemActiveStatus, setMenuItemActiveStatus] = useState([]);
 	const {featureFlags} = useAppPropertiesContext();

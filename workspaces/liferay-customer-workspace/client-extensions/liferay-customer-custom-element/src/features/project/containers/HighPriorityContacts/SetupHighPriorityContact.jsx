@@ -14,7 +14,7 @@ import {
 	getContactRoleByFilter,
 } from '~/features/project/utils/getHighPriorityContacts';
 import {useOnboarding} from '~/features/onboarding/context';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import useCurrentKoroneikiAccount from '~/hooks/useCurrentKoroneikiAccount';
 import HighPriorityContactsInput from './HighPriorityContactsInput';
 import {useHighPriorityContacts} from './hooks/useHighPriorityContacts';
@@ -84,7 +84,7 @@ const SetupHighPriorityContact = ({
 	const {client} = useAppPropertiesContext();
 	const {data: currentKoroneikiAccountData, loading: loadingCurrentKoroneikiAccount } = useCurrentKoroneikiAccount();
 	const projectOnboarding = useOnboarding();
-	const projectPortal = useCustomerPortal();
+	const projectPortal = useAppContext();
 
 	const highPriorityContactsCategory = useMemo(
 		() => mapFilterToContactsCategory(filter),

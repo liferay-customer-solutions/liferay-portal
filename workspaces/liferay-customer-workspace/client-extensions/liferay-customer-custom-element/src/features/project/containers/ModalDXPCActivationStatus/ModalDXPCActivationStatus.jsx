@@ -16,7 +16,7 @@ import {
 	updateDXPCloudEnvironment,
 } from '~/services/liferay/graphql/queries';
 import {isLowercaseAndNumbers} from '~/utils/validations.form';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 
 import {actionTypes} from '../../context/reducer';
 
@@ -34,7 +34,7 @@ const ModalDXPCActivationStatus = ({
 }) => {
 	const [hasError, setHasError] = useState();
 
-	const [{project, subscriptionGroups}, dispatch] = useCustomerPortal();
+	const [{project, subscriptionGroups}, dispatch] = useAppContext();
 	const {client} = useAppPropertiesContext();
 
 	const handleOnConfirm = () => {

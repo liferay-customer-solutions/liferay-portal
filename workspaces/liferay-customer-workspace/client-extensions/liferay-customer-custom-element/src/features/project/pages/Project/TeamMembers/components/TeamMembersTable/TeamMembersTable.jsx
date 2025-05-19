@@ -18,7 +18,7 @@ import i18n from '~/utils/I18n';
 import StatusTag from '~/components/StatusTag';
 import ActionTable from '~/components/ActionTable';
 import {useAppPropertiesContext} from '~/contexts/AppPropertiesContext';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import {STATUS_TAG_TYPES} from '~/features/project/utils/constants/statusTag';
 import {getOrRequestToken} from '~/services/liferay/security/auth/getOrRequestToken';
 import RemoveUserModal from './components/RemoveUserModal/RemoveUserModal';
@@ -53,7 +53,7 @@ const TeamMembersTable = ({
 	const [oAuthToken, setOAuthToken] = useState();
 	const provisioningKeys = useProvisioningLicenseKeys();
 
-	const [{project}] = useCustomerPortal();
+	const [{project}] = useAppContext();
 
 	useEffect(() => {
 		const fetchToken = async () => {

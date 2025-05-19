@@ -21,7 +21,7 @@ import {
 } from '~/services/liferay/graphql/queries';
 import getActivationStatusDateRange from '~/utils/getActivationStatusDateRange';
 import {ALERT_UPDATE_DXP_CLOUD_STATUS} from '~/features/project/containers/ActivationKeysTable/utils/constants';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import {actionTypes} from '~/features/project/context/reducer';
 import {
 	AUTO_CLOSE_ALERT_TIME,
@@ -91,7 +91,7 @@ const ActivationStatusDXPCloud = ({
 		subscriptionGroupActivationStatus,
 		setSubscriptionGroupActivationStatus,
 	] = useState(subscriptionGroupDXPCloud?.activationStatus);
-	const [, dispatch] = useCustomerPortal();
+	const [, dispatch] = useAppContext();
 	const {client} = useAppPropertiesContext();
 	const [hasFinishedUpdate, setHasFinishedUpdate] = useState(false);
 	const [activationStatusDate, setActivationStatusDate] = useState('');

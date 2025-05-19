@@ -16,7 +16,7 @@ import {useCallback, useEffect, useMemo, useState} from 'react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import {Button, DatePicker, Input, Select, TimePicker} from '~/components';
 import {useAppPropertiesContext} from '~/contexts/AppPropertiesContext';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import useGetBusinessEventTypesList from '~/features/project/pages/Project/BusinessEvents/hooks/useGetBusinessEventTypesList';
 import useGetLiferayVersions from '~/features/project/pages/Project/BusinessEvents/hooks/useGetLiferayVersions';
 import useGetUTCTimeZonesList from '~/features/project/pages/Project/BusinessEvents/hooks/useGetUTCTimeZonesList';
@@ -60,7 +60,7 @@ const BusinessEventsItemEditPage: React.FC<IProps> = ({
 }) => {
 	const {client} = useAppPropertiesContext();
 
-	const [{project, subscriptionGroups}] = useCustomerPortal();
+	const [{project, subscriptionGroups}] = useAppContext();
 
 	const [baseButtonDisabled, setBaseButtonDisabled] = useState<boolean>(true);
 	const [reason, setReason] = useState('');

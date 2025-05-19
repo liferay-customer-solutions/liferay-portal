@@ -10,7 +10,7 @@ import {useGetMyUserAccount} from '~/services/liferay/graphql/user-accounts';
 import i18n from '~/utils/I18n';
 import ActionTable from '~/components/ActionTable';
 import {getOrRequestToken} from '~/services/liferay/security/auth/getOrRequestToken';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import useGetActivationKeysData from '../ActivationKeysTable/hooks/useGetActivationKeysData';
 import usePagination from '../ActivationKeysTable/hooks/usePagination';
 import useStatusCountNavigation from '../ActivationKeysTable/hooks/useStatusCountNavigation';
@@ -34,7 +34,7 @@ import './DeactivateKeysTable.css';
 const DeactivateKeysTable = ({initialFilter, productName}) => {
 	const {data: myAccount} = useGetMyUserAccount();
 	const [oAuthToken, setOAuthToken] = useState();
-	const [{project, userAccount}] = useCustomerPortal();
+	const [{project, userAccount}] = useAppContext();
 	const {setHasSideMenu} = useOutletContext();
 
 	useEffect(() => {

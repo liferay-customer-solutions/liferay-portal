@@ -6,7 +6,7 @@
 import {useEffect, useState} from 'react';
 import {Navigate, useLocation, useOutletContext} from 'react-router-dom';
 import {useGetMyUserAccount} from '~/services/liferay/graphql/user-accounts';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import {getOrRequestToken} from '~/services/liferay/security/auth/getOrRequestToken';
 import {hasAdminOrPartnerManager} from '../ActivationKeysTable/utils/hasAdminOrPartnerManager';
 import {hasAdminUserAccount} from '../ActivationKeysTable/utils/hasAdminUserAccount';
@@ -28,7 +28,7 @@ const GenerateNewKey = ({
 	const {state} = useLocation();
 	const {data: myAccount} = useGetMyUserAccount();
 	const [oAuthToken, setOAuthToken] = useState();
-	const [{project, userAccount}] = useCustomerPortal();
+	const [{project, userAccount}] = useAppContext();
 	const [selectedKeyData, setSelectedKeyData] = useState();
 	const [step, setStep] = useState(STEP_TYPES.selectDescriptions);
 	const {setHasSideMenu} = useOutletContext();

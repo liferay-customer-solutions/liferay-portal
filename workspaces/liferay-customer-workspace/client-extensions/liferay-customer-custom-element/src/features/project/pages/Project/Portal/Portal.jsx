@@ -6,14 +6,14 @@ import {useEffect, useState} from 'react';
 import {useOutletContext} from 'react-router-dom';
 import i18n from '~/utils/I18n';
 import ActivationKeysTable from '~/features/project/containers/ActivationKeysTable';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import DeveloperKeysLayouts from '~/features/project/layouts/DeveloperKeysLayout';
 import {LIST_TYPES} from '~/features/project/utils/constants';
 import {getOrRequestToken} from '~/services/liferay/security/auth/getOrRequestToken';
 
 const Portal = ({hasComplimentaryKey}) => {
 	const [oAuthToken, setOAuthToken] = useState();
-	const [{project}] = useCustomerPortal();
+	const [{project}] = useAppContext();
 	const {setHasSideMenu} = useOutletContext();
 
 	useEffect(() => {

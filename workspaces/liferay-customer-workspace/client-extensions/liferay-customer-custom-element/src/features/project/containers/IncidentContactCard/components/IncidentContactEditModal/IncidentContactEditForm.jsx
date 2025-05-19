@@ -14,7 +14,7 @@ import {STATUS_CODE} from '~/features/project/utils/constants';
 import {Button} from '~/components';
 import {getOrRequestToken} from '~/services/liferay/security/auth/getOrRequestToken';
 import getKebabCase from '~/utils/getKebabCase';
-import {useCustomerPortal} from '~/features/project/context';
+import {useAppContext} from '~/features/project/context';
 import {
 	addContactRoleLiferay,
 	addContactRoleRaysource,
@@ -33,7 +33,7 @@ const IncidentContactEditModal = ({
 	leftButton,
 	modalFilter,
 }) => {
-	const [{project}] = useCustomerPortal();
+	const [{project}] = useAppContext();
 
 	const [addHighPriorityContact, setAddHighPriorityContacts] = useState([]);
 
