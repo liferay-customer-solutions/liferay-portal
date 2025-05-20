@@ -192,6 +192,7 @@ const BusinessEventsItemEditPage: React.FC<IProps> = ({
 			associatedTickets: businessEvent.associatedTickets,
 			currentLiferayVersion: businessEvent.currentLiferayVersion?.key,
 			description: businessEvent.description,
+			eventStatus: 'open',
 			eventType: businessEvent.eventType?.key,
 			lastComment: reason,
 			name: businessEvent?.name,
