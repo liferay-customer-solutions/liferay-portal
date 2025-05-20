@@ -12,10 +12,10 @@ const AttachmentUploaderRoutes = () => {
 	return (
 		<HashRouter>
 			<Routes>
-				<Route element={<AttachmentUploader />} path="/" />
+				<Route element={<AttachmentUploader />} path="/:ticketId" />
 				<Route
 					element={<AttachmentUploadConfirmation />}
-					path="/upload-confirmation"
+					path=":ticketId/upload-confirmation"
 				/>
 			</Routes>
 		</HashRouter>
