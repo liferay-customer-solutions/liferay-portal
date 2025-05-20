@@ -6,14 +6,14 @@
 import {Button as ClayButton} from '@clayui/core';
 import {ClayCheckbox, ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useState} from 'react';
 import SparkMD5 from 'spark-md5';
 import {Liferay} from '~/services/liferay';
 import i18n from '~/utils/I18n';
 
 import './AttachmentUploader.css';
 
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {getTicketAttachmentById} from '~/services/liferay/api';
 
 import DropzoneUpload from './components/DropzoneUpload';
@@ -27,19 +27,15 @@ export interface IAttachment {
 
 const AttachmentUploader = () => {
 	const [attachment, setAttachment] = useState<IAttachment>();
-	const [gcsSessionURL, setGcsSessionURL] = useState<string>();
-	const [ticketAttachmentId, setTicketAttachmentId] = useState<string>();
 	const [abortController, setAbortController] =
 		useState<AbortController | null>(null);
 	const [uploadedFile, setUploadedFile] = useState<{progress: number}>({
 		progress: 0,
 	});
 	const [showProgress, setShowProgress] = useState(false);
-	const [uploadAccountKey, setUploadAccountKey] = useState('');
 
 	const navigate = useNavigate();
-	const urlParams = new URLSearchParams(window.location.search);
-	const ticketId = urlParams.get('ticketId');
+	const {ticketId} = useParams();
 
 	async function generateFileMd5(file: File): Promise<string> {
 		const chunkSize = 2 * 1024 * 1024;
@@ -82,44 +78,60 @@ const AttachmentUploader = () => {
 		});
 	}
 
-	const completeUpload = useCallback(async () => {
-		try {
-			const response: Response =
-				(await Liferay.OAuth2Client.FromUserAgentApplication(
-					'liferay-customer-etc-spring-boot-oaua'
-				).fetch(
-					`/ticket-attachments/${ticketAttachmentId}/complete-upload`,
-					{
-						body: JSON.stringify({
-							zendeskTicketCommentBody: attachment?.comment,
-						}),
-						method: 'POST',
-					}
-				)) as unknown as Response;
+	const completeUpload = useCallback(
+		async (ticketAttachmentId: string, comment?: string) => {
+			try {
+				const response: Response =
+					(await Liferay.OAuth2Client.FromUserAgentApplication(
+						'liferay-customer-etc-spring-boot-oaua'
+					).fetch(
+						`/ticket-attachments/${ticketAttachmentId}/complete-upload`,
+						{
+							body: JSON.stringify({
+								zendeskTicketCommentBody: comment,
+							}),
+							method: 'POST',
+						}
+					)) as unknown as Response;
 
-			if (!response.ok) {
-				throw new Error(
-					`Failed to ticket comment upload:  ${response.statusText}`
-				);
+				if (!response.ok) {
+					throw new Error(
+						`Failed to complete upload: ${response.statusText}`
+					);
+				}
 			}
-		}
-		catch (error) {
-			console.error(error);
-		}
-	}, [attachment?.comment, ticketAttachmentId]);
+			catch (error) {
+				console.error(error);
+			}
+		},
+		[]
+	);
 
-	const fetchTicketAttachment = async (id: string) => {
+	const fetchTicketAttachment = async (
+		id: string
+	): Promise<string | undefined> => {
 		try {
 			const response = await getTicketAttachmentById(id, 'accountKey');
 
-			setUploadAccountKey(response.accountKey);
+			return response.accountKey;
 		}
 		catch (error) {
 			console.error(error);
+
+			return undefined;
 		}
 	};
 
-	const initiateUpload = async (attachment: IAttachment) => {
+	const initiateUpload = async (
+		attachment: IAttachment
+	): Promise<
+		| {
+				accountKey: string;
+				gcsSessionURL: string;
+				ticketAttachmentId: string;
+		  }
+		| undefined
+	> => {
 		const fileMd5 = await generateFileMd5(attachment.file);
 
 		try {
@@ -144,15 +156,26 @@ const AttachmentUploader = () => {
 
 			const responseText = await response.text();
 			const responseJson = JSON.parse(responseText);
-			const newTicketAttachment = responseJson.ticketAttachmentId || '';
 
-			setGcsSessionURL(responseJson.gcsSessionURL || '');
-			setTicketAttachmentId(responseJson.ticketAttachmentId || '');
+			const ticketAttachmentId = responseJson.ticketAttachmentId || '';
+			const gcsSessionURL = responseJson.gcsSessionURL || '';
 
-			await fetchTicketAttachment(newTicketAttachment);
+			const accountKey = await fetchTicketAttachment(ticketAttachmentId);
+
+			if (!accountKey) {
+				throw new Error('Account key not found');
+			}
+
+			return {
+				accountKey,
+				gcsSessionURL,
+				ticketAttachmentId,
+			};
 		}
 		catch (error) {
 			console.error(error);
+
+			return undefined;
 		}
 	};
 
@@ -187,123 +210,130 @@ const AttachmentUploader = () => {
 		return 0;
 	}
 
-	const uploadFileToGcs = useCallback(async () => {
-		if (!attachment || !gcsSessionURL) {
-			return;
-		}
+	const uploadFileToGcs = useCallback(
+		async (
+			uploadAccountKeyParam: string,
+			sessionUrl: string,
+			ticketAttachmentId: string
+		) => {
+			if (!attachment) {
+				return;
+			}
 
-		const file = attachment.file;
-		const chunkSize = 25 * 1024 * 1024;
-		const totalSize = file.size;
+			const file = attachment.file;
+			const chunkSize = 25 * 1024 * 1024;
+			const totalSize = file.size;
 
-		const startOffset = await getUploadOffset(gcsSessionURL, totalSize);
+			const startOffset = await getUploadOffset(sessionUrl, totalSize);
 
-		let chunkStart = startOffset;
-		let chunkEnd = Math.min(chunkStart + chunkSize, totalSize);
+			let chunkStart = startOffset;
+			let chunkEnd = Math.min(chunkStart + chunkSize, totalSize);
 
-		const controller = new AbortController();
-		setAbortController(controller);
+			const controller = new AbortController();
+			setAbortController(controller);
 
-		let uploadFailed = false;
+			let uploadFailed = false;
 
-		const maxRetries = 5;
-		const retryDelay = (attempt: number) => 500 * Math.pow(2, attempt);
+			const maxRetries = 5;
+			const retryDelay = (attempt: number) => 500 * Math.pow(2, attempt);
 
-		while (chunkStart < totalSize) {
-			const chunk = file.slice(chunkStart, chunkEnd);
-			const contentRange = `bytes ${chunkStart}-${chunkEnd - 1}/${totalSize}`;
+			while (chunkStart < totalSize) {
+				const chunk = file.slice(chunkStart, chunkEnd);
+				const contentRange = `bytes ${chunkStart}-${chunkEnd - 1}/${totalSize}`;
 
-			let success = false;
-			let attempt = 0;
+				let success = false;
+				let attempt = 0;
 
-			while (!success && attempt < maxRetries) {
-				try {
-					const response = await fetch(gcsSessionURL, {
-						body: chunk,
-						headers: {
-							'Content-Length': chunk.size.toString(),
-							'Content-Range': contentRange,
-						},
-						method: 'PUT',
-						signal: controller.signal,
-					});
+				while (!success && attempt < maxRetries) {
+					try {
+						const response = await fetch(sessionUrl, {
+							body: chunk,
+							headers: {
+								'Content-Length': chunk.size.toString(),
+								'Content-Range': contentRange,
+							},
+							method: 'PUT',
+							signal: controller.signal,
+						});
 
-					if (response.ok || response.status === 308) {
-						success = true;
-						chunkStart = chunkEnd;
-						chunkEnd = Math.min(chunkStart + chunkSize, totalSize);
+						if (response.ok || response.status === 308) {
+							success = true;
+							chunkStart = chunkEnd;
+							chunkEnd = Math.min(
+								chunkStart + chunkSize,
+								totalSize
+							);
 
-						const uploadPercentage = Math.round(
-							(chunkStart / totalSize) * 100
-						);
-						setUploadedFile({progress: uploadPercentage});
+							const uploadPercentage = Math.round(
+								(chunkStart / totalSize) * 100
+							);
+							setUploadedFile({progress: uploadPercentage});
+						}
+						else if (
+							response.status >= 500 &&
+							response.status < 600
+						) {
+							attempt++;
+							await new Promise((resolve) =>
+								setTimeout(resolve, retryDelay(attempt))
+							);
+						}
+						else {
+							throw new Error(
+								`Chunk upload failed: ${response.statusText}`
+							);
+						}
 					}
-					else if (
-						response.status >= 500 &&
-						response.status < 600
-					) {
+					catch (error) {
+						if (controller.signal.aborted) {
+							return;
+						}
+
+						console.error(
+							`Upload failed on attempt ${attempt + 1}:`,
+							error
+						);
 						attempt++;
-						await new Promise((resolve) =>
-							setTimeout(resolve, retryDelay(attempt))
-						);
-					}
-					else {
-						throw new Error(
-							`Chunk upload failed: ${response.statusText}`
-						);
+
+						if (attempt < maxRetries) {
+							await new Promise((resolve) =>
+								setTimeout(resolve, retryDelay(attempt))
+							);
+						}
+						else {
+							uploadFailed = true;
+							break;
+						}
 					}
 				}
-				catch (error) {
-					if (controller.signal.aborted) {
-						return;
-					}
 
-					console.error(
-						`Upload failed on attempt ${attempt + 1}:`,
-						error
-					);
-					attempt++;
-
-					if (attempt < maxRetries) {
-						await new Promise((resolve) =>
-							setTimeout(resolve, retryDelay(attempt))
-						);
-					}
-					else {
-						uploadFailed = true;
-						break;
-					}
+				if (!success) {
+					uploadFailed = true;
+					break;
 				}
 			}
 
-			if (!success) {
-				uploadFailed = true;
-				break;
+			setShowProgress(false);
+			setAbortController(null);
+
+			if (
+				!controller.signal.aborted &&
+				!uploadFailed &&
+				uploadAccountKeyParam
+			) {
+				await completeUpload(ticketAttachmentId, attachment.comment);
+
+				navigate(`/${ticketId}/upload-confirmation`, {
+					state: {
+						attachmentName: attachment.file.name,
+						ticketId,
+						uploadAccountKey: uploadAccountKeyParam,
+					},
+				});
 			}
-		}
-
-		setShowProgress(false);
-		setAbortController(null);
-
-		if (!controller.signal.aborted && !uploadFailed) {
-			await completeUpload();
-
-			navigate('/upload-confirmation', {
-				state: {
-					attachmentName: attachment.file.name,
-					ticketId,
-					uploadAccountKey,
-				},
-			});
-		}
-	}, [
-		attachment,
-		gcsSessionURL,
-		completeUpload,
-		navigate,
-		ticketId,
-		uploadAccountKey,
-	]);
+		},
+		[attachment, completeUpload, navigate, ticketId]
+	);
 
 	const _handleCloseOnClick = () => {
 		if (window.history.length > 1) {
@@ -327,7 +357,24 @@ const AttachmentUploader = () => {
 	const _handleUploadOnClick = async () => {
 		if (attachment) {
 			setShowProgress(true);
-			await initiateUpload(attachment);
+
+			const uploadData = await initiateUpload(attachment);
+
+			if (
+				!uploadData?.accountKey ||
+				!uploadData?.gcsSessionURL ||
+				!uploadData?.ticketAttachmentId
+			) {
+				setShowProgress(false);
+
+				return;
+			}
+
+			await uploadFileToGcs(
+				uploadData.accountKey,
+				uploadData.gcsSessionURL,
+				uploadData.ticketAttachmentId
+			);
 		}
 	};
 
@@ -340,22 +387,6 @@ const AttachmentUploader = () => {
 		setAttachment(undefined);
 		setShowProgress(false);
 	};
-
-	useEffect(() => {
-		if (!attachment) {
-			return;
-		}
-
-		if (gcsSessionURL) {
-			uploadFileToGcs();
-		}
-	}, [
-		attachment,
-		completeUpload,
-		gcsSessionURL,
-		ticketAttachmentId,
-		uploadFileToGcs,
-	]);
 
 	return (
 		<div className="attachment-container mt-4">
