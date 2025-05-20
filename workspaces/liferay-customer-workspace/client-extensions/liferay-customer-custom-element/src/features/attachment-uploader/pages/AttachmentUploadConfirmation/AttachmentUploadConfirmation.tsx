@@ -3,30 +3,17 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {Button as ClayButton} from '@clayui/core';
 import ClayIcon from '@clayui/icon';
 import i18n from '~/utils/I18n';
 
 import './AttachmentUploadConfirmation.css';
 
 import {useLocation} from 'react-router-dom';
-import {Liferay} from '~/services/liferay';
 import routerPath from '~/utils/routerPath';
 
 const AttachmentUploadConfirmation = () => {
 	const {state} = useLocation();
-
-	const handleNavigateToTicket = () => {
-		window.location.href = `https://help.liferay.com/hc/requests/${state?.ticketId}`;
-	};
-
-	const handleNavigateToAttachments = () => {
-		const pageRoutes = routerPath();
-
-		Liferay.Util.navigate(
-			`${pageRoutes.project(state?.uploadAccountKey)}/attachments`
-		);
-	};
+	const pageRoutes = routerPath();
 
 	return (
 		<div className="uploader-confirmation-container">
@@ -54,21 +41,19 @@ const AttachmentUploadConfirmation = () => {
 
 				<div>
 					<div className="d-flex justify-content-center">
-						<ClayButton
-							className="mr-2 uploader-attachments-button"
-							displayType="secondary"
-							onClick={handleNavigateToAttachments}
+						<a
+							className="btn btn-secondary mr-2 uploader-attachments-button"
+							href={`${pageRoutes.project(state?.uploadAccountKey)}/attachments`}
 						>
 							{i18n.translate('go-to-attachments')}
-						</ClayButton>
+						</a>
 
-						<ClayButton
-							className="uploader-ticket-button"
-							displayType="primary"
-							onClick={handleNavigateToTicket}
+						<a
+							className="btn btn-primary uploader-ticket-button"
+							href={`https://help.liferay.com/hc/requests/${state?.ticketId}`}
 						>
 							{i18n.translate('return-to-ticket')}
-						</ClayButton>
+						</a>
 					</div>
 				</div>
 			</div>
