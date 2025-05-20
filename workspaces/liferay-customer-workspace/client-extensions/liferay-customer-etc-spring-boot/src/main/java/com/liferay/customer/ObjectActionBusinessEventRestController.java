@@ -156,6 +156,10 @@ public class ObjectActionBusinessEventRestController
 			return "New business event has been created.";
 		}
 
+		if (businessEvent.isOverdue()) {
+			return "Business event status changed to overdue.";
+		}
+
 		return businessEvent.getLastComment();
 	}
 
@@ -198,6 +202,11 @@ public class ObjectActionBusinessEventRestController
 			externalReferenceCode =
 				NotificationTemplateConstants.
 					EXTERNAL_REFERENCE_CODE_COMPLETED_BUSINESS_EVENTS;
+		}
+		else if (businessEvent.isOverdue()) {
+			externalReferenceCode =
+				NotificationTemplateConstants.
+					EXTERNAL_REFERENCE_CODE_OVERDUE_BUSINESS_EVENTS;
 		}
 		else {
 			externalReferenceCode =
@@ -247,28 +256,42 @@ public class ObjectActionBusinessEventRestController
 		}
 
 		return HashMapBuilder.put(
-			"[%BUSINESSEVENT_ACTIVITY_HISTORY_PAGE_LINK%]",
+			"BUSINESSEVENT_ACTIVITY_HISTORY_PAGE_LINK",
 			businessEvent.getActivityHistoryURL(
 				lxcDXPServerProtocol, lxcDXPMainDomain)
 		).put(
-			"[%BUSINESSEVENT_DETAIL_PAGE_LINK%]",
+			"BUSINESSEVENT_AUTHOR_FIRST_NAME",
+			businessEvent.getCreatorGivenName()
+		).put(
+			"BUSINESSEVENT_DETAIL_PAGE_LINK",
 			businessEvent.getURL(lxcDXPServerProtocol, lxcDXPMainDomain)
 		).put(
-			"[%BUSINESSEVENT_EVENTTYPE%]", businessEvent.getEventTypeName()
+			"BUSINESSEVENT_EDIT_PAGE_LINK",
+			businessEvent.getEditURL(lxcDXPServerProtocol, lxcDXPMainDomain)
 		).put(
-			"[%BUSINESSEVENT_LASTCOMMENT%]", formattedComment
+			"BUSINESSEVENT_EVENTTYPE", businessEvent.getEventTypeName()
 		).put(
-			"[%BUSINESSEVENT_NAME%]", businessEvent.getName()
+			"BUSINESSEVENT_LASTCOMMENT", formattedComment
 		).put(
-			"[%BUSINESSEVENT_TARGETGOLIVEDATETIME%]",
+			"BUSINESSEVENT_NAME", businessEvent.getName()
+		).put(
+			"BUSINESSEVENT_TARGETGOLIVEDATETIME",
 			businessEvent.getTargetGoLiveDate()
 		).put(
-			"[%PROJECT_NAME%]", koroneikiAccountJSONObject.getString("name")
+			"PROJECT_NAME", koroneikiAccountJSONObject.getString("name")
 		).build();
 	}
 
-	private String _getRecipientsTo(JSONObject koroneikiAccountJSONObject)
+	private String _getRecipientsTo(
+			BusinessEvent businessEvent, JSONObject koroneikiAccountJSONObject)
 		throws Exception {
+
+		if (businessEvent.isOverdue()) {
+			JSONObject userAccountJSONObject = _getUserAccountJSONObject(
+				businessEvent.getCreatorId());
+
+			return userAccountJSONObject.getString("emailAddress");
+		}
 
 		String region = koroneikiAccountJSONObject.getString("region");
 
@@ -302,6 +325,19 @@ public class ObjectActionBusinessEventRestController
 		return rsmEmailAddress;
 	}
 
+	private JSONObject _getUserAccountJSONObject(Long id) throws Exception {
+		JSONObject userAccountJSONObject = new JSONObject(
+			get(
+				_getAuthorization(),
+				"/o/headless-admin-user/v1.0/user-accounts/" + id));
+
+		if (userAccountJSONObject.isEmpty()) {
+			throw new Exception("No user account found for id " + id);
+		}
+
+		return userAccountJSONObject;
+	}
+
 	private boolean _hasTAMServiceSubscription(
 			String accountExternalReferenceCode)
 		throws Exception {
@@ -327,7 +363,7 @@ public class ObjectActionBusinessEventRestController
 	}
 
 	private JSONArray _parseRecipientsJSONArray(
-			JSONObject koroneikiAccountJSONObject,
+			BusinessEvent businessEvent, JSONObject koroneikiAccountJSONObject,
 			JSONArray recipientsJSONArray)
 		throws Exception {
 
@@ -339,23 +375,13 @@ public class ObjectActionBusinessEventRestController
 		recipientJSONObject.put(
 			"fromName", fromNameJSONObject.getString("en_US")
 		).put(
-			"to", _getRecipientsTo(koroneikiAccountJSONObject)
+			"to", _getRecipientsTo(businessEvent, koroneikiAccountJSONObject)
 		);
 
 		return new JSONArray(
 		).put(
 			recipientJSONObject
 		);
-	}
-
-	private String _replace(
-		Map<String, String> placeholderValues, String string) {
-
-		for (Map.Entry<String, String> entry : placeholderValues.entrySet()) {
-			return StringUtil.replace(string, entry.getKey(), entry.getValue());
-		}
-
-		return string;
 	}
 
 	private void _sendNotification(
@@ -382,19 +408,19 @@ public class ObjectActionBusinessEventRestController
 			new JSONObject(
 			).put(
 				"body",
-				_replace(
-					placeholderValues,
-					notificationTemplateBodyJSONObject.getString("en_US"))
+				StringUtil.replace(
+					notificationTemplateBodyJSONObject.getString("en_US"), "[%",
+					"%]", placeholderValues)
 			).put(
 				"recipients",
 				_parseRecipientsJSONArray(
-					koroneikiAccountJSONObject,
+					businessEvent, koroneikiAccountJSONObject,
 					notificationTemplateJSONObject.getJSONArray("recipients"))
 			).put(
 				"subject",
-				_replace(
-					placeholderValues,
-					notificationTemplateSubjectJSONObject.getString("en_US"))
+				StringUtil.replace(
+					notificationTemplateSubjectJSONObject.getString("en_US"),
+					"[%", "%]", placeholderValues)
 			).put(
 				"type", "email"
 			).toString(),
