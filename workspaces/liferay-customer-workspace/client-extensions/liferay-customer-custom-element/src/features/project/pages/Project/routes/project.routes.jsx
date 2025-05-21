@@ -49,6 +49,13 @@ const ProjectRoutes = () => {
 	const koroneikiAccount =
 		koroneikiData?.koroneikiAccountByExternalReferenceCode;
 
+	if (koroneikiAccount) {
+		localStorage.setItem(
+			`@liferayCP:${Liferay.ThemeDisplay.getUserId()}:lastViewedProject`,
+			koroneikiAccount.accountKey
+		);
+	}
+
 	const {data: myUserAccountData} =
 		useMyUserAccountByAccountExternalReferenceCode(
 			koroneikiAccount?.accountKey,
