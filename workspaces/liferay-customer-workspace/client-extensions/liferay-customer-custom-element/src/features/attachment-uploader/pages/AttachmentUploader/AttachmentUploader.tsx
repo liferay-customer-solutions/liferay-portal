@@ -79,7 +79,10 @@ const AttachmentUploader = () => {
 	}
 
 	const completeUpload = useCallback(
-		async (ticketAttachmentId: string, comment?: string) => {
+		async (
+			ticketAttachmentId: string,
+			comment?: string
+		): Promise<boolean> => {
 			try {
 				const response: Response =
 					(await Liferay.OAuth2Client.FromUserAgentApplication(
@@ -99,9 +102,13 @@ const AttachmentUploader = () => {
 						`Failed to complete upload: ${response.statusText}`
 					);
 				}
+
+				return true;
 			}
 			catch (error) {
 				console.error(error);
+
+				return false;
 			}
 		},
 		[]
@@ -215,9 +222,9 @@ const AttachmentUploader = () => {
 			uploadAccountKeyParam: string,
 			sessionUrl: string,
 			ticketAttachmentId: string
-		) => {
+		): Promise<boolean> => {
 			if (!attachment) {
-				return;
+				return false;
 			}
 
 			const file = attachment.file;
@@ -269,15 +276,6 @@ const AttachmentUploader = () => {
 							);
 							setUploadedFile({progress: uploadPercentage});
 						}
-						else if (
-							response.status >= 500 &&
-							response.status < 600
-						) {
-							attempt++;
-							await new Promise((resolve) =>
-								setTimeout(resolve, retryDelay(attempt))
-							);
-						}
 						else {
 							throw new Error(
 								`Chunk upload failed: ${response.statusText}`
@@ -286,7 +284,7 @@ const AttachmentUploader = () => {
 					}
 					catch (error) {
 						if (controller.signal.aborted) {
-							return;
+							return false;
 						}
 
 						console.error(
@@ -321,15 +319,40 @@ const AttachmentUploader = () => {
 				!uploadFailed &&
 				uploadAccountKeyParam
 			) {
-				await completeUpload(ticketAttachmentId, attachment.comment);
+				const hasUploadCompleted = await completeUpload(
+					ticketAttachmentId,
+					attachment.comment
+				);
 
-				navigate(`/${ticketId}/upload-confirmation`, {
-					state: {
-						attachmentName: attachment.file.name,
-						ticketId,
-						uploadAccountKey: uploadAccountKeyParam,
-					},
+				if (hasUploadCompleted) {
+					navigate(`/${ticketId}/upload-confirmation`, {
+						state: {
+							attachmentName: attachment.file.name,
+							ticketId,
+							uploadAccountKey: uploadAccountKeyParam,
+						},
+					});
+
+					return true;
+				}
+				else {
+					Liferay.Util.openToast({
+						message: i18n.translate('an-unexpected-error-occurred'),
+						title: i18n.translate('error'),
+						type: 'danger',
+					});
+
+					return false;
+				}
+			}
+			else {
+				Liferay.Util.openToast({
+					message: i18n.translate('an-unexpected-error-occurred'),
+					title: i18n.translate('error'),
+					type: 'danger',
 				});
+
+				return false;
 			}
 		},
 		[attachment, completeUpload, navigate, ticketId]
@@ -366,6 +389,12 @@ const AttachmentUploader = () => {
 				!uploadData?.ticketAttachmentId
 			) {
 				setShowProgress(false);
+
+				Liferay.Util.openToast({
+					message: i18n.translate('an-unexpected-error-occurred'),
+					title: i18n.translate('error'),
+					type: 'danger',
+				});
 
 				return;
 			}
