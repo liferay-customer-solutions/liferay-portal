@@ -9,11 +9,13 @@ import i18n from '~/utils/I18n';
 import './AttachmentUploadConfirmation.css';
 
 import {useLocation} from 'react-router-dom';
+import {useAppPropertiesContext} from '~/contexts/AppPropertiesContext';
 import routerPath from '~/utils/routerPath';
 
 const AttachmentUploadConfirmation = () => {
 	const {state} = useLocation();
 	const pageRoutes = routerPath();
+	const {helpCenterURL} = useAppPropertiesContext();
 
 	return (
 		<div className="uploader-confirmation-container">
@@ -50,7 +52,7 @@ const AttachmentUploadConfirmation = () => {
 
 						<a
 							className="btn btn-primary uploader-ticket-button"
-							href={`https://help.liferay.com/hc/requests/${state?.ticketId}`}
+							href={`${helpCenterURL}/hc/requests/${state?.ticketId}`}
 						>
 							{i18n.translate('return-to-ticket')}
 						</a>
