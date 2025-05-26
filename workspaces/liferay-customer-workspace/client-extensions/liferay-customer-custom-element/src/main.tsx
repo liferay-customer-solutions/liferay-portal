@@ -43,6 +43,7 @@ type Properties = {
 	articleNotifiedWhenMyActivationKeyIsAboutToExpireURL: string | null;
 	articleWhatIsMyInstanceSizingValueURL: string | null;
 	featureFlags?: string[];
+	helpCenterURL: string | null;
 	importDate?: Date | null;
 	submitSupportTicketURL: string | null;
 	theOverviewPageURL: string | null;
@@ -123,6 +124,7 @@ class CustomerPortalWebComponent extends HTMLElement {
 			featureFlags: (super.getAttribute('feature-flags') ?? '')
 				.split(',')
 				.map((featureflag) => featureflag.trim()),
+			helpCenterURL: super.getAttribute('help-center-url'),
 			importDate: super.getAttribute('import-date')
 				? new Date(super.getAttribute('import-date') as string)
 				: undefined,
