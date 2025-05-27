@@ -1,12 +1,8 @@
 {
-	"dependencies": {
-		"spark-md5": "^3.0.2"
-	},
 	"devDependencies": {
 		"@liferay/eslint-plugin": "1.6.0",
 		"@liferay/prettier-plugin": "1.1.5",
 		"@liferay/stylelint-plugin": "1.1.0",
-		"@types/spark-md5": "^3.0.5",
 		"@typescript-eslint/eslint-plugin": "^5.12.1",
 		"@typescript-eslint/parser": "^7.8.0",
 		"babel-eslint": "^10.1.0",
