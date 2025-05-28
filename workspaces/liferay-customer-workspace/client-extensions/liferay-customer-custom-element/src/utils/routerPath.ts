@@ -22,5 +22,9 @@ export default function routerPath() {
 			`${Liferay.ThemeDisplay.getPortalURL()}${siteURL}/project/#/${externalReferenceCode}`,
 		projects: () =>
 			`${Liferay.ThemeDisplay.getPortalURL()}${siteURL}/projects`,
+		releaseNotes: () =>
+			`${Liferay.ThemeDisplay.getPortalURL()}${siteURL}/release-notes`,
+		securityVulnerabilities: () =>
+			`${Liferay.ThemeDisplay.getPortalURL()}${siteURL}/security-vulnerabilities`,
 	};
 }

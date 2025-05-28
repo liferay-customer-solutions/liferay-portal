@@ -8,6 +8,17 @@
 					}
 				},
 				"pageElements": [
+					{
+						"definition": {
+							"widgetInstance": {
+								"widgetConfig": {
+									"properties": "route=home"
+								},
+								"widgetName": "[$CLIENT_EXTENSION_ENTRY_ERC:LXC:liferay-customer-custom-element$]"
+							}
+						},
+						"type": "Widget"
+					}
 				],
 				"type": "Section"
 			}

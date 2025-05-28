@@ -12,6 +12,7 @@ import {SWRConfig} from 'swr';
 
 import {AppPropertiesContext} from './contexts/AppPropertiesContext';
 import AttachmentUploader from './features/attachment-uploader';
+import Home from './features/home/Home';
 import Onboarding from './features/onboarding';
 import Project from './features/project';
 import Projects from './features/projects';
@@ -28,6 +29,7 @@ const ELEMENT_ID = 'liferay-customer-custom-element';
 
 const AppRoutes = {
 	attachmentUploader: AttachmentUploader,
+	home: Home,
 	onboarding: Onboarding,
 	project: Project,
 	projects: Projects,
