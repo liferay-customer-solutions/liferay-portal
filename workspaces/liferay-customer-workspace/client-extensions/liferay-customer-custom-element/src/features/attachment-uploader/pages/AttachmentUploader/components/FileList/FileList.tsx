@@ -18,18 +18,10 @@ interface IProps {
 	attachment: IAttachment;
 	isUploading: boolean;
 	onDelete: (attachment: IAttachment) => void;
-	uploadedFile: IPropsUploadedFile;
-}
-interface IPropsUploadedFile {
 	progress: number;
 }
 
-const FileList = ({
-	attachment,
-	isUploading,
-	onDelete,
-	uploadedFile,
-}: IProps) => {
+const FileList = ({attachment, isUploading, onDelete, progress}: IProps) => {
 	return (
 		<div className="file-list-container">
 			<div className="file-list-item-container">
@@ -40,7 +32,7 @@ const FileList = ({
 								<CircularProgress
 									height={80}
 									pathColor="#ffffff"
-									progress={uploadedFile.progress}
+									progress={progress}
 									progressColor="#0B5FFF"
 									width={80}
 								/>

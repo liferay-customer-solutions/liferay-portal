@@ -14,7 +14,6 @@ import i18n from '~/utils/I18n';
 import './AttachmentUploader.css';
 
 import {useNavigate, useParams} from 'react-router-dom';
-import {getTicketAttachmentById} from '~/services/liferay/api';
 
 import DropzoneUpload from './components/DropzoneUpload';
 import FileList from './components/FileList';
@@ -26,16 +25,41 @@ export interface IAttachment {
 }
 
 const AttachmentUploader = () => {
-	const [attachment, setAttachment] = useState<IAttachment>();
 	const [abortController, setAbortController] =
 		useState<AbortController | null>(null);
-	const [uploadedFile, setUploadedFile] = useState<{progress: number}>({
-		progress: 0,
-	});
+	const [attachment, setAttachment] = useState<IAttachment>();
+	const [gcsSessionURL, setGCSSessionURL] = useState<string>('');
+
+	const [progress, setProgress] = useState<number>(0);
 	const [showProgress, setShowProgress] = useState(false);
 
 	const navigate = useNavigate();
 	const {ticketId} = useParams();
+
+	async function cancelUpload(gcsSessionURL: string): Promise<number> {
+		try {
+			const response: Response =
+				(await Liferay.OAuth2Client.FromUserAgentApplication(
+					'liferay-customer-etc-spring-boot-oaua'
+				).fetch(`/ticket-attachments/cancel-upload`, {
+					body: JSON.stringify({
+						gcsSessionURL,
+					}),
+					method: 'POST',
+				})) as unknown as Response;
+
+			if (response.status !== 499) {
+				throw new Error(
+					`Failed to cancel upload: ${response.statusText}`
+				);
+			}
+		}
+		catch (error) {
+			console.error(error);
+		}
+
+		return 0;
+	}
 
 	async function generateFileMd5(file: File): Promise<string> {
 		const chunkSize = 2 * 1024 * 1024;
@@ -103,6 +127,9 @@ const AttachmentUploader = () => {
 					);
 				}
 
+				sessionStorage.removeItem('gcsSessionURL');
+				setGCSSessionURL('');
+
 				return true;
 			}
 			catch (error) {
@@ -114,21 +141,6 @@ const AttachmentUploader = () => {
 		[]
 	);
 
-	const fetchTicketAttachment = async (
-		id: string
-	): Promise<string | undefined> => {
-		try {
-			const response = await getTicketAttachmentById(id, 'accountKey');
-
-			return response.accountKey;
-		}
-		catch (error) {
-			console.error(error);
-
-			return undefined;
-		}
-	};
-
 	const initiateUpload = async (
 		attachment: IAttachment
 	): Promise<
@@ -139,6 +151,12 @@ const AttachmentUploader = () => {
 		  }
 		| undefined
 	> => {
+		const existingGCSSessionURL = sessionStorage.getItem('gcsSessionURL');
+
+		if (existingGCSSessionURL) {
+			setGCSSessionURL(existingGCSSessionURL);
+		}
+
 		const fileMd5 = await generateFileMd5(attachment.file);
 
 		try {
@@ -149,6 +167,7 @@ const AttachmentUploader = () => {
 					body: JSON.stringify({
 						fileName: attachment.file.name,
 						fileSize: String(attachment.file.size),
+						gcsSessionURL: existingGCSSessionURL,
 						md5Checksum: fileMd5,
 						zendeskTicketId: ticketId,
 					}),
@@ -161,17 +180,14 @@ const AttachmentUploader = () => {
 				);
 			}
 
-			const responseText = await response.text();
-			const responseJson = JSON.parse(responseText);
+			const responseJSON = await response.json();
 
-			const ticketAttachmentId = responseJson.ticketAttachmentId || '';
-			const gcsSessionURL = responseJson.gcsSessionURL || '';
+			const accountKey = responseJSON.accountKey;
+			const gcsSessionURL = responseJSON.gcsSessionURL;
+			const ticketAttachmentId = responseJSON.ticketAttachmentId;
 
-			const accountKey = await fetchTicketAttachment(ticketAttachmentId);
-
-			if (!accountKey) {
-				throw new Error('Account key not found');
-			}
+			setGCSSessionURL(gcsSessionURL);
+			sessionStorage.setItem('gcsSessionURL', gcsSessionURL);
 
 			return {
 				accountKey,
@@ -181,6 +197,8 @@ const AttachmentUploader = () => {
 		}
 		catch (error) {
 			console.error(error);
+
+			setShowProgress(false);
 
 			return undefined;
 		}
@@ -274,7 +292,8 @@ const AttachmentUploader = () => {
 							const uploadPercentage = Math.round(
 								(chunkStart / totalSize) * 100
 							);
-							setUploadedFile({progress: uploadPercentage});
+
+							setProgress(uploadPercentage);
 						}
 						else {
 							throw new Error(
@@ -380,16 +399,11 @@ const AttachmentUploader = () => {
 	const _handleUploadOnClick = async () => {
 		if (attachment) {
 			setShowProgress(true);
+			setProgress(1);
 
 			const uploadData = await initiateUpload(attachment);
 
-			if (
-				!uploadData?.accountKey ||
-				!uploadData?.gcsSessionURL ||
-				!uploadData?.ticketAttachmentId
-			) {
-				setShowProgress(false);
-
+			if (!uploadData?.gcsSessionURL || !uploadData?.ticketAttachmentId) {
 				Liferay.Util.openToast({
 					message: i18n.translate('an-unexpected-error-occurred'),
 					title: i18n.translate('error'),
@@ -413,8 +427,13 @@ const AttachmentUploader = () => {
 			setAbortController(null);
 		}
 
-		setAttachment(undefined);
 		setShowProgress(false);
+
+		cancelUpload(gcsSessionURL);
+		sessionStorage.removeItem('gcsSessionURL');
+		setAttachment(undefined);
+		setGCSSessionURL('');
+		setProgress(0);
 	};
 
 	return (
@@ -467,7 +486,7 @@ const AttachmentUploader = () => {
 												setAttachment(undefined);
 											}
 								}
-								uploadedFile={uploadedFile}
+								progress={progress}
 							/>
 						</div>
 					)}

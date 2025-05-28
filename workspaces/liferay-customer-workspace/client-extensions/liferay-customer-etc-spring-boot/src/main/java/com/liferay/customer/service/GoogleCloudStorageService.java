@@ -32,12 +32,41 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 /**
  * @author Amos Fong
  */
 @Component
 public class GoogleCloudStorageService extends BaseService {
+
+	public void cancelUpload(String origin, String gcsSessionURL)
+		throws Exception {
+
+		try {
+			WebClient.create(
+			).delete(
+			).uri(
+				gcsSessionURL
+			).accept(
+				MediaType.APPLICATION_JSON
+			).header(
+				HttpHeaders.AUTHORIZATION, "Bearer " + _getAccessToken()
+			).header(
+				HttpHeaders.ORIGIN, origin
+			).retrieve(
+			).toEntity(
+				String.class
+			).block();
+		}
+		catch (WebClientResponseException webClientResponseException) {
+			int statusCode = webClientResponseException.getRawStatusCode();
+
+			if (statusCode != 499) {
+				throw webClientResponseException;
+			}
+		}
+	}
 
 	public void deleteObject(String bucketName, String objectName)
 		throws Exception {
@@ -77,7 +106,8 @@ public class GoogleCloudStorageService extends BaseService {
 	}
 
 	public String getUploadSessionURL(
-			String origin, String bucketName, String objectName)
+			String origin, String bucketName, String objectName,
+			String fileSize)
 		throws Exception {
 
 		ResponseEntity<String> responseEntity = WebClient.create(
@@ -90,6 +120,8 @@ public class GoogleCloudStorageService extends BaseService {
 			MediaType.APPLICATION_JSON
 		).header(
 			HttpHeaders.AUTHORIZATION, "Bearer " + _getAccessToken()
+		).header(
+			HttpHeaders.CONTENT_LENGTH, fileSize
 		).header(
 			HttpHeaders.ORIGIN, origin
 		).retrieve(
