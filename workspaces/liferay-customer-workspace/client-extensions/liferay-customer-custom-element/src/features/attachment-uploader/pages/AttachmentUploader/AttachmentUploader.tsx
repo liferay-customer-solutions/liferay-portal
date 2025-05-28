@@ -217,6 +217,14 @@ const AttachmentUploader = () => {
 		return 0;
 	}
 
+	function isMd5HashEqual(localMd5: string, gcpMd5Hash: string): boolean {
+		const localBase24Md5 = new Uint8Array(
+			localMd5.match(/.{1,2}/g)!.map((byte) => parseInt(byte, 16))
+		);
+
+		return btoa(String.fromCharCode(...localBase24Md5)) === gcpMd5Hash;
+	}
+
 	const uploadFileToGcs = useCallback(
 		async (
 			uploadAccountKeyParam: string,
