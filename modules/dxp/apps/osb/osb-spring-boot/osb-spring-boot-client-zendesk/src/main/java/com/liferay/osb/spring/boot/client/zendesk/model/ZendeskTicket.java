@@ -97,6 +97,14 @@ public class ZendeskTicket {
 		return false;
 	}
 
+	public void setCustomFields(Map<Long, String> customFields) {
+		_customFields = customFields;
+	}
+
+	public void setTags(Set<String> tags) {
+		_tags = tags;
+	}
+
 	public JSONObject toJSONObject() {
 		return new JSONObject(
 		).put(
@@ -110,11 +118,11 @@ public class ZendeskTicket {
 		);
 	}
 
-	private final Map<Long, String> _customFields;
+	private Map<Long, String> _customFields;
 	private final long _requesterId;
 	private final String _status;
 	private final String _subject;
-	private final Set<String> _tags;
+	private Set<String> _tags;
 	private final long _zendeskOrganizationId;
 	private final long _zendeskTicketId;
 	private final String _zendeskURL;

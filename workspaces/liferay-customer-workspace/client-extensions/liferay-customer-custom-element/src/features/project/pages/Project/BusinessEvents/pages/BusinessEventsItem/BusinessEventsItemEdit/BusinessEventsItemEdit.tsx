@@ -98,9 +98,11 @@ const BusinessEventsItemEditPage: React.FC<IProps> = ({
 
 	const {isSaasOnly} = useIsSaasOnly(subscriptionGroups);
 
-	const {loading: loadingTickets, tickets} = useAccountsTickets(
-		project?.accountKey || ''
-	);
+	const {loading: loadingTickets, tickets} = useAccountsTickets({
+		associatedTicketIds: originalBusinessEvent.associatedTickets,
+		externalReferenceCode: project?.accountKey || '',
+		includeOpenTickets: true,
+	});
 
 	const {loading: loadingUTCTimeZonesList, utcTimeZonesList} =
 		useGetUTCTimeZonesList();

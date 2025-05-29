@@ -295,6 +295,38 @@ public class ZendeskService {
 		).block();
 	}
 
+	public void updateZendeskTickets(List<ZendeskTicket> zendeskTickets)
+		throws Exception {
+
+		int batchSize = 100;
+		int batchTotal = zendeskTickets.size();
+
+		for (int i = 0; i < batchTotal; i += batchSize) {
+			int batchEnd = Math.min(i + batchSize, batchTotal);
+
+			JSONArray batchJSONArray = new JSONArray();
+
+			for (int j = i; j < batchEnd; j++) {
+				ZendeskTicket zendeskTicket = zendeskTickets.get(j);
+
+				batchJSONArray.put(
+					new JSONObject(
+					).put(
+						"custom_fields",
+						_transformToCustomFieldsJSONArray(
+							zendeskTicket.getCustomFields())
+					).put(
+						"id", zendeskTicket.getZendeskTicketId()
+					).put(
+						"tags",
+						_transformToTagsJSONArray(zendeskTicket.getTags())
+					));
+			}
+
+			_updateZendeskTicketsBatch(batchJSONArray);
+		}
+	}
+
 	protected SearchHits<ZendeskTicket> toSearchHits(JSONObject jsonObject) {
 		SearchHits<ZendeskTicket> searchHits = new SearchHits<>();
 
@@ -393,6 +425,32 @@ public class ZendeskService {
 		}
 
 		return jsonArray;
+	}
+
+	private void _updateZendeskTicketsBatch(JSONArray jsonArray)
+		throws Exception {
+
+		WebClient.create(
+			_zendeskURL
+		).put(
+		).uri(
+			"/api/v2/tickets/update_many.json"
+		).accept(
+			MediaType.APPLICATION_JSON
+		).contentType(
+			MediaType.APPLICATION_JSON
+		).header(
+			HttpHeaders.AUTHORIZATION, _zendeskAuthorization
+		).body(
+			BodyInserters.fromValue(
+				new JSONObject(
+				).put(
+					"tickets", jsonArray
+				).toString())
+		).retrieve(
+		).bodyToMono(
+			String.class
+		).block();
 	}
 
 	@Value("${spring.boot.web.client.max.in.memory.size}")

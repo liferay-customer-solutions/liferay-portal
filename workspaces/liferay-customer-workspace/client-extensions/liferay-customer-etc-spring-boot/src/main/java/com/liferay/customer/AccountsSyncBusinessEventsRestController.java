@@ -318,6 +318,8 @@ public class AccountsSyncBusinessEventsRestController
 
 		int page = 1;
 
+		List<ZendeskTicket> zendeskTickets = new ArrayList<>();
+
 		while (page > 0) {
 			zendeskTicketQuery.setPage(page);
 
@@ -355,14 +357,16 @@ public class AccountsSyncBusinessEventsRestController
 					}
 				}
 
-				_zendeskService.updateZendeskTicket(
-					zendeskTicket.getZendeskTicketId(), zendeskOrganizationId,
-					zendeskTicket.getRequesterId(), zendeskTicket.getStatus(),
-					customFields, tags);
+				zendeskTicket.setCustomFields(customFields);
+				zendeskTicket.setTags(tags);
+
+				zendeskTickets.add(zendeskTicket);
 			}
 
 			page = searchHits.getNextPage();
 		}
+
+		_zendeskService.updateZendeskTickets(zendeskTickets);
 	}
 
 	private void _updateZendeskTickets(
@@ -377,6 +381,8 @@ public class AccountsSyncBusinessEventsRestController
 		zendeskTicketQuery.addCriterion("status<solved");
 
 		int page = 1;
+
+		List<ZendeskTicket> zendeskTickets = new ArrayList<>();
 
 		while (page > 0) {
 			zendeskTicketQuery.setPage(page);
@@ -408,14 +414,15 @@ public class AccountsSyncBusinessEventsRestController
 
 				customFields.put(_zendeskHeatTagTicketFieldId, highestHeatTag);
 
-				_zendeskService.updateZendeskTicket(
-					zendeskTicket.getZendeskTicketId(), zendeskOrganizationId,
-					zendeskTicket.getRequesterId(), zendeskTicket.getStatus(),
-					customFields, zendeskTicket.getTags());
+				zendeskTicket.setCustomFields(customFields);
+
+				zendeskTickets.add(zendeskTicket);
 			}
 
 			page = searchHits.getNextPage();
 		}
+
+		_zendeskService.updateZendeskTickets(zendeskTickets);
 	}
 
 	private static final Log _log = LogFactory.getLog(

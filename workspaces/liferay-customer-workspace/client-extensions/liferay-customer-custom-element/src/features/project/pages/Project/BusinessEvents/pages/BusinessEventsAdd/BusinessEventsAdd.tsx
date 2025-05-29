@@ -90,9 +90,10 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 
 	const {isSaasOnly} = useIsSaasOnly(subscriptionGroups);
 
-	const {loading: loadingTickets, tickets} = useAccountsTickets(
-		project?.accountKey || ''
-	);
+	const {loading: loadingTickets, tickets} = useAccountsTickets({
+		externalReferenceCode: project?.accountKey || '',
+		includeOpenTickets: true,
+	});
 
 	const {loading: loadingUTCTimeZonesList, utcTimeZonesList} =
 		useGetUTCTimeZonesList();
@@ -362,15 +363,9 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 
 	useEffect(() => {
 		setTicketOptions([
-			...(tickets
-				?.filter((ticket) => {
-					return (
-						ticket.status !== 'closed' && ticket.status !== 'solved'
-					);
-				})
-				.map((ticket) => {
-					return {...ticket, selected: false};
-				}) || []),
+			...(tickets?.map((ticket) => {
+				return {...ticket, selected: false};
+			}) || []),
 		]);
 	}, [tickets]);
 

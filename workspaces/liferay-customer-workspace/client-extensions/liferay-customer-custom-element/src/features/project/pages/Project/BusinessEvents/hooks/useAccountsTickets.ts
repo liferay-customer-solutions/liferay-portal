@@ -7,12 +7,17 @@ import {useCallback, useEffect, useState} from 'react';
 import {Liferay} from '~/services/liferay';
 import {ITicket} from '~/utils/types';
 
-const useAccountsTickets = (externalReferenceCode?: string, skip?: boolean) => {
+const useAccountsTickets = (props: {
+	associatedTicketIds?: string;
+	externalReferenceCode?: string;
+	includeOpenTickets?: boolean;
+	skip?: boolean;
+}) => {
 	const [loading, setLoading] = useState(true);
 	const [tickets, setTickets] = useState<ITicket[] | undefined>(undefined);
 
 	const fetchTickets = useCallback(async () => {
-		if (skip || !externalReferenceCode) {
+		if (props.skip || !props.externalReferenceCode) {
 			return;
 		}
 
@@ -21,7 +26,9 @@ const useAccountsTickets = (externalReferenceCode?: string, skip?: boolean) => {
 				await Liferay.OAuth2Client.FromUserAgentApplication(
 					'liferay-customer-etc-spring-boot-oaua'
 				)
-					.fetch(`/accounts/${externalReferenceCode}/tickets`)
+					.fetch(
+						`/accounts/${props.externalReferenceCode}/tickets?associatedTicketIds=${props.associatedTicketIds ? JSON.parse(props.associatedTicketIds)?.join(',') : ''}&includeOpenTickets=${props.includeOpenTickets || false}`
+					)
 					.then((response: {json: () => any}) => response.json());
 
 			setTickets(response);
@@ -35,7 +42,12 @@ const useAccountsTickets = (externalReferenceCode?: string, skip?: boolean) => {
 
 			setLoading(false);
 		}
-	}, [externalReferenceCode, skip]);
+	}, [
+		props.associatedTicketIds,
+		props.externalReferenceCode,
+		props.includeOpenTickets,
+		props.skip,
+	]);
 
 	useEffect(() => {
 		fetchTickets();

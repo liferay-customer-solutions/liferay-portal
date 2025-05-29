@@ -40,7 +40,11 @@ const BusinessEventsItemDetails = () => {
 	const [modalType, setModalType] = useState('');
 	const {hasAllEventsPermissions} = useHasAllEventsPermissions();
 
-	const {loading: loadingTickets, tickets} = useAccountsTickets(accountKey);
+	const {loading: loadingTickets, tickets} = useAccountsTickets({
+		associatedTicketIds: businessEvent?.associatedTickets,
+		externalReferenceCode: accountKey,
+		skip: !businessEvent?.associatedTickets,
+	});
 
 	const location = useLocation();
 	const navigate = useNavigate();
@@ -100,15 +104,7 @@ const BusinessEventsItemDetails = () => {
 
 	useEffect(() => {
 		if (businessEvent && tickets) {
-			const associatedTickets = JSON.parse(
-				businessEvent.associatedTickets!
-			);
-
-			setTicketOptions([
-				...(tickets?.filter((ticket) =>
-					associatedTickets.includes(ticket.ticketId)
-				) || []),
-			]);
+			setTicketOptions([...tickets]);
 		}
 
 		const params = new URLSearchParams(location.search);

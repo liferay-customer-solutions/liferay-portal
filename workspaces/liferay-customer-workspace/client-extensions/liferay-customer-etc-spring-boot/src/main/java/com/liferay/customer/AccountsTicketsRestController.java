@@ -15,14 +15,17 @@ import com.liferay.osb.spring.boot.client.zendesk.search.SearchHits;
 import com.liferay.osb.spring.boot.client.zendesk.search.ZendeskTicketQuery;
 import com.liferay.osb.spring.boot.client.zendesk.service.ZendeskService;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +35,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -46,34 +50,39 @@ public class AccountsTicketsRestController extends BaseRestController {
 	)
 	public ResponseEntity<String> getZendeskTickets(
 			@AuthenticationPrincipal Jwt jwt,
-			@PathVariable("externalReferenceCode") String externalReferenceCode)
+			@PathVariable("externalReferenceCode") String externalReferenceCode,
+			@RequestParam(defaultValue = "") long[] associatedTicketIds,
+			@RequestParam(defaultValue = "false") boolean includeOpenTickets)
 		throws Exception {
 
 		try {
 			_businessEventPermission.check(
 				jwt, externalReferenceCode, ActionKeys.VIEW);
 
-			ZendeskTicketQuery zendeskTicketQuery = new ZendeskTicketQuery();
-
-			zendeskTicketQuery.addCriterion(
-				"organization:" +
-					_fetchZendeskOrganizationId(externalReferenceCode));
-
-			int page = 1;
-
 			JSONArray jsonArray = new JSONArray();
 
-			while (page > 0) {
-				zendeskTicketQuery.setPage(page);
+			long zendeskOrganizationId = _fetchZendeskOrganizationId(
+				externalReferenceCode);
 
-				SearchHits<ZendeskTicket> searchHits = _zendeskService.search(
-					zendeskTicketQuery);
+			if (includeOpenTickets) {
+				jsonArray.putAll(
+					_getTicketsJSONArray(null, zendeskOrganizationId));
+			}
 
-				for (ZendeskTicket zendeskTicket : searchHits.getResults()) {
-					jsonArray.put(zendeskTicket.toJSONObject());
+			if (ArrayUtil.isNotEmpty(associatedTicketIds)) {
+				List<Long> openTicketIds = _getTicketIds(jsonArray);
+
+				long[] filteredAssociatedTicketIds = ArrayUtil.filter(
+					associatedTicketIds,
+					associatedTicketId -> !openTicketIds.contains(
+						associatedTicketId));
+
+				if (filteredAssociatedTicketIds.length > 0) {
+					jsonArray.putAll(
+						_getTicketsJSONArray(
+							filteredAssociatedTicketIds,
+							zendeskOrganizationId));
 				}
-
-				page = searchHits.getNextPage();
 			}
 
 			return new ResponseEntity<>(jsonArray.toString(), HttpStatus.OK);
@@ -105,6 +114,57 @@ public class AccountsTicketsRestController extends BaseRestController {
 		}
 
 		return 0;
+	}
+
+	private List<Long> _getTicketIds(JSONArray ticketsJSONArray) {
+		List<Long> ticketIds = new ArrayList<>();
+
+		for (int i = 0; i < ticketsJSONArray.length(); i++) {
+			JSONObject ticketJSONObject = ticketsJSONArray.getJSONObject(i);
+
+			ticketIds.add(ticketJSONObject.getLong("ticketId"));
+		}
+
+		return ticketIds;
+	}
+
+	private JSONArray _getTicketsJSONArray(
+			long[] associatedTicketIds, long zendeskOrganizationId)
+		throws Exception {
+
+		ZendeskTicketQuery zendeskTicketQuery = new ZendeskTicketQuery();
+
+		zendeskTicketQuery.addCriterion(
+			"organization:" + zendeskOrganizationId);
+
+		if (associatedTicketIds != null) {
+			for (long associatedTicketId : associatedTicketIds) {
+				zendeskTicketQuery.addCriterion(
+					"ticket_id:" + associatedTicketId);
+			}
+		}
+		else {
+			zendeskTicketQuery.addCriterion("status<solved");
+		}
+
+		int page = 1;
+
+		JSONArray jsonArray = new JSONArray();
+
+		while (page > 0) {
+			zendeskTicketQuery.setPage(page);
+
+			SearchHits<ZendeskTicket> searchHits = _zendeskService.search(
+				zendeskTicketQuery);
+
+			for (ZendeskTicket zendeskTicket : searchHits.getResults()) {
+				jsonArray.put(zendeskTicket.toJSONObject());
+			}
+
+			page = searchHits.getNextPage();
+		}
+
+		return jsonArray;
 	}
 
 	private static final Log _log = LogFactory.getLog(
