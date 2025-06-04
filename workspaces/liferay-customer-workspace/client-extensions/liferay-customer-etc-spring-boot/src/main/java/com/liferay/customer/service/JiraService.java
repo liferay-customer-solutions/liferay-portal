@@ -151,7 +151,7 @@ public class JiraService extends BaseService {
 		sb.append(" = 'Ready for Publishing'");
 
 		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
-			"yyyy-MM-dd 00:00");
+			"yyyy-MM-dd 23:59");
 
 		if (hasEarlyPublishAccess) {
 			sb.append(" AND ");
