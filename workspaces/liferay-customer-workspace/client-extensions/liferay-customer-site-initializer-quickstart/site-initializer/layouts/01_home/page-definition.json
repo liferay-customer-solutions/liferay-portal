@@ -27,7 +27,8 @@
 								}
 							},
 							"indexed": true,
-							"layout": {}
+							"layout": {
+							}
 						},
 						"pageElements": [
 							{
@@ -37,8 +38,9 @@
 										"siteKey": "Customer Portal"
 									},
 									"fragmentConfig": {
-										"titleTile": "Liferay Learn",
-										"descriptionTile": "Find documentation, tutorials, and guides."									},
+										"descriptionTile": "Find documentation, tutorials, and guides.",
+										"titleTile": "Liferay Learn"
+									},
 									"fragmentFields": [
 										{
 											"id": "icon-img",
@@ -55,7 +57,8 @@
 														}
 													}
 												},
-												"fragmentLink": {}
+												"fragmentLink": {
+												}
 											}
 										}
 									],
@@ -96,7 +99,8 @@
 								}
 							},
 							"indexed": true,
-							"layout": {}
+							"layout": {
+							}
 						},
 						"pageElements": [
 							{
@@ -106,8 +110,8 @@
 										"siteKey": "Customer Portal"
 									},
 									"fragmentConfig": {
-										"titleTile": "Release Notes",
-										"descriptionTile": "Review version highlights and technical details."
+										"descriptionTile": "Review version highlights and technical details.",
+										"titleTile": "Release Notes"
 									},
 									"fragmentFields": [
 										{
@@ -125,7 +129,8 @@
 														}
 													}
 												},
-												"fragmentLink": {}
+												"fragmentLink": {
+												}
 											}
 										}
 									],

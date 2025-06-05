@@ -35,7 +35,8 @@
 								}
 							},
 							"indexed": true,
-							"layout": {}
+							"layout": {
+							}
 						},
 						"pageElements": [
 							{
@@ -45,8 +46,8 @@
 										"siteKey": "Customer Portal"
 									},
 									"fragmentConfig": {
-										"titleTile": "Liferay Learn",
-										"descriptionTile": "Find documentation, tutorials, and guides."
+										"descriptionTile": "Find documentation, tutorials, and guides.",
+										"titleTile": "Liferay Learn"
 									},
 									"fragmentFields": [
 										{
@@ -64,7 +65,8 @@
 														}
 													}
 												},
-												"fragmentLink": {}
+												"fragmentLink": {
+												}
 											}
 										}
 									],
@@ -105,7 +107,8 @@
 								}
 							},
 							"indexed": true,
-							"layout": {}
+							"layout": {
+							}
 						},
 						"pageElements": [
 							{
@@ -115,8 +118,8 @@
 										"siteKey": "Customer Portal"
 									},
 									"fragmentConfig": {
-										"titleTile": "Security Reports",
-										"descriptionTile": "Latest vulnerability alerts and incident updates."
+										"descriptionTile": "Latest vulnerability alerts and incident updates.",
+										"titleTile": "Security Reports"
 									},
 									"fragmentFields": [
 										{
@@ -134,7 +137,8 @@
 														}
 													}
 												},
-												"fragmentLink": {}
+												"fragmentLink": {
+												}
 											}
 										}
 									],
@@ -175,7 +179,8 @@
 								}
 							},
 							"indexed": true,
-							"layout": {}
+							"layout": {
+							}
 						},
 						"pageElements": [
 							{
@@ -185,8 +190,8 @@
 										"siteKey": "Customer Portal"
 									},
 									"fragmentConfig": {
-										"titleTile": "Release Notes",
-										"descriptionTile": "Review version highlights and technical details."
+										"descriptionTile": "Review version highlights and technical details.",
+										"titleTile": "Release Notes"
 									},
 									"fragmentFields": [
 										{
@@ -204,7 +209,8 @@
 														}
 													}
 												},
-												"fragmentLink": {}
+												"fragmentLink": {
+												}
 											}
 										}
 									],
@@ -229,7 +235,8 @@
 								}
 							},
 							"indexed": true,
-							"layout": {}
+							"layout": {
+							}
 						},
 						"pageElements": [
 							{
@@ -239,8 +246,8 @@
 										"siteKey": "Customer Portal"
 									},
 									"fragmentConfig": {
-										"titleTile": "My Tickets",
-										"descriptionTile": "Track open and closed support requests."
+										"descriptionTile": "Track open and closed support requests.",
+										"titleTile": "My Tickets"
 									},
 									"fragmentFields": [
 										{
@@ -258,7 +265,8 @@
 														}
 													}
 												},
-												"fragmentLink": {}
+												"fragmentLink": {
+												}
 											}
 										}
 									],
@@ -283,7 +291,8 @@
 								}
 							},
 							"indexed": true,
-							"layout": {}
+							"layout": {
+							}
 						},
 						"pageElements": [
 							{
@@ -293,8 +302,8 @@
 										"siteKey": "Customer Portal"
 									},
 									"fragmentConfig": {
-										"titleTile": "Submit a Ticket",
-										"descriptionTile": "Need help? Log an issue or ask a question."
+										"descriptionTile": "Need help? Log an issue or ask a question.",
+										"titleTile": "Submit a Ticket"
 									},
 									"fragmentFields": [
 										{
@@ -312,7 +321,8 @@
 														}
 													}
 												},
-												"fragmentLink": {}
+												"fragmentLink": {
+												}
 											}
 										}
 									],
