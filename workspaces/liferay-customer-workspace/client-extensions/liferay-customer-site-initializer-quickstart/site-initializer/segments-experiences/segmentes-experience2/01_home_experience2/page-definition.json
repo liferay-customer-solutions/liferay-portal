@@ -38,7 +38,8 @@
 									},
 									"fragmentConfig": {
 										"titleTile": "Liferay Learn",
-										"descriptionTile": "Find documentation, tutorials, and guides."									},
+										"descriptionTile": "Find documentation, tutorials, and guides."
+									},
 									"fragmentFields": [
 										{
 											"id": "icon-img",
@@ -61,7 +62,77 @@
 									],
 									"fragmentStyle": {
 										"maxHeight": "200px",
-										"width": "620px"
+										"width": "400px"
+									},
+									"indexed": true
+								},
+								"type": "Fragment"
+							}
+						],
+						"type": "Section"
+					},
+					{
+						"definition": {
+							"fragmentLink": {
+								"href": {
+									"mapping": {
+										"itemReference": {
+											"className": "com.liferay.portal.kernel.model.Layout",
+											"fields": [
+												{
+													"fieldName": "friendlyURL",
+													"fieldValue": "/security-vulnerabilities"
+												},
+												{
+													"fieldName": "privatePage",
+													"fieldValue": "false"
+												},
+												{
+													"fieldName": "siteKey",
+													"fieldValue": "[$GROUP_KEY$]"
+												}
+											]
+										}
+									}
+								}
+							},
+							"indexed": true,
+							"layout": {}
+						},
+						"pageElements": [
+							{
+								"definition": {
+									"fragment": {
+										"key": "tile-card",
+										"siteKey": "Customer Portal"
+									},
+									"fragmentConfig": {
+										"titleTile": "Security Reports",
+										"descriptionTile": "Latest vulnerability alerts and incident updates."
+									},
+									"fragmentFields": [
+										{
+											"id": "icon-img",
+											"value": {
+												"fragmentImage": {
+													"description": {
+														"value_i18n": {
+															"en_US": "Security Reports"
+														}
+													},
+													"url": {
+														"value_i18n": {
+															"en_US": "[$DOCUMENT_URL:/site-initializer/documents/group/assets/security_reports.svg$]"
+														}
+													}
+												},
+												"fragmentLink": {}
+											}
+										}
+									],
+									"fragmentStyle": {
+										"maxHeight": "200px",
+										"width": "400px"
 									},
 									"indexed": true
 								},
@@ -88,7 +159,7 @@
 												},
 												{
 													"fieldName": "siteKey",
-													"fieldValue": "Customer Portal"
+													"fieldValue": "[$GROUP_KEY$]"
 												}
 											]
 										}
@@ -131,7 +202,7 @@
 									],
 									"fragmentStyle": {
 										"maxHeight": "200px",
-										"width": "620px"
+										"width": "400px"
 									},
 									"indexed": true
 								},

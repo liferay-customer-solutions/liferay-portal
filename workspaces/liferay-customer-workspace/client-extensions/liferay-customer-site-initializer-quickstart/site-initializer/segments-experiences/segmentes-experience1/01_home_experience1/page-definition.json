@@ -1,0 +1,344 @@
+{
+	"pageElement": {
+		"pageElements": [
+			{
+				"definition": {
+					"fragmentLink": {
+						"href": {
+							"value_i18n": {
+								"en_US": ""
+							}
+						},
+						"target": "Self"
+					},
+					"fragmentStyle": {
+						"marginBottom": "40px",
+						"marginLeft": "56px",
+						"marginRight": "56px",
+						"marginTop": "64px"
+					},
+					"indexed": true,
+					"layout": {
+						"align": "Center",
+						"contentDisplay": "FlexRow",
+						"justify": "SpaceBetween"
+					}
+				},
+				"pageElements": [
+					{
+						"definition": {
+							"fragmentLink": {
+								"href": {
+									"value_i18n": {
+										"en_US": "https://learn.liferay.com/"
+									}
+								}
+							},
+							"indexed": true,
+							"layout": {}
+						},
+						"pageElements": [
+							{
+								"definition": {
+									"fragment": {
+										"key": "tile-card",
+										"siteKey": "Customer Portal"
+									},
+									"fragmentConfig": {
+										"titleTile": "Liferay Learn",
+										"descriptionTile": "Find documentation, tutorials, and guides."
+									},
+									"fragmentFields": [
+										{
+											"id": "icon-img",
+											"value": {
+												"fragmentImage": {
+													"description": {
+														"value_i18n": {
+															"en_US": "Liferay Learn"
+														}
+													},
+													"url": {
+														"value_i18n": {
+															"en_US": "[$DOCUMENT_URL:/site-initializer/documents/group/assets/liferay_learn.svg$]"
+														}
+													}
+												},
+												"fragmentLink": {}
+											}
+										}
+									],
+									"fragmentStyle": {
+										"maxHeight": "200px",
+										"width": "224px"
+									},
+									"indexed": true
+								},
+								"type": "Fragment"
+							}
+						],
+						"type": "Section"
+					},
+					{
+						"definition": {
+							"fragmentLink": {
+								"href": {
+									"mapping": {
+										"itemReference": {
+											"className": "com.liferay.portal.kernel.model.Layout",
+											"fields": [
+												{
+													"fieldName": "friendlyURL",
+													"fieldValue": "/security-vulnerabilities"
+												},
+												{
+													"fieldName": "privatePage",
+													"fieldValue": "false"
+												},
+												{
+													"fieldName": "siteKey",
+													"fieldValue": "[$GROUP_KEY$]"
+												}
+											]
+										}
+									}
+								}
+							},
+							"indexed": true,
+							"layout": {}
+						},
+						"pageElements": [
+							{
+								"definition": {
+									"fragment": {
+										"key": "tile-card",
+										"siteKey": "Customer Portal"
+									},
+									"fragmentConfig": {
+										"titleTile": "Security Reports",
+										"descriptionTile": "Latest vulnerability alerts and incident updates."
+									},
+									"fragmentFields": [
+										{
+											"id": "icon-img",
+											"value": {
+												"fragmentImage": {
+													"description": {
+														"value_i18n": {
+															"en_US": "Security Reports"
+														}
+													},
+													"url": {
+														"value_i18n": {
+															"en_US": "[$DOCUMENT_URL:/site-initializer/documents/group/assets/security_reports.svg$]"
+														}
+													}
+												},
+												"fragmentLink": {}
+											}
+										}
+									],
+									"fragmentStyle": {
+										"maxHeight": "200px",
+										"width": "224px"
+									},
+									"indexed": true
+								},
+								"type": "Fragment"
+							}
+						],
+						"type": "Section"
+					},
+					{
+						"definition": {
+							"fragmentLink": {
+								"href": {
+									"mapping": {
+										"itemReference": {
+											"className": "com.liferay.portal.kernel.model.Layout",
+											"fields": [
+												{
+													"fieldName": "friendlyURL",
+													"fieldValue": "/release-notes"
+												},
+												{
+													"fieldName": "privatePage",
+													"fieldValue": "false"
+												},
+												{
+													"fieldName": "siteKey",
+													"fieldValue": "[$GROUP_KEY$]"
+												}
+											]
+										}
+									}
+								}
+							},
+							"indexed": true,
+							"layout": {}
+						},
+						"pageElements": [
+							{
+								"definition": {
+									"fragment": {
+										"key": "tile-card",
+										"siteKey": "Customer Portal"
+									},
+									"fragmentConfig": {
+										"titleTile": "Release Notes",
+										"descriptionTile": "Review version highlights and technical details."
+									},
+									"fragmentFields": [
+										{
+											"id": "icon-img",
+											"value": {
+												"fragmentImage": {
+													"description": {
+														"value_i18n": {
+															"en_US": "Release Notes"
+														}
+													},
+													"url": {
+														"value_i18n": {
+															"en_US": "[$DOCUMENT_URL:/site-initializer/documents/group/assets/release_notes.svg$]"
+														}
+													}
+												},
+												"fragmentLink": {}
+											}
+										}
+									],
+									"fragmentStyle": {
+										"maxHeight": "200px",
+										"width": "224px"
+									},
+									"indexed": true
+								},
+								"type": "Fragment"
+							}
+						],
+						"type": "Section"
+					},
+					{
+						"definition": {
+							"fragmentLink": {
+								"href": {
+									"value_i18n": {
+										"en_US": ""
+									}
+								}
+							},
+							"indexed": true,
+							"layout": {}
+						},
+						"pageElements": [
+							{
+								"definition": {
+									"fragment": {
+										"key": "tile-card",
+										"siteKey": "Customer Portal"
+									},
+									"fragmentConfig": {
+										"titleTile": "My Tickets",
+										"descriptionTile": "Track open and closed support requests."
+									},
+									"fragmentFields": [
+										{
+											"id": "icon-img",
+											"value": {
+												"fragmentImage": {
+													"description": {
+														"value_i18n": {
+															"en_US": "My Tickets"
+														}
+													},
+													"url": {
+														"value_i18n": {
+															"en_US": "[$DOCUMENT_URL:/site-initializer/documents/group/assets/my_tickets.svg$]"
+														}
+													}
+												},
+												"fragmentLink": {}
+											}
+										}
+									],
+									"fragmentStyle": {
+										"maxHeight": "200px",
+										"width": "224px"
+									},
+									"indexed": true
+								},
+								"type": "Fragment"
+							}
+						],
+						"type": "Section"
+					},
+					{
+						"definition": {
+							"fragmentLink": {
+								"href": {
+									"value_i18n": {
+										"en_US": ""
+									}
+								}
+							},
+							"indexed": true,
+							"layout": {}
+						},
+						"pageElements": [
+							{
+								"definition": {
+									"fragment": {
+										"key": "tile-card",
+										"siteKey": "Customer Portal"
+									},
+									"fragmentConfig": {
+										"titleTile": "Submit a Ticket",
+										"descriptionTile": "Need help? Log an issue or ask a question."
+									},
+									"fragmentFields": [
+										{
+											"id": "icon-img",
+											"value": {
+												"fragmentImage": {
+													"description": {
+														"value_i18n": {
+															"en_US": "Submit a ticket"
+														}
+													},
+													"url": {
+														"value_i18n": {
+															"en_US": "[$DOCUMENT_URL:/site-initializer/documents/group/assets/submit_a_ticket.svg$]"
+														}
+													}
+												},
+												"fragmentLink": {}
+											}
+										}
+									],
+									"fragmentStyle": {
+										"maxHeight": "200px",
+										"width": "224px"
+									},
+									"indexed": true
+								},
+								"type": "Fragment"
+							}
+						],
+						"type": "Section"
+					}
+				],
+				"type": "Section"
+			}
+		],
+		"type": "Root"
+	},
+	"settings": {
+		"colorSchemeName": "01",
+		"masterPage": {
+			"key": "home"
+		},
+		"themeName": "Dialect"
+	},
+	"version": 1.1
+}
