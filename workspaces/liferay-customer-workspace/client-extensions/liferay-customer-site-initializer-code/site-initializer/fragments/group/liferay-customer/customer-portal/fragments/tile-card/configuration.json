@@ -1,0 +1,30 @@
+{
+	"fieldSets": [
+		{
+			"fields": [
+				{
+					"dataType": "string",
+					"defaultValue": "Title here",
+					"label": "Title Tile",
+					"localizable": true,
+					"name": "titleTile",
+					"type": "text",
+					"typeOptions": {
+						"placeholder": "Placeholder"
+					}
+				},
+				{
+					"dataType": "string",
+					"defaultValue": "Description here",
+					"label": "Description Tile",
+					"localizable": true,
+					"name": "descriptionTile",
+					"type": "text",
+					"typeOptions": {
+						"placeholder": "Placeholder"
+					}
+				}
+			]
+		}
+	]
+}
