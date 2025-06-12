@@ -47,7 +47,8 @@ public class JiraRestController extends BaseRestController {
 				throw new PrincipalException();
 			}
 
-			_jiraService.scheduledCacheEviction();
+			_jiraService.scheduledAffectedVersionsCacheEviction();
+			_jiraService.scheduledIssuesCacheEviction();
 
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
