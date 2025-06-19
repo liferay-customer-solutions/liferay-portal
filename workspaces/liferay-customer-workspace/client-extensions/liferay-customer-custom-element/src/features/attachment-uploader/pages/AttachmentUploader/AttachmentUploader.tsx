@@ -20,6 +20,8 @@ import useTicketAttachmentsDelete from '../../hooks/useTicketAttachmentsDelete';
 import useTicketAttachmentsInitiateUpload from '../../hooks/useTicketAttachmentsInitiateUpload';
 import DropzoneUpload from './components/DropzoneUpload';
 import FileList from './components/FileList';
+import {PostCommentError, ServerConnectionError} from '../../components';
+import useTicketAttachmentsCompleteUpload from '../../hooks/useTicketAttachmentsCompleteUpload';
 
 export function isMd5HashEqual(localMd5: string, gcpMd5Hash: string): boolean {
 	const localBase24Md5 = new Uint8Array(
@@ -33,6 +35,9 @@ const AttachmentUploader = () => {
 	const [comment, setComment] = useState<string>('');
 	const [file, setFile] = useState<File>();
 	const [hasPersonalData, setHasPersonalData] = useState<boolean>(false);
+	const [activeErrorComponent, setActiveErrorComponent] = useState<
+		string | null
+	>(null);
 
 	const navigate = useNavigate();
 	const {ticketId} = useParams();
@@ -61,9 +66,15 @@ const AttachmentUploader = () => {
 		uploadFile,
 	} = useGCSUploadFile();
 
+	const {
+		error: ticketAttachmentsCompleteUploadError,
+		loading: ticketAttachmentsCompleteUploadLoading,
+	} = useTicketAttachmentsCompleteUpload();
+
 	const isLoading =
 		gcsUploadFileLoading ||
 		generateMd5Loading ||
+		ticketAttachmentsCompleteUploadLoading ||
 		ticketAttachmentInitiateUploadLoading;
 
 	const _handleCloseOnClick = () => {
@@ -140,6 +151,12 @@ const AttachmentUploader = () => {
 			return;
 		}
 
+		if (ticketAttachmentsCompleteUploadError) {
+			setActiveErrorComponent(
+				ticketAttachmentsCompleteUploadError.message
+			);
+		}
+
 		setFile(undefined);
 		setComment('');
 		setHasPersonalData(false);
@@ -151,9 +168,11 @@ const AttachmentUploader = () => {
 		generateMd5Error,
 		initiateUpload,
 		navigate,
+		setActiveErrorComponent,
 		setComment,
 		setFile,
 		setHasPersonalData,
+		ticketAttachmentsCompleteUploadError,
 		ticketAttachmentInitiateUploadError,
 		ticketId,
 		uploadFile,
@@ -196,7 +215,20 @@ const AttachmentUploader = () => {
 		setFile(undefined);
 	};
 
-	return (
+	const renderError = () => {
+		switch (activeErrorComponent) {
+			case 'COMMENT_POST_FAILED_RETRYING':
+				return <PostCommentError />;
+			case 'FILE_SERVER_UNAVAILABLE':
+				return <ServerConnectionError />;
+			default:
+				return;
+		}
+	};
+
+	return activeErrorComponent ? (
+		renderError()
+	) : (
 		<div className="attachment-container mt-4">
 			<div className="attachment-uploader">
 				<div className="d-flex text-neutral-10">

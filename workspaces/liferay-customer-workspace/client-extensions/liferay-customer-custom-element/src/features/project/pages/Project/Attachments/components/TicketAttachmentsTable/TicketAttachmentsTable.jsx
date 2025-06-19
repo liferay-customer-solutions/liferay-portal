@@ -22,57 +22,65 @@ import getAttachmentFormattedDateTime from './utils/getAttachmentFormattedDateTi
 import {getColumns} from './utils/getColumns';
 
 import './TicketAttachmentsTable.css';
+import {
+	FileDoNotExistError,
+	ServerConnectionError,
+} from '~/features/attachment-uploader/components';
 
 const TicketAttachmentsTable = ({
 	koroneikiAccount,
 	loading: koroneikiAccountLoading,
 }) => {
-	const {
-		data: myUserAccountData,
-		loading,
-	} = useMyUserAccountByAccountExternalReferenceCode(
-		koroneikiAccount?.accountKey,
-		koroneikiAccountLoading
-	);
+	const {data: myUserAccountData, loading} =
+		useMyUserAccountByAccountExternalReferenceCode(
+			koroneikiAccount?.accountKey,
+			koroneikiAccountLoading
+		);
 	const loggedUserAccount = myUserAccountData?.myUserAccount;
 
 	const [ticketAttachments, setTicketAttachments] = useState([]);
 	const [selectedTicketAttachment, setSelectedTicketAttachment] = useState();
 
 	const {handleSortChange, sortConfig} = useSort();
-	const {
-		paginationConfig,
-		sortedTicketAttachmentsFilteredPerPage,
-	} = usePagination(sortConfig, ticketAttachments);
+	const {paginationConfig, sortedTicketAttachmentsFilteredPerPage} =
+		usePagination(sortConfig, ticketAttachments);
 	const {onDownload} = useDownload();
 	const {isDeleting, onDelete} = useDelete();
 	const {observer, onOpenChange, open} = useModal();
 
 	useEffect(() => {
 		const fetchTicketAttachments = async () => {
-			const ticketAttachmentsResponse = await getTicketAttachments(
-				`accountKey eq '${koroneikiAccount?.accountKey}' and (state eq 0 or state eq null) and status/any(s:s eq 0)`
-			);
+			try {
+				const ticketAttachmentsResponse = await getTicketAttachments(
+					`accountKey eq '${koroneikiAccount?.accountKey}' and (state eq 0 or state eq null) and status/any(s:s eq 0)`
+				);
 
-			const ticketAttachments = ticketAttachmentsResponse.items.map(
-				async (ticketAttachment) => {
-					return {
-						accountKey: ticketAttachment.accountKey,
-						creatorId: ticketAttachment.creator.id,
-						creatorName: ticketAttachment.creator.name,
-						dateCreated: ticketAttachment.dateCreated,
-						downloadUrl: await getAttachmentDownloadUrl(ticketAttachment.id),
-						fileName: ticketAttachment.fileName,
-						fileSize: ticketAttachment.fileSize,
-						storageBucket: ticketAttachment.storageBucket,
-						ticketAttachmentId: ticketAttachment.id,
-						zendeskTicketId: ticketAttachment.zendeskTicketId,
-					};
-				}
-			);
+				const ticketAttachments = ticketAttachmentsResponse.items.map(
+					async (ticketAttachment) => {
+						return {
+							accountKey: ticketAttachment.accountKey,
+							creatorId: ticketAttachment.creator.id,
+							creatorName: ticketAttachment.creator.name,
+							dateCreated: ticketAttachment.dateCreated,
+							downloadUrl: await getAttachmentDownloadUrl(
+								ticketAttachment.id
+							),
+							fileName: ticketAttachment.fileName,
+							fileSize: ticketAttachment.fileSize,
+							storageBucket: ticketAttachment.storageBucket,
+							ticketAttachmentId: ticketAttachment.id,
+							zendeskTicketId: ticketAttachment.zendeskTicketId,
+						};
+					}
+				);
 
-			setTicketAttachments(await Promise.all(ticketAttachments));
+				setTicketAttachments(await Promise.all(ticketAttachments));
+			}
+			catch (error) {
+				setActiveErrorComponent(error.message);
+			}
 		};
+
 		fetchTicketAttachments();
 	}, [
 		koroneikiAccount?.accountKey,
@@ -82,120 +90,146 @@ const TicketAttachmentsTable = ({
 		isDeleting,
 	]);
 
+	const renderError = () => {
+		switch (activeErrorComponent) {
+			case 'FILE_SERVER_UNAVAILABLE':
+				return <ServerConnectionError />;
+			case 'ATTACHMENT_NOT_FOUND':
+				return <FileDoNotExistError />;
+			default:
+				return null;
+		}
+	};
+
 	return (
 		<>
-			{open && (
-				<DeleteTicketAttachmentModal
-					modalTitle={i18n.translate('delete-attached-file')}
-					observer={observer}
-					onClose={() => onOpenChange(false)}
-					onDelete={() => {
-						onDelete(selectedTicketAttachment?.ticketAttachmentId);
-						onOpenChange(false);
-						Liferay.Util.openToast({
-							message: i18n.translate('was-deleted-successfully'),
-							title: selectedTicketAttachment?.fileName,
-							type: 'success',
-						});
-					}}
-					removing={isDeleting}
-				>
-					<p className="my-0 text-neutral-10">
-						{i18n.translate(
-							'are-you-sure-you-want-to-delete-this-attached-file'
-						)}
-					</p>
-
-					<p className="font-weight-bold mt-4 text-neutral-10">
-						- {selectedTicketAttachment?.fileName}
-					</p>
-				</DeleteTicketAttachmentModal>
-			)}
-
-			{sortedTicketAttachmentsFilteredPerPage &&
-			paginationConfig.totalCount > 0 &&
-			!loading ? (
-				<div className="cp-ticket-attachments-table-wrapper">
-					<ActionTable
-						className="border-0"
-						columns={getColumns()}
-						handleSortChange={handleSortChange}
-						hasPagination
-						hasSorting
-						isLoading={loading}
-						paginationConfig={paginationConfig}
-						rows={sortedTicketAttachmentsFilteredPerPage?.map(
-							(ticketAttachment) => ({
-								attached: (
-									<div className="d-flex flex-column">
-										<div className="m-0 text-neutral-10 text-truncate">
-											{getAttachmentFormattedDateTime(
-												ticketAttachment?.dateCreated
-											)}
-										</div>
-
-										<div className="m-0 text-neutral-7 text-paragraph-sm text-truncate">
-											{`${i18n.translate('by')} ${
-												ticketAttachment?.creatorName
-											}`}
-										</div>
-									</div>
-								),
-								fileName: (
-									<a
-										className="m-0 text-truncate"
-										href={ticketAttachment?.downloadUrl}
-									>
-										{ticketAttachment?.fileName}
-									</a>
-								),
-								fileSize: (
-									<div className="m-0 text-neutral-10 text-paragraph text-truncate">
-										{ticketAttachment?.fileSize}
-									</div>
-								),
-								options: (
-									<OptionsColumn
-										hasDeletePermissions={
-											loggedUserAccount
-												?.selectedAccountSummary
-												.hasAdministratorRole ||
-											loggedUserAccount?.id ===
-												ticketAttachment.creatorId
-										}
-										onDelete={onDelete}
-										onDownload={onDownload}
-										onOpenChange={onOpenChange}
-										setSelectedTicketAttachment={
-											setSelectedTicketAttachment
-										}
-										ticketAttachment={ticketAttachment}
-									/>
-								),
-								ticket: (
-									<a
-										className="m-0 text-truncate"
-										href={PAGE_ROUTER_TYPES.request(
-											ticketAttachment?.zendeskTicketId
-										)}
-									>
-										{'#' + ticketAttachment?.zendeskTicketId}
-									</a>
-								),
-							})
-						)}
-					/>
-				</div>
+			{activeErrorComponent ? (
+				renderError()
 			) : (
-				!sortedTicketAttachmentsFilteredPerPage ||
-				(paginationConfig.totalCount === 0 && !loading && (
-					<TicketAttachmentsTableEmpty
-						description={i18n.translate(
-							'there-are-no-items-to-display'
-						)}
-						title={i18n.translate('no-attachments-yet')}
-					/>
-				))
+				<>
+					{open && (
+						<DeleteTicketAttachmentModal
+							modalTitle={i18n.translate('delete-attached-file')}
+							observer={observer}
+							onClose={() => onOpenChange(false)}
+							onDelete={() => {
+								onDelete(
+									selectedTicketAttachment?.ticketAttachmentId
+								);
+								onOpenChange(false);
+								Liferay.Util.openToast({
+									message: i18n.translate(
+										'was-deleted-successfully'
+									),
+									title: selectedTicketAttachment?.fileName,
+									type: 'success',
+								});
+							}}
+							removing={isDeleting}
+						>
+							<p className="my-0 text-neutral-10">
+								{i18n.translate(
+									'are-you-sure-you-want-to-delete-this-attached-file'
+								)}
+							</p>
+
+							<p className="font-weight-bold mt-4 text-neutral-10">
+								- {selectedTicketAttachment?.fileName}
+							</p>
+						</DeleteTicketAttachmentModal>
+					)}
+
+					{sortedTicketAttachmentsFilteredPerPage &&
+					paginationConfig.totalCount > 0 &&
+					!loading ? (
+						<div className="cp-ticket-attachments-table-wrapper">
+							<ActionTable
+								className="border-0"
+								columns={getColumns()}
+								handleSortChange={handleSortChange}
+								hasPagination
+								hasSorting
+								isLoading={loading}
+								paginationConfig={paginationConfig}
+								rows={sortedTicketAttachmentsFilteredPerPage?.map(
+									(ticketAttachment) => ({
+										attached: (
+											<div className="d-flex flex-column">
+												<div className="m-0 text-neutral-10 text-truncate">
+													{getAttachmentFormattedDateTime(
+														ticketAttachment?.dateCreated
+													)}
+												</div>
+
+												<div className="m-0 text-neutral-7 text-paragraph-sm text-truncate">
+													{`${i18n.translate('by')} ${
+														ticketAttachment?.creatorName
+													}`}
+												</div>
+											</div>
+										),
+										fileName: (
+											<a
+												className="m-0 text-truncate"
+												href={
+													ticketAttachment?.downloadUrl
+												}
+											>
+												{ticketAttachment?.fileName}
+											</a>
+										),
+										fileSize: (
+											<div className="m-0 text-neutral-10 text-paragraph text-truncate">
+												{ticketAttachment?.fileSize}
+											</div>
+										),
+										options: (
+											<OptionsColumn
+												hasDeletePermissions={
+													loggedUserAccount
+														?.selectedAccountSummary
+														.hasAdministratorRole ||
+													loggedUserAccount?.id ===
+														ticketAttachment.creatorId
+												}
+												onDelete={onDelete}
+												onDownload={onDownload}
+												onOpenChange={onOpenChange}
+												setSelectedTicketAttachment={
+													setSelectedTicketAttachment
+												}
+												ticketAttachment={
+													ticketAttachment
+												}
+											/>
+										),
+										ticket: (
+											<a
+												className="m-0 text-truncate"
+												href={PAGE_ROUTER_TYPES.request(
+													ticketAttachment?.zendeskTicketId
+												)}
+											>
+												{'#' +
+													ticketAttachment?.zendeskTicketId}
+											</a>
+										),
+									})
+								)}
+							/>
+						</div>
+					) : (
+						!sortedTicketAttachmentsFilteredPerPage ||
+						(paginationConfig.totalCount === 0 && !loading && (
+							<TicketAttachmentsTableEmpty
+								description={i18n.translate(
+									'there-are-no-items-to-display'
+								)}
+								title={i18n.translate('no-attachments-yet')}
+							/>
+						))
+					)}
+				</>
 			)}
 		</>
 	);
