@@ -28,8 +28,8 @@ const AttachmentMessages: React.FC<AttachmentMessagesProps> = ({
 	title,
 }) => {
 	return (
-		<div className="uploader-confirmation-container">
-			<div className="uploader-confirmation-box-containter">
+		<div className="message-container">
+			<div className="message-box-containter">
 				<div className="d-flex justify-content-center pb-4">
 					<div className="uploader-icon">
 						<ClayIcon symbol={icon} />
