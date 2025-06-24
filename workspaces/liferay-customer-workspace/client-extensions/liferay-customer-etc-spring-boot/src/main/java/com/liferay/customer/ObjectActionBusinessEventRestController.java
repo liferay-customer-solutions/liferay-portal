@@ -169,9 +169,10 @@ public class ObjectActionBusinessEventRestController
 	private String _getDetailPageLink(
 		String accountExternalReferenceCode, String businessEventId) {
 
-		StringBundler sb = new StringBundler(4);
+		StringBundler sb = new StringBundler(5);
 
-		sb.append("https://support.liferay.com/project/#/");
+		sb.append(_customerPortalURL);
+		sb.append("/project/#/");
 		sb.append(accountExternalReferenceCode);
 		sb.append("/business-events/");
 		sb.append(businessEventId);
@@ -566,6 +567,9 @@ public class ObjectActionBusinessEventRestController
 
 	@Value("${liferay.customer.email.address.china.rsm}")
 	private String _chinaRSMEmailAddress;
+
+	@Value("${liferay.customer.portal.url}")
+	private String _customerPortalURL;
 
 	@Value("${liferay.customer.email.address.global.cx.lead}")
 	private String _globalCXLeadEmailAddress;
