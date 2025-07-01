@@ -34,7 +34,7 @@ const AccountSubscriptionCard = ({
 	selectedAccountSubscriptionGroup,
 	...accountSubscription
 }) => {
-	const {theOverviewPageURL} = useAppPropertiesContext();
+	const {aboutTheOverviewPageURL} = useAppPropertiesContext();
 
 	const {data: accountSubscriptionUsageData} = useGetAccountSubscriptionUsage(
 		accountSubscription?.accountKey,
@@ -235,7 +235,7 @@ const AccountSubscriptionCard = ({
 								textLink: i18n.translate(
 									'learn-more-about-your-liferay-subscriptions-data'
 								),
-								url: theOverviewPageURL,
+								url: aboutTheOverviewPageURL,
 							}}
 							symbol="question-circle"
 						/>

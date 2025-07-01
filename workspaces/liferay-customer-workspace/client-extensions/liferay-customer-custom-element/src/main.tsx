@@ -18,7 +18,7 @@ import Projects from './features/projects';
 import SecurityVulnerabilities from './features/security-vulnerabilities';
 import useApollo from './hooks/useApollo';
 import useGlobalNetworkIndicator from './hooks/useGlobalNetworkIndicator';
-import {Liferay} from './services/liferay';
+import env from './utils/env';
 import getIconSpriteMap from './utils/getIconSpriteMap';
 import swrCacheProvider from './utils/swrCacheProvider';
 
@@ -34,21 +34,6 @@ const AppRoutes = {
 	securityVulnerabilities: SecurityVulnerabilities,
 };
 
-type Properties = {
-	accountSettingsURL: string | null;
-	articleAccountSupportURL: string | null;
-	articleDeactivateKey: string | null;
-	articleDeployingActivationKeysURL: string | null;
-	articleGettingStartedWithLiferayEnterpriseSearchURL: string | null;
-	articleNotifiedWhenMyActivationKeyIsAboutToExpireURL: string | null;
-	articleWhatIsMyInstanceSizingValueURL: string | null;
-	featureFlags?: string[];
-	helpCenterURL: string | null;
-	importDate?: Date | null;
-	submitSupportTicketURL: string | null;
-	theOverviewPageURL: string | null;
-};
-
 type APIs = {
 	gravatarAPI: string | null;
 	provisioningServerAPI: string | null;
@@ -57,13 +42,9 @@ type APIs = {
 type CustomerPortalAppProps = {
 	apis: APIs;
 	route: string;
-} & Properties;
+};
 
-const CustomerPortalApp: React.FC<CustomerPortalAppProps> = ({
-	apis,
-	route,
-	...properties
-}) => {
+const CustomerPortalApp: React.FC<CustomerPortalAppProps> = ({apis, route}) => {
 	const {client, networkStatus} = useApollo(
 		apis.provisioningServerAPI as string
 	);
@@ -81,13 +62,13 @@ const CustomerPortalApp: React.FC<CustomerPortalAppProps> = ({
 			<AppPropertiesContext.Provider
 				value={
 					{
-						...properties,
+						...env,
 						...apis,
 						client,
 					} as any
 				}
 			>
-				{properties.featureFlags?.includes('LPS-192494')}
+				{env.featureFlags?.includes('LPS-192494')}
 
 				<AppRouteComponent />
 			</AppPropertiesContext.Provider>
@@ -99,55 +80,9 @@ class CustomerPortalWebComponent extends HTMLElement {
 	private root: Root | undefined;
 
 	connectedCallback() {
-		const properties = {
-			accountSettingsURL: super.getAttribute('account-settings-url'),
-			articleAccountSupportURL: super.getAttribute(
-				'article-account-support-url'
-			),
-			articleDeactivateKey: super.getAttribute(
-				'article-deactivate-key-url'
-			),
-			articleDeployingActivationKeysURL: super.getAttribute(
-				'article-deploying-activation-keys-url'
-			),
-			articleGettingStartedWithLiferayEnterpriseSearchURL:
-				super.getAttribute(
-					'article-getting-started-with-liferay-enterprise-search-url'
-				),
-			articleNotifiedWhenMyActivationKeyIsAboutToExpireURL:
-				super.getAttribute(
-					'article-notified-when-my-activation-key-is-about-to-expire-url'
-				),
-			articleWhatIsMyInstanceSizingValueURL: super.getAttribute(
-				'article-what-is-my-instance-sizing-value-url'
-			),
-			featureFlags: (super.getAttribute('feature-flags') ?? '')
-				.split(',')
-				.map((featureflag) => featureflag.trim()),
-			helpCenterURL: super.getAttribute('help-center-url'),
-			importDate: super.getAttribute('import-date')
-				? new Date(super.getAttribute('import-date') as string)
-				: undefined,
-			submitSupportTicketURL: super.getAttribute(
-				'submit-support-ticket-url'
-			),
-			theOverviewPageURL: super.getAttribute(
-				'about-the-overview-page-url'
-			),
-		};
-
-		if (
-			!properties.featureFlags.includes('LPS-153478') &&
-			(Liferay.FeatureFlags as any)['LPS-153478']
-		) {
-			properties.featureFlags.push('LPS-153478');
-		}
-
 		const apis = {
-			gravatarAPI: super.getAttribute('gravatar-api'),
-			provisioningServerAPI: super.getAttribute(
-				'provisioning-server-api'
-			),
+			gravatarAPI: env.gravatarAPI,
+			provisioningServerAPI: env.provisioningServerAPI,
 		};
 
 		if (!this.root) {
@@ -162,7 +97,6 @@ class CustomerPortalWebComponent extends HTMLElement {
 						}}
 					>
 						<CustomerPortalApp
-							{...properties}
 							apis={apis}
 							route={super.getAttribute('route') as string}
 						/>
