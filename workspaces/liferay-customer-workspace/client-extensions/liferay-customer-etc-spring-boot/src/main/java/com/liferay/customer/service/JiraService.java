@@ -6,6 +6,7 @@
 package com.liferay.customer.service;
 
 import com.liferay.client.extension.util.spring.boot3.service.BaseService;
+import com.liferay.customer.model.JiraIssue;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -186,6 +187,48 @@ public class JiraService extends BaseService {
 			jql, pageSize, returnFields, _calculateStartAt(page, pageSize));
 
 		return _transformSearchResults(jsonObject);
+	}
+
+	public JSONArray search(String jql, String[] returnFields)
+		throws Exception {
+
+		int page = 1;
+		int pageSize = 100;
+
+		JSONArray jsonArray = new JSONArray();
+
+		while (true) {
+			JSONObject jsonObject = _search(
+				jql, pageSize, returnFields, _calculateStartAt(page, pageSize));
+
+			JSONArray issuesJSONArray = jsonObject.getJSONArray("issues");
+
+			for (int i = 0; i < issuesJSONArray.length(); i++) {
+				JSONObject issueJSONObject = issuesJSONArray.getJSONObject(i);
+
+				String issueKey = issueJSONObject.getString("key");
+
+				String jiraSupportURL = _jiraSupportCustomerPortalURL;
+
+				if (issueKey.startsWith("LRFLS-")) {
+					jiraSupportURL = _jiraSupportPartnerPortalURL;
+				}
+
+				JiraIssue jiraIssue = new JiraIssue(
+					issueJSONObject, jiraSupportURL);
+
+				jsonArray.put(jiraIssue.toJSONObject());
+			}
+
+			if ((page * pageSize) < jsonObject.getInt("total")) {
+				page++;
+			}
+			else {
+				break;
+			}
+		}
+
+		return jsonArray;
 	}
 
 	@Cacheable("issues")
@@ -652,8 +695,14 @@ public class JiraService extends BaseService {
 	@Value("${liferay.customer.jira.security.vulnerability.project}")
 	private String _jiraSecurityVulnerabilityProject;
 
+	@Value("${liferay.customer.jira.support.customer.portal.url}")
+	private String _jiraSupportCustomerPortalURL;
+
 	@Value("${liferay.customer.jira.support.field.organization}")
 	private String _jiraSupportFieldOrganization;
+
+	@Value("${liferay.customer.jira.support.partner.portal.url}")
+	private String _jiraSupportPartnerPortalURL;
 
 	@Value("${liferay.customer.jira.url}")
 	private String _jiraURL;
