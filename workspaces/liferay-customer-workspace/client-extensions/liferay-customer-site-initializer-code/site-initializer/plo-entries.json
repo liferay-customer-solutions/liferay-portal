@@ -15,6 +15,18 @@
 		}
 	},
 	{
+		"key": "activate-your-liferay-saas-liferay-paas-or-liferay-self-hosted-instance",
+		"value": {
+			"en-US": "Activate your Liferay SaaS, Liferay PaaS, or Liferay Self-hosted Instance."
+		}
+	},
+	{
+		"key": "activation",
+		"value": {
+			"en-US": "Activation"
+		}
+	},
+	{
 		"key": "activation-keys",
 		"value": {
 			"en-US": "Activation Keys",
