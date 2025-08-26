@@ -5,6 +5,8 @@
 
 package com.liferay.customer.exception;
 
+import com.google.cloud.storage.StorageException;
+
 /**
  * @author Karoline Silva
  */
@@ -19,6 +21,22 @@ public class FileServerUnavailableException extends Exception {
 
 	public FileServerUnavailableException(Throwable throwable) {
 		super(throwable);
+	}
+
+	public boolean isNotFoundException() {
+		Throwable throwable = getCause();
+
+		if (throwable instanceof StorageException) {
+			StorageException storageException = (StorageException)throwable;
+
+			if (storageException.getCode() == 404) {
+				return true;
+			}
+
+			return false;
+		}
+
+		return false;
 	}
 
 }
