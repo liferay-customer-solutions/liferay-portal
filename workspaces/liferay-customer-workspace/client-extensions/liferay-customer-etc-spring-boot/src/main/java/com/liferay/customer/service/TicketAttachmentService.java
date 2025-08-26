@@ -6,10 +6,12 @@
 package com.liferay.customer.service;
 
 import com.liferay.client.extension.util.spring.boot3.service.BaseService;
+import com.liferay.customer.exception.FileServerUnavailableException;
 import com.liferay.customer.exception.TicketAttachmentNotFoundException;
 import com.liferay.customer.model.TicketAttachment;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,10 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -114,6 +119,39 @@ public class TicketAttachmentService extends BaseService {
 				"/o/c/ticketattachments/" + ticketAttachmentId
 			).build(
 			).toUri());
+	}
+
+	public ResponseEntity<String> deleteTicketAttachmentWithFallback(
+			String authorization, long ticketAttachmentId)
+		throws Exception {
+
+		TicketAttachment ticketAttachment = getTicketAttachment(
+			authorization, ticketAttachmentId);
+
+		try {
+			_googleCloudStorageService.deleteObject(
+				ticketAttachment.getGCSBucketName(),
+				ticketAttachment.getGCSObjectName());
+
+			delete(
+				authorization, "",
+				UriComponentsBuilder.fromPath(
+					"/o/c/ticketattachments/" + ticketAttachmentId
+				).build(
+				).toUri());
+
+			return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
+		}
+		catch (FileServerUnavailableException fileServerUnavailableException) {
+			_log.error(
+				fileServerUnavailableException, fileServerUnavailableException);
+
+			updateTicketAttachmentState(
+				authorization, ticketAttachmentId,
+				WorkflowConstants.STATUS_IN_TRASH);
+
+			return new ResponseEntity<>("", HttpStatus.ACCEPTED);
+		}
 	}
 
 	public TicketAttachment fetchTicketAttachment(
@@ -294,5 +332,8 @@ public class TicketAttachmentService extends BaseService {
 
 	@Value("${liferay.customer.gcs.bucket.name}")
 	private String _gcsBucketName;
+
+	@Autowired
+	private GoogleCloudStorageService _googleCloudStorageService;
 
 }

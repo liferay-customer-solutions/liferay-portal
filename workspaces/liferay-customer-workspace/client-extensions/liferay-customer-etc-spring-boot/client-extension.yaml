@@ -28,3 +28,8 @@ liferay-customer-etc-spring-boot-object-action-business-event:
     oAuth2ApplicationExternalReferenceCode: liferay-customer-etc-spring-boot-oaua
     resourcePath: /object/action/business/event
     type: objectAction
+liferay-customer-etc-spring-boot-object-action-ticket-attachment:
+    name: Liferay Customer Etc Spring Boot Object Action Ticket Attachment
+    oAuth2ApplicationExternalReferenceCode: liferay-customer-etc-spring-boot-oaua
+    resourcePath: /object/action/ticket/attachment
+    type: objectAction

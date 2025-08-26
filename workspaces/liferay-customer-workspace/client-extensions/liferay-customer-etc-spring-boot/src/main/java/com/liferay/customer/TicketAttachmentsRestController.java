@@ -9,7 +9,6 @@ import com.liferay.client.extension.util.spring.boot3.BaseRestController;
 import com.liferay.client.extension.util.spring.boot3.client.LiferayOAuth2AccessTokenManager;
 import com.liferay.customer.exception.TicketAttachmentNotFoundException;
 import com.liferay.customer.model.TicketAttachment;
-import com.liferay.customer.service.GoogleCloudStorageService;
 import com.liferay.customer.service.JiraService;
 import com.liferay.customer.service.NotificationQueueEntryService;
 import com.liferay.customer.service.TicketAttachmentService;
@@ -50,29 +49,8 @@ public class TicketAttachmentsRestController extends BaseRestController {
 		@PathVariable("ticketAttachmentId") long ticketAttachmentId) {
 
 		try {
-			TicketAttachment ticketAttachment =
-				_ticketAttachmentService.getTicketAttachment(
-					"Bearer " + jwt.getTokenValue(), ticketAttachmentId);
-
-			_ticketAttachmentService.updateTicketAttachmentState(
-				"Bearer " + jwt.getTokenValue(), ticketAttachmentId,
-				WorkflowConstants.STATUS_IN_TRASH);
-
-			try {
-				_googleCloudStorageService.deleteObject(
-					ticketAttachment.getGCSBucketName(),
-					ticketAttachment.getGCSObjectName());
-
-				_ticketAttachmentService.deleteTicketAttachment(
-					"Bearer " + jwt.getTokenValue(), ticketAttachmentId);
-
-				return new ResponseEntity<>(HttpStatus.OK);
-			}
-			catch (Exception exception) {
-				_log.error(exception, exception);
-
-				return new ResponseEntity<>("", HttpStatus.ACCEPTED);
-			}
+			return _ticketAttachmentService.deleteTicketAttachmentWithFallback(
+				"Bearer " + jwt.getTokenValue(), ticketAttachmentId);
 		}
 		catch (TicketAttachmentNotFoundException
 					ticketAttachmentNotFoundException) {
@@ -137,10 +115,6 @@ public class TicketAttachmentsRestController extends BaseRestController {
 
 		for (TicketAttachment ticketAttachment : ticketAttachments) {
 			try {
-				_googleCloudStorageService.deleteObject(
-					ticketAttachment.getGCSBucketName(),
-					ticketAttachment.getGCSObjectName());
-
 				_ticketAttachmentService.deleteTicketAttachment(
 					_getAuthorization(),
 					ticketAttachment.getTicketAttachmentId());
@@ -177,10 +151,6 @@ public class TicketAttachmentsRestController extends BaseRestController {
 
 			_ticketAttachmentService.deleteTicketAttachment(
 				_getAuthorization(), ticketAttachment.getTicketAttachmentId());
-
-			_googleCloudStorageService.deleteObject(
-				ticketAttachment.getGCSBucketName(),
-				ticketAttachment.getGCSObjectName());
 		}
 	}
 
@@ -191,9 +161,6 @@ public class TicketAttachmentsRestController extends BaseRestController {
 
 	private static final Log _log = LogFactory.getLog(
 		TicketAttachmentsRestController.class);
-
-	@Autowired
-	private GoogleCloudStorageService _googleCloudStorageService;
 
 	@Autowired
 	private JiraService _jiraService;
