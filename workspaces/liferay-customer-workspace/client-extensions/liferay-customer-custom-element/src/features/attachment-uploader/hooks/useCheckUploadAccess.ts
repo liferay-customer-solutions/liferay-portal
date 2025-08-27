@@ -58,24 +58,31 @@ export default function useCheckUploadAccess(): IResponse {
 				if (response.ok) {
 					setHasAccess(true);
 				}
+				else {
+					const errorCode = (await response.text()) as ErrorCode;
+
+					setHasAccess(false);
+
+					if (!controller.signal.aborted) {
+						switch (errorCode) {
+							case 'FORBIDDEN_ACCESS':
+							case 'TICKET_IS_CLOSED':
+							case 'INVALID_TICKET_NUMBER':
+							case 'ZENDESK_ORGANIZATION_ERROR':
+							case 'UNEXPECTED_ERROR':
+								setErrorCode(errorCode);
+								break;
+							default:
+								setErrorCode('UNEXPECTED_ERROR');
+						}
+					}
+				}
 			}
 			catch (error: any) {
-				const errorCode = await error.text();
-
 				setHasAccess(false);
 
 				if (!controller.signal.aborted) {
-					switch (errorCode) {
-						case 'FORBIDDEN_ACCESS':
-						case 'TICKET_IS_CLOSED':
-						case 'INVALID_TICKET_NUMBER':
-						case 'ZENDESK_ORGANIZATION_ERROR':
-						case 'UNEXPECTED_ERROR':
-							setErrorCode(errorCode);
-							break;
-						default:
-							setErrorCode('UNEXPECTED_ERROR');
-					}
+					setErrorCode('UNEXPECTED_ERROR');
 				}
 			}
 			finally {

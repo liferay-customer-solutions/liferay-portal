@@ -45,8 +45,12 @@ public class TicketsTicketAttachmentsUploadAccessCheckRestController
 		@AuthenticationPrincipal Jwt jwt,
 		@PathVariable("ticketId") String ticketId) {
 
+		String accountKey = "";
+
 		try {
-			if (!_hasAddPermission(jwt, getAccountKey(ticketId))) {
+			accountKey = getAccountKey(ticketId);
+			
+			if (!_hasAddPermission(jwt, accountKey)) {
 				return new ResponseEntity<>(
 					"FORBIDDEN_ACCESS", HttpStatus.FORBIDDEN);
 			}
@@ -56,8 +60,12 @@ public class TicketsTicketAttachmentsUploadAccessCheckRestController
 		catch (JiraIssueClosedException jiraIssueClosedException) {
 			_log.error(jiraIssueClosedException, jiraIssueClosedException);
 
+			HttpHeaders httpHeaders = new HttpHeaders();
+
+			httpHeaders.add("Account-Id", accountKey);
+
 			return new ResponseEntity<>(
-				"TICKET_IS_CLOSED", HttpStatus.BAD_REQUEST);
+				"TICKET_IS_CLOSED", httpHeaders, HttpStatus.BAD_REQUEST);
 		}
 		catch (JiraIssueNotFoundException jiraIssueNotFoundException) {
 			_log.error(jiraIssueNotFoundException, jiraIssueNotFoundException);
