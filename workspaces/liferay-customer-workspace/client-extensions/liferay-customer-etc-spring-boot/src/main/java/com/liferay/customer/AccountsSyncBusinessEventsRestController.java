@@ -248,8 +248,8 @@ public class AccountsSyncBusinessEventsRestController
 				jsonObject.getString("associatedTickets"));
 
 			for (int j = 0; j < associatedTicketIdsJSONArray.length(); j++) {
-				String associatedTicketId = associatedTicketIdsJSONArray.getString(
-					j);
+				String associatedTicketId =
+					associatedTicketIdsJSONArray.getString(j);
 
 				String highestHeatTag = associatedTicketsHeatTags.get(
 					associatedTicketId);
