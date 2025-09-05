@@ -175,7 +175,7 @@ export function InventoryAnalysisCard() {
 	}, [filters, language, space]);
 
 	return (
-		<div className="cms-dashboard__inventory-analysis">
+		<div className="cms-dashboard__inventory-analysis mb-3">
 			<BaseCard
 				Preferences={
 					<ClayDropdown
@@ -200,7 +200,7 @@ export function InventoryAnalysisCard() {
 								)}
 
 								<Text weight="semi-bold">
-									{Liferay.Language.get(selectedItem.name)}
+									{selectedItem.name}
 								</Text>
 
 								<ClayIcon

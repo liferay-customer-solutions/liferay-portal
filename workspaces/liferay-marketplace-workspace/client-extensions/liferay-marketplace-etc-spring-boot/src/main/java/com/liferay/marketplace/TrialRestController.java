@@ -533,6 +533,7 @@ public class TrialRestController extends BaseRestController {
 			).toString());
 
 		portalInstance.setAdmin(() -> admin);
+
 		portalInstance.setDomain(() -> "lxc.app");
 		portalInstance.setSiteInitializerKey(() -> siteInitializerKey);
 

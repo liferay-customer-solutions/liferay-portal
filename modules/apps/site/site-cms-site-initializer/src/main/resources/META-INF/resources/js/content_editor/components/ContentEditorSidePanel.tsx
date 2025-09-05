@@ -14,7 +14,7 @@ import {LiferayEditorConfig} from 'frontend-editor-ckeditor-web';
 import {openToast} from 'frontend-js-components-web';
 import {fetch, objectToFormData} from 'frontend-js-web';
 import moment from 'moment';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import focusInvalidElement from '../../common/utils/focusInvalidElement';
 import {Comment} from '../services/CommentService';
@@ -43,8 +43,9 @@ type Props = {
 
 type SidePanelProps = Props & {
 	dateConfig: datetimeUtils.DateConfig;
-	fields: ScheduleFields;
-	onUpdateFieldData: (props: UpdateFieldProps) => void;
+	onUpdateCategorization: (props: UpdateCategorizationProps) => void;
+	onUpdateSchedule: (props: UpdateScheduleProps) => void;
+	scheduleFields: ScheduleFields;
 };
 
 type Item = {
@@ -55,19 +56,32 @@ type Item = {
 	title: string;
 };
 
-type BaseData = {
+type BaseScheduleData = {
 	error: string;
 	neverExpire: boolean;
 	value: string;
 };
 
-export type FieldData = BaseData & {
+export type CategorizationFields = {
+	assetCategoryIds: string;
+	assetTagNames: string;
+};
+
+type ScheduleFieldData = BaseScheduleData & {
 	serverValue: string;
 };
 
-export type ScheduleFields = {expirationDate: FieldData; reviewDate: FieldData};
+export type ScheduleFields = {
+	expirationDate: ScheduleFieldData;
+	reviewDate: ScheduleFieldData;
+};
 
-export type UpdateFieldProps = BaseData & {
+export type UpdateCategorizationProps = {
+	name: keyof CategorizationFields;
+	value: string;
+};
+
+export type UpdateScheduleProps = BaseScheduleData & {
 	name: keyof ScheduleFields;
 };
 
@@ -120,13 +134,28 @@ export default function ContentEditorSidePanel(props: Props) {
 			value: toMomentDate(props.reviewDate),
 		},
 	});
+	const [categorizationFields, setCategorizationFields] =
+		useState<CategorizationFields>({
+			assetCategoryIds: '',
+			assetTagNames: '',
+		});
 
-	const onUpdateFieldData = ({
+	const onUpdateCategorization = useCallback(
+		({name, value}: UpdateCategorizationProps) => {
+			setCategorizationFields((fields) => ({
+				...fields,
+				[name]: value,
+			}));
+		},
+		[]
+	);
+
+	const onUpdateSchedule = ({
 		error,
 		name,
 		neverExpire,
 		value,
-	}: UpdateFieldProps) => {
+	}: UpdateScheduleProps) => {
 		const values = neverExpire
 			? {serverValue: ''}
 			: {
@@ -134,7 +163,7 @@ export default function ContentEditorSidePanel(props: Props) {
 					value,
 				};
 
-		setScheduleFields((fields: ScheduleFields) => ({
+		setScheduleFields((fields) => ({
 			...fields,
 			[name]: {
 				...fields[name],
@@ -157,8 +186,9 @@ export default function ContentEditorSidePanel(props: Props) {
 			<SidePanel
 				{...props}
 				dateConfig={dateConfig}
-				fields={scheduleFields}
-				onUpdateFieldData={onUpdateFieldData}
+				onUpdateCategorization={onUpdateCategorization}
+				onUpdateSchedule={onUpdateSchedule}
+				scheduleFields={scheduleFields}
 			/>
 			{Object.entries(scheduleFields).map(([name, {serverValue}]) => (
 				<input
@@ -167,6 +197,16 @@ export default function ContentEditorSidePanel(props: Props) {
 					name={name}
 					type="hidden"
 					value={serverValue}
+				/>
+			))}
+
+			{Object.entries(categorizationFields).map(([name, value]) => (
+				<input
+					form={formId}
+					key={name}
+					name={name}
+					type="hidden"
+					value={value}
 				/>
 			))}
 		</>
@@ -179,7 +219,7 @@ function SidePanel(props: SidePanelProps) {
 
 	useEffect(() => {
 		const validateScheduleFields = ({event}: {event: MouseEvent}) => {
-			const hasError = Object.values(props.fields).some(
+			const hasError = Object.values(props.scheduleFields).some(
 				(field) => field.error && field.serverValue
 			);
 
@@ -196,7 +236,7 @@ function SidePanel(props: SidePanelProps) {
 		return () => {
 			Liferay.detach(EVENT_VALIDATE_FORM, validateScheduleFields);
 		};
-	}, [props.fields]);
+	}, [props.scheduleFields]);
 
 	useEffect(() => {
 		if (hasError) {
