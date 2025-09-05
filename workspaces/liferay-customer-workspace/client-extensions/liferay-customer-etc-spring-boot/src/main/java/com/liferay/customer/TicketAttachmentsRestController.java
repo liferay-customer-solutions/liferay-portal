@@ -98,18 +98,18 @@ public class TicketAttachmentsRestController extends BaseRestController {
 			_log.info("Cleaning up JSM large file attachments");
 		}
 
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("(project in (");
-		sb.append(_jiraSupportProjects);
-		sb.append(")) and (status = Closed) and (status changed to (Closed) ");
-		sb.append("after -8d) and (status changed to (Closed) before -7d)");
+		String jql = StringBundler.concat(
+			"(project in (", _jiraSupportProjects,
+			")) and (status in (Closed, 'Solution Accepted')) and (((status ",
+			"changed to (Closed) after -8d) and (status changed to (Closed) ",
+			"before -7d)) or ((status changed to ('Solution Accepted') after ",
+			"-8d) and (status changed to ('Solution Accepted') before -7d)))");
 
 		int page = 1;
 
 		while (true) {
 			JSONObject jsonObject = _jiraService.search(
-				sb.toString(), page, 20, new String[] {"key"});
+				jql, page, 20, new String[] {"key"});
 
 			JSONArray jsonArray = jsonObject.getJSONArray("issues");
 

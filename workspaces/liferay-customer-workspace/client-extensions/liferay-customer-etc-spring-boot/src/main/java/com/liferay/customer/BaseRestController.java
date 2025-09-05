@@ -5,12 +5,14 @@
 
 package com.liferay.customer;
 
+import com.liferay.customer.constants.JiraIssueConstants;
 import com.liferay.customer.exception.JiraIssueClosedException;
 import com.liferay.customer.exception.JiraIssueNotFoundException;
 import com.liferay.customer.exception.JiraOrganizationNotFoundException;
 import com.liferay.customer.service.JiraService;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringUtil;
+import com.liferay.portal.kernel.util.ArrayUtil;
 
 import java.util.List;
 
@@ -54,7 +56,7 @@ public class BaseRestController
 
 		String status = fieldsJSONObject.optString("status");
 
-		if (status.equals("Closed")) {
+		if (ArrayUtil.contains(JiraIssueConstants.STATUSES_CLOSED, status)) {
 			throw new JiraIssueClosedException();
 		}
 
