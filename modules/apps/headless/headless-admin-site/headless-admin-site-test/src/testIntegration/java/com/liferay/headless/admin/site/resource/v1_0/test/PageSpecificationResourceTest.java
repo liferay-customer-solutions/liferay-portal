@@ -8,6 +8,7 @@ package com.liferay.headless.admin.site.resource.v1_0.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.headless.admin.site.client.dto.v1_0.ContainerPageElementDefinition;
 import com.liferay.headless.admin.site.client.dto.v1_0.ContentPageSpecification;
+import com.liferay.headless.admin.site.client.dto.v1_0.FavIcon;
 import com.liferay.headless.admin.site.client.dto.v1_0.PageElement;
 import com.liferay.headless.admin.site.client.dto.v1_0.PageElementDefinition;
 import com.liferay.headless.admin.site.client.dto.v1_0.PageExperience;
@@ -890,7 +891,8 @@ public class PageSpecificationResourceTest
 
 		if (!typeUtility) {
 			SettingsTestUtil.modifySettings(
-				serviceContext, pageSpecification.getSettings());
+				FavIcon.FavIconType.CLIENT_EXTENSION, serviceContext,
+				pageSpecification.getSettings());
 
 			return;
 		}
@@ -1084,7 +1086,8 @@ public class PageSpecificationResourceTest
 						layout.getExternalReferenceCode());
 
 		SettingsTestUtil.modifySettings(
-			serviceContext, widgetPageSpecification.getSettings());
+			FavIcon.FavIconType.ITEM_EXTERNAL_REFERENCE, serviceContext,
+			widgetPageSpecification.getSettings());
 
 		_testPatchSiteSiteByExternalReferenceCodePageSpecification(
 			widgetPageSpecification,

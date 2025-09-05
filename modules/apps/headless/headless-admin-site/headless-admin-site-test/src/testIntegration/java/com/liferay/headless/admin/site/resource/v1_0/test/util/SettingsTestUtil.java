@@ -9,15 +9,27 @@ import com.liferay.client.extension.constants.ClientExtensionEntryConstants;
 import com.liferay.client.extension.model.ClientExtensionEntryRel;
 import com.liferay.client.extension.service.ClientExtensionEntryLocalServiceUtil;
 import com.liferay.client.extension.service.ClientExtensionEntryRelLocalServiceUtil;
+import com.liferay.document.library.kernel.model.DLFileEntry;
+import com.liferay.document.library.kernel.model.DLFolder;
+import com.liferay.document.library.kernel.service.DLFileEntryLocalServiceUtil;
+import com.liferay.document.library.test.util.DLTestUtil;
 import com.liferay.headless.admin.site.client.dto.v1_0.ClientExtension;
 import com.liferay.headless.admin.site.client.dto.v1_0.FavIcon;
+import com.liferay.headless.admin.site.client.dto.v1_0.FavIconClientExtension;
+import com.liferay.headless.admin.site.client.dto.v1_0.FavIconItemExternalReference;
 import com.liferay.headless.admin.site.client.dto.v1_0.ItemExternalReference;
+import com.liferay.headless.admin.site.client.dto.v1_0.Scope;
 import com.liferay.headless.admin.site.client.dto.v1_0.Settings;
 import com.liferay.layout.page.template.model.LayoutPageTemplateEntry;
 import com.liferay.layout.page.template.service.LayoutPageTemplateEntryLocalServiceUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
+import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
@@ -66,22 +78,52 @@ public class SettingsTestUtil {
 			Assert.assertEquals(layout.getCss(), settings.getCss());
 		}
 
-		ClientExtension clientExtension = null;
+		FavIconClientExtension favIconClientExtension = null;
+		FavIconItemExternalReference favIconItemExternalReference = null;
 
 		FavIcon favIcon = settings.getFavIcon();
 
-		if ((favIcon != null) &&
-			Objects.equals(
-				favIcon.getClassName(),
-				com.liferay.headless.admin.site.dto.v1_0.ClientExtension.class.
-					getName())) {
+		if (favIcon == null) {
+			Assert.assertEquals(0, layout.getFaviconFileEntryId());
+		}
+		else if (favIcon instanceof FavIconClientExtension) {
+			favIconClientExtension = (FavIconClientExtension)favIcon;
+		}
+		else if (favIcon instanceof FavIconItemExternalReference) {
+			favIconItemExternalReference =
+				(FavIconItemExternalReference)favIcon;
+		}
+		else {
+			Assert.fail("Unexpected class: " + favIcon.getClass());
+		}
 
-			clientExtension = new ClientExtension() {
-				{
-					setClientExtensionConfig(favIcon::getClientExtensionConfig);
-					setExternalReferenceCode(favIcon::getExternalReferenceCode);
-				}
-			};
+		if (layout.getFaviconFileEntryId() == 0) {
+			Assert.assertNull(favIconItemExternalReference);
+		}
+		else {
+			DLFileEntry dlFileEntry =
+				DLFileEntryLocalServiceUtil.fetchDLFileEntry(
+					layout.getFaviconFileEntryId());
+
+			Assert.assertEquals(
+				dlFileEntry.getExternalReferenceCode(),
+				favIconItemExternalReference.getExternalReferenceCode());
+
+			Scope scope = favIconItemExternalReference.getScope();
+
+			if (scope == null) {
+				Assert.assertEquals(
+					dlFileEntry.getGroupId(), layout.getGroupId());
+			}
+			else {
+				Group group =
+					GroupLocalServiceUtil.fetchGroupByExternalReferenceCode(
+						scope.getExternalReferenceCode(),
+						layout.getCompanyId());
+
+				Assert.assertEquals(
+					dlFileEntry.getGroupId(), group.getGroupId());
+			}
 		}
 
 		_assertClientExtensions(
@@ -90,9 +132,7 @@ public class SettingsTestUtil {
 		_assertClientExtensions(
 			settings.getGlobalJSClientExtensions(), layout,
 			ClientExtensionEntryConstants.TYPE_GLOBAL_JS);
-		_assertClientExtension(
-			clientExtension, layout,
-			ClientExtensionEntryConstants.TYPE_THEME_FAVICON);
+		_assertFavIconClientExtension(favIconClientExtension, layout);
 
 		UnicodeProperties unicodeProperties =
 			layout.getTypeSettingsProperties();
@@ -175,7 +215,9 @@ public class SettingsTestUtil {
 		Settings expectedSettings, Settings actualSettings) {
 
 		if (expectedSettings == null) {
-			Assert.assertNull(actualSettings);
+			Assert.assertTrue(
+				(actualSettings == null) ||
+				Objects.equals(actualSettings.toString(), "{}"));
 
 			return;
 		}
@@ -250,19 +292,27 @@ public class SettingsTestUtil {
 		};
 	}
 
-	public static Settings getSettings(ServiceContext serviceContext) {
+	public static Settings getSettings(
+		FavIcon.FavIconType favIconType, ServiceContext serviceContext) {
+
 		return new Settings() {
 			{
 				setColorSchemeName(() -> "01");
 				setCss(RandomTestUtil::randomString);
-				setFavIcon(() -> _getFavIcon());
+				setFavIcon(() -> _getFavIcon(favIconType));
 				setGlobalCSSClientExtensions(
 					() -> new ClientExtension[] {
-						_getClientExtension(), _getClientExtension()
+						_getClientExtension(
+							ClientExtensionEntryConstants.TYPE_GLOBAL_CSS),
+						_getClientExtension(
+							ClientExtensionEntryConstants.TYPE_GLOBAL_CSS)
 					});
 				setGlobalJSClientExtensions(
 					() -> new ClientExtension[] {
-						_getClientExtension(), _getClientExtension()
+						_getClientExtension(
+							ClientExtensionEntryConstants.TYPE_GLOBAL_JS),
+						_getClientExtension(
+							ClientExtensionEntryConstants.TYPE_GLOBAL_JS)
 					});
 				setJavascript(RandomTestUtil::randomString);
 				setMasterPageItemExternalReference(
@@ -271,7 +321,9 @@ public class SettingsTestUtil {
 				setStyleBookItemExternalReference(
 					() -> SettingsTestUtil.getStyleBookItemExternalReference(
 						serviceContext));
-				setThemeCSSClientExtension(() -> _getClientExtension());
+				setThemeCSSClientExtension(
+					() -> _getClientExtension(
+						ClientExtensionEntryConstants.TYPE_THEME_CSS));
 				setThemeName(() -> "classic_WAR_classictheme");
 				setThemeSettings(
 					() -> TreeMapBuilder.put(
@@ -281,7 +333,9 @@ public class SettingsTestUtil {
 						"lfr-theme:" + RandomTestUtil.randomString(),
 						RandomTestUtil.randomString()
 					).build());
-				setThemeSpritemapClientExtension(() -> _getClientExtension());
+				setThemeSpritemapClientExtension(
+					() -> _getClientExtension(
+						ClientExtensionEntryConstants.TYPE_THEME_SPRITEMAP));
 			}
 		};
 	}
@@ -306,14 +360,15 @@ public class SettingsTestUtil {
 	}
 
 	public static void modifySettings(
-			ServiceContext serviceContext, Settings settings)
+			FavIcon.FavIconType favIconType, ServiceContext serviceContext,
+			Settings settings)
 		throws Exception {
 
 		if (Validator.isNotNull(settings.getFavIcon())) {
 			settings.setFavIcon(() -> null);
 		}
 		else {
-			settings.setFavIcon(() -> _getFavIcon());
+			settings.setFavIcon(() -> _getFavIcon(favIconType));
 		}
 
 		if (Validator.isNotNull(settings.getGlobalCSSClientExtensions())) {
@@ -322,7 +377,10 @@ public class SettingsTestUtil {
 		else {
 			settings.setGlobalCSSClientExtensions(
 				new ClientExtension[] {
-					_getClientExtension(), _getClientExtension()
+					_getClientExtension(
+						ClientExtensionEntryConstants.TYPE_GLOBAL_CSS),
+					_getClientExtension(
+						ClientExtensionEntryConstants.TYPE_GLOBAL_CSS)
 				});
 		}
 
@@ -332,7 +390,10 @@ public class SettingsTestUtil {
 		else {
 			settings.setGlobalJSClientExtensions(
 				new ClientExtension[] {
-					_getClientExtension(), _getClientExtension()
+					_getClientExtension(
+						ClientExtensionEntryConstants.TYPE_GLOBAL_JS),
+					_getClientExtension(
+						ClientExtensionEntryConstants.TYPE_GLOBAL_JS)
 				});
 		}
 
@@ -385,7 +446,9 @@ public class SettingsTestUtil {
 			settings.setThemeCSSClientExtension(() -> null);
 		}
 		else {
-			settings.setThemeCSSClientExtension(_getClientExtension());
+			settings.setThemeCSSClientExtension(
+				_getClientExtension(
+					ClientExtensionEntryConstants.TYPE_THEME_CSS));
 		}
 
 		if (Validator.isNotNull(settings.getThemeName())) {
@@ -416,7 +479,9 @@ public class SettingsTestUtil {
 			settings.setThemeSpritemapClientExtension(() -> null);
 		}
 		else {
-			settings.setThemeSpritemapClientExtension(_getClientExtension());
+			settings.setThemeSpritemapClientExtension(
+				_getClientExtension(
+					ClientExtensionEntryConstants.TYPE_THEME_SPRITEMAP));
 		}
 	}
 
@@ -483,13 +548,38 @@ public class SettingsTestUtil {
 		}
 	}
 
-	private static ClientExtension _getClientExtension() throws Exception {
+	private static void _assertFavIconClientExtension(
+		FavIconClientExtension favIconClientExtension, Layout layout) {
+
+		ClientExtensionEntryRel clientExtensionEntryRel =
+			ClientExtensionEntryRelLocalServiceUtil.
+				fetchClientExtensionEntryRel(
+					PortalUtil.getClassNameId(Layout.class), layout.getPlid(),
+					ClientExtensionEntryConstants.TYPE_THEME_FAVICON);
+
+		if (clientExtensionEntryRel == null) {
+			Assert.assertNull(favIconClientExtension);
+		}
+		else {
+			Assert.assertEquals(
+				clientExtensionEntryRel.getCETExternalReferenceCode(),
+				favIconClientExtension.getExternalReferenceCode());
+			Assert.assertEquals(
+				clientExtensionEntryRel.getTypeSettings(),
+				UnicodePropertiesBuilder.create(
+					favIconClientExtension.getClientExtensionConfig(), true
+				).buildString());
+		}
+	}
+
+	private static ClientExtension _getClientExtension(String type)
+		throws Exception {
+
 		ClientExtension clientExtension = new ClientExtension() {
 			{
 				setClientExtensionConfig(
 					() -> HashMapBuilder.put(
-						RandomTestUtil::randomString,
-						RandomTestUtil::randomString
+						"url", "http://test.com"
 					).build());
 				setExternalReferenceCode(RandomTestUtil::randomString);
 			}
@@ -500,8 +590,7 @@ public class SettingsTestUtil {
 			TestPropsValues.getUserId(), StringPool.BLANK,
 			Collections.singletonMap(
 				LocaleUtil.getDefault(), RandomTestUtil.randomString()),
-			StringPool.BLANK, StringPool.BLANK,
-			ClientExtensionEntryConstants.TYPE_THEME_CSS,
+			StringPool.BLANK, StringPool.BLANK, type,
 			UnicodePropertiesBuilder.create(
 				clientExtension.getClientExtensionConfig(), true
 			).buildString());
@@ -509,19 +598,69 @@ public class SettingsTestUtil {
 		return clientExtension;
 	}
 
-	private static FavIcon _getFavIcon() throws Exception {
-		ClientExtension clientExtension = _getClientExtension();
+	private static FavIcon _getFavIcon(FavIcon.FavIconType favIconType)
+		throws Exception {
 
-		return new FavIcon() {
+		if (favIconType == FavIcon.FavIconType.CLIENT_EXTENSION) {
+			return _getFavIconClientExtension();
+		}
+
+		return _getFavIconItemExternalReference();
+	}
+
+	private static FavIconClientExtension _getFavIconClientExtension()
+		throws Exception {
+
+		FavIconClientExtension favIconClientExtension =
+			new FavIconClientExtension() {
+				{
+					setClientExtensionConfig(
+						() -> HashMapBuilder.put(
+							"url", "http://test.com"
+						).build());
+					setExternalReferenceCode(RandomTestUtil::randomString);
+					setFavIconType(FavIcon.FavIconType.CLIENT_EXTENSION);
+				}
+			};
+
+		ClientExtensionEntryLocalServiceUtil.addClientExtensionEntry(
+			favIconClientExtension.getExternalReferenceCode(),
+			TestPropsValues.getUserId(), StringPool.BLANK,
+			Collections.singletonMap(
+				LocaleUtil.getDefault(), RandomTestUtil.randomString()),
+			StringPool.BLANK, StringPool.BLANK,
+			ClientExtensionEntryConstants.TYPE_THEME_FAVICON,
+			UnicodePropertiesBuilder.create(
+				favIconClientExtension.getClientExtensionConfig(), true
+			).buildString());
+
+		return favIconClientExtension;
+	}
+
+	private static FavIconItemExternalReference
+			_getFavIconItemExternalReference()
+		throws Exception {
+
+		Company company = CompanyLocalServiceUtil.getCompany(
+			TestPropsValues.getCompanyId());
+
+		DLFolder dlFolder = DLTestUtil.addDLFolder(company.getGroupId());
+
+		DLFileEntry dlFileEntry = DLTestUtil.addDLFileEntry(
+			dlFolder.getFolderId());
+
+		return new FavIconItemExternalReference() {
 			{
-				setClassName(
-					() ->
-						com.liferay.headless.admin.site.dto.v1_0.
-							ClientExtension.class.getName());
-				setClientExtensionConfig(
-					clientExtension::getClientExtensionConfig);
-				setExternalReferenceCode(
-					clientExtension::getExternalReferenceCode);
+				setClassName(FileEntry.class::getName);
+				setExternalReferenceCode(dlFileEntry::getExternalReferenceCode);
+				setFavIconType(FavIconType.ITEM_EXTERNAL_REFERENCE);
+				setScope(
+					() -> new Scope() {
+						{
+							setExternalReferenceCode(() -> "L_GLOBAL");
+							setType(() -> Type.SITE);
+						}
+					});
 			}
 		};
 	}

@@ -15,6 +15,7 @@ import com.liferay.headless.admin.site.client.dto.v1_0.DisplayPageTemplateFolder
 import com.liferay.headless.admin.site.client.dto.v1_0.DisplayPageTemplateOpenGraphSettings;
 import com.liferay.headless.admin.site.client.dto.v1_0.DisplayPageTemplateSEOSettings;
 import com.liferay.headless.admin.site.client.dto.v1_0.DisplayPageTemplateSettings;
+import com.liferay.headless.admin.site.client.dto.v1_0.FavIcon;
 import com.liferay.headless.admin.site.client.dto.v1_0.FriendlyUrlHistory;
 import com.liferay.headless.admin.site.client.dto.v1_0.ItemExternalReference;
 import com.liferay.headless.admin.site.client.dto.v1_0.PageSpecification;
@@ -24,6 +25,7 @@ import com.liferay.headless.admin.site.client.problem.Problem;
 import com.liferay.headless.admin.site.client.resource.v1_0.DisplayPageTemplateResource;
 import com.liferay.headless.admin.site.resource.v1_0.test.util.LayoutPageTemplateEntryTestUtil;
 import com.liferay.headless.admin.site.resource.v1_0.test.util.PageSpecificationsTestUtil;
+import com.liferay.headless.admin.site.resource.v1_0.test.util.SettingsTestUtil;
 import com.liferay.info.item.InfoItemFormVariation;
 import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.info.item.provider.InfoItemFormVariationsProvider;
@@ -1302,6 +1304,7 @@ public class DisplayPageTemplateResourceTest
 		_testPostSiteSiteByExternalReferenceCodeDisplayPageTemplateWithPageSpecifications(
 			PageSpecification.Status.DRAFT, PageSpecification.Status.DRAFT);
 		_testPostSiteSiteByExternalReferenceCodeDisplayPageTemplateWithPageSpecificationsNull();
+		_testPostSiteSiteByExternalReferenceCodeDisplayPageTemplateWithPageSpecificationsWithSettings();
 	}
 
 	private void
@@ -1357,6 +1360,47 @@ public class DisplayPageTemplateResourceTest
 		PageSpecificationsTestUtil.assertPageSpecifications(
 			_layoutLocalService.getLayout(layoutPageTemplateEntry.getPlid()),
 			displayPageTemplate.getPageSpecifications());
+	}
+
+	private void _testPostSiteSiteByExternalReferenceCodeDisplayPageTemplateWithPageSpecificationsWithSettings()
+		throws Exception {
+
+		DisplayPageTemplate displayPageTemplate = randomDisplayPageTemplate();
+
+		ContentPageSpecification draftContentPageSpecification =
+			PageSpecificationsTestUtil.getContentPageSpecification(
+				null, PageSpecification.Status.DRAFT);
+
+		ServiceContext serviceContext =
+			ServiceContextTestUtil.getServiceContext(
+				testGroup.getGroupId(), TestPropsValues.getUserId());
+
+		draftContentPageSpecification.setSettings(
+			SettingsTestUtil.getSettings(
+				FavIcon.FavIconType.CLIENT_EXTENSION, serviceContext));
+
+		ContentPageSpecification publishedContentPageSpecification =
+			PageSpecificationsTestUtil.getContentPageSpecification(
+				draftContentPageSpecification.getExternalReferenceCode(),
+				PageSpecification.Status.APPROVED);
+
+		publishedContentPageSpecification.setSettings(
+			SettingsTestUtil.getSettings(
+				FavIcon.FavIconType.ITEM_EXTERNAL_REFERENCE, serviceContext));
+
+		displayPageTemplate.setPageSpecifications(
+			() -> new PageSpecification[] {
+				publishedContentPageSpecification, draftContentPageSpecification
+			});
+
+		DisplayPageTemplateResource displayPageTemplateResource =
+			_getDisplayPageTemplateResource();
+
+		_assertPageSpecifications(
+			displayPageTemplateResource.
+				postSiteSiteByExternalReferenceCodeDisplayPageTemplate(
+					testGroup.getExternalReferenceCode(), displayPageTemplate),
+			draftContentPageSpecification, publishedContentPageSpecification);
 	}
 
 	private void _testPostSiteSiteByExternalReferenceCodeDisplayPageTemplateWithParentFolder()

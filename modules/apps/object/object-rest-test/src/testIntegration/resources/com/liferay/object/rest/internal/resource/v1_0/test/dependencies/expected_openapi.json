@@ -1112,6 +1112,36 @@
 					"name": "ObjectEntry"
 				}
 			},
+			"ObjectDefinitionBrief": {
+				"properties": {
+					"externalReferenceCode": {
+						"description": "The object definition's external reference code.",
+						"readOnly": true,
+						"type": "string"
+					},
+					"label": {
+						"description": "The object definition's label.",
+						"readOnly": true,
+						"type": "string"
+					},
+					"objectFolderExternalReferenceCode": {
+						"description": "The object folder's external reference code.",
+						"readOnly": true,
+						"type": "string"
+					},
+					"x-class-name": {
+						"default": "com.liferay.object.rest.dto.v1_0.ObjectDefinitionBrief",
+						"readOnly": true,
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"x-filterable": [
+				],
+				"xml": {
+					"name": "ObjectDefinitionBrief"
+				}
+			},
 			"PageCollaborator": {
 				"properties": {
 					"actions": {
@@ -1835,7 +1865,21 @@
 					},
 					{
 						"in": "query",
+						"name": "aggregationTerms",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
 						"name": "fields",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "filter",
 						"schema": {
 							"type": "string"
 						}
@@ -1864,6 +1908,20 @@
 					{
 						"in": "query",
 						"name": "restrictFields",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "search",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "sort",
 						"schema": {
 							"type": "string"
 						}
@@ -2126,7 +2184,21 @@
 					},
 					{
 						"in": "query",
+						"name": "aggregationTerms",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
 						"name": "fields",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "filter",
 						"schema": {
 							"type": "string"
 						}
@@ -2155,6 +2227,20 @@
 					{
 						"in": "query",
 						"name": "restrictFields",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "search",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "sort",
 						"schema": {
 							"type": "string"
 						}
@@ -3046,7 +3132,21 @@
 					},
 					{
 						"in": "query",
+						"name": "aggregationTerms",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
 						"name": "fields",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "filter",
 						"schema": {
 							"type": "string"
 						}
@@ -3075,6 +3175,20 @@
 					{
 						"in": "query",
 						"name": "restrictFields",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "search",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "sort",
 						"schema": {
 							"type": "string"
 						}
@@ -3391,7 +3505,21 @@
 					},
 					{
 						"in": "query",
+						"name": "aggregationTerms",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
 						"name": "fields",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "filter",
 						"schema": {
 							"type": "string"
 						}
@@ -3420,6 +3548,20 @@
 					{
 						"in": "query",
 						"name": "restrictFields",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "search",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "sort",
 						"schema": {
 							"type": "string"
 						}

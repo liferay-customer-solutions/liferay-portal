@@ -345,7 +345,7 @@ public class ExpiredAssetResourceImpl extends BaseExpiredAssetResourceImpl {
 
 			for (long groupId : groupIds) {
 				usages += objectRelatedModelsProvider.getRelatedModelsCount(
-					groupId, objectRelationship.getObjectRelationshipId(),
+					groupId, objectRelationship.getObjectRelationshipId(), null,
 					objectEntryId, null);
 			}
 		}

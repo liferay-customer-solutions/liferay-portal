@@ -7,7 +7,6 @@ import ClayForm from '@clayui/form';
 import {
 	API,
 	ManagementToolbar,
-	MultiSelectItem,
 	constantsUtils,
 	invalidateRequired,
 	openToast,
@@ -23,7 +22,6 @@ import {BasicInfoContainer} from './BasicInfoContainer/BasicInfoContainer';
 import ContentContainer from './ContentContainer/ContentContainer';
 import DefinitionOfTermsContainer from './DefinitionOfTermsContainer/DefinitionOfTermsContainer';
 import {SettingsContainer} from './SettingsContainer/SettingsContainer';
-import {getEmailNotificationRoles} from './SettingsContainer/rolesUtil';
 
 import './EditNotificationTemplate.scss';
 
@@ -118,10 +116,6 @@ export default function EditNotificationTemplate({
 	);
 
 	const [templateTitle, setTemplateTitle] = useState<string>('');
-
-	const [emailNotificationRoles, setEmailNotificationRoles] = useState<
-		MultiSelectItem[]
-	>([]);
 
 	const onSubmit = async (notification: NotificationTemplate) => {
 		if (isSubmitted) {
@@ -287,15 +281,6 @@ export default function EditNotificationTemplate({
 				);
 			}
 
-			if (
-				notificationTemplateType === '' ||
-				notificationTemplateType === 'email'
-			) {
-				setEmailNotificationRoles(
-					await getEmailNotificationRoles(baseResourceURL)
-				);
-			}
-
 			const objectDefinitionsItems = await API.getObjectDefinitions();
 
 			setObjectDefinitions(objectDefinitionsItems);
@@ -380,7 +365,7 @@ export default function EditNotificationTemplate({
 							})}
 						>
 							<SettingsContainer
-								emailNotificationRoles={emailNotificationRoles}
+								baseResourceURL={baseResourceURL}
 								errors={errors}
 								learnResources={learnResources}
 								selectedLocale={selectedLocale}

@@ -6,17 +6,19 @@
 import ClayPanel from '@clayui/panel';
 import {FormError, MultiSelectItem} from '@liferay/object-js-components-web';
 import {ILearnResourceContext} from 'frontend-js-components-web';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {NotificationTemplateError} from '../EditNotificationTemplate';
 import {PrimaryRecipient} from './PrimaryRecipients';
 import {SecondaryRecipient} from './SecondaryRecipients';
 import {Sender} from './Sender';
+import {getEmailNotificationRoles} from './rolesUtil';
+import {getUserGroups} from './userGroupsUtil';
 
 import './EmailNotificationSettings.scss';
 
 interface EmailNotificationSettingsProps {
-	emailNotificationRoles: MultiSelectItem[];
+	baseResourceURL: string;
 	errors: FormError<NotificationTemplate & NotificationTemplateError>;
 	learnResources: ILearnResourceContext;
 	selectedLocale: Locale;
@@ -35,19 +37,42 @@ const RECIPIENT_OPTIONS = [
 	},
 ] as LabelValueObject[];
 
+if (Liferay.FeatureFlags['LPD-50091']) {
+	RECIPIENT_OPTIONS.push({
+		label: Liferay.Language.get('user-groups'),
+		value: 'user-group',
+	});
+}
+
 const SUBSCRIBERS_OPTION = {
 	label: Liferay.Language.get('subscribers'),
 	value: 'subscribers',
 } as LabelValueObject;
 
 export function EmailNotificationSettings({
-	emailNotificationRoles,
+	baseResourceURL,
 	errors,
 	learnResources,
 	selectedLocale,
 	setValues,
 	values,
 }: EmailNotificationSettingsProps) {
+	const [roles, setRoles] = useState<MultiSelectItem[]>([]);
+	const [userGroups, setUserGroups] = useState<MultiSelectItem[]>([]);
+
+	useEffect(() => {
+		const fetchInitialData = async () => {
+			const emailNotificationRoles =
+				await getEmailNotificationRoles(baseResourceURL);
+			const emailNotificationUserGroups = await getUserGroups();
+
+			setRoles(emailNotificationRoles);
+			setUserGroups(emailNotificationUserGroups);
+		};
+
+		fetchInitialData();
+	}, [baseResourceURL]);
+
 	return (
 		<div className="lfr__notification-template-email-notification-settings">
 			<ClayPanel
@@ -70,7 +95,6 @@ export function EmailNotificationSettings({
 			>
 				<ClayPanel.Body>
 					<PrimaryRecipient
-						emailNotificationRoles={emailNotificationRoles}
 						errors={errors}
 						learnResources={learnResources}
 						recipientOptions={
@@ -78,8 +102,10 @@ export function EmailNotificationSettings({
 								? [...RECIPIENT_OPTIONS, SUBSCRIBERS_OPTION]
 								: RECIPIENT_OPTIONS
 						}
+						roles={roles}
 						selectedLocale={selectedLocale}
 						setValues={setValues}
+						userGroups={userGroups}
 						values={values}
 					/>
 				</ClayPanel.Body>
@@ -91,10 +117,12 @@ export function EmailNotificationSettings({
 			>
 				<ClayPanel.Body>
 					<SecondaryRecipient
-						emailNotificationRoles={emailNotificationRoles}
 						learnResources={learnResources}
 						recipientOptions={RECIPIENT_OPTIONS}
+						roles={roles}
+						selectedLocale={selectedLocale}
 						setValues={setValues}
+						userGroups={userGroups}
 						values={values}
 					/>
 				</ClayPanel.Body>

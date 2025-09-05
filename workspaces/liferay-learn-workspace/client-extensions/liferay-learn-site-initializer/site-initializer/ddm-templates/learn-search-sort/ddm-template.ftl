@@ -98,6 +98,28 @@
 			dataTargetElement.classList.toggle('show');
 		}
 	}
+
+	document.addEventListener('DOMContentLoaded', () => {
+		const panel = document.querySelector('.portlet-sort');
+
+		if (!panel) return;
+
+		if (window.innerWidth <= 768) {
+			const panelBody = panel.querySelector('#sort-filter-items');
+
+			if (panelBody) {
+				panelBody.classList.remove('show');
+				panelBody.classList.add('collapse');
+			}
+
+			const panelHeaderButton = panel.querySelector('.sort-collapse-trigger');
+
+			if (panelHeaderButton) {
+				panelHeaderButton.classList.add('collapsed');
+				panelHeaderButton.setAttribute('aria-expanded', 'false');
+			}
+		}
+	});
 </script>
 
 <style>

@@ -303,6 +303,7 @@ public class PageSpecificationResourceImpl
 			groupId, contextHttpServletRequest, null
 		).build();
 
+		serviceContext.setCompanyId(contextCompany.getCompanyId());
 		serviceContext.setUserId(contextUser.getUserId());
 
 		if (!layout.isTypeAssetDisplay() && !layout.isTypeContent()) {
@@ -321,7 +322,7 @@ public class PageSpecificationResourceImpl
 					_cetManager, layout, layout.getNameMap(),
 					layout.getTitleMap(), layout.getDescriptionMap(),
 					layout.getRobotsMap(), layout.getFriendlyURLMap(),
-					pageSpecification, serviceContext));
+					pageSpecification, layout.getStatus(), serviceContext));
 		}
 
 		if (!Objects.equals(
@@ -337,11 +338,10 @@ public class PageSpecificationResourceImpl
 
 		return _pageSpecificationDTOConverter.toDTO(
 			LayoutUtil.updateLayout(
-				_cetManager, (ContentPageSpecification)pageSpecification,
-				layout, layout.getNameMap(), layout.getTitleMap(),
+				_cetManager, layout, layout.getNameMap(), layout.getTitleMap(),
 				layout.getDescriptionMap(), layout.getRobotsMap(),
-				layout.getFriendlyURLMap(), WorkflowConstants.STATUS_DRAFT,
-				serviceContext));
+				layout.getFriendlyURLMap(), pageSpecification,
+				WorkflowConstants.STATUS_DRAFT, serviceContext));
 	}
 
 	@Override

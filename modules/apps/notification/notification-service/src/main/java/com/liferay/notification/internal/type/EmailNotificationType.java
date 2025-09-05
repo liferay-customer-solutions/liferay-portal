@@ -26,6 +26,7 @@ import com.liferay.notification.internal.type.email.provider.DefaultEmailProvide
 import com.liferay.notification.internal.type.email.provider.EmailProvider;
 import com.liferay.notification.internal.type.email.provider.RoleEmailProvider;
 import com.liferay.notification.internal.type.email.provider.SubscribersEmailProvider;
+import com.liferay.notification.internal.type.email.provider.UserGroupEmailProvider;
 import com.liferay.notification.model.NotificationQueueEntry;
 import com.liferay.notification.model.NotificationQueueEntryAttachment;
 import com.liferay.notification.model.NotificationRecipient;
@@ -234,6 +235,17 @@ public class EmailNotificationType extends BaseNotificationType {
 	public void sendNotification(NotificationContext notificationContext)
 		throws PortalException {
 
+		NotificationTemplate notificationTemplate =
+			notificationContext.getNotificationTemplate();
+
+		if (Objects.equals(
+				notificationTemplate.getRecipientType(),
+				NotificationRecipientConstants.TYPE_USER_GROUP) &&
+			!FeatureFlagManagerUtil.isEnabled("LPD-50091")) {
+
+			return;
+		}
+
 		long groupId = 0;
 
 		User user = userLocalService.getUser(notificationContext.getUserId());
@@ -261,9 +273,6 @@ public class EmailNotificationType extends BaseNotificationType {
 		}
 
 		notificationContext.setUserLocale(userLocale);
-
-		NotificationTemplate notificationTemplate =
-			notificationContext.getNotificationTemplate();
 
 		String body = _formatBody(
 			notificationTemplate.getBodyMap(), userGroup, notificationContext);
@@ -316,10 +325,14 @@ public class EmailNotificationType extends BaseNotificationType {
 				NotificationRecipientSettingConstants.NAME_TO));
 
 		if (Validator.isNull(validEmailAddresses) &&
-			Objects.equals(
+			(Objects.equals(
 				notificationRecipientSettings.get(
 					NotificationRecipientSettingConstants.NAME_TO_TYPE),
-				NotificationRecipientConstants.TYPE_ROLE)) {
+				NotificationRecipientConstants.TYPE_ROLE) ||
+			 Objects.equals(
+				 notificationRecipientSettings.get(
+					 NotificationRecipientSettingConstants.NAME_TO_TYPE),
+				 NotificationRecipientConstants.TYPE_USER_GROUP))) {
 
 			return;
 		}
@@ -509,6 +522,11 @@ public class EmailNotificationType extends BaseNotificationType {
 			new SubscribersEmailProvider(
 				_objectEntryFolderLocalService, _objectEntryLocalService,
 				_subscriptionLocalService, _userLocalService));
+		_emailProviders.put(
+			NotificationRecipientConstants.TYPE_USER_GROUP,
+			new UserGroupEmailProvider(
+				_permissionCheckerFactory, userGroupLocalService,
+				_userLocalService));
 
 		_serviceTrackerList = ServiceTrackerListFactory.open(
 			bundleContext, TemplateContextContributor.class,

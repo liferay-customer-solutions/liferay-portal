@@ -284,9 +284,10 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 
 		ServiceContext serviceContext = ServiceContextUtil.createServiceContext(
 			sitePage.getTaxonomyCategoryItemExternalReferences(),
-			sitePage.getDateCreated(), groupId, contextHttpServletRequest,
-			sitePage.getKeywords(), sitePage.getDateModified(),
-			contextUser.getUserId(), sitePage.getUuid());
+			contextCompany.getCompanyId(), sitePage.getDateCreated(), groupId,
+			contextHttpServletRequest, sitePage.getKeywords(),
+			sitePage.getDateModified(), contextUser.getUserId(),
+			sitePage.getUuid());
 
 		_validatePageSpecificationExternalReferenceCode(
 			serviceContext, sitePage);
@@ -313,7 +314,7 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 		}
 		else {
 			layout = LayoutUtil.addPortletLayout(
-				sitePage.getExternalReferenceCode(), groupId,
+				_cetManager, sitePage.getExternalReferenceCode(), groupId,
 				_getParentLayoutId(
 					LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, groupId,
 					sitePage.getParentSitePageExternalReferenceCode()),
@@ -432,10 +433,10 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 
 		ServiceContext serviceContext = ServiceContextUtil.createServiceContext(
 			sitePage.getTaxonomyCategoryItemExternalReferences(),
-			sitePage.getDateCreated(), layout.getGroupId(),
-			contextHttpServletRequest, sitePage.getKeywords(),
-			sitePage.getDateModified(), contextUser.getUserId(),
-			sitePage.getUuid());
+			contextCompany.getCompanyId(), sitePage.getDateCreated(),
+			layout.getGroupId(), contextHttpServletRequest,
+			sitePage.getKeywords(), sitePage.getDateModified(),
+			contextUser.getUserId(), sitePage.getUuid());
 
 		serviceContext.setAttribute(
 			"hidden",

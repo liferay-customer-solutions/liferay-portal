@@ -20,9 +20,12 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -71,7 +74,7 @@ public class TestrayServer {
 		}
 
 		try {
-			List<JSONObject> entityJSONObjects = requestGraphQL(
+			Set<JSONObject> entityJSONObjects = requestGraphQL(
 				"builds", TestrayBuild.FIELD_NAMES, "id eq '" + buildID + "'",
 				null, 1, 1);
 
@@ -79,7 +82,9 @@ public class TestrayServer {
 				return null;
 			}
 
-			JSONObject entityJSONObject = entityJSONObjects.get(0);
+			Iterator<JSONObject> iterator = entityJSONObjects.iterator();
+
+			JSONObject entityJSONObject = iterator.next();
 
 			JSONObject projectJSONObject = entityJSONObject.getJSONObject(
 				"projectToBuilds");
@@ -115,7 +120,7 @@ public class TestrayServer {
 		}
 
 		try {
-			List<JSONObject> entityJSONObjects = requestGraphQL(
+			Set<JSONObject> entityJSONObjects = requestGraphQL(
 				"caseTypes", TestrayCaseType.FIELD_NAMES,
 				"id eq '" + testrayCaseTypeID + "'", null, 1, 1);
 
@@ -123,8 +128,10 @@ public class TestrayServer {
 				return null;
 			}
 
+			Iterator<JSONObject> iterator = entityJSONObjects.iterator();
+
 			testrayCaseType = TestrayFactory.newTestrayCaseType(
-				this, entityJSONObjects.get(0));
+				this, iterator.next());
 
 			_testrayCaseTypesID.put(testrayCaseType.getID(), testrayCaseType);
 			_testrayCaseTypesName.put(
@@ -148,7 +155,7 @@ public class TestrayServer {
 		}
 
 		try {
-			List<JSONObject> entityJSONObjects = requestGraphQL(
+			Set<JSONObject> entityJSONObjects = requestGraphQL(
 				"caseTypes", TestrayCaseType.FIELD_NAMES,
 				"name eq '" + testrayCaseTypeName + "'", null, 1, 1);
 
@@ -156,8 +163,10 @@ public class TestrayServer {
 				return null;
 			}
 
+			Iterator<JSONObject> iterator = entityJSONObjects.iterator();
+
 			testrayCaseType = TestrayFactory.newTestrayCaseType(
-				this, entityJSONObjects.get(0));
+				this, iterator.next());
 
 			_testrayCaseTypesID.put(testrayCaseType.getID(), testrayCaseType);
 			_testrayCaseTypesName.put(
@@ -176,7 +185,7 @@ public class TestrayServer {
 		}
 
 		try {
-			List<JSONObject> entityJSONObjects = requestGraphQL(
+			Set<JSONObject> entityJSONObjects = requestGraphQL(
 				"projects", TestrayProject.FIELD_NAMES,
 				"id eq '" + projectID + "'", null, 1, 1);
 
@@ -184,8 +193,10 @@ public class TestrayServer {
 				return null;
 			}
 
+			Iterator<JSONObject> iterator = entityJSONObjects.iterator();
+
 			TestrayProject testrayProject = TestrayFactory.newTestrayProject(
-				this, entityJSONObjects.get(0));
+				this, iterator.next());
 
 			_testrayProjects.put(testrayProject.getID(), testrayProject);
 
@@ -204,7 +215,7 @@ public class TestrayServer {
 		}
 
 		try {
-			List<JSONObject> entityJSONObjects = requestGraphQL(
+			Set<JSONObject> entityJSONObjects = requestGraphQL(
 				"projects", TestrayProject.FIELD_NAMES,
 				"name eq '" + projectName + "'", null, 1, 1);
 
@@ -212,8 +223,10 @@ public class TestrayServer {
 				return null;
 			}
 
+			Iterator<JSONObject> iterator = entityJSONObjects.iterator();
+
 			TestrayProject testrayProject = TestrayFactory.newTestrayProject(
-				this, entityJSONObjects.get(0));
+				this, iterator.next());
 
 			_testrayProjects.put(testrayProject.getID(), testrayProject);
 
@@ -253,7 +266,7 @@ public class TestrayServer {
 		}
 
 		try {
-			List<JSONObject> entityJSONObjects = requestGraphQL(
+			Set<JSONObject> entityJSONObjects = requestGraphQL(
 				"routines", TestrayRoutine.FIELD_NAMES,
 				"id eq '" + routineId + "'", null, 1, 1);
 
@@ -261,7 +274,9 @@ public class TestrayServer {
 				return null;
 			}
 
-			JSONObject entityJSONObject = entityJSONObjects.get(0);
+			Iterator<JSONObject> iterator = entityJSONObjects.iterator();
+
+			JSONObject entityJSONObject = iterator.next();
 
 			JSONObject projectJSONObject = entityJSONObject.getJSONObject(
 				"routineToProjects");
@@ -388,7 +403,7 @@ public class TestrayServer {
 		return getURL() + "/" + urlPath;
 	}
 
-	protected List<JSONObject> requestGraphQL(
+	protected Set<JSONObject> requestGraphQL(
 			boolean checkCache, String entityName, String[] entityFields,
 			String filter, String sort, long maxCount, int pageSize)
 		throws IOException {
@@ -405,7 +420,7 @@ public class TestrayServer {
 			pageSize = (int)maxCount;
 		}
 
-		List<JSONObject> entityJSONObjects = new ArrayList<>();
+		Set<JSONObject> entityJSONObjects = new HashSet<>();
 
 		int page = 0;
 
@@ -502,7 +517,7 @@ public class TestrayServer {
 		return entityJSONObjects;
 	}
 
-	protected List<JSONObject> requestGraphQL(
+	protected Set<JSONObject> requestGraphQL(
 			String entityName, String[] entityFields, String filter,
 			String sort)
 		throws IOException {
@@ -510,7 +525,7 @@ public class TestrayServer {
 		return requestGraphQL(entityName, entityFields, filter, sort, 0, 0);
 	}
 
-	protected List<JSONObject> requestGraphQL(
+	protected Set<JSONObject> requestGraphQL(
 			String entityName, String[] entityFields, String filter,
 			String sort, long maxCount, int pageSize)
 		throws IOException {

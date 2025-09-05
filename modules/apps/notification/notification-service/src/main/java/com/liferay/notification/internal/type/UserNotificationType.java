@@ -13,6 +13,7 @@ import com.liferay.notification.context.NotificationContext;
 import com.liferay.notification.internal.type.users.provider.DefaultUsersProvider;
 import com.liferay.notification.internal.type.users.provider.RoleUsersProvider;
 import com.liferay.notification.internal.type.users.provider.TermUsersProvider;
+import com.liferay.notification.internal.type.users.provider.UserGroupUsersProvider;
 import com.liferay.notification.internal.type.users.provider.UsersProvider;
 import com.liferay.notification.model.NotificationQueueEntry;
 import com.liferay.notification.model.NotificationRecipient;
@@ -23,6 +24,7 @@ import com.liferay.notification.type.NotificationType;
 import com.liferay.object.service.ObjectEntryService;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserNotificationDeliveryConstants;
@@ -32,6 +34,7 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.RoleLocalService;
+import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.service.UserGroupRoleLocalService;
 import com.liferay.portal.kernel.service.UserNotificationEventLocalService;
 import com.liferay.portal.kernel.util.HashMapBuilder;
@@ -42,6 +45,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.osgi.framework.BundleContext;
@@ -75,6 +79,7 @@ public class UserNotificationType extends BaseNotificationType {
 		return SetUtil.fromArray(
 			NotificationRecipientSettingConstants.NAME_ROLE_NAME,
 			NotificationRecipientSettingConstants.NAME_TERM,
+			NotificationRecipientSettingConstants.NAME_USER_GROUP_NAME,
 			NotificationRecipientSettingConstants.NAME_USER_SCREEN_NAME);
 	}
 
@@ -111,12 +116,20 @@ public class UserNotificationType extends BaseNotificationType {
 	public void sendNotification(NotificationContext notificationContext)
 		throws PortalException {
 
+		NotificationTemplate notificationTemplate =
+			notificationContext.getNotificationTemplate();
+
+		if (Objects.equals(
+				notificationTemplate.getRecipientType(),
+				NotificationRecipientConstants.TYPE_USER_GROUP) &&
+			!FeatureFlagManagerUtil.isEnabled("LPD-50091")) {
+
+			return;
+		}
+
 		boolean enqueue = false;
 		List<Map<String, String>> notificationRecipientSettings =
 			new ArrayList<>();
-
-		NotificationTemplate notificationTemplate =
-			notificationContext.getNotificationTemplate();
 
 		UsersProvider usersProvider = _usersProviders.get(
 			notificationTemplate.getRecipientType());
@@ -198,6 +211,11 @@ public class UserNotificationType extends BaseNotificationType {
 			NotificationRecipientConstants.TYPE_USER,
 			new DefaultUsersProvider(
 				_permissionCheckerFactory, userLocalService));
+		_usersProviders.put(
+			NotificationRecipientConstants.TYPE_USER_GROUP,
+			new UserGroupUsersProvider(
+				_permissionCheckerFactory, _userGroupLocalService,
+				userLocalService));
 	}
 
 	@Reference
@@ -211,6 +229,9 @@ public class UserNotificationType extends BaseNotificationType {
 
 	@Reference
 	private RoleLocalService _roleLocalService;
+
+	@Reference
+	private UserGroupLocalService _userGroupLocalService;
 
 	@Reference
 	private UserGroupRoleLocalService _userGroupRoleLocalService;

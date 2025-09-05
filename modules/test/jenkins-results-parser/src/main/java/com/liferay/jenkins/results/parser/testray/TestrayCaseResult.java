@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
@@ -89,17 +90,13 @@ public class TestrayCaseResult {
 		}
 
 		for (TestrayCaseResult previousTestrayCaseResult :
-				getTestrayCaseResultHistory(5)) {
+				getTestrayCaseResultHistory(10, 10)) {
 
 			if (Objects.equals(getID(), previousTestrayCaseResult.getID())) {
 				continue;
 			}
 
-			if (_isSimilarError(previousTestrayCaseResult) &&
-				!Objects.equals(
-					getPullRequestSenderUsername(),
-					previousTestrayCaseResult.getPullRequestSenderUsername())) {
-
+			if (_isSimilarError(previousTestrayCaseResult)) {
 				_errorType = ErrorType.COMMON;
 
 				return _errorType;
@@ -218,7 +215,9 @@ public class TestrayCaseResult {
 		return _testrayCase;
 	}
 
-	public List<TestrayCaseResult> getTestrayCaseResultHistory(int maxCount) {
+	public List<TestrayCaseResult> getTestrayCaseResultHistory(
+		int maxCount, int pageSize) {
+
 		List<TestrayCaseResult> testrayCaseResults = new ArrayList<>();
 
 		StringBuilder sb = new StringBuilder();
@@ -232,14 +231,31 @@ public class TestrayCaseResult {
 		TestrayServer testrayServer = getTestrayServer();
 
 		try {
-			List<JSONObject> entityJSONObjects = testrayServer.requestGraphQL(
+			Set<JSONObject> entityJSONObjects = testrayServer.requestGraphQL(
 				"caseResults", TestrayCaseResult.FIELD_NAMES, sb.toString(),
-				"dateCreated:desc", maxCount, 5);
+				"dateCreated:desc", maxCount, pageSize);
+
+			int previousTestrayCaseResultsCount = 0;
 
 			for (JSONObject entityJSONObject : entityJSONObjects) {
-				testrayCaseResults.add(
+				if (previousTestrayCaseResultsCount >=
+						_MAX_PREVIOUS_TESTRAY_CASE_RESULTS) {
+
+					break;
+				}
+
+				TestrayCaseResult testrayCaseResult =
 					TestrayFactory.newJSONObjectTestrayCaseResult(
-						testrayServer, entityJSONObject));
+						testrayServer, entityJSONObject);
+
+				if (!Objects.equals(
+						testrayCaseResult.getPullRequestSenderUsername(),
+						getPullRequestSenderUsername())) {
+
+					testrayCaseResults.add(testrayCaseResult);
+
+					previousTestrayCaseResultsCount++;
+				}
 			}
 		}
 		catch (IOException ioException) {
@@ -471,6 +487,8 @@ public class TestrayCaseResult {
 	};
 
 	private static final double _MAX_JARO_WINKLER_DISTANCE = 0.93;
+
+	private static final int _MAX_PREVIOUS_TESTRAY_CASE_RESULTS = 5;
 
 	private ErrorType _errorType;
 	private final JSONObject _jsonObject;

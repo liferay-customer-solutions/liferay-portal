@@ -173,11 +173,33 @@ public abstract class BaseSectionDisplayContext {
 
 				return _getFileMimeTypeIcons();
 			}
+		).put(
+			"objectDefinitionCssClasses",
+			HashMapBuilder.put(
+				"default", "content-icon-custom-structure"
+			).put(
+				"L_BASIC_WEB_CONTENT", "content-icon-basic-content"
+			).put(
+				"L_BLOG", "content-icon-blog"
+			).put(
+				"L_KNOWLEDGE_BASE", "content-icon-knowledge-base"
+			).build()
+		).put(
+			"objectDefinitionIcons",
+			HashMapBuilder.put(
+				"default", "web-content"
+			).put(
+				"L_BASIC_WEB_CONTENT", "forms"
+			).put(
+				"L_BLOG", "blogs"
+			).put(
+				"L_KNOWLEDGE_BASE", "wiki"
+			).build()
 		).build();
 	}
 
 	public String getAPIURL() {
-		StringBundler sb = new StringBundler(7);
+		StringBundler sb = new StringBundler(8);
 
 		sb.append("/o/search/v1.0/search?emptySearch=true&filter=");
 
@@ -201,7 +223,8 @@ public abstract class BaseSectionDisplayContext {
 			sb.append(getCMSSectionFilterString());
 		}
 
-		sb.append("&nestedFields=embedded,file.thumbnailURL");
+		sb.append("&nestedFields=embedded,file.thumbnailURL,");
+		sb.append("systemProperties.objectDefinitionBrief");
 
 		return sb.toString();
 	}

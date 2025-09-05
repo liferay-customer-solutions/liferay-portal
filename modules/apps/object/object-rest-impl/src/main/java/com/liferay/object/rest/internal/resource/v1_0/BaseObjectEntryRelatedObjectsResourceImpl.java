@@ -8,10 +8,15 @@ package com.liferay.object.rest.internal.resource.v1_0;
 import com.liferay.object.rest.dto.v1_0.ObjectEntry;
 import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.petra.function.transform.TransformUtil;
+import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.search.Sort;
+import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
+import com.liferay.portal.vulcan.aggregation.Aggregation;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
+import com.liferay.portal.vulcan.resource.EntityModelResource;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,6 +38,7 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.UriInfo;
 
@@ -42,7 +48,8 @@ import java.util.List;
 /**
  * @author Carlos Correa
  */
-public abstract class BaseObjectEntryRelatedObjectsResourceImpl {
+public abstract class BaseObjectEntryRelatedObjectsResourceImpl
+	implements EntityModelResource {
 
 	@DELETE
 	@Operation(
@@ -151,11 +158,15 @@ public abstract class BaseObjectEntryRelatedObjectsResourceImpl {
 				in = ParameterIn.PATH, name = "currentExternalReferenceCode"
 			),
 			@Parameter(in = ParameterIn.PATH, name = "objectRelationshipName"),
+			@Parameter(in = ParameterIn.QUERY, name = "aggregationTerms"),
 			@Parameter(in = ParameterIn.QUERY, name = "fields"),
+			@Parameter(in = ParameterIn.QUERY, name = "filter"),
 			@Parameter(in = ParameterIn.QUERY, name = "nestedFields"),
 			@Parameter(in = ParameterIn.QUERY, name = "page"),
 			@Parameter(in = ParameterIn.QUERY, name = "pageSize"),
-			@Parameter(in = ParameterIn.QUERY, name = "restrictFields")
+			@Parameter(in = ParameterIn.QUERY, name = "restrictFields"),
+			@Parameter(in = ParameterIn.QUERY, name = "search"),
+			@Parameter(in = ParameterIn.QUERY, name = "sort")
 		}
 	)
 	@Path(
@@ -171,7 +182,9 @@ public abstract class BaseObjectEntryRelatedObjectsResourceImpl {
 				@NotNull @Parameter(hidden = true)
 				@PathParam("objectRelationshipName")
 				String objectRelationshipName,
-				@Context Pagination pagination)
+				@Parameter(hidden = true) @QueryParam("search") String search,
+				@Context Aggregation aggregation, @Context Filter filter,
+				@Context Pagination pagination, @Context Sort[] sorts)
 		throws Exception;
 
 	@GET
@@ -276,11 +289,15 @@ public abstract class BaseObjectEntryRelatedObjectsResourceImpl {
 				in = ParameterIn.PATH, name = "currentExternalReferenceCode"
 			),
 			@Parameter(in = ParameterIn.PATH, name = "objectRelationshipName"),
+			@Parameter(in = ParameterIn.QUERY, name = "aggregationTerms"),
 			@Parameter(in = ParameterIn.QUERY, name = "fields"),
+			@Parameter(in = ParameterIn.QUERY, name = "filter"),
 			@Parameter(in = ParameterIn.QUERY, name = "nestedFields"),
 			@Parameter(in = ParameterIn.QUERY, name = "page"),
 			@Parameter(in = ParameterIn.QUERY, name = "pageSize"),
-			@Parameter(in = ParameterIn.QUERY, name = "restrictFields")
+			@Parameter(in = ParameterIn.QUERY, name = "restrictFields"),
+			@Parameter(in = ParameterIn.QUERY, name = "search"),
+			@Parameter(in = ParameterIn.QUERY, name = "sort")
 		}
 	)
 	@Path(
@@ -298,7 +315,9 @@ public abstract class BaseObjectEntryRelatedObjectsResourceImpl {
 				@NotNull @Parameter(hidden = true)
 				@PathParam("objectRelationshipName")
 				String objectRelationshipName,
-				@Context Pagination pagination)
+				@Parameter(hidden = true) @QueryParam("search") String search,
+				@Context Aggregation aggregation, @Context Filter filter,
+				@Context Pagination pagination, @Context Sort[] sorts)
 		throws Exception;
 
 	@GET
@@ -617,6 +636,10 @@ public abstract class BaseObjectEntryRelatedObjectsResourceImpl {
 				String relatedExternalReferenceCode)
 		throws Exception;
 
+	public void setContextCompany(Company contextCompany) {
+		this.contextCompany = contextCompany;
+	}
+
 	protected <T, R, E extends Throwable> List<R> transform(
 		Collection<T> collection, UnsafeFunction<T, R, E> unsafeFunction) {
 
@@ -624,6 +647,7 @@ public abstract class BaseObjectEntryRelatedObjectsResourceImpl {
 	}
 
 	protected AcceptLanguage contextAcceptLanguage;
+	protected Company contextCompany;
 	protected HttpServletRequest contextHttpServletRequest;
 	protected UriInfo contextUriInfo;
 	protected User contextUser;

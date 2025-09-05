@@ -13,6 +13,7 @@ import com.liferay.exportimport.kernel.service.StagingLocalService;
 import com.liferay.headless.admin.site.client.dto.v1_0.ContentPageSpecification;
 import com.liferay.headless.admin.site.client.dto.v1_0.ContentPageTemplate;
 import com.liferay.headless.admin.site.client.dto.v1_0.ContentPageTemplateSettings;
+import com.liferay.headless.admin.site.client.dto.v1_0.FavIcon;
 import com.liferay.headless.admin.site.client.dto.v1_0.NavigationSettings;
 import com.liferay.headless.admin.site.client.dto.v1_0.PageSpecification;
 import com.liferay.headless.admin.site.client.dto.v1_0.PageTemplate;
@@ -851,18 +852,6 @@ public class PageTemplateResourceTest extends BasePageTemplateResourceTestCase {
 		}
 	}
 
-	private void _assertWidgetPageSpecifications(
-		PageSpecification[] pageSpecifications,
-		WidgetPageSpecification widgetPageSpecification) {
-
-		Assert.assertEquals(
-			Arrays.toString(pageSpecifications), 1, pageSpecifications.length);
-
-		PageSpecificationsTestUtil.assertWidgetPageSpecification(
-			widgetPageSpecification,
-			(WidgetPageSpecification)pageSpecifications[0]);
-	}
-
 	private void _enableLocalStaging() throws Exception {
 		_stagingLocalService.enableLocalStaging(
 			TestPropsValues.getUserId(), testGroup, true, false,
@@ -1374,7 +1363,7 @@ public class PageTemplateResourceTest extends BasePageTemplateResourceTestCase {
 		WidgetPageSpecification widgetPageSpecification =
 			(WidgetPageSpecification)patchPageSpecifications[0];
 
-		_assertWidgetPageSpecifications(
+		PageSpecificationsTestUtil.assertWidgetPageSpecifications(
 			pageTemplate.getPageSpecifications(), widgetPageSpecification);
 
 		WidgetPageTemplateSettings patchWidgetPageTemplateSettings =
@@ -1385,7 +1374,8 @@ public class PageTemplateResourceTest extends BasePageTemplateResourceTestCase {
 			patchWidgetPageTemplateSettings.getLayoutTemplateId());
 
 		SettingsTestUtil.modifySettings(
-			serviceContext, widgetPageSpecification.getSettings());
+			FavIcon.FavIconType.ITEM_EXTERNAL_REFERENCE, serviceContext,
+			widgetPageSpecification.getSettings());
 
 		pageTemplate =
 			pageTemplateResource.
@@ -1419,7 +1409,7 @@ public class PageTemplateResourceTest extends BasePageTemplateResourceTestCase {
 			_layoutLocalService.getLayout(layoutPageTemplateEntry.getPlid()),
 			widgetPageSpecification.getSettings());
 
-		_assertWidgetPageSpecifications(
+		PageSpecificationsTestUtil.assertWidgetPageSpecifications(
 			pageTemplate.getPageSpecifications(), widgetPageSpecification);
 
 		_layoutPageTemplateEntryLocalService.deleteLayoutPageTemplateEntry(
@@ -1622,6 +1612,7 @@ public class PageTemplateResourceTest extends BasePageTemplateResourceTestCase {
 
 		widgetPageSpecification.setSettings(
 			SettingsTestUtil.getSettings(
+				FavIcon.FavIconType.ITEM_EXTERNAL_REFERENCE,
 				ServiceContextTestUtil.getServiceContext(
 					testGroup.getGroupId(), TestPropsValues.getUserId())));
 
@@ -1630,7 +1621,7 @@ public class PageTemplateResourceTest extends BasePageTemplateResourceTestCase {
 				postSiteSiteByExternalReferenceCodePageTemplate(
 					testGroup.getExternalReferenceCode(), pageTemplate);
 
-		_assertWidgetPageSpecifications(
+		PageSpecificationsTestUtil.assertWidgetPageSpecifications(
 			postPageTemplate.getPageSpecifications(), widgetPageSpecification);
 
 		_layoutPageTemplateEntryLocalService.deleteLayoutPageTemplateEntry(
@@ -1757,6 +1748,7 @@ public class PageTemplateResourceTest extends BasePageTemplateResourceTestCase {
 			PageSpecificationsTestUtil.getWidgetPageSpecification(
 				null, pageTemplate.getExternalReferenceCode(),
 				SettingsTestUtil.getSettings(
+					FavIcon.FavIconType.ITEM_EXTERNAL_REFERENCE,
 					ServiceContextTestUtil.getServiceContext(
 						testGroup.getGroupId(), TestPropsValues.getUserId())),
 				PageSpecification.Status.APPROVED,
@@ -1771,7 +1763,7 @@ public class PageTemplateResourceTest extends BasePageTemplateResourceTestCase {
 				testGroup.getExternalReferenceCode(),
 				pageTemplate.getExternalReferenceCode(), pageTemplate);
 
-		_assertWidgetPageSpecifications(
+		PageSpecificationsTestUtil.assertWidgetPageSpecifications(
 			putPageTemplate.getPageSpecifications(), widgetPageSpecification);
 
 		String layoutTemplateId = "1_column";
@@ -1792,7 +1784,7 @@ public class PageTemplateResourceTest extends BasePageTemplateResourceTestCase {
 				testGroup.getExternalReferenceCode(),
 				pageTemplate.getExternalReferenceCode(), pageTemplate);
 
-		_assertWidgetPageSpecifications(
+		PageSpecificationsTestUtil.assertWidgetPageSpecifications(
 			putPageTemplate.getPageSpecifications(), widgetPageSpecification);
 
 		WidgetPageTemplateSettings putWidgetPageTemplateSettings =
@@ -1805,6 +1797,7 @@ public class PageTemplateResourceTest extends BasePageTemplateResourceTestCase {
 
 		widgetPageSpecification.setSettings(
 			SettingsTestUtil.getSettings(
+				FavIcon.FavIconType.CLIENT_EXTENSION,
 				ServiceContextTestUtil.getServiceContext(
 					testGroup.getGroupId(), TestPropsValues.getUserId())));
 
@@ -1813,7 +1806,7 @@ public class PageTemplateResourceTest extends BasePageTemplateResourceTestCase {
 				testGroup.getExternalReferenceCode(),
 				pageTemplate.getExternalReferenceCode(), pageTemplate);
 
-		_assertWidgetPageSpecifications(
+		PageSpecificationsTestUtil.assertWidgetPageSpecifications(
 			putPageTemplate.getPageSpecifications(), widgetPageSpecification);
 
 		_layoutPageTemplateEntryLocalService.deleteLayoutPageTemplateEntry(

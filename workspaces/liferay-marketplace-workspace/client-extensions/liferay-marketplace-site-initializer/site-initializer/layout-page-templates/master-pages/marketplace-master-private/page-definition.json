@@ -3,19 +3,18 @@
 		"pageElements": [
 			{
 				"definition": {
+					"customCSS": ".[$FRAGMENT_CLASS$] {\n\nposition:sticky;\ntop:-48px;\nz-index:970;\n}",
 					"fragmentStyle": {
-						"borderWidth": "0",
-						"minHeight": "100vh"
+						"backgroundColor": "#FFFFFF"
 					},
 					"indexed": true,
 					"layout": {
-						"contentDisplay": "FlexColumn",
-						"justify": "SpaceBetween"
 					}
 				},
 				"pageElements": [
 					{
 						"definition": {
+							"customCSS": ".[$FRAGMENT_CLASS$] {\nborder-bottom: solid 1px var(--neutral-02, #E2E2E4);\n}",
 							"indexed": true,
 							"layout": {
 							}
@@ -55,7 +54,6 @@
 								"pageElements": [
 									{
 										"definition": {
-											"customCSS": ".[$FRAGMENT_CLASS$] {\nborder-bottom: solid 1px var(--neutral-02, #E2E2E4);\n}",
 											"fragmentStyle": {
 												"height": "48px"
 											},
@@ -256,6 +254,7 @@
 														"siteKey": "[$GROUP_KEY$]"
 													},
 													"fragmentConfig": {
+														"siteNavigationMenuId": 0
 													},
 													"fragmentFields": [
 													],
@@ -276,12 +275,20 @@
 									}
 								],
 								"type": "Section"
-							},
+							}
+						],
+						"type": "Section"
+					},
+					{
+						"definition": {
+							"customCSS": ".[$FRAGMENT_CLASS$] {\nborder-bottom: solid 1px var(--neutral-02, #E2E2E4);\n}",
+							"indexed": true,
+							"layout": {
+							}
+						},
+						"pageElements": [
 							{
 								"definition": {
-									"cssClasses": [
-										"nav-mobile-class"
-									],
 									"customCSS": ".[$FRAGMENT_CLASS$] {\n \n}",
 									"fragmentStyle": {
 										"borderWidth": "0",
@@ -656,7 +663,7 @@
 																"pageElements": [
 																	{
 																		"definition": {
-																			"customCSS": ".[$FRAGMENT_CLASS$] .nav-item:hover {\n\tbackground-color: #EDF3FE !important;\n}\n\n.dropdown-menu {\n\tmin-width: 130px;\n}\n\nul {\n\tpadding: 0px\n}\n\n.mobile-menu-container .lfr-nav-item {\n\tborder-radius: 8px;\n\tborder: none;\n\tmargin: 6px;\n\tpadding: 6px;\n\ttext-align: center;\n\ttransition: all 0.3s cubic-bezier(.25, .8, .25, 1);\n}\n\n.mobile-menu-container .lfr-nav-item a:hover {\n\tbackground: #EDF3FE;\n\tcolor: #0053F0;\n\ttransition: all 0.3s cubic-bezier(.25, .8, .25, 1);\n}\n",
+																			"customCSS": ".[$FRAGMENT_CLASS$] .nav-item:hover {\n\tbackground-color: #EDF3FE !important;\n}\n\n.dropdown-menu {\n\tmin-width: 130px;\n}\n\n.mobile-menu-container ul {\n\tpadding: 0px !important;\n}\n\n.mobile-menu-container .lfr-nav-item {\n\tborder-radius: 8px;\n\tborder: none;\n\tmargin: 6px;\n\tpadding: 6px;\n\ttext-align: center;\n\ttransition: all 0.3s cubic-bezier(.25, .8, .25, 1);\n}\n\n.mobile-menu-container .lfr-nav-item a:hover {\n\tbackground: #EDF3FE;\n\tcolor: #0053F0;\n\ttransition: all 0.3s cubic-bezier(.25, .8, .25, 1);\n}\n",
 																			"fragment": {
 																				"key": "com.liferay.fragment.renderer.menu.display.internal.MenuDisplayFragmentRenderer"
 																			},
@@ -687,7 +694,33 @@
 									}
 								],
 								"type": "Section"
-							},
+							}
+						],
+						"type": "Section"
+					}
+				],
+				"type": "Section"
+			},
+			{
+				"definition": {
+					"fragmentStyle": {
+						"borderWidth": "0",
+						"minHeight": "100vh"
+					},
+					"indexed": true,
+					"layout": {
+						"contentDisplay": "FlexColumn",
+						"justify": "SpaceBetween"
+					}
+				},
+				"pageElements": [
+					{
+						"definition": {
+							"indexed": true,
+							"layout": {
+							}
+						},
+						"pageElements": [
 							{
 								"definition": {
 									"fragmentStyle": {
@@ -745,7 +778,7 @@
 	},
 	"settings": {
 		"colorSchemeName": "01",
-		"css": "/*Source Sans 3*/\n@font-face {\n\tfont-display: swap;\n\tfont-family: 'Source Sans 3';\n\tfont-style: normal;\n\tfont-weight: 400;\n\tsrc: url('/documents/d/marketplace/sourcesans3-regular-ttf');\n}\n\n.child-menu.dropdown-menu {\n\tborder-radius: 8px !important;\n\tpadding: 0px !important;\n}\n\n.card.main-image {\n\tborder-radius: 10px !important;\n}\n\n.lfr-layout-structure-item-com-liferay-portal-search-web-category-facet-portlet-categoryfacetportlet,\n.lfr-layout-structure-item-com-liferay-commerce-product-content-search-web-internal-portlet-cpspecificationoptionfacetsportlet {\n\tborder-radius: 10px;\n}\n\n.lfr-nav-item.nav-item {\n\tborder-radius: 8px;\n\tmargin-right: 0.5rem;\n\ttransition: all 0.3s ease-in-out;\n}\n\n.lfr-nav-item.nav-item .nav-link {\n\tborder-bottom: transparent solid 3px !important;\n}\n\n.lfr-nav-item.nav-item:hover {\n\tbackground-color: #ffffff !important;\n\tfont-weight: none !important;\n}\n\n.lfr-nav-item.nav-item.dropdown:has(.child-menu.dropdown-menu .active.selected) .nav-link {\n\tborder-bottom: #004AD7 solid 3px !important;\n\tcolor: #0053F0 !important;\n\tfont-weight: 600;\n}\n\n.lfr-nav-item.nav-item.selected.active .nav-link {\n\tborder-bottom: #004AD7 solid 3px !important;\n\tcolor: #0053F0 !important;\n\tfont-weight: 600;\n}\n\n.product-gallery .arrow.next {\n\tborder-bottom-right-radius: 10px;\n\tborder-top-right-radius: 10px;\n}\n\n.product-gallery .arrow.prev {\n\tborder-bottom-left-radius: 10px;\n\tborder-top-left-radius: 10px;\n}",
+		"css": "/*Source Sans 3*/\n@font-face {\n   font-display: swap;\n   font-family: 'Source Sans 3';\n   font-style: normal;\n   font-weight: 400;\n   src: url('/documents/d/marketplace/sourcesans3-regular-ttf');\n}\n\n.child-menu.dropdown-menu {\n   border-radius: 8px !important;\n   padding: 0px !important;\n}\n\n.card.main-image {\n   border-radius: 10px !important;\n}\n\n.lfr-layout-structure-item-com-liferay-portal-search-web-category-facet-portlet-categoryfacetportlet,\n.lfr-layout-structure-item-com-liferay-commerce-product-content-search-web-internal-portlet-cpspecificationoptionfacetsportlet {\n   border-radius: 10px;\n}\n\n.lfr-nav-item.nav-item {\n   border-radius: 8px;\n   margin-right: 0.5rem;\n   transition: all 0.3s ease-in-out;\n}\n\n.lfr-nav-item.nav-item .nav-link {\n   border-bottom: transparent solid 3px !important;\n}\n\n.lfr-nav-item.nav-item:hover {\n   background-color: #ffffff !important;\n   font-weight: none !important;\n}\n\n.lfr-nav-item.nav-item.dropdown:has(.child-menu.dropdown-menu .active.selected) .nav-link {\n   border-bottom: #004AD7 solid 3px !important;\n   color: #0053F0 !important;\n   font-weight: 600;\n}\n\n.lfr-nav-item.nav-item.selected.active .nav-link {\n   border-bottom: #004AD7 solid 3px !important;\n   color: #0053F0 !important;\n   font-weight: 600;\n}\n\n.product-gallery .arrow.next {\n   border-bottom-right-radius: 10px;\n   border-top-right-radius: 10px;\n}\n\n.product-gallery .arrow.prev {\n   border-bottom-left-radius: 10px;\n   border-top-left-radius: 10px;\n}\n\n/* \n\n\n.app-type-badge {\n   padding: 4px 10px;\n   border-bottom-left-radius: 10px;\n   border-bottom-right-radius: 10px;\n   border-top-left-radius: 2px;\n   border-top-right-radius: 2px;\n   display: inline-block;\n   height: 20px;\n   position: absolute;\n   right: 32px;\n   top: -10px;\n   width: 80;\n   font-size: 13px;\n   font-weight: 600;\n}\n */\n\n\n\n\n\n.app-type-badge {\n\nborder-bottom-left-radius: 10px;\n\t\tborder-bottom-right-radius: 10px;\n\t\tborder-top-left-radius: 2px;\n\t\tborder-top-right-radius: 2px;\n\t\tdisplay: inline-block;\n\t\tfont-size: 11px;\n\t\theight: 20px;\n\t\tline-height: 20px;\n\t\tpadding: 0 8px;\n\t\tposition: absolute;\n\t\tright: 32px;\n\t\ttop: -6px;\n   font-weight: 600;\n}\n\n\n\n\n\n.app-type-badge.payment-methods {\n   --badge-color: #4B9BFF;\n   color: color-mix(in srgb, var(--badge-color) 70%, black 50%);\n   background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);\n}\n\n.app-type-badge.theme {\n   --badge-color: #AF78FF;\n   color: color-mix(in srgb, var(--badge-color) 70%, black 50%);\n   background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);\n}\n\n.app-type-badge.site-initializer {\n   --badge-color: #50D2A0;\n   color: color-mix(in srgb, var(--badge-color) 70%, black 50%);\n   background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);\n}\n\n.app-type-badge.fragments {\n   --badge-color: #FF5F5F;\n   color: color-mix(in srgb, var(--badge-color) 70%, black 50%);\n   background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);\n}\n\n.app-type-badge.batch {\n   --badge-color: #FFB46E;\n   color: color-mix(in srgb, var(--badge-color) 70%, black 50%);\n   background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);\n}\n\n.app-type-badge.checkout {\n   --badge-color: #9BE169;\n   color: color-mix(in srgb, var(--badge-color) 70%, black 50%);\n   background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);\n}\n\n.app-type-badge.object-action {\n   --badge-color: #5FC8FF;\n   color: color-mix(in srgb, var(--badge-color) 70%, black 50%);\n   background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);\n}\n\n.app-type-badge.workflow-action {\n   --badge-color: #7785FF;\n   color: color-mix(in srgb, var(--badge-color) 70%, black 50%);\n   background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);\n}",
 		"styleBook": {
 			"key": "marketplace",
 			"name": "Marketplace"

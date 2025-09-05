@@ -5,9 +5,14 @@
 
 package com.liferay.headless.admin.site.dto.v1_0;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import com.liferay.petra.function.UnsafeSupplier;
 import com.liferay.petra.string.StringBundler;
@@ -39,8 +44,23 @@ import java.util.function.Supplier;
 	description = "The FavIcon of the page specification.", value = "FavIcon"
 )
 @JsonFilter("Liferay.Vulcan")
+@JsonSubTypes(
+	{
+		@JsonSubTypes.Type(
+			name = "ClientExtension", value = FavIconClientExtension.class
+		),
+		@JsonSubTypes.Type(
+			name = "ItemExternalReference",
+			value = FavIconItemExternalReference.class
+		)
+	}
+)
+@JsonTypeInfo(
+	include = JsonTypeInfo.As.PROPERTY, property = "favIconType",
+	use = JsonTypeInfo.Id.NAME, visible = true
+)
 @XmlRootElement(name = "FavIcon")
-public class FavIcon implements Serializable {
+public abstract class FavIcon implements Serializable {
 
 	public static FavIcon toDTO(String json) {
 		return ObjectMapperUtil.readValue(FavIcon.class, json);
@@ -50,77 +70,45 @@ public class FavIcon implements Serializable {
 		return ObjectMapperUtil.unsafeReadValue(FavIcon.class, json);
 	}
 
-	@io.swagger.v3.oas.annotations.media.Schema
-	public String getClassName() {
-		if (_classNameSupplier != null) {
-			className = _classNameSupplier.get();
-
-			_classNameSupplier = null;
-		}
-
-		return className;
-	}
-
-	public void setClassName(String className) {
-		this.className = className;
-
-		_classNameSupplier = null;
-	}
-
-	@JsonIgnore
-	public void setClassName(
-		UnsafeSupplier<String, Exception> classNameUnsafeSupplier) {
-
-		_classNameSupplier = () -> {
-			try {
-				return classNameUnsafeSupplier.get();
-			}
-			catch (RuntimeException runtimeException) {
-				throw runtimeException;
-			}
-			catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
-		};
-	}
-
-	@GraphQLField
-	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected String className;
-
-	@JsonIgnore
-	private Supplier<String> _classNameSupplier;
-
 	@io.swagger.v3.oas.annotations.media.Schema(
-		description = "The configuration keys and values of the client extension."
+		description = "The FavIcon's type (ClientExtension, ItemExternalReference)."
 	)
+	@JsonGetter("favIconType")
 	@Valid
-	public Map<String, String> getClientExtensionConfig() {
-		if (_clientExtensionConfigSupplier != null) {
-			clientExtensionConfig = _clientExtensionConfigSupplier.get();
+	public FavIconType getFavIconType() {
+		if (_favIconTypeSupplier != null) {
+			favIconType = _favIconTypeSupplier.get();
 
-			_clientExtensionConfigSupplier = null;
+			_favIconTypeSupplier = null;
 		}
 
-		return clientExtensionConfig;
-	}
-
-	public void setClientExtensionConfig(
-		Map<String, String> clientExtensionConfig) {
-
-		this.clientExtensionConfig = clientExtensionConfig;
-
-		_clientExtensionConfigSupplier = null;
+		return favIconType;
 	}
 
 	@JsonIgnore
-	public void setClientExtensionConfig(
-		UnsafeSupplier<Map<String, String>, Exception>
-			clientExtensionConfigUnsafeSupplier) {
+	public String getFavIconTypeAsString() {
+		FavIconType favIconType = getFavIconType();
 
-		_clientExtensionConfigSupplier = () -> {
+		if (favIconType == null) {
+			return null;
+		}
+
+		return favIconType.toString();
+	}
+
+	public void setFavIconType(FavIconType favIconType) {
+		this.favIconType = favIconType;
+
+		_favIconTypeSupplier = null;
+	}
+
+	@JsonIgnore
+	public void setFavIconType(
+		UnsafeSupplier<FavIconType, Exception> favIconTypeUnsafeSupplier) {
+
+		_favIconTypeSupplier = () -> {
 			try {
-				return clientExtensionConfigUnsafeSupplier.get();
+				return favIconTypeUnsafeSupplier.get();
 			}
 			catch (RuntimeException runtimeException) {
 				throw runtimeException;
@@ -132,94 +120,13 @@ public class FavIcon implements Serializable {
 	}
 
 	@GraphQLField(
-		description = "The configuration keys and values of the client extension."
+		description = "The FavIcon's type (ClientExtension, ItemExternalReference)."
 	)
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected Map<String, String> clientExtensionConfig;
+	protected FavIconType favIconType;
 
 	@JsonIgnore
-	private Supplier<Map<String, String>> _clientExtensionConfigSupplier;
-
-	@io.swagger.v3.oas.annotations.media.Schema
-	public String getExternalReferenceCode() {
-		if (_externalReferenceCodeSupplier != null) {
-			externalReferenceCode = _externalReferenceCodeSupplier.get();
-
-			_externalReferenceCodeSupplier = null;
-		}
-
-		return externalReferenceCode;
-	}
-
-	public void setExternalReferenceCode(String externalReferenceCode) {
-		this.externalReferenceCode = externalReferenceCode;
-
-		_externalReferenceCodeSupplier = null;
-	}
-
-	@JsonIgnore
-	public void setExternalReferenceCode(
-		UnsafeSupplier<String, Exception> externalReferenceCodeUnsafeSupplier) {
-
-		_externalReferenceCodeSupplier = () -> {
-			try {
-				return externalReferenceCodeUnsafeSupplier.get();
-			}
-			catch (RuntimeException runtimeException) {
-				throw runtimeException;
-			}
-			catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
-		};
-	}
-
-	@GraphQLField
-	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected String externalReferenceCode;
-
-	@JsonIgnore
-	private Supplier<String> _externalReferenceCodeSupplier;
-
-	@io.swagger.v3.oas.annotations.media.Schema
-	@Valid
-	public Scope getScope() {
-		if (_scopeSupplier != null) {
-			scope = _scopeSupplier.get();
-
-			_scopeSupplier = null;
-		}
-
-		return scope;
-	}
-
-	public void setScope(Scope scope) {
-		this.scope = scope;
-
-		_scopeSupplier = null;
-	}
-
-	@JsonIgnore
-	public void setScope(UnsafeSupplier<Scope, Exception> scopeUnsafeSupplier) {
-		_scopeSupplier = () -> {
-			try {
-				return scopeUnsafeSupplier.get();
-			}
-			catch (RuntimeException runtimeException) {
-				throw runtimeException;
-			}
-			catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
-		};
-	}
-
-	@GraphQLField
-	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected Scope scope;
-
-	@JsonIgnore
-	private Supplier<Scope> _scopeSupplier;
+	private Supplier<FavIconType> _favIconTypeSupplier;
 
 	@Override
 	public boolean equals(Object object) {
@@ -248,60 +155,20 @@ public class FavIcon implements Serializable {
 
 		sb.append("{");
 
-		String className = getClassName();
+		FavIconType favIconType = getFavIconType();
 
-		if (className != null) {
+		if (favIconType != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"className\": ");
+			sb.append("\"favIconType\": ");
 
 			sb.append("\"");
 
-			sb.append(_escape(className));
+			sb.append(favIconType);
 
 			sb.append("\"");
-		}
-
-		Map<String, String> clientExtensionConfig = getClientExtensionConfig();
-
-		if (clientExtensionConfig != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"clientExtensionConfig\": ");
-
-			sb.append(_toJSON(clientExtensionConfig));
-		}
-
-		String externalReferenceCode = getExternalReferenceCode();
-
-		if (externalReferenceCode != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"externalReferenceCode\": ");
-
-			sb.append("\"");
-
-			sb.append(_escape(externalReferenceCode));
-
-			sb.append("\"");
-		}
-
-		Scope scope = getScope();
-
-		if (scope != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"scope\": ");
-
-			sb.append(String.valueOf(scope));
 		}
 
 		sb.append("}");
@@ -315,6 +182,45 @@ public class FavIcon implements Serializable {
 		name = "x-class-name"
 	)
 	public String xClassName;
+
+	@GraphQLName("FavIconType")
+	public static enum FavIconType {
+
+		CLIENT_EXTENSION("ClientExtension"),
+		ITEM_EXTERNAL_REFERENCE("ItemExternalReference");
+
+		@JsonCreator
+		public static FavIconType create(String value) {
+			if ((value == null) || value.equals("")) {
+				return null;
+			}
+
+			for (FavIconType favIconType : values()) {
+				if (Objects.equals(favIconType.getValue(), value)) {
+					return favIconType;
+				}
+			}
+
+			throw new IllegalArgumentException("Invalid enum value: " + value);
+		}
+
+		@JsonValue
+		public String getValue() {
+			return _value;
+		}
+
+		@Override
+		public String toString() {
+			return _value;
+		}
+
+		private FavIconType(String value) {
+			_value = value;
+		}
+
+		private final String _value;
+
+	}
 
 	private static String _escape(Object object) {
 		return StringUtil.replace(
