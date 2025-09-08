@@ -3074,13 +3074,20 @@ public class DefaultObjectEntryManagerImplTest
 			_objectDefinition1, _addObjectEntry(_objectDefinition1, null, 1),
 			2);
 
+		ObjectEntry copyObjectEntry1 =
+			_defaultObjectEntryManager.copyObjectEntryByVersion(
+				_createDTOConverterContext(adminUser), _objectDefinition1,
+				objectEntry.getId(), 2);
+
 		assertEquals(
 			_defaultObjectEntryManager.getObjectEntryByVersion(
-				dtoConverterContext, objectEntry.getExternalReferenceCode(),
-				_objectDefinition1, null, 2),
-			_defaultObjectEntryManager.copyObjectEntryByVersion(
-				dtoConverterContext, _objectDefinition1, objectEntry.getId(),
-				2));
+				_createDTOConverterContext(adminUser),
+				objectEntry.getExternalReferenceCode(), _objectDefinition1,
+				null, 2),
+			_defaultObjectEntryManager.getObjectEntryByVersion(
+				_createDTOConverterContext(adminUser),
+				copyObjectEntry1.getExternalReferenceCode(), _objectDefinition1,
+				null, 1));
 
 		// Site scope
 
@@ -3088,13 +3095,21 @@ public class DefaultObjectEntryManagerImplTest
 			_objectDefinition4,
 			_addObjectEntry(_objectDefinition4, _group.getGroupKey(), 1), 2);
 
+		ObjectEntry copyObjectEntry2 =
+			_defaultObjectEntryManager.copyObjectEntryByVersion(
+				_createDTOConverterContext(adminUser),
+				objectEntry.getExternalReferenceCode(), _objectDefinition4,
+				_group.getGroupKey(), 2);
+
 		assertEquals(
 			_defaultObjectEntryManager.getObjectEntryByVersion(
-				dtoConverterContext, objectEntry.getExternalReferenceCode(),
-				_objectDefinition4, _group.getGroupKey(), 2),
-			_defaultObjectEntryManager.copyObjectEntryByVersion(
-				dtoConverterContext, objectEntry.getExternalReferenceCode(),
-				_objectDefinition4, _group.getGroupKey(), 2));
+				_createDTOConverterContext(adminUser),
+				objectEntry.getExternalReferenceCode(), _objectDefinition4,
+				_group.getGroupKey(), 2),
+			_defaultObjectEntryManager.getObjectEntryByVersion(
+				_createDTOConverterContext(adminUser),
+				copyObjectEntry2.getExternalReferenceCode(), _objectDefinition4,
+				_group.getGroupKey(), 1));
 
 		// Status draft
 
@@ -3104,12 +3119,12 @@ public class DefaultObjectEntryManagerImplTest
 			objectDefinitionLocalService.updateObjectDefinition(
 				_objectDefinition4);
 
-		ObjectEntry copyObjectEntry =
+		ObjectEntry copyObjectEntry3 =
 			_defaultObjectEntryManager.copyObjectEntryByVersion(
-				dtoConverterContext, _objectDefinition4, objectEntry.getId(),
-				1);
+				_createDTOConverterContext(adminUser), _objectDefinition4,
+				objectEntry.getId(), 1);
 
-		Status status = copyObjectEntry.getStatus();
+		Status status = copyObjectEntry3.getStatus();
 
 		AssertUtils.assertEquals(
 			WorkflowConstants.STATUS_DRAFT, status.getCode());
@@ -3125,14 +3140,17 @@ public class DefaultObjectEntryManagerImplTest
 		_assertObjectEntryStatus(
 			WorkflowConstants.STATUS_EXPIRED,
 			_defaultObjectEntryManager.expireObjectEntryByVersion(
-				dtoConverterContext, objectEntry.getExternalReferenceCode(),
-				_objectDefinition4, _group.getGroupKey(), 2));
+				_createDTOConverterContext(adminUser),
+				objectEntry.getExternalReferenceCode(), _objectDefinition4,
+				_group.getGroupKey(), 2));
 
-		copyObjectEntry = _defaultObjectEntryManager.copyObjectEntryByVersion(
-			dtoConverterContext, objectEntry.getExternalReferenceCode(),
-			_objectDefinition4, _group.getGroupKey(), 2);
+		ObjectEntry copyObjectEntry4 =
+			_defaultObjectEntryManager.copyObjectEntryByVersion(
+				_createDTOConverterContext(adminUser),
+				objectEntry.getExternalReferenceCode(), _objectDefinition4,
+				_group.getGroupKey(), 2);
 
-		status = copyObjectEntry.getStatus();
+		status = copyObjectEntry4.getStatus();
 
 		AssertUtils.assertEquals(
 			WorkflowConstants.STATUS_APPROVED, status.getCode());
@@ -5556,38 +5574,38 @@ public class DefaultObjectEntryManagerImplTest
 
 		ObjectEntry objectEntry = _addObjectEntry(_objectDefinition1, null, 1);
 
-		assertEquals(
+		_assertObjectEntry(
+			objectEntry,
 			_defaultObjectEntryManager.getObjectEntryByVersion(
-				dtoConverterContext, objectEntry.getId(), 1),
-			objectEntry);
+				dtoConverterContext, objectEntry.getId(), 1));
 
 		objectEntry = _updateObjectEntryVersion(
 			_objectDefinition1, objectEntry, 2);
 
-		assertEquals(
+		_assertObjectEntry(
+			objectEntry,
 			_defaultObjectEntryManager.getObjectEntryByVersion(
-				dtoConverterContext, objectEntry.getId(), 2),
-			objectEntry);
+				dtoConverterContext, objectEntry.getId(), 2));
 
 		// Site scope
 
 		objectEntry = _addObjectEntry(
 			_objectDefinition4, _group.getGroupKey(), 1);
 
-		assertEquals(
+		_assertObjectEntry(
+			objectEntry,
 			_defaultObjectEntryManager.getObjectEntryByVersion(
 				dtoConverterContext, objectEntry.getExternalReferenceCode(),
-				_objectDefinition4, _group.getGroupKey(), 1),
-			objectEntry);
+				_objectDefinition4, _group.getGroupKey(), 1));
 
 		objectEntry = _updateObjectEntryVersion(
 			_objectDefinition4, objectEntry, 2);
 
-		assertEquals(
+		_assertObjectEntry(
+			objectEntry,
 			_defaultObjectEntryManager.getObjectEntryByVersion(
 				dtoConverterContext, objectEntry.getExternalReferenceCode(),
-				_objectDefinition4, _group.getGroupKey(), 2),
-			objectEntry);
+				_objectDefinition4, _group.getGroupKey(), 2));
 	}
 
 	@Test
@@ -6038,7 +6056,9 @@ public class DefaultObjectEntryManagerImplTest
 
 		assertEquals(
 			(List<ObjectEntry>)page.getItems(),
-			ListUtil.fromArray(objectEntry1));
+			ListUtil.fromArray(
+				_defaultObjectEntryManager.getObjectEntryByVersion(
+					dtoConverterContext, objectEntry1.getId(), 1)));
 
 		ObjectEntry objectEntry2 = _updateObjectEntryVersion(
 			_objectDefinition1, objectEntry1, 2);
@@ -6047,9 +6067,16 @@ public class DefaultObjectEntryManagerImplTest
 			dtoConverterContext, _objectDefinition1, objectEntry2.getId(),
 			null);
 
+		objectEntry1 = _defaultObjectEntryManager.getObjectEntryByVersion(
+			dtoConverterContext, objectEntry1.getId(), 1);
+
 		assertEquals(
 			(List<ObjectEntry>)page.getItems(),
-			ListUtil.fromArray(objectEntry1, objectEntry2));
+			ListUtil.fromArray(
+				_defaultObjectEntryManager.getObjectEntryByVersion(
+					dtoConverterContext, objectEntry1.getId(), 1),
+				_defaultObjectEntryManager.getObjectEntryByVersion(
+					dtoConverterContext, objectEntry2.getId(), 2)));
 
 		// Site scope
 
@@ -6062,7 +6089,9 @@ public class DefaultObjectEntryManagerImplTest
 
 		assertEquals(
 			(List<ObjectEntry>)page.getItems(),
-			ListUtil.fromArray(objectEntry1));
+			ListUtil.fromArray(
+				_defaultObjectEntryManager.getObjectEntryByVersion(
+					dtoConverterContext, objectEntry1.getId(), 1)));
 
 		objectEntry2 = _updateObjectEntryVersion(
 			_objectDefinition4, objectEntry1, 2);
@@ -6071,9 +6100,16 @@ public class DefaultObjectEntryManagerImplTest
 			dtoConverterContext, objectEntry2.getExternalReferenceCode(),
 			_objectDefinition4, _group.getGroupKey(), null);
 
+		objectEntry1 = _defaultObjectEntryManager.getObjectEntryByVersion(
+			dtoConverterContext, objectEntry1.getId(), 1);
+
 		assertEquals(
 			(List<ObjectEntry>)page.getItems(),
-			ListUtil.fromArray(objectEntry1, objectEntry2));
+			ListUtil.fromArray(
+				_defaultObjectEntryManager.getObjectEntryByVersion(
+					dtoConverterContext, objectEntry1.getId(), 1),
+				_defaultObjectEntryManager.getObjectEntryByVersion(
+					dtoConverterContext, objectEntry2.getId(), 2)));
 	}
 
 	@FeatureFlag("LPD-53981")
@@ -8425,7 +8461,7 @@ public class DefaultObjectEntryManagerImplTest
 		throws Exception {
 
 		return _defaultObjectEntryManager.addObjectEntry(
-			dtoConverterContext, objectDefinition,
+			_createDTOConverterContext(adminUser), objectDefinition,
 			new ObjectEntry() {
 				{
 					externalReferenceCode = RandomTestUtil.randomString();
@@ -8760,6 +8796,17 @@ public class DefaultObjectEntryManagerImplTest
 			objectEntries.toString(), size, objectEntries.size());
 	}
 
+	private void _assertObjectEntry(
+		ObjectEntry actualObjectEntry, ObjectEntry expectedObjectEntry) {
+
+		Assert.assertEquals(
+			expectedObjectEntry.getProperties(),
+			actualObjectEntry.getProperties());
+
+		Assert.assertEquals(
+			expectedObjectEntry.getStatus(), actualObjectEntry.getStatus());
+	}
+
 	private void _assertObjectEntryStatus(
 			int expectedStatusCode, ObjectEntry objectEntry)
 		throws Exception {
@@ -8910,9 +8957,13 @@ public class DefaultObjectEntryManagerImplTest
 	}
 
 	private DTOConverterContext _createDTOConverterContext() {
+		return _createDTOConverterContext(_user);
+	}
+
+	private DTOConverterContext _createDTOConverterContext(User user) {
 		return new DefaultDTOConverterContext(
 			false, Collections.emptyMap(), dtoConverterRegistry, null,
-			LocaleUtil.getDefault(), null, _user);
+			LocaleUtil.getDefault(), null, user);
 	}
 
 	private Tree _createObjectEntryTree(
@@ -9564,7 +9615,7 @@ public class DefaultObjectEntryManagerImplTest
 			scopeKey);
 
 		_defaultObjectEntryManager.deleteObjectEntry(
-			_createDTOConverterContext(), objectDefinitionAA,
+			_createDTOConverterContext(adminUser), objectDefinitionAA,
 			objectEntryAA1.getId());
 
 		Assert.assertNull(
@@ -10118,7 +10169,8 @@ public class DefaultObjectEntryManagerImplTest
 		throws Exception {
 
 		return _defaultObjectEntryManager.updateObjectEntry(
-			TestPropsValues.getCompanyId(), dtoConverterContext,
+			TestPropsValues.getCompanyId(),
+			_createDTOConverterContext(adminUser),
 			objectEntry.getExternalReferenceCode(), objectDefinition,
 			new ObjectEntry() {
 				{

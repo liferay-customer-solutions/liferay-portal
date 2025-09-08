@@ -7,4 +7,13 @@
 
 <%@ include file="/init.jsp" %>
 
-<div class="cms-section"></div>
+<%
+ViewHomeWorkflowTasksDisplayContext viewHomeWorkflowTasksDisplayContext = (ViewHomeWorkflowTasksDisplayContext)request.getAttribute(ViewHomeWorkflowTasksDisplayContext.class.getName());
+%>
+
+<div class="cms-section">
+	<react:component
+		module="{ViewWorkflowTasks} from site-cms-site-initializer"
+		props="<%= viewHomeWorkflowTasksDisplayContext.getReactData() %>"
+	/>
+</div>

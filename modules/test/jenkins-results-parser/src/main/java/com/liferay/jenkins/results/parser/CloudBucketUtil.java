@@ -228,7 +228,9 @@ public class CloudBucketUtil {
 
 		String destinationFileName = destinationFile.getName();
 
-		if (!destinationFileName.endsWith(_CHECKSUM_FILE_EXTENSION)) {
+		if (!destinationFileName.endsWith(_CHECKSUM_FILE_EXTENSION) &&
+			!destinationFileName.equals("build-database.json")) {
+
 			_validateChecksumFile(destinationFile, s3SourcePath);
 		}
 	}
@@ -373,7 +375,9 @@ public class CloudBucketUtil {
 				while (listS3FilesMatcher.find()) {
 					String fileName = listS3FilesMatcher.group("fileName");
 
-					if (!fileName.endsWith(_CHECKSUM_FILE_EXTENSION)) {
+					if (!fileName.endsWith(_CHECKSUM_FILE_EXTENSION) &&
+						!fileName.equals("build-database.json")) {
+
 						_validateChecksumFile(
 							new File(destination + "/" + fileName),
 							source + "/" + fileName);
@@ -419,7 +423,9 @@ public class CloudBucketUtil {
 			return;
 		}
 
-		if (!sourceFileName.endsWith(_CHECKSUM_FILE_EXTENSION)) {
+		if (!sourceFileName.endsWith(_CHECKSUM_FILE_EXTENSION) &&
+			!sourceFileName.equals("build-database.json")) {
+
 			_createChecksumFile(replacedS3DestinationPath, sourceFile);
 		}
 	}
