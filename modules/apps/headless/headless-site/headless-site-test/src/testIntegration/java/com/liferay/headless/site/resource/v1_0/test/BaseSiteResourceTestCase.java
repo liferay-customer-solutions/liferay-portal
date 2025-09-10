@@ -13,6 +13,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 
+import com.liferay.headless.batch.engine.client.dto.v1_0.ImportTask;
+import com.liferay.headless.batch.engine.client.http.HttpInvoker.HttpResponse;
+import com.liferay.headless.batch.engine.client.resource.v1_0.ImportTaskResource;
 import com.liferay.headless.site.client.dto.v1_0.Site;
 import com.liferay.headless.site.client.http.HttpInvoker;
 import com.liferay.headless.site.client.pagination.Page;
@@ -103,6 +106,16 @@ public abstract class BaseSiteResourceTestCase {
 			testCompany.getCompanyId());
 
 		siteResource = SiteResource.builder(
+		).authentication(
+			_testCompanyAdminUser.getEmailAddress(),
+			PropsValues.DEFAULT_ADMIN_PASSWORD
+		).endpoint(
+			testCompany.getVirtualHostname(), 8080, "http"
+		).locale(
+			LocaleUtil.getDefault()
+		).build();
+
+		importTaskResource = ImportTaskResource.builder(
 		).authentication(
 			_testCompanyAdminUser.getEmailAddress(),
 			PropsValues.DEFAULT_ADMIN_PASSWORD
@@ -205,6 +218,52 @@ public abstract class BaseSiteResourceTestCase {
 	}
 
 	@Test
+	public void testDeleteSiteBatch() throws Exception {
+		Site site1 = testDeleteSiteBatch_addSite();
+
+		testDeleteSiteBatch_deleteSite(
+			202, site1.getExternalReferenceCode(), null);
+
+		site1 = testDeleteSiteBatch_addSite();
+
+		testDeleteSiteBatch_deleteSite(202, null, site1.getId());
+
+		site1 = testDeleteSiteBatch_addSite();
+		Site site2 = testDeleteSiteBatch_addSite();
+
+		testDeleteSiteBatch_deleteSite(
+			202, site2.getExternalReferenceCode(), site1.getId());
+
+		testDeleteSiteBatch_deleteSite(
+			202, site2.getExternalReferenceCode(), site1.getId());
+	}
+
+	protected Site testDeleteSiteBatch_addSite() throws Exception {
+		return testDeleteSite_addSite();
+	}
+
+	protected void testDeleteSiteBatch_deleteSite(
+			int expectedStatusCode, String externalReferenceCode, Long id)
+		throws Exception {
+
+		HttpInvoker.HttpResponse httpResponse =
+			siteResource.deleteSiteBatchHttpResponse(
+				null,
+				JSONUtil.putAll(
+					JSONUtil.put(
+						"externalReferenceCode", () -> externalReferenceCode
+					).put(
+						"id", () -> id
+					)));
+
+		Assert.assertEquals(expectedStatusCode, httpResponse.getStatusCode());
+
+		waitForFinish(
+			"COMPLETED",
+			JSONFactoryUtil.createJSONObject(httpResponse.getContent()));
+	}
+
+	@Test
 	public void testDeleteSiteByExternalReferenceCode() throws Exception {
 		@SuppressWarnings("PMD.UnusedLocalVariable")
 		Site site = testDeleteSiteByExternalReferenceCode_addSite();
@@ -256,7 +315,8 @@ public abstract class BaseSiteResourceTestCase {
 
 	@Test
 	public void testGetSitesPage() throws Exception {
-		Page<Site> page = siteResource.getSitesPage(null, Pagination.of(1, 10));
+		Page<Site> page = siteResource.getSitesPage(
+			null, null, Pagination.of(1, 10));
 
 		long totalCount = page.getTotalCount();
 
@@ -264,7 +324,7 @@ public abstract class BaseSiteResourceTestCase {
 
 		Site site2 = testGetSitesPage_addSite(randomSite());
 
-		page = siteResource.getSitesPage(null, Pagination.of(1, 10));
+		page = siteResource.getSitesPage(null, null, Pagination.of(1, 10));
 
 		Assert.assertEquals(totalCount + 2, page.getTotalCount());
 
@@ -288,7 +348,7 @@ public abstract class BaseSiteResourceTestCase {
 
 	@Test
 	public void testGetSitesPageWithPagination() throws Exception {
-		Page<Site> sitesPage = siteResource.getSitesPage(null, null);
+		Page<Site> sitesPage = siteResource.getSitesPage(null, null, null);
 
 		int totalCount = GetterUtil.getInteger(sitesPage.getTotalCount());
 
@@ -304,7 +364,7 @@ public abstract class BaseSiteResourceTestCase {
 
 		if (totalCount >= (pageSizeLimit - 2)) {
 			Page<Site> page1 = siteResource.getSitesPage(
-				null,
+				null, null,
 				Pagination.of(
 					(int)Math.ceil((totalCount + 1.0) / pageSizeLimit),
 					pageSizeLimit));
@@ -314,7 +374,7 @@ public abstract class BaseSiteResourceTestCase {
 			assertContains(site1, (List<Site>)page1.getItems());
 
 			Page<Site> page2 = siteResource.getSitesPage(
-				null,
+				null, null,
 				Pagination.of(
 					(int)Math.ceil((totalCount + 2.0) / pageSizeLimit),
 					pageSizeLimit));
@@ -322,7 +382,7 @@ public abstract class BaseSiteResourceTestCase {
 			assertContains(site2, (List<Site>)page2.getItems());
 
 			Page<Site> page3 = siteResource.getSitesPage(
-				null,
+				null, null,
 				Pagination.of(
 					(int)Math.ceil((totalCount + 3.0) / pageSizeLimit),
 					pageSizeLimit));
@@ -331,7 +391,7 @@ public abstract class BaseSiteResourceTestCase {
 		}
 		else {
 			Page<Site> page1 = siteResource.getSitesPage(
-				null, Pagination.of(1, totalCount + 2));
+				null, null, Pagination.of(1, totalCount + 2));
 
 			List<Site> sites1 = (List<Site>)page1.getItems();
 
@@ -339,7 +399,7 @@ public abstract class BaseSiteResourceTestCase {
 				sites1.toString(), totalCount + 2, sites1.size());
 
 			Page<Site> page2 = siteResource.getSitesPage(
-				null, Pagination.of(2, totalCount + 2));
+				null, null, Pagination.of(2, totalCount + 2));
 
 			Assert.assertEquals(totalCount + 3, page2.getTotalCount());
 
@@ -348,7 +408,7 @@ public abstract class BaseSiteResourceTestCase {
 			Assert.assertEquals(sites2.toString(), 1, sites2.size());
 
 			Page<Site> page3 = siteResource.getSitesPage(
-				null, Pagination.of(1, (int)totalCount + 3));
+				null, null, Pagination.of(1, (int)totalCount + 3));
 
 			assertContains(site1, (List<Site>)page3.getItems());
 			assertContains(site2, (List<Site>)page3.getItems());
@@ -365,31 +425,24 @@ public abstract class BaseSiteResourceTestCase {
 	public void testPostSite() throws Exception {
 		Site randomSite = randomSite();
 
-		Map<String, File> multipartFiles = getMultipartFiles();
-
-		Site postSite = testPostSite_addSite(randomSite, multipartFiles);
+		Site postSite = testPostSite_addSite(randomSite);
 
 		assertEquals(randomSite, postSite);
 		assertValid(postSite);
-
-		assertValid(postSite, multipartFiles);
 	}
 
-	protected Site testPostSite_addSite(
-			Site site, Map<String, File> multipartFiles)
-		throws Exception {
-
+	protected Site testPostSite_addSite(Site site) throws Exception {
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
 
 	@Test
-	public void testPostFormDataSite() throws Exception {
+	public void testPostSiteSiteInitializer() throws Exception {
 		Site randomSite = randomSite();
 
 		Map<String, File> multipartFiles = getMultipartFiles();
 
-		Site postSite = testPostFormDataSite_addSite(
+		Site postSite = testPostSiteSiteInitializer_addSite(
 			randomSite, multipartFiles);
 
 		assertEquals(randomSite, postSite);
@@ -398,7 +451,7 @@ public abstract class BaseSiteResourceTestCase {
 		assertValid(postSite, multipartFiles);
 	}
 
-	protected Site testPostFormDataSite_addSite(
+	protected Site testPostSiteSiteInitializer_addSite(
 			Site site, Map<String, File> multipartFiles)
 		throws Exception {
 
@@ -457,6 +510,66 @@ public abstract class BaseSiteResourceTestCase {
 		throws Exception {
 
 		return randomSite();
+	}
+
+	@Test
+	public void testBatchEngineDeleteImportTask() throws Exception {
+		Site site1 = testBatchEngineDeleteImportTask_addSite();
+
+		testBatchEngineDeleteImportTask_deleteSite(
+			200, site1.getExternalReferenceCode(), null);
+
+		site1 = testBatchEngineDeleteImportTask_addSite();
+
+		testBatchEngineDeleteImportTask_deleteSite(200, null, site1.getId());
+
+		site1 = testBatchEngineDeleteImportTask_addSite();
+		Site site2 = testBatchEngineDeleteImportTask_addSite();
+
+		testBatchEngineDeleteImportTask_deleteSite(
+			200, site2.getExternalReferenceCode(), site1.getId());
+
+		testBatchEngineDeleteImportTask_deleteSite(
+			200, site2.getExternalReferenceCode(), site1.getId());
+	}
+
+	protected Site testBatchEngineDeleteImportTask_addSite() throws Exception {
+		return testDeleteSite_addSite();
+	}
+
+	protected void testBatchEngineDeleteImportTask_deleteSite(
+			int expectedStatusCode, String externalReferenceCode, Long id,
+			String... parameters)
+		throws Exception {
+
+		ImportTaskResource importTaskResource = ImportTaskResource.builder(
+		).authentication(
+			_testCompanyAdminUser.getEmailAddress(),
+			PropsValues.DEFAULT_ADMIN_PASSWORD
+		).endpoint(
+			testCompany.getVirtualHostname(), 8080, "http"
+		).parameters(
+			parameters
+		).build();
+
+		HttpResponse httpResponse =
+			importTaskResource.deleteImportTaskHttpResponse(
+				"com.liferay.headless.site.dto.v1_0.Site", null, null, null,
+				null,
+				JSONUtil.putAll(
+					JSONUtil.put(
+						"externalReferenceCode", () -> externalReferenceCode
+					).put(
+						"id", () -> id
+					)));
+
+		Assert.assertEquals(expectedStatusCode, httpResponse.getStatusCode());
+
+		if (expectedStatusCode == 200) {
+			waitForFinish(
+				"COMPLETED",
+				JSONFactoryUtil.createJSONObject(httpResponse.getContent()));
+		}
 	}
 
 	protected void assertContains(Site site, List<Site> sites) {
@@ -527,6 +640,14 @@ public abstract class BaseSiteResourceTestCase {
 		for (String additionalAssertFieldName :
 				getAdditionalAssertFieldNames()) {
 
+			if (Objects.equals("active", additionalAssertFieldName)) {
+				if (site.getActive() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals(
 					"externalReferenceCode", additionalAssertFieldName)) {
 
@@ -547,6 +668,24 @@ public abstract class BaseSiteResourceTestCase {
 
 			if (Objects.equals("key", additionalAssertFieldName)) {
 				if (site.getKey() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("manualMembership", additionalAssertFieldName)) {
+				if (site.getManualMembership() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"membershipRestriction", additionalAssertFieldName)) {
+
+				if (site.getMembershipRestriction() == null) {
 					valid = false;
 				}
 
@@ -587,6 +726,14 @@ public abstract class BaseSiteResourceTestCase {
 
 			if (Objects.equals("templateType", additionalAssertFieldName)) {
 				if (site.getTemplateType() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("typeSettings", additionalAssertFieldName)) {
+				if (site.getTypeSettings() == null) {
 					valid = false;
 				}
 
@@ -715,6 +862,14 @@ public abstract class BaseSiteResourceTestCase {
 		for (String additionalAssertFieldName :
 				getAdditionalAssertFieldNames()) {
 
+			if (Objects.equals("active", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(site1.getActive(), site2.getActive())) {
+					return false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals(
 					"externalReferenceCode", additionalAssertFieldName)) {
 
@@ -749,6 +904,30 @@ public abstract class BaseSiteResourceTestCase {
 
 			if (Objects.equals("key", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(site1.getKey(), site2.getKey())) {
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("manualMembership", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						site1.getManualMembership(),
+						site2.getManualMembership())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"membershipRestriction", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						site1.getMembershipRestriction(),
+						site2.getMembershipRestriction())) {
+
 					return false;
 				}
 
@@ -796,6 +975,17 @@ public abstract class BaseSiteResourceTestCase {
 			if (Objects.equals("templateType", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
 						site1.getTemplateType(), site2.getTemplateType())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("typeSettings", additionalAssertFieldName)) {
+				if (!equals(
+						(Map)site1.getTypeSettings(),
+						(Map)site2.getTypeSettings())) {
 
 					return false;
 				}
@@ -909,6 +1099,11 @@ public abstract class BaseSiteResourceTestCase {
 		sb.append(" ");
 		sb.append(operator);
 		sb.append(" ");
+
+		if (entityFieldName.equals("active")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
+		}
 
 		if (entityFieldName.equals("externalReferenceCode")) {
 			Object object = site.getExternalReferenceCode();
@@ -1049,6 +1244,17 @@ public abstract class BaseSiteResourceTestCase {
 				sb.append(value);
 				sb.append("'");
 			}
+
+			return sb.toString();
+		}
+
+		if (entityFieldName.equals("manualMembership")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
+		}
+
+		if (entityFieldName.equals("membershipRestriction")) {
+			sb.append(String.valueOf(site.getMembershipRestriction()));
 
 			return sb.toString();
 		}
@@ -1201,6 +1407,11 @@ public abstract class BaseSiteResourceTestCase {
 				"Invalid entity field " + entityFieldName);
 		}
 
+		if (entityFieldName.equals("typeSettings")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
+		}
+
 		throw new IllegalArgumentException(
 			"Invalid entity field " + entityFieldName);
 	}
@@ -1251,12 +1462,15 @@ public abstract class BaseSiteResourceTestCase {
 	protected Site randomSite() throws Exception {
 		return new Site() {
 			{
+				active = RandomTestUtil.randomBoolean();
 				externalReferenceCode = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
 				friendlyUrlPath = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
 				id = RandomTestUtil.randomLong();
 				key = StringUtil.toLowerCase(RandomTestUtil.randomString());
+				manualMembership = RandomTestUtil.randomBoolean();
+				membershipRestriction = RandomTestUtil.randomInt();
 				name = StringUtil.toLowerCase(RandomTestUtil.randomString());
 				parentSiteKey = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
@@ -1276,7 +1490,30 @@ public abstract class BaseSiteResourceTestCase {
 		return randomSite();
 	}
 
+	protected final JSONObject waitForFinish(
+			String expectedExecuteStatus, JSONObject jsonObject)
+		throws Exception {
+
+		while (true) {
+			ImportTask importTask = importTaskResource.getImportTask(
+				jsonObject.getLong("id"));
+
+			ImportTask.ExecuteStatus executeStatus =
+				importTask.getExecuteStatus();
+
+			if (StringUtil.equals(executeStatus.getValue(), "COMPLETED") ||
+				StringUtil.equals(executeStatus.getValue(), "FAILED")) {
+
+				Assert.assertEquals(
+					expectedExecuteStatus, executeStatus.getValue());
+
+				return jsonObject;
+			}
+		}
+	}
+
 	protected SiteResource siteResource;
+	protected ImportTaskResource importTaskResource;
 	protected com.liferay.portal.kernel.model.Group irrelevantGroup;
 	protected com.liferay.portal.kernel.model.Company testCompany;
 	protected com.liferay.portal.kernel.model.Group testGroup;

@@ -5,12 +5,13 @@ components:
             description:
                 Represents the site being created.
             properties:
+                active:
+                    type: boolean
                 externalReferenceCode:
                     description:
                         The site's external reference code.
                     type: string
                 friendlyUrlPath:
-                    readOnly: true
                     type: string
                 id:
                     format: int64
@@ -19,6 +20,11 @@ components:
                 key:
                     readOnly: true
                     type: string
+                manualMembership:
+                    type: boolean
+                membershipRestriction:
+                    format: int32
+                    type: integer
                 membershipType:
                     description:
                         The default value is open.
@@ -27,7 +33,6 @@ components:
                         -   private
                         -   restricted
                     type: string
-                    writeOnly: true
                 name:
                     type: string
                 parentSiteKey:
@@ -42,6 +47,10 @@ components:
                         -   site-template
                     type: string
                     writeOnly: true
+                typeSettings:
+                    additionalProperties:
+                        type: string
+                    type: object
             required:
                 -   name
             type: object
@@ -82,6 +91,10 @@ paths:
             operationId: getSitesPage
             parameters:
                 -   in: query
+                    name: active
+                    schema:
+                        type: boolean
+                -   in: query
                     name: page
                     schema:
                         type: integer
@@ -121,15 +134,6 @@ paths:
                     application/xml:
                         schema:
                             $ref: "#/components/schemas/Site"
-                    multipart/form-data:
-                        schema:
-                            properties:
-                                file:
-                                    format: binary
-                                    type: string
-                                site:
-                                    $ref: "#/components/schemas/Site"
-                            type: object
             responses:
                 200:
                     content:
@@ -228,4 +232,32 @@ paths:
                             schema:
                                 format: binary
                                 type: string
+            tags: ["Site"]
+    /sites/site-initializer:
+        post:
+            description:
+                Adds a new site based on a multipart/form-data
+            operationId: postSiteSiteInitializer
+            requestBody:
+                content:
+                    multipart/form-data:
+                        schema:
+                            properties:
+                                file:
+                                    format: binary
+                                    type: string
+                                site:
+                                    $ref: "#/components/schemas/Site"
+                            type: object
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Site"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/Site"
+                    description:
+                        default response
             tags: ["Site"]

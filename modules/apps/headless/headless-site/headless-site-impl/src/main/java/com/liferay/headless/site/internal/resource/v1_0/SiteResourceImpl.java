@@ -7,6 +7,7 @@ package com.liferay.headless.site.internal.resource.v1_0;
 
 import com.liferay.headless.site.dto.v1_0.Site;
 import com.liferay.headless.site.resource.v1_0.SiteResource;
+import com.liferay.layout.util.LayoutServiceContextHelper;
 import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.portal.events.ServicePreAction;
 import com.liferay.portal.events.ThemeServicePreAction;
@@ -34,9 +35,13 @@ import com.liferay.portal.kernel.servlet.DummyHttpServletResponse;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.UnicodeProperties;
+import com.liferay.portal.kernel.util.UnicodePropertiesBuilder;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.util.comparator.GroupNameComparator;
@@ -137,12 +142,9 @@ public class SiteResourceImpl extends BaseSiteResourceImpl {
 	}
 
 	@Override
-	public Page<Site> getSitesPage(String search, Pagination pagination)
+	public Page<Site> getSitesPage(
+			Boolean active, String search, Pagination pagination)
 		throws Exception {
-
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
-			throw new UnsupportedOperationException();
-		}
 
 		long[] classNameIds = {
 			_portal.getClassNameId(Company.class.getName()),
@@ -150,30 +152,43 @@ public class SiteResourceImpl extends BaseSiteResourceImpl {
 		};
 		LinkedHashMap<String, Object> params =
 			LinkedHashMapBuilder.<String, Object>put(
-				"active", true
+				"active",
+				() -> {
+					if (active != null) {
+						return GetterUtil.getBoolean(active);
+					}
+
+					return null;
+				}
 			).put(
 				"site", true
 			).build();
 
 		return Page.of(
+			HashMapBuilder.put(
+				"create",
+				addAction(
+					ActionKeys.UPDATE, "postSite", Group.class.getName(), null)
+			).put(
+				"createBatch",
+				addAction(
+					ActionKeys.UPDATE, "postSiteBatch", Group.class.getName(),
+					null)
+			).put(
+				"deleteBatch",
+				addAction(
+					ActionKeys.DELETE, "deleteSiteBatch", Group.class.getName(),
+					null)
+			).build(),
 			transform(
 				_groupService.search(
 					contextCompany.getCompanyId(), classNameIds, search, null,
 					params, true, pagination.getStartPosition(),
 					pagination.getEndPosition(), new GroupNameComparator()),
-				group -> _toSite(group)),
+				this::_toSite),
 			pagination,
 			_groupService.searchCount(
 				contextCompany.getCompanyId(), classNameIds, search, params));
-	}
-
-	@Override
-	public Site postSite(MultipartBody multipartBody) throws Exception {
-		Site site = postSite(
-			multipartBody.getValueAsInstance("site", Site.class));
-
-		return putSiteByExternalReferenceCode(
-			site.getExternalReferenceCode(), multipartBody);
 	}
 
 	@Override
@@ -186,6 +201,17 @@ public class SiteResourceImpl extends BaseSiteResourceImpl {
 		catch (Throwable throwable) {
 			throw new Exception(throwable);
 		}
+	}
+
+	@Override
+	public Site postSiteSiteInitializer(MultipartBody multipartBody)
+		throws Exception {
+
+		Site site = postSite(
+			multipartBody.getValueAsInstance("site", Site.class));
+
+		return putSiteByExternalReferenceCode(
+			site.getExternalReferenceCode(), multipartBody);
 	}
 
 	@Override
@@ -322,12 +348,26 @@ public class SiteResourceImpl extends BaseSiteResourceImpl {
 
 		_initThemeDisplay();
 
-		ServiceContext serviceContext = ServiceContextFactory.getInstance(
-			contextHttpServletRequest);
+		ServiceContext serviceContext = null;
+
+		if (contextHttpServletRequest != null) {
+			serviceContext = ServiceContextFactory.getInstance(
+				contextHttpServletRequest);
+		}
+		else {
+			serviceContext = new ServiceContext();
+
+			serviceContext.setCompanyId(contextCompany.getCompanyId());
+			serviceContext.setRequest(contextHttpServletRequest);
+			serviceContext.setUserId(contextUser.getUserId());
+		}
 
 		ServiceContextThreadLocal.pushServiceContext(serviceContext);
 
-		try {
+		try (AutoCloseable autoCloseable =
+				_layoutServiceContextHelper.getServiceContextAutoCloseable(
+					contextCompany, contextUser)) {
+
 			return _addGroup(externalReferenceCode, site, serviceContext);
 		}
 		catch (Exception exception) {
@@ -347,6 +387,25 @@ public class SiteResourceImpl extends BaseSiteResourceImpl {
 			String externalReferenceCode, Site site,
 			ServiceContext serviceContext)
 		throws Exception {
+
+		boolean active = true;
+
+		if (Validator.isNotNull(site.getActive())) {
+			active = site.getActive();
+		}
+
+		boolean manualMembership = true;
+
+		if (Validator.isNotNull(site.getManualMembership())) {
+			manualMembership = site.getManualMembership();
+		}
+
+		int membershipRestriction =
+			GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION;
+
+		if (Validator.isNotNull(site.getMembershipRestriction())) {
+			membershipRestriction = site.getMembershipRestriction();
+		}
 
 		long parentGroupId = GroupConstants.DEFAULT_PARENT_GROUP_ID;
 
@@ -378,9 +437,24 @@ public class SiteResourceImpl extends BaseSiteResourceImpl {
 
 		Group group = _groupService.addOrUpdateGroup(
 			externalReferenceCode, parentGroupId,
-			GroupConstants.DEFAULT_LIVE_GROUP_ID, nameMap, null, type, true,
-			GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION, null, true, false,
-			true, serviceContext);
+			GroupConstants.DEFAULT_LIVE_GROUP_ID, nameMap, null, type,
+			manualMembership, membershipRestriction, site.getFriendlyUrlPath(),
+			true, false, active, serviceContext);
+
+		if (Validator.isNotNull(site.getTypeSettings())) {
+			UnicodeProperties unicodeProperties =
+				UnicodePropertiesBuilder.putAll(
+					site.getTypeSettings()
+				).build();
+
+			unicodeProperties.putIfAbsent(
+				GroupConstants.TYPE_SETTINGS_KEY_INHERIT_LOCALES,
+				String.valueOf(
+					!unicodeProperties.containsKey(PropsKeys.LOCALES)));
+
+			group = _groupService.updateGroup(
+				group.getGroupId(), unicodeProperties.toString());
+		}
 
 		LiveUsers.joinGroup(
 			contextCompany.getCompanyId(), group.getGroupId(),
@@ -423,6 +497,10 @@ public class SiteResourceImpl extends BaseSiteResourceImpl {
 	}
 
 	private void _initThemeDisplay() throws Exception {
+		if (contextHttpServletRequest == null) {
+			return;
+		}
+
 		ThemeDisplay themeDisplay =
 			(ThemeDisplay)contextHttpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
@@ -451,11 +529,21 @@ public class SiteResourceImpl extends BaseSiteResourceImpl {
 	private Site _toSite(Group group) {
 		return new Site() {
 			{
+				setActive(group::getActive);
 				setExternalReferenceCode(group::getExternalReferenceCode);
 				setFriendlyUrlPath(group::getFriendlyURL);
 				setId(group::getGroupId);
 				setKey(group::getGroupKey);
+				setManualMembership(group::getManualMembership);
+				setMembershipRestriction(group::getMembershipRestriction);
+				setMembershipType(
+					() -> MembershipType.create(
+						GroupConstants.getTypeLabel(group.getType())));
 				setName(() -> group.getName(LocaleUtil.getDefault()));
+				setTypeSettings(
+					() -> UnicodePropertiesBuilder.fastLoad(
+						group.getTypeSettings()
+					).build());
 			}
 		};
 	}
@@ -465,6 +553,9 @@ public class SiteResourceImpl extends BaseSiteResourceImpl {
 
 	@Reference
 	private GroupService _groupService;
+
+	@Reference
+	private LayoutServiceContextHelper _layoutServiceContextHelper;
 
 	@Reference
 	private LayoutSetPrototypeLocalService _layoutSetPrototypeLocalService;

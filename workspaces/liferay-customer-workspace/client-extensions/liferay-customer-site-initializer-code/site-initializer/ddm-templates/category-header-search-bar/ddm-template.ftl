@@ -1,16 +1,7 @@
 <style>
 	.cp-category-header-container {
 		align-items: center;
-		background-image: url('/documents/d/customer-portal/search_bar-png');
-		background-size: cover;
-		height: 120px;
 		justify-content: space-between;
-
-		h1, h3 {
-			color: var(--color-neutral-0, #FFFFFF);
-			font-weight: var(--font-weight-semi-bold);
-			text-align: center;
-		}
 
 		.search-bar {
 			max-width: 100%;
@@ -23,8 +14,6 @@
 	}
 
 	.landing-page-mode {
-		background-image: url('/documents/d/customer-portal/search_bar_landing_page-png');
-		height: 280px;
 		justify-content: center;
 
 		.search-bar {
@@ -33,22 +22,40 @@
 	}
 </style>
 
-<#assign displayObject = (request.getAttribute("LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER").getDisplayObject())!{} />
+<#assign displayObject = (renderRequest.getAttribute("LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER").getDisplayObject())!{} />
 
 <#if displayObject?has_content>
-	<#assign
-		currentCategoryId = displayObject.categoryId
-		mainCategoryId = displayObject.treePath?split("/")[1]!""
-		mainCategory = restClient.get("/headless-admin-taxonomy/v1.0/taxonomy-categories/" + mainCategoryId)!{}
-	/>
+	<#if displayObject.categoryId??>
+		<#assign
+			currentCategoryId = displayObject.categoryId
+			mainCategoryId = displayObject.treePath?split("/")[1]!""
+
+			mainCategory = restClient.get("/headless-admin-taxonomy/v1.0/taxonomy-categories/" + mainCategoryId)!{}
+
+			mainCategoryName = mainCategory.name
+		/>
+	<#elseif displayObject.externalReferenceCode?? && displayObject.groupId??>
+		<#assign
+			article = restClient.get("/headless-delivery/v1.0/sites//" + displayObject.groupId + "/structured-contents/by-external-reference-code/" + displayObject.externalReferenceCode)!{}
+		/>
+
+		<#if article?has_content && article.taxonomyCategoryBriefs?has_content>
+			<#assign
+				currentCategoryId = article.taxonomyCategoryBriefs[article.taxonomyCategoryBriefs?size -1].taxonomyCategoryId
+				mainCategoryId = article.taxonomyCategoryBriefs[0].taxonomyCategoryId
+
+				mainCategoryName = article.taxonomyCategoryBriefs[0].taxonomyCategoryName
+			/>
+		</#if>
+	</#if>
 </#if>
 
-<#if mainCategory?has_content>
-	<#assign isLandingPage = currentCategoryId?string == mainCategoryId />
+<#if mainCategoryName?has_content>
+	<#assign isLandingPage = currentCategoryId?string == mainCategoryId?string />
 
-	<div class="cp-category-header-container d-flex ${isLandingPage?then('flex-column landing-page-mode','')} mb-5 p-5">
+	<div class="cp-category-header-container d-flex ${isLandingPage?then('flex-column landing-page-mode','')}">
 		<${isLandingPage?then("h1", "h3")}>
-			${htmlUtil.escape(mainCategory.name)}
+			${htmlUtil.escape(mainCategoryName)}
 		</${isLandingPage?then("h1", "h3")}>
 
 		<@liferay_aui.fieldset cssClass="search-bar">
@@ -108,7 +115,7 @@
 						disabled=true
 						label=""
 						name=htmlUtil.escape(searchBarPortletDisplayContext.getKeywordsParameterName())
-						placeholder='${languageUtil.get(locale, "search")} ${htmlUtil.escape(mainCategory.name)}'
+						placeholder='${languageUtil.get(locale, "search")} ${htmlUtil.escape(mainCategoryName)}'
 						title=languageUtil.get(locale, "search")
 						type="text"
 						useNamespace=false
@@ -124,7 +131,7 @@
 							disabled=true
 							id="${namespace + stringUtil.randomId()}"
 							name="${htmlUtil.escape(searchBarPortletDisplayContext.getKeywordsParameterName())}"
-							placeholder='${languageUtil.get(locale, "search")} ${htmlUtil.escape(mainCategory.name)}'
+							placeholder='${languageUtil.get(locale, "search")} ${htmlUtil.escape(mainCategoryName)}'
 							title='${languageUtil.get(locale, "search")}'
 							type="text"
 							value="${htmlUtil.escape(searchBarPortletDisplayContext.getKeywords())}"

@@ -2423,6 +2423,19 @@
 		"to": "SAXReaderUtil.read(param#0#).formattedString()"
 	},
 	{
+		"classNames": [
+			"BaseJSPDynamicInclude"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-28057",
+		"methodsToFormat": [
+			{
+				"from": "regex:@Override\\s*@Reference\\s*\\(\\s*target\\s*=\\s*\"(?<target>[^\"]*)\",[\\s\\S]*?\\)\\s*public\\s+void\\s+setServletContext\\(ServletContext\\s+servletContext\\)\\s*\\{[\\s\\S]*?\\}",
+				"to": "@Reference(\n\t\ttarget = \"${target}\"\n\t)\n\tprivate ServletContext _servletContext;\n\n\t@Override\n\tpublic ServletContext getServletContext() {\n\t\treturn _servletContext;\n\t}"
+			}
+		]
+	},
+	{
 		"from": "new CommercePriceEntryUOMCreateDateComparator()",
 		"issueKey": "LPD-28067",
 		"skipParametersValidation": true,
@@ -4386,6 +4399,19 @@
 		"from": "regex:(?<variableName>\\w+)\\.(?<prefixMethodName>getPortlet|setPortlet)Setup",
 		"issueKey": "LPD-47124",
 		"to": "${variableName}.${prefixMethodName}Preferences"
+	},
+	{
+		"classNames": [
+			"DefaultConfigurationAction"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-47432",
+		"methodsToFormat": [
+			{
+				"from": "regex:\\s*@Override\\s*@Reference\\s*\\(\\s*target\\s*=\\s*\\\"[^\\\"]*\\\",[\\s\\S]*?\\)\\s*public\\s+void\\s+setServletContext\\(ServletContext\\s+servletContext\\)\\s*\\{[\\s\\S]*?\\}",
+				"to": ""
+			}
+		]
 	},
 	{
 		"classNames": [

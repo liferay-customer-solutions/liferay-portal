@@ -143,19 +143,19 @@ public class FragmentEntryLinkManager {
 			return Collections.emptySet();
 		}
 
-		FragmentEntry fragmentEntry = _getFragmentEntry(
-			fragmentEntryLink, LocaleUtil.getMostRelevantLocale());
-
-		if (fragmentEntry != null) {
-			return _getFieldTypes(fragmentEntry.getTypeOptions());
-		}
-
 		FragmentRenderer fragmentRenderer =
 			_fragmentRendererRegistry.getFragmentRenderer(
 				fragmentEntryLink.getRendererKey());
 
 		if (fragmentRenderer != null) {
 			return _getFieldTypes(fragmentRenderer.getTypeOptions());
+		}
+
+		FragmentEntry fragmentEntry = _getFragmentEntry(
+			fragmentEntryLink, LocaleUtil.getMostRelevantLocale());
+
+		if (fragmentEntry != null) {
+			return _getFieldTypes(fragmentEntry.getTypeOptions());
 		}
 
 		return Collections.emptySet();

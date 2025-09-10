@@ -262,7 +262,7 @@ function SidePanel(props: SidePanelProps) {
 
 					return (
 						<VerticalBar.Panel key={item.title}>
-							<div className="align-items-center border-0 d-flex justify-content-between sidebar-header">
+							<div className="align-items-center d-flex justify-content-between pl-3 sidebar-header">
 								<div className="component-title">
 									{item.title}
 								</div>
@@ -299,7 +299,12 @@ function SidePanel(props: SidePanelProps) {
 			<VerticalBar.Bar displayType="light" items={items}>
 				{(item) => (
 					<VerticalBar.Item divider={item.divider} key={item.title}>
-						<Button aria-label={item.title} displayType={null}>
+						<Button
+							aria-label={item.title}
+							data-tooltip-align="left"
+							displayType={null}
+							title={item.title}
+						>
 							<ClayIcon symbol={item.icon} />
 						</Button>
 					</VerticalBar.Item>

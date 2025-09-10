@@ -5,7 +5,8 @@
 
 package com.liferay.depot.web.internal.item.selector;
 
-import com.liferay.depot.web.internal.util.DepotAdminGroupSearchProvider;
+import com.liferay.depot.item.selector.DepotGroupItemSelectorCriterion;
+import com.liferay.depot.web.internal.util.DepotEntryAdminSearchProvider;
 import com.liferay.item.selector.ItemSelectorReturnType;
 import com.liferay.item.selector.ItemSelectorView;
 import com.liferay.item.selector.ItemSelectorViewDescriptor;
@@ -26,6 +27,7 @@ import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 
 import jakarta.portlet.PortletRequest;
+import jakarta.portlet.PortletResponse;
 import jakarta.portlet.PortletURL;
 
 import jakarta.servlet.ServletException;
@@ -97,7 +99,7 @@ public class DepotGroupItemSelectorView
 			new GroupItemSelectorReturnType());
 
 	@Reference
-	private DepotAdminGroupSearchProvider _depotAdminGroupSearchProvider;
+	private DepotEntryAdminSearchProvider _depotEntryAdminSearchProvider;
 
 	@Reference
 	private ItemSelectorViewDescriptorRenderer<DepotGroupItemSelectorCriterion>
@@ -235,9 +237,13 @@ public class DepotGroupItemSelectorView
 					(PortletRequest)_httpServletRequest.getAttribute(
 						JavaConstants.JAKARTA_PORTLET_REQUEST);
 
-				return _depotAdminGroupSearchProvider.getGroupSearch(
+				PortletResponse portletResponse =
+					(PortletResponse)_httpServletRequest.getAttribute(
+						JavaConstants.JAKARTA_PORTLET_RESPONSE);
+
+				return _depotEntryAdminSearchProvider.getGroupSearch(
 					_depotGroupItemSelectorCriterion, portletRequest,
-					_portletURL);
+					portletResponse, _portletURL);
 			}
 			catch (PortalException portalException) {
 				return ReflectionUtil.throwException(portalException);
