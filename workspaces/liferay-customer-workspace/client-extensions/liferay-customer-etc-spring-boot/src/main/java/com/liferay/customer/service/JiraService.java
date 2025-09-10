@@ -223,7 +223,7 @@ public class JiraService extends BaseService {
 				}
 
 				JiraSupportIssue jiraSupportIssue = new JiraSupportIssue(
-					issueJSONObject, ticketURL);
+					_transformIssue(issueJSONObject), ticketURL);
 
 				jiraSupportIssues.add(jiraSupportIssue);
 			}
@@ -752,6 +752,8 @@ public class JiraService extends BaseService {
 						_jiraSecurityVulnerabilityFieldIssueClassification),
 					"value")
 			).put(
+				"labels", issueFieldsJSONObject.optJSONArray("labels")
+			).put(
 				"organization",
 				_getAssetObjectFieldId(
 					issueFieldsJSONObject.optJSONArray(
@@ -776,6 +778,8 @@ public class JiraService extends BaseService {
 				"status",
 				_getJSONObjectFieldValue(
 					issueFieldsJSONObject.optJSONObject(_FIELD_STATUS), "name")
+			).put(
+				"summary", issueFieldsJSONObject.optString("summary")
 			);
 		}
 

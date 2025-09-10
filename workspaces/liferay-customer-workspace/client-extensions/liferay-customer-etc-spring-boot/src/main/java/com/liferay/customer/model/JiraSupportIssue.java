@@ -18,6 +18,10 @@ import org.json.JSONObject;
  */
 public class JiraSupportIssue {
 
+	public JiraSupportIssue(JSONObject jsonObject) {
+		this(jsonObject, null);
+	}
+
 	public JiraSupportIssue(JSONObject jsonObject, String ticketURL) {
 		_key = jsonObject.getString("key");
 
@@ -33,9 +37,9 @@ public class JiraSupportIssue {
 
 		_labels = labels.toArray(new String[0]);
 
-		JSONObject statusJSONObject = fieldsJSONObject.getJSONObject("status");
+		_organization = fieldsJSONObject.optString("organization", null);
 
-		_status = statusJSONObject.getString("name");
+		_status = fieldsJSONObject.getString("status");
 
 		_summary = fieldsJSONObject.getString("summary");
 
@@ -48,6 +52,10 @@ public class JiraSupportIssue {
 
 	public String[] getLabels() {
 		return _labels;
+	}
+
+	public String getOrganization() {
+		return _organization;
 	}
 
 	public String getStatus() {
@@ -74,6 +82,7 @@ public class JiraSupportIssue {
 
 	private final String _key;
 	private final String[] _labels;
+	private final String _organization;
 	private final String _status;
 	private final String _summary;
 	private final String _ticketURL;
