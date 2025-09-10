@@ -7,6 +7,7 @@ package com.liferay.portal.service.impl;
 
 import com.liferay.asset.kernel.service.AssetEntryLocalService;
 import com.liferay.expando.kernel.service.ExpandoRowLocalService;
+import com.liferay.exportimport.kernel.empty.model.EmptyModelManagerUtil;
 import com.liferay.exportimport.kernel.staging.MergeLayoutPrototypesThreadLocal;
 import com.liferay.layout.admin.kernel.model.LayoutTypePortletConstants;
 import com.liferay.petra.function.transform.TransformUtil;
@@ -372,17 +373,17 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 
 		layout.setPublishDate(serviceContext.getModifiedDate(date));
 
-		if (_workflowDefinitionLinkLocalService.hasWorkflowDefinitionLink(
-				layout.getCompanyId(), layout.getGroupId(),
-				Layout.class.getName()) &&
-			(Objects.equals(type, LayoutConstants.TYPE_CONTENT) ||
-			 Objects.equals(type, LayoutConstants.TYPE_UTILITY)) &&
-			!system) {
+		if (EmptyModelManagerUtil.isEmptyModel()) {
+			layout.setStatus(WorkflowConstants.STATUS_EMPTY);
+		}
+		else if (_workflowDefinitionLinkLocalService.hasWorkflowDefinitionLink(
+					layout.getCompanyId(), layout.getGroupId(),
+					Layout.class.getName()) &&
+				 (Objects.equals(type, LayoutConstants.TYPE_CONTENT) ||
+				  Objects.equals(type, LayoutConstants.TYPE_UTILITY)) &&
+				 !system) {
 
 			layout.setStatus(WorkflowConstants.STATUS_DRAFT);
-		}
-		else if (type.equals(LayoutConstants.TYPE_EMPTY)) {
-			layout.setStatus(WorkflowConstants.STATUS_EMPTY);
 		}
 		else {
 			layout.setStatus(WorkflowConstants.STATUS_APPROVED);
@@ -2257,6 +2258,28 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 		}
 
 		return nextLayoutId;
+	}
+
+	public Layout getOrAddEmptyLayout(
+			String externalReferenceCode, long userId, long groupId,
+			ServiceContext serviceContext)
+		throws Exception {
+
+		return EmptyModelManagerUtil.getOrAddEmptyModel(
+			Layout.class,
+			() -> {
+				serviceContext.setAttribute(
+					"layout.instanceable.allowed", Boolean.TRUE);
+
+				return layoutLocalService.addLayout(
+					externalReferenceCode, userId, groupId, false,
+					LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+					externalReferenceCode, StringPool.BLANK, null,
+					LayoutConstants.TYPE_EMPTY, true, false, null,
+					serviceContext);
+			},
+			externalReferenceCode, this::fetchLayoutByExternalReferenceCode,
+			this::getLayoutByExternalReferenceCode, groupId);
 	}
 
 	@Override

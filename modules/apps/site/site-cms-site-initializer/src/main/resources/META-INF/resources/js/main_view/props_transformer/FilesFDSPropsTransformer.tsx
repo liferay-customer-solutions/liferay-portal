@@ -14,13 +14,16 @@ import FilePreviewerModalContent from '../modal/FilePreviewerModalContent';
 import createAssetAction from './actions/createAssetAction';
 import createFolderAction from './actions/createFolderAction';
 import deleteAssetEntriesBulkAction from './actions/deleteAssetEntriesBulkAction';
-import multipleFilesUploadAction from './actions/multipleFilesUploadAction';
+import fileDropAction from './actions/fileDropAction';
+import multipleFilesUploadAction, {
+	MultipleFileUploaderData,
+} from './actions/multipleFilesUploadAction';
 import shareAction from './actions/shareAction';
+import AssetTypeRenderer from './cell_renderers/AssetTypeRenderer';
 import AuthorRenderer from './cell_renderers/AuthorRenderer';
 import NameRenderer from './cell_renderers/NameRenderer';
 import SimpleActionLinkRenderer from './cell_renderers/SimpleActionLinkRenderer';
 import SpaceRenderer from './cell_renderers/SpaceRenderer';
-import TypeRenderer from './cell_renderers/TypeRenderer';
 import addOnClickToCreationMenuItems from './utils/addOnClickToCreationMenuItems';
 import transformViewsItemsProps from './utils/transformViewsItemProps';
 
@@ -42,13 +45,15 @@ export default function FilesFDSPropsTransformer({
 }: {
 	additionalProps: {
 		autocompleteURL: string;
+		baseFolderViewURL: string;
 		cmsGroupId?: number;
 		collaboratorURLs: Record<string, string>;
 		fileMimeTypeCssClasses: Record<string, string>;
 		fileMimeTypeIcons: Record<string, string>;
 		objectDefinitionCssClasses: Record<string, string>;
 		objectDefinitionIcons: Record<string, string>;
-	};
+		redirect: string;
+	} & MultipleFileUploaderData;
 	creationMenu: any;
 	itemsActions?: any[];
 	otherProps: any;
@@ -65,6 +70,11 @@ export default function FilesFDSPropsTransformer({
 		},
 		customRenderers: {
 			tableCell: [
+				{
+					component: AssetTypeRenderer,
+					name: 'assetTypeTableCellRenderer',
+					type: 'internal',
+				} as IInternalRenderer,
 				{
 					component: AuthorRenderer,
 					name: 'authorTableCellRenderer',
@@ -85,12 +95,17 @@ export default function FilesFDSPropsTransformer({
 					name: 'spaceTableCellRenderer',
 					type: 'internal',
 				} as IInternalRenderer,
-				{
-					component: TypeRenderer,
-					name: 'typeTableCellRenderer',
-					type: 'internal',
-				} as IInternalRenderer,
 			],
+		},
+		fileDropSettings: {
+			enabled: true,
+			isDropTarget: ({item}: {item: any}) => {
+				return item.entryClassName.includes(
+					OBJECT_ENTRY_FOLDER_CLASS_NAME
+				);
+			},
+			onFileDrop: (droppedFiles: any, dropTarget?: any) =>
+				fileDropAction(additionalProps, droppedFiles, dropTarget),
 		},
 		infoPanelComponent: (items: {items: ISearchAssetObjectEntry[]}) => (
 			<AssetTypeInfoPanel
@@ -99,14 +114,7 @@ export default function FilesFDSPropsTransformer({
 			/>
 		),
 		itemsActions: itemsActions.map((action) => {
-			if (action?.data?.id === 'download') {
-				return {
-					...action,
-					isVisible: (item: any) =>
-						Boolean(item?.embedded?.file?.link?.href),
-				};
-			}
-			else if (action?.data?.id === 'actionLink') {
+			if (action?.data?.id === 'actionLink') {
 				return {
 					...action,
 					isVisible: (item: any) =>
@@ -116,16 +124,18 @@ export default function FilesFDSPropsTransformer({
 						),
 				};
 			}
-			else if (
-				action?.data?.id === 'export-for-translation' ||
-				action?.data?.id === 'import-translation'
-			) {
+			else if (action?.data?.id === 'download') {
 				return {
 					...action,
-					isVisible: (item: any) => Boolean(!item?.embedded?.file),
+					isVisible: (item: any) =>
+						Boolean(item?.embedded?.file?.link?.href),
 				};
 			}
-			else if (action?.data?.id === 'view-content') {
+			else if (
+				action?.data?.id === 'export-for-translation' ||
+				action?.data?.id === 'import-translation' ||
+				action?.data?.id === 'view-content'
+			) {
 				return {
 					...action,
 					isVisible: () => Boolean(false),
@@ -151,7 +161,18 @@ export default function FilesFDSPropsTransformer({
 			action: any;
 			itemData: any;
 		}) => {
-			if (action?.data?.id === 'view-file') {
+			if (action?.data?.id === 'share') {
+				const {autocompleteURL, collaboratorURLs} = additionalProps;
+
+				shareAction({
+					autocompleteURL,
+					collaboratorURL: collaboratorURLs[itemData.entryClassName],
+					creator: itemData.embedded.creator,
+					itemId: itemData.embedded.id,
+					title: itemData.embedded?.title,
+				});
+			}
+			else if (action?.data?.id === 'view-file') {
 				openModal({
 					containerProps: {
 						className: '',
@@ -162,17 +183,6 @@ export default function FilesFDSPropsTransformer({
 							headerName: itemData.embedded.title,
 						}),
 					size: 'full-screen',
-				});
-			}
-			else if (action?.data?.id === 'share') {
-				const {autocompleteURL, collaboratorURLs} = additionalProps;
-
-				shareAction({
-					autocompleteURL,
-					collaboratorURL: collaboratorURLs[itemData.entryClassName],
-					creator: itemData.embedded.creator,
-					itemId: itemData.embedded.id,
-					title: itemData.embedded?.title,
 				});
 			}
 		},

@@ -19,7 +19,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import org.eclipse.equinox.http.servlet.internal.HttpServletEndpointController;
-import org.eclipse.equinox.http.servlet.internal.servlet.HttpServletRequestWrapperImpl;
 
 /**
  * @author Dante Wang
@@ -50,7 +49,7 @@ public class HttpServletEndpointServlet extends HttpServlet {
 		throws IOException, ServletException {
 
 		String dispatchPathInfo =
-			HttpServletRequestWrapperImpl.getDispatchPathInfo(
+			LiferayHttpServletRequestWrapper.getDispatchPathInfo(
 				httpServletRequest);
 
 		if (dispatchPathInfo == null) {

@@ -13,6 +13,8 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.osgi.web.http.servlet.internal.servlet.LiferayHttpServletRequestWrapper;
+import com.liferay.portal.osgi.web.http.servlet.internal.servlet.LiferayHttpServletResponseWrapper;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ResponseStateHandler;
 
 import jakarta.servlet.DispatcherType;
@@ -39,8 +41,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.eclipse.equinox.http.servlet.internal.context.DispatchTargets;
 import org.eclipse.equinox.http.servlet.internal.registration.EndpointRegistration;
 import org.eclipse.equinox.http.servlet.internal.registration.FilterRegistration;
-import org.eclipse.equinox.http.servlet.internal.servlet.HttpServletRequestWrapperImpl;
-import org.eclipse.equinox.http.servlet.internal.servlet.HttpServletResponseWrapperImpl;
 import org.eclipse.equinox.http.servlet.internal.util.Params;
 
 /**
@@ -163,22 +163,21 @@ public class LiferayDispatchTargets extends DispatchTargets {
 
 		HttpServletRequest newHttpServletRequest = httpServletRequest;
 
-		HttpServletRequestWrapperImpl httpServletRequestWrapperImpl =
-			HttpServletRequestWrapperImpl.findHttpRuntimeRequest(
-				httpServletRequest);
+		LiferayHttpServletRequestWrapper liferayHttpServletRequestWrapper =
+			LiferayHttpServletRequestWrapper.find(httpServletRequest);
 
-		if (httpServletRequestWrapperImpl == null) {
-			httpServletRequestWrapperImpl = new HttpServletRequestWrapperImpl(
-				httpServletRequest);
+		if (liferayHttpServletRequestWrapper == null) {
+			liferayHttpServletRequestWrapper =
+				new LiferayHttpServletRequestWrapper(httpServletRequest);
 
-			newHttpServletRequest = httpServletRequestWrapperImpl;
+			newHttpServletRequest = liferayHttpServletRequestWrapper;
 
-			httpServletResponse = new HttpServletResponseWrapperImpl(
+			httpServletResponse = new LiferayHttpServletResponseWrapper(
 				httpServletResponse);
 		}
 
 		try {
-			httpServletRequestWrapperImpl.push(this);
+			liferayHttpServletRequestWrapper.push(this);
 
 			ResponseStateHandler responseStateHandler =
 				new ResponseStateHandler(
@@ -217,7 +216,7 @@ public class LiferayDispatchTargets extends DispatchTargets {
 			}
 		}
 		finally {
-			httpServletRequestWrapperImpl.pop();
+			liferayHttpServletRequestWrapper.pop();
 
 			requestAttributeSetter.close();
 		}

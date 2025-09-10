@@ -48,8 +48,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.osgi.framework.BundleContext;
@@ -145,13 +145,6 @@ public class FeatureFlagsBagProviderImpl
 		return this;
 	}
 
-	@Override
-	public <T> T withFeatureFlagsBag(
-		long companyId, Function<FeatureFlagsBag, T> function) {
-
-		return function.apply(getOrCreateFeatureFlagsBag(companyId));
-	}
-
 	@Activate
 	protected void activate(BundleContext bundleContext) {
 		_initSystemFeatureFlags(false);
@@ -183,7 +176,7 @@ public class FeatureFlagsBagProviderImpl
 	}
 
 	private FeatureFlagsBag _createFeatureFlagsBag(long companyId) {
-		Map<String, FeatureFlag> featureFlags = new HashMap<>();
+		Map<String, FeatureFlag> featureFlags = new TreeMap<>();
 
 		Map<String, FeatureFlag> systemFeatureFlags = new HashMap<>();
 

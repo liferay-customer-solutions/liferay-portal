@@ -13,7 +13,10 @@ import AssetTypeInfoPanel from '../info_panel/AssetTypeInfoPanelContent';
 import FilePreviewerModalContent from '../modal/FilePreviewerModalContent';
 import createAssetAction from './actions/createAssetAction';
 import deleteAssetEntriesBulkAction from './actions/deleteAssetEntriesBulkAction';
-import multipleFilesUploadAction from './actions/multipleFilesUploadAction';
+import fileDropAction from './actions/fileDropAction';
+import multipleFilesUploadAction, {
+	MultipleFileUploaderData,
+} from './actions/multipleFilesUploadAction';
 import shareAction from './actions/shareAction';
 import AuthorRenderer from './cell_renderers/AuthorRenderer';
 import NameRenderer from './cell_renderers/NameRenderer';
@@ -27,6 +30,9 @@ const ACTIONS = {
 	uploadMultipleFiles: multipleFilesUploadAction,
 };
 
+const OBJECT_ENTRY_FOLDER_CLASS_NAME =
+	'com.liferay.object.model.ObjectEntryFolder';
+
 export default function AllFDSPropsTransformer({
 	additionalProps,
 	creationMenu,
@@ -36,13 +42,15 @@ export default function AllFDSPropsTransformer({
 }: {
 	additionalProps: {
 		autocompleteURL: string;
+		baseFolderViewURL: string;
 		cmsGroupId?: number;
 		collaboratorURLs: Record<string, string>;
 		fileMimeTypeCssClasses: Record<string, string>;
 		fileMimeTypeIcons: Record<string, string>;
 		objectDefinitionCssClasses: Record<string, string>;
 		objectDefinitionIcons: Record<string, string>;
-	};
+		redirect: string;
+	} & MultipleFileUploaderData;
 	creationMenu: any;
 	itemsActions?: any[];
 	otherProps: any;
@@ -80,6 +88,16 @@ export default function AllFDSPropsTransformer({
 					type: 'internal',
 				} as IInternalRenderer,
 			],
+		},
+		fileDropSettings: {
+			enabled: true,
+			isDropTarget: ({item}: {item: any}) => {
+				return item.entryClassName.includes(
+					OBJECT_ENTRY_FOLDER_CLASS_NAME
+				);
+			},
+			onFileDrop: (droppedFiles: any, dropTarget?: any) =>
+				fileDropAction(additionalProps, droppedFiles, dropTarget),
 		},
 		infoPanelComponent: (items: {items: ISearchAssetObjectEntry[]}) => (
 			<AssetTypeInfoPanel

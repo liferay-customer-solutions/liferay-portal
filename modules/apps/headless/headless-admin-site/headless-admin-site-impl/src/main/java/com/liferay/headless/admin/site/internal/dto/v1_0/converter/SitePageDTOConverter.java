@@ -14,10 +14,17 @@ import com.liferay.headless.admin.site.internal.dto.v1_0.util.SitePageTypeUtil;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutTypePortletConstants;
 import com.liferay.portal.kernel.service.LayoutLocalService;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.UnicodeProperties;
+import com.liferay.portal.kernel.util.UnicodePropertiesBuilder;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterContext;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -102,6 +109,31 @@ public class SitePageDTOConverter implements DTOConverter<Layout, SitePage> {
 	private WidgetPageSettings _toWidgetPageSettings(Layout layout) {
 		WidgetPageSettings widgetPageSettings = new WidgetPageSettings();
 
+		widgetPageSettings.setCustomizable(layout::isCustomizable);
+		widgetPageSettings.setCustomizableSectionIds(
+			() -> {
+				List<String> customizableSectionIds = new ArrayList<>();
+
+				UnicodeProperties typeSettingsUnicodeProperties =
+					UnicodePropertiesBuilder.fastLoad(
+						layout.getTypeSettings()
+					).build();
+
+				typeSettingsUnicodeProperties.forEach(
+					(key, value) -> {
+						if (key.contains("-customizable") &&
+							Objects.equals(value, "true")) {
+
+							customizableSectionIds.add(
+								key.substring(0, key.indexOf("-customizable")));
+						}
+					});
+
+				List<String> sortedCustomizableSectionIds = ListUtil.sort(
+					customizableSectionIds);
+
+				return sortedCustomizableSectionIds.toArray(new String[0]);
+			});
 		widgetPageSettings.setLayoutTemplateId(
 			() -> layout.getTypeSettingsProperty(
 				LayoutTypePortletConstants.LAYOUT_TEMPLATE_ID));

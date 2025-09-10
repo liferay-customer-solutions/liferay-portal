@@ -3913,7 +3913,8 @@ public class ObjectEntryLocalServiceTest {
 			_objectDefinition.getPanelCategoryKey(),
 			_objectDefinition.isPortlet(),
 			_objectDefinition.getPluralLabelMap(), _objectDefinition.getScope(),
-			_objectDefinition.getStatus(), Collections.emptyList());
+			_objectDefinition.getStatus(), Collections.emptyList(),
+			Collections.emptyList());
 
 		_objectEntryLocalService.deleteObjectEntry(objectEntry4);
 
@@ -6432,16 +6433,6 @@ public class ObjectEntryLocalServiceTest {
 					objectDefinitionAAA,
 					ObjectRelationshipConstants.DELETION_TYPE_CASCADE,
 					"objectRelationship2")));
-
-		Assert.assertNotNull(
-			WorkflowHandlerRegistryUtil.getWorkflowHandler(
-				objectDefinitionA.getClassName()));
-		Assert.assertNull(
-			WorkflowHandlerRegistryUtil.getWorkflowHandler(
-				objectDefinitionAA.getClassName()));
-		Assert.assertNull(
-			WorkflowHandlerRegistryUtil.getWorkflowHandler(
-				objectDefinitionAAA.getClassName()));
 
 		ObjectEntry objectEntryA = _addObjectEntry(
 			0, objectDefinitionA.getObjectDefinitionId(),

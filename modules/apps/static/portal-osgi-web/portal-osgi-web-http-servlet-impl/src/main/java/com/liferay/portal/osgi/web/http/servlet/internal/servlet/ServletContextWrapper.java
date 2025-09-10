@@ -37,7 +37,6 @@ import java.util.function.BiConsumer;
 
 import org.eclipse.equinox.http.servlet.internal.context.ServletContextHelperDataContext;
 import org.eclipse.equinox.http.servlet.internal.servlet.Match;
-import org.eclipse.equinox.http.servlet.internal.servlet.RequestDispatcherAdaptor;
 import org.eclipse.equinox.http.servlet.internal.util.EventListeners;
 
 import org.osgi.framework.Bundle;
@@ -282,8 +281,7 @@ public class ServletContextWrapper implements ServletContext {
 			return null;
 		}
 
-		return new RequestDispatcherAdaptor(
-			liferayDispatchTargets, servletName);
+		return new RequestDispatcherImpl(liferayDispatchTargets, servletName);
 	}
 
 	@Override
@@ -315,7 +313,7 @@ public class ServletContextWrapper implements ServletContext {
 			return null;
 		}
 
-		return new RequestDispatcherAdaptor(liferayDispatchTargets, path);
+		return new RequestDispatcherImpl(liferayDispatchTargets, path);
 	}
 
 	@Override

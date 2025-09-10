@@ -15,7 +15,10 @@ import FilePreviewerModalContent from '../modal/FilePreviewerModalContent';
 import createAssetAction from './actions/createAssetAction';
 import createFolderAction from './actions/createFolderAction';
 import deleteAssetEntriesBulkAction from './actions/deleteAssetEntriesBulkAction';
-import multipleFilesUploadAction from './actions/multipleFilesUploadAction';
+import fileDropAction from './actions/fileDropAction';
+import multipleFilesUploadAction, {
+	MultipleFileUploaderData,
+} from './actions/multipleFilesUploadAction';
 import shareAction from './actions/shareAction';
 import AuthorRenderer from './cell_renderers/AuthorRenderer';
 import NameRenderer from './cell_renderers/NameRenderer';
@@ -32,6 +35,7 @@ const ACTIONS = {
 
 const OBJECT_ENTRY_FOLDER_CLASS_NAME =
 	'com.liferay.object.model.ObjectEntryFolder';
+const OBJECT_ENTRY_FOLDER_EXTERNAL_REFERENCE_CODE_FILES = 'L_FILES';
 
 export default function FolderFDSPropsTransformer({
 	additionalProps,
@@ -42,13 +46,16 @@ export default function FolderFDSPropsTransformer({
 }: {
 	additionalProps: {
 		autocompleteURL: string;
+		baseFolderViewURL: string;
 		cmsGroupId?: number;
 		collaboratorURLs: Record<string, string>;
 		fileMimeTypeCssClasses: Record<string, string>;
 		fileMimeTypeIcons: Record<string, string>;
 		objectDefinitionCssClasses: Record<string, string>;
 		objectDefinitionIcons: Record<string, string>;
-	};
+		redirect: string;
+		rootObjectEntryFolderExternalReferenceCode: string;
+	} & MultipleFileUploaderData;
 	creationMenu: any;
 	itemsActions?: any[];
 	otherProps: any;
@@ -87,6 +94,20 @@ export default function FolderFDSPropsTransformer({
 				} as IInternalRenderer,
 			],
 		},
+		fileDropSettings: {
+			enabled:
+				additionalProps.rootObjectEntryFolderExternalReferenceCode ===
+				OBJECT_ENTRY_FOLDER_EXTERNAL_REFERENCE_CODE_FILES,
+			isDropTarget: ({item}: {item: any}) => {
+				return (
+					additionalProps.parentObjectEntryFolderExternalReferenceCode ===
+						OBJECT_ENTRY_FOLDER_EXTERNAL_REFERENCE_CODE_FILES &&
+					item.entryClassName.includes(OBJECT_ENTRY_FOLDER_CLASS_NAME)
+				);
+			},
+			onFileDrop: (droppedFiles: any, dropTarget?: any) =>
+				fileDropAction(additionalProps, droppedFiles, dropTarget),
+		},
 		infoPanelComponent: (items: {items: ISearchAssetObjectEntry[]}) => (
 			<AssetTypeInfoPanel
 				additionalProps={additionalProps as any}
@@ -109,6 +130,15 @@ export default function FolderFDSPropsTransformer({
 					...action,
 					isVisible: (item: any) =>
 						Boolean(item?.embedded?.file?.link?.href),
+				};
+			}
+			else if (
+				action?.data?.id === 'export-for-translation' ||
+				action?.data?.id === 'import-translation'
+			) {
+				return {
+					...action,
+					isVisible: (item: any) => Boolean(!item?.embedded?.file),
 				};
 			}
 			else if (action?.data?.id === 'view-content') {
@@ -140,7 +170,19 @@ export default function FolderFDSPropsTransformer({
 			event: Event;
 			itemData: any;
 		}) => {
-			if (action?.data?.id === 'share') {
+			if (
+				action?.data?.id === 'export-for-translation' ||
+				action?.data?.id === 'import-translation'
+			) {
+				event?.preventDefault();
+
+				openModal({
+					size: 'full-screen',
+					title: action.label,
+					url: formatActionURL(itemData, action.href),
+				});
+			}
+			else if (action?.data?.id === 'share') {
 				const {autocompleteURL, collaboratorURLs} = additionalProps;
 
 				shareAction({

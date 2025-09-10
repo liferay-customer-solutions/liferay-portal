@@ -7,6 +7,7 @@ package com.liferay.analytics.cms.rest.internal.resource.v1_0;
 
 import com.liferay.analytics.cms.rest.dto.v1_0.InventoryAnalysis;
 import com.liferay.analytics.cms.rest.dto.v1_0.InventoryAnalysisItem;
+import com.liferay.analytics.cms.rest.internal.resource.v1_0.util.ObjectEntryVersionTitleExpressionUtil;
 import com.liferay.analytics.cms.rest.resource.v1_0.InventoryAnalysisResource;
 import com.liferay.asset.entry.rel.model.AssetEntryAssetCategoryRelTable;
 import com.liferay.asset.kernel.model.AssetCategoryTable;
@@ -31,12 +32,6 @@ import com.liferay.petra.sql.dsl.expression.Expression;
 import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.sql.dsl.query.FromStep;
 import com.liferay.petra.sql.dsl.query.GroupByStep;
-import com.liferay.petra.sql.dsl.spi.expression.DSLFunction;
-import com.liferay.petra.sql.dsl.spi.expression.DSLFunctionType;
-import com.liferay.petra.sql.dsl.spi.expression.Scalar;
-import com.liferay.portal.kernel.dao.db.DB;
-import com.liferay.portal.kernel.dao.db.DBManagerUtil;
-import com.liferay.portal.kernel.dao.db.DBType;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -345,11 +340,10 @@ public class InventoryAnalysisResourceImpl
 
 		if (Validator.isNotNull(languageId)) {
 			predicate = predicate.and(
-				_getPropertyValueExpression(
-					ObjectEntryVersionTable.INSTANCE.content, "$.properties"
-				).like(
-					"%\"" + languageId + "\":%"
-				));
+				DSLFunctionFactoryUtil.castClobText(
+					ObjectEntryVersionTitleExpressionUtil.
+						getLocalizedTitleExpression(languageId)
+				).isNotNull());
 		}
 
 		if (Validator.isNotNull(rangeStart)) {
@@ -382,24 +376,6 @@ public class InventoryAnalysisResourceImpl
 		}
 
 		return predicate;
-	}
-
-	private <T> Expression<T> _getPropertyValueExpression(
-		Expression<T> expression, String propertyName) {
-
-		DB db = DBManagerUtil.getDB();
-
-		if ((db.getDBType() == DBType.MYSQL) ||
-			(db.getDBType() == DBType.MARIADB)) {
-
-			return new DSLFunction<>(
-				new DSLFunctionType("JSON_EXTRACT(", ")"), expression,
-				new Scalar<>(propertyName));
-		}
-
-		return new DSLFunction<>(
-			new DSLFunctionType("JSON_QUERY(", ")"), expression,
-			new Scalar<>(propertyName));
 	}
 
 	private Expression<?>[] _getSelectExpressions(String groupBy) {

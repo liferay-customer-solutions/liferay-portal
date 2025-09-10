@@ -267,7 +267,7 @@ test(
 				.locator('tr')
 				.filter({hasText: 'System Action'});
 
-			await expect(itemActionRows).toHaveCount(13);
+			await expect(itemActionRows).toHaveCount(14);
 
 			for (const itemActionRow of await itemActionRows.all()) {
 				await expect(
@@ -427,7 +427,7 @@ test(
 				'id': buildTableRowSpec('true', 'Action Link'),
 				'size': buildTableRowSpec('false', ''),
 				'status': buildTableRowSpec('false', 'Status'),
-				'title': buildTableRowSpec('true', 'Default'),
+				'title': buildTableRowSpec('true', 'Action Link'),
 			});
 
 			await page.getByTitle('Back').click();

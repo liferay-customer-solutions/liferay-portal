@@ -976,6 +976,10 @@ public class OrganizationLocalServiceImpl
 			companyId, parentOrganizationId, queryDefinition);
 	}
 
+	public List<Organization> getOrganizationsByLogoId(long logoId) {
+		return organizationPersistence.findByLogoId(logoId);
+	}
+
 	/**
 	 * Returns the number of organizations belonging to the parent organization.
 	 *

@@ -281,7 +281,8 @@ public class RenderLayoutStructureTagTest {
 					ObjectFieldUtil.createObjectField(
 						ObjectFieldConstants.BUSINESS_TYPE_TEXT,
 						ObjectFieldConstants.DB_TYPE_STRING,
-						RandomTestUtil.randomString(), "text")));
+						RandomTestUtil.randomString(), "text")),
+				Collections.emptyList());
 
 		_objectDefinitionLocalService.publishCustomObjectDefinition(
 			TestPropsValues.getUserId(),
@@ -303,7 +304,8 @@ public class RenderLayoutStructureTagTest {
 					ObjectFieldUtil.createObjectField(
 						ObjectFieldConstants.BUSINESS_TYPE_TEXT,
 						ObjectFieldConstants.DB_TYPE_STRING,
-						RandomTestUtil.randomString(), "text")));
+						RandomTestUtil.randomString(), "text")),
+				Collections.emptyList());
 
 		_objectDefinitionLocalService.publishCustomObjectDefinition(
 			TestPropsValues.getUserId(),
@@ -349,7 +351,7 @@ public class RenderLayoutStructureTagTest {
 				layoutStructure.getLayoutStructureItem(
 					jsonObject.getString("addedItemId")),
 			true, draftLayout, layoutStructure,
-			LocaleUtil.getMostRelevantLocale(), segmentsExperienceId,
+			LocaleUtil.getMostRelevantLocale(), false, segmentsExperienceId,
 			_serviceContext, null);
 
 		_layoutPageTemplateStructureLocalService.

@@ -134,15 +134,11 @@ public class ViewAllSpacesDisplayContext {
 				"view-members", null),
 			new FDSActionDropdownItem(
 				null, "globe", "view-sites",
-				LanguageUtil.format(
-					_httpServletRequest, "view-x",
-					LanguageUtil.get(_httpServletRequest, "sites")),
+				LanguageUtil.get(_httpServletRequest, "view-connected-sites"),
 				"get", "connect-sites", null),
 			new FDSActionDropdownItem(
 				null, "globe", "view-sites",
-				LanguageUtil.format(
-					_httpServletRequest, "view-x",
-					LanguageUtil.get(_httpServletRequest, "sites")),
+				LanguageUtil.get(_httpServletRequest, "view-connected-sites"),
 				"get", "view-sites", null),
 			new FDSActionDropdownItem(
 				PortletURLBuilder.create(
@@ -168,12 +164,9 @@ public class ViewAllSpacesDisplayContext {
 				_language.get(_httpServletRequest, "permissions"), "get", null,
 				"modal-permissions"),
 			new FDSActionDropdownItem(
-				_language.get(
-					_httpServletRequest,
-					"are-you-sure-you-want-to-delete-this-entry"),
-				null, "trash", "delete",
+				"{actions.delete.href}", "trash", "delete",
 				_language.get(_httpServletRequest, "delete"), "delete",
-				"delete", "headless"));
+				"delete", null));
 	}
 
 	private final DepotEntryPinLocalService _depotEntryPinLocalService;

@@ -14,7 +14,6 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.util.PropsValues;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -36,19 +35,17 @@ public class FeatureFlagsBag {
 	}
 
 	public List<FeatureFlag> getFeatureFlags(Predicate<FeatureFlag> predicate) {
-		List<FeatureFlag> featureFlags = new ArrayList<>();
-
 		if (predicate == null) {
-			predicate = featureFlag -> true;
+			return new ArrayList<>(_featureFlagsMap.values());
 		}
+
+		List<FeatureFlag> featureFlags = new ArrayList<>();
 
 		for (FeatureFlag featureFlag : _featureFlagsMap.values()) {
 			if (predicate.test(featureFlag)) {
 				featureFlags.add(featureFlag);
 			}
 		}
-
-		featureFlags.sort(Comparator.comparing(FeatureFlag::getKey));
 
 		return featureFlags;
 	}

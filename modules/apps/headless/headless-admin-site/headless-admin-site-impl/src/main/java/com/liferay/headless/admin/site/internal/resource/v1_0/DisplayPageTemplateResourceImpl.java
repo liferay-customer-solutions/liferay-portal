@@ -474,8 +474,8 @@ public class DisplayPageTemplateResourceImpl
 
 		Layout layout = LayoutUtil.addContentLayout(
 			_cetManager, groupId, displayPageTemplate.getPageSpecifications(),
-			false, nameMap, nameMap, null,
-			_getRobotsMap(displayPageTemplateSettings),
+			LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, false, nameMap, nameMap,
+			null, _getRobotsMap(displayPageTemplateSettings),
 			LayoutConstants.TYPE_ASSET_DISPLAY,
 			_getUnicodeProperties(displayPageTemplateSettings), true, true,
 			LocalizedMapUtil.getLocalizedMap(

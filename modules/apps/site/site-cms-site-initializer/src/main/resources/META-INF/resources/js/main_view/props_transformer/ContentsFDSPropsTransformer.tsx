@@ -14,11 +14,11 @@ import createAssetAction from './actions/createAssetAction';
 import createFolderAction from './actions/createFolderAction';
 import deleteAssetEntriesBulkAction from './actions/deleteAssetEntriesBulkAction';
 import shareAction from './actions/shareAction';
+import AssetTypeRenderer from './cell_renderers/AssetTypeRenderer';
 import AuthorRenderer from './cell_renderers/AuthorRenderer';
 import NameRenderer from './cell_renderers/NameRenderer';
 import SimpleActionLinkRenderer from './cell_renderers/SimpleActionLinkRenderer';
 import SpaceRenderer from './cell_renderers/SpaceRenderer';
-import TypeRenderer from './cell_renderers/TypeRenderer';
 import addOnClickToCreationMenuItems from './utils/addOnClickToCreationMenuItems';
 import transformViewsItemsProps from './utils/transformViewsItemProps';
 
@@ -63,6 +63,11 @@ export default function ContentFDSPropsTransformer({
 		customRenderers: {
 			tableCell: [
 				{
+					component: AssetTypeRenderer,
+					name: 'assetTypeTableCellRenderer',
+					type: 'internal',
+				} as IInternalRenderer,
+				{
 					component: AuthorRenderer,
 					name: 'authorTableCellRenderer',
 					type: 'internal',
@@ -80,11 +85,6 @@ export default function ContentFDSPropsTransformer({
 				{
 					component: SpaceRenderer,
 					name: 'spaceTableCellRenderer',
-					type: 'internal',
-				} as IInternalRenderer,
-				{
-					component: TypeRenderer,
-					name: 'typeTableCellRenderer',
 					type: 'internal',
 				} as IInternalRenderer,
 			],
@@ -129,18 +129,7 @@ export default function ContentFDSPropsTransformer({
 			event: Event;
 			itemData: any;
 		}) => {
-			if (action?.data?.id === 'share') {
-				const {autocompleteURL, collaboratorURLs} = additionalProps;
-
-				shareAction({
-					autocompleteURL,
-					collaboratorURL: collaboratorURLs[itemData.entryClassName],
-					creator: itemData.embedded.creator,
-					itemId: itemData.embedded.id,
-					title: itemData.embedded?.title,
-				});
-			}
-			else if (
+			if (
 				action?.data?.id === 'export-for-translation' ||
 				action?.data?.id === 'import-translation'
 			) {
@@ -150,6 +139,17 @@ export default function ContentFDSPropsTransformer({
 					size: 'full-screen',
 					title: action.label,
 					url: formatActionURL(itemData, action.href),
+				});
+			}
+			else if (action?.data?.id === 'share') {
+				const {autocompleteURL, collaboratorURLs} = additionalProps;
+
+				shareAction({
+					autocompleteURL,
+					collaboratorURL: collaboratorURLs[itemData.entryClassName],
+					creator: itemData.embedded.creator,
+					itemId: itemData.embedded.id,
+					title: itemData.embedded?.title,
 				});
 			}
 			else if (action?.data?.id === 'view-content') {

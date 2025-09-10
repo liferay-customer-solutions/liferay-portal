@@ -6,7 +6,7 @@
 import ClayButton, {ClayButtonWithIcon} from '@clayui/button';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import classNames from 'classnames';
-import {addDays} from 'date-fns';
+import {add} from 'date-fns';
 import {ReactElement, useState} from 'react';
 import {KeyedMutator} from 'swr';
 
@@ -193,9 +193,14 @@ const ExtendRequestModal: React.FC<ExtendSSATrialModalProps> = ({
 						>
 							<span className="extend-request-info">
 								{formatDate(
-									order.customFields[
-										OrderCustomFields.TRIAL_END_DATE
-									],
+									add(
+										new Date(
+											order.customFields[
+												OrderCustomFields.TRIAL_END_DATE
+											]
+										),
+										{days: trialExtend.duration}
+									),
 									'DNE'
 								)}
 							</span>
@@ -280,37 +285,11 @@ const ExtendRequestModal: React.FC<ExtendSSATrialModalProps> = ({
 								ExtendRequestStatus.APPROVED
 							);
 
-							mutatePlacedOrderPage(
-								(response: any) => ({
-									...order,
-									items: (
-										response as APIResponse<PlacedOrder>
-									).items.map((item) => {
-										if (item.id === order.id) {
-											return {
-												...item,
-												customFields: {
-													...item.customFields,
-													[OrderCustomFields.TRIAL_END_DATE]:
-														addDays(
-															new Date(
-																order.customFields[
-																	OrderCustomFields.TRIAL_END_DATE
-																]
-															),
-															trialExtend.duration
-														).toISOString(),
-												},
-											};
-										}
-
-										return item;
-									}),
-								}),
-								{revalidate: true}
-							);
-
 							await trialOAuth2.extendTrial(trialExtend.id);
+
+							mutatePlacedOrderPage((response: any) => response, {
+								revalidate: true,
+							});
 
 							setSubmitting(null);
 
@@ -341,6 +320,7 @@ const ExtendRequestModal: React.FC<ExtendSSATrialModalProps> = ({
 						{submitting === 'approve' && (
 							<ClayLoadingIndicator className="mr-3 my-0" />
 						)}
+
 						{i18n.translate('approve-request')}
 					</div>
 				</ClayButton>

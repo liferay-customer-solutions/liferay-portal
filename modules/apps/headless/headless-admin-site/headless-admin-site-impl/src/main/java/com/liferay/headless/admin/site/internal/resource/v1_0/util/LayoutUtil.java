@@ -87,12 +87,13 @@ public class LayoutUtil {
 
 	public static Layout addContentLayout(
 			CETManager cetManager, long groupId,
-			PageSpecification[] pageSpecifications, boolean privateLayout,
-			Map<Locale, String> nameMap, Map<Locale, String> titleMap,
-			Map<Locale, String> descriptionMap, Map<Locale, String> robotsMap,
-			String type, UnicodeProperties typeSettingsUnicodeProperties,
-			boolean hidden, boolean system, Map<Locale, String> friendlyURLMap,
-			int status, ServiceContext serviceContext)
+			PageSpecification[] pageSpecifications, long parentLayoutId,
+			boolean privateLayout, Map<Locale, String> nameMap,
+			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
+			Map<Locale, String> robotsMap, String type,
+			UnicodeProperties typeSettingsUnicodeProperties, boolean hidden,
+			boolean system, Map<Locale, String> friendlyURLMap, int status,
+			ServiceContext serviceContext)
 		throws Exception {
 
 		if (typeSettingsUnicodeProperties == null) {
@@ -104,10 +105,10 @@ public class LayoutUtil {
 				GetterUtil.getString(
 					serviceContext.getAttribute("layoutExternalReferenceCode"),
 					null),
-				serviceContext.getUserId(), groupId, privateLayout, 0, 0, 0,
-				nameMap, titleMap, descriptionMap, null, robotsMap, type,
-				typeSettingsUnicodeProperties.toString(), hidden, system,
-				friendlyURLMap, 0L, serviceContext);
+				serviceContext.getUserId(), groupId, privateLayout,
+				parentLayoutId, 0, 0, nameMap, titleMap, descriptionMap, null,
+				robotsMap, type, typeSettingsUnicodeProperties.toString(),
+				hidden, system, friendlyURLMap, 0L, serviceContext);
 
 			return LayoutLocalServiceUtil.updateStatus(
 				serviceContext.getUserId(), layout.getPlid(), status,
@@ -248,8 +249,8 @@ public class LayoutUtil {
 
 		Layout layout = LayoutLocalServiceUtil.addLayout(
 			publishedContentPageSpecification.getExternalReferenceCode(),
-			serviceContext.getUserId(), groupId, privateLayout, 0, 0, 0,
-			nameMap, titleMap, descriptionMap, null, robotsMap, type,
+			serviceContext.getUserId(), groupId, privateLayout, parentLayoutId,
+			0, 0, nameMap, titleMap, descriptionMap, null, robotsMap, type,
 			typeSettingsUnicodeProperties.toString(), hidden, system,
 			friendlyURLMap, masterLayoutPlid, serviceContext);
 
@@ -597,13 +598,25 @@ public class LayoutUtil {
 		).build();
 
 		if (typeSettingsUnicodeProperties != null) {
-			String layoutTemplateId = GetterUtil.getString(
-				typeSettingsUnicodeProperties.remove(
-					LayoutTypePortletConstants.LAYOUT_TEMPLATE_ID),
-				PropsValues.DEFAULT_LAYOUT_TEMPLATE_ID);
-
 			LayoutTypePortlet layoutTypePortlet =
 				(LayoutTypePortlet)layout.getLayoutType();
+
+			layoutTypePortlet.removeCustomization(unicodeProperties);
+
+			typeSettingsUnicodeProperties.setProperty(
+				LayoutConstants.CUSTOMIZABLE_LAYOUT,
+				String.valueOf(
+					GetterUtil.getBoolean(
+						typeSettingsUnicodeProperties.get(
+							LayoutConstants.CUSTOMIZABLE_LAYOUT))));
+
+			String layoutTemplateId = typeSettingsUnicodeProperties.getProperty(
+				LayoutTypePortletConstants.LAYOUT_TEMPLATE_ID,
+				PropsValues.DEFAULT_LAYOUT_TEMPLATE_ID);
+
+			typeSettingsUnicodeProperties.setProperty(
+				LayoutTypePortletConstants.LAYOUT_TEMPLATE_ID,
+				layoutTemplateId);
 
 			if (!Objects.equals(
 					layoutTemplateId,
@@ -614,10 +627,12 @@ public class LayoutUtil {
 			}
 
 			unicodeProperties.putAll(typeSettingsUnicodeProperties);
+
+			layout.setTypeSettingsProperties(unicodeProperties);
 		}
 
 		return _updatePortletLayout(
-			layout, serviceContext, unicodeProperties, widgetPageSpecification);
+			layout, serviceContext, widgetPageSpecification);
 	}
 
 	private static void _addPortletLookAndFeelToConfigurationMap(
@@ -1088,23 +1103,11 @@ public class LayoutUtil {
 
 	private static Layout _updatePortletLayout(
 			Layout layout, ServiceContext serviceContext,
-			UnicodeProperties typeSettingsUnicodeProperties,
 			WidgetPageSpecification widgetPageSpecification)
 		throws Exception {
 
 		UnicodeProperties unicodeProperties =
 			layout.getTypeSettingsProperties();
-
-		LayoutTypePortlet layoutTypePortlet =
-			(LayoutTypePortlet)layout.getLayoutType();
-
-		boolean layoutCustomizable = GetterUtil.getBoolean(
-			typeSettingsUnicodeProperties.get(
-				LayoutConstants.CUSTOMIZABLE_LAYOUT));
-
-		if (!layoutCustomizable) {
-			layoutTypePortlet.removeCustomization(unicodeProperties);
-		}
 
 		if (widgetPageSpecification == null) {
 			return LayoutServiceUtil.updateLayout(
@@ -1115,6 +1118,9 @@ public class LayoutUtil {
 		WidgetPageSection[] widgetPageSections =
 			widgetPageSpecification.getWidgetPageSections();
 
+		LayoutTypePortlet layoutTypePortlet =
+			(LayoutTypePortlet)layout.getLayoutType();
+
 		List<String> columns = layoutTypePortlet.getColumns();
 
 		if (widgetPageSections.length != columns.size()) {
@@ -1123,9 +1129,12 @@ public class LayoutUtil {
 
 		List<String> portletIds = layoutTypePortlet.getPortletIds();
 
+		boolean layoutCustomizable = GetterUtil.getBoolean(
+			unicodeProperties.get(LayoutConstants.CUSTOMIZABLE_LAYOUT));
+
 		for (WidgetPageSection widgetPageSection : widgetPageSections) {
 			boolean customizable = GetterUtil.getBoolean(
-				typeSettingsUnicodeProperties.get(
+				unicodeProperties.get(
 					CustomizedPages.namespaceColumnId(
 						widgetPageSection.getId())));
 

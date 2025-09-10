@@ -5164,7 +5164,8 @@ public class ObjectEntryResourceTest {
 					ObjectFieldUtil.createObjectField(
 						ObjectFieldConstants.BUSINESS_TYPE_BOOLEAN,
 						ObjectFieldConstants.DB_TYPE_BOOLEAN, true, false, null,
-						"Test Field", "testField", true)));
+						"Test Field", "testField", true)),
+				Collections.emptyList());
 
 		_objectDefinitionLocalService.publishCustomObjectDefinition(
 			TestPropsValues.getUserId(),
@@ -6087,15 +6088,11 @@ public class ObjectEntryResourceTest {
 			JSONUtil.put(
 				_OBJECT_FIELD_NAME_1, RandomTestUtil.randomString()
 			).put(
-				"externalReferenceCode", "a/b"
+				"externalReferenceCode", "a/b/c"
 			).toString(),
 			_objectDefinition1.getRESTContextPath(), Http.Method.POST);
 
-		try (LogCapture logCapture1 = LoggerTestUtil.configureLog4JLogger(
-				"com.liferay.object.rest.internal.resource.v1_0." +
-					"ObjectEntryRelatedObjectsResourceImpl",
-				LoggerTestUtil.ERROR);
-			LogCapture logCapture2 = LoggerTestUtil.configureLog4JLogger(
+		try (LogCapture logCapture2 = LoggerTestUtil.configureLog4JLogger(
 				"com.liferay.portal.vulcan.internal.jaxrs.exception.mapper." +
 					"WebApplicationExceptionMapper",
 				LoggerTestUtil.ERROR)) {
@@ -6105,7 +6102,7 @@ public class ObjectEntryResourceTest {
 				HTTPTestUtil.invokeToHttpCode(
 					null,
 					_objectDefinition1.getRESTContextPath() +
-						"/by-external-reference-code/a/b",
+						"/by-external-reference-code/a/b/c",
 					Http.Method.GET));
 		}
 
@@ -6114,21 +6111,21 @@ public class ObjectEntryResourceTest {
 			HTTPTestUtil.invokeToHttpCode(
 				null,
 				_objectDefinition1.getRESTContextPath() +
-					"/by-external-reference-code/a%252Fb",
+					"/by-external-reference-code/a%252Fb%252Fc",
 				Http.Method.GET));
 		Assert.assertEquals(
 			200,
 			HTTPTestUtil.invokeToHttpCode(
 				null,
 				_objectDefinition1.getRESTContextPath() +
-					"/by-external-reference-code/a%252Fb/",
+					"/by-external-reference-code/a%252Fb%252Fc/",
 				Http.Method.GET));
 		Assert.assertEquals(
 			400,
 			HTTPTestUtil.invokeToHttpCode(
 				null,
 				_objectDefinition1.getRESTContextPath() +
-					"/by-external-reference-code/a%2Fb",
+					"/by-external-reference-code/a%2Fb%2Fc",
 				Http.Method.GET));
 
 		HTTPTestUtil.invokeToJSONObject(
@@ -7017,7 +7014,8 @@ public class ObjectEntryResourceTest {
 							).value(
 								String.valueOf(_MAX_FILE_SIZE_VALUE)
 							).build()),
-						false)));
+						false)),
+				Collections.emptyList());
 
 		objectDefinition.setEnableObjectEntryHistory(true);
 

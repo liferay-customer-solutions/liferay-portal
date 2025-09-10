@@ -372,7 +372,8 @@ public class BaseNotificationTypeTest {
 							RandomTestUtil.randomString())
 					).name(
 						"textObjectField"
-					).build()));
+					).build()),
+				Collections.emptyList());
 
 		childObjectDefinition =
 			objectDefinitionLocalService.publishCustomObjectDefinition(
@@ -450,7 +451,8 @@ public class BaseNotificationTypeTest {
 						"textObjectField"
 					).objectFieldSettings(
 						Collections.emptyList()
-					).build()));
+					).build()),
+				Collections.emptyList());
 
 		parentObjectDefinition =
 			objectDefinitionLocalService.publishCustomObjectDefinition(

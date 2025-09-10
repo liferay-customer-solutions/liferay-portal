@@ -864,7 +864,8 @@ public class DefaultObjectEntryManagerImplTest
 							RandomTestUtil.randomString())
 					).name(
 						"textObjectFieldName2"
-					).build()));
+					).build()),
+				Collections.emptyList());
 
 		ObjectDefinition accountEntryObjectDefinition =
 			objectDefinitionLocalService.fetchObjectDefinition(
@@ -1207,9 +1208,6 @@ public class DefaultObjectEntryManagerImplTest
 			_objectRelationshipLocalService.getObjectRelationship(
 				edge.getObjectRelationshipId());
 
-		ObjectField objectField = objectFieldLocalService.getObjectField(
-			objectRelationship.getObjectFieldId2());
-
 		_defaultObjectEntryManager.addRelatedObjectEntry(
 			_simpleDTOConverterContext,
 			new ObjectEntry() {
@@ -1248,18 +1246,14 @@ public class DefaultObjectEntryManagerImplTest
 				"User ", _user.getUserId(),
 				" must have ADD_OBJECT_ENTRY permission for ",
 				_rootObjectDefinition.getResourceName(), StringPool.SPACE),
-			() -> _defaultObjectEntryManager.addObjectEntry(
+			() -> _defaultObjectEntryManager.addRelatedObjectEntry(
 				_simpleDTOConverterContext,
-				objectDefinitionLocalService.getObjectDefinition(
-					childNode.getPrimaryKey()),
 				new ObjectEntry() {
 					{
-						properties = HashMapBuilder.<String, Object>put(
-							objectField.getName(), objectEntry.getId()
-						).build();
+						properties = new HashMap<>();
 					}
 				},
-				ObjectDefinitionConstants.SCOPE_COMPANY));
+				objectEntry.getId(), objectRelationship));
 		AssertUtils.assertFailure(
 			PrincipalException.MustHavePermission.class,
 			StringBundler.concat(
@@ -8239,7 +8233,7 @@ public class DefaultObjectEntryManagerImplTest
 				ObjectDefinitionTestUtil.getRandomName(), null, null,
 				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
 				true, scope, ObjectDefinitionConstants.STORAGE_TYPE_DEFAULT,
-				Collections.emptyList(), objectFields);
+				Collections.emptyList(), objectFields, Collections.emptyList());
 
 		return objectDefinitionLocalService.publishCustomObjectDefinition(
 			adminUser.getUserId(), objectDefinition.getObjectDefinitionId());
@@ -9502,12 +9496,10 @@ public class DefaultObjectEntryManagerImplTest
 			_createDTOConverterContext(), objectDefinitionAA, objectEntry,
 			scopeKey);
 
-		Assert.assertEquals(
-			0L,
+		Assert.assertNull(
 			objectEntryAA.getPropertyValue(
 				objectRelationshipA_AAObjectField2.getName()));
-		Assert.assertEquals(
-			0L,
+		Assert.assertNull(
 			objectEntryAA.getPropertyValue(
 				objectRelationshipB_AAObjectField2.getName()));
 
@@ -9528,8 +9520,7 @@ public class DefaultObjectEntryManagerImplTest
 			objectEntryA.getId(),
 			objectEntryAA.getPropertyValue(
 				objectRelationshipA_AAObjectField2.getName()));
-		Assert.assertEquals(
-			0L,
+		Assert.assertNull(
 			objectEntryAA.getPropertyValue(
 				objectRelationshipB_AAObjectField2.getName()));
 
@@ -9773,7 +9764,7 @@ public class DefaultObjectEntryManagerImplTest
 		assertEquals(
 			unsafeTriFunction.apply(
 				null, null, getSorts("textObjectFieldName:desc")),
-			Page.of(List.of(objectEntryAA2, objectEntryAA1), null, 1));
+			Page.of(List.of(objectEntryAA2, objectEntryAA1), null, 2));
 
 		_objectEntryLocalService.deleteObjectEntry(objectEntryAA1.getId());
 		_objectEntryLocalService.deleteObjectEntry(objectEntryAA2.getId());
@@ -10112,8 +10103,7 @@ public class DefaultObjectEntryManagerImplTest
 			objectEntryA.getId(),
 			objectEntry.getPropertyValue(
 				objectRelationshipA_AAObjectField2.getName()));
-		Assert.assertEquals(
-			0L,
+		Assert.assertNull(
 			objectEntry.getPropertyValue(
 				objectRelationshipB_AAObjectField2.getName()));
 

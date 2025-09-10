@@ -53,7 +53,6 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -66,57 +65,19 @@ import org.osgi.framework.FrameworkUtil;
  */
 @FeatureFlags(
 	featureFlags = {
-		@FeatureFlag(value = "LPD-31149"), @FeatureFlag(value = "LPD-34594"),
-		@FeatureFlag(value = "LPS-179669"), @FeatureFlag(value = "LPD-17564"),
-		@FeatureFlag(value = "LPD-21926"), @FeatureFlag(value = "LPS-179669")
+		@FeatureFlag("LPD-17564"), @FeatureFlag("LPD-21926"),
+		@FeatureFlag("LPD-31149"), @FeatureFlag("LPD-34594"),
+		@FeatureFlag("LPS-179669")
 	}
 )
 @RunWith(Arquillian.class)
 public class OverviewResourceTest extends BaseOverviewResourceTestCase {
 
-	@Before
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-
-		Bundle testBundle = FrameworkUtil.getBundle(OverviewResourceTest.class);
-
-		BundleContext bundleContext = testBundle.getBundleContext();
-
-		for (Bundle bundle : bundleContext.getBundles()) {
-			if (Objects.equals(
-					bundle.getSymbolicName(),
-					"com.liferay.site.initializer.cms")) {
-
-				_deleteFile(bundle, "01.object.folder");
-				_deleteFile(bundle, "02.object.definition");
-
-				CompletableFuture<Void> completableFuture =
-					_batchEngineUnitProcessor.processBatchEngineUnits(
-						_batchEngineUnitReader.getBatchEngineUnits(bundle));
-
-				completableFuture.join();
-
-				break;
-			}
-		}
-
-		_serviceContext = ServiceContextTestUtil.getServiceContext(
-			testGroup.getGroupId(), TestPropsValues.getUserId());
-
-		_depotEntry = _depotEntryLocalService.addDepotEntry(
-			HashMapBuilder.put(
-				LocaleUtil.getDefault(), RandomTestUtil.randomString()
-			).build(),
-			HashMapBuilder.put(
-				LocaleUtil.getDefault(), RandomTestUtil.randomString()
-			).build(),
-			DepotConstants.TYPE_ASSET_LIBRARY, _serviceContext);
-	}
-
 	@Override
 	@Test
 	public void testGetContentOverview() throws Exception {
+		_setUpCMSContext();
+
 		ObjectDefinition objectDefinition =
 			_objectDefinitionLocalService.
 				getObjectDefinitionByExternalReferenceCode(
@@ -193,6 +154,8 @@ public class OverviewResourceTest extends BaseOverviewResourceTestCase {
 	@Override
 	@Test
 	public void testGetFileOverview() throws Exception {
+		_setUpCMSContext();
+
 		DLFolder dlFolder = DLTestUtil.addDLFolder(_depotEntry.getGroupId());
 		byte[] bytes = TestDataConstants.TEST_BYTE_ARRAY;
 
@@ -238,12 +201,48 @@ public class OverviewResourceTest extends BaseOverviewResourceTestCase {
 
 	private void _deleteFile(Bundle bundle, String fileName) {
 		File file = bundle.getDataFile(
-			".com.liferay.headless.builder.internal.batch." + fileName +
+			".com.liferay.site.initializer.cms.internal.batch." + fileName +
 				".batch.engine.data.json.0.processed");
 
 		if ((file != null) && file.exists()) {
 			file.delete();
 		}
+	}
+
+	private void _setUpCMSContext() throws Exception {
+		Bundle testBundle = FrameworkUtil.getBundle(OverviewResourceTest.class);
+
+		BundleContext bundleContext = testBundle.getBundleContext();
+
+		for (Bundle bundle : bundleContext.getBundles()) {
+			if (Objects.equals(
+					bundle.getSymbolicName(),
+					"com.liferay.site.initializer.cms")) {
+
+				_deleteFile(bundle, "01.object.folder");
+				_deleteFile(bundle, "02.object.definition");
+
+				CompletableFuture<Void> completableFuture =
+					_batchEngineUnitProcessor.processBatchEngineUnits(
+						_batchEngineUnitReader.getBatchEngineUnits(bundle));
+
+				completableFuture.join();
+
+				break;
+			}
+		}
+
+		_serviceContext = ServiceContextTestUtil.getServiceContext(
+			testGroup.getGroupId(), TestPropsValues.getUserId());
+
+		_depotEntry = _depotEntryLocalService.addDepotEntry(
+			HashMapBuilder.put(
+				LocaleUtil.getDefault(), RandomTestUtil.randomString()
+			).build(),
+			HashMapBuilder.put(
+				LocaleUtil.getDefault(), RandomTestUtil.randomString()
+			).build(),
+			DepotConstants.TYPE_ASSET_LIBRARY, _serviceContext);
 	}
 
 	@DeleteAfterTestRun
