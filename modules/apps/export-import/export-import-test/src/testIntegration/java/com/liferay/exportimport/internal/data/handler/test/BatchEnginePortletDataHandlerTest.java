@@ -443,6 +443,39 @@ public class BatchEnginePortletDataHandlerTest {
 	}
 
 	@Test
+	@TestInfo("LPD-58645")
+	public void testExportImportWithDifferentScopedObjectEntries()
+		throws Exception {
+
+		Group group1 = GroupTestUtil.addGroupWithType(
+			GroupConstants.TYPE_DEPOT);
+
+		Layout layout = LayoutTestUtil.addTypePortletLayout(group1);
+
+		ObjectDefinition objectDefinition = _addObjectDefinition(
+			ObjectDefinitionConstants.SCOPE_SITE);
+
+		_addObjectEntries(3, group1.getGroupId(), objectDefinition);
+
+		File larFile = _exportLayouts(
+			false, group1.getGroupId(), false,
+			new long[] {layout.getLayoutId()}, objectDefinition);
+
+		Group group2 = GroupTestUtil.addGroupWithType(
+			GroupConstants.TYPE_DEPOT);
+
+		_importLayouts(
+			false, true, larFile, group2.getGroupId(), objectDefinition);
+
+		List<ObjectEntry> objectEntries =
+			_objectEntryLocalService.getObjectEntries(
+				group2.getGroupId(), objectDefinition.getObjectDefinitionId(),
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+		Assert.assertEquals(objectEntries.toString(), 0, objectEntries.size());
+	}
+
+	@Test
 	@TestInfo("LPD-50142")
 	public void testExportIndividualDeletionsCompanyGroup() throws Exception {
 		Group group = _stagingGroupHelper.fetchCompanyGroup(

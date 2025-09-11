@@ -136,6 +136,7 @@ public class ObjectRelationshipLocalServiceTest {
 			_addAndPublishModifiableSystemObjectDefinition();
 		_objectDefinition1 = _addAndPublishCustomObjectDefinition();
 		_objectDefinition2 = _addAndPublishCustomObjectDefinition();
+		_objectDefinition3 = _addAndPublishCustomObjectDefinition();
 		_systemObjectDefinition2 = _addSystemObjectDefinition(
 			"/o/test-endpoint/entries");
 	}
@@ -1533,6 +1534,9 @@ public class ObjectRelationshipLocalServiceTest {
 
 	@DeleteAfterTestRun
 	private ObjectDefinition _objectDefinition2;
+
+	@DeleteAfterTestRun
+	private ObjectDefinition _objectDefinition3;
 
 	@Inject
 	private ObjectEntryLocalService _objectEntryLocalService;

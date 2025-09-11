@@ -54,11 +54,11 @@ public class OrphanReferencesDataCleanupUtilTest {
 	}
 
 	@Test
-	public void testCleanUpTablesExcludedTable() throws Exception {
+	public void testCleanUpTableExcludedTable() throws Exception {
 		long auditEventId = RandomTestUtil.nextLong();
 		long companyId = RandomTestUtil.nextLong();
 
-		_testCleanUpTables(
+		_testCleanUpTable(
 			logCapture -> {
 				List<LogEntry> logEntries = logCapture.getLogEntries();
 
@@ -78,10 +78,10 @@ public class OrphanReferencesDataCleanupUtilTest {
 	}
 
 	@Test
-	public void testCleanUpTablesWithoutWhereClause() throws Exception {
+	public void testCleanUpTableWithoutWhereClause() throws Exception {
 		long companyId = RandomTestUtil.nextLong();
 
-		_testCleanUpTables(
+		_testCleanUpTable(
 			logCapture -> {
 				List<LogEntry> logEntries = logCapture.getLogEntries();
 
@@ -121,12 +121,12 @@ public class OrphanReferencesDataCleanupUtilTest {
 	}
 
 	@Test
-	public void testCleanUpTablesWithWhereClause() throws Exception {
+	public void testCleanUpTableWithWhereClause() throws Exception {
 		long companyId = RandomTestUtil.nextLong();
 		long ownerType1 = PortletKeys.PREFS_OWNER_TYPE_COMPANY;
 		long ownerType2 = PortletKeys.PREFS_OWNER_TYPE_GROUP;
 
-		_testCleanUpTables(
+		_testCleanUpTable(
 			logCapture -> {
 				List<LogEntry> logEntries = logCapture.getLogEntries();
 
@@ -189,12 +189,12 @@ public class OrphanReferencesDataCleanupUtilTest {
 			"Table ", _dbInspector.normalizeName(sourceTableName), ", ", count,
 			(count == 1) ? " row " : " rows ", "deleted because ",
 			_dbInspector.normalizeName(sourceColumnName), StringPool.SPACE,
-			targetValue, " was not found in ",
-			_dbInspector.normalizeName(targetTableName), StringPool.PERIOD,
-			_dbInspector.normalizeName(targetColumnName));
+			targetValue, " was not found in column ",
+			_dbInspector.normalizeName(targetColumnName), " from table ",
+			_dbInspector.normalizeName(targetTableName));
 	}
 
-	private void _testCleanUpTables(
+	private void _testCleanUpTable(
 			UnsafeConsumer<LogCapture, Exception> assertUnsafeConsumer,
 			UnsafeRunnable<Exception> cleanUpDataUnsafeRunnable,
 			UnsafeRunnable<Exception> initializeDataUnsafeRunnable,
@@ -213,7 +213,7 @@ public class OrphanReferencesDataCleanupUtilTest {
 				_connection, sourceAdditionalWhereClause,
 				_dbInspector.normalizeName(sourceColumnName),
 				_dbInspector.normalizeName(sourceTableName),
-				_dbInspector.normalizeName(targetColumnName),
+				new String[] {_dbInspector.normalizeName(targetColumnName)},
 				_dbInspector.normalizeName(targetTableName));
 
 			assertUnsafeConsumer.accept(logCapture);

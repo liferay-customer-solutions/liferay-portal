@@ -145,7 +145,7 @@ public class AddFragmentEntryLinksMVCActionCommandTest {
 				FragmentEntryProcessorConstants.
 					KEY_EDITABLE_FRAGMENT_ENTRY_PROCESSOR,
 				JSONUtil.put(
-					"[namespace]-element-text",
+					"[$NAMESPACE$]-element-text",
 					JSONUtil.put(
 						LocaleUtil.toLanguageId(
 							_portal.getSiteDefaultLocale(_group)),

@@ -3578,34 +3578,20 @@ public class ObjectEntryLocalServiceImpl
 			long objectDefinitionId)
 		throws PortalException {
 
-		// TODO Cache this across the cluster with proper invalidation when the
-		// object definition or its object fields are updated
-
-		ObjectDefinition objectDefinition =
-			_objectDefinitionPersistence.findByPrimaryKey(objectDefinitionId);
-
-		return new DynamicObjectDefinitionTable(
-			objectDefinition,
-			_objectFieldLocalService.getObjectFields(
-				objectDefinitionId, objectDefinition.getDBTableName()),
-			objectDefinition.getDBTableName());
+		return DynamicObjectDefinitionTableUtil.getDynamicObjectDefinitionTable(
+			false,
+			_objectDefinitionPersistence.findByPrimaryKey(objectDefinitionId),
+			_objectFieldLocalService);
 	}
 
 	private DynamicObjectDefinitionTable
 			_getExtensionDynamicObjectDefinitionTable(long objectDefinitionId)
 		throws PortalException {
 
-		// TODO Cache this across the cluster with proper invalidation when the
-		// object definition or its object fields are updated
-
-		ObjectDefinition objectDefinition =
-			_objectDefinitionPersistence.findByPrimaryKey(objectDefinitionId);
-
-		return new DynamicObjectDefinitionTable(
-			objectDefinition,
-			_objectFieldLocalService.getObjectFields(
-				objectDefinitionId, objectDefinition.getExtensionDBTableName()),
-			objectDefinition.getExtensionDBTableName());
+		return DynamicObjectDefinitionTableUtil.getDynamicObjectDefinitionTable(
+			true,
+			_objectDefinitionPersistence.findByPrimaryKey(objectDefinitionId),
+			_objectFieldLocalService);
 	}
 
 	private DSLQuery _getExtensionDynamicObjectDefinitionTableSelectDSLQuery(
@@ -4057,23 +4043,10 @@ public class ObjectEntryLocalServiceImpl
 					objectRelationship.getObjectDefinitionId2())
 			).and(
 				() -> {
-					Column<DynamicObjectDefinitionTable, Long> column = null;
-
-					if (Objects.equals(
-							objectField.getDBTableName(),
-							dynamicObjectDefinitionTable.getName())) {
-
-						column =
-							(Column<DynamicObjectDefinitionTable, Long>)
-								dynamicObjectDefinitionTable.getColumn(
-									objectField.getDBColumnName());
-					}
-					else {
-						column =
-							(Column<DynamicObjectDefinitionTable, Long>)
-								extensionDynamicObjectDefinitionTable.getColumn(
-									objectField.getDBColumnName());
-					}
+					Column<?, Long> column =
+						(Column<?, Long>)_objectFieldLocalService.getColumn(
+							objectField.getObjectDefinitionId(),
+							objectField.getName());
 
 					return column.eq(related ? primaryKey : 0L);
 				}

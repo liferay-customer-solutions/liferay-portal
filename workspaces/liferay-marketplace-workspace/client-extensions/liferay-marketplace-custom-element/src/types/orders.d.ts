@@ -25,11 +25,11 @@ type Cart = {
 	currencyCode: string;
 	customFields: any;
 	id: number;
-	orderStatusInfo: { [key: string]: string };
+	orderStatusInfo: {[key: string]: string};
 	orderTypeExternalReferenceCode: string;
 	orderTypeId: number;
 	paymentMethod: string;
-	paymentStatusInfo: { [key: string]: string };
+	paymentStatusInfo: {[key: string]: string};
 	paymentStatusLabel: string;
 	purchaseOrderNumber?: string;
 	shippingAddress: BillingAddress;
@@ -58,10 +58,12 @@ type Order = {
 	account: {
 		id: number;
 		name: string;
+		taxId: string;
 		type: string;
 	};
 	accountExternalReferenceCode?: string;
 	accountId: number;
+	billingAddress?: BillingAddress;
 	billingAddressId?: number;
 	channel: {
 		currencyCode?: string;
@@ -73,7 +75,7 @@ type Order = {
 	createDate?: string;
 	creatorEmailAddress?: string;
 	currencyCode: string;
-	customFields?: { [key: string]: string };
+	customFields?: {[key: string]: string};
 	externalReferenceCode?: string;
 	id: number;
 	marketplaceOrderType?: string;
@@ -98,32 +100,43 @@ type Order = {
 	};
 	orderTypeExternalReferenceCode?: string;
 	orderTypeId?: number;
-	paymentStatusInfo: {
-		code: number;
-		label: string;
-		label_i18n: string;
-	};
+	paymentMethod?: string;
+	paymentStatus?: number;
+	paymentStatusInfo: PaymentStatusInfo;
+	placedOrderBillingAddress?: BillingAddress;
+	placedOrderBillingAddressId?: number;
 	placedOrderItems?: any;
+	projectName?: string;
 	shippingAmount?: number;
 	shippingWithTaxAmount?: number;
+	subtotalFormatted?: string;
+	taxAmountFormatted?: string;
 	totalAmount?: number;
 	totalFormatted: string;
+	totalWithTaxAmountFormatted: string;
+	transactionId: string;
 };
 
 type OrderType = {
 	externalReferenceCode: string;
 	id: number;
-	name: { [key: string]: string };
+	name: {[key: string]: string};
 };
 
 type PaymentMethodSelector = 'order' | 'pay' | 'trial' | 'free';
+
+type PaymentStatusInfo = {
+	code: number;
+	label: string;
+	label_i18n: string;
+};
 
 type PlacedOrder = {
 	account: string;
 	accountId: number;
 	author: string;
 	createDate: string;
-	customFields: { [key: string]: string };
+	customFields: {[key: string]: string};
 	id: number;
 	orderStatusInfo: {
 		code: number;

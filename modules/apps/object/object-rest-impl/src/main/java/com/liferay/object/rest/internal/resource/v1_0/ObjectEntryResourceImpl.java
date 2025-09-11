@@ -382,6 +382,12 @@ public class ObjectEntryResourceImpl
 					return Scope.COMPANY;
 				}
 
+				if (StringUtil.equalsIgnoreCase(
+						_objectDefinition.getScope(), "depot")) {
+
+					return Scope.DEPOT;
+				}
+
 				return Scope.SITE;
 			}
 

@@ -72,6 +72,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -429,9 +430,48 @@ public abstract class BaseCTDisplayRenderer<T extends BaseModel<T>>
 
 		LocalizedValue label = ddmFormField.getLabel();
 
+		String labelString = label.getString(locale);
+
+		Value value = ddmFormFieldValue.getValue();
+
+		if ((value == null) || (value.getString(locale) == null) ||
+			StringUtil.equals(value.getString(locale), StringPool.BLANK)) {
+
+			displayBuilder.display(labelString, StringPool.BLANK);
+
+			return;
+		}
+
+		String valueString = value.getString(locale);
+
+		if (StringUtil.equals(
+				ddmFormField.getType(), DDMFormFieldTypeConstants.COLOR)) {
+
+			displayBuilder.display(
+				labelString,
+				StringBundler.concat(
+					"<span class=\"mr-2\">",
+					StringPool.POUND.concat(valueString),
+					"</span><span style=\"background-color: ",
+					StringPool.POUND.concat(valueString),
+					"; display: inline-block; height: 80%; vertical-align: ",
+					"middle; width: 50%;\" />"),
+				false);
+
+			return;
+		}
+		else if (StringUtil.equals(
+					ddmFormField.getType(), DDMFormFieldTypeConstants.GRID)) {
+
+			displayBuilder.display(
+				labelString,
+				_getGridOptionValues(ddmFormField, locale, valueString));
+
+			return;
+		}
+
 		displayBuilder.display(
-			label.getString(locale),
-			_getOptionValue(ddmFormFieldValue, locale));
+			labelString, _getOptionValue(ddmFormField, locale, valueString));
 	}
 
 	private void _buildTableContent(
@@ -466,21 +506,87 @@ public abstract class BaseCTDisplayRenderer<T extends BaseModel<T>>
 		}
 	}
 
-	private String _getOptionValue(
-		DDMFormFieldValue ddmFormFieldValue, Locale locale) {
+	private String _getGridLabelString(
+		LocalizedValue localizedValue, String defaultLabelString,
+		Locale locale) {
 
-		Value value = ddmFormFieldValue.getValue();
-
-		if (value == null) {
-			return StringPool.BLANK;
+		if (localizedValue != null) {
+			return HtmlUtil.escape(localizedValue.getString(locale));
 		}
 
-		DDMFormField ddmFormField = ddmFormFieldValue.getDDMFormField();
+		return defaultLabelString;
+	}
+
+	private String _getGridOptionValues(
+		DDMFormField ddmFormField, Locale locale, String optionValueString) {
+
+		try {
+			JSONObject valuesJSONObject = JSONFactoryUtil.createJSONObject(
+				optionValueString);
+
+			if (valuesJSONObject.length() == 0) {
+				return StringPool.BLANK;
+			}
+
+			StringBundler sb = new StringBundler(valuesJSONObject.length() * 5);
+
+			DDMFormFieldOptions columnsDDMFormFieldOptions =
+				(DDMFormFieldOptions)ddmFormField.getProperty("columns");
+
+			DDMFormFieldOptions rowsDDMFormFieldOptions =
+				(DDMFormFieldOptions)ddmFormField.getProperty("rows");
+
+			Set<String> rowOptions = rowsDDMFormFieldOptions.getOptionsValues();
+
+			for (String rowOption : rowOptions) {
+				if (!valuesJSONObject.has(rowOption)) {
+					continue;
+				}
+
+				sb.append(StringPool.OPEN_CURLY_BRACE);
+
+				LocalizedValue rowLabel =
+					rowsDDMFormFieldOptions.getOptionLabels(rowOption);
+
+				sb.append(
+					StringUtil.quote(
+						_getGridLabelString(rowLabel, rowOption, locale)));
+
+				sb.append(": ");
+
+				String columnOption = valuesJSONObject.getString(rowOption);
+
+				LocalizedValue columnLabel =
+					columnsDDMFormFieldOptions.getOptionLabels(columnOption);
+
+				sb.append(
+					StringUtil.quote(
+						_getGridLabelString(
+							columnLabel, columnOption, locale)));
+
+				sb.append("}, ");
+			}
+
+			if (sb.index() > 0) {
+				sb.setIndex(sb.index() - 1);
+			}
+
+			return sb.toString();
+		}
+		catch (JSONException jsonException) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(jsonException);
+			}
+		}
+
+		return StringPool.BLANK;
+	}
+
+	private String _getOptionValue(
+		DDMFormField ddmFormField, Locale locale, String valueString) {
 
 		DDMFormFieldOptions ddmFormFieldOptions =
 			ddmFormField.getDDMFormFieldOptions();
-
-		String valueString = value.getString(locale);
 
 		LocalizedValue optionLabel = ddmFormFieldOptions.getOptionLabels(
 			valueString);
@@ -498,23 +604,34 @@ public abstract class BaseCTDisplayRenderer<T extends BaseModel<T>>
 		try {
 			JSONArray jsonArray = JSONFactoryUtil.createJSONArray(valueString);
 
-			if (jsonArray.length() > 0) {
-				StringBundler sb = new StringBundler(jsonArray.length());
+			if (jsonArray.length() == 0) {
+				return StringPool.BLANK;
+			}
 
-				for (int i = 0; i < jsonArray.length(); i++) {
-					if (i > 0) {
-						sb.append(StringPool.COMMA_AND_SPACE);
-					}
+			StringBundler sb = new StringBundler(jsonArray.length() + 1);
 
-					LocalizedValue localizedValue =
-						ddmFormFieldOptions.getOptionLabels(
-							jsonArray.getString(i));
+			sb.append(StringPool.OPEN_BRACKET);
 
-					sb.append(localizedValue.getString(locale));
+			for (int i = 0; i < jsonArray.length(); i++) {
+				if (i > 0) {
+					sb.append(StringPool.COMMA_AND_SPACE);
 				}
 
-				return sb.toString();
+				String optionValueString = jsonArray.getString(i);
+
+				if (optionValueString.isEmpty()) {
+					continue;
+				}
+
+				LocalizedValue localizedValue =
+					ddmFormFieldOptions.getOptionLabels(optionValueString);
+
+				sb.append(StringUtil.quote(localizedValue.getString(locale)));
 			}
+
+			sb.append(StringPool.CLOSE_BRACKET);
+
+			return sb.toString();
 		}
 		catch (JSONException jsonException) {
 			if (_log.isDebugEnabled()) {

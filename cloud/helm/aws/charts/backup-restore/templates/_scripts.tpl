@@ -1,3 +1,32 @@
+{{- define "liferayAWSBackupRestore.script.checkoutGitRepository" -}}
+#!/bin/sh
+
+set -eu
+
+function main {
+    cp /mnt/.git-credentials /tmp/.git-credentials
+
+    git config --global credential.helper 'store --file /tmp/.git-credentials'
+
+    git \
+    	clone \
+    	--branch "{{ .Values.git.repository.branch }}" \
+    	--depth 1 \
+    	--filter blob:none \
+    	--no-checkout \
+    	"{{ .Values.git.repository.url }}" \
+    	/src
+
+    cd /src
+
+    git sparse-checkout set --no-cone "{{ .Values.git.repository.paths.sparseCheckout }}"
+
+    git checkout
+}
+
+main
+{{- end -}}
+
 {{- define "liferayAWSBackupRestore.script.getDependenciesModuleOutputs" -}}
 #!/bin/sh
 
@@ -8,7 +37,9 @@ function main {
 
     terraform plan -detailed-exitcode -input=false
 
-    local db_restore_snapshot_identifier=$( \
+    local db_restore_snapshot_identifier
+
+    db_restore_snapshot_identifier=$( \
     	terraform \
 			output \
 			-raw \
@@ -43,7 +74,9 @@ main
 set -eu
 
 function main {
-    local restore_job_id=$( \
+    local restore_job_id
+
+    restore_job_id=$( \
     	aws \
 			backup \
 			start-restore-job \
@@ -53,21 +86,29 @@ function main {
 			--resource-type "S3" \
 			| jq --raw-output '.RestoreJobId')
 
-    local timeout=$(( $(date +%s) + {{ .Values.awsBackupService.restoreWaitTimeoutSeconds }} ))
+    local timeout
+
+    timeout=$(( $(date +%s) + {{ .Values.awsBackupService.restoreWaitTimeoutSeconds }} ))
 
     while [ $(date +%s) -lt ${timeout} ]
     do
-        local restore_job_status_json=$( \
+        local restore_job_status_json
+
+    	restore_job_status_json=$( \
     		aws \
 				backup \
 				describe-restore-job \
 				--restore-job-id "${restore_job_id}")
 
-        local restore_job_status=$(echo "${restore_job_status_json}" | jq --raw-output '.Status')
+        local restore_job_status
+
+    	restore_job_status=$(echo "${restore_job_status_json}" | jq --raw-output '.Status')
 
         if [ "${restore_job_status}" = "ABORTED" ] || [ "${restore_job_status}" = "FAILED" ]
         then
-            local restore_job_status_message=$( \
+            local restore_job_status_message
+
+            restore_job_status_message=$( \
                 echo \
                     "${restore_job_status_json}" \
                     | jq --raw-output '.StatusMessage')

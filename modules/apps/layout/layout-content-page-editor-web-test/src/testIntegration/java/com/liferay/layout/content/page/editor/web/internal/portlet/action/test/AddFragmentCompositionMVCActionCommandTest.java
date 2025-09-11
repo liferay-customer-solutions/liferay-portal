@@ -508,7 +508,7 @@ public class AddFragmentCompositionMVCActionCommandTest {
 
 		String data = fragmentComposition.getData();
 
-		Assert.assertTrue(data.contains("[namespace]"));
+		Assert.assertTrue(data.contains("[$NAMESPACE$]"));
 	}
 
 	@Test

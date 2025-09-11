@@ -47,10 +47,11 @@ export enum OrderWorkflowStatusCode {
 }
 
 export enum PaymentStatus {
-	PAID = 0,
-	PENDING = 1,
-	PAYMENT_PENDING = 2,
+	CANCELED = 8,
 	FAILED = 4,
+	PAID = 0,
+	PAYMENT_PENDING = 2,
+	PENDING = 1,
 }
 
 export const orderTypeLabel = {
