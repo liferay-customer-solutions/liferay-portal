@@ -9,6 +9,8 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.LiferayContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.LiferayDispatchTargets;
+import com.liferay.portal.osgi.web.http.servlet.internal.registration.EndpointRegistration;
+import com.liferay.portal.osgi.web.http.servlet.internal.registration.EventListeners;
 
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.RequestDispatcher;
@@ -28,9 +30,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.eclipse.equinox.http.servlet.internal.registration.EndpointRegistration;
-import org.eclipse.equinox.http.servlet.internal.util.EventListeners;
 
 /**
  * @author Dante Wang
@@ -412,7 +411,7 @@ public class LiferayHttpServletRequestWrapper
 			LiferayContextController liferayContextController =
 				liferayDispatchTargets.getContextController();
 
-			return liferayContextController.getSessionAdaptor(
+			return liferayContextController.getHttpSessionWrapper(
 				httpSession, _getServletContext(liferayDispatchTargets));
 		}
 
@@ -529,7 +528,7 @@ public class LiferayHttpServletRequestWrapper
 		EndpointRegistration<?> endpointRegistration =
 			liferayDispatchTargets.getServletRegistration();
 
-		Servlet servlet = endpointRegistration.getT();
+		Servlet servlet = endpointRegistration.getService();
 
 		ServletConfig servletConfig = servlet.getServletConfig();
 

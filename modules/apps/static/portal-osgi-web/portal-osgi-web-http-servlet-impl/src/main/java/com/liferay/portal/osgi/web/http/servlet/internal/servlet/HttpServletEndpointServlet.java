@@ -8,6 +8,7 @@ package com.liferay.portal.osgi.web.http.servlet.internal.servlet;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.NoSuchLayoutException;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.osgi.web.http.servlet.internal.HttpServletEndpointController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.LiferayDispatchTargets;
 
 import jakarta.servlet.ServletConfig;
@@ -17,8 +18,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-
-import org.eclipse.equinox.http.servlet.internal.HttpServletEndpointController;
 
 /**
  * @author Dante Wang
@@ -57,9 +56,7 @@ public class HttpServletEndpointServlet extends HttpServlet {
 		}
 
 		LiferayDispatchTargets liferayDispatchTargets =
-			(LiferayDispatchTargets)
-				_httpServletEndpointController.getDispatchTargets(
-					dispatchPathInfo);
+			_httpServletEndpointController.getDispatchTargets(dispatchPathInfo);
 
 		if ((liferayDispatchTargets != null) &&
 			liferayDispatchTargets.doDispatch(

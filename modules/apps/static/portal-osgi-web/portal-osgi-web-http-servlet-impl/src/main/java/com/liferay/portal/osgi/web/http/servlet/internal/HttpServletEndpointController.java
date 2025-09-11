@@ -8,6 +8,7 @@ package com.liferay.portal.osgi.web.http.servlet.internal;
 import com.liferay.osgi.service.tracker.collections.EagerServiceTrackerCustomizer;
 import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerList;
 import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerListFactory;
+import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -16,7 +17,7 @@ import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.LiferayContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.LiferayDispatchTargets;
-import com.liferay.portal.osgi.web.http.servlet.internal.context.ServletContextHelperDataContextImpl;
+import com.liferay.portal.osgi.web.http.servlet.internal.context.ServletContextHelperDataContext;
 
 import jakarta.servlet.ServletContext;
 
@@ -30,7 +31,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.eclipse.equinox.http.servlet.internal.HttpServletEndpointController;
 import org.eclipse.equinox.http.servlet.internal.error.IllegalContextNameException;
 import org.eclipse.equinox.http.servlet.internal.error.IllegalContextPathException;
 import org.eclipse.equinox.http.servlet.internal.servlet.Match;
@@ -55,10 +55,9 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 /**
  * @author Dante Wang
  */
-public class HttpServletEndpointControllerImpl
-	implements HttpServletEndpointController {
+public class HttpServletEndpointController {
 
-	public HttpServletEndpointControllerImpl(
+	public HttpServletEndpointController(
 		Map<String, Object> attributesMap, BundleContext bundleContext,
 		ServletContext parentServletContext) {
 
@@ -73,7 +72,8 @@ public class HttpServletEndpointControllerImpl
 		if (parentServletContextTempDir != null) {
 			parentServletContextTempDir = new File(
 				parentServletContextTempDir,
-				HttpServletEndpointController.class.getName() + hashCode());
+				org.eclipse.equinox.http.servlet.internal.
+					HttpServletEndpointController.class.getName() + hashCode());
 
 			_parentServletContextTempDir = parentServletContextTempDir;
 
@@ -105,14 +105,12 @@ public class HttpServletEndpointControllerImpl
 			).build());
 	}
 
-	@Override
 	public void destroy() {
 		_serviceRegistration.unregister();
 
 		_liferayContextControllers.close();
 	}
 
-	@Override
 	public LiferayDispatchTargets getDispatchTargets(String pathString) {
 		Path path = new Path(pathString);
 
@@ -153,29 +151,24 @@ public class HttpServletEndpointControllerImpl
 		return liferayDispatchTargets;
 	}
 
-	@Override
 	public List<String> getHttpServiceEndpoints() {
 		return StringPlus.from(
 			_attributesMap.get(
 				HttpServiceRuntimeConstants.HTTP_SERVICE_ENDPOINT));
 	}
 
-	@Override
 	public ServletContext getParentServletContext() {
 		return _parentServletContext;
 	}
 
-	@Override
 	public Set<Object> getRegisteredObjects() {
 		return _registeredObjects;
 	}
 
-	@Override
 	public void log(String message, Throwable throwable) {
 		_log.error(message, throwable);
 	}
 
-	@Override
 	public boolean matches(ServiceReference<?> serviceReference) {
 		String target = (String)serviceReference.getProperty(
 			HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET);
@@ -201,7 +194,7 @@ public class HttpServletEndpointControllerImpl
 	private List<LiferayContextController> _getLiferayContextControllers(
 		String requestURI) {
 
-		int index = requestURI.lastIndexOf('/');
+		int index = requestURI.lastIndexOf(CharPool.SLASH);
 
 		while (true) {
 			List<LiferayContextController> liferayContextControllers =
@@ -228,7 +221,7 @@ public class HttpServletEndpointControllerImpl
 
 			requestURI = requestURI.substring(0, index);
 
-			index = requestURI.lastIndexOf('/');
+			index = requestURI.lastIndexOf(CharPool.SLASH);
 		}
 
 		return null;
@@ -245,7 +238,7 @@ public class HttpServletEndpointControllerImpl
 
 		requestURI = requestURI.substring(contextPath.length());
 
-		int index = requestURI.lastIndexOf('/');
+		int index = requestURI.lastIndexOf(CharPool.SLASH);
 
 		String servletPath = requestURI;
 
@@ -278,14 +271,14 @@ public class HttpServletEndpointControllerImpl
 
 			pathInfo = requestURI.substring(index);
 
-			index = servletPath.lastIndexOf('/');
+			index = servletPath.lastIndexOf(CharPool.SLASH);
 		}
 
 		return null;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		HttpServletEndpointControllerImpl.class.getName());
+		HttpServletEndpointController.class.getName());
 
 	private final Map<String, Object> _attributesMap;
 	private final BundleContext _bundleContext;
@@ -353,10 +346,10 @@ public class HttpServletEndpointControllerImpl
 
 				return new LiferayContextController(
 					_bundleContext, serviceReference,
-					new ServletContextHelperDataContextImpl(
+					new ServletContextHelperDataContext(
 						contextName, _parentServletContext,
 						_parentServletContextTempDir),
-					HttpServletEndpointControllerImpl.this, contextName,
+					HttpServletEndpointController.this, contextName,
 					contextPath);
 			}
 			catch (Exception exception) {

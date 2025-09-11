@@ -21,6 +21,7 @@ import multipleFilesUploadAction, {
 import shareAction from './actions/shareAction';
 import AuthorRenderer from './cell_renderers/AuthorRenderer';
 import NameRenderer from './cell_renderers/NameRenderer';
+import SimpleActionLinkRenderer from './cell_renderers/SimpleActionLinkRenderer';
 import SpaceRenderer from './cell_renderers/SpaceRenderer';
 import TypeRenderer from './cell_renderers/TypeRenderer';
 import addOnClickToCreationMenuItems from './utils/addOnClickToCreationMenuItems';
@@ -84,6 +85,18 @@ export default function AllFDSPropsTransformer({
 					type: 'internal',
 				} as IInternalRenderer,
 				{
+					component: ({actions, itemData, options, value}) =>
+						SimpleActionLinkRenderer({
+							actions,
+							additionalProps,
+							itemData,
+							options,
+							value,
+						}),
+					name: 'simpleActionLinkTableCellRenderer',
+					type: 'internal',
+				} as IInternalRenderer,
+				{
 					component: TypeRenderer,
 					name: 'typeTableCellRenderer',
 					type: 'internal',
@@ -107,7 +120,13 @@ export default function AllFDSPropsTransformer({
 			/>
 		),
 		itemsActions: itemsActions.map((action) => {
-			if (action?.data?.id === 'download') {
+			if (action?.data?.id === 'default-permissions') {
+				return {
+					...action,
+					isVisible: () => Boolean(false),
+				};
+			}
+			else if (action?.data?.id === 'download') {
 				return {
 					...action,
 					isVisible: (item: any) =>

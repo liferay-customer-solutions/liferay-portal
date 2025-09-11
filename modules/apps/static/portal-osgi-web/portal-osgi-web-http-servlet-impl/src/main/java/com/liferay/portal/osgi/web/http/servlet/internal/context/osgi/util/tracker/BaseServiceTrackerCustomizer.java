@@ -5,14 +5,16 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.context.osgi.util.tracker;
 
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.osgi.web.http.servlet.internal.HttpServletEndpointController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.LiferayContextController;
+import com.liferay.portal.osgi.web.http.servlet.internal.context.ServletContextHelperDataContext;
+import com.liferay.portal.osgi.web.http.servlet.internal.registration.Registration;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.eclipse.equinox.http.servlet.internal.HttpServletEndpointController;
-import org.eclipse.equinox.http.servlet.internal.context.ServletContextHelperDataContext;
-import org.eclipse.equinox.http.servlet.internal.registration.Registration;
+import org.eclipse.equinox.http.servlet.internal.util.Const;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -58,6 +60,21 @@ public abstract class BaseServiceTrackerCustomizer
 
 		if (registration != null) {
 			registration.destroy();
+		}
+	}
+
+	protected void checkPattern(String pattern) {
+		if (pattern == null) {
+			throw new IllegalArgumentException("Pattern must not be null");
+		}
+		else if (pattern.indexOf(Const.STAR_DOT) != 0) {
+			if (!pattern.startsWith(StringPool.SLASH) ||
+				(pattern.endsWith(StringPool.SLASH) &&
+				 !pattern.equals(StringPool.SLASH))) {
+
+				throw new IllegalArgumentException(
+					"Invalid pattern: " + pattern);
+			}
 		}
 	}
 

@@ -10,7 +10,12 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.osgi.web.http.servlet.internal.HttpServletEndpointController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.LiferayContextController;
+import com.liferay.portal.osgi.web.http.servlet.internal.context.ServletContextHelperDataContext;
+import com.liferay.portal.osgi.web.http.servlet.internal.registration.EndpointRegistration;
+import com.liferay.portal.osgi.web.http.servlet.internal.registration.ResourceRegistration;
+import com.liferay.portal.osgi.web.http.servlet.internal.registration.ServiceHolder;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ResourceServlet;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ServletConfigImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ServletContextWrapper;
@@ -22,11 +27,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.eclipse.equinox.http.servlet.internal.HttpServletEndpointController;
-import org.eclipse.equinox.http.servlet.internal.context.ContextController;
-import org.eclipse.equinox.http.servlet.internal.context.ServletContextHelperDataContext;
-import org.eclipse.equinox.http.servlet.internal.registration.EndpointRegistration;
-import org.eclipse.equinox.http.servlet.internal.registration.ResourceRegistration;
 import org.eclipse.equinox.http.servlet.internal.util.Const;
 
 import org.osgi.framework.Bundle;
@@ -121,7 +121,7 @@ public class ResourceServiceTrackerCustomizer
 		}
 
 		for (String resourcePattern : resourcePatterns) {
-			ContextController.checkPattern(resourcePattern);
+			checkPattern(resourcePattern);
 		}
 
 		Bundle bundle = serviceReference.getBundle();
@@ -138,12 +138,14 @@ public class ResourceServiceTrackerCustomizer
 			liferayContextController.getServletContextHelper(bundle);
 
 		ResourceRegistration resourceRegistration = new ResourceRegistration(
-			new ContextController.ServiceHolder<>(
+			liferayContextController, resourceDTO,
+			new ServiceHolder<>(
+				bundle,
 				new ResourceServlet(resourcePrefix, servletContextHelper),
-				bundle, resourceDTO.serviceId,
+				resourceDTO.serviceId,
 				GetterUtil.getInteger(
 					serviceReference.getProperty(Constants.SERVICE_RANKING))),
-			resourceDTO, servletContextHelper, liferayContextController, null);
+			servletContextHelper);
 
 		try {
 			resourceRegistration.init(

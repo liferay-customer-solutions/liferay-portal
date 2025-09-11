@@ -9,6 +9,7 @@ import React from 'react';
 
 import formatActionURL from '../../common/utils/formatActionURL';
 import {ISearchAssetObjectEntry} from '../../structure_builder/types/AssetType';
+import DefaultPermissionModalContent from '../default_permission/DefaultPermissionModalContent';
 import AssetTypeInfoPanel from '../info_panel/AssetTypeInfoPanelContent';
 import createAssetAction from './actions/createAssetAction';
 import createFolderAction from './actions/createFolderAction';
@@ -42,6 +43,7 @@ export default function ContentFDSPropsTransformer({
 		autocompleteURL: string;
 		cmsGroupId?: number;
 		collaboratorURLs: Record<string, string>;
+		defaultPermissionAdditionalProps?: any;
 		fileMimeTypeCssClasses: Record<string, string>;
 		fileMimeTypeIcons: Record<string, string>;
 		objectDefinitionCssClasses: Record<string, string>;
@@ -79,7 +81,14 @@ export default function ContentFDSPropsTransformer({
 					type: 'internal',
 				} as IInternalRenderer,
 				{
-					component: SimpleActionLinkRenderer,
+					component: ({actions, itemData, options, value}) =>
+						SimpleActionLinkRenderer({
+							actions,
+							additionalProps,
+							itemData,
+							options,
+							value,
+						}),
 					name: 'simpleActionLinkTableCellRenderer',
 					type: 'internal',
 				} as IInternalRenderer,
@@ -112,6 +121,16 @@ export default function ContentFDSPropsTransformer({
 						),
 				};
 			}
+			else if (action?.data?.id === 'default-permissions') {
+				return {
+					...action,
+					isVisible: (item: any) =>
+						Boolean(
+							item?.entryClassName ===
+								OBJECT_ENTRY_FOLDER_CLASS_NAME
+						),
+				};
+			}
 			else if (action?.data?.id === 'view-file') {
 				return {
 					...action,
@@ -132,7 +151,28 @@ export default function ContentFDSPropsTransformer({
 			itemData: ItemData;
 			loadData: () => {};
 		}) {
-			if (action?.data?.id === 'delete') {
+			if (action?.data?.id === 'default-permissions') {
+				openModal({
+					containerProps: {
+						className: '',
+					},
+					contentComponent: ({
+						closeModal,
+					}: {
+						closeModal: () => void;
+					}) =>
+						DefaultPermissionModalContent({
+							...(additionalProps.defaultPermissionAdditionalProps ||
+								{}),
+							classExternalReferenceCode:
+								itemData.embedded.externalReferenceCode,
+							className: itemData.entryClassName,
+							closeModal,
+						}),
+					size: 'full-screen',
+				});
+			}
+			else if (action?.data?.id === 'delete') {
 				await deleteItemAction(itemData, loadData);
 			}
 
