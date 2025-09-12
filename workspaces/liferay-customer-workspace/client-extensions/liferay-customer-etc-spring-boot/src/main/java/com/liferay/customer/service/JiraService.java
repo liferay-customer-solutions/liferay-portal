@@ -235,7 +235,7 @@ public class JiraService extends BaseService {
 				}
 
 				JiraSupportIssue jiraSupportIssue = new JiraSupportIssue(
-					issueJSONObject, ticketURL);
+					_transformIssue(issueJSONObject), ticketURL);
 
 				jiraSupportIssues.add(jiraSupportIssue);
 			}
@@ -708,18 +708,29 @@ public class JiraService extends BaseService {
 	}
 
 	private JSONObject _transformIssue(JSONObject issueJSONObject) {
-		return new JSONObject(
+		String issueKey = issueJSONObject.getString(_FIELD_ISSUE_KEY);
+
+		JSONObject transformedIssueJSONObject = new JSONObject(
 		).put(
-			"fields",
-			_transformIssueFields(
-				issueJSONObject.optJSONObject("fields"),
-				issueJSONObject.optJSONObject("renderedFields"))
-		).put(
-			"key", issueJSONObject.getString(_FIELD_ISSUE_KEY)
+			"key", issueKey
 		);
+
+		JSONObject issueFieldsJSONObject = issueJSONObject.optJSONObject(
+			"fields");
+
+		if (issueKey.startsWith(_jiraSecurityVulnerabilityProject)) {
+			return transformedIssueJSONObject.put(
+				"fields",
+				_transformLSVIssueFields(
+					issueFieldsJSONObject,
+					issueJSONObject.optJSONObject("renderedFields")));
+		}
+
+		return transformedIssueJSONObject.put(
+			"fields", _transformSupportIssueFields(issueFieldsJSONObject));
 	}
 
-	private JSONObject _transformIssueFields(
+	private JSONObject _transformLSVIssueFields(
 		JSONObject issueFieldsJSONObject,
 		JSONObject issueRenderedFieldsJSONObject) {
 
@@ -844,6 +855,31 @@ public class JiraService extends BaseService {
 		).put(
 			"total", resultsJSONObject.getInt("total")
 		);
+	}
+
+	private JSONObject _transformSupportIssueFields(
+		JSONObject issueFieldsJSONObject) {
+
+		JSONObject jsonObject = new JSONObject();
+
+		if (issueFieldsJSONObject != null) {
+			jsonObject.put(
+				"labels", issueFieldsJSONObject.optJSONArray("labels")
+			).put(
+				"organization",
+				_getAssetObjectFieldId(
+					issueFieldsJSONObject.optJSONArray(
+						_jiraSupportHCFieldOrganization))
+			).put(
+				"status",
+				_getJSONObjectFieldValue(
+					issueFieldsJSONObject.optJSONObject(_FIELD_STATUS), "name")
+			).put(
+				"summary", issueFieldsJSONObject.optString("summary")
+			);
+		}
+
+		return jsonObject;
 	}
 
 	private static final String _FIELD_AFFECTED_VERSION = "affectedVersion";

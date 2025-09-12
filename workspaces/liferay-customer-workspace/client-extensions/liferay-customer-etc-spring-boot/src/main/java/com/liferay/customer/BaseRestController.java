@@ -8,6 +8,7 @@ package com.liferay.customer;
 import com.liferay.customer.exception.JiraIssueClosedException;
 import com.liferay.customer.exception.JiraIssueNotFoundException;
 import com.liferay.customer.exception.JiraOrganizationNotFoundException;
+import com.liferay.customer.model.JiraSupportIssue;
 import com.liferay.customer.service.JiraService;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringUtil;
@@ -32,14 +33,10 @@ public class BaseRestController
 		try {
 			return _getAccountKey(jiraIssueKey);
 		}
-		catch (JiraOrganizationNotFoundException
-					jiraOrganizationNotFoundException) {
+		catch (Exception exception) {
+			_log.error(exception, exception);
 
-			_log.error(
-				jiraOrganizationNotFoundException,
-				jiraOrganizationNotFoundException);
-
-			throw new JiraIssueNotFoundException();
+			throw exception;
 		}
 	}
 
@@ -50,48 +47,46 @@ public class BaseRestController
 			throw new JiraIssueNotFoundException();
 		}
 
-		JSONObject fieldsJSONObject = jsonObject.getJSONObject("fields");
+		JiraSupportIssue jiraSupportIssue = new JiraSupportIssue(jsonObject);
 
-		String status = fieldsJSONObject.optString("status");
-
-		if (status.equals("Closed")) {
+		if (jiraSupportIssue.isClosed()) {
 			throw new JiraIssueClosedException();
 		}
 
-		List<String> organizationCompositeIdArray = StringUtil.split(
-			fieldsJSONObject.getString("organization"), CharPool.COLON);
+		try {
+			List<String> organizationCompositeIdArray = StringUtil.split(
+				jiraSupportIssue.getOrganization(), CharPool.COLON);
 
-		JSONObject assetObjectJSONObject = _jiraService.getAssetObject(
-			organizationCompositeIdArray.get(0),
-			organizationCompositeIdArray.get(1));
+			JSONObject assetObjectJSONObject = _jiraService.getAssetObject(
+				organizationCompositeIdArray.get(0),
+				organizationCompositeIdArray.get(1));
 
-		if (assetObjectJSONObject == null) {
-			throw new JiraOrganizationNotFoundException();
-		}
+			JSONArray jsonArray = assetObjectJSONObject.getJSONArray(
+				"attributes");
 
-		JSONArray jsonArray = assetObjectJSONObject.getJSONArray("attributes");
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject attributeJSONObject = jsonArray.getJSONObject(i);
 
-		for (int i = 0; i < jsonArray.length(); i++) {
-			JSONObject attributeJSONObject = jsonArray.getJSONObject(i);
+				JSONObject objectTypeAttributeJSONObject =
+					attributeJSONObject.getJSONObject("objectTypeAttribute");
 
-			JSONObject objectTypeAttributeJSONObject =
-				attributeJSONObject.getJSONObject("objectTypeAttribute");
+				String name = objectTypeAttributeJSONObject.getString("name");
 
-			String name = objectTypeAttributeJSONObject.getString("name");
+				if (!name.equals("External Key")) {
+					continue;
+				}
 
-			if (!name.equals("External Key")) {
-				continue;
-			}
+				JSONArray objectAttributeValuesJSONArray =
+					attributeJSONObject.getJSONArray("objectAttributeValues");
 
-			JSONArray objectAttributeValuesJSONArray =
-				attributeJSONObject.getJSONArray("objectAttributeValues");
-
-			for (int j = 0; j < objectAttributeValuesJSONArray.length(); j++) {
 				JSONObject objectAttributeValuesJSONObject =
-					objectAttributeValuesJSONArray.getJSONObject(j);
+					objectAttributeValuesJSONArray.getJSONObject(0);
 
 				return objectAttributeValuesJSONObject.getString("value");
 			}
+		}
+		catch (Exception exception) {
+			throw new JiraOrganizationNotFoundException(exception);
 		}
 
 		throw new JiraOrganizationNotFoundException();

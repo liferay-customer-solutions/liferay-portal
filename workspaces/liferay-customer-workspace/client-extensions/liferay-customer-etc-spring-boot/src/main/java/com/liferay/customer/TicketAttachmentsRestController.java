@@ -8,6 +8,7 @@ package com.liferay.customer;
 import com.liferay.client.extension.util.spring.boot3.BaseRestController;
 import com.liferay.client.extension.util.spring.boot3.client.LiferayOAuth2AccessTokenManager;
 import com.liferay.customer.exception.TicketAttachmentNotFoundException;
+import com.liferay.customer.model.JiraSupportIssue;
 import com.liferay.customer.model.TicketAttachment;
 import com.liferay.customer.service.GoogleCloudStorageService;
 import com.liferay.customer.service.JiraService;
@@ -15,16 +16,12 @@ import com.liferay.customer.service.NotificationQueueEntryService;
 import com.liferay.customer.service.TicketAttachmentService;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.StackTraceUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -99,37 +96,16 @@ public class TicketAttachmentsRestController extends BaseRestController {
 			_log.info("Cleaning up JSM large file attachments");
 		}
 
-		String[] jiraSupportProjects = {
-			_jiraSupportFLSProject, _jiraSupportHCProject
-		};
+		String jql = StringBundler.concat(
+			"(project in (", _jiraSupportFLSProject, ",", _jiraSupportHCProject,
+			")) and (status in (Closed, 'Solution Accepted')) and (status ",
+			"changed to (Closed, 'Solution Accepted') after -8d before -7d)");
 
-		StringBundler sb = new StringBundler(4);
+		List<JiraSupportIssue> jiraSupportIssues = _jiraService.search(
+			jql, new String[] {"key"});
 
-		sb.append("(project in (");
-		sb.append(StringUtil.merge(jiraSupportProjects, ","));
-		sb.append(")) and (status = Closed) and (status changed to (Closed) ");
-		sb.append("after -8d) and (status changed to (Closed) before -7d)");
-
-		int page = 1;
-
-		while (true) {
-			JSONObject jsonObject = _jiraService.search(
-				sb.toString(), page, 20, new String[] {"key"});
-
-			JSONArray jsonArray = jsonObject.getJSONArray("issues");
-
-			for (int i = 0; i < jsonArray.length(); i++) {
-				JSONObject itemJSONObject = jsonArray.getJSONObject(i);
-
-				_deleteTicketAttachments(itemJSONObject.getString("key"));
-			}
-
-			if ((page * 20) < jsonObject.getInt("total")) {
-				page++;
-			}
-			else {
-				break;
-			}
+		for (JiraSupportIssue jiraSupportIssue : jiraSupportIssues) {
+			_deleteTicketAttachments(jiraSupportIssue.getKey());
 		}
 	}
 
