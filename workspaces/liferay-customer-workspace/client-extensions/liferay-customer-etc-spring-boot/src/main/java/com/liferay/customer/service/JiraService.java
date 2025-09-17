@@ -14,6 +14,8 @@ import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -53,6 +55,10 @@ public class JiraService extends BaseService {
 			).toUri());
 	}
 
+	public int calculateStartAt(int page, int pageSize) {
+		return (page - 1) * pageSize;
+	}
+
 	@Cacheable("affectedVersions")
 	public JSONArray getAffectedVersionsJSONArray() throws Exception {
 		try {
@@ -74,20 +80,22 @@ public class JiraService extends BaseService {
 					_jiraSecurityVulnerabilityFieldPartnerPublishingDate));
 			sb.append(" <= now()");
 
-			String jql = sb.toString();
+			String nextPageToken = StringPool.BLANK;
 
-			for (int i = 0; true; i += 100) {
-				JSONObject jsonObject = _search(jql, 100, issueFields, i);
+			while (true) {
+				JSONObject jsonObject = _search(
+					sb.toString(), 100, nextPageToken, issueFields,
+					calculateStartAt(1, 100));
 
-				JSONArray issuesJSONArray = jsonObject.getJSONArray("issues");
-
-				if (issuesJSONArray.length() <= 0) {
+				if (jsonObject == null) {
 					break;
 				}
 
-				for (int j = 0; j < issuesJSONArray.length(); j++) {
+				JSONArray issuesJSONArray = jsonObject.getJSONArray("issues");
+
+				for (int i = 0; i < issuesJSONArray.length(); i++) {
 					JSONObject issueJSONObject = issuesJSONArray.getJSONObject(
-						j);
+						i);
 
 					JSONObject fieldsJSONObject = issueJSONObject.getJSONObject(
 						"fields");
@@ -95,13 +103,19 @@ public class JiraService extends BaseService {
 					JSONArray versionsJSONArray = fieldsJSONObject.getJSONArray(
 						"versions");
 
-					for (int k = 0; k < versionsJSONArray.length(); k++) {
+					for (int j = 0; j < versionsJSONArray.length(); j++) {
 						JSONObject versionJSONObject =
-							versionsJSONArray.getJSONObject(k);
+							versionsJSONArray.getJSONObject(j);
 
 						affectedVersions.add(
 							versionJSONObject.optString("name"));
 					}
+				}
+
+				nextPageToken = jsonObject.optString("nextPageToken");
+
+				if (Validator.isNull(nextPageToken)) {
+					break;
 				}
 			}
 
@@ -146,7 +160,7 @@ public class JiraService extends BaseService {
 					_getCredentials(),
 					UriComponentsBuilder.fromUriString(
 						StringBundler.concat(
-							_jiraURL, _URL_REST_API_2, "/issue/", issueKey)
+							_jiraURL, _URL_REST_API_3, "/issue/", issueKey)
 					).queryParam(
 						"expand", "renderedFields"
 					).build(
@@ -183,17 +197,17 @@ public class JiraService extends BaseService {
 		throws Exception {
 
 		JSONObject jsonObject = _search(
-			jql, pageSize, returnFields, _calculateStartAt(page, pageSize));
+			jql, pageSize, returnFields, calculateStartAt(page, pageSize));
 
 		return _transformSearchResults(jsonObject);
 	}
 
 	@Cacheable("issues")
-	public JSONObject search(
+	public List<JSONObject> search(
 			String[] filterAffectedVersions, String[] filterCategories,
 			String[] filterClassifications, String[] filterFixVersions,
-			String[] filterSeverities, String keywords, int page, int pageSize,
-			String sortOrder, boolean hasEarlyPublishAccess)
+			String[] filterSeverities, String keywords, String sortOrder,
+			boolean hasEarlyPublishAccess)
 		throws Exception {
 
 		StringBundler sb = new StringBundler(49);
@@ -319,19 +333,38 @@ public class JiraService extends BaseService {
 			_jiraSecurityVulnerabilityFieldSeverity
 		};
 
-		JSONObject jsonObject = _search(
-			sb.toString(), pageSize, securityVulnerabilitiesIssueFields,
-			_calculateStartAt(page, pageSize));
+		List<JSONObject> jsonObjects = new ArrayList<>();
 
-		return _transformSearchResults(jsonObject);
+		String nextPageToken = StringPool.BLANK;
+
+		while (true) {
+			JSONObject jsonObject = _search(
+				sb.toString(), 100, nextPageToken,
+				securityVulnerabilitiesIssueFields, calculateStartAt(1, 100));
+
+			if (jsonObject == null) {
+				break;
+			}
+
+			JSONArray issuesJSONArray = jsonObject.getJSONArray("issues");
+
+			for (int i = 0; i < issuesJSONArray.length(); i++) {
+				jsonObjects.add(
+					_transformIssue(issuesJSONArray.getJSONObject(i)));
+			}
+
+			nextPageToken = jsonObject.optString("nextPageToken");
+
+			if (Validator.isNull(nextPageToken)) {
+				break;
+			}
+		}
+
+		return jsonObjects;
 	}
 
 	private int _calculatePage(int startAt, int maxResults) {
 		return (startAt / maxResults) + 1;
-	}
-
-	private int _calculateStartAt(int page, int pageSize) {
-		return (page - 1) * pageSize;
 	}
 
 	private JSONArray _flattenJSONArray(JSONArray jsonArray) {
@@ -392,7 +425,8 @@ public class JiraService extends BaseService {
 	}
 
 	private JSONObject _search(
-			String jql, int maxResults, String[] returnFields, int startAt)
+			String jql, int maxResults, String nextPageToken,
+			String[] returnFields, int startAt)
 		throws Exception {
 
 		try {
@@ -400,7 +434,7 @@ public class JiraService extends BaseService {
 				get(
 					_getCredentials(),
 					UriComponentsBuilder.fromUriString(
-						_jiraURL + _URL_REST_API_2 + "/search"
+						_jiraURL + _URL_REST_API_3 + "/search/jql"
 					).queryParam(
 						"expand", "renderedFields"
 					).queryParam(
@@ -409,6 +443,8 @@ public class JiraService extends BaseService {
 						"jql", jql
 					).queryParam(
 						"maxResults", maxResults
+					).queryParam(
+						"nextPageToken", nextPageToken
 					).queryParam(
 						"startAt", startAt
 					).build(
@@ -422,6 +458,14 @@ public class JiraService extends BaseService {
 		}
 
 		return null;
+	}
+
+	private JSONObject _search(
+			String jql, int maxResults, String[] returnFields, int startAt)
+		throws Exception {
+
+		return _search(
+			jql, maxResults, StringPool.BLANK, returnFields, startAt);
 	}
 
 	private JSONObject _transformIssue(JSONObject issueJSONObject) {
@@ -576,7 +620,7 @@ public class JiraService extends BaseService {
 	private static final String _JIRA_CLOUD_API_URL =
 		"https://api.atlassian.com";
 
-	private static final String _URL_REST_API_2 = "/rest/api/2";
+	private static final String _URL_REST_API_3 = "/rest/api/3";
 
 	private static final Log _log = LogFactory.getLog(JiraService.class);
 
