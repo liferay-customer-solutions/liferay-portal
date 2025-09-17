@@ -11,8 +11,8 @@ import com.liferay.exportimport.vulcan.batch.engine.ExportImportVulcanBatchEngin
 import com.liferay.petra.function.UnsafeBiConsumer;
 import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.petra.lang.SafeCloseable;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
+import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.odata.entity.EntityModel;
 import com.liferay.portal.test.rule.FeatureFlag;
 import com.liferay.portal.test.rule.Inject;
@@ -75,15 +76,15 @@ public class BatchEnginePortletDataHandlerRegistryTest {
 		new LiferayIntegrationTestRule();
 
 	@BeforeClass
-	public static void setUpClass() throws PortalException {
+	public static void setUpClass() {
 		FeatureFlagTestUtil.invokeFeatureFlagListeners(
-			TestPropsValues.getCompanyId(), true, "LPD-35914");
+			CompanyConstants.SYSTEM, true, "LPD-35914");
 	}
 
 	@AfterClass
-	public static void tearDownClass() throws PortalException {
+	public static void tearDownClass() {
 		FeatureFlagTestUtil.invokeFeatureFlagListeners(
-			TestPropsValues.getCompanyId(), false, "LPD-35914");
+			CompanyConstants.SYSTEM, false, "LPD-35914");
 	}
 
 	@Test
@@ -99,12 +100,7 @@ public class BatchEnginePortletDataHandlerRegistryTest {
 				Portlet.class,
 				new GenericPortlet() {
 				},
-				HashMapDictionaryBuilder.<String, Object>put(
-					"com.liferay.portlet.company",
-					TestPropsValues.getCompanyId()
-				).put(
-					"jakarta.portlet.name", portletId
-				).build());
+				MapUtil.singletonDictionary("jakarta.portlet.name", portletId));
 			SafeCloseable safeCloseable2 = _registerServiceWithSafeCloseable(
 				VulcanBatchEngineTaskItemDelegate.class,
 				new TestExportImportVulcanBatchEngineTaskItemDelegate(
@@ -113,9 +109,6 @@ public class BatchEnginePortletDataHandlerRegistryTest {
 					"batch.engine.task.item.delegate", "true"
 				).put(
 					"batch.engine.task.item.delegate.class.name",
-					RandomTestUtil.randomString()
-				).put(
-					"batch.engine.task.item.delegate.item.class.name",
 					RandomTestUtil.randomString()
 				).put(
 					"batch.engine.task.item.delegate.name",
@@ -128,9 +121,6 @@ public class BatchEnginePortletDataHandlerRegistryTest {
 					"batch.engine.task.item.delegate", "true"
 				).put(
 					"batch.engine.task.item.delegate.class.name",
-					RandomTestUtil.randomString()
-				).put(
-					"batch.engine.task.item.delegate.item.class.name",
 					RandomTestUtil.randomString()
 				).put(
 					"batch.engine.task.item.delegate.name",
@@ -194,6 +184,11 @@ public class BatchEnginePortletDataHandlerRegistryTest {
 		@Override
 		public ExportImportDescriptor getExportImportDescriptor() {
 			return new ExportImportDescriptor() {
+
+				@Override
+				public String getItemClassName() {
+					return _itemClassName;
+				}
 
 				@Override
 				public String getPortletId() {
@@ -261,6 +256,8 @@ public class BatchEnginePortletDataHandlerRegistryTest {
 		public void update(
 			Collection<Object> items, Map<String, Serializable> parameters) {
 		}
+
+		private static String _itemClassName = RandomTestUtil.randomString();
 
 		private final String _portletId;
 

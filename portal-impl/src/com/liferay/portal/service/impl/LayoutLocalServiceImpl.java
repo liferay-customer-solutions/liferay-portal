@@ -1111,6 +1111,40 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 	}
 
 	@Override
+	public Map<Layout, Layout> fetchDraftLayouts(List<Layout> layouts) {
+		if (layouts.isEmpty()) {
+			return Collections.emptyMap();
+		}
+
+		Map<Layout, Layout> draftLayouts = new HashMap<>();
+
+		long[] plids = new long[layouts.size()];
+
+		Map<Long, Layout> layoutsMap = new HashMap<>();
+
+		for (int i = 0; i < layouts.size(); i++) {
+			Layout layout = layouts.get(i);
+
+			long plid = layout.getPlid();
+
+			plids[i] = plid;
+
+			layoutsMap.put(plid, layout);
+		}
+
+		for (Layout draftLayout :
+				layoutPersistence.findByC_C(
+					_classNameLocalService.getClassNameId(Layout.class),
+					plids)) {
+
+			draftLayouts.put(
+				layoutsMap.get(draftLayout.getClassPK()), draftLayout);
+		}
+
+		return draftLayouts;
+	}
+
+	@Override
 	public Layout fetchFirstLayout(
 		long groupId, boolean privateLayout, long parentLayoutId) {
 

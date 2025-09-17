@@ -173,66 +173,20 @@ public abstract class BaseFriendlyUrlHistoryResourceTestCase {
 	}
 
 	@Test
-	public void testGetSiteSiteByExternalReferenceCodeDisplayPageTemplateFriendlyUrlHistory()
+	public void testGetSiteDisplayPageTemplateFriendlyUrlHistory()
 		throws Exception {
 
 		Assert.assertTrue(false);
 	}
 
 	@Test
-	public void testGraphQLGetSiteSiteByExternalReferenceCodeDisplayPageTemplateFriendlyUrlHistory()
-		throws Exception {
-
-		Assert.assertTrue(true);
-	}
-
-	@Test
-	public void testGraphQLGetSiteSiteByExternalReferenceCodeDisplayPageTemplateFriendlyUrlHistoryNotFound()
-		throws Exception {
-
-		Assert.assertTrue(true);
-	}
-
-	@Test
-	public void testGetSiteSiteByExternalReferenceCodeSitePageFriendlyUrlHistory()
-		throws Exception {
-
+	public void testGetSiteSitePageFriendlyUrlHistory() throws Exception {
 		Assert.assertTrue(false);
 	}
 
 	@Test
-	public void testGraphQLGetSiteSiteByExternalReferenceCodeSitePageFriendlyUrlHistory()
-		throws Exception {
-
-		Assert.assertTrue(true);
-	}
-
-	@Test
-	public void testGraphQLGetSiteSiteByExternalReferenceCodeSitePageFriendlyUrlHistoryNotFound()
-		throws Exception {
-
-		Assert.assertTrue(true);
-	}
-
-	@Test
-	public void testGetSiteSiteByExternalReferenceCodeUtilityPageFriendlyUrlHistory()
-		throws Exception {
-
+	public void testGetSiteUtilityPageFriendlyUrlHistory() throws Exception {
 		Assert.assertTrue(false);
-	}
-
-	@Test
-	public void testGraphQLGetSiteSiteByExternalReferenceCodeUtilityPageFriendlyUrlHistory()
-		throws Exception {
-
-		Assert.assertTrue(true);
-	}
-
-	@Test
-	public void testGraphQLGetSiteSiteByExternalReferenceCodeUtilityPageFriendlyUrlHistoryNotFound()
-		throws Exception {
-
-		Assert.assertTrue(true);
 	}
 
 	protected void assertContains(

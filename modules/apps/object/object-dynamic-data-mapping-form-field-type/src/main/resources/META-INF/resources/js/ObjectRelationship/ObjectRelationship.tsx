@@ -291,6 +291,14 @@ export default function ObjectRelationship({
 			)) ??
 		searchTerm;
 
+	const isSelected = (value: unknown): value is SelectedItem => {
+		if (!value || typeof value !== 'object') {
+			return false;
+		}
+
+		return 'id' in value;
+	};
+
 	return (
 		<FieldBase
 			name={name}
@@ -405,7 +413,15 @@ export default function ObjectRelationship({
 				{loading && <ClayAutocomplete.LoadingIndicator />}
 			</ClayAutocomplete>
 
-			<input name={name} type="hidden" value={selected?.id} />
+			<input
+				name={name}
+				type="hidden"
+				value={
+					isSelected(selected)
+						? selected?.[valueKey] ?? selected.id
+						: undefined
+				}
+			/>
 		</FieldBase>
 	);
 }
@@ -450,3 +466,8 @@ interface State {
 	selected?: Item;
 	url: string | null;
 }
+
+type SelectedItem = {
+	id: string | number;
+	[key: string]: string | number | undefined;
+};

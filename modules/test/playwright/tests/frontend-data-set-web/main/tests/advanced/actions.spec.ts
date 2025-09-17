@@ -51,19 +51,11 @@ test('Behavior of item actions', async ({fdsSamplePage, page}) => {
 
 		await expect(tableItemActionButton).toBeVisible();
 
-		const dropdownId =
-			await tableItemActionButton.getAttribute('aria-controls');
+		const dropdownMenu = await fdsSamplePage.getDropdownId(
+			tableItemActionButton
+		);
 
-		await tableItemActionButton.click();
-
-		await page
-			.locator(`#${dropdownId}`)
-			.filter({has: page.getByRole('menu')})
-			.waitFor();
-
-		await expect(
-			page.locator(`#${dropdownId}`).getByRole('menuitem')
-		).toHaveCount(14);
+		await expect(dropdownMenu.getByRole('menuitem')).toHaveCount(14);
 
 		await page.keyboard.press('Escape');
 	});
@@ -271,5 +263,26 @@ test('Behavior of item actions', async ({fdsSamplePage, page}) => {
 		await fdsSamplePage.clickItemAction(asyncSuccess);
 
 		await waitForAlert(page);
+	});
+
+	await test.step('Check that Sample Delete action has custom className applied', async () => {
+		const tableItemActionButton =
+			fdsSamplePage.table.itemActionButtons.first();
+
+		await expect(tableItemActionButton).toBeVisible();
+
+		const dropdownMenu = await fdsSamplePage.getDropdownId(
+			tableItemActionButton
+		);
+
+		const sampleDeleteActionItem = dropdownMenu
+			.getByRole('menuitem')
+			.filter({hasText: 'Sample Delete'});
+
+		await expect(sampleDeleteActionItem).toBeVisible();
+
+		await expect(sampleDeleteActionItem).toHaveClass(/text-danger/);
+
+		await page.keyboard.press('Escape');
 	});
 });

@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.model.LayoutTypeController;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 import com.liferay.portal.kernel.service.permission.LayoutPermissionUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -50,7 +51,7 @@ public class NavItem implements Serializable {
 			ThemeDisplay themeDisplay)
 		throws PortalException {
 
-		if (parentLayouts == null) {
+		if (ListUtil.isEmpty(parentLayouts)) {
 			return Collections.emptyList();
 		}
 
@@ -58,12 +59,16 @@ public class NavItem implements Serializable {
 			LayoutLocalServiceUtil.getLayoutChildLayouts(parentLayouts);
 
 		for (List<Layout> childLayouts : layoutChildLayouts.values()) {
+			Map<Layout, Layout> draftLayouts =
+				LayoutLocalServiceUtil.fetchDraftLayouts(childLayouts);
+
 			Iterator<Layout> iterator = childLayouts.iterator();
 
 			while (iterator.hasNext()) {
 				Layout childLayout = iterator.next();
 
-				if (_isContentLayoutDraft(childLayout) ||
+				if (_isContentLayoutDraft(
+						childLayout, draftLayouts.get(childLayout)) ||
 					!_isLayoutRevisionDisplayable(childLayout) ||
 					childLayout.isHidden() ||
 					!LayoutPermissionUtil.contains(
@@ -77,11 +82,15 @@ public class NavItem implements Serializable {
 
 		List<NavItem> navItems = new ArrayList<>(parentLayouts.size());
 
+		Map<Layout, Layout> draftLayouts =
+			LayoutLocalServiceUtil.fetchDraftLayouts(parentLayouts);
+
 		for (Layout parentLayout : parentLayouts) {
 			List<Layout> childLayouts = layoutChildLayouts.get(
 				parentLayout.getPlid());
 
-			if (_isContentLayoutDraft(parentLayout) ||
+			if (_isContentLayoutDraft(
+					parentLayout, draftLayouts.get(parentLayout)) ||
 				!_isLayoutRevisionDisplayable(parentLayout)) {
 
 				continue;
@@ -363,13 +372,16 @@ public class NavItem implements Serializable {
 			layout.getAncestorPlid());
 	}
 
-	private static boolean _isContentLayoutDraft(Layout layout) {
+	private static boolean _isContentLayoutDraft(
+		Layout layout, Layout draftLayout) {
+
 		if (!layout.isTypeContent()) {
 			return false;
 		}
 
-		if (layout.fetchDraftLayout() != null) {
-			return !layout.isPublished();
+		if (draftLayout != null) {
+			return !GetterUtil.getBoolean(
+				draftLayout.getTypeSettingsProperty("published"));
 		}
 
 		if (layout.isApproved() && !layout.isHidden() && !layout.isSystem()) {

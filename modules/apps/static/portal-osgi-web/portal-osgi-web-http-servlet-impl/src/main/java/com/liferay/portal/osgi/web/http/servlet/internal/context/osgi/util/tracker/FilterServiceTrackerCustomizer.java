@@ -17,16 +17,15 @@ import com.liferay.portal.osgi.web.http.servlet.internal.registration.FilterRegi
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.ServiceHolder;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.FilterConfigImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ServletContextWrapper;
+import com.liferay.portal.osgi.web.http.servlet.internal.util.ServicePropertiesUtil;
 
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.Filter;
+import jakarta.servlet.ServletException;
 
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
-
-import org.eclipse.equinox.http.servlet.internal.error.RegisteredFilterException;
-import org.eclipse.equinox.http.servlet.internal.util.ServiceProperties;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -126,7 +125,8 @@ public class FilterServiceTrackerCustomizer
 					if (Objects.equals(
 							curFilterRegistration.getService(), filter)) {
 
-						throw new RegisteredFilterException(filter);
+						throw new ServletException(
+							"Filter " + filter + " is already registered");
 					}
 				}
 
@@ -215,18 +215,19 @@ public class FilterServiceTrackerCustomizer
 
 		FilterDTO filterDTO = new FilterDTO();
 
-		filterDTO.asyncSupported = ServiceProperties.parseBoolean(
-			serviceReference,
-			HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED);
+		filterDTO.asyncSupported = GetterUtil.getBoolean(
+			serviceReference.getProperty(
+				HttpWhiteboardConstants.
+					HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED));
 		filterDTO.dispatcher = sort(filterDispatcherTypes);
-		filterDTO.initParams = ServiceProperties.parseInitParams(
+		filterDTO.initParams = ServicePropertiesUtil.parseInitParams(
 			serviceReference,
 			HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_INIT_PARAM_PREFIX);
 
 		Class<?> filterClass = filter.getClass();
 
 		filterDTO.name = GetterUtil.getString(
-			ServiceProperties.parseName(
+			ServicePropertiesUtil.parseName(
 				serviceReference.getProperty(
 					HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_NAME),
 				filter),

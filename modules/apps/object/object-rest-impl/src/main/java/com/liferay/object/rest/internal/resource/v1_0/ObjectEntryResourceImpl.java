@@ -123,14 +123,64 @@ public class ObjectEntryResourceImpl
 			if (objectEntryUnsafeFunction == null) {
 				throw new NotSupportedException(
 					"Create strategy \"" + createStrategy +
-						"\" is not supported for object entry");
+						"\" is not supported");
 			}
 
 			contextBatchUnsafeBiConsumer.accept(
 				objectEntries, objectEntryUnsafeFunction);
 		}
 		else {
-			super.create(objectEntries, parameters);
+			UnsafeFunction<ObjectEntry, ObjectEntry, Exception>
+				objectEntryUnsafeFunction = null;
+
+			String createStrategy = (String)parameters.getOrDefault(
+				"createStrategy", "INSERT");
+
+			if (StringUtil.equalsIgnoreCase(createStrategy, "INSERT")) {
+				objectEntryUnsafeFunction = this::postObjectEntry;
+			}
+
+			if (StringUtil.equalsIgnoreCase(createStrategy, "UPSERT")) {
+				String updateStrategy = (String)parameters.getOrDefault(
+					"updateStrategy", "UPDATE");
+
+				if (StringUtil.equalsIgnoreCase(
+						updateStrategy, "PARTIAL_UPDATE")) {
+
+					objectEntryUnsafeFunction =
+						objectEntry -> patchByExternalReferenceCode(
+							objectEntry.getExternalReferenceCode(),
+							objectEntry);
+				}
+				else if (StringUtil.equalsIgnoreCase(
+							updateStrategy, "UPDATE")) {
+
+					objectEntryUnsafeFunction =
+						objectEntry -> putByExternalReferenceCode(
+							objectEntry.getExternalReferenceCode(),
+							objectEntry);
+				}
+			}
+
+			if (objectEntryUnsafeFunction == null) {
+				throw new NotSupportedException(
+					"Create strategy \"" + createStrategy +
+						"\" is not supported");
+			}
+
+			if (contextBatchUnsafeBiConsumer != null) {
+				contextBatchUnsafeBiConsumer.accept(
+					objectEntries, objectEntryUnsafeFunction);
+			}
+			else if (contextBatchUnsafeConsumer != null) {
+				contextBatchUnsafeConsumer.accept(
+					objectEntries, objectEntryUnsafeFunction::apply);
+			}
+			else {
+				for (ObjectEntry objectEntry : objectEntries) {
+					objectEntryUnsafeFunction.apply(objectEntry);
+				}
+			}
 		}
 	}
 
@@ -235,7 +285,7 @@ public class ObjectEntryResourceImpl
 					_objectDefinition.getStorageType()));
 
 		defaultObjectEntryManager.deleteObjectEntry(
-			_getDTOConverterContext(null), _objectDefinition, objectEntryId);
+			_objectDefinition, objectEntryId);
 	}
 
 	@Override
@@ -359,6 +409,11 @@ public class ObjectEntryResourceImpl
 	@Override
 	public ExportImportDescriptor getExportImportDescriptor() {
 		return new ExportImportDescriptor() {
+
+			@Override
+			public String getItemClassName() {
+				return _objectDefinition.getClassName();
+			}
 
 			@Override
 			public List<String> getNestedFields() {
@@ -627,8 +682,7 @@ public class ObjectEntryResourceImpl
 					_objectDefinition.getStorageType()));
 
 		defaultObjectEntryManager.subscribeObjectEntry(
-			externalReferenceCode, _objectDefinition, null,
-			contextUser.getUserId());
+			externalReferenceCode, _objectDefinition, null);
 	}
 
 	@Override
@@ -646,8 +700,7 @@ public class ObjectEntryResourceImpl
 					_objectDefinition.getStorageType()));
 
 		defaultObjectEntryManager.unsubscribeObjectEntry(
-			externalReferenceCode, _objectDefinition, null,
-			contextUser.getUserId());
+			externalReferenceCode, _objectDefinition, null);
 	}
 
 	@Override
@@ -815,8 +868,7 @@ public class ObjectEntryResourceImpl
 					_objectDefinition.getStorageType()));
 
 		defaultObjectEntryManager.subscribeObjectEntry(
-			externalReferenceCode, _objectDefinition, scopeKey,
-			contextUser.getUserId());
+			externalReferenceCode, _objectDefinition, scopeKey);
 	}
 
 	@Override
@@ -834,8 +886,7 @@ public class ObjectEntryResourceImpl
 					_objectDefinition.getStorageType()));
 
 		defaultObjectEntryManager.unsubscribeObjectEntry(
-			externalReferenceCode, _objectDefinition, scopeKey,
-			contextUser.getUserId());
+			externalReferenceCode, _objectDefinition, scopeKey);
 	}
 
 	@Override

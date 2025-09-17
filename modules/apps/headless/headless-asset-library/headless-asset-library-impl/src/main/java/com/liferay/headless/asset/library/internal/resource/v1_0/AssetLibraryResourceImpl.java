@@ -51,7 +51,6 @@ import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
 import com.liferay.portal.vulcan.util.SearchUtil;
-import com.liferay.sharing.constants.SharingConfigurationConstants;
 
 import jakarta.ws.rs.core.MultivaluedMap;
 
@@ -574,6 +573,17 @@ public class AssetLibraryResourceImpl extends BaseAssetLibraryResourceImpl {
 			_getBooleanValue(
 				unicodeProperties.getProperty("sharingEnabled"),
 				settings.getSharingEnabled())
+		).put(
+			"trashEnabled",
+			_getBooleanValue(
+				unicodeProperties.getProperty("trashEnabled"),
+				settings.getTrashEnabled())
+		).put(
+			"trashEntriesMaxAge",
+			GetterUtil.getInteger(
+				settings.getTrashEntriesMaxAge(),
+				GetterUtil.getInteger(
+					unicodeProperties.getProperty("trashEntriesMaxAge")))
 		).build();
 	}
 
@@ -599,9 +609,13 @@ public class AssetLibraryResourceImpl extends BaseAssetLibraryResourceImpl {
 			GetterUtil.getString(settings.getLogoColor(), "outline-0")
 		).put(
 			"sharingEnabled",
-			GetterUtil.getBoolean(
-				settings.getSharingEnabled(),
-				SharingConfigurationConstants.SHARING_ENABLED_DEFAULT)
+			GetterUtil.getBoolean(settings.getSharingEnabled())
+		).put(
+			"trashEnabled",
+			GetterUtil.getBoolean(settings.getTrashEnabled(), true)
+		).put(
+			"trashEntriesMaxAge",
+			GetterUtil.getInteger(settings.getTrashEntriesMaxAge())
 		).build();
 	}
 

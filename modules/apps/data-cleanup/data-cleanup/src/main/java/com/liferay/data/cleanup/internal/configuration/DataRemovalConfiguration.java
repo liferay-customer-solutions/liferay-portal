@@ -19,6 +19,9 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
 )
 public interface DataRemovalConfiguration {
 
+	@Meta.AD(deflt = "false", name = "fix-counter-values", required = false)
+	public boolean fixCounterValues();
+
 	@Meta.AD(
 		deflt = "false", name = "remove-analytics-message-data",
 		required = false

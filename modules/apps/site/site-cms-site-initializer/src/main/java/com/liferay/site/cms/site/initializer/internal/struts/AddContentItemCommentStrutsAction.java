@@ -44,17 +44,28 @@ public class AddContentItemCommentStrutsAction implements StrutsAction {
 			HttpServletResponse httpServletResponse)
 		throws Exception {
 
+		String className1 = ParamUtil.getString(
+			httpServletRequest, "className", null);
+
+		if (className1 == null) {
+			long classNameId = ParamUtil.getLong(
+				httpServletRequest, "classNameId");
+
+			ClassName className2 = _classNameLocalService.getClassName(
+				classNameId);
+
+			className1 = className2.getClassName();
+		}
+
+		long classPK = ParamUtil.getLong(httpServletRequest, "classPK");
+
 		ThemeDisplay themeDisplay =
 			(ThemeDisplay)httpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
 
-		ClassName className = _classNameLocalService.getClassName(
-			ParamUtil.getLong(httpServletRequest, "classNameId"));
-		long classPK = ParamUtil.getLong(httpServletRequest, "classPK");
-
 		_discussionPermission.checkAddPermission(
 			themeDisplay.getPermissionChecker(), themeDisplay.getCompanyId(),
-			themeDisplay.getScopeGroupId(), className.getClassName(), classPK);
+			themeDisplay.getScopeGroupId(), className1, classPK);
 
 		User user = themeDisplay.getUser();
 
@@ -70,14 +81,13 @@ public class AddContentItemCommentStrutsAction implements StrutsAction {
 		if (parentCommentId == 0) {
 			commentId = _commentManager.addComment(
 				null, user.getUserId(), themeDisplay.getScopeGroupId(),
-				className.getClassName(), classPK, user.getFullName(), null,
-				body, serviceContextFunction);
+				className1, classPK, user.getFullName(), null, body,
+				serviceContextFunction);
 		}
 		else {
 			commentId = _commentManager.addComment(
-				null, user.getUserId(), className.getClassName(), classPK,
-				user.getFullName(), parentCommentId, null, body,
-				serviceContextFunction);
+				null, user.getUserId(), className1, classPK, user.getFullName(),
+				parentCommentId, null, body, serviceContextFunction);
 		}
 
 		Comment comment = _commentManager.fetchComment(commentId);

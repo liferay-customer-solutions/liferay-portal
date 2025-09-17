@@ -36,13 +36,7 @@ import {
 	getLocalizedValue,
 } from '../../utils/getLocalizedValue';
 import {getInputRendererById} from '../../utils/renderer';
-import {
-	ESelectionTrigger,
-	IItemsActions,
-	ITableSchema,
-	IView,
-	TSort,
-} from '../../utils/types';
+import {IItemsActions, ITableSchema, IView, TSort} from '../../utils/types';
 import ViewsContext, {
 	IViewsContext,
 	TViewsContextDispatch,
@@ -103,7 +97,7 @@ const Head = ({
 }: {
 	fields: Array<Field>;
 	items: Array<any>;
-	selectionType?: string;
+	selectionType?: 'single' | 'multiple';
 }) => {
 	const {selectable} = useContext(FrontendDataSetContext);
 
@@ -169,7 +163,7 @@ const Row = ({
 	items: any[];
 	itemsActions: Array<IItemsActions>;
 	onItemSelectionChange: Function;
-	selectionType?: string;
+	selectionType?: 'single' | 'multiple';
 }) => {
 	const {itemsChanges, selectedItemsKey, updateItem} = useContext(
 		FrontendDataSetContext
@@ -233,11 +227,7 @@ const Row = ({
 									<SelectionComponent
 										checked={active}
 										onChange={() =>
-											onItemSelectionChange({
-												item,
-												trigger:
-													ESelectionTrigger.INPUT,
-											})
+											onItemSelectionChange(item)
 										}
 										title={Liferay.Language.get(
 											'select-item'
@@ -349,7 +339,7 @@ const Body = ({
 	items: Array<any>;
 	itemsActions: Array<IItemsActions>;
 	onItemSelectionChange: Function;
-	selectionType?: string;
+	selectionType?: 'single' | 'multiple';
 }) => {
 	const {
 		allItemsSelectedActive,
@@ -414,7 +404,7 @@ function ClayTableRowOptionalDropTarget({
 	onItemSelectionChange: Function;
 }) {
 	const [viewsContext] = useContext(ViewsContext);
-	const {onSelect, selectable} = useContext(FrontendDataSetContext);
+	const {selectable} = useContext(FrontendDataSetContext);
 
 	const {className: dropClassName, dropRef} = useFDSDrop({item});
 
@@ -426,12 +416,7 @@ function ClayTableRowOptionalDropTarget({
 		items,
 		onClick: selectable
 			? () => {
-					onItemSelectionChange({
-						item,
-						trigger: ESelectionTrigger.CONTAINER,
-					});
-
-					onSelect?.({selectedItems: [item]});
+					onItemSelectionChange(item, true);
 				}
 			: undefined,
 		ref: dropRef,

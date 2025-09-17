@@ -198,6 +198,9 @@ public class TestrayBuild implements Comparable<TestrayBuild> {
 
 		List<TestrayCaseResult> testrayCaseResults = new ArrayList<>();
 
+		String[] fieldNames = TestrayCaseResult.FIELD_NAMES;
+		int pageSize = 500;
+
 		StringBuilder sb = new StringBuilder();
 
 		if ((testrayRun != null) && (testrayRun.getID() > 0)) {
@@ -211,6 +214,9 @@ public class TestrayBuild implements Comparable<TestrayBuild> {
 		sb.append("'");
 
 		if (filterbyFailures) {
+			fieldNames = TestrayCaseResult.TESTRAY_REPORT_FIELD_NAMES;
+			pageSize = 50;
+
 			sb.append(" ");
 			sb.append("and (dueStatus eq 'FAILED'");
 			sb.append(" ");
@@ -219,8 +225,8 @@ public class TestrayBuild implements Comparable<TestrayBuild> {
 
 		try {
 			Set<JSONObject> entityJSONObjects = _testrayServer.requestGraphQL(
-				true, "caseResults", TestrayCaseResult.FIELD_NAMES,
-				sb.toString(), null, 0, 1000);
+				true, "caseResults", fieldNames, sb.toString(), null, 0,
+				pageSize);
 
 			for (JSONObject entityJSONObject : entityJSONObjects) {
 				TestrayCaseResult testrayCaseResult =
@@ -271,6 +277,18 @@ public class TestrayBuild implements Comparable<TestrayBuild> {
 
 	public TestrayRoutine getTestrayRoutine() {
 		return _testrayRoutine;
+	}
+
+	public synchronized TestrayRun getTestrayRun(String name) {
+		for (TestrayRun testrayRun : getTestrayRuns()) {
+			String testrayRunIDString = testrayRun.getRunIDString();
+
+			if (testrayRunIDString.equals(name)) {
+				return testrayRun;
+			}
+		}
+
+		return null;
 	}
 
 	public synchronized List<TestrayRun> getTestrayRuns() {

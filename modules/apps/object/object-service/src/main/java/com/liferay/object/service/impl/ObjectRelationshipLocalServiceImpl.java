@@ -26,6 +26,7 @@ import com.liferay.object.exception.ObjectRelationshipTypeException;
 import com.liferay.object.internal.dao.db.ObjectDBManagerUtil;
 import com.liferay.object.internal.info.collection.provider.RelatedInfoCollectionProviderFactory;
 import com.liferay.object.model.ObjectDefinition;
+import com.liferay.object.model.ObjectEntry;
 import com.liferay.object.model.ObjectEntryTable;
 import com.liferay.object.model.ObjectField;
 import com.liferay.object.model.ObjectFieldSetting;
@@ -76,11 +77,8 @@ import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.security.RandomUtil;
-import com.liferay.portal.kernel.service.ResourceActionLocalService;
-import com.liferay.portal.kernel.service.ResourcePermissionLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
-import com.liferay.portal.kernel.service.WorkflowDefinitionLinkLocalService;
 import com.liferay.portal.kernel.service.WorkflowInstanceLinkLocalService;
 import com.liferay.portal.kernel.servlet.InitialRequestSyncUtil;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
@@ -233,8 +231,12 @@ public class ObjectRelationshipLocalServiceImpl
 				).build());
 		}
 		else {
+			ObjectEntry objectEntry = _objectEntryLocalService.getObjectEntry(
+				primaryKey2);
+
 			_objectEntryLocalService.partialUpdateObjectEntry(
-				userId, primaryKey2,
+				userId, objectEntry.getPrimaryKey(),
+				objectEntry.getObjectEntryFolderId(),
 				HashMapBuilder.<String, Serializable>put(
 					objectField2.getName(), primaryKey1
 				).build(),
@@ -1068,9 +1070,7 @@ public class ObjectRelationshipLocalServiceImpl
 				_objectDefinitionPersistence,
 				_objectDefinitionSettingLocalService, _objectEntryLocalService,
 				_objectFieldPersistence, objectRelationship,
-				objectRelationshipLocalService, objectRelationshipPersistence,
-				_resourceActionLocalService, _resourcePermissionLocalService,
-				_workflowDefinitionLinkLocalService);
+				objectRelationshipLocalService, objectRelationshipPersistence);
 		}
 
 		return objectRelationship;
@@ -2186,12 +2186,6 @@ public class ObjectRelationshipLocalServiceImpl
 	private RelatedInfoCollectionProviderFactory
 		_relatedInfoCollectionProviderFactory;
 
-	@Reference
-	private ResourceActionLocalService _resourceActionLocalService;
-
-	@Reference
-	private ResourcePermissionLocalService _resourcePermissionLocalService;
-
 	private final Map<String, ServiceRegistration<?>> _serviceRegistrations =
 		new ConcurrentHashMap<>();
 
@@ -2201,10 +2195,6 @@ public class ObjectRelationshipLocalServiceImpl
 
 	@Reference
 	private UserLocalService _userLocalService;
-
-	@Reference
-	private WorkflowDefinitionLinkLocalService
-		_workflowDefinitionLinkLocalService;
 
 	@Reference
 	private WorkflowInstanceLinkLocalService _workflowInstanceLinkLocalService;

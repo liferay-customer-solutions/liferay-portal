@@ -98,7 +98,7 @@ public class DataCleanupPreupgradeProcessSuite {
 
 			// Company, then user, then group, and then the rest for optimal
 			// performance since cleaning companies will remove its users,
-			// groups, and related data.
+			// groups, and related data
 
 			new CompanyDataCleanupPreupgradeProcess(),
 
@@ -114,12 +114,13 @@ public class DataCleanupPreupgradeProcessSuite {
 
 			new AnalyticsMessageDataCleanupPreupgradeProcess(),
 			new ConfigurationDataCleanupPreupgradeProcess(),
+			new CounterDataCleanupPreupgradeProcess(),
 			new DDMStructureDataCleanupPreupgradeProcess(),
 			new DLFileEntryDataCleanupPreupgradeProcess(),
 			new NullUnicodeContentDataCleanupPreupgradeProcess(),
 			new QuartzJobDetailsDataCleanupPreupgradeProcess(),
 
-			//
+			// Journal data is used by dynamic data mapping structures data
 
 			new JournalDataCleanupPreupgradeProcess());
 

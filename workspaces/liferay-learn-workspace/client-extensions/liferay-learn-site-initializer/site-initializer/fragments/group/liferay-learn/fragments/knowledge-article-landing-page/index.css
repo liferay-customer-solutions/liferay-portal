@@ -13,30 +13,59 @@
 	background-color: var(--color-action-primary-hover-10, #edf3fe);
 }
 
-.article-entry_collection {
-	align-items: stretch;
-	border-radius: 10px;
-	display: flex;
-	flex-direction: column;
-	justify-content: start;
-	padding: 1rem;
-}
-
-.article-entry_collection:hover {
-	background-color: var(--color-action-primary-hover-10, #edf3fe);
-}
-
-.article-entry_description {
+.article-entry-description {
 	color: var(--color-neutral-10, #282934);
+	display: -webkit-box;
 	font-weight: 400;
+	line-clamp: 2;
+	overflow: hidden;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
 }
 
-.article-entry_title {
+.article-entry-title {
 	color: var(--color-brand-primary, #0B5FFF);
 	font-weight: 600;
 }
 
-.search-card_cta {
+.knowledge-base-container {
+	align-items: stretch;
+	display: flex;
+	flex-direction: column;
+	gap: 3rem;
+	justify-content: space-between;
+	max-width: var(--container-max-xl);
+	padding: 0 1.5rem;
+}
+
+.knowledge-base-row {
+	display: flex;
+	flex-direction: row;
+	gap: 3rem;
+	width: 100%;
+	
+	> * {
+		flex: 0 1 100%;
+	}
+}
+
+.knowledge-base-search-card {
+	align-items: stretch;
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	height: 100%;
+	justify-content: center;
+	padding: 1.5rem;
+	width: 100%;
+}
+
+.knowledge-base-search-card:hover {
+	background-color: var(--color-action-primary-hover-10, #EDF3FE)  !important;
+	border-color: #0053F0  !important;
+}
+
+.search-card-cta {
 	p {
 		align-items: center; 
 		gap: 0.5rem;
@@ -51,44 +80,7 @@
 	}
 }
 
-.knowledge-base_search-card {
-	align-items: stretch;
-	display: flex;
-	flex-direction: column;
-	gap: 1.5rem;
-	height: 100%;
-	justify-content: center;
-	padding: 1.5rem;
-	width: 100%;
-}
-
-.knowledge-base__container {
-	align-items: stretch;
-	display: flex;
-	flex-direction: column;
-	gap: 3rem;
-	justify-content: space-between;
-	max-width: var(--container-max-xl);
-	padding: 0 1.5rem;
-}
-
-.knowledge-base_row {
-	display: flex;
-	flex-direction: row;
-	gap: 3rem;
-	width: 100%;
-	
-	> * {
-		flex: 0 1 100%;
-	}
-}
-
-.knowledge-base_search-card:hover {
-	background-color: var(--color-action-primary-hover-10, #EDF3FE)  !important;
-	border-color: #0053F0  !important;
-}
-
-.search-card_image {
+.search-card-image {
 	align-items: center;
 	background: radial-gradient(
 				14.55% 34.6% at 100% 34.6%,
@@ -117,7 +109,7 @@
 }
 
 @media screen and (max-width: 849px) {
-	.knowledge-base_row {
+	.knowledge-base-row {
 		flex-direction: column;
 	}
 }

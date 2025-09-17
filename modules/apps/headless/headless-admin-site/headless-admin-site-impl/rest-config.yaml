@@ -7,8 +7,8 @@ application:
 author: Rubén Pulido
 clientDir: ../headless-admin-site-client/src/main/java
 compatibilityVersion: 11
-forcePredictableOperationId: false
+forcePredictableOperationId: true
 generateBatch: true
-generateGraphQL: true
+generateGraphQL: false
 javaEEPackage: jakarta
 testDir: ../headless-admin-site-test/src/testIntegration/java

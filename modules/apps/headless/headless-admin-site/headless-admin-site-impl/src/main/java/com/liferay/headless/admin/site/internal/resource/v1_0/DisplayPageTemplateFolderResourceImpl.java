@@ -6,6 +6,7 @@
 package com.liferay.headless.admin.site.internal.resource.v1_0;
 
 import com.liferay.headless.admin.site.dto.v1_0.DisplayPageTemplateFolder;
+import com.liferay.headless.admin.site.internal.odata.entity.v1_0.DisplayPageTemplateFolderEntityModel;
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.DisplayPageTemplateFolderUtil;
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.GroupUtil;
 import com.liferay.headless.admin.site.resource.v1_0.DisplayPageTemplateFolderResource;
@@ -13,13 +14,20 @@ import com.liferay.layout.page.template.constants.LayoutPageTemplateCollectionTy
 import com.liferay.layout.page.template.model.LayoutPageTemplateCollection;
 import com.liferay.layout.page.template.service.LayoutPageTemplateCollectionService;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
+import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.odata.entity.EntityModel;
 import com.liferay.portal.vulcan.aggregation.Aggregation;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
+import com.liferay.portal.vulcan.util.SearchUtil;
 
+import jakarta.ws.rs.core.MultivaluedMap;
+
+import java.util.Collections;
 import java.util.Objects;
 
 import org.osgi.service.component.annotations.Component;
@@ -39,7 +47,7 @@ public class DisplayPageTemplateFolderResourceImpl
 	extends BaseDisplayPageTemplateFolderResourceImpl {
 
 	@Override
-	public void deleteSiteSiteByExternalReferenceCodeDisplayPageTemplateFolder(
+	public void deleteSiteDisplayPageTemplateFolder(
 			String siteExternalReferenceCode,
 			String displayPageTemplateFolderExternalReferenceCode)
 		throws Exception {
@@ -56,10 +64,14 @@ public class DisplayPageTemplateFolderResourceImpl
 	}
 
 	@Override
-	public DisplayPageTemplateFolder
-			getSiteSiteByExternalReferenceCodeDisplayPageTemplateFolder(
-				String siteExternalReferenceCode,
-				String displayPageTemplateFolderExternalReferenceCode)
+	public EntityModel getEntityModel(MultivaluedMap multivaluedMap) {
+		return _entityModel;
+	}
+
+	@Override
+	public DisplayPageTemplateFolder getSiteDisplayPageTemplateFolder(
+			String siteExternalReferenceCode,
+			String displayPageTemplateFolderExternalReferenceCode)
 		throws Exception {
 
 		if (!FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
@@ -77,7 +89,7 @@ public class DisplayPageTemplateFolderResourceImpl
 
 	@Override
 	public Page<DisplayPageTemplateFolder>
-			getSiteSiteByExternalReferenceCodeDisplayPageTemplateFoldersPage(
+			getSiteDisplayPageTemplateFoldersPage(
 				String siteExternalReferenceCode, String search,
 				Aggregation aggregation, Filter filter, Pagination pagination,
 				Sort[] sorts)
@@ -90,28 +102,35 @@ public class DisplayPageTemplateFolderResourceImpl
 		long groupId = GroupUtil.getGroupId(
 			true, contextCompany.getCompanyId(), siteExternalReferenceCode);
 
-		return Page.of(
-			transform(
-				_layoutPageTemplateCollectionService.
-					getLayoutPageTemplateCollections(
-						groupId, search,
-						LayoutPageTemplateCollectionTypeConstants.DISPLAY_PAGE,
-						pagination.getStartPosition(),
-						pagination.getEndPosition(), null),
-				layoutPageTemplateCollection -> _toDisplayPageTemplateFolder(
-					layoutPageTemplateCollection)),
+		return SearchUtil.search(
+			Collections.emptyMap(),
+			booleanQuery -> {
+			},
+			filter, LayoutPageTemplateCollection.class.getName(), search,
 			pagination,
-			_layoutPageTemplateCollectionService.
-				getLayoutPageTemplateCollectionsCount(
-					groupId, search,
-					LayoutPageTemplateCollectionTypeConstants.DISPLAY_PAGE));
+			queryConfig -> queryConfig.setSelectedFieldNames(
+				Field.ENTRY_CLASS_PK),
+			searchContext -> {
+				searchContext.setAttribute(
+					Field.TYPE,
+					String.valueOf(
+						LayoutPageTemplateCollectionTypeConstants.
+							DISPLAY_PAGE));
+				searchContext.setCompanyId(contextCompany.getCompanyId());
+				searchContext.setGroupIds(new long[] {groupId});
+			},
+			sorts,
+			document -> _toDisplayPageTemplateFolder(
+				_layoutPageTemplateCollectionService.
+					fetchLayoutPageTemplateCollection(
+						GetterUtil.getLong(
+							document.get(Field.ENTRY_CLASS_PK)))));
 	}
 
 	@Override
-	public DisplayPageTemplateFolder
-			postSiteSiteByExternalReferenceCodeDisplayPageTemplateFolder(
-				String siteExternalReferenceCode,
-				DisplayPageTemplateFolder displayPageTemplateFolder)
+	public DisplayPageTemplateFolder postSiteDisplayPageTemplateFolder(
+			String siteExternalReferenceCode,
+			DisplayPageTemplateFolder displayPageTemplateFolder)
 		throws Exception {
 
 		if (!FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
@@ -126,11 +145,10 @@ public class DisplayPageTemplateFolderResourceImpl
 	}
 
 	@Override
-	public DisplayPageTemplateFolder
-			putSiteSiteByExternalReferenceCodeDisplayPageTemplateFolder(
-				String siteExternalReferenceCode,
-				String displayPageTemplateFolderExternalReferenceCode,
-				DisplayPageTemplateFolder displayPageTemplateFolder)
+	public DisplayPageTemplateFolder putSiteDisplayPageTemplateFolder(
+			String siteExternalReferenceCode,
+			String displayPageTemplateFolderExternalReferenceCode,
+			DisplayPageTemplateFolder displayPageTemplateFolder)
 		throws Exception {
 
 		if (!FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
@@ -194,6 +212,9 @@ public class DisplayPageTemplateFolderResourceImpl
 		return _displayPageTemplateFolderDTOConverter.toDTO(
 			layoutPageTemplateCollection);
 	}
+
+	private static final EntityModel _entityModel =
+		new DisplayPageTemplateFolderEntityModel();
 
 	@Reference(
 		target = "(component.name=com.liferay.headless.admin.site.internal.dto.v1_0.converter.DisplayPageTemplateFolderDTOConverter)"

@@ -6,6 +6,7 @@
 package com.liferay.headless.admin.site.internal.resource.v1_0;
 
 import com.liferay.headless.admin.site.dto.v1_0.PageTemplateSet;
+import com.liferay.headless.admin.site.internal.odata.entity.v1_0.PageTemplateSetEntityModel;
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.GroupUtil;
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.PageTemplateSetUtil;
 import com.liferay.headless.admin.site.resource.v1_0.PageTemplateSetResource;
@@ -13,12 +14,20 @@ import com.liferay.layout.page.template.constants.LayoutPageTemplateCollectionTy
 import com.liferay.layout.page.template.model.LayoutPageTemplateCollection;
 import com.liferay.layout.page.template.service.LayoutPageTemplateCollectionService;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
+import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.odata.entity.EntityModel;
 import com.liferay.portal.vulcan.aggregation.Aggregation;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
+import com.liferay.portal.vulcan.util.SearchUtil;
+
+import jakarta.ws.rs.core.MultivaluedMap;
+
+import java.util.Collections;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -35,7 +44,7 @@ public class PageTemplateSetResourceImpl
 	extends BasePageTemplateSetResourceImpl {
 
 	@Override
-	public void deleteSiteSiteByExternalReferenceCodePageTemplateSet(
+	public void deleteSitePageTemplateSet(
 			String siteExternalReferenceCode,
 			String pageTemplateSetExternalReferenceCode)
 		throws Exception {
@@ -52,7 +61,12 @@ public class PageTemplateSetResourceImpl
 	}
 
 	@Override
-	public PageTemplateSet getSiteSiteByExternalReferenceCodePageTemplateSet(
+	public EntityModel getEntityModel(MultivaluedMap multivaluedMap) {
+		return _entityModel;
+	}
+
+	@Override
+	public PageTemplateSet getSitePageTemplateSet(
 			String siteExternalReferenceCode,
 			String pageTemplateSetExternalReferenceCode)
 		throws Exception {
@@ -71,11 +85,10 @@ public class PageTemplateSetResourceImpl
 	}
 
 	@Override
-	public Page<PageTemplateSet>
-			getSiteSiteByExternalReferenceCodePageTemplateSetsPage(
-				String siteExternalReferenceCode, String search,
-				Aggregation aggregation, Filter filter, Pagination pagination,
-				Sort[] sorts)
+	public Page<PageTemplateSet> getSitePageTemplateSetsPage(
+			String siteExternalReferenceCode, String search,
+			Aggregation aggregation, Filter filter, Pagination pagination,
+			Sort[] sorts)
 		throws Exception {
 
 		if (!FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
@@ -85,24 +98,32 @@ public class PageTemplateSetResourceImpl
 		long groupId = GroupUtil.getGroupId(
 			true, contextCompany.getCompanyId(), siteExternalReferenceCode);
 
-		return Page.of(
-			transform(
-				_layoutPageTemplateCollectionService.
-					getLayoutPageTemplateCollections(
-						groupId, search,
-						LayoutPageTemplateCollectionTypeConstants.BASIC,
-						pagination.getStartPosition(),
-						pagination.getEndPosition(), null),
-				this::_toPageTemplateSet),
+		return SearchUtil.search(
+			Collections.emptyMap(),
+			booleanQuery -> {
+			},
+			filter, LayoutPageTemplateCollection.class.getName(), search,
 			pagination,
-			_layoutPageTemplateCollectionService.
-				getLayoutPageTemplateCollectionsCount(
-					groupId, search,
-					LayoutPageTemplateCollectionTypeConstants.BASIC));
+			queryConfig -> queryConfig.setSelectedFieldNames(
+				Field.ENTRY_CLASS_PK),
+			searchContext -> {
+				searchContext.setAttribute(
+					Field.TYPE,
+					String.valueOf(
+						LayoutPageTemplateCollectionTypeConstants.BASIC));
+				searchContext.setCompanyId(contextCompany.getCompanyId());
+				searchContext.setGroupIds(new long[] {groupId});
+			},
+			sorts,
+			document -> _toPageTemplateSet(
+				_layoutPageTemplateCollectionService.
+					fetchLayoutPageTemplateCollection(
+						GetterUtil.getLong(
+							document.get(Field.ENTRY_CLASS_PK)))));
 	}
 
 	@Override
-	public PageTemplateSet postSiteSiteByExternalReferenceCodePageTemplateSet(
+	public PageTemplateSet postSitePageTemplateSet(
 			String siteExternalReferenceCode, PageTemplateSet pageTemplateSet)
 		throws Exception {
 
@@ -119,7 +140,7 @@ public class PageTemplateSetResourceImpl
 	}
 
 	@Override
-	public PageTemplateSet putSiteSiteByExternalReferenceCodePageTemplateSet(
+	public PageTemplateSet putSitePageTemplateSet(
 			String siteExternalReferenceCode,
 			String pageTemplateSetExternalReferenceCode,
 			PageTemplateSet pageTemplateSet)
@@ -158,6 +179,9 @@ public class PageTemplateSetResourceImpl
 
 		return _pageTemplateSetDTOConverter.toDTO(layoutPageTemplateCollection);
 	}
+
+	private static final EntityModel _entityModel =
+		new PageTemplateSetEntityModel();
 
 	@Reference
 	private LayoutPageTemplateCollectionService

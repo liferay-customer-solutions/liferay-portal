@@ -67,6 +67,7 @@ data "aws_iam_policy_document" "liferay_backup_restore_policy_doc" {
 			"rds:RestoreDBInstanceFromDBSnapshot",
 			"s3:CreateBucket",
 			"s3:DeleteBucket",
+			"s3:DeleteObject",
 			"s3:GetAccelerateConfiguration",
 			"s3:GetBucket*",
 			"s3:GetEncryptionConfiguration",
@@ -92,16 +93,6 @@ data "aws_iam_policy_document" "liferay_backup_restore_policy_doc" {
 			"${var.terraform_state_bucket_arn}/*",
 		]
 		sid="AllowTerraformStateBucketAccess"
-	}
-	statement {
-		actions=[
-			"dynamodb:DeleteItem",
-			"dynamodb:GetItem",
-			"dynamodb:PutItem",
-		]
-		effect="Allow"
-		resources=[var.terraform_state_dynamodb_table_arn]
-		sid="AllowTerraformStateLocking"
 	}
 }
 locals {

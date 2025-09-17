@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
@@ -252,13 +253,15 @@ public class ObjectEntryFolderResourceTest
 		super.
 			testPostScopeScopeKeyObjectEntryFolderByExternalReferenceCodeSubscribe();
 
-		PermissionChecker permissionChecker =
+		PermissionChecker originalPermissionChecker =
 			PermissionThreadLocal.getPermissionChecker();
+		String originalName = PrincipalThreadLocal.getName();
 
 		User user = UserTestUtil.addUser();
 
 		PermissionThreadLocal.setPermissionChecker(
 			PermissionCheckerFactoryUtil.create(user));
+		PrincipalThreadLocal.setName(user.getUserId());
 
 		_addResourcePermission(ActionKeys.VIEW, user.getUserId());
 
@@ -293,7 +296,8 @@ public class ObjectEntryFolderResourceTest
 				com.liferay.object.model.ObjectEntryFolder.class.getName(),
 				objectEntryFolder.getId()));
 
-		PermissionThreadLocal.setPermissionChecker(permissionChecker);
+		PermissionThreadLocal.setPermissionChecker(originalPermissionChecker);
+		PrincipalThreadLocal.setName(originalName);
 	}
 
 	@Override
@@ -304,13 +308,15 @@ public class ObjectEntryFolderResourceTest
 		super.
 			testPostScopeScopeKeyObjectEntryFolderByExternalReferenceCodeUnsubscribe();
 
-		PermissionChecker permissionChecker =
+		PermissionChecker originalPermissionChecker =
 			PermissionThreadLocal.getPermissionChecker();
+		String originalName = PrincipalThreadLocal.getName();
 
 		User user = UserTestUtil.addUser();
 
 		PermissionThreadLocal.setPermissionChecker(
 			PermissionCheckerFactoryUtil.create(user));
+		PrincipalThreadLocal.setName(user.getUserId());
 
 		_addResourcePermission(ActionKeys.VIEW, user.getUserId());
 
@@ -356,7 +362,8 @@ public class ObjectEntryFolderResourceTest
 				com.liferay.object.model.ObjectEntryFolder.class.getName(),
 				objectEntryFolder.getId()));
 
-		PermissionThreadLocal.setPermissionChecker(permissionChecker);
+		PermissionThreadLocal.setPermissionChecker(originalPermissionChecker);
+		PrincipalThreadLocal.setName(originalName);
 	}
 
 	@Override

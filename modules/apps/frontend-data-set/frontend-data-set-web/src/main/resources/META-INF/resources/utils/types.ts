@@ -34,7 +34,6 @@ export declare function FrontendDataSet({
 	nestedItemsReferenceKey,
 	onActionDropdownItemClick,
 	onBulkActionItemClick,
-	onSelect,
 	overrideEmptyResultView,
 	pagination,
 	portletId,
@@ -77,11 +76,6 @@ export interface IEmptyStateConfiguration extends IEmptyState {
 		search?: IEmptyState;
 		searchAndFilters?: IEmptyState;
 	};
-}
-
-export enum ESelectionTrigger {
-	CONTAINER = 'container',
-	INPUT = 'input',
 }
 
 export interface IInlineEditingSettings {
@@ -127,6 +121,7 @@ export interface ICreationActionItem {
 }
 
 export interface IItemsActions {
+	className?: string;
 	data?: IItemActionsData;
 	disabled?: boolean;
 	href?: string;
@@ -313,7 +308,6 @@ export interface IFrontendDataSetProps {
 	nestedItemsReferenceKey?: string;
 	onActionDropdownItemClick?: any;
 	onBulkActionItemClick?: any;
-	onSelect?: ({selectedItems}: {selectedItems: Array<any>}) => void;
 	onSelectedItemsChange?: (selectedItems: Array<any>) => void;
 	overrideEmptyResultView?: boolean;
 	pagination?: {
@@ -328,6 +322,7 @@ export interface IFrontendDataSetProps {
 	showBulkActionsManagementBar?: boolean;
 	showBulkActionsManagementBarActions?: boolean;
 	showManagementBar?: boolean;
+	showNavBarWhenSelected?: boolean;
 	showPagination?: boolean;
 	showSearch?: boolean;
 	showSelectAll?: boolean;

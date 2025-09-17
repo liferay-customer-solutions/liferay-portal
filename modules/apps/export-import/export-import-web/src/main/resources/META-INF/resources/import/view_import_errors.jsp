@@ -21,8 +21,6 @@ BackgroundTask backgroundTask = BackgroundTaskManagerUtil.fetchBackgroundTask(ba
 renderResponse.setTitle(backgroundTask.getName());
 
 GroupDisplayContextHelper groupDisplayContextHelper = new GroupDisplayContextHelper(request);
-
-ImportErrorsDisplayContext importErrorsDisplayContext = new ImportErrorsDisplayContext(request, renderResponse);
 %>
 
 <clay:navigation-bar
@@ -35,12 +33,6 @@ ImportErrorsDisplayContext importErrorsDisplayContext = new ImportErrorsDisplayC
 						navigationItem.setHref(currentURL);
 						navigationItem.setLabel(LanguageUtil.get(httpServletRequest, "errors-report"));
 					});
-
-				add(
-					navigationItem -> {
-						navigationItem.setHref(importErrorsDisplayContext.getImportErrorDetailsURL());
-						navigationItem.setLabel("Link to mocked detailed view of an error");
-					});
 			}
 		}
 	%>'
@@ -48,7 +40,7 @@ ImportErrorsDisplayContext importErrorsDisplayContext = new ImportErrorsDisplayC
 
 <aui:form method="post" name="fm">
 	<frontend-data-set:headless-display
-		apiURL="<%= importErrorsDisplayContext.getAPIURL() %>"
+		apiURL="<%= importErrorsDisplayContext.getAPIURL(String.valueOf(backgroundTaskId)) %>"
 		fdsActionDropdownItems="<%= importErrorsDisplayContext.getFDSActionDropdownItems() %>"
 		id="<%= stagingGroupHelper.isCompanyGroup(groupDisplayContextHelper.getGroup()) ? ExportImportFDSNames.COMPANY_IMPORT_ERRORS : ExportImportFDSNames.IMPORT_ERRORS %>"
 		style="fluid"

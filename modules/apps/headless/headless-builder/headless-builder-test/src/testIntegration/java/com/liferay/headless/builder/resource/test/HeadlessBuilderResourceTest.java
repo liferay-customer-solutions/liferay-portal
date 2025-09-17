@@ -37,10 +37,9 @@ import com.liferay.object.model.ObjectEntry;
 import com.liferay.object.model.ObjectField;
 import com.liferay.object.model.ObjectFieldSetting;
 import com.liferay.object.model.ObjectRelationship;
+import com.liferay.object.rest.test.util.ObjectEntryTestUtil;
 import com.liferay.object.rest.test.util.ObjectFieldTestUtil;
 import com.liferay.object.rest.test.util.ObjectRelationshipTestUtil;
-import com.liferay.object.scope.ObjectScopeProvider;
-import com.liferay.object.scope.ObjectScopeProviderRegistry;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.object.service.ObjectFieldLocalService;
@@ -84,6 +83,7 @@ import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.portal.test.rule.FeatureFlag;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
 
@@ -118,7 +118,9 @@ public class HeadlessBuilderResourceTest extends BaseTestCase {
 	@ClassRule
 	@Rule
 	public static final AggregateTestRule aggregateTestRule =
-		new LiferayIntegrationTestRule();
+		new AggregateTestRule(
+			new LiferayIntegrationTestRule(),
+			PermissionCheckerMethodTestRule.INSTANCE);
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -2330,24 +2332,25 @@ public class HeadlessBuilderResourceTest extends BaseTestCase {
 
 		_publishAPIApplication(_API_APPLICATION_ERC_1);
 
-		JSONObject jsonObject1 = HTTPTestUtil.invokeToJSONObject(
-			JSONUtil.put(
-				"externalReferenceCode", RandomTestUtil.randomString()
-			).toString(),
-			_getEndpoint(_objectDefinition1, 0), Http.Method.POST);
+		ObjectEntry objectEntry = ObjectEntryTestUtil.addObjectEntry(
+			_objectDefinition1, "externalReferenceCode",
+			RandomTestUtil.randomString());
 
-		JSONObject jsonObject2 = HTTPTestUtil.invokeToJSONObject(
+		JSONObject jsonObject = HTTPTestUtil.invokeToJSONObject(
 			null, "c/" + _BASE_URL_1 + _API_APPLICATION_PATH_1,
 			Http.Method.GET);
 
-		JSONArray itemsJSONArray = jsonObject2.getJSONArray("items");
+		JSONArray itemsJSONArray = jsonObject.getJSONArray("items");
 
-		jsonObject2 = itemsJSONArray.getJSONObject(0);
-
-		Assert.assertEquals(jsonObject1.getInt("id"), jsonObject2.getInt("id"));
+		jsonObject = itemsJSONArray.getJSONObject(0);
 
 		Assert.assertEquals(
-			jsonObject1.getString("creator"), jsonObject2.getString("creator"));
+			objectEntry.getObjectEntryId(), jsonObject.getInt("id"));
+
+		JSONObject creatorJSONObject = jsonObject.getJSONObject("creator");
+
+		Assert.assertEquals(
+			objectEntry.getUserName(), creatorJSONObject.getString("name"));
 	}
 
 	@Test
@@ -3442,8 +3445,9 @@ public class HeadlessBuilderResourceTest extends BaseTestCase {
 
 		Document document = _addRandomDocument();
 
-		JSONObject jsonObject = HTTPTestUtil.invokeToJSONObject(
-			JSONUtil.put(
+		return ObjectEntryTestUtil.addObjectEntry(
+			groupId, objectDefinition,
+			HashMapBuilder.<String, Serializable>put(
 				"attachmentField", document.getId()
 			).put(
 				"booleanField", RandomTestUtil.randomBoolean()
@@ -3465,7 +3469,7 @@ public class HeadlessBuilderResourceTest extends BaseTestCase {
 				"longTextField", RandomTestUtil.randomString()
 			).put(
 				"multiselectPicklistField",
-				TransformUtil.transform(
+				(Serializable)TransformUtil.transform(
 					multiselectPicklistFieldValue, ListTypeValue::name)
 			).put(
 				"picklistField", listTypeValue.name()
@@ -3477,10 +3481,7 @@ public class HeadlessBuilderResourceTest extends BaseTestCase {
 				"textField", textFieldValue
 			).put(
 				"textUniqueField", textUniqueFieldValue
-			).toString(),
-			_getEndpoint(objectDefinition, groupId), Http.Method.POST);
-
-		return _objectEntryLocalService.getObjectEntry(jsonObject.getInt("id"));
+			).build());
 	}
 
 	private ObjectDefinition _addObjectDefinition(int index, String scope)
@@ -3855,21 +3856,6 @@ public class HeadlessBuilderResourceTest extends BaseTestCase {
 			Http.Method.PATCH);
 	}
 
-	private String _getEndpoint(
-		ObjectDefinition objectDefinition, Object scopeKey) {
-
-		ObjectScopeProvider objectScopeProvider =
-			_objectScopeProviderRegistry.getObjectScopeProvider(
-				objectDefinition.getScope());
-
-		if (objectScopeProvider.isGroupAware()) {
-			return StringBundler.concat(
-				objectDefinition.getRESTContextPath(), "/scopes/", scopeKey);
-		}
-
-		return objectDefinition.getRESTContextPath();
-	}
-
 	private void _publishAPIApplication(
 			String apiApplicationExternalReferenceCode)
 		throws Exception {
@@ -4104,9 +4090,6 @@ public class HeadlessBuilderResourceTest extends BaseTestCase {
 
 	private ObjectRelationship _objectRelationship1;
 	private ObjectRelationship _objectRelationship2;
-
-	@Inject
-	private ObjectScopeProviderRegistry _objectScopeProviderRegistry;
 
 	@Inject
 	private ResourcePermissionLocalService _resourcePermissionLocalService;

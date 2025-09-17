@@ -7,16 +7,25 @@ package com.liferay.object.internal.system.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.object.model.ObjectField;
-import com.liferay.object.system.SystemObjectDefinitionManager;
-import com.liferay.object.system.SystemObjectDefinitionManagerRegistry;
+import com.liferay.object.test.util.BaseSystemObjectDefinitionManagerTestCase;
+import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Address;
+import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.test.AssertUtils;
+import com.liferay.portal.kernel.test.TestInfo;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
+import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.test.rule.Inject;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.util.List;
 import java.util.Objects;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -28,7 +37,8 @@ import org.junit.runner.RunWith;
  * @author Matyas Wollner
  */
 @RunWith(Arquillian.class)
-public class AddressSystemObjectDefinitionManagerTest {
+public class AddressSystemObjectDefinitionManagerTest
+	extends BaseSystemObjectDefinitionManagerTestCase {
 
 	@ClassRule
 	@Rule
@@ -36,16 +46,21 @@ public class AddressSystemObjectDefinitionManagerTest {
 		new LiferayIntegrationTestRule();
 
 	@Before
+	@Override
 	public void setUp() throws Exception {
-		_systemObjectDefinitionManager =
-			_systemObjectDefinitionManagerRegistry.
-				getSystemObjectDefinitionManager("Address");
+		super.setUp();
+	}
+
+	@After
+	@Override
+	public void tearDown() throws Exception {
+		super.tearDown();
 	}
 
 	@Test
 	public void testGetObjectFields() throws Exception {
 		List<ObjectField> objectFields =
-			_systemObjectDefinitionManager.getObjectFields();
+			systemObjectDefinitionManager.getObjectFields();
 
 		Assert.assertEquals(objectFields.toString(), 12, objectFields.size());
 
@@ -109,10 +124,52 @@ public class AddressSystemObjectDefinitionManagerTest {
 			).isEmpty());
 	}
 
-	private SystemObjectDefinitionManager _systemObjectDefinitionManager;
+	@Override
+	@Test
+	@TestInfo("LPD-63933")
+	public void testGetOrAddEmptyBaseModel() throws Exception {
+		super.testGetOrAddEmptyBaseModel();
+	}
 
-	@Inject
-	private SystemObjectDefinitionManagerRegistry
-		_systemObjectDefinitionManagerRegistry;
+	@Override
+	protected void assertGetOrAddEmptyBaseModelWithoutPermissions(
+			BaseModel<?> baseModel, User user)
+		throws PortalException {
+
+		User adminUser = TestPropsValues.getUser();
+
+		AssertUtils.assertFailure(
+			PortalException.class,
+			StringBundler.concat(
+				"User ", user.getUserId(), " must have UPDATE permission for ",
+				User.class.getName(), " ", adminUser.getUserId()),
+			() -> systemObjectDefinitionManager.getOrAddEmptyBaseModel(
+				RandomTestUtil.randomString(), adminUser));
+
+		Address address = (Address)baseModel;
+
+		AssertUtils.assertFailure(
+			PortalException.class,
+			StringBundler.concat(
+				"User ", user.getUserId(), " must have VIEW permission for ",
+				User.class.getName(), " ", adminUser.getUserId()),
+			() -> systemObjectDefinitionManager.getOrAddEmptyBaseModel(
+				address.getExternalReferenceCode(), adminUser));
+	}
+
+	@Override
+	protected void assertGetOrAddEmptyBaseModelWithPermissions(
+		BaseModel<?> baseModel) {
+
+		Address address = (Address)baseModel;
+
+		Assert.assertEquals(
+			WorkflowConstants.STATUS_EMPTY, address.getStatus());
+	}
+
+	@Override
+	protected String getSystemObjectDefinitionName() {
+		return "Address";
+	}
 
 }

@@ -7,6 +7,7 @@ package com.liferay.object.rest.internal.manager.v1_0;
 
 import com.liferay.account.exception.NoSuchGroupException;
 import com.liferay.depot.constants.DepotConstants;
+import com.liferay.depot.model.DepotEntry;
 import com.liferay.depot.model.DepotEntryModel;
 import com.liferay.depot.service.DepotEntryLocalService;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
@@ -58,7 +59,7 @@ import com.liferay.object.scope.ObjectScopeProvider;
 import com.liferay.object.scope.ObjectScopeProviderRegistry;
 import com.liferay.object.service.ObjectActionLocalService;
 import com.liferay.object.service.ObjectDefinitionLocalService;
-import com.liferay.object.service.ObjectEntryFolderLocalService;
+import com.liferay.object.service.ObjectEntryFolderService;
 import com.liferay.object.service.ObjectEntryService;
 import com.liferay.object.service.ObjectEntryVersionLocalService;
 import com.liferay.object.service.ObjectEntryVersionService;
@@ -76,6 +77,7 @@ import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -144,6 +146,7 @@ import com.liferay.roles.admin.role.type.contributor.provider.RoleTypeContributo
 import com.liferay.sharing.configuration.SharingConfiguration;
 import com.liferay.sharing.configuration.SharingConfigurationFactory;
 import com.liferay.subscription.service.SubscriptionLocalService;
+import com.liferay.trash.TrashHelper;
 
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.core.MultivaluedMap;
@@ -319,19 +322,6 @@ public class DefaultObjectEntryManagerImpl
 
 	@Override
 	public void deleteObjectEntry(
-			DTOConverterContext dtoConverterContext,
-			ObjectDefinition objectDefinition, long objectEntryId)
-		throws Exception {
-
-		com.liferay.object.model.ObjectEntry serviceBuilderObjectEntry =
-			_objectEntryService.getObjectEntry(objectEntryId);
-
-		_deleteObjectEntry(
-			dtoConverterContext, objectDefinition, serviceBuilderObjectEntry);
-	}
-
-	@Override
-	public void deleteObjectEntry(
 			long companyId, DTOConverterContext dtoConverterContext,
 			String externalReferenceCode, ObjectDefinition objectDefinition,
 			String scopeKey)
@@ -342,8 +332,18 @@ public class DefaultObjectEntryManagerImpl
 				externalReferenceCode, getGroupId(objectDefinition, scopeKey),
 				objectDefinition.getObjectDefinitionId());
 
-		_deleteObjectEntry(
-			dtoConverterContext, objectDefinition, serviceBuilderObjectEntry);
+		_deleteObjectEntry(objectDefinition, serviceBuilderObjectEntry);
+	}
+
+	@Override
+	public void deleteObjectEntry(
+			ObjectDefinition objectDefinition, long objectEntryId)
+		throws Exception {
+
+		com.liferay.object.model.ObjectEntry serviceBuilderObjectEntry =
+			_objectEntryService.getObjectEntry(objectEntryId);
+
+		_deleteObjectEntry(objectDefinition, serviceBuilderObjectEntry);
 	}
 
 	@Override
@@ -480,11 +480,11 @@ public class DefaultObjectEntryManagerImpl
 
 		com.liferay.object.model.ObjectEntry serviceBuilderObjectEntry =
 			_objectEntryService.expireObjectEntry(
-				dtoConverterContext.getUserId(), objectEntryId,
+				objectEntryId,
 				ServiceContextUtil.createServiceContext(objectEntryId));
 
 		_objectEntryVersionService.expireObjectEntryVersions(
-			dtoConverterContext.getUserId(), serviceBuilderObjectEntry,
+			serviceBuilderObjectEntry,
 			ServiceContextUtil.createServiceContext(objectEntryId));
 
 		return _objectEntryDTOConverter.toDTO(
@@ -1127,7 +1127,7 @@ public class DefaultObjectEntryManagerImpl
 		return _toObjectEntry(
 			dtoConverterContext, objectDefinition,
 			_objectEntryService.restoreObjectEntryFromTrash(
-				dtoConverterContext.getUserId(), serviceBuilderObjectEntry,
+				serviceBuilderObjectEntry,
 				ServiceContextUtil.createServiceContext(
 					serviceBuilderObjectEntry.getObjectEntryId())));
 	}
@@ -1163,7 +1163,7 @@ public class DefaultObjectEntryManagerImpl
 	@Override
 	public void subscribeObjectEntry(
 			String externalReferenceCode, ObjectDefinition objectDefinition,
-			String scopeKey, long userId)
+			String scopeKey)
 		throws Exception {
 
 		com.liferay.object.model.ObjectEntry serviceBuilderObjectEntry =
@@ -1172,14 +1172,14 @@ public class DefaultObjectEntryManagerImpl
 				objectDefinition.getObjectDefinitionId());
 
 		_objectEntryService.subscribeObjectEntry(
-			userId, getGroupId(objectDefinition, scopeKey),
+			getGroupId(objectDefinition, scopeKey),
 			serviceBuilderObjectEntry.getObjectEntryId());
 	}
 
 	@Override
 	public void unsubscribeObjectEntry(
 			String externalReferenceCode, ObjectDefinition objectDefinition,
-			String scopeKey, long userId)
+			String scopeKey)
 		throws Exception {
 
 		com.liferay.object.model.ObjectEntry serviceBuilderObjectEntry =
@@ -1188,7 +1188,7 @@ public class DefaultObjectEntryManagerImpl
 				objectDefinition.getObjectDefinitionId());
 
 		_objectEntryService.unsubscribeObjectEntry(
-			userId, serviceBuilderObjectEntry.getObjectEntryId());
+			serviceBuilderObjectEntry.getObjectEntryId());
 	}
 
 	@Override
@@ -1224,8 +1224,9 @@ public class DefaultObjectEntryManagerImpl
 			_objectEntryService.addOrUpdateObjectEntry(
 				externalReferenceCode, groupId,
 				objectDefinition.getObjectDefinitionId(),
-				ObjectEntryFolderConstants.
-					PARENT_OBJECT_ENTRY_FOLDER_ID_DEFAULT,
+				_getObjectEntryFolderId(
+					objectDefinition.getCompanyId(), groupId, objectEntry,
+					serviceContext),
 				_toObjectValues(
 					0L, dtoConverterContext.getLocale(), objectDefinition,
 					objectEntry, scopeKey, serviceContext),
@@ -1451,12 +1452,34 @@ public class DefaultObjectEntryManagerImpl
 					Map<String, Object> nestedObjectEntry =
 						(Map<String, Object>)item;
 
-					long nestedObjectEntryId =
-						systemObjectDefinitionManager.upsertBaseModel(
-							String.valueOf(
-								nestedObjectEntry.get("externalReferenceCode")),
-							relatedObjectDefinition.getCompanyId(),
-							dtoConverterContext.getUser(), nestedObjectEntry);
+					long nestedObjectEntryId = 0;
+
+					try {
+						nestedObjectEntryId =
+							systemObjectDefinitionManager.upsertBaseModel(
+								String.valueOf(
+									nestedObjectEntry.get(
+										"externalReferenceCode")),
+								relatedObjectDefinition.getCompanyId(),
+								dtoConverterContext.getUser(),
+								nestedObjectEntry);
+					}
+					catch (PortalException portalException) {
+						if (!LazyReferencingThreadLocal.isEnabled()) {
+							throw portalException;
+						}
+
+						BaseModel<?> baseModel =
+							systemObjectDefinitionManager.
+								getOrAddEmptyBaseModel(
+									String.valueOf(
+										nestedObjectEntry.get(
+											"externalReferenceCode")),
+									dtoConverterContext.getUser());
+
+						nestedObjectEntryId =
+							(long)baseModel.getPrimaryKeyObj();
+					}
 
 					_relateNestedObjectEntry(
 						objectDefinition, objectRelationship,
@@ -1509,7 +1532,7 @@ public class DefaultObjectEntryManagerImpl
 							dtoConverterContext, relatedObjectDefinition,
 							_objectEntryService.getOrAddEmptyObjectEntry(
 								nestedObjectEntry.getExternalReferenceCode(),
-								groupId, dtoConverterContext.getUserId(),
+								groupId,
 								relatedObjectDefinition.
 									getObjectDefinitionId()));
 					}
@@ -1750,7 +1773,6 @@ public class DefaultObjectEntryManagerImpl
 	}
 
 	private void _deleteObjectEntry(
-			DTOConverterContext dtoConverterContext,
 			ObjectDefinition objectDefinition,
 			com.liferay.object.model.ObjectEntry serviceBuilderObjectEntry)
 		throws Exception {
@@ -1759,20 +1781,25 @@ public class DefaultObjectEntryManagerImpl
 			objectDefinition, serviceBuilderObjectEntry);
 		_checkRootDescendantNode(serviceBuilderObjectEntry, false);
 
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-53981") ||
-			(serviceBuilderObjectEntry.getStatus() ==
-				WorkflowConstants.STATUS_IN_TRASH)) {
+		DepotEntry depotEntry = _depotEntryLocalService.fetchGroupDepotEntry(
+			serviceBuilderObjectEntry.getGroupId());
 
+		if ((depotEntry != null) &&
+			_trashHelper.isTrashEnabled(
+				serviceBuilderObjectEntry.getGroupId()) &&
+			(serviceBuilderObjectEntry.getStatus() !=
+				WorkflowConstants.STATUS_IN_TRASH) &&
+			FeatureFlagManagerUtil.isEnabled("LPD-53981")) {
+
+			_objectEntryService.moveObjectEntryToTrash(
+				serviceBuilderObjectEntry,
+				ServiceContextUtil.createServiceContext(
+					serviceBuilderObjectEntry.getObjectEntryId()));
+		}
+		else {
 			_objectEntryService.deleteObjectEntry(
 				serviceBuilderObjectEntry.getObjectEntryId());
-
-			return;
 		}
-
-		_objectEntryService.moveObjectEntryToTrash(
-			dtoConverterContext.getUserId(), serviceBuilderObjectEntry,
-			ServiceContextUtil.createServiceContext(
-				serviceBuilderObjectEntry.getObjectEntryId()));
 	}
 
 	private void _deleteRelateObjectEntry(
@@ -1910,7 +1937,6 @@ public class DefaultObjectEntryManagerImpl
 
 		if (serviceBuilderObjectEntry.getVersion() == version) {
 			_objectEntryService.expireObjectEntry(
-				dtoConverterContext.getUserId(),
 				serviceBuilderObjectEntry.getObjectEntryId(),
 				ServiceContextUtil.createServiceContext(
 					serviceBuilderObjectEntry.getObjectEntryId()));
@@ -1920,7 +1946,7 @@ public class DefaultObjectEntryManagerImpl
 			serviceBuilderObjectEntry,
 			ServiceContextUtil.createServiceContext(
 				serviceBuilderObjectEntry.getObjectEntryId()),
-			dtoConverterContext.getUserId(), version);
+			version);
 
 		ObjectEntryVersion objectEntryVersion =
 			_objectEntryVersionService.getObjectEntryVersion(
@@ -2139,15 +2165,14 @@ public class DefaultObjectEntryManagerImpl
 			objectEntry.getObjectEntryFolderExternalReferenceCode();
 
 		if (Validator.isNull(objectEntryFolderExternalReferenceCode)) {
-			return ObjectEntryFolderConstants.
-				PARENT_OBJECT_ENTRY_FOLDER_ID_DEFAULT;
+			return GetterUtil.getLong(objectEntry.getObjectEntryFolderId());
 		}
 
 		try {
 			ObjectEntryFolder objectEntryFolder =
-				_objectEntryFolderLocalService.getOrAddEmptyObjectEntryFolder(
+				_objectEntryFolderService.getOrAddEmptyObjectEntryFolder(
 					objectEntryFolderExternalReferenceCode, groupId, companyId,
-					serviceContext.getGuestOrUserId(), serviceContext);
+					serviceContext);
 
 			return objectEntryFolder.getObjectEntryFolderId();
 		}
@@ -2626,9 +2651,7 @@ public class DefaultObjectEntryManagerImpl
 		if (fileEntry.getFileBase64() != null) {
 			fileContent = _decode(fileEntry.getFileBase64());
 		}
-		else if ((fileEntry.getFileURL() != null) &&
-				 FeatureFlagManagerUtil.isEnabled("LPD-39967")) {
-
+		else if (fileEntry.getFileURL() != null) {
 			try {
 				URL url = _exportImportAttachmentManager.getURL(
 					fileEntry.getFileURL());
@@ -3258,11 +3281,21 @@ public class DefaultObjectEntryManagerImpl
 		if (partialUpdate) {
 			serviceBuilderObjectEntry =
 				_objectEntryService.partialUpdateObjectEntry(
-					objectEntryId, values, serviceContext);
+					objectEntryId,
+					_getObjectEntryFolderId(
+						serviceBuilderObjectEntry.getCompanyId(),
+						serviceBuilderObjectEntry.getGroupId(), objectEntry,
+						serviceContext),
+					values, serviceContext);
 		}
 		else {
 			serviceBuilderObjectEntry = _objectEntryService.updateObjectEntry(
-				objectEntryId, values, serviceContext);
+				objectEntryId,
+				_getObjectEntryFolderId(
+					serviceBuilderObjectEntry.getCompanyId(),
+					serviceBuilderObjectEntry.getGroupId(), objectEntry,
+					serviceContext),
+				values, serviceContext);
 		}
 
 		return _toObjectEntry(
@@ -3363,7 +3396,7 @@ public class DefaultObjectEntryManagerImpl
 		_objectEntryDTOConverter;
 
 	@Reference
-	private ObjectEntryFolderLocalService _objectEntryFolderLocalService;
+	private ObjectEntryFolderService _objectEntryFolderService;
 
 	@Reference
 	private ObjectEntryManagerRegistry _objectEntryManagerRegistry;
@@ -3433,6 +3466,9 @@ public class DefaultObjectEntryManagerImpl
 	@Reference
 	private SystemObjectDefinitionManagerRegistry
 		_systemObjectDefinitionManagerRegistry;
+
+	@Reference
+	private TrashHelper _trashHelper;
 
 	@Reference
 	private UserLocalService _userLocalService;

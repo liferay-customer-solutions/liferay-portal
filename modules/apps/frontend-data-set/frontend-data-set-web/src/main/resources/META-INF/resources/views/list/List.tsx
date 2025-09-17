@@ -19,7 +19,6 @@ import FDSDndProvider from '../../dnd/FDSDndProvider';
 import useFDSDrop from '../../dnd/useFDSDrop';
 import {getLocalizedValue} from '../../utils/getLocalizedValue';
 import {
-	ESelectionTrigger,
 	IHeader,
 	IListSchema,
 	IListTitleRenderer,
@@ -72,7 +71,6 @@ const ListItem = forwardRef<HTMLLIElement, any>(
 	) => {
 		const {
 			itemsActions,
-			onSelect,
 			selectable,
 			selectedItemsKey,
 			selectedItemsValue,
@@ -121,12 +119,7 @@ const ListItem = forwardRef<HTMLLIElement, any>(
 									: false
 							}
 							onChange={() => {
-								onItemSelectionChange({
-									item,
-									trigger: ESelectionTrigger.INPUT,
-								});
-
-								onSelect?.({selectedItems: [item]});
+								onItemSelectionChange(item);
 							}}
 							value={itemId}
 						/>
@@ -158,12 +151,7 @@ const ListItem = forwardRef<HTMLLIElement, any>(
 					expand
 					onClick={() => {
 						if (selectable) {
-							onItemSelectionChange({
-								item,
-								trigger: ESelectionTrigger.CONTAINER,
-							});
-
-							onSelect?.({selectedItems: [item]});
+							onItemSelectionChange(item, true);
 						}
 					}}
 				>

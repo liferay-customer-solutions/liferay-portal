@@ -71,7 +71,7 @@ public interface ObjectEntryService extends BaseService {
 		throws PortalException;
 
 	public ObjectEntry expireObjectEntry(
-			long userId, long objectEntryId, ServiceContext serviceContext)
+			long objectEntryId, ServiceContext serviceContext)
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -129,8 +129,7 @@ public interface ObjectEntryService extends BaseService {
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ObjectEntry getOrAddEmptyObjectEntry(
-			String externalReferenceCode, long groupId, long userId,
-			long objectDefinitionId)
+			String externalReferenceCode, long groupId, long objectDefinitionId)
 		throws PortalException;
 
 	/**
@@ -161,28 +160,27 @@ public interface ObjectEntryService extends BaseService {
 		throws PortalException;
 
 	public ObjectEntry moveObjectEntryToTrash(
-			long userId, ObjectEntry objectEntry, ServiceContext serviceContext)
+			ObjectEntry objectEntry, ServiceContext serviceContext)
 		throws PortalException;
 
 	public ObjectEntry partialUpdateObjectEntry(
-			long objectEntryId, Map<String, Serializable> values,
-			ServiceContext serviceContext)
+			long objectEntryId, long objectEntryFolderId,
+			Map<String, Serializable> values, ServiceContext serviceContext)
 		throws PortalException;
 
 	public ObjectEntry restoreObjectEntryFromTrash(
-			long userId, ObjectEntry objectEntry, ServiceContext serviceContext)
+			ObjectEntry objectEntry, ServiceContext serviceContext)
 		throws PortalException;
 
-	public void subscribeObjectEntry(
-			long userId, long groupId, long objectEntryId)
+	public void subscribeObjectEntry(long groupId, long objectEntryId)
 		throws PortalException;
 
-	public void unsubscribeObjectEntry(long userId, long objectEntryId)
+	public void unsubscribeObjectEntry(long objectEntryId)
 		throws PortalException;
 
 	public ObjectEntry updateObjectEntry(
-			long objectEntryId, Map<String, Serializable> values,
-			ServiceContext serviceContext)
+			long objectEntryId, long objectEntryFolderId,
+			Map<String, Serializable> values, ServiceContext serviceContext)
 		throws PortalException;
 
 	public void validate(

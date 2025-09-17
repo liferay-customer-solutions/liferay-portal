@@ -196,6 +196,18 @@ export class FDSSamplePage {
 		await waitForFDS({page, visualizationMode});
 	}
 
+	async checkDropdownMenuIconsAreVisible(itemActionButton: Locator) {
+		const dropdownMenu = await this.getDropdownId(itemActionButton);
+
+		const menuItems = dropdownMenu.getByRole('menuitem');
+
+		for (const menuItem of await menuItems.all()) {
+			await expect.soft(menuItem.locator('.lexicon-icon')).toBeVisible();
+		}
+
+		await this.page.keyboard.press('Escape');
+	}
+
 	async clickItemAction(action: string, item: number = 0) {
 		const dropdownId = await this.itemActionsButtons
 			.nth(item)
@@ -217,7 +229,7 @@ export class FDSSamplePage {
 			.click();
 	}
 
-	async checkDropdownMenuIconsAreVisible(itemActionButton: Locator) {
+	async getDropdownId(itemActionButton: Locator) {
 		await itemActionButton.click();
 
 		const dropdownId = await itemActionButton.getAttribute('aria-controls');
@@ -226,13 +238,7 @@ export class FDSSamplePage {
 
 		await dropdownMenu.filter({has: this.page.getByRole('menu')}).waitFor();
 
-		const menuItems = dropdownMenu.getByRole('menuitem');
-
-		for (const menuItem of await menuItems.all()) {
-			await expect.soft(menuItem.locator('.lexicon-icon')).toBeVisible();
-		}
-
-		await this.page.keyboard.press('Escape');
+		return dropdownMenu;
 	}
 
 	selectItemActionsByRow(text: string) {

@@ -15,6 +15,7 @@ import React, {useState} from 'react';
 
 import {
 	assetLibraryViews,
+	cmsFileViews,
 	documentViews,
 	userViews,
 } from './utils/defaultViews';
@@ -49,6 +50,11 @@ type Document = {
 	encodingFormat: string;
 	fileName: string;
 	id: string;
+	title: string;
+};
+
+type CMSFile = {
+	id: number;
 	title: string;
 };
 
@@ -92,7 +98,7 @@ const documentsItemSelectorConfig = {
 		label: 'fileName',
 		value: 'id',
 	},
-	type: Liferay.Language.get('document'),
+	type: Liferay.Language.get('documents'),
 	views: documentViews,
 };
 
@@ -107,6 +113,21 @@ const userAccountsItemSelectorConfig = {
 	views: userViews,
 };
 
+const cmsFileItemSelectorConfig = {
+	apiURL: `${location.origin}/o/search/v1.0/search?${[
+		'emptySearch=true',
+		'nestedFields=embedded,file.thumbnailURL',
+		"filter=(cmsKind eq 'object') and (cmsSection eq 'files') and (status in (0, 2, 3))",
+	].join('&')}`,
+	locator: {
+		id: 'embedded.id',
+		label: 'embedded.title',
+		value: 'embedded.id',
+	},
+	type: Liferay.Language.get('file'),
+	views: cmsFileViews,
+};
+
 function getRandomId(): string {
 	return Math.random().toString(36).substring(2, 9);
 }
@@ -115,14 +136,20 @@ export default function ItemSelectorSamples() {
 	const [documents, setDocuments] = useState<Document[]>([]);
 	const [space, setSpace] = useState<Space>();
 
-	const [space2, setSpace2] = useState<Space | null>();
-	const [document, setDocument] = useState<Document | null>();
-	const [user, setUser] = useState<User | null>();
+	const [documentsItemSelectorModal, setDocumentsItemSelectorModal] =
+		useState<Document[]>([]);
+	const [spacesItemSelectorModal, setSpacesItemSelectorModal] = useState<
+		Space[]
+	>([]);
+	const [usersItemSelectorModal, setUsersItemSelectorModal] = useState<
+		User[]
+	>([]);
+	const [cmsFile, setCMSFile] = useState<CMSFile | null>(null);
 
 	const {
-		observer: fileItemSelectorObserver,
-		onOpenChange: fileItemSelectorOpenChange,
-		open: fileItemSelectorOpen,
+		observer: documentItemSelectorObserver,
+		onOpenChange: documentItemSelectorOpenChange,
+		open: documentItemSelectorOpen,
 	} = useModal();
 	const {
 		observer: spaceItemSelectorObserver,
@@ -133,6 +160,11 @@ export default function ItemSelectorSamples() {
 		observer: userItemSelectorObserver,
 		onOpenChange: userItemSelectorOpenChange,
 		open: userItemSelectorOpen,
+	} = useModal();
+	const {
+		observer: cmsFileItemSelectorObserver,
+		onOpenChange: cmsFileItemSelectorOpenChange,
+		open: cmsFileItemSelectorOpen,
 	} = useModal();
 
 	return (
@@ -315,14 +347,15 @@ export default function ItemSelectorSamples() {
 									EItemSelectorModalViewsConfig.DOCUMENTS,
 							}),
 						},
-						items: document ? [document] : [],
+						items: documentsItemSelectorModal,
 						locator: documentsItemSelectorConfig.locator,
-						observer: fileItemSelectorObserver,
+						multiSelect: true,
+						observer: documentItemSelectorObserver,
 						onItemsChange: (items: Document[]) => {
-							setDocument(items[0]);
+							setDocumentsItemSelectorModal(items);
 						},
-						onOpenChange: fileItemSelectorOpenChange,
-						open: fileItemSelectorOpen,
+						onOpenChange: documentItemSelectorOpenChange,
+						open: documentItemSelectorOpen,
 						type: documentsItemSelectorConfig.type,
 					}}
 				/>
@@ -338,11 +371,11 @@ export default function ItemSelectorSamples() {
 									EItemSelectorModalViewsConfig.ASSET_LIBRARIES,
 							}),
 						},
-						items: space2 ? [space2] : [],
+						items: spacesItemSelectorModal,
 						locator: assetLibrariesItemSelectorConfig.locator,
 						observer: spaceItemSelectorObserver,
 						onItemsChange: (items: Space[]) => {
-							setSpace2(items[0]);
+							setSpacesItemSelectorModal(items);
 						},
 						onOpenChange: spaceItemSelectorOpenChange,
 						open: spaceItemSelectorOpen,
@@ -361,11 +394,11 @@ export default function ItemSelectorSamples() {
 									EItemSelectorModalViewsConfig.USER_ACCOUNTS,
 							}),
 						},
-						items: user ? [user] : [],
+						items: usersItemSelectorModal,
 						locator: userAccountsItemSelectorConfig.locator,
 						observer: userItemSelectorObserver,
 						onItemsChange: (items: User[]) => {
-							setUser(items[0]);
+							setUsersItemSelectorModal(items);
 						},
 						onOpenChange: userItemSelectorOpenChange,
 						open: userItemSelectorOpen,
@@ -373,14 +406,50 @@ export default function ItemSelectorSamples() {
 					}}
 				/>
 
+				<ItemSelectorModal<CMSFile>
+					{...{
+						fdsProps: {
+							...FDS_DEFAULT_PROPS,
+							apiURL: cmsFileItemSelectorConfig.apiURL,
+							filters: [
+								{
+									apiURL: '/o/headless-asset-library/v1.0/asset-libraries',
+									entityFieldType: 'collection',
+									id: 'groupIds',
+									itemKey: 'siteId',
+									itemLabel: 'name',
+									label: Liferay.Language.get('space'),
+									multiple: true,
+									type: 'selection',
+								},
+							],
+
+							id: `itemSelectorModal-cms-files-${getRandomId()}`,
+							views: getDefaultItemSelectorModalViews({
+								viewsConfig:
+									EItemSelectorModalViewsConfig.CMS_FILES,
+							}),
+						},
+						items: cmsFile ? [cmsFile] : [],
+						locator: cmsFileItemSelectorConfig.locator,
+						observer: cmsFileItemSelectorObserver,
+						onItemsChange: (items: CMSFile[]) => {
+							setCMSFile(items[0]);
+						},
+						onOpenChange: cmsFileItemSelectorOpenChange,
+						open: cmsFileItemSelectorOpen,
+						type: cmsFileItemSelectorConfig.type,
+					}}
+				/>
+
 				<ClayButton.Group className="mb-3" spaced>
 					<ClayButton
 						displayType="primary"
 						onClick={() => {
-							fileItemSelectorOpenChange(true);
+							documentItemSelectorOpenChange(true);
 						}}
 					>
-						Select Document
+						Select Documents
 					</ClayButton>
 
 					<ClayButton
@@ -400,29 +469,48 @@ export default function ItemSelectorSamples() {
 					>
 						Select User
 					</ClayButton>
+
+					<ClayButton
+						displayType="primary"
+						onClick={() => {
+							cmsFileItemSelectorOpenChange(true);
+						}}
+					>
+						Select CMS File
+					</ClayButton>
 				</ClayButton.Group>
 
-				{space2 && (
+				{!!documentsItemSelectorModal.length &&
+					documentsItemSelectorModal.map((document) => (
+						<ClayAlert
+							displayType="info"
+							key={document.id}
+							symbol="document"
+							title={document.fileName}
+						/>
+					))}
+
+				{!!spacesItemSelectorModal.length && (
 					<ClayAlert
 						displayType="info"
 						symbol="nodes"
-						title={space2.name}
+						title={spacesItemSelectorModal[0].name}
 					/>
 				)}
 
-				{document && (
-					<ClayAlert
-						displayType="info"
-						symbol="document"
-						title={document.fileName}
-					/>
-				)}
-
-				{user && (
+				{!!usersItemSelectorModal.length && (
 					<ClayAlert
 						displayType="info"
 						symbol="user"
-						title={user.name}
+						title={usersItemSelectorModal[0].name}
+					/>
+				)}
+
+				{cmsFile && (
+					<ClayAlert
+						displayType="info"
+						symbol="file-template"
+						title={cmsFile.title}
 					/>
 				)}
 			</SampleContainer>

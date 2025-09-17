@@ -6,6 +6,7 @@
 package com.liferay.portal.osgi.web.http.servlet.internal.context.osgi.util.tracker;
 
 import com.liferay.osgi.util.StringPlus;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -26,8 +27,6 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
-
-import org.eclipse.equinox.http.servlet.internal.util.Const;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -104,8 +103,8 @@ public class ResourceServiceTrackerCustomizer
 			throw new IllegalArgumentException("Prefix is null");
 		}
 
-		if (resourcePrefix.endsWith(Const.SLASH) &&
-			!resourcePrefix.equals(Const.SLASH)) {
+		if (resourcePrefix.endsWith(StringPool.SLASH) &&
+			!resourcePrefix.equals(StringPool.SLASH)) {
 
 			throw new IllegalArgumentException(
 				"Invalid prefix \"" + resourcePrefix + "\"");

@@ -8,6 +8,7 @@ package com.liferay.portal.osgi.web.http.servlet.internal;
 import com.liferay.osgi.service.tracker.collections.EagerServiceTrackerCustomizer;
 import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerList;
 import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerListFactory;
+import com.liferay.osgi.util.StringPlus;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
@@ -18,6 +19,9 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.LiferayContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.LiferayDispatchTargets;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ServletContextHelperDataContext;
+import com.liferay.portal.osgi.web.http.servlet.internal.exception.IllegalContextNameException;
+import com.liferay.portal.osgi.web.http.servlet.internal.exception.IllegalContextPathException;
+import com.liferay.portal.osgi.web.http.servlet.internal.util.Path;
 
 import jakarta.servlet.ServletContext;
 
@@ -30,13 +34,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.eclipse.equinox.http.servlet.internal.error.IllegalContextNameException;
-import org.eclipse.equinox.http.servlet.internal.error.IllegalContextPathException;
-import org.eclipse.equinox.http.servlet.internal.servlet.Match;
-import org.eclipse.equinox.http.servlet.internal.util.Const;
-import org.eclipse.equinox.http.servlet.internal.util.Path;
-import org.eclipse.equinox.http.servlet.internal.util.StringPlus;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -72,8 +69,7 @@ public class HttpServletEndpointController {
 		if (parentServletContextTempDir != null) {
 			parentServletContextTempDir = new File(
 				parentServletContextTempDir,
-				org.eclipse.equinox.http.servlet.internal.
-					HttpServletEndpointController.class.getName() + hashCode());
+				HttpServletEndpointController.class.getName() + hashCode());
 
 			_parentServletContextTempDir = parentServletContextTempDir;
 
@@ -97,7 +93,7 @@ public class HttpServletEndpointController {
 				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME
 			).put(
 				HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH,
-				Const.SLASH
+				StringPool.SLASH
 			).put(
 				HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET,
 				"(http.servlet.endpoint.id=" +
@@ -152,7 +148,7 @@ public class HttpServletEndpointController {
 	}
 
 	public List<String> getHttpServiceEndpoints() {
-		return StringPlus.from(
+		return StringPlus.asList(
 			_attributesMap.get(
 				HttpServiceRuntimeConstants.HTTP_SERVICE_ENDPOINT));
 	}

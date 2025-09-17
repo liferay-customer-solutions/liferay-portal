@@ -10,10 +10,13 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServletEndpointController;
+import com.liferay.portal.osgi.web.http.servlet.internal.Match;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.osgi.util.tracker.EventListenerServiceTrackerCustomizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.osgi.util.tracker.FilterServiceTrackerCustomizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.osgi.util.tracker.ResourceServiceTrackerCustomizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.osgi.util.tracker.ServletServiceTrackerCustomizer;
+import com.liferay.portal.osgi.web.http.servlet.internal.exception.IllegalContextNameException;
+import com.liferay.portal.osgi.web.http.servlet.internal.exception.IllegalContextPathException;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.EndpointRegistration;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.EventListenerRegistration;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.EventListeners;
@@ -21,6 +24,8 @@ import com.liferay.portal.osgi.web.http.servlet.internal.registration.FilterRegi
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.ResourceRegistration;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.ServletRegistration;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.HttpSessionWrapper;
+import com.liferay.portal.osgi.web.http.servlet.internal.util.Path;
+import com.liferay.portal.osgi.web.http.servlet.internal.util.ServicePropertiesUtil;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.Servlet;
@@ -51,13 +56,6 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.eclipse.equinox.http.servlet.internal.error.IllegalContextNameException;
-import org.eclipse.equinox.http.servlet.internal.error.IllegalContextPathException;
-import org.eclipse.equinox.http.servlet.internal.servlet.Match;
-import org.eclipse.equinox.http.servlet.internal.util.Const;
-import org.eclipse.equinox.http.servlet.internal.util.Path;
-import org.eclipse.equinox.http.servlet.internal.util.ServiceProperties;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -92,7 +90,7 @@ public class LiferayContextController {
 		}
 
 		try {
-			new URI(Const.HTTP, Const.LOCALHOST, contextPath, null);
+			new URI("http", "localhost", contextPath, null);
 		}
 		catch (URISyntaxException uriSyntaxException) {
 			IllegalContextPathException illegalContextPathException =
@@ -110,13 +108,13 @@ public class LiferayContextController {
 		_httpServletEndpointController = httpServletEndpointController;
 		_contextName = contextName;
 
-		if (contextPath.equals(Const.SLASH)) {
-			contextPath = Const.BLANK;
+		if (contextPath.equals(StringPool.SLASH)) {
+			contextPath = StringPool.BLANK;
 		}
 
 		_contextPath = contextPath;
 
-		_servletContextInitParams = ServiceProperties.parseInitParams(
+		_servletContextInitParams = ServicePropertiesUtil.parseInitParams(
 			serviceReference,
 			HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_INIT_PARAM_PREFIX,
 			servletContextHelperDataContext.getServletContext());
@@ -456,7 +454,7 @@ public class LiferayContextController {
 			return true;
 		}
 
-		if (!contextSelect.startsWith(Const.OPEN_PAREN)) {
+		if (!contextSelect.startsWith(StringPool.OPEN_PARENTHESIS)) {
 			return false;
 		}
 
@@ -496,7 +494,7 @@ public class LiferayContextController {
 
 		if (match == Match.DEFAULT_SERVLET) {
 			pathInfo = servletPath;
-			servletPath = Const.SLASH;
+			servletPath = StringPool.SLASH;
 		}
 
 		while (true) {

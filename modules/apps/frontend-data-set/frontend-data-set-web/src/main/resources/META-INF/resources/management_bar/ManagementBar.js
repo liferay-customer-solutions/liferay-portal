@@ -25,6 +25,7 @@ function ManagementBar({
 	selectedItemsKey,
 	selectedItemsValue,
 	selectionType,
+	showNavBarWhenSelected = false,
 	showSearch,
 	showSelectAll,
 	total,
@@ -40,20 +41,22 @@ function ManagementBar({
 	);
 
 	function handleCheckboxClick() {
-		const itemKeys = items.map((item) =>
-			getObjectValueFromPath({object: item, path: selectedItemsKey})
-		);
+		if (pageSelectedItemsValue.length) {
+			deselectItems(pageSelectedItemsValue);
 
-		if (pageSelectedItemsValue.length === items.length) {
-			return deselectItems(itemKeys);
+			return;
 		}
 
-		return selectItems(itemKeys);
+		selectItems(
+			items.map((item) =>
+				getObjectValueFromPath({object: item, path: selectedItemsKey})
+			)
+		);
 	}
 
 	return (
 		<>
-			{selectionType === 'multiple' && (
+			{selectionType === 'multiple' && !showNavBarWhenSelected && (
 				<BulkActions
 					bulkActions={bulkActions}
 					deselectItems={deselectItems}
@@ -72,11 +75,14 @@ function ManagementBar({
 				/>
 			)}
 
-			{(!selectedItemsValue.length || selectionType === 'single') && (
+			{(selectionType === 'single' ||
+				!selectedItemsValue.length ||
+				(!!selectedItemsValue.length && showNavBarWhenSelected)) && (
 				<NavBar
 					creationMenu={creationMenu}
 					handleCheckboxClick={handleCheckboxClick}
 					items={items}
+					pageSelectedItemsValue={pageSelectedItemsValue}
 					showSearch={showSearch}
 				/>
 			)}

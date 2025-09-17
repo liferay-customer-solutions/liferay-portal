@@ -1029,6 +1029,10 @@ public class ObjectEntryDTOConverter
 		if (objectField.compareBusinessType(
 				ObjectFieldConstants.BUSINESS_TYPE_ATTACHMENT)) {
 
+			if (serializable instanceof FileEntry) {
+				return serializable;
+			}
+
 			long fileEntryId = 0;
 
 			if (serializable instanceof Long) {
@@ -1103,8 +1107,18 @@ public class ObjectEntryDTOConverter
 				return serializable;
 			}
 
+			String key = null;
+
+			if (serializable instanceof Map) {
+				key = MapUtil.getString(
+					(Map<String, String>)serializable, "key");
+			}
+			else if (serializable instanceof String) {
+				key = (String)serializable;
+			}
+
 			return _getListEntry(
-				dtoConverterContext, (String)serializable,
+				dtoConverterContext, key,
 				objectField.getListTypeDefinitionId());
 		}
 

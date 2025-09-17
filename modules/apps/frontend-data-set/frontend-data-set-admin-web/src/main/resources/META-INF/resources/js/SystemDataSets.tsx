@@ -30,8 +30,7 @@ import openDefaultSuccessToast from './utils/openDefaultSuccessToast';
 import {IDataSet, ISystemDataSet} from './utils/types';
 
 interface IFrontendDataSetContext {
-	onSelect: Function;
-	selectItems: ({trigger, value}: {trigger: string; value: any}) => void;
+	selectItems: ({value}: {value: any}) => void;
 	selectable: boolean;
 	selectedItemsKey: keyof ISystemDataSet;
 	selectedItemsValue: Array<any>;
@@ -40,17 +39,15 @@ interface IFrontendDataSetContext {
 const SystemDataSetsView = ({
 	frontendDataSetContext,
 	items,
+	onItemSelectionChange,
 }: {
 	frontendDataSetContext: any;
 	items: Array<ISystemDataSet>;
+	onItemSelectionChange?: Function;
 }) => {
-	const {
-		onSelect,
-		selectItems,
-		selectable,
-		selectedItemsKey,
-		selectedItemsValue,
-	} = useContext(frontendDataSetContext) as IFrontendDataSetContext;
+	const {selectable, selectedItemsKey, selectedItemsValue} = useContext(
+		frontendDataSetContext
+	) as IFrontendDataSetContext;
 
 	return (
 		<ClayList>
@@ -69,12 +66,7 @@ const SystemDataSetsView = ({
 						key={item.name}
 						onClick={() => {
 							if (selectable) {
-								selectItems({
-									trigger: 'container',
-									value: item[selectedItemsKey],
-								});
-
-								onSelect({selectedItems: [item]});
+								onItemSelectionChange?.(item);
 							}
 						}}
 					>
@@ -193,13 +185,12 @@ const SelectSystemDataSetModalContent = ({
 						{...FDS_DEFAULT_PROPS}
 						apiURL={getSystemDataSetsURL}
 						id="SystemDataSets"
-						onSelect={({
-							selectedItems,
-						}: {
-							selectedItems: Array<ISystemDataSet>;
-						}) => {
+						onSelectedItemsChange={(
+							selectedItems: Array<ISystemDataSet>
+						) => {
 							setSelectedSystemDataSet(selectedItems[0]);
 						}}
+						selectedItems={[selectedSystemDataSet]}
 						selectedItemsKey="name"
 						selectionType="single"
 						views={[

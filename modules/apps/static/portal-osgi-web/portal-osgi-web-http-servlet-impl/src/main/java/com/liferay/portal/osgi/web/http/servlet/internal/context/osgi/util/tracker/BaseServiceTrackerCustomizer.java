@@ -7,14 +7,13 @@ package com.liferay.portal.osgi.web.http.servlet.internal.context.osgi.util.trac
 
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServletEndpointController;
+import com.liferay.portal.osgi.web.http.servlet.internal.constants.HttpServletConstants;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.LiferayContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ServletContextHelperDataContext;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.Registration;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
-
-import org.eclipse.equinox.http.servlet.internal.util.Const;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -67,7 +66,7 @@ public abstract class BaseServiceTrackerCustomizer
 		if (pattern == null) {
 			throw new IllegalArgumentException("Pattern must not be null");
 		}
-		else if (pattern.indexOf(Const.STAR_DOT) != 0) {
+		else if (pattern.indexOf(HttpServletConstants.STAR_DOT) != 0) {
 			if (!pattern.startsWith(StringPool.SLASH) ||
 				(pattern.endsWith(StringPool.SLASH) &&
 				 !pattern.equals(StringPool.SLASH))) {

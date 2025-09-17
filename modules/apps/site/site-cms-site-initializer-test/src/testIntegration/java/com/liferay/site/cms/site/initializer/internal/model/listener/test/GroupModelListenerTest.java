@@ -21,19 +21,29 @@ import com.liferay.object.service.ObjectFolderLocalService;
 import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.GroupConstants;
+import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.test.rule.FeatureFlag;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
 import com.liferay.site.cms.site.initializer.util.CMSDefaultPermissionUtil;
 
 import java.io.File;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -57,7 +67,9 @@ public class GroupModelListenerTest {
 	@ClassRule
 	@Rule
 	public static final AggregateTestRule aggregateTestRule =
-		new LiferayIntegrationTestRule();
+		new AggregateTestRule(
+			new LiferayIntegrationTestRule(),
+			PermissionCheckerMethodTestRule.INSTANCE);
 
 	@Before
 	public void setUp() throws Exception {
@@ -99,15 +111,7 @@ public class GroupModelListenerTest {
 	@FeatureFlag("LPD-17564")
 	@Test
 	public void testAddDepotEntry() throws Exception {
-		DepotEntry depotEntry = _depotEntryLocalService.addDepotEntry(
-			HashMapBuilder.put(
-				LocaleUtil.getDefault(), StringUtil.randomString()
-			).build(),
-			HashMapBuilder.put(
-				LocaleUtil.getDefault(), StringUtil.randomString()
-			).build(),
-			DepotConstants.TYPE_SPACE,
-			ServiceContextTestUtil.getServiceContext());
+		DepotEntry depotEntry = _addDepotEntry();
 
 		Group group = depotEntry.getGroup();
 
@@ -128,15 +132,7 @@ public class GroupModelListenerTest {
 	@FeatureFlag("LPD-17564")
 	@Test
 	public void testDeleteDepotEntry() throws Exception {
-		DepotEntry depotEntry = _depotEntryLocalService.addDepotEntry(
-			HashMapBuilder.put(
-				LocaleUtil.getDefault(), StringUtil.randomString()
-			).build(),
-			HashMapBuilder.put(
-				LocaleUtil.getDefault(), StringUtil.randomString()
-			).build(),
-			DepotConstants.TYPE_SPACE,
-			ServiceContextTestUtil.getServiceContext());
+		DepotEntry depotEntry = _addDepotEntry();
 
 		Group group = depotEntry.getGroup();
 
@@ -155,6 +151,62 @@ public class GroupModelListenerTest {
 					PARENT_OBJECT_ENTRY_FOLDER_ID_DEFAULT));
 	}
 
+	@FeatureFlag("LPD-17564")
+	@Test
+	public void testUpdateDepotEntry() throws Exception {
+		Group siteGroup = _groupLocalService.getGroup(
+			TestPropsValues.getCompanyId(), GroupConstants.CMS);
+
+		Layout layout = _getRecycleBinLayout(siteGroup);
+
+		Assert.assertFalse(layout.isHidden());
+
+		Group defaultGroup = _groupLocalService.getGroup(
+			TestPropsValues.getCompanyId(), "Default");
+
+		_setTrashEnabled(defaultGroup, Boolean.FALSE.toString());
+
+		Assert.assertFalse(
+			GetterUtil.getBoolean(
+				defaultGroup.getTypeSettingsProperty("trashEnabled")));
+
+		layout = _getRecycleBinLayout(siteGroup);
+
+		Assert.assertTrue(layout.isHidden());
+
+		DepotEntry depotEntry = _addDepotEntry();
+
+		Group depotGroup = depotEntry.getGroup();
+
+		_setTrashEnabled(depotGroup, Boolean.TRUE.toString());
+
+		Assert.assertTrue(
+			GetterUtil.getBoolean(
+				depotGroup.getTypeSettingsProperty("trashEnabled")));
+
+		layout = _getRecycleBinLayout(siteGroup);
+
+		Assert.assertFalse(layout.isHidden());
+
+		_setTrashEnabled(defaultGroup, null);
+	}
+
+	private DepotEntry _addDepotEntry() throws Exception {
+		DepotEntry depotEntry = _depotEntryLocalService.addDepotEntry(
+			HashMapBuilder.put(
+				LocaleUtil.getDefault(), StringUtil.randomString()
+			).build(),
+			HashMapBuilder.put(
+				LocaleUtil.getDefault(), StringUtil.randomString()
+			).build(),
+			DepotConstants.TYPE_SPACE,
+			ServiceContextTestUtil.getServiceContext());
+
+		_depotEntries.add(depotEntry);
+
+		return depotEntry;
+	}
+
 	private void _deleteFile(Bundle bundle, String fileName) {
 		File file = bundle.getDataFile(
 			".com.liferay.site.initializer.cms.internal.batch." + fileName +
@@ -163,6 +215,11 @@ public class GroupModelListenerTest {
 		if ((file != null) && file.exists()) {
 			file.delete();
 		}
+	}
+
+	private Layout _getRecycleBinLayout(Group group) throws Exception {
+		return _layoutLocalService.getLayoutByFriendlyURL(
+			group.getGroupId(), false, "/recycle-bin");
 	}
 
 	private boolean _isCMSSiteInitialized() throws Exception {
@@ -178,11 +235,28 @@ public class GroupModelListenerTest {
 		return false;
 	}
 
+	private void _setTrashEnabled(Group group, String value) throws Exception {
+		UnicodeProperties unicodeProperties = group.getTypeSettingsProperties();
+
+		if (value == null) {
+			unicodeProperties.remove("trashEnabled");
+		}
+		else {
+			unicodeProperties.setProperty("trashEnabled", value);
+		}
+
+		_groupLocalService.updateGroup(
+			group.getGroupId(), unicodeProperties.toString());
+	}
+
 	@Inject
 	private BatchEngineUnitProcessor _batchEngineUnitProcessor;
 
 	@Inject
 	private BatchEngineUnitReader _batchEngineUnitReader;
+
+	@DeleteAfterTestRun
+	private final List<DepotEntry> _depotEntries = new ArrayList<>();
 
 	@Inject
 	private DepotEntryLocalService _depotEntryLocalService;
@@ -191,6 +265,12 @@ public class GroupModelListenerTest {
 		filter = "filter.factory.key=" + ObjectDefinitionConstants.STORAGE_TYPE_DEFAULT
 	)
 	private FilterFactory<Predicate> _filterFactory;
+
+	@Inject
+	private GroupLocalService _groupLocalService;
+
+	@Inject
+	private LayoutLocalService _layoutLocalService;
 
 	@Inject
 	private ObjectEntryFolderLocalService _objectEntryFolderLocalService;

@@ -98,6 +98,7 @@ import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.role.RoleConstants;
+import com.liferay.portal.kernel.security.auth.Authenticator;
 import com.liferay.portal.kernel.security.auth.CompanyInheritableThreadLocalCallable;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
@@ -738,6 +739,7 @@ public class ObjectActionLocalServiceTest {
 
 			objectEntry = _objectEntryLocalService.partialUpdateObjectEntry(
 				TestPropsValues.getUserId(), objectEntry.getObjectEntryId(),
+				objectEntry.getObjectEntryFolderId(),
 				HashMapBuilder.<String, Serializable>put(
 					"firstName", "João"
 				).put(
@@ -796,6 +798,7 @@ public class ObjectActionLocalServiceTest {
 
 			objectEntry = _objectEntryLocalService.partialUpdateObjectEntry(
 				TestPropsValues.getUserId(), objectEntry.getObjectEntryId(),
+				objectEntry.getObjectEntryFolderId(),
 				HashMapBuilder.<String, Serializable>put(
 					"firstName", RandomTestUtil.randomString()
 				).build(),
@@ -863,6 +866,7 @@ public class ObjectActionLocalServiceTest {
 
 			_objectEntryLocalService.updateObjectEntry(
 				TestPropsValues.getUserId(), objectEntry.getObjectEntryId(),
+				objectEntry.getObjectEntryFolderId(),
 				HashMapBuilder.<String, Serializable>put(
 					"firstName", "Peter"
 				).build(),
@@ -2009,6 +2013,78 @@ public class ObjectActionLocalServiceTest {
 			"John", "Smith", WorkflowConstants.STATUS_APPROVED);
 	}
 
+	@FeatureFlag("LPD-59081")
+	@Test
+	public void testExecuteObjectActionAfterUserLogin() throws Exception {
+		ObjectDefinition userObjectDefinition =
+			_objectDefinitionLocalService.fetchObjectDefinitionByClassName(
+				TestPropsValues.getCompanyId(), User.class.getName());
+
+		ObjectAction objectAction = _addObjectAction(
+			userObjectDefinition.getObjectDefinitionId(),
+			ObjectActionExecutorConstants.KEY_WEBHOOK,
+			ObjectActionTriggerConstants.KEY_ON_AFTER_LOGIN,
+			UnicodePropertiesBuilder.put(
+				"secret", "onafterlogin"
+			).put(
+				"url", "https://onafterlogin.com"
+			).build());
+
+		Assert.assertEquals(0, _argumentsList.size());
+
+		int authResult = _userLocalService.authenticateByUserId(
+			TestPropsValues.getCompanyId(), TestPropsValues.getUserId(),
+			TestPropsValues.USER_PASSWORD, null, null, null);
+
+		Assert.assertEquals(Authenticator.SUCCESS, authResult);
+
+		Assert.assertEquals(1, _argumentsList.size());
+
+		Object[] arguments = _argumentsList.poll();
+
+		Http.Options options = (Http.Options)arguments[0];
+
+		Http.Body body = options.getBody();
+
+		JSONObject payloadJSONObject = _jsonFactory.createJSONObject(
+			body.getContent());
+
+		Assert.assertEquals(
+			ObjectActionTriggerConstants.KEY_ON_AFTER_LOGIN,
+			payloadJSONObject.getString("objectActionTriggerKey"));
+		Assert.assertEquals(
+			userObjectDefinition.getObjectDefinitionId(),
+			payloadJSONObject.getLong("objectDefinitionId"));
+
+		Assert.assertTrue(payloadJSONObject.has("modelUser"));
+
+		User user = _userLocalService.getUser(TestPropsValues.getUserId());
+
+		Assert.assertEquals(
+			user.getExternalReferenceCode(),
+			JSONUtil.getValue(
+				payloadJSONObject, "JSONObject/modelUser",
+				"Object/externalReferenceCode"));
+		Assert.assertEquals(
+			user.getFirstName(),
+			JSONUtil.getValue(
+				payloadJSONObject, "JSONObject/modelUser", "Object/firstName"));
+		Assert.assertEquals(
+			user.getLastName(),
+			JSONUtil.getValue(
+				payloadJSONObject, "JSONObject/modelUser", "Object/lastName"));
+
+		authResult = _userLocalService.authenticateByUserId(
+			TestPropsValues.getCompanyId(), TestPropsValues.getUserId(),
+			RandomTestUtil.randomString(), null, null, null);
+
+		Assert.assertEquals(Authenticator.FAILURE, authResult);
+
+		Assert.assertEquals(0, _argumentsList.size());
+
+		_objectActionLocalService.deleteObjectAction(objectAction);
+	}
+
 	@Test
 	public void testExecuteObjectActionMultipleTimesInTheSameThread()
 		throws Exception {
@@ -2123,6 +2199,7 @@ public class ObjectActionLocalServiceTest {
 
 		_objectEntryLocalService.updateObjectEntry(
 			TestPropsValues.getUserId(), objectEntry.getObjectEntryId(),
+			objectEntry.getObjectEntryFolderId(),
 			HashMapBuilder.<String, Serializable>put(
 				"firstName", RandomTestUtil.randomString()
 			).build(),
@@ -2175,6 +2252,7 @@ public class ObjectActionLocalServiceTest {
 
 		_objectEntryLocalService.updateObjectEntry(
 			TestPropsValues.getUserId(), objectEntry.getObjectEntryId(),
+			objectEntry.getObjectEntryFolderId(),
 			HashMapBuilder.<String, Serializable>put(
 				"firstName", "Paulo"
 			).build(),
@@ -2187,6 +2265,7 @@ public class ObjectActionLocalServiceTest {
 
 		_objectEntryLocalService.updateObjectEntry(
 			TestPropsValues.getUserId(), objectEntry.getObjectEntryId(),
+			objectEntry.getObjectEntryFolderId(),
 			HashMapBuilder.<String, Serializable>put(
 				"firstName", RandomTestUtil.randomString()
 			).build(),
@@ -2842,6 +2921,7 @@ public class ObjectActionLocalServiceTest {
 
 		objectEntry = _objectEntryLocalService.updateObjectEntry(
 			TestPropsValues.getUserId(), objectEntry.getObjectEntryId(),
+			objectEntry.getObjectEntryFolderId(),
 			HashMapBuilder.<String, Serializable>put(
 				"firstName", RandomTestUtil.randomString()
 			).build(),
@@ -3800,6 +3880,7 @@ public class ObjectActionLocalServiceTest {
 
 		objectEntry5 = _objectEntryLocalService.updateObjectEntry(
 			TestPropsValues.getUserId(), objectEntry5.getObjectEntryId(),
+			objectEntry5.getObjectEntryFolderId(),
 			HashMapBuilder.<String, Serializable>put(
 				"firstName", "John"
 			).put(
@@ -3814,6 +3895,7 @@ public class ObjectActionLocalServiceTest {
 
 		objectEntry6 = _objectEntryLocalService.updateObjectEntry(
 			TestPropsValues.getUserId(), objectEntry6.getObjectEntryId(),
+			objectEntry6.getObjectEntryFolderId(),
 			HashMapBuilder.<String, Serializable>put(
 				"firstName", "João"
 			).put(

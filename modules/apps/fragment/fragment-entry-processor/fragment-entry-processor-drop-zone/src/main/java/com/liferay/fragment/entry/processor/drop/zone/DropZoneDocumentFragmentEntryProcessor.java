@@ -17,8 +17,13 @@ import com.liferay.layout.page.template.service.LayoutPageTemplateStructureLocal
 import com.liferay.layout.util.structure.FragmentDropZoneLayoutStructureItem;
 import com.liferay.layout.util.structure.LayoutStructure;
 import com.liferay.layout.util.structure.LayoutStructureItem;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -118,6 +123,22 @@ public class DropZoneDocumentFragmentEntryProcessor
 			}
 
 			if (!idsAvailable) {
+				if (elements.size() != dropZoneItemIds.size()) {
+					Layout layout = _layoutLocalService.getLayout(
+						fragmentEntryLink.getPlid());
+
+					_log.error(
+						StringBundler.concat(
+							"Dropzone UUID missing for fragment entry link ID ",
+							fragmentEntryLink.getFragmentEntryLinkId(),
+							", friendly URL ", layout.getFriendlyURL(),
+							", and layout structure item ID ",
+							layoutStructureItem.getItemId(),
+							" because it is expected to have ", elements.size(),
+							" dropzone elements but found ",
+							dropZoneItemIds.size()));
+				}
+
 				for (int i = 0;
 					 (i < dropZoneItemIds.size()) && (i < elements.size());
 					 i++) {
@@ -138,15 +159,11 @@ public class DropZoneDocumentFragmentEntryProcessor
 						layoutStructure.getLayoutStructureItem(dropZoneItemId);
 
 					if (!(childLayoutStructureItem instanceof
-							FragmentDropZoneLayoutStructureItem)) {
+							FragmentDropZoneLayoutStructureItem
+								fragmentDropZoneLayoutStructureItem)) {
 
 						continue;
 					}
-
-					FragmentDropZoneLayoutStructureItem
-						fragmentDropZoneLayoutStructureItem =
-							(FragmentDropZoneLayoutStructureItem)
-								childLayoutStructureItem;
 
 					String fragmentDropZoneId =
 						fragmentDropZoneLayoutStructureItem.
@@ -161,9 +178,7 @@ public class DropZoneDocumentFragmentEntryProcessor
 					}
 				}
 
-				for (int i = 0; i < elements.size(); i++) {
-					Element element = elements.get(i);
-
+				for (Element element : elements) {
 					String dropZoneId = element.attr("data-lfr-drop-zone-id");
 
 					if (fragmentDropZoneIdsMap.containsKey(dropZoneId)) {
@@ -222,8 +237,14 @@ public class DropZoneDocumentFragmentEntryProcessor
 		}
 	}
 
+	private static final Log _log = LogFactoryUtil.getLog(
+		DropZoneDocumentFragmentEntryProcessor.class);
+
 	@Reference
 	private FragmentDropZoneRenderer _fragmentDropZoneRenderer;
+
+	@Reference
+	private LayoutLocalService _layoutLocalService;
 
 	@Reference
 	private LayoutPageTemplateStructureLocalService

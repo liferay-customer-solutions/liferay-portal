@@ -69,19 +69,12 @@ const FDSAdminItemSelector = ({
 					{...FDS_DEFAULT_PROPS}
 					apiURL={getDataSetResourceURL({})}
 					id={`${namespace}FDSAdminItemSelector`}
-					onSelect={({
-						selectedItems,
-					}: {
-						selectedItems: Array<ISelectedItem>;
-					}) => {
-						setSelectedItem({
-							externalReferenceCode:
-								selectedItems[0].externalReferenceCode,
-							id: selectedItems[0].id,
-							label: selectedItems[0].label,
-						});
+					onSelectedItemsChange={(
+						selectedItems: Array<ISelectedItem>
+					) => {
+						setSelectedItem(selectedItems[0]);
 					}}
-					selectedItems={[selectedItem?.externalReferenceCode]}
+					selectedItems={[selectedItem]}
 					selectedItemsKey="externalReferenceCode"
 					selectionType="single"
 					views={views}

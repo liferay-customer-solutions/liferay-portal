@@ -23,17 +23,14 @@ import com.liferay.portal.kernel.dao.orm.ProjectionList;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
-import com.liferay.portal.kernel.search.BooleanClause;
-import com.liferay.portal.kernel.search.BooleanClauseFactoryUtil;
-import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Sort;
-import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
-import com.liferay.portal.kernel.search.generic.BooleanQueryImpl;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -158,6 +155,11 @@ public class KeywordResourceImpl
 		return new ExportImportDescriptor() {
 
 			@Override
+			public String getItemClassName() {
+				return AssetTag.class.getName();
+			}
+
+			@Override
 			public String getPortletId() {
 				return AssetTagsAdminPortletKeys.ASSET_TAGS_ADMIN;
 			}
@@ -173,58 +175,6 @@ public class KeywordResourceImpl
 	@Override
 	public Keyword getKeyword(Long keywordId) throws Exception {
 		return _toKeyword(_assetTagService.getTag(keywordId));
-	}
-
-	@Override
-	public Page<Keyword> getKeywordsPage(
-			String search, Aggregation aggregation, Filter filter,
-			Pagination pagination, Sort[] sorts)
-		throws Exception {
-
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
-			throw new UnsupportedOperationException();
-		}
-
-		return SearchUtil.search(
-			null,
-			booleanQuery -> {
-			},
-			filter, AssetTag.class.getName(), search, pagination,
-			queryConfig -> queryConfig.setSelectedFieldNames(
-				Field.ENTRY_CLASS_PK),
-			searchContext -> {
-				searchContext.addVulcanAggregation(aggregation);
-				searchContext.setAttribute(Field.NAME, search);
-
-				BooleanFilter booleanFilter = new BooleanFilter();
-
-				booleanFilter.addRequiredTerm(
-					Field.GROUP_ID,
-					TaxonomyGroupUtil.getCMSGroupId(
-						contextCompany.getCompanyId()));
-
-				searchContext.setBooleanClauses(
-					new BooleanClause[] {
-						BooleanClauseFactoryUtil.create(
-							new BooleanQueryImpl() {
-								{
-									if (filter != null) {
-										booleanFilter.add(
-											filter, BooleanClauseOccur.MUST);
-									}
-
-									setPreBooleanFilter(booleanFilter);
-								}
-							},
-							BooleanClauseOccur.MUST.getName())
-					});
-
-				searchContext.setCompanyId(contextCompany.getCompanyId());
-			},
-			sorts,
-			document -> _toKeyword(
-				_assetTagService.getTag(
-					GetterUtil.getLong(document.get(Field.ENTRY_CLASS_PK)))));
 	}
 
 	@Override
@@ -315,31 +265,25 @@ public class KeywordResourceImpl
 	}
 
 	@Override
-	public Keyword postKeyword(Keyword keyword) throws Exception {
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
-			throw new UnsupportedOperationException();
-		}
-
-		Keyword postKeyword = postSiteKeyword(
-			TaxonomyGroupUtil.getCMSGroupId(contextCompany.getCompanyId()),
-			keyword);
-
-		_assetTagGroupRelLocalService.setAssetTagGroupRels(
-			postKeyword.getId(),
-			TaxonomyGroupUtil.getAssetLibraryGroupIds(
-				keyword.getAssetLibraries()));
-
-		return postKeyword;
-	}
-
-	@Override
 	public Keyword postSiteKeyword(Long siteId, Keyword keyword)
 		throws Exception {
 
-		return _toKeyword(
-			_assetTagService.addTag(
-				keyword.getExternalReferenceCode(), siteId, keyword.getName(),
-				new ServiceContext()));
+		AssetTag assetTag = _assetTagService.addTag(
+			keyword.getExternalReferenceCode(), siteId, keyword.getName(),
+			new ServiceContext());
+
+		Group group = _groupLocalService.getGroup(siteId);
+
+		if (FeatureFlagManagerUtil.isEnabled("LPD-17564") && group.isCMS() &&
+			ArrayUtil.isNotEmpty(keyword.getAssetLibraries())) {
+
+			_assetTagGroupRelLocalService.setAssetTagGroupRels(
+				assetTag.getTagId(),
+				TaxonomyGroupUtil.getAssetLibraryGroupIds(
+					keyword.getAssetLibraries()));
+		}
+
+		return _toKeyword(assetTag);
 	}
 
 	@Override
@@ -602,6 +546,9 @@ public class KeywordResourceImpl
 
 	@Reference
 	private DTOConverterRegistry _dtoConverterRegistry;
+
+	@Reference
+	private GroupLocalService _groupLocalService;
 
 	@Reference(
 		target = "(component.name=com.liferay.headless.admin.taxonomy.internal.dto.v1_0.converter.KeywordDTOConverter)"

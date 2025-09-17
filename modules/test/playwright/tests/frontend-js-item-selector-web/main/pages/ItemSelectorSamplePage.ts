@@ -8,16 +8,22 @@ import {Locator, Page} from '@playwright/test';
 import {EFDSVisualizationMode, waitForFDS} from '../../../../utils/waitFor';
 
 export class ItemSelectorSamplePage {
+	readonly fdsContentContainer: Locator;
 	readonly fragmentWidgetSearchInput: Locator;
 	readonly modal: {
 		cancelButton: Locator;
 		selectButton: Locator;
 	};
 	readonly page: Page;
+	readonly filtersButton: Locator;
 	readonly publishPageButton: Locator;
 	readonly samplePageHeader: Locator;
+	readonly selectCMSFileButton: Locator;
+	readonly selectCMSFileModalHeader: Locator;
 	readonly selectDocumentButton: Locator;
 	readonly selectDocumentModalHeader: Locator;
+	readonly selectUserButton: Locator;
+	readonly selectUserModalHeader: Locator;
 	readonly table: {
 		bodyRows: Locator;
 		container: Locator;
@@ -25,6 +31,9 @@ export class ItemSelectorSamplePage {
 	readonly visualizationModeSelector: Locator;
 
 	constructor(page: Page) {
+		this.fdsContentContainer = page.locator(
+			'.fds .data-set-content-wrapper'
+		);
 		this.fragmentWidgetSearchInput = page.getByLabel(
 			'Search Fragments and Widgets'
 		);
@@ -39,6 +48,9 @@ export class ItemSelectorSamplePage {
 			}),
 		};
 		this.page = page;
+		this.filtersButton = page.getByRole('button', {
+			name: 'Filter',
+		});
 		this.publishPageButton = page.getByRole('button', {
 			name: 'Publish',
 		});
@@ -46,13 +58,29 @@ export class ItemSelectorSamplePage {
 			exact: true,
 			name: 'Item Selector Samples',
 		});
+		this.selectCMSFileButton = page.getByRole('button', {
+			exact: true,
+			name: 'Select CMS File',
+		});
+		this.selectCMSFileModalHeader = page.getByRole('heading', {
+			exact: true,
+			name: 'Select File',
+		});
 		this.selectDocumentButton = page.getByRole('button', {
 			exact: true,
-			name: 'Select Document',
+			name: 'Select Documents',
 		});
 		this.selectDocumentModalHeader = page.getByRole('heading', {
 			exact: true,
-			name: 'Select Document',
+			name: 'Select Documents',
+		});
+		this.selectUserButton = page.getByRole('button', {
+			exact: true,
+			name: 'Select User',
+		});
+		this.selectUserModalHeader = page.getByRole('heading', {
+			exact: true,
+			name: 'Select User',
 		});
 
 		const tableContainer = page.locator('.fds table');

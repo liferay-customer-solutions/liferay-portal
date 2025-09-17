@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {Locator, Page} from '@playwright/test';
+import {Locator, Page, expect} from '@playwright/test';
 
+import {ApiHelpers} from '../../../../helpers/ApiHelpers';
 import {clickAndExpectToBeHidden} from '../../../../utils/clickAndExpectToBeHidden';
 import {clickAndExpectToBeVisible} from '../../../../utils/clickAndExpectToBeVisible';
 import {PORTLET_URLS} from '../../../../utils/portletUrls';
@@ -36,18 +37,21 @@ export class ContentsPage {
 
 	readonly newButton: Locator;
 	readonly publishButton: Locator;
-
+	readonly apiHelpers: ApiHelpers;
 	constructor(page: Page) {
 		this.page = page;
 
-		this.newButton = page.getByLabel('New');
+		this.apiHelpers = new ApiHelpers(page);
+		this.newButton = page.locator('.nav-item').getByLabel('New');
 		this.publishButton = page.getByText('Publish', {exact: true});
 	}
 
 	async goto() {
-		await this.page.goto(PORTLET_URLS.cmsContents);
+		await expect(async () => {
+			await this.page.goto(PORTLET_URLS.cmsContents);
 
-		await this.newButton.waitFor({state: 'visible'});
+			await this.newButton.waitFor({state: 'visible', timeout: 3000});
+		}).toPass();
 	}
 
 	async closeSidePanel() {
@@ -63,12 +67,29 @@ export class ContentsPage {
 		}
 	}
 
-	async createContent(type: string) {
+	async createContent(type: string, space: string = 'Default') {
+		const assetLibraries =
+			await this.apiHelpers.headlessAssetLibrary.getAssetLibrariesPage(
+				encodeURIComponent("type eq 'Space'")
+			);
+
 		await clickAndExpectToBeVisible({
 			autoClick: true,
 			target: this.page.getByRole('menuitem', {name: type}),
 			trigger: this.newButton,
 		});
+
+		if (assetLibraries.length > 1) {
+			await this.page.getByRole('dialog').waitFor();
+
+			await clickAndExpectToBeVisible({
+				autoClick: true,
+				target: this.page.getByRole('option', {name: space}),
+				trigger: this.page.getByRole('dialog').getByLabel('Space'),
+			});
+
+			await this.page.getByRole('button', {name: 'Save'}).click();
+		}
 
 		await this.page.getByRole('tab', {name: 'General'}).waitFor();
 	}
@@ -173,5 +194,21 @@ export class ContentsPage {
 			timeout: 5000,
 			trigger: this.publishButton,
 		});
+	}
+
+	async translateContent(title: string) {
+		const card = this.page
+			.locator('tr', {hasText: title})
+			.or(this.page.locator('.card-row', {hasText: title}));
+
+		await clickAndExpectToBeVisible({
+			autoClick: true,
+			target: this.page.getByRole('menuitem', {name: 'Translate'}),
+			trigger: card.locator('button'),
+		});
+
+		await expect(
+			this.page.locator('.management-bar').getByText('Publish')
+		).toBeVisible();
 	}
 }
