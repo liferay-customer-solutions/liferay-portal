@@ -168,8 +168,8 @@ public class ObjectEntryFolderModelListener
 			null, objectEntryFolder.getCompanyId(),
 			objectEntryFolder.getUserId(),
 			objectEntryFolder.getExternalReferenceCode(),
-			objectEntryFolder.getModelClassName(),
-			defaultPermissionsJSONObject);
+			objectEntryFolder.getModelClassName(), defaultPermissionsJSONObject,
+			objectEntryFolder.getGroupId(), objectEntryFolder.getTreePath());
 
 		JSONObject objectEntryFoldersJSONObject =
 			defaultPermissionsJSONObject.getJSONObject("OBJECT_ENTRY_FOLDERS");

@@ -216,7 +216,8 @@ public class ObjectEntryFolderModelListenerTest {
 			null, objectEntryFolder1.getCompanyId(),
 			objectEntryFolder1.getUserId(),
 			objectEntryFolder1.getExternalReferenceCode(),
-			objectEntryFolder1.getModelClassName(), jsonObject2);
+			objectEntryFolder1.getModelClassName(), jsonObject2,
+			objectEntryFolder1.getGroupId(), objectEntryFolder1.getTreePath());
 
 		ObjectEntryFolder objectEntryFolder2 =
 			_objectEntryFolderLocalService.addObjectEntryFolder(

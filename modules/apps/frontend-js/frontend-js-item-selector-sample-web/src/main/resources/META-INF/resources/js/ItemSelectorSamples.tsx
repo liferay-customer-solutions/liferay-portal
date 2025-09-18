@@ -82,34 +82,34 @@ const FDS_DEFAULT_PROPS: Partial<IFrontendDataSetProps> = {
 
 const assetLibrariesItemSelectorConfig = {
 	apiURL: `${location.origin}/o/headless-asset-library/v1.0/asset-libraries`,
+	itemTypeLabel: Liferay.Language.get('space'),
 	locator: {
 		id: 'id',
 		label: 'name',
 		value: 'id',
 	},
-	type: Liferay.Language.get('space'),
 	views: assetLibraryViews,
 };
 
 const documentsItemSelectorConfig = {
 	apiURL: `${location.origin}/o/headless-delivery/v1.0/sites/${Liferay.ThemeDisplay.getSiteGroupId()}/documents`,
+	itemTypeLabel: Liferay.Language.get('documents'),
 	locator: {
 		id: 'id',
 		label: 'fileName',
 		value: 'id',
 	},
-	type: Liferay.Language.get('documents'),
 	views: documentViews,
 };
 
 const userAccountsItemSelectorConfig = {
 	apiURL: `${location.origin}/o/headless-admin-user/v1.0/user-accounts`,
+	itemTypeLabel: Liferay.Language.get('user'),
 	locator: {
 		id: 'id',
 		label: 'givenName',
 		value: 'id',
 	},
-	type: Liferay.Language.get('user'),
 	views: userViews,
 };
 
@@ -119,12 +119,12 @@ const cmsFileItemSelectorConfig = {
 		'nestedFields=embedded,file.thumbnailURL',
 		"filter=(cmsKind eq 'object') and (cmsSection eq 'files') and (status in (0, 2, 3))",
 	].join('&')}`,
+	itemTypeLabel: Liferay.Language.get('file'),
 	locator: {
 		id: 'embedded.id',
 		label: 'embedded.title',
 		value: 'embedded.id',
 	},
-	type: Liferay.Language.get('file'),
 	views: cmsFileViews,
 };
 
@@ -145,6 +145,10 @@ export default function ItemSelectorSamples() {
 		User[]
 	>([]);
 	const [cmsFile, setCMSFile] = useState<CMSFile | null>(null);
+	const [user2, setUser2] = useState<User | null>();
+	const [space3, setSpace3] = useState<Space | null>();
+	const [spacesMultiSelect, setSpacesMultiSelect] = useState<Space[]>([]);
+	const [usersMultiSelect, setUsersMultiSelect] = useState<User[]>([]);
 
 	const {
 		observer: documentItemSelectorObserver,
@@ -268,6 +272,140 @@ export default function ItemSelectorSamples() {
 				</ItemSelector>
 			</SampleContainer>
 
+			<SampleContainer label="Single Select (Users) - Open Modal Trigger">
+				<ItemSelector
+					apiURL={userAccountsItemSelectorConfig.apiURL}
+					itemSelectorModalProps={{
+						fdsProps: {
+							...FDS_DEFAULT_PROPS,
+							id: `itemSelectorModal-users-${getRandomId()}`,
+							views: getDefaultItemSelectorModalViews({
+								viewsConfig:
+									EItemSelectorModalViewsConfig.USER_ACCOUNTS,
+							}),
+						},
+						itemTypeLabel:
+							userAccountsItemSelectorConfig.itemTypeLabel,
+					}}
+					items={user2 ? [user2] : []}
+					locator={{
+						id: 'id',
+						label: 'name',
+						value: 'id',
+					}}
+					onItemsChange={(items: User[]) => setUser2(items[0])}
+					placeholder="Select a User"
+				>
+					{(item) => (
+						<ItemSelector.Item key={item.id} textValue={item.name}>
+							{item.name}
+						</ItemSelector.Item>
+					)}
+				</ItemSelector>
+			</SampleContainer>
+
+			<SampleContainer label="Multiple Select (Users) - Open Modal Trigger">
+				<ItemSelector
+					apiURL={userAccountsItemSelectorConfig.apiURL}
+					itemSelectorModalProps={{
+						fdsProps: {
+							...FDS_DEFAULT_PROPS,
+							id: `itemSelectorModal-documents-${getRandomId()}`,
+							views: getDefaultItemSelectorModalViews({
+								viewsConfig:
+									EItemSelectorModalViewsConfig.USER_ACCOUNTS,
+							}),
+						},
+						itemTypeLabel:
+							userAccountsItemSelectorConfig.itemTypeLabel,
+					}}
+					items={usersMultiSelect}
+					locator={{
+						id: 'id',
+						label: 'name',
+						value: 'id',
+					}}
+					multiSelect
+					onItemsChange={(items: User[]) => {
+						setUsersMultiSelect(items);
+					}}
+					placeholder="Select a User"
+				>
+					{(item) => (
+						<ItemSelector.Item key={item.id} textValue={item.name}>
+							{item.name}
+						</ItemSelector.Item>
+					)}
+				</ItemSelector>
+			</SampleContainer>
+
+			<SampleContainer label="Single Select (Spaces) - Open Modal Trigger">
+				<ItemSelector
+					apiURL={`${location.origin}/o/headless-asset-library/v1.0/asset-libraries`}
+					itemSelectorModalProps={{
+						fdsProps: {
+							...FDS_DEFAULT_PROPS,
+							id: `itemSelectorModal-spaces-${getRandomId()}`,
+							views: getDefaultItemSelectorModalViews({
+								viewsConfig:
+									EItemSelectorModalViewsConfig.ASSET_LIBRARIES,
+							}),
+						},
+						itemTypeLabel:
+							assetLibrariesItemSelectorConfig.itemTypeLabel,
+					}}
+					items={space3 ? [space3] : []}
+					locator={{
+						id: 'id',
+						label: 'name',
+						value: 'id',
+					}}
+					onItemsChange={(items: Space[]) => setSpace3(items[0])}
+					placeholder="Select a Space"
+				>
+					{(item) => (
+						<ItemSelector.Item key={item.id} textValue={item.name}>
+							{item.name}
+						</ItemSelector.Item>
+					)}
+				</ItemSelector>
+			</SampleContainer>
+
+			<SampleContainer label="Multiple Select (Spaces) - Open Modal Trigger">
+				<ItemSelector
+					apiURL={`${location.origin}/o/headless-asset-library/v1.0/asset-libraries`}
+					itemSelectorModalProps={{
+						fdsProps: {
+							...FDS_DEFAULT_PROPS,
+							id: `itemSelectorModal-spaces-${getRandomId()}`,
+							views: getDefaultItemSelectorModalViews({
+								viewsConfig:
+									EItemSelectorModalViewsConfig.ASSET_LIBRARIES,
+							}),
+						},
+						itemTypeLabel:
+							assetLibrariesItemSelectorConfig.itemTypeLabel,
+					}}
+					items={spacesMultiSelect}
+					locator={{
+						id: 'id',
+						label: 'name',
+						value: 'id',
+					}}
+					multiSelect
+					onItemsChange={(items: Space[]) => {
+						setSpacesMultiSelect(items);
+					}}
+					placeholder="Select a Space"
+				>
+					{(item) => (
+						<ItemSelector.Item key={item.id} textValue={item.name}>
+							{item.name}
+						</ItemSelector.Item>
+					)}
+				</ItemSelector>
+			</SampleContainer>
+
 			<SampleContainer label="Multiple Select (Documents) - Custom Selected Items List">
 				<ItemSelector<Document>
 					apiURL={`${location.origin}/o/headless-delivery/v1.0/sites/${Liferay.ThemeDisplay.getSiteGroupId()}/documents`}
@@ -338,15 +476,17 @@ export default function ItemSelectorSamples() {
 			<SampleContainer label="Item Selector Modal">
 				<ItemSelectorModal<Document>
 					{...{
+						apiURL: documentsItemSelectorConfig.apiURL,
 						fdsProps: {
 							...FDS_DEFAULT_PROPS,
-							apiURL: documentsItemSelectorConfig.apiURL,
 							id: `itemSelectorModal-documents-${getRandomId()}`,
 							views: getDefaultItemSelectorModalViews({
 								viewsConfig:
 									EItemSelectorModalViewsConfig.DOCUMENTS,
 							}),
 						},
+						itemTypeLabel:
+							documentsItemSelectorConfig.itemTypeLabel,
 						items: documentsItemSelectorModal,
 						locator: documentsItemSelectorConfig.locator,
 						multiSelect: true,
@@ -356,21 +496,22 @@ export default function ItemSelectorSamples() {
 						},
 						onOpenChange: documentItemSelectorOpenChange,
 						open: documentItemSelectorOpen,
-						type: documentsItemSelectorConfig.type,
 					}}
 				/>
 
 				<ItemSelectorModal<Space>
 					{...{
+						apiURL: assetLibrariesItemSelectorConfig.apiURL,
 						fdsProps: {
 							...FDS_DEFAULT_PROPS,
-							apiURL: assetLibrariesItemSelectorConfig.apiURL,
 							id: `itemSelectorModal-assets-${getRandomId()}`,
 							views: getDefaultItemSelectorModalViews({
 								viewsConfig:
 									EItemSelectorModalViewsConfig.ASSET_LIBRARIES,
 							}),
 						},
+						itemTypeLabel:
+							assetLibrariesItemSelectorConfig.itemTypeLabel,
 						items: spacesItemSelectorModal,
 						locator: assetLibrariesItemSelectorConfig.locator,
 						observer: spaceItemSelectorObserver,
@@ -379,21 +520,22 @@ export default function ItemSelectorSamples() {
 						},
 						onOpenChange: spaceItemSelectorOpenChange,
 						open: spaceItemSelectorOpen,
-						type: assetLibrariesItemSelectorConfig.type,
 					}}
 				/>
 
 				<ItemSelectorModal<User>
 					{...{
+						apiURL: userAccountsItemSelectorConfig.apiURL,
 						fdsProps: {
 							...FDS_DEFAULT_PROPS,
-							apiURL: userAccountsItemSelectorConfig.apiURL,
 							id: `itemSelectorModal-users-${getRandomId()}`,
 							views: getDefaultItemSelectorModalViews({
 								viewsConfig:
 									EItemSelectorModalViewsConfig.USER_ACCOUNTS,
 							}),
 						},
+						itemTypeLabel:
+							userAccountsItemSelectorConfig.itemTypeLabel,
 						items: usersItemSelectorModal,
 						locator: userAccountsItemSelectorConfig.locator,
 						observer: userItemSelectorObserver,
@@ -402,15 +544,14 @@ export default function ItemSelectorSamples() {
 						},
 						onOpenChange: userItemSelectorOpenChange,
 						open: userItemSelectorOpen,
-						type: userAccountsItemSelectorConfig.type,
 					}}
 				/>
 
 				<ItemSelectorModal<CMSFile>
 					{...{
+						apiURL: cmsFileItemSelectorConfig.apiURL,
 						fdsProps: {
 							...FDS_DEFAULT_PROPS,
-							apiURL: cmsFileItemSelectorConfig.apiURL,
 							filters: [
 								{
 									apiURL: '/o/headless-asset-library/v1.0/asset-libraries',
@@ -430,6 +571,7 @@ export default function ItemSelectorSamples() {
 									EItemSelectorModalViewsConfig.CMS_FILES,
 							}),
 						},
+						itemTypeLabel: cmsFileItemSelectorConfig.itemTypeLabel,
 						items: cmsFile ? [cmsFile] : [],
 						locator: cmsFileItemSelectorConfig.locator,
 						observer: cmsFileItemSelectorObserver,
@@ -438,7 +580,6 @@ export default function ItemSelectorSamples() {
 						},
 						onOpenChange: cmsFileItemSelectorOpenChange,
 						open: cmsFileItemSelectorOpen,
-						type: cmsFileItemSelectorConfig.type,
 					}}
 				/>
 

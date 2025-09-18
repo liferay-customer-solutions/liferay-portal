@@ -10,10 +10,12 @@ import {EFDSVisualizationMode, waitForFDS} from '../../../../utils/waitFor';
 export class ItemSelectorSamplePage {
 	readonly fdsContentContainer: Locator;
 	readonly fragmentWidgetSearchInput: Locator;
+	readonly inputGroup: (label: string) => Locator;
 	readonly modal: {
 		cancelButton: Locator;
 		selectButton: Locator;
 	};
+	readonly multiselectGridItem: (name: string) => Locator;
 	readonly page: Page;
 	readonly filtersButton: Locator;
 	readonly publishPageButton: Locator;
@@ -37,6 +39,8 @@ export class ItemSelectorSamplePage {
 		this.fragmentWidgetSearchInput = page.getByLabel(
 			'Search Fragments and Widgets'
 		);
+		this.inputGroup = (label: string) =>
+			page.getByText(label).locator('..');
 		this.modal = {
 			cancelButton: page.getByRole('button', {
 				exact: true,
@@ -47,6 +51,11 @@ export class ItemSelectorSamplePage {
 				name: 'Select',
 			}),
 		};
+		this.multiselectGridItem = (name: string) =>
+			page.getByRole('gridcell', {
+				exact: true,
+				name,
+			});
 		this.page = page;
 		this.filtersButton = page.getByRole('button', {
 			name: 'Filter',

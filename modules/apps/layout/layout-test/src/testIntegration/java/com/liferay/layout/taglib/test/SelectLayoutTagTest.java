@@ -88,6 +88,28 @@ public class SelectLayoutTagTest {
 	}
 
 	@Test
+	public void testEmptyLayouts() throws Exception {
+		LayoutTestUtil.addTypeEmptyLayout(_group);
+
+		SelectLayoutTag selectLayoutTag = new SelectLayoutTag();
+
+		HttpServletRequest httpServletRequest = _getMockHttpServletRequest();
+
+		selectLayoutTag.doTag(
+			httpServletRequest, new MockHttpServletResponse());
+
+		Map<String, Object> data =
+			(Map<String, Object>)httpServletRequest.getAttribute(
+				"liferay-layout:select-layout:data");
+
+		JSONArray nodesJSONArray = (JSONArray)data.get("nodes");
+
+		JSONObject nodeJSONObject = nodesJSONArray.getJSONObject(0);
+
+		Assert.assertTrue(nodeJSONObject.getBoolean("disabled"));
+	}
+
+	@Test
 	public void testUnpublishedChildLayouts() throws Exception {
 		Layout layout = LayoutTestUtil.addTypeContentLayout(_group);
 

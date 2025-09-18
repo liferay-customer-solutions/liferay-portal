@@ -21,6 +21,7 @@ import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.petra.sql.dsl.expression.Predicate;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
@@ -164,7 +165,8 @@ public class GroupModelListener extends BaseModelListener<Group> {
 								ObjectEntryFolder.class.getName()),
 							resourceAction -> resourceAction.getActionId(),
 							String.class)))
-			));
+			),
+			group.getGroupId(), StringPool.BLANK);
 	}
 
 	private void _onAfterRemove(Group group) throws PortalException {

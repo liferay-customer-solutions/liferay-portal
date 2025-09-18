@@ -945,10 +945,12 @@ public class ObjectFieldLocalServiceImpl
 	private void _addObjectFieldColumn(
 		String dbTableName, ObjectField objectField) {
 
-		runSQL(
-			DynamicObjectDefinitionTableUtil.getAlterTableAddColumnSQL(
-				dbTableName, objectField.getBusinessType(),
-				objectField.getDBColumnName(), objectField.getDBType()));
+		for (String dbColumnName : objectField.getDBColumnNames()) {
+			runSQL(
+				DynamicObjectDefinitionTableUtil.getAlterTableAddColumnSQL(
+					dbTableName, objectField.getBusinessType(), dbColumnName,
+					objectField.getDBType()));
+		}
 
 		if (objectField.compareBusinessType(
 				ObjectFieldConstants.BUSINESS_TYPE_AUTO_INCREMENT)) {
@@ -1234,8 +1236,9 @@ public class ObjectFieldLocalServiceImpl
 			return objectField;
 		}
 
-		_alterTableDropColumn(
-			objectField.getDBTableName(), objectField.getDBColumnName());
+		for (String dbColumnName : objectField.getDBColumnNames()) {
+			_alterTableDropColumn(objectField.getDBTableName(), dbColumnName);
+		}
 
 		if (objectField.compareBusinessType(
 				ObjectFieldConstants.BUSINESS_TYPE_AUTO_INCREMENT)) {
@@ -1404,6 +1407,13 @@ public class ObjectFieldLocalServiceImpl
 			newObjectField.getObjectDefinitionId());
 
 		_validateListTypeDefinitionId(listTypeDefinitionId, businessType);
+
+		if (!oldObjectField.compareBusinessType(businessType)) {
+			_validateBusinessTypeAssignee(
+				newObjectField.getCompanyId(),
+				newObjectField.getObjectDefinitionId(), businessType);
+		}
+
 		_validateBusinessTypeEncrypted(
 			newObjectField.getObjectDefinitionId(), businessType);
 		_validateIndexed(
@@ -1526,8 +1536,35 @@ public class ObjectFieldLocalServiceImpl
 					"attachment business types");
 		}
 
+		_validateBusinessTypeAssignee(
+			objectDefinition.getCompanyId(),
+			objectDefinition.getObjectDefinitionId(), businessType);
 		_validateBusinessTypeEncrypted(
 			objectDefinition.getObjectDefinitionId(), businessType);
+	}
+
+	private void _validateBusinessTypeAssignee(
+			long companyId, long objectDefinitionId, String businessType)
+		throws PortalException {
+
+		if (!Objects.equals(
+				businessType, ObjectFieldConstants.BUSINESS_TYPE_ASSIGNEE)) {
+
+			return;
+		}
+
+		if (!FeatureFlagManagerUtil.isEnabled(companyId, "LPD-6233")) {
+			throw new UnsupportedOperationException();
+		}
+
+		int count = objectFieldPersistence.countByODI_BT(
+			objectDefinitionId, ObjectFieldConstants.BUSINESS_TYPE_ASSIGNEE);
+
+		if (count > 0) {
+			throw new ObjectFieldBusinessTypeException(
+				"An object definition can only have one assignee field",
+				"an-object-definition-can-only-have-one-assignee-field");
+		}
 	}
 
 	private void _validateBusinessTypeEncrypted(
@@ -1929,9 +1966,10 @@ public class ObjectFieldLocalServiceImpl
 	private final Set<String> _reservedNames = SetUtil.fromArray(
 		"actions", "companyid", "createdate", "creator", "currentdate",
 		"datecreated", "datemodified", "displaydate", "expirationdate",
-		"externalreferencecode", "groupid", "id", "lastpublishdate",
+		"externalreferencecode", "groupid", "id", "keywords", "lastpublishdate",
 		"modifieddate", "reviewdate", "status", "statusbyuserid",
-		"statusbyusername", "statusdate", "userid", "username");
+		"statusbyusername", "statusdate", "taxonomycategoryids", "userid",
+		"username");
 
 	@Reference
 	private SystemObjectDefinitionManagerRegistry

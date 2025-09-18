@@ -7,7 +7,6 @@ import {expect, mergeTests} from '@playwright/test';
 import {createReadStream} from 'fs';
 import path from 'path';
 
-import {apiHelpersTest} from '../../../fixtures/apiHelpersTest';
 import {dataApiHelpersTest} from '../../../fixtures/dataApiHelpersTest';
 import {featureFlagsTest} from '../../../fixtures/featureFlagsTest';
 import {isolatedSiteTest} from '../../../fixtures/isolatedSiteTest';
@@ -19,9 +18,9 @@ import getWidgetDefinition from '../../layout-content-page-editor-web/main/utils
 import {itemSelectorSamplePageTest} from './fixtures/itemSelectorSamplePageTest';
 
 const test = mergeTests(
-	apiHelpersTest,
 	dataApiHelpersTest,
 	featureFlagsTest({
+		'LPD-17564': {enabled: true},
 		'LPS-178052': {enabled: true},
 	}),
 	itemSelectorSamplePageTest,
@@ -177,6 +176,122 @@ test('Item Selector Modal with multiple selection', async ({
 
 		await expect(
 			itemSelectorSamplePage.page.getByText(`2 Items Selected`)
+		).toBeVisible();
+	});
+});
+
+test('Check user selection via modal in autocomplete input', async ({
+	itemSelectorSamplePage,
+	page,
+}) => {
+	const inputGroupLabel = 'Single Select (Users) - Open Modal Trigger';
+
+	await test.step('Select use via modal', async () => {
+		await itemSelectorSamplePage
+			.inputGroup(inputGroupLabel)
+			.getByLabel('Select Items')
+			.click();
+
+		await page.getByText('Test', {exact: true}).click();
+		await itemSelectorSamplePage.modal.selectButton.click();
+	});
+
+	await test.step('Assert that the autocomplete input has the proper value', async () => {
+		expect(
+			itemSelectorSamplePage
+				.inputGroup(inputGroupLabel)
+				.getByRole('combobox')
+		).toHaveValue('Test Test');
+	});
+});
+
+test('Check user selection via modal in multiselect input', async ({
+	itemSelectorSamplePage,
+	page,
+}) => {
+	const inputGroupLabel = 'Multiple Select (Users) - Open Modal Trigger';
+
+	await test.step('Select use via modal', async () => {
+		await itemSelectorSamplePage
+			.inputGroup(inputGroupLabel)
+			.getByLabel('Select Items')
+			.click();
+
+		await page.getByText('Test', {exact: true}).click();
+		await itemSelectorSamplePage.modal.selectButton.click();
+	});
+
+	await test.step('Assert that multiselect item is selected', async () => {
+		expect(
+			itemSelectorSamplePage.multiselectGridItem('Test Test')
+		).toBeVisible();
+	});
+});
+
+test('Check space selection via modal in autocomplete input', async ({
+	apiHelpers,
+	itemSelectorSamplePage,
+	page,
+}) => {
+	const spaceName = `Space ${getRandomString()}`;
+
+	await apiHelpers.headlessAssetLibrary.createAssetLibrariesPage({
+		name: spaceName,
+		settings: {},
+		type: 'Space',
+	});
+
+	const inputGroupLabel = 'Single Select (Spaces) - Open Modal Trigger';
+
+	await test.step('Select space via modal', async () => {
+		await itemSelectorSamplePage
+			.inputGroup(inputGroupLabel)
+			.getByLabel('Select Items')
+			.click();
+
+		await page.getByText(spaceName, {exact: true}).first().click();
+
+		await itemSelectorSamplePage.modal.selectButton.click();
+	});
+
+	await test.step('Assert that the autocomplete input has the proper value', async () => {
+		expect(
+			itemSelectorSamplePage
+				.inputGroup(inputGroupLabel)
+				.getByRole('combobox')
+		).toHaveValue(spaceName);
+	});
+});
+
+test('Check space selection via modal in multiselect input', async ({
+	apiHelpers,
+	itemSelectorSamplePage,
+	page,
+}) => {
+	const spaceName = `Space ${getRandomString()}`;
+
+	await apiHelpers.headlessAssetLibrary.createAssetLibrariesPage({
+		name: spaceName,
+		settings: {},
+		type: 'Space',
+	});
+
+	const inputGroupLabel = 'Multiple Select (Spaces) - Open Modal Trigger';
+
+	await test.step('Select space via modal', async () => {
+		await itemSelectorSamplePage
+			.inputGroup(inputGroupLabel)
+			.getByLabel('Select Items')
+			.click();
+
+		await page.getByText(spaceName, {exact: true}).first().click();
+
+		await itemSelectorSamplePage.modal.selectButton.click();
+	});
+
+	await test.step('Assert that multiselect item is selected', async () => {
+		expect(
+			itemSelectorSamplePage.multiselectGridItem(spaceName)
 		).toBeVisible();
 	});
 });

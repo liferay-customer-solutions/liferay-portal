@@ -16,6 +16,8 @@ import com.liferay.fragment.renderer.FragmentRendererRegistry;
 import com.liferay.fragment.service.FragmentEntryLinkLocalServiceUtil;
 import com.liferay.fragment.service.FragmentEntryLinkService;
 import com.liferay.fragment.service.FragmentEntryLinkServiceUtil;
+import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
+import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemBuilder;
 import com.liferay.info.field.InfoField;
 import com.liferay.info.form.InfoForm;
 import com.liferay.info.item.InfoItemServiceRegistry;
@@ -34,8 +36,12 @@ import com.liferay.layout.util.structure.FragmentStyledLayoutStructureItem;
 import com.liferay.layout.util.structure.LayoutStructure;
 import com.liferay.layout.util.structure.LayoutStructureItem;
 import com.liferay.layout.util.structure.RowStyledLayoutStructureItem;
+import com.liferay.object.constants.ObjectEntryFolderConstants;
+import com.liferay.object.constants.ObjectFolderConstants;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectEntryFolder;
+import com.liferay.object.service.ObjectDefinitionLocalServiceUtil;
+import com.liferay.object.service.ObjectDefinitionServiceUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -72,6 +78,7 @@ import com.liferay.site.cms.site.initializer.internal.fragment.renderer.SpacesCo
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -454,6 +461,52 @@ public class ActionUtil {
 		}
 	}
 
+	public static List<DropdownItem> getAllSectionCreationMenuDropdownItems(
+		HttpServletRequest httpServletRequest) {
+
+		List<DropdownItem> dropdownItems = new ArrayList<>(
+			List.of(
+				getBasicWebContentDropdownItem(
+					httpServletRequest,
+					ObjectEntryFolderConstants.
+						EXTERNAL_REFERENCE_CODE_CONTENTS),
+				getBasicDocumentDropdownItem(
+					httpServletRequest,
+					ObjectEntryFolderConstants.EXTERNAL_REFERENCE_CODE_FILES),
+				getUploadMultipleFilesDropdownItem(
+					httpServletRequest,
+					ObjectEntryFolderConstants.EXTERNAL_REFERENCE_CODE_FILES),
+				getBlogDropdownItem(
+					httpServletRequest,
+					ObjectEntryFolderConstants.
+						EXTERNAL_REFERENCE_CODE_CONTENTS),
+				getKnowledgeBaseDropdownItem(
+					httpServletRequest,
+					ObjectEntryFolderConstants.
+						EXTERNAL_REFERENCE_CODE_CONTENTS),
+				getExternalVideoShortcutDropdownItem(
+					httpServletRequest,
+					ObjectEntryFolderConstants.EXTERNAL_REFERENCE_CODE_FILES)));
+
+		List<DropdownItem> contentsCustomDropdownItems = getContentsCustomDropdownItems(
+			httpServletRequest,
+			ObjectEntryFolderConstants.EXTERNAL_REFERENCE_CODE_CONTENTS);
+
+		contentsCustomDropdownItems.addAll(
+			getFilesCustomDropdownItems(
+				httpServletRequest,
+				ObjectEntryFolderConstants.EXTERNAL_REFERENCE_CODE_FILES));
+
+		contentsCustomDropdownItems.sort(
+			Comparator.comparing(
+				dropdownItem -> (String)dropdownItem.get("label"),
+				String.CASE_INSENSITIVE_ORDER));
+
+		dropdownItems.addAll(contentsCustomDropdownItems);
+
+		return dropdownItems;
+	}
+
 	public static String getBaseAddSpaceMembersURL(ThemeDisplay themeDisplay) {
 		return StringBundler.concat(
 			themeDisplay.getPathFriendlyURLPublic(),
@@ -490,6 +543,126 @@ public class ActionUtil {
 			GroupConstants.CMS_FRIENDLY_URL, "/e/view-folder/",
 			PortalUtil.getClassNameId(ObjectEntryFolder.class),
 			StringPool.SLASH);
+	}
+
+	public static DropdownItem getBasicDocumentDropdownItem(
+		HttpServletRequest httpServletRequest,
+		String objectEntryFolderExternalReferenceCode) {
+
+		return getStructuredContentDropdownItem(
+			httpServletRequest, "upload", "single-file", "L_BASIC_DOCUMENT",
+			objectEntryFolderExternalReferenceCode);
+	}
+
+	public static DropdownItem getBasicWebContentDropdownItem(
+		HttpServletRequest httpServletRequest,
+		String objectEntryFolderExternalReferenceCode) {
+
+		return getStructuredContentDropdownItem(
+			httpServletRequest, "forms", "basic-content", "L_BASIC_WEB_CONTENT",
+			objectEntryFolderExternalReferenceCode);
+	}
+
+	public static DropdownItem getBlogDropdownItem(
+		HttpServletRequest httpServletRequest,
+		String objectEntryFolderExternalReferenceCode) {
+
+		return getStructuredContentDropdownItem(
+			httpServletRequest, "blogs", null, "L_BLOG",
+			objectEntryFolderExternalReferenceCode);
+	}
+
+	public static List<DropdownItem> getContentsCustomDropdownItems(
+		HttpServletRequest httpServletRequest,
+		String objectEntryFolderExternalReferenceCode) {
+
+		List<DropdownItem> dropdownItems = new ArrayList<>();
+
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)httpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
+		for (ObjectDefinition objectDefinition :
+				ObjectDefinitionServiceUtil.getCMSObjectDefinitions(
+					themeDisplay.getCompanyId(),
+					new String[] {
+						ObjectFolderConstants.
+							EXTERNAL_REFERENCE_CODE_CONTENT_STRUCTURES
+					})) {
+
+			if (objectDefinition.isSystem()) {
+				continue;
+			}
+
+			dropdownItems.add(
+				getStructuredContentDropdownItem(
+					httpServletRequest, "web-content", null, objectDefinition,
+					objectEntryFolderExternalReferenceCode));
+		}
+
+		return dropdownItems;
+	}
+
+	public static List<DropdownItem>
+		getContentsSectionCreationMenuDropdownItems(
+			HttpServletRequest httpServletRequest,
+			ObjectEntryFolder objectEntryFolder) {
+
+		String objectEntryFolderExternalReferenceCode =
+			ObjectEntryFolderConstants.EXTERNAL_REFERENCE_CODE_CONTENTS;
+
+		if (objectEntryFolder != null) {
+			objectEntryFolderExternalReferenceCode =
+				objectEntryFolder.getExternalReferenceCode();
+		}
+
+		List<DropdownItem> dropdownItems = new ArrayList<>(
+			List.of(
+				getCreateFolderDropdownItem(
+					httpServletRequest, objectEntryFolderExternalReferenceCode),
+				getBasicWebContentDropdownItem(
+					httpServletRequest, objectEntryFolderExternalReferenceCode),
+				getBlogDropdownItem(
+					httpServletRequest, objectEntryFolderExternalReferenceCode),
+				getKnowledgeBaseDropdownItem(
+					httpServletRequest,
+					objectEntryFolderExternalReferenceCode)));
+
+		List<DropdownItem> contentsCustomDropdownItems = getContentsCustomDropdownItems(
+			httpServletRequest, objectEntryFolderExternalReferenceCode);
+
+		contentsCustomDropdownItems.sort(
+			Comparator.comparing(
+				dropdownItem -> (String)dropdownItem.get("label"),
+				String.CASE_INSENSITIVE_ORDER));
+
+		dropdownItems.addAll(contentsCustomDropdownItems);
+
+		return dropdownItems;
+	}
+
+	public static DropdownItem getCreateFolderDropdownItem(
+		HttpServletRequest httpServletRequest,
+		String parentObjectEntryFolderExternalReferenceCode) {
+
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)httpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
+		return DropdownItemBuilder.putData(
+			"action", "createFolder"
+		).putData(
+			"baseAssetLibraryViewURL", getBaseSpaceURL(themeDisplay)
+		).putData(
+			"baseFolderViewURL", getBaseViewFolderURL(themeDisplay)
+		).putData(
+			"parentObjectEntryFolderExternalReferenceCode",
+			parentObjectEntryFolderExternalReferenceCode
+		).setIcon(
+			"folder"
+		).setLabel(
+			LanguageUtil.get(httpServletRequest, "folder")
+		).build();
 	}
 
 	public static String getDisplayPageEditURL(
@@ -596,6 +769,91 @@ public class ActionUtil {
 		return StringPool.BLANK;
 	}
 
+	public static DropdownItem getExternalVideoShortcutDropdownItem(
+		HttpServletRequest httpServletRequest,
+		String objectEntryFolderExternalReferenceCode) {
+
+		return getStructuredContentDropdownItem(
+			httpServletRequest, "video", "external-video-shortcut",
+			"L_EXTERNAL_VIDEO", objectEntryFolderExternalReferenceCode);
+	}
+
+	public static List<DropdownItem> getFilesCustomDropdownItems(
+		HttpServletRequest httpServletRequest,
+		String objectEntryFolderExternalReferenceCode) {
+
+		List<DropdownItem> dropdownItems = new ArrayList<>();
+
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)httpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
+		for (ObjectDefinition objectDefinition :
+				ObjectDefinitionServiceUtil.getCMSObjectDefinitions(
+					themeDisplay.getCompanyId(),
+					new String[] {
+						ObjectFolderConstants.EXTERNAL_REFERENCE_CODE_FILE_TYPES
+					})) {
+
+			if (objectDefinition.isSystem()) {
+				continue;
+			}
+
+			dropdownItems.add(
+				getStructuredContentDropdownItem(
+					httpServletRequest, "document-default", null,
+					objectDefinition, objectEntryFolderExternalReferenceCode));
+		}
+
+		return dropdownItems;
+	}
+
+	public static List<DropdownItem> getFilesSectionCreationMenuDropdownItems(
+		HttpServletRequest httpServletRequest,
+		ObjectEntryFolder objectEntryFolder) {
+
+		String objectEntryFolderExternalReferenceCode =
+			ObjectEntryFolderConstants.EXTERNAL_REFERENCE_CODE_FILES;
+
+		if (objectEntryFolder != null) {
+			objectEntryFolderExternalReferenceCode =
+				objectEntryFolder.getExternalReferenceCode();
+		}
+
+		List<DropdownItem> dropdownItems = new ArrayList<>(
+			List.of(
+				getBasicDocumentDropdownItem(
+					httpServletRequest, objectEntryFolderExternalReferenceCode),
+				getUploadMultipleFilesDropdownItem(
+					httpServletRequest, objectEntryFolderExternalReferenceCode),
+				getCreateFolderDropdownItem(
+					httpServletRequest, objectEntryFolderExternalReferenceCode),
+				getExternalVideoShortcutDropdownItem(
+					httpServletRequest,
+					objectEntryFolderExternalReferenceCode)));
+
+		List<DropdownItem> filesCustomDropdownItems = getFilesCustomDropdownItems(
+			httpServletRequest, objectEntryFolderExternalReferenceCode);
+
+		filesCustomDropdownItems.sort(
+			Comparator.comparing(
+				dropdownItem -> (String)dropdownItem.get("label"),
+				String.CASE_INSENSITIVE_ORDER));
+
+		dropdownItems.addAll(filesCustomDropdownItems);
+
+		return dropdownItems;
+	}
+
+	public static DropdownItem getKnowledgeBaseDropdownItem(
+		HttpServletRequest httpServletRequest,
+		String objectEntryFolderExternalReferenceCode) {
+
+		return getStructuredContentDropdownItem(
+			httpServletRequest, "wiki", null, "L_KNOWLEDGE_BASE",
+			objectEntryFolderExternalReferenceCode);
+	}
+
 	public static String getRecycleBinURL(ThemeDisplay themeDisplay) {
 		return StringBundler.concat(
 			themeDisplay.getPathFriendlyURLPublic(),
@@ -616,6 +874,70 @@ public class ActionUtil {
 
 	public static String getSpaceURL(long classPK, ThemeDisplay themeDisplay) {
 		return getBaseSpaceURL(themeDisplay) + classPK;
+	}
+
+	public static DropdownItem getStructuredContentDropdownItem(
+		HttpServletRequest httpServletRequest, String icon, String labelKey,
+		ObjectDefinition objectDefinition,
+		String objectEntryFolderExternalReferenceCode) {
+
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)httpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
+		return DropdownItemBuilder.putData(
+			"action", "createAsset"
+		).putData(
+			"objectDefinitionId",
+			String.valueOf(objectDefinition.getObjectDefinitionId())
+		).putData(
+			"redirect",
+			StringBundler.concat(
+				themeDisplay.getPortalURL(), themeDisplay.getPathMain(),
+				GroupConstants.CMS_FRIENDLY_URL,
+				"/add_structured_content_item?objectDefinitionId=",
+				objectDefinition.getObjectDefinitionId(),
+				"&objectEntryFolderExternalReferenceCode=",
+				objectEntryFolderExternalReferenceCode, "&plid=",
+				themeDisplay.getPlid(), "&redirect=",
+				themeDisplay.getURLCurrent())
+		).putData(
+			"title", objectDefinition.getLabel(themeDisplay.getLocale())
+		).setIcon(
+			icon
+		).setLabel(
+			() -> {
+				if (Validator.isNull(labelKey)) {
+					return objectDefinition.getLabel(themeDisplay.getLocale());
+				}
+
+				return LanguageUtil.get(httpServletRequest, labelKey);
+			}
+		).build();
+	}
+
+	public static DropdownItem getStructuredContentDropdownItem(
+		HttpServletRequest httpServletRequest, String icon, String labelKey,
+		String objectDefinitionExternalReferenceCode,
+		String objectEntryFolderExternalReferenceCode) {
+
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)httpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
+		ObjectDefinition objectDefinition =
+			ObjectDefinitionLocalServiceUtil.
+				fetchObjectDefinitionByExternalReferenceCode(
+					objectDefinitionExternalReferenceCode,
+					themeDisplay.getCompanyId());
+
+		if (objectDefinition == null) {
+			return null;
+		}
+
+		return getStructuredContentDropdownItem(
+			httpServletRequest, icon, labelKey, objectDefinition,
+			objectEntryFolderExternalReferenceCode);
 	}
 
 	public static String getTranslateURL(
@@ -672,6 +994,22 @@ public class ActionUtil {
 		}
 
 		return StringPool.BLANK;
+	}
+
+	public static DropdownItem getUploadMultipleFilesDropdownItem(
+		HttpServletRequest httpServletRequest,
+		String parentObjectEntryFolderExternalReferenceCode) {
+
+		return DropdownItemBuilder.putData(
+			"action", "uploadMultipleFiles"
+		).putData(
+			"parentObjectEntryFolderExternalReferenceCode",
+			parentObjectEntryFolderExternalReferenceCode
+		).setIcon(
+			"upload-multiple"
+		).setLabel(
+			LanguageUtil.get(httpServletRequest, "multiple-files")
+		).build();
 	}
 
 	public static String getViewFolderRecycleBinURL(

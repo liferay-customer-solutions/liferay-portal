@@ -77,14 +77,13 @@ const ItemSelectorModalWrapper = ({
 
 			<ItemSelectorModal<TestItem>
 				{...{
+					apiURL: `${location.origin}/o/headless-delivery/v1.0/test-api-url`,
 					fdsProps: {
-						apiURL: `${location.origin}/o/headless-delivery/v1.0/test-api-url`,
 						id: `itemSelectorModal-test-0001`,
 						pagination: {
 							deltas: [{label: 20}],
 							initialDelta: 20,
 						},
-						selectionType: 'single',
 						views: [
 							{
 								contentRenderer: 'cards',
@@ -98,6 +97,7 @@ const ItemSelectorModalWrapper = ({
 							} as IView,
 						],
 					},
+					itemTypeLabel: 'Space',
 					items: selectedItems,
 					locator: {
 						id: 'itemId',
@@ -108,7 +108,6 @@ const ItemSelectorModalWrapper = ({
 					onItemsChange,
 					onOpenChange,
 					open,
-					type: 'Space',
 				}}
 			/>
 		</>

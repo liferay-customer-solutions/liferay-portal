@@ -91,7 +91,7 @@ public class LayoutInfoItemFormProviderHelper {
 
 		InfoFieldUtil.forEachInfoField(
 			_fragmentRendererController, layout, segmentsExperienceId,
-			(name, infoField, unsafeSupplier) -> infoFieldSetEntries.add(
+			(infoField, type, unsafeSupplier) -> infoFieldSetEntries.add(
 				infoField));
 
 		return infoFieldSetEntries;

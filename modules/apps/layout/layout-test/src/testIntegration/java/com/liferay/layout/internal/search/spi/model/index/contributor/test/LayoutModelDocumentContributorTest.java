@@ -565,6 +565,13 @@ public class LayoutModelDocumentContributorTest {
 	}
 
 	@Test
+	public void testSearchEmptyLayout() throws Exception {
+		Layout layout = LayoutTestUtil.addTypeEmptyLayout(_group);
+
+		_layoutIndexerFixture.searchOnlyOne(layout.getName(_locale));
+	}
+
+	@Test
 	@TestInfo("LPS-152949")
 	public void testSearchFullPageApplicationLayout() throws Exception {
 		Layout layout = LayoutTestUtil.addTypeFullPageApplicationLayout(

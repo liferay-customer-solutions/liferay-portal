@@ -183,7 +183,8 @@ public class ObjectEntryModelListenerTest {
 			objectEntry1.getExternalReferenceCode(),
 			objectEntryFolder2.getCompanyId(), objectEntryFolder2.getUserId(),
 			objectEntryFolder2.getExternalReferenceCode(),
-			objectEntryFolder2.getModelClassName(), jsonObject);
+			objectEntryFolder2.getModelClassName(), jsonObject,
+			objectEntryFolder2.getGroupId(), objectEntryFolder2.getTreePath());
 
 		ObjectDefinition objectDefinition =
 			_objectDefinitionLocalService.
@@ -267,7 +268,8 @@ public class ObjectEntryModelListenerTest {
 			objectEntry1.getExternalReferenceCode(),
 			objectEntryFolder2.getCompanyId(), objectEntryFolder2.getUserId(),
 			objectEntryFolder2.getExternalReferenceCode(),
-			objectEntryFolder2.getModelClassName(), jsonObject);
+			objectEntryFolder2.getModelClassName(), jsonObject,
+			objectEntryFolder2.getGroupId(), objectEntryFolder2.getTreePath());
 
 		objectDefinition =
 			_objectDefinitionLocalService.

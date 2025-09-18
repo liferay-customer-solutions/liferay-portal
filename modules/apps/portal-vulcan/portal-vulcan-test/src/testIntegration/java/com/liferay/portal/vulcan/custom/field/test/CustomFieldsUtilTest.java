@@ -8,11 +8,19 @@ package com.liferay.portal.vulcan.custom.field.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.expando.kernel.exception.NoSuchValueException;
+import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.expando.kernel.model.ExpandoColumn;
 import com.liferay.expando.kernel.model.ExpandoColumnConstants;
 import com.liferay.expando.kernel.model.ExpandoTable;
 import com.liferay.expando.kernel.service.ExpandoColumnLocalService;
+import com.liferay.expando.kernel.util.ExpandoBridgeFactoryUtil;
 import com.liferay.expando.test.util.ExpandoTestUtil;
+import com.liferay.exportimport.kernel.lar.ExportImportThreadLocal;
+import com.liferay.exportimport.report.constants.ExportImportReportEntryConstants;
+import com.liferay.exportimport.report.model.ExportImportReportEntry;
+import com.liferay.exportimport.report.service.ExportImportReportEntryLocalService;
+import com.liferay.exportimport.test.rule.LazyReferencing;
+import com.liferay.exportimport.test.rule.LazyReferencingTestRule;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.model.User;
@@ -28,6 +36,7 @@ import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
@@ -38,6 +47,8 @@ import com.liferay.portal.vulcan.custom.field.CustomField;
 import com.liferay.portal.vulcan.custom.field.CustomFieldsUtil;
 import com.liferay.portal.vulcan.custom.field.CustomValue;
 import com.liferay.portal.vulcan.custom.field.Geo;
+import com.liferay.portal.vulcan.fields.NestedFieldsContext;
+import com.liferay.portal.vulcan.fields.NestedFieldsContextThreadLocal;
 
 import java.io.Serializable;
 
@@ -49,6 +60,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -70,7 +82,7 @@ public class CustomFieldsUtilTest {
 	@Rule
 	public static final AggregateTestRule aggregateTestRule =
 		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
+			LazyReferencingTestRule.INSTANCE, new LiferayIntegrationTestRule(),
 			PermissionCheckerMethodTestRule.INSTANCE);
 
 	@Before
@@ -183,6 +195,10 @@ public class CustomFieldsUtilTest {
 
 		_user = UserTestUtil.addCompanyAdminUser(
 			_companyLocalService.fetchCompany(TestPropsValues.getCompanyId()));
+
+		NestedFieldsContextThreadLocal.setNestedFieldsContext(
+			new NestedFieldsContext(
+				1, Arrays.asList("customFields.attributeType")));
 	}
 
 	@Test
@@ -313,6 +329,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.BOOLEAN;
 					customValue = new CustomValue() {
 						{
 							data = true;
@@ -326,6 +343,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.BOOLEAN_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new boolean[] {true};
@@ -339,6 +357,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.DATE;
 					customValue = new CustomValue() {
 						{
 							data = _dateFormat.format(randomDate);
@@ -352,6 +371,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.DATE_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new Date[] {randomDate};
@@ -365,6 +385,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.DOUBLE;
 					customValue = new CustomValue() {
 						{
 							data = _DATA_DOUBLE;
@@ -378,6 +399,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.DOUBLE_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new double[] {_DATA_DOUBLE};
@@ -391,6 +413,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.DOUBLE_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new double[] {_DATA_DOUBLE};
@@ -404,6 +427,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.DOUBLE_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new double[] {_DATA_DOUBLE};
@@ -417,6 +441,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.FLOAT;
 					customValue = new CustomValue() {
 						{
 							data = randomFloat;
@@ -430,6 +455,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.FLOAT_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new float[] {randomFloat};
@@ -443,6 +469,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.GEOLOCATION;
 					customValue = new CustomValue() {
 						{
 							geo = new Geo() {
@@ -461,6 +488,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.INTEGER;
 					customValue = new CustomValue() {
 						{
 							data = randomInt;
@@ -474,6 +502,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.INTEGER_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new int[] {randomInt};
@@ -487,6 +516,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.LONG;
 					customValue = new CustomValue() {
 						{
 							data = _DATA_LONG;
@@ -500,6 +530,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.LONG_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new long[] {_DATA_LONG};
@@ -513,6 +544,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.LONG_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new long[] {_DATA_LONG};
@@ -526,6 +558,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.LONG_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new long[] {_DATA_LONG};
@@ -539,6 +572,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.NUMBER;
 					customValue = new CustomValue() {
 						{
 							data = new BigDecimal(randomNumber.intValue());
@@ -552,6 +586,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.NUMBER_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new Number[] {
@@ -567,6 +602,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.SHORT;
 					customValue = new CustomValue() {
 						{
 							data = randomShort;
@@ -580,6 +616,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.SHORT_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new short[] {randomShort};
@@ -593,6 +630,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.STRING;
 					customValue = new CustomValue() {
 						{
 							data = _DATA_STRING;
@@ -606,6 +644,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.STRING_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new String[] {_DATA_STRING};
@@ -619,6 +658,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.STRING_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new String[] {_DATA_STRING};
@@ -632,6 +672,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.STRING_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new String[] {_DATA_STRING};
@@ -645,6 +686,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.STRING_ARRAY_LOCALIZED;
 					customValue = new CustomValue() {
 						{
 							data = HashMapBuilder.put(
@@ -664,6 +706,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.STRING_LOCALIZED;
 					customValue = new CustomValue() {
 						{
 							data = _DATA_STRING;
@@ -681,6 +724,42 @@ public class CustomFieldsUtilTest {
 				}
 			},
 			_getCustomField(customFields, _expandoColumn27.getName()));
+
+		// Without nested fields
+
+		NestedFieldsContextThreadLocal.setNestedFieldsContext(null);
+
+		customFields = CustomFieldsUtil.toCustomFields(
+			true, _clazz.getName(), _user.getPrimaryKey(),
+			TestPropsValues.getCompanyId(), LocaleUtil.getDefault());
+
+		_assertNullAttributeType(customFields, _expandoColumn1.getName());
+		_assertNullAttributeType(customFields, _expandoColumn2.getName());
+		_assertNullAttributeType(customFields, _expandoColumn3.getName());
+		_assertNullAttributeType(customFields, _expandoColumn4.getName());
+		_assertNullAttributeType(customFields, _expandoColumn5.getName());
+		_assertNullAttributeType(customFields, _expandoColumn6.getName());
+		_assertNullAttributeType(customFields, _expandoColumn7.getName());
+		_assertNullAttributeType(customFields, _expandoColumn8.getName());
+		_assertNullAttributeType(customFields, _expandoColumn9.getName());
+		_assertNullAttributeType(customFields, _expandoColumn10.getName());
+		_assertNullAttributeType(customFields, _expandoColumn11.getName());
+		_assertNullAttributeType(customFields, _expandoColumn12.getName());
+		_assertNullAttributeType(customFields, _expandoColumn13.getName());
+		_assertNullAttributeType(customFields, _expandoColumn14.getName());
+		_assertNullAttributeType(customFields, _expandoColumn15.getName());
+		_assertNullAttributeType(customFields, _expandoColumn16.getName());
+		_assertNullAttributeType(customFields, _expandoColumn17.getName());
+		_assertNullAttributeType(customFields, _expandoColumn18.getName());
+		_assertNullAttributeType(customFields, _expandoColumn19.getName());
+		_assertNullAttributeType(customFields, _expandoColumn20.getName());
+		_assertNullAttributeType(customFields, _expandoColumn21.getName());
+		_assertNullAttributeType(customFields, _expandoColumn22.getName());
+		_assertNullAttributeType(customFields, _expandoColumn23.getName());
+		_assertNullAttributeType(customFields, _expandoColumn24.getName());
+		_assertNullAttributeType(customFields, _expandoColumn25.getName());
+		_assertNullAttributeType(customFields, _expandoColumn26.getName());
+		_assertNullAttributeType(customFields, _expandoColumn27.getName());
 	}
 
 	@Test
@@ -692,6 +771,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.BOOLEAN;
 					customValue = new CustomValue() {
 						{
 							data = false;
@@ -705,6 +785,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.BOOLEAN_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new boolean[0];
@@ -718,6 +799,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.DATE;
 					customValue = new CustomValue() {
 						{
 							data = "1970-01-01T00:00:00Z";
@@ -731,6 +813,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.DATE_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new String[0];
@@ -744,6 +827,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.DOUBLE;
 					customValue = new CustomValue() {
 						{
 							data = 0.0;
@@ -757,6 +841,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.DOUBLE_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new double[] {0.0};
@@ -770,6 +855,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.DOUBLE_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new double[] {0.0};
@@ -783,6 +869,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.DOUBLE_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new double[] {_DATA_DOUBLE};
@@ -796,6 +883,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.FLOAT;
 					customValue = new CustomValue() {
 						{
 							data = (float)0.0;
@@ -809,6 +897,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.FLOAT_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new float[0];
@@ -822,6 +911,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.GEOLOCATION;
 					customValue = new CustomValue() {
 						{
 							geo = new Geo() {
@@ -840,6 +930,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.INTEGER;
 					customValue = new CustomValue() {
 						{
 							data = 0;
@@ -853,6 +944,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.INTEGER_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new int[0];
@@ -866,6 +958,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.LONG;
 					customValue = new CustomValue() {
 						{
 							data = 0L;
@@ -879,6 +972,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.LONG_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new long[] {0L};
@@ -892,6 +986,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.LONG_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new long[] {0L};
@@ -905,6 +1000,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.LONG_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new long[] {_DATA_LONG};
@@ -918,6 +1014,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.NUMBER;
 					customValue = new CustomValue() {
 						{
 							data = 0;
@@ -931,6 +1028,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.NUMBER_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new Number[0];
@@ -944,6 +1042,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.SHORT;
 					customValue = new CustomValue() {
 						{
 							data = (short)0;
@@ -957,6 +1056,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.SHORT_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new short[0];
@@ -970,6 +1070,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.STRING;
 					customValue = new CustomValue() {
 						{
 							data = "";
@@ -983,6 +1084,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.STRING_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new String[] {"false"};
@@ -996,6 +1098,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.STRING_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new String[] {"false"};
@@ -1009,6 +1112,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.STRING_ARRAY;
 					customValue = new CustomValue() {
 						{
 							data = new String[] {_DATA_STRING};
@@ -1022,6 +1126,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.STRING_ARRAY_LOCALIZED;
 					customValue = new CustomValue() {
 						{
 							data = new HashMap<>();
@@ -1035,6 +1140,7 @@ public class CustomFieldsUtilTest {
 		_assertEquals(
 			new CustomField() {
 				{
+					attributeType = AttributeType.STRING_LOCALIZED;
 					customValue = new CustomValue() {
 						{
 							data_i18n = new HashMap<>();
@@ -2155,6 +2261,508 @@ public class CustomFieldsUtilTest {
 				null, null));
 	}
 
+	@Test
+	public void testToMapWithNonexistentCustomFieldAndLazyReferencingDisabled()
+		throws Exception {
+
+		long exportImportConfigurationId = RandomTestUtil.nextLong();
+
+		ExportImportThreadLocal.setExportImportConfigurationId(
+			exportImportConfigurationId);
+
+		int initialExpandoColumnsCount =
+			_expandoColumnLocalService.getColumnsCount(
+				TestPropsValues.getCompanyId(),
+				_classNameLocalService.getClassNameId(_clazz), "CUSTOM_FIELDS");
+
+		try {
+			CustomFieldsUtil.toMap(
+				_clazz.getName(), TestPropsValues.getCompanyId(),
+				new CustomField[] {
+					new CustomField() {
+						{
+							attributeType = AttributeType.INTEGER;
+							customValue = new CustomValue() {
+								{
+									data = _DATA_INT;
+								}
+							};
+							dataType = "Integer";
+							name = RandomTestUtil.randomString();
+						}
+					}
+				},
+				LocaleUtil.getDefault());
+
+			Assert.fail();
+		}
+		catch (NullPointerException nullPointerException) {
+
+			// TODO LPD-65443 The exception should not be a NPE
+
+			Assert.assertNotNull(nullPointerException);
+
+			Assert.assertEquals(
+				initialExpandoColumnsCount,
+				_expandoColumnLocalService.getColumnsCount(
+					TestPropsValues.getCompanyId(),
+					_classNameLocalService.getClassNameId(_clazz),
+					"CUSTOM_FIELDS"));
+			Assert.assertTrue(
+				ListUtil.isEmpty(
+					_exportImportReportEntryLocalService.
+						getExportImportReportEntries(
+							TestPropsValues.getCompanyId(),
+							exportImportConfigurationId)));
+		}
+	}
+
+	@LazyReferencing
+	@Test
+	public void testToMapWithNonexistentCustomFieldAndLazyReferencingEnabled()
+		throws Exception {
+
+		long exportImportConfigurationId = RandomTestUtil.nextLong();
+
+		ExportImportThreadLocal.setExportImportConfigurationId(
+			exportImportConfigurationId);
+
+		int initialExpandoColumnsCount =
+			_expandoColumnLocalService.getColumnsCount(
+				TestPropsValues.getCompanyId(),
+				_classNameLocalService.getClassNameId(_clazz), "CUSTOM_FIELDS");
+
+		Date randomDate = RandomTestUtil.nextDate();
+		String randomName1 = RandomTestUtil.randomString();
+		String randomName2 = RandomTestUtil.randomString();
+		String randomName3 = RandomTestUtil.randomString();
+		String randomName4 = RandomTestUtil.randomString();
+		String randomName5 = RandomTestUtil.randomString();
+		String randomName6 = RandomTestUtil.randomString();
+		String randomName7 = RandomTestUtil.randomString();
+		String randomName8 = RandomTestUtil.randomString();
+		String randomName9 = RandomTestUtil.randomString();
+		String randomName10 = RandomTestUtil.randomString();
+		String randomName11 = RandomTestUtil.randomString();
+		String randomName12 = RandomTestUtil.randomString();
+		String randomName13 = RandomTestUtil.randomString();
+		String randomName14 = RandomTestUtil.randomString();
+		String randomName15 = RandomTestUtil.randomString();
+		String randomName16 = RandomTestUtil.randomString();
+		String randomName17 = RandomTestUtil.randomString();
+		String randomName18 = RandomTestUtil.randomString();
+		String randomName19 = RandomTestUtil.randomString();
+		String randomName20 = RandomTestUtil.randomString();
+		String randomName21 = RandomTestUtil.randomString();
+		Number randomNumber = RandomTestUtil.randomInt();
+		short randomShort = (short)RandomTestUtil.randomInt(
+			Short.MIN_VALUE, Short.MAX_VALUE);
+		String randomString = RandomTestUtil.randomString();
+
+		Map<String, Serializable> map = CustomFieldsUtil.toMap(
+			_clazz.getName(), TestPropsValues.getCompanyId(),
+			new CustomField[] {
+				new CustomField() {
+					{
+						attributeType = AttributeType.BOOLEAN;
+						customValue = new CustomValue() {
+							{
+								data = true;
+							}
+						};
+						name = _expandoColumn1.getName();
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.BOOLEAN;
+						customValue = new CustomValue() {
+							{
+								data = true;
+							}
+						};
+						name = randomName1;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.BOOLEAN_ARRAY;
+						customValue = new CustomValue() {
+							{
+								data = new boolean[] {true};
+							}
+						};
+						name = randomName2;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.DATE;
+						customValue = new CustomValue() {
+							{
+								data = _dateFormat.format(randomDate);
+							}
+						};
+						dataType = "";
+						name = randomName3;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.DATE_ARRAY;
+						customValue = new CustomValue() {
+							{
+								data = new Date[] {randomDate};
+							}
+						};
+						name = randomName4;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.DOUBLE;
+						customValue = new CustomValue() {
+							{
+								data = _DATA_DOUBLE;
+							}
+						};
+						name = randomName5;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.DOUBLE_ARRAY;
+						customValue = new CustomValue() {
+							{
+								data = new double[] {_DATA_DOUBLE};
+							}
+						};
+						name = randomName6;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.FLOAT;
+						customValue = new CustomValue() {
+							{
+								data = _DATA_FLOAT;
+							}
+						};
+						name = randomName7;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.FLOAT_ARRAY;
+						customValue = new CustomValue() {
+							{
+								data = new float[] {_DATA_FLOAT};
+							}
+						};
+						name = randomName8;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.INTEGER;
+						customValue = new CustomValue() {
+							{
+								data = _DATA_INT;
+							}
+						};
+						name = randomName9;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.INTEGER_ARRAY;
+						customValue = new CustomValue() {
+							{
+								data = new int[] {_DATA_INT};
+							}
+						};
+						name = randomName10;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.LONG;
+						customValue = new CustomValue() {
+							{
+								data = _DATA_LONG;
+							}
+						};
+						name = randomName11;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.LONG_ARRAY;
+						customValue = new CustomValue() {
+							{
+								data = new long[] {_DATA_LONG};
+							}
+						};
+						name = randomName12;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.SHORT;
+						customValue = new CustomValue() {
+							{
+								data = randomShort;
+							}
+						};
+						name = randomName13;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.SHORT_ARRAY;
+						customValue = new CustomValue() {
+							{
+								data = new short[] {randomShort};
+							}
+						};
+						name = randomName14;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.STRING;
+						customValue = new CustomValue() {
+							{
+								data = _DATA_STRING;
+							}
+						};
+						name = randomName15;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.STRING_ARRAY;
+						customValue = new CustomValue() {
+							{
+								data = new String[] {_DATA_STRING};
+							}
+						};
+						name = randomName16;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.NUMBER;
+						customValue = new CustomValue() {
+							{
+								data = new BigDecimal(randomNumber.intValue());
+							}
+						};
+						name = randomName17;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.NUMBER_ARRAY;
+						customValue = new CustomValue() {
+							{
+								data = new Number[] {
+									new BigDecimal(randomNumber.intValue())
+								};
+							}
+						};
+						name = randomName18;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.STRING_ARRAY_LOCALIZED;
+						customValue = new CustomValue() {
+							{
+								data = HashMapBuilder.put(
+									_enLocale, new String[] {_DATA_STRING}
+								).put(
+									_frLocale, new String[] {randomString}
+								).put(
+									_ptLocale, new String[] {randomString}
+								).build();
+							}
+						};
+						name = randomName19;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.STRING_LOCALIZED;
+						customValue = new CustomValue() {
+							{
+								data = _DATA_STRING;
+								data_i18n = HashMapBuilder.put(
+									"en-US", _DATA_STRING
+								).put(
+									"fr-FR", randomString
+								).put(
+									"pt-BR", randomString
+								).build();
+							}
+						};
+						name = randomName20;
+					}
+				},
+				new CustomField() {
+					{
+						attributeType = AttributeType.GEOLOCATION;
+						customValue = new CustomValue() {
+							{
+								geo = new Geo() {
+									{
+										latitude = _DATA_DOUBLE;
+										longitude = _DATA_DOUBLE;
+									}
+								};
+							}
+						};
+						name = randomName21;
+					}
+				}
+			},
+			LocaleUtil.getDefault());
+
+		Assert.assertEquals(
+			initialExpandoColumnsCount + 21,
+			_expandoColumnLocalService.getColumnsCount(
+				TestPropsValues.getCompanyId(),
+				_classNameLocalService.getClassNameId(_clazz),
+				"CUSTOM_FIELDS"));
+
+		ExpandoBridge expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(
+			TestPropsValues.getCompanyId(), _clazz.getName());
+
+		Assert.assertEquals(
+			1, expandoBridge.getAttributeType(_expandoColumn1.getName()));
+
+		Assert.assertTrue((boolean)map.get(_expandoColumn1.getName()));
+		Assert.assertEquals(1, expandoBridge.getAttributeType(randomName1));
+		Assert.assertTrue((boolean)map.get(randomName1));
+		Assert.assertEquals(2, expandoBridge.getAttributeType(randomName2));
+		Assert.assertArrayEquals(
+			new boolean[] {true}, (boolean[])map.get(randomName2));
+		Assert.assertEquals(3, expandoBridge.getAttributeType(randomName3));
+		Assert.assertTrue(
+			DateUtil.equals(
+				new Date((randomDate.getTime() / 1000) * 1000),
+				(Date)map.get(randomName3)));
+		Assert.assertEquals(4, expandoBridge.getAttributeType(randomName4));
+		Assert.assertArrayEquals(
+			new Date[] {randomDate}, (Date[])map.get(randomName4));
+		Assert.assertEquals(5, expandoBridge.getAttributeType(randomName5));
+		Assert.assertEquals(_DATA_DOUBLE, map.get(randomName5));
+		Assert.assertEquals(6, expandoBridge.getAttributeType(randomName6));
+		Assert.assertArrayEquals(
+			new double[] {_DATA_DOUBLE}, (double[])map.get(randomName6), 0);
+		Assert.assertEquals(7, expandoBridge.getAttributeType(randomName7));
+		Assert.assertEquals(_DATA_FLOAT, map.get(randomName7));
+		Assert.assertEquals(8, expandoBridge.getAttributeType(randomName8));
+		Assert.assertArrayEquals(
+			new float[] {_DATA_FLOAT}, (float[])map.get(randomName8), 0);
+		Assert.assertEquals(9, expandoBridge.getAttributeType(randomName9));
+		Assert.assertEquals(_DATA_INT, map.get(randomName9));
+		Assert.assertEquals(10, expandoBridge.getAttributeType(randomName10));
+		Assert.assertArrayEquals(
+			new int[] {_DATA_INT}, (int[])map.get(randomName10));
+		Assert.assertEquals(11, expandoBridge.getAttributeType(randomName11));
+		Assert.assertEquals(_DATA_LONG, map.get(randomName11));
+		Assert.assertEquals(12, expandoBridge.getAttributeType(randomName12));
+		Assert.assertArrayEquals(
+			new long[] {_DATA_LONG}, (long[])map.get(randomName12));
+		Assert.assertEquals(13, expandoBridge.getAttributeType(randomName13));
+		Assert.assertEquals(randomShort, map.get(randomName13));
+		Assert.assertEquals(14, expandoBridge.getAttributeType(randomName14));
+		Assert.assertArrayEquals(
+			new short[] {randomShort}, (short[])map.get(randomName14));
+		Assert.assertEquals(15, expandoBridge.getAttributeType(randomName15));
+		Assert.assertEquals(_DATA_STRING, map.get(randomName15));
+		Assert.assertEquals(16, expandoBridge.getAttributeType(randomName16));
+		Assert.assertArrayEquals(
+			new String[] {_DATA_STRING}, (String[])map.get(randomName16));
+		Assert.assertEquals(17, expandoBridge.getAttributeType(randomName17));
+		Assert.assertEquals(
+			new BigDecimal(randomNumber.intValue()), map.get(randomName17));
+		Assert.assertEquals(18, expandoBridge.getAttributeType(randomName18));
+		Assert.assertArrayEquals(
+			new Number[] {new BigDecimal(randomNumber.intValue())},
+			(Number[])map.get(randomName18));
+		Assert.assertEquals(19, expandoBridge.getAttributeType(randomName19));
+		AssertUtils.assertEquals(
+			HashMapBuilder.put(
+				_enLocale, new String[] {_DATA_STRING}
+			).put(
+				_frLocale, new String[] {randomString}
+			).put(
+				_ptLocale, new String[] {randomString}
+			).build(),
+			(Map)map.get(randomName19));
+		Assert.assertEquals(20, expandoBridge.getAttributeType(randomName20));
+		AssertUtils.assertEquals(
+			HashMapBuilder.put(
+				_enLocale, _DATA_STRING
+			).put(
+				_frLocale, randomString
+			).put(
+				_ptLocale, randomString
+			).build(),
+			(Map)map.get(randomName20));
+		Assert.assertEquals(21, expandoBridge.getAttributeType(randomName21));
+		Assert.assertEquals(
+			JSONUtil.put(
+				"latitude", _DATA_DOUBLE
+			).put(
+				"longitude", _DATA_DOUBLE
+			).toString(),
+			map.get(randomName21));
+
+		List<ExportImportReportEntry> exportImportReportEntries =
+			_exportImportReportEntryLocalService.getExportImportReportEntries(
+				TestPropsValues.getCompanyId(), exportImportConfigurationId);
+
+		Assert.assertEquals(
+			exportImportReportEntries.toString(),
+			exportImportReportEntries.size(), 21);
+
+		ExportImportReportEntry exportImportReportEntry =
+			exportImportReportEntries.get(0);
+
+		Assert.assertEquals(0L, exportImportReportEntry.getGroupId());
+		Assert.assertEquals(
+			TestPropsValues.getCompanyId(),
+			exportImportReportEntry.getCompanyId());
+		Assert.assertEquals(
+			randomName1,
+			exportImportReportEntry.getClassExternalReferenceCode());
+		Assert.assertEquals(
+			_classNameLocalService.getClassNameId(ExpandoColumn.class),
+			exportImportReportEntry.getClassNameId());
+		Assert.assertEquals(
+			exportImportConfigurationId,
+			exportImportReportEntry.getExportImportConfigurationId());
+		Assert.assertNull(exportImportReportEntry.getError());
+		Assert.assertNull(exportImportReportEntry.getErrorStacktrace());
+		Assert.assertEquals(
+			ExpandoColumn.class.getName(),
+			exportImportReportEntry.getModelName());
+		Assert.assertEquals(
+			ExportImportReportEntryConstants.ORIGIN_STAGING,
+			exportImportReportEntry.getOrigin());
+		Assert.assertEquals("company", exportImportReportEntry.getScope());
+		Assert.assertEquals("", exportImportReportEntry.getScopeKey());
+		Assert.assertEquals(
+			ExportImportReportEntryConstants.TYPE_EMPTY,
+			exportImportReportEntry.getType());
+		Assert.assertEquals(
+			ExportImportReportEntryConstants.STATUS_UNRESOLVED,
+			exportImportReportEntry.getStatus());
+	}
+
 	private ExpandoColumn _addExpandoColumn(
 			Object defaultData, String displayType, ExpandoTable expandoTable,
 			int type)
@@ -2181,6 +2789,9 @@ public class CustomFieldsUtilTest {
 
 	private void _assertEquals(
 		CustomField customField1, CustomField customField2) {
+
+		Assert.assertEquals(
+			customField1.getAttributeType(), customField2.getAttributeType());
 
 		_assertEquals(
 			customField1.getCustomValue(), customField2.getCustomValue());
@@ -2223,6 +2834,15 @@ public class CustomFieldsUtilTest {
 
 		Assert.assertEquals(geo1.getLatitude(), geo2.getLatitude());
 		Assert.assertEquals(geo1.getLongitude(), geo2.getLongitude());
+	}
+
+	private void _assertNullAttributeType(
+			CustomField[] customFields, String name)
+		throws Exception {
+
+		CustomField customField = _getCustomField(customFields, name);
+
+		Assert.assertNull(customField.getAttributeType());
 	}
 
 	private CustomField _createCustomField(
@@ -2347,6 +2967,10 @@ public class CustomFieldsUtilTest {
 
 	@DeleteAfterTestRun
 	private ExpandoTable _expandoTable;
+
+	@Inject
+	private ExportImportReportEntryLocalService
+		_exportImportReportEntryLocalService;
 
 	private final Locale _frLocale = LocaleUtil.fromLanguageId("fr_FR");
 	private int _initialExpandoColumnsCount;

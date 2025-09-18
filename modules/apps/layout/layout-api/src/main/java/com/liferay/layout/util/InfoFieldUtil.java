@@ -45,7 +45,7 @@ public class InfoFieldUtil {
 			FragmentEntryLink fragmentEntryLink,
 			FragmentRendererController fragmentRendererController,
 			UnsafeTriConsumer
-				<String, InfoField<?>,
+				<InfoField<?>, String,
 				 UnsafeSupplier<JSONObject, JSONException>, E> consumer)
 		throws E {
 
@@ -68,10 +68,9 @@ public class InfoFieldUtil {
 
 			if (!name.equals(defaultElementName) && _isTextFieldType(type)) {
 				consumer.accept(
-					name,
 					_getInfoField(
 						fragmentEntryLink.getFragmentEntryLinkId(), name, type),
-					fragmentEntryLink::getEditableValuesJSONObject);
+					type, fragmentEntryLink::getEditableValuesJSONObject);
 			}
 		}
 	}
@@ -80,7 +79,7 @@ public class InfoFieldUtil {
 			FragmentRendererController fragmentRendererController,
 			Layout layout, long segmentsExperienceId,
 			UnsafeTriConsumer
-				<String, InfoField<?>,
+				<InfoField<?>, String,
 				 UnsafeSupplier<JSONObject, JSONException>, E> consumer)
 		throws E {
 
@@ -165,8 +164,9 @@ public class InfoFieldUtil {
 	}
 
 	private static boolean _isTextFieldType(String type) {
-		if (type.equals("html") || type.equals("link") ||
-			type.equals("rich-text") || type.equals("text")) {
+		if (type.equals("action") || type.equals("html") ||
+			type.equals("link") || type.equals("rich-text") ||
+			type.equals("text")) {
 
 			return true;
 		}

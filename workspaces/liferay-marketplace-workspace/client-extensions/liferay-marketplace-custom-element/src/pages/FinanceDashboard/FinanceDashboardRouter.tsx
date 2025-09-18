@@ -7,8 +7,10 @@ import {HashRouter, Route, Routes} from 'react-router-dom';
 
 import withProviders from '../../hoc/withProviders';
 import FinanceDashboardOutlet from './FinanceDashboardOutlet';
-import Orders from './pages/Orders';
-import OrderDetails from './pages/Orders/OrderDetails';
+import OrderDetails from './pages/Orders/OrderDetails/OrderDetails';
+import Orders from './pages/Orders/Orders';
+import PaymentDetails from './pages/Payments/PaymentDetails/PaymentDetails';
+import Payments from './pages/Payments/Payments';
 
 import './index.scss';
 
@@ -19,6 +21,10 @@ const SSADashboardRouter = () => (
 				<Route element={<Orders />} index />
 
 				<Route element={<OrderDetails />} path="order/:orderId" />
+
+				<Route element={<Payments />} path="payments" />
+
+				<Route element={<PaymentDetails />} path="payments/:entryId" />
 			</Route>
 		</Routes>
 	</HashRouter>

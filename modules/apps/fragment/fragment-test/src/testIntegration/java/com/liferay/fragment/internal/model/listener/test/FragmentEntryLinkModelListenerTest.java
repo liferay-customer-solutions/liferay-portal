@@ -240,6 +240,21 @@ public class FragmentEntryLinkModelListenerTest {
 	}
 
 	@Test
+	public void testAddFragmentEntryLinkWithRichTextField() throws Exception {
+		String editableFieldValue = "<script>alert('xss');</script>Example";
+
+		FragmentEntryLink fragmentEntryLink = _addFragmentEntryLink(
+			_fragmentCollectionContributorRegistry.getFragmentEntry(
+				"BASIC_COMPONENT-paragraph"),
+			_createEditableValues("element-text", editableFieldValue),
+			_serviceContext);
+
+		Assert.assertEquals(
+			_createEditableValues("element-text", "Example"),
+			fragmentEntryLink.getEditableValues());
+	}
+
+	@Test
 	public void testAddFragmentEntryLinkWithTextField() throws Exception {
 		String editableFieldValue =
 			"<script>alert('xss');</script>Heading Example";
@@ -260,19 +275,12 @@ public class FragmentEntryLinkModelListenerTest {
 	public void testUpdateFragmentEntryLinkWithEscapedTextField()
 		throws Exception {
 
-		FragmentEntryLink fragmentEntryLink = _addFragmentEntryLink(
-			_fragmentCollectionContributorRegistry.getFragmentEntry(
-				"BASIC_COMPONENT-heading"),
-			StringPool.BLANK, _serviceContext);
-
 		String editableValues = _createEditableValues(
 			"element-text",
 			HtmlUtil.escape("<script>alert('xss');</script>Heading Example"));
 
-		fragmentEntryLink =
-			_fragmentEntryLinkLocalService.updateFragmentEntryLink(
-				TestPropsValues.getUserId(),
-				fragmentEntryLink.getFragmentEntryLinkId(), editableValues);
+		FragmentEntryLink fragmentEntryLink = _updateFragmentEntryLink(
+			"BASIC_COMPONENT-heading", editableValues);
 
 		Assert.assertEquals(
 			editableValues, fragmentEntryLink.getEditableValues());
@@ -280,18 +288,11 @@ public class FragmentEntryLinkModelListenerTest {
 
 	@Test
 	public void testUpdateFragmentEntryLinkWithHTMLField() throws Exception {
-		FragmentEntryLink fragmentEntryLink = _addFragmentEntryLink(
-			_fragmentCollectionContributorRegistry.getFragmentEntry(
-				"BASIC_COMPONENT-html"),
-			StringPool.BLANK, _serviceContext);
-
 		String editableValues = _createEditableValues(
 			"element-html", "<script>alert('xss');</script>HTML Example");
 
-		fragmentEntryLink =
-			_fragmentEntryLinkLocalService.updateFragmentEntryLink(
-				TestPropsValues.getUserId(),
-				fragmentEntryLink.getFragmentEntryLinkId(), editableValues);
+		FragmentEntryLink fragmentEntryLink = _updateFragmentEntryLink(
+			"BASIC_COMPONENT-html", editableValues);
 
 		Assert.assertEquals(
 			editableValues, fragmentEntryLink.getEditableValues());
@@ -300,11 +301,6 @@ public class FragmentEntryLinkModelListenerTest {
 	@Test
 	public void testUpdateFragmentEntryLinkWithMappedTextField()
 		throws Exception {
-
-		FragmentEntryLink fragmentEntryLink = _addFragmentEntryLink(
-			_fragmentCollectionContributorRegistry.getFragmentEntry(
-				"BASIC_COMPONENT-heading"),
-			StringPool.BLANK, _serviceContext);
 
 		long classPK = RandomTestUtil.randomLong();
 
@@ -355,34 +351,38 @@ public class FragmentEntryLinkModelListenerTest {
 				))
 		).toString();
 
-		fragmentEntryLink =
-			_fragmentEntryLinkLocalService.updateFragmentEntryLink(
-				TestPropsValues.getUserId(),
-				fragmentEntryLink.getFragmentEntryLinkId(), editableValues);
+		FragmentEntryLink fragmentEntryLink = _updateFragmentEntryLink(
+			"BASIC_COMPONENT-heading", editableValues);
 
 		Assert.assertEquals(
 			expectedEditableValues, fragmentEntryLink.getEditableValues());
 	}
 
 	@Test
+	public void testUpdateFragmentEntryLinkWithRichTextField()
+		throws Exception {
+
+		FragmentEntryLink fragmentEntryLink = _updateFragmentEntryLink(
+			"BASIC_COMPONENT-paragraph",
+			_createEditableValues(
+				"element-text", "<script>alert('xss');</script>Example"));
+
+		Assert.assertEquals(
+			_createEditableValues("element-text", "Example"),
+			fragmentEntryLink.getEditableValues());
+	}
+
+	@Test
 	public void testUpdateFragmentEntryLinkWithTextField() throws Exception {
-		FragmentEntryLink fragmentEntryLink = _addFragmentEntryLink(
-			_fragmentCollectionContributorRegistry.getFragmentEntry(
-				"BASIC_COMPONENT-heading"),
-			StringPool.BLANK, _serviceContext);
+		String editableValue = "<script>alert('xss');</script>Example";
 
-		String editableFieldValue =
-			"<script>alert('xss');</script>Heading Example";
-
-		fragmentEntryLink =
-			_fragmentEntryLinkLocalService.updateFragmentEntryLink(
-				TestPropsValues.getUserId(),
-				fragmentEntryLink.getFragmentEntryLinkId(),
-				_createEditableValues("element-text", editableFieldValue));
+		FragmentEntryLink fragmentEntryLink = _updateFragmentEntryLink(
+			"BASIC_COMPONENT-heading",
+			_createEditableValues("element-text", editableValue));
 
 		Assert.assertEquals(
 			_createEditableValues(
-				"element-text", HtmlUtil.escape(editableFieldValue)),
+				"element-text", HtmlUtil.escape(editableValue)),
 			fragmentEntryLink.getEditableValues());
 	}
 
@@ -460,6 +460,20 @@ public class FragmentEntryLinkModelListenerTest {
 		serviceContext.setUserId(TestPropsValues.getUserId());
 
 		ServiceContextThreadLocal.pushServiceContext(serviceContext);
+	}
+
+	private FragmentEntryLink _updateFragmentEntryLink(
+			String fragmentEntryKey, String editableValues)
+		throws Exception {
+
+		FragmentEntryLink fragmentEntryLink = _addFragmentEntryLink(
+			_fragmentCollectionContributorRegistry.getFragmentEntry(
+				fragmentEntryKey),
+			StringPool.BLANK, _serviceContext);
+
+		return _fragmentEntryLinkLocalService.updateFragmentEntryLink(
+			TestPropsValues.getUserId(),
+			fragmentEntryLink.getFragmentEntryLinkId(), editableValues);
 	}
 
 	@Inject

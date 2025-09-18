@@ -34,7 +34,6 @@ import com.liferay.object.exception.ObjectDefinitionFriendlyURLSeparatorExceptio
 import com.liferay.object.exception.ObjectDefinitionLabelException;
 import com.liferay.object.exception.ObjectDefinitionModifiableException;
 import com.liferay.object.exception.ObjectDefinitionNameException;
-import com.liferay.object.exception.ObjectDefinitionPanelCategoryKeyException;
 import com.liferay.object.exception.ObjectDefinitionPluralLabelException;
 import com.liferay.object.exception.ObjectDefinitionScopeException;
 import com.liferay.object.exception.ObjectDefinitionSettingNameException;
@@ -44,6 +43,7 @@ import com.liferay.object.exception.ObjectDefinitionSystemException;
 import com.liferay.object.exception.ObjectDefinitionVersionException;
 import com.liferay.object.exception.ObjectFieldRelationshipTypeException;
 import com.liferay.object.exception.ObjectRelationshipEdgeException;
+import com.liferay.object.field.builder.AssigneeObjectFieldBuilder;
 import com.liferay.object.field.builder.BooleanObjectFieldBuilder;
 import com.liferay.object.field.builder.DateObjectFieldBuilder;
 import com.liferay.object.field.builder.DateTimeObjectFieldBuilder;
@@ -200,6 +200,7 @@ public class ObjectDefinitionLocalServiceTest {
 			_objectDefinitionLocalService, _objectRelationshipLocalService);
 	}
 
+	@FeatureFlag("LPD-6233")
 	@Test
 	public void testAddCustomObjectDefinition() throws Exception {
 
@@ -378,9 +379,18 @@ public class ObjectDefinitionLocalServiceTest {
 				Collections.emptyList());
 
 		ObjectFieldUtil.addCustomObjectField(
-			new TextObjectFieldBuilder(
+			new AssigneeObjectFieldBuilder(
+			).labelMap(
+				RandomTestUtil.randomLocaleStringMap()
+			).name(
+				"assignee"
+			).objectDefinitionId(
+				objectDefinition.getObjectDefinitionId()
 			).userId(
 				TestPropsValues.getUserId()
+			).build());
+		ObjectFieldUtil.addCustomObjectField(
+			new TextObjectFieldBuilder(
 			).labelMap(
 				LocalizedMapUtil.getLocalizedMap("Charlie")
 			).name(
@@ -389,6 +399,8 @@ public class ObjectDefinitionLocalServiceTest {
 				objectDefinition.getObjectDefinitionId()
 			).required(
 				true
+			).userId(
+				TestPropsValues.getUserId()
 			).build());
 
 		// Custom object definition names are automatically prepended with
@@ -527,6 +539,8 @@ public class ObjectDefinitionLocalServiceTest {
 		Assert.assertTrue(
 			_hasColumn(objectDefinition.getDBTableName(), "able_"));
 		Assert.assertFalse(
+			_hasColumn(objectDefinition.getDBTableName(), "assignee_"));
+		Assert.assertFalse(
 			_hasColumn(objectDefinition.getDBTableName(), "baker"));
 		Assert.assertTrue(
 			_hasColumn(objectDefinition.getDBTableName(), "baker_"));
@@ -534,6 +548,11 @@ public class ObjectDefinitionLocalServiceTest {
 			_hasColumn(objectDefinition.getDBTableName(), "charlie"));
 		Assert.assertTrue(
 			_hasColumn(objectDefinition.getDBTableName(), "charlie_"));
+		Assert.assertTrue(
+			_hasColumn(
+				objectDefinition.getDBTableName(), "classNameId_assignee_"));
+		Assert.assertTrue(
+			_hasColumn(objectDefinition.getDBTableName(), "classPK_assignee_"));
 		Assert.assertFalse(
 			_hasColumn(objectDefinition.getExtensionDBTableName(), "dog"));
 		Assert.assertTrue(
@@ -541,6 +560,37 @@ public class ObjectDefinitionLocalServiceTest {
 		Assert.assertTrue(_hasTable(objectDefinition.getDBTableName()));
 		Assert.assertTrue(
 			_hasTable(objectDefinition.getExtensionDBTableName()));
+
+		_objectFieldLocalService.deleteObjectField(
+			_objectFieldLocalService.fetchObjectField(
+				objectDefinition.getObjectDefinitionId(), "assignee"));
+
+		Assert.assertFalse(
+			_hasColumn(
+				objectDefinition.getDBTableName(), "classNameId_assignee_"));
+		Assert.assertFalse(
+			_hasColumn(objectDefinition.getDBTableName(), "classPK_assignee_"));
+
+		ObjectFieldUtil.addCustomObjectField(
+			new AssigneeObjectFieldBuilder(
+			).labelMap(
+				RandomTestUtil.randomLocaleStringMap()
+			).name(
+				"newAssignee"
+			).objectDefinitionId(
+				objectDefinition.getObjectDefinitionId()
+			).userId(
+				TestPropsValues.getUserId()
+			).build());
+
+		Assert.assertTrue(
+			_hasColumn(
+				objectDefinition.getExtensionDBTableName(),
+				"classNameId_newAssignee_"));
+		Assert.assertTrue(
+			_hasColumn(
+				objectDefinition.getExtensionDBTableName(),
+				"classPK_newAssignee_"));
 
 		TreeTestUtil.forEachNodeObjectDefinition(
 			tree.iterator(), _objectDefinitionLocalService,
@@ -2340,16 +2390,18 @@ public class ObjectDefinitionLocalServiceTest {
 		ObjectDefinition objectDefinition1 =
 			ObjectDefinitionTestUtil.addCustomObjectDefinition(
 				false,
-				Arrays.asList(
+				Collections.singletonList(
 					new TextObjectFieldBuilder(
 					).labelMap(
 						LocalizedMapUtil.getLocalizedMap(
 							RandomTestUtil.randomString())
 					).name(
-						"a" + RandomTestUtil.randomString()
+						"textObjectField"
 					).localized(
 						true
 					).build()));
+
+		ObjectDefinition finalObjectDefinition = objectDefinition1;
 
 		AssertUtils.assertFailure(
 			ObjectDefinitionEnableLocalizationException.class,
@@ -2357,30 +2409,40 @@ public class ObjectDefinitionLocalServiceTest {
 				"because translation is enabled for custom fields",
 			() -> _objectDefinitionLocalService.publishCustomObjectDefinition(
 				TestPropsValues.getUserId(),
-				objectDefinition1.getObjectDefinitionId()));
+				finalObjectDefinition.getObjectDefinitionId()));
 
-		ObjectDefinition objectDefinition2 = null;
-		ObjectDefinition objectDefinition3 = null;
+		objectDefinition1.setEnableLocalization(true);
+		objectDefinition1.setName(ObjectDefinitionTestUtil.getRandomName());
 
-		try {
-			objectDefinition2 = _publishCustomObjectDefinition(false);
+		objectDefinition1 = _updateCustomObjectDefinition(
+			null, objectDefinition1);
 
-			Assert.assertNull(
-				IndexerRegistryUtil.getIndexer(
-					objectDefinition2.getClassName()));
+		objectDefinition1 =
+			_objectDefinitionLocalService.publishCustomObjectDefinition(
+				TestPropsValues.getUserId(),
+				objectDefinition1.getObjectDefinitionId());
 
-			objectDefinition3 = _publishCustomObjectDefinition(true);
+		ObjectField objectField = _objectFieldLocalService.getObjectField(
+			objectDefinition1.getObjectDefinitionId(), "textObjectField");
 
-			Assert.assertNotNull(
-				IndexerRegistryUtil.getIndexer(
-					objectDefinition3.getClassName()));
-		}
-		finally {
-			_objectDefinitionLocalService.deleteObjectDefinition(
-				objectDefinition2);
-			_objectDefinitionLocalService.deleteObjectDefinition(
-				objectDefinition3);
-		}
+		Assert.assertEquals(
+			objectDefinition1.getDBTableName(), objectField.getDBTableName());
+
+		ObjectDefinition objectDefinition2 = _publishCustomObjectDefinition(
+			false);
+
+		Assert.assertNull(
+			IndexerRegistryUtil.getIndexer(objectDefinition2.getClassName()));
+
+		ObjectDefinition objectDefinition3 = _publishCustomObjectDefinition(
+			true);
+
+		Assert.assertNotNull(
+			IndexerRegistryUtil.getIndexer(objectDefinition3.getClassName()));
+
+		_objectDefinitionLocalService.deleteObjectDefinition(objectDefinition1);
+		_objectDefinitionLocalService.deleteObjectDefinition(objectDefinition2);
+		_objectDefinitionLocalService.deleteObjectDefinition(objectDefinition3);
 	}
 
 	@Test
@@ -2798,45 +2860,49 @@ public class ObjectDefinitionLocalServiceTest {
 
 	@Test
 	public void testUpdateRootDescendantObjectDefinition() throws Exception {
-		ObjectDefinition objectDefinition1 =
+		ObjectDefinition objectDefinitionA =
 			ObjectDefinitionTestUtil.publishObjectDefinition();
-		ObjectDefinition objectDefinition2 =
+		ObjectDefinition objectDefinitionAA =
 			ObjectDefinitionTestUtil.publishObjectDefinition();
 
-		ObjectRelationship objectRelationship =
-			_objectRelationshipLocalService.addObjectRelationship(
-				StringUtil.randomId(), TestPropsValues.getUserId(),
-				objectDefinition1.getObjectDefinitionId(),
-				objectDefinition2.getObjectDefinitionId(), 0,
-				ObjectRelationshipConstants.DELETION_TYPE_CASCADE, true,
-				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
-				StringUtil.randomId(), false,
-				ObjectRelationshipConstants.TYPE_ONE_TO_MANY, null);
+		TreeTestUtil.bind(
+			objectDefinitionA.getObjectDefinitionId(),
+			objectDefinitionAA.getObjectDefinitionId(),
+			_objectRelationshipLocalService);
 
-		AssertUtils.assertFailure(
-			ObjectDefinitionPanelCategoryKeyException.class,
-			"Panel category key cannot be changed when the object definition " +
-				"is a root descendant node",
-			() -> _testUpdateRootDescendantObjectDefinition(
-				objectDefinition2, RandomTestUtil.randomString()));
+		String panelCategoryKey = RandomTestUtil.randomString();
 
-		_testUpdateRootDescendantObjectDefinition(objectDefinition2, null);
-		_testUpdateRootDescendantObjectDefinition(
-			objectDefinition2, StringPool.BLANK);
+		objectDefinitionAA =
+			_objectDefinitionLocalService.updateCustomObjectDefinition(
+				objectDefinitionAA.getExternalReferenceCode(),
+				objectDefinitionAA.getObjectDefinitionId(),
+				objectDefinitionAA.getAccountEntryRestrictedObjectFieldId(),
+				objectDefinitionAA.getDescriptionObjectFieldId(),
+				objectDefinitionAA.getObjectFolderId(),
+				objectDefinitionAA.getTitleObjectFieldId(),
+				objectDefinitionAA.isAccountEntryRestricted(),
+				objectDefinitionAA.isActive(),
+				objectDefinitionAA.getClassName(),
+				objectDefinitionAA.isEnableCategorization(),
+				objectDefinitionAA.isEnableComments(),
+				objectDefinitionAA.isEnableFriendlyURLCustomization(),
+				objectDefinitionAA.isEnableIndexSearch(),
+				objectDefinitionAA.isEnableLocalization(),
+				objectDefinitionAA.isEnableObjectEntryDraft(),
+				objectDefinitionAA.isEnableObjectEntryHistory(),
+				objectDefinitionAA.isEnableObjectEntrySchedule(),
+				objectDefinitionAA.isEnableObjectEntrySubscription(),
+				objectDefinitionAA.isEnableObjectEntryVersioning(),
+				objectDefinitionAA.getFriendlyURLSeparator(),
+				objectDefinitionAA.getLabelMap(), objectDefinitionAA.getName(),
+				objectDefinitionAA.getPanelAppOrder(), panelCategoryKey,
+				objectDefinitionAA.isPortlet(),
+				objectDefinitionAA.getPluralLabelMap(),
+				objectDefinitionAA.getScope(), objectDefinitionAA.getStatus(),
+				Collections.emptyList(), Collections.emptyList());
 
-		objectRelationship =
-			_objectRelationshipLocalService.updateObjectRelationship(
-				objectRelationship.getExternalReferenceCode(),
-				objectRelationship.getObjectRelationshipId(),
-				objectRelationship.getParameterObjectFieldId(),
-				objectRelationship.getDeletionType(), false,
-				objectRelationship.getLabelMap(), null);
-
-		_objectRelationshipLocalService.deleteObjectRelationship(
-			objectRelationship);
-
-		_objectDefinitionLocalService.deleteObjectDefinition(objectDefinition1);
-		_objectDefinitionLocalService.deleteObjectDefinition(objectDefinition2);
+		Assert.assertEquals(
+			panelCategoryKey, objectDefinitionAA.getPanelCategoryKey());
 	}
 
 	@FeatureFlag("LPD-32050")
@@ -3728,40 +3794,6 @@ public class ObjectDefinitionLocalServiceTest {
 			_objectDefinitionLocalService.deleteObjectDefinition(
 				objectDefinition2);
 		}
-	}
-
-	private void _testUpdateRootDescendantObjectDefinition(
-			ObjectDefinition objectDefinition, String panelCategoryKey)
-		throws Exception {
-
-		objectDefinition = _objectDefinitionLocalService.fetchObjectDefinition(
-			objectDefinition.getObjectDefinitionId());
-
-		_objectDefinitionLocalService.updateCustomObjectDefinition(
-			objectDefinition.getExternalReferenceCode(),
-			objectDefinition.getObjectDefinitionId(),
-			objectDefinition.getAccountEntryRestrictedObjectFieldId(),
-			objectDefinition.getDescriptionObjectFieldId(),
-			objectDefinition.getObjectFolderId(),
-			objectDefinition.getTitleObjectFieldId(),
-			objectDefinition.isAccountEntryRestricted(),
-			objectDefinition.isActive(), objectDefinition.getClassName(),
-			objectDefinition.isEnableCategorization(),
-			objectDefinition.isEnableComments(),
-			objectDefinition.isEnableFriendlyURLCustomization(),
-			objectDefinition.isEnableIndexSearch(),
-			objectDefinition.isEnableLocalization(),
-			objectDefinition.isEnableObjectEntryDraft(),
-			objectDefinition.isEnableObjectEntryHistory(),
-			objectDefinition.isEnableObjectEntrySchedule(),
-			objectDefinition.isEnableObjectEntrySubscription(),
-			objectDefinition.isEnableObjectEntryVersioning(),
-			objectDefinition.getFriendlyURLSeparator(),
-			objectDefinition.getLabelMap(), objectDefinition.getName(),
-			objectDefinition.getPanelAppOrder(), panelCategoryKey,
-			objectDefinition.isPortlet(), objectDefinition.getPluralLabelMap(),
-			objectDefinition.getScope(), objectDefinition.getStatus(),
-			Collections.emptyList(), Collections.emptyList());
 	}
 
 	private ObjectDefinition _updateCustomObjectDefinition(

@@ -6,9 +6,12 @@
 package com.liferay.portal.vulcan.custom.field;
 
 import com.liferay.expando.kernel.model.ExpandoBridge;
+import com.liferay.expando.kernel.model.ExpandoColumn;
 import com.liferay.expando.kernel.model.ExpandoColumnConstants;
 import com.liferay.expando.kernel.util.ExpandoBridgeFactoryUtil;
+import com.liferay.exportimport.kernel.empty.model.EmptyModelManagerUtil;
 import com.liferay.petra.function.transform.TransformUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
@@ -16,9 +19,12 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
+import com.liferay.portal.vulcan.fields.NestedFieldsSupplier;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
+import com.liferay.portlet.expando.model.impl.ExpandoColumnImpl;
 
 import java.io.Serializable;
 
@@ -108,6 +114,38 @@ public class CustomFieldsUtil {
 			}
 
 			String name = customField.getName();
+
+			try {
+				EmptyModelManagerUtil.getOrAddEmptyModel(
+					ExpandoColumn.class, companyId, name,
+					(__, ___) -> {
+						if (!expandoBridge.hasAttribute(name)) {
+							return null;
+						}
+
+						return _expandoColumn;
+					},
+					(__, ___) -> {
+						if (!expandoBridge.hasAttribute(name)) {
+
+							// TODO LPD-65443 Throw exception to handle error
+
+							return null;
+						}
+
+						return _expandoColumn;
+					},
+					() -> {
+						expandoBridge.addAttribute(
+							name,
+							_toAttributeType(customField.getAttributeType()));
+
+						return _expandoColumn;
+					});
+			}
+			catch (PortalException portalException) {
+				throw new RuntimeException(portalException);
+			}
 
 			int attributeType = expandoBridge.getAttributeType(name);
 
@@ -340,6 +378,21 @@ public class CustomFieldsUtil {
 		return serializable;
 	}
 
+	private static int _toAttributeType(
+		CustomField.AttributeType attributeType) {
+
+		for (Map.Entry<Integer, CustomField.AttributeType> entry :
+				_attributeTypes.entrySet()) {
+
+			if (attributeType == entry.getValue()) {
+				return entry.getKey();
+			}
+		}
+
+		throw new IllegalArgumentException(
+			"Invalid attribute type: " + attributeType);
+	}
+
 	private static CustomField _toCustomField(
 		boolean acceptAllLanguages, String displayType,
 		Map.Entry<String, Serializable> entry, ExpandoBridge expandoBridge,
@@ -347,11 +400,15 @@ public class CustomFieldsUtil {
 
 		String key = entry.getKey();
 
-		int attributeType = expandoBridge.getAttributeType(key);
+		int type = expandoBridge.getAttributeType(key);
 
-		if (ExpandoColumnConstants.GEOLOCATION == attributeType) {
+		if (ExpandoColumnConstants.GEOLOCATION == type) {
 			return new CustomField() {
 				{
+					setAttributeType(
+						() -> NestedFieldsSupplier.supply(
+							"customFields.attributeType",
+							nestedField -> _attributeTypes.get(type)));
 					setCustomValue(
 						() -> {
 							JSONObject jsonObject =
@@ -382,25 +439,28 @@ public class CustomFieldsUtil {
 
 		return new CustomField() {
 			{
+				setAttributeType(
+					() -> NestedFieldsSupplier.supply(
+						"customFields.attributeType",
+						nestedField -> _attributeTypes.get(type)));
 				setCustomValue(
 					() -> new CustomValue() {
 						{
 							setData(
 								() -> _getValue(
-									attributeType, locale,
+									type, locale,
 									_getValue(
-										attributeType, displayType, entry,
-										expandoBridge, key)));
+										type, displayType, entry, expandoBridge,
+										key)));
 							setData_i18n(
 								() -> _getLocalizedValues(
-									acceptAllLanguages, attributeType,
+									acceptAllLanguages, type,
 									_getValue(
-										attributeType, displayType, entry,
-										expandoBridge, key)));
+										type, displayType, entry, expandoBridge,
+										key)));
 						}
 					});
-				setDataType(
-					() -> ExpandoColumnConstants.getDataType(attributeType));
+				setDataType(() -> ExpandoColumnConstants.getDataType(type));
 				setName(entry::getKey);
 			}
 		};
@@ -422,5 +482,63 @@ public class CustomFieldsUtil {
 				"Unable to parse date from " + data, parseException);
 		}
 	}
+
+	private static final Map<Integer, CustomField.AttributeType>
+		_attributeTypes = HashMapBuilder.put(
+			ExpandoColumnConstants.BOOLEAN, CustomField.AttributeType.BOOLEAN
+		).put(
+			ExpandoColumnConstants.BOOLEAN_ARRAY,
+			CustomField.AttributeType.BOOLEAN_ARRAY
+		).put(
+			ExpandoColumnConstants.DATE, CustomField.AttributeType.DATE
+		).put(
+			ExpandoColumnConstants.DATE_ARRAY,
+			CustomField.AttributeType.DATE_ARRAY
+		).put(
+			ExpandoColumnConstants.DOUBLE, CustomField.AttributeType.DOUBLE
+		).put(
+			ExpandoColumnConstants.DOUBLE_ARRAY,
+			CustomField.AttributeType.DOUBLE_ARRAY
+		).put(
+			ExpandoColumnConstants.FLOAT, CustomField.AttributeType.FLOAT
+		).put(
+			ExpandoColumnConstants.FLOAT_ARRAY,
+			CustomField.AttributeType.FLOAT_ARRAY
+		).put(
+			ExpandoColumnConstants.GEOLOCATION,
+			CustomField.AttributeType.GEOLOCATION
+		).put(
+			ExpandoColumnConstants.INTEGER, CustomField.AttributeType.INTEGER
+		).put(
+			ExpandoColumnConstants.INTEGER_ARRAY,
+			CustomField.AttributeType.INTEGER_ARRAY
+		).put(
+			ExpandoColumnConstants.LONG, CustomField.AttributeType.LONG
+		).put(
+			ExpandoColumnConstants.LONG_ARRAY,
+			CustomField.AttributeType.LONG_ARRAY
+		).put(
+			ExpandoColumnConstants.NUMBER, CustomField.AttributeType.NUMBER
+		).put(
+			ExpandoColumnConstants.NUMBER_ARRAY,
+			CustomField.AttributeType.NUMBER_ARRAY
+		).put(
+			ExpandoColumnConstants.SHORT, CustomField.AttributeType.SHORT
+		).put(
+			ExpandoColumnConstants.SHORT_ARRAY,
+			CustomField.AttributeType.SHORT_ARRAY
+		).put(
+			ExpandoColumnConstants.STRING, CustomField.AttributeType.STRING
+		).put(
+			ExpandoColumnConstants.STRING_ARRAY,
+			CustomField.AttributeType.STRING_ARRAY
+		).put(
+			ExpandoColumnConstants.STRING_ARRAY_LOCALIZED,
+			CustomField.AttributeType.STRING_ARRAY_LOCALIZED
+		).put(
+			ExpandoColumnConstants.STRING_LOCALIZED,
+			CustomField.AttributeType.STRING_LOCALIZED
+		).build();
+	private static final ExpandoColumn _expandoColumn = new ExpandoColumnImpl();
 
 }

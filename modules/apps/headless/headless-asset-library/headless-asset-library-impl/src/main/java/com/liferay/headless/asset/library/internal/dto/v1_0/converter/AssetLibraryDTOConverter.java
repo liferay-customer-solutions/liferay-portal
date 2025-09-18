@@ -6,19 +6,25 @@
 package com.liferay.headless.asset.library.internal.dto.v1_0.converter;
 
 import com.liferay.depot.model.DepotEntry;
+import com.liferay.depot.model.DepotEntryGroupRel;
 import com.liferay.depot.service.DepotEntryGroupRelLocalService;
 import com.liferay.depot.service.DepotEntryLocalService;
 import com.liferay.document.library.configuration.DLSizeLimitConfigurationProvider;
 import com.liferay.headless.asset.library.dto.v1_0.AssetLibrary;
+import com.liferay.headless.asset.library.dto.v1_0.ConnectedSite;
 import com.liferay.headless.asset.library.dto.v1_0.MimeTypeLimit;
 import com.liferay.headless.asset.library.dto.v1_0.Settings;
 import com.liferay.headless.asset.library.internal.resource.v1_0.BaseAssetLibraryResourceImpl;
 import com.liferay.headless.asset.library.internal.util.AssetLibraryUtil;
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.service.CompanyLocalService;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
@@ -78,6 +84,16 @@ public class AssetLibraryDTOConverter
 			{
 				setActions(dtoConverterContext::getActions);
 				setAssetLibraryKey(group::getGroupKey);
+				setConnectedSiteId(group::getGroupId);
+				setConnectedSites(
+					() -> NestedFieldsSupplier.supply(
+						"connectedSites",
+						nestedField -> TransformUtil.transformToArray(
+							_depotEntryGroupRelLocalService.
+								getDepotEntryGroupRels(depotEntry),
+							depotEntryGroupRel -> _toConnectedSite(
+								depotEntryGroupRel, dtoConverterContext),
+							ConnectedSite.class)));
 				setCreatorUserId(group::getCreatorUserId);
 				setDateCreated(depotEntry::getCreateDate);
 				setDateModified(
@@ -98,9 +114,9 @@ public class AssetLibraryDTOConverter
 					() -> LocalizedMapUtil.getI18nMap(
 						dtoConverterContext.isAcceptAllLanguages(),
 						group.getNameMap()));
-				setNumberOfSites(
+				setNumberOfConnectedSites(
 					() -> NestedFieldsSupplier.supply(
-						"numberOfSites",
+						"numberOfConnectedSites",
 						nestedField ->
 							_depotEntryGroupRelLocalService.
 								getDepotEntryGroupRelsCount(depotEntry)));
@@ -116,7 +132,6 @@ public class AssetLibraryDTOConverter
 							_userGroupLocalService.getGroupUserGroupsCount(
 								group.getGroupId())));
 				setSettings(() -> _toSettings(group));
-				setSiteId(group::getGroupId);
 				setType(
 					() -> AssetLibraryUtil.getAssetLibraryType(
 						depotEntry.getType()));
@@ -139,6 +154,41 @@ public class AssetLibraryDTOConverter
 				}
 			},
 			MimeTypeLimit.class);
+	}
+
+	private ConnectedSite _toConnectedSite(
+			DepotEntryGroupRel depotEntryGroupRel,
+			DTOConverterContext dtoConverterContext)
+		throws Exception {
+
+		return new ConnectedSite() {
+			{
+				Group group = _groupLocalService.getGroup(
+					depotEntryGroupRel.getToGroupId());
+
+				setExternalReferenceCode(group::getExternalReferenceCode);
+				setId(group::getGroupId);
+				setLogo(
+					() -> {
+						ThemeDisplay themeDisplay = new ThemeDisplay() {
+							{
+								setCompany(
+									_companyLocalService.getCompany(
+										group.getCompanyId()));
+								setPathImage(_portal.getPathImage());
+							}
+						};
+
+						return group.getLogoURL(themeDisplay, true);
+					});
+				setName(() -> group.getName(dtoConverterContext.getLocale()));
+				setName_i18n(
+					() -> LocalizedMapUtil.getI18nMap(
+						dtoConverterContext.isAcceptAllLanguages(),
+						group.getNameMap()));
+				setSearchable(depotEntryGroupRel::isSearchable);
+			}
+		};
 	}
 
 	private Settings _toSettings(Group group) {
@@ -177,6 +227,9 @@ public class AssetLibraryDTOConverter
 	}
 
 	@Reference
+	private CompanyLocalService _companyLocalService;
+
+	@Reference
 	private DepotEntryGroupRelLocalService _depotEntryGroupRelLocalService;
 
 	@Reference
@@ -184,6 +237,12 @@ public class AssetLibraryDTOConverter
 
 	@Reference
 	private DLSizeLimitConfigurationProvider _dlSizeLimitConfigurationProvider;
+
+	@Reference
+	private GroupLocalService _groupLocalService;
+
+	@Reference
+	private Portal _portal;
 
 	@Reference
 	private UserGroupLocalService _userGroupLocalService;

@@ -135,6 +135,10 @@ public class LinkEditableElementMapper implements EditableElementMapper {
 				target = "_self";
 			}
 
+			if (StringUtil.equalsIgnoreCase(target, "_blank")) {
+				linkElement.attr("rel", "noopener noreferrer");
+			}
+
 			linkElement.attr("target", target);
 		}
 
