@@ -8,10 +8,8 @@ import ClayIcon from '@clayui/icon';
 import ClayLink from '@clayui/link';
 import ClayModal from '@clayui/modal';
 import classNames from 'classnames';
-
-// @ts-ignore
-
 import {ImagePreviewer} from 'document-library-preview-image';
+import {DLVideoIframe} from 'document-library-video';
 import React from 'react';
 
 type File = {
@@ -21,6 +19,7 @@ type File = {
 		href: string;
 		label: string;
 	};
+	mimeType: string;
 	name: string;
 	previewURL: string;
 	thumbnailURL: string;
@@ -35,9 +34,10 @@ export default function FilePreviewerModalContent({
 	file,
 	headerName,
 }: FilePreviewerModalContentProps) {
-	const {link, name, thumbnailURL} = file;
+	const {link, mimeType, name, previewURL, thumbnailURL} = file;
 	const params = new URLSearchParams(thumbnailURL);
 	const hasImagePreview = params.has('imageThumbnail');
+	const isVideo = mimeType.startsWith('video/') && previewURL;
 
 	return (
 		<>
@@ -73,6 +73,8 @@ export default function FilePreviewerModalContent({
 			>
 				{hasImagePreview ? (
 					<ImagePreviewer alt={name} imageURL={link.href} />
+				) : isVideo ? (
+					<DLVideoIframe videoPreviewURL={previewURL} />
 				) : (
 					<ClayEmptyState
 						description={Liferay.Language.get(

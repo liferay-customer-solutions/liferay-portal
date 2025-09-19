@@ -86,8 +86,11 @@ public class DataCleanupPreupgradeProcessSuite {
 			new CompanyDataCleanupPreupgradeProcess();
 		DataCleanupPreupgradeProcess configurationDataCleanupPreupgradeProcess =
 			new ConfigurationDataCleanupPreupgradeProcess();
-		DataCleanupPreupgradeProcess ddmStructureDataCleanupPreupgradeProcess =
-			new DDMStructureDataCleanupPreupgradeProcess();
+		DataCleanupPreupgradeProcess ddmDataCleanupPreupgradeProcess =
+			new DDMDataCleanupPreupgradeProcess();
+		DataCleanupPreupgradeProcess
+			ddmStorageLinkDataCleanupPreupgradeProcess =
+				new DDMStorageLinkDataCleanupPreupgradeProcess();
 		DataCleanupPreupgradeProcess dlFileEntryDataCleanupPreupgradeProcess =
 			new DLFileEntryDataCleanupPreupgradeProcess();
 		DataCleanupPreupgradeProcess groupDataCleanupPreupgradeProcess =
@@ -132,7 +135,8 @@ public class DataCleanupPreupgradeProcessSuite {
 					analyticsMessageDataCleanupPreupgradeProcess,
 					companyDataCleanupPreupgradeProcess,
 					configurationDataCleanupPreupgradeProcess,
-					ddmStructureDataCleanupPreupgradeProcess,
+					ddmDataCleanupPreupgradeProcess,
+					ddmStorageLinkDataCleanupPreupgradeProcess,
 					dlFileEntryDataCleanupPreupgradeProcess,
 					groupDataCleanupPreupgradeProcess,
 					journalDataCleanupPreupgradeProcess,
@@ -141,9 +145,15 @@ public class DataCleanupPreupgradeProcessSuite {
 					updateAllPrimaryKeysDataCleanupPreupgradeProcess,
 					userDataCleanupPreupgradeProcess)
 			).put(
-				ddmStructureDataCleanupPreupgradeProcess,
+				ddmDataCleanupPreupgradeProcess,
 				DataCleanupPreupgradeProcess.dependsOn(
 					groupDataCleanupPreupgradeProcess)
+			).put(
+				ddmStorageLinkDataCleanupPreupgradeProcess,
+				DataCleanupPreupgradeProcess.dependsOn(
+					ddmDataCleanupPreupgradeProcess,
+					dlFileEntryDataCleanupPreupgradeProcess,
+					journalDataCleanupPreupgradeProcess)
 			).put(
 				dlFileEntryDataCleanupPreupgradeProcess,
 				DataCleanupPreupgradeProcess.dependsOn(
@@ -155,11 +165,11 @@ public class DataCleanupPreupgradeProcessSuite {
 			).put(
 				journalDataCleanupPreupgradeProcess,
 				DataCleanupPreupgradeProcess.dependsOn(
-					ddmStructureDataCleanupPreupgradeProcess)
+					ddmDataCleanupPreupgradeProcess)
 			).put(
 				nullUnicodeContentDataCleanupPreupgradeProcess,
 				DataCleanupPreupgradeProcess.dependsOn(
-					ddmStructureDataCleanupPreupgradeProcess)
+					ddmDataCleanupPreupgradeProcess)
 			).put(
 				quartzJobDetailsDataCleanupPreupgradeProcess,
 				DataCleanupPreupgradeProcess.dependsOn()

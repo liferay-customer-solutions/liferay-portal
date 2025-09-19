@@ -12,11 +12,19 @@ import selectStructureUuid from '../selectors/selectStructureUuid';
 import {ReferencedStructure} from '../types/Structure';
 import {
 	FIELD_TYPES,
+	FIELD_TYPE_ICON,
 	FIELD_TYPE_LABEL,
 	Field,
 	getDefaultField,
 } from '../utils/field';
 import ReferencedStructureModal from './ReferencedStructureModal';
+
+type Item = {
+	className?: string;
+	label: string;
+	onClick: () => void;
+	symbolLeft: string;
+};
 
 export default function AddChildDropdown({
 	triggerType = 'text',
@@ -53,15 +61,23 @@ export default function AddChildDropdown({
 
 			<ClayDropDownWithItems
 				items={[
-					...FIELD_TYPES.map((type) => ({
-						label: FIELD_TYPE_LABEL[type],
-						onClick: () => addField(type),
-					})),
+					...FIELD_TYPES.map(
+						(type): Item => ({
+							label: FIELD_TYPE_LABEL[type],
+							onClick: () => addField(type),
+							symbolLeft: FIELD_TYPE_ICON[type],
+						})
+					),
+					{type: 'divider'},
 					{
+						className: 'dropdown-item-cms-warning',
 						label: Liferay.Language.get('referenced-structure'),
 						onClick: () => setShowStructuresModal(true),
+						symbolLeft: 'edit-layout',
 					},
 				]}
+				menuElementAttrs={{className: 'dropdown-menu-cms'}}
+				menuHeight="auto"
 				trigger={
 					triggerType === 'text' ? (
 						<ClayButton displayType="secondary" size="sm">
@@ -73,6 +89,7 @@ export default function AddChildDropdown({
 							displayType="secondary"
 							size="sm"
 							symbol="plus"
+							title={Liferay.Language.get('add-field')}
 						/>
 					)
 				}

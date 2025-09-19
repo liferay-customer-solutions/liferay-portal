@@ -53,6 +53,13 @@
 		padding-top: 1.5rem;
 	}
 
+	.sidebar-close-button {
+		position: absolute;
+		right: 0;
+		top: 0;
+		z-index: 1;
+	}
+
 	.sidebar-container {
 		display: flex;
 		grid-area: sidebar;
