@@ -642,6 +642,7 @@
 		<check name="JavaReturnStatementCheck">
 			<category name="Styling" />
 			<description name="Finds unnecessary `else` statement (when `if` and `else` statement both end with `return` statement)." />
+			<property name="enabled" value="false" />
 		</check>
 		<check name="JavaSeeAnnotationCheck">
 			<category name="Bug Prevention" />
@@ -1034,6 +1035,11 @@
 		<check name="JavaLocalServiceImplErcUsageCheck">
 			<category name="Productivity" />
 			<description name="Automatically generates and ensures that `externalReferenceCode` is properly used in local `*ServiceImpl` add method." />
+			<property name="enabled" value="false" />
+		</check>
+		<check name="JavaLocalServiceImplUserIdUsageCheck">
+			<category name="Bug Prevention" />
+			<description name="Finds incorrect use of `GuestOrUserUtil.getUserId()` or `PrincipalThreadLocal.getUserId()`." />
 			<property name="enabled" value="false" />
 		</check>
 		<check name="JavaModuleClassGetResourceCallCheck">
@@ -1879,10 +1885,6 @@
 		<check name="UpgradeJavaBasePanelAppExtendedClassesCheck">
 			<category name="Upgrade" />
 			<description name="Replace the setPortlet method with getPortlet." />
-		</check>
-		<check name="UpgradeJavaCommerceOrderValidatorCheck">
-			<category name="Upgrade" />
-			<description name="Replace the parameter Int for BigDecimal of method validate of 'CommerceOrderValidator' interface." />
 		</check>
 		<check name="UpgradeJavaDDMFormValuesSerializerTrackerCheck">
 			<category name="Upgrade" />

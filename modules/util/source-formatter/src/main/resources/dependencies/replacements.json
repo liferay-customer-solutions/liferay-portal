@@ -53,6 +53,23 @@
 		"to": "fetchCommerceCatalogByExternalReferenceCode(param#1#, param#0#)"
 	},
 	{
+		"classNames": [
+			"BaseProductResourceImpl"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-7753",
+		"methodsToFormat": [
+			{
+				"from": "@Override\n\tpublic Response deleteProduct(Long id)",
+				"to": "@Override\n\tpublic void deleteProduct(Long id)"
+			},
+			{
+				"from": "@Override\n\tpublic Response deleteProductByExternalReferenceCode(\n\t\t\tString externalReferenceCode)",
+				"to": "@Override\n\tpublic void deleteProductByExternalReferenceCode(\n\t\t\tString externalReferenceCode)"
+			}
+		]
+	},
+	{
 		"from": "regex:serviceLocator[\\n\\s]*\\.[\\n\\s]*findService\\([\\n\\s]*\"com\\.liferay\\.dynamic\\.data\\.mapping\\.storage\\.StorageEngine\"\\)",
 		"issueKey": "LPD-7762",
 		"skipParametersValidation": true,
@@ -191,7 +208,7 @@
 			"Http",
 			"HttpUtil"
 		],
-		"from": "regex:(\\w+)\\.(?<methodName>addParameter|decodePath|decodeURL|encodeParameters|encodePath|fixPath|getCompleteURL|getDomain|getIpAddress|getParameter|getParameterMap|getPath|getProtocol|getQueryString|getRequestURL|getURI|hasDomain|hasProtocol|isForwarded|isSecure|normalizePath|parameterMapFromString|protocolize|removeDomain|removeParameter|removePathParameters|removeProtocol|sanitizeHeader|setParameter|shortenURL)",
+		"from": "regex:(\\w+)\\.(?<methodName>addParameter|decodePath|decodeURL|encodeParameters|encodePath|fixPath|getCompleteURL|getDomain|getIpAddress|getParameter|getParameterMap|getPath|getProtocol|getQueryString|getRequestURL|getURI|hasDomain|hasProtocol|isForwarded|isSecure|normalizePath|parameterMapFromString|parameterMapToString|protocolize|removeDomain|removeParameter|removePathParameters|removeProtocol|sanitizeHeader|setParameter|shortenURL)",
 		"issueKey": "LPD-8040",
 		"newImports": [
 			"com.liferay.portal.kernel.util.HttpComponentsUtil"
@@ -3863,7 +3880,7 @@
 		"issueKey": "LPD-40678",
 		"newImports": [
 			"com.liferay.portal.kernel.util.SetUtil",
-			"com.liferay.portal.util.PropsValues"
+			"com.liferay.portal.kernel.util.PropsValues"
 		],
 		"to": "SetUtil.fromArray(PropsValues.MIME_TYPES_WEB_IMAGES).contains",
 		"validExtensions": [
@@ -4427,6 +4444,19 @@
 			{
 				"from": "regex:\\s*@Override\\s*@Reference\\s*\\(\\s*target\\s*=\\s*\\\"[^\\\"]*\\\",[\\s\\S]*?\\)\\s*public\\s+void\\s+setServletContext\\(ServletContext\\s+servletContext\\)\\s*\\{[\\s\\S]*?\\}",
 				"to": ""
+			}
+		]
+	},
+	{
+		"classNames": [
+			"RawMetadataProcessor"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-47852",
+		"methodsToFormat": [
+			{
+				"from": "@Override\n\tpublic Map<String, Set<String>> getFieldNames()",
+				"to": "@Override\n\tpublic Set<String> getFieldNames()"
 			}
 		]
 	},
@@ -5304,6 +5334,22 @@
 			"com.liferay.portal.kernel.util.PortalUtil"
 		],
 		"to": "serveImage(PortalUtil.getHttpServletRequest(param#0#), PortalUtil.getHttpServletResponse(param#1#))"
+	},
+	{
+		"classNames": [
+			"CommerceOrderValidator"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPS-196599",
+		"methodsToFormat": [
+			{
+				"from": "regex:(?<methodSignature>@Override\\n\\tpublic CommerceOrderValidatorResult validate\\(\\n\\s+Locale locale, CommerceOrder commerceOrder, CPInstance cpInstance,\\n\\s+)int quantity\\)",
+				"to": "${methodSignature}String json, BigDecimal quantity, boolean child)"
+			}
+		],
+		"newImports": [
+			"java.math.BigDecimal"
+		]
 	},
 	{
 		"classNames": [

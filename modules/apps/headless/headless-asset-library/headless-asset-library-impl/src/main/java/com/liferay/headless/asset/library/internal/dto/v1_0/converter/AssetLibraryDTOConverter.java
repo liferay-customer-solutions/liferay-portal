@@ -84,7 +84,6 @@ public class AssetLibraryDTOConverter
 			{
 				setActions(dtoConverterContext::getActions);
 				setAssetLibraryKey(group::getGroupKey);
-				setConnectedSiteId(group::getGroupId);
 				setConnectedSites(
 					() -> NestedFieldsSupplier.supply(
 						"connectedSites",
@@ -132,6 +131,7 @@ public class AssetLibraryDTOConverter
 							_userGroupLocalService.getGroupUserGroupsCount(
 								group.getGroupId())));
 				setSettings(() -> _toSettings(group));
+				setSiteId(group::getGroupId);
 				setType(
 					() -> AssetLibraryUtil.getAssetLibraryType(
 						depotEntry.getType()));
@@ -161,11 +161,11 @@ public class AssetLibraryDTOConverter
 			DTOConverterContext dtoConverterContext)
 		throws Exception {
 
+		Group group = _groupLocalService.getGroup(
+			depotEntryGroupRel.getToGroupId());
+
 		return new ConnectedSite() {
 			{
-				Group group = _groupLocalService.getGroup(
-					depotEntryGroupRel.getToGroupId());
-
 				setExternalReferenceCode(group::getExternalReferenceCode);
 				setId(group::getGroupId);
 				setLogo(

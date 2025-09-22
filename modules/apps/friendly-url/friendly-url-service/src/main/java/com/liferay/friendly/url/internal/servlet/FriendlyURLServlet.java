@@ -67,11 +67,11 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsValues;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.util.PortalInstances;
-import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.AsyncPortletServletRequest;
 import com.liferay.portlet.documentlibrary.constants.DLFriendlyURLConstants;
 import com.liferay.redirect.provider.RedirectProvider;
@@ -301,7 +301,7 @@ public class FriendlyURLServlet extends HttpServlet {
 									 group.getCompanyId(),
 									 RoleConstants.CMS_ADMINISTRATOR,
 									 user.getUserId(), true) &&
-								 !_hasDeptEntryTypeSpace(user)) {
+								 !_hasDepotEntryTypeSpace(user)) {
 
 							throw new NoSuchLayoutException();
 						}
@@ -1130,7 +1130,7 @@ public class FriendlyURLServlet extends HttpServlet {
 		return user;
 	}
 
-	private boolean _hasDeptEntryTypeSpace(User user) throws PortalException {
+	private boolean _hasDepotEntryTypeSpace(User user) throws PortalException {
 		for (Group group : user.getGroups()) {
 			if (!group.isDepot()) {
 				continue;

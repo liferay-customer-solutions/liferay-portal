@@ -1,3 +1,5 @@
 .cms-breadcrumb .breadcrumb-item {
-	font-size: 1.125rem;
+	.breadcrumb-link:not([href]) {
+		text-decoration: none;
+	}
 }

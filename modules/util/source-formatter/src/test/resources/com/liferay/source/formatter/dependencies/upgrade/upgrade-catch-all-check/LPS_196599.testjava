@@ -8,7 +8,7 @@ package com.liferay.source.formatter.dependencies.upgrade;
 /**
  * @author Micaelle Silva
  */
-public class UpgradeJavaCommerceOrderValidatorCheck implements CommerceOrderValidator {
+public class LPS_196599 implements CommerceOrderValidator {
 
 	@Override
 	public CommerceOrderValidatorResult validate(
@@ -16,7 +16,6 @@ public class UpgradeJavaCommerceOrderValidatorCheck implements CommerceOrderVali
 			int quantity)
 		throws PortalException {
 
-		int validateQuantity = quantity;
 	}
 
 }

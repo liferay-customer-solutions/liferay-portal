@@ -50,6 +50,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.PropsValues;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.odata.entity.EntityField;
@@ -58,7 +59,6 @@ import com.liferay.portal.search.test.rule.SearchTestRule;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
-import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
 import com.liferay.portal.vulcan.crud.VulcanCRUDItemDelegate;
 import com.liferay.portal.vulcan.crud.VulcanCRUDItemDelegateBuilderRegistry;
@@ -1550,6 +1550,14 @@ public abstract class BaseAssetLibraryResourceTestCase {
 			valid = false;
 		}
 
+		if (!Objects.equals(
+				assetLibrary.getAssetLibraryKey(),
+				testDepotEntryGroup.getGroupKey()) &&
+			!Objects.equals(assetLibrary.getSiteId(), testGroup.getGroupId())) {
+
+			valid = false;
+		}
+
 		for (String additionalAssertFieldName :
 				getAdditionalAssertFieldNames()) {
 
@@ -1563,14 +1571,6 @@ public abstract class BaseAssetLibraryResourceTestCase {
 
 			if (Objects.equals("assetLibraryKey", additionalAssertFieldName)) {
 				if (assetLibrary.getAssetLibraryKey() == null) {
-					valid = false;
-				}
-
-				continue;
-			}
-
-			if (Objects.equals("connectedSiteId", additionalAssertFieldName)) {
-				if (assetLibrary.getConnectedSiteId() == null) {
 					valid = false;
 				}
 
@@ -1755,6 +1755,8 @@ public abstract class BaseAssetLibraryResourceTestCase {
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
 
+		graphQLFields.add(new GraphQLField("siteId"));
+
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(
 					com.liferay.headless.asset.library.dto.v1_0.AssetLibrary.
@@ -1820,17 +1822,6 @@ public abstract class BaseAssetLibraryResourceTestCase {
 				if (!equals(
 						(Map)assetLibrary1.getActions(),
 						(Map)assetLibrary2.getActions())) {
-
-					return false;
-				}
-
-				continue;
-			}
-
-			if (Objects.equals("connectedSiteId", additionalAssertFieldName)) {
-				if (!Objects.deepEquals(
-						assetLibrary1.getConnectedSiteId(),
-						assetLibrary2.getConnectedSiteId())) {
 
 					return false;
 				}
@@ -2188,11 +2179,6 @@ public abstract class BaseAssetLibraryResourceTestCase {
 			return sb.toString();
 		}
 
-		if (entityFieldName.equals("connectedSiteId")) {
-			throw new IllegalArgumentException(
-				"Invalid entity field " + entityFieldName);
-		}
-
 		if (entityFieldName.equals("connectedSites")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
@@ -2437,6 +2423,11 @@ public abstract class BaseAssetLibraryResourceTestCase {
 				"Invalid entity field " + entityFieldName);
 		}
 
+		if (entityFieldName.equals("siteId")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
+		}
+
 		if (entityFieldName.equals("type")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
@@ -2499,7 +2490,6 @@ public abstract class BaseAssetLibraryResourceTestCase {
 			{
 				assetLibraryKey = String.valueOf(
 					testDepotEntry.getDepotEntryId());
-				connectedSiteId = RandomTestUtil.randomLong();
 				creatorUserId = RandomTestUtil.randomLong();
 				dateCreated = RandomTestUtil.nextDate();
 				dateModified = RandomTestUtil.nextDate();
@@ -2512,6 +2502,7 @@ public abstract class BaseAssetLibraryResourceTestCase {
 				numberOfConnectedSites = RandomTestUtil.randomInt();
 				numberOfUserAccounts = RandomTestUtil.randomInt();
 				numberOfUserGroups = RandomTestUtil.randomInt();
+				siteId = testGroup.getGroupId();
 			}
 		};
 	}
@@ -2521,6 +2512,8 @@ public abstract class BaseAssetLibraryResourceTestCase {
 
 		randomIrrelevantAssetLibrary.setAssetLibraryKey(
 			String.valueOf(irrelevantDepotEntry.getDepotEntryId()));
+
+		randomIrrelevantAssetLibrary.setSiteId(irrelevantGroup.getGroupId());
 
 		return randomIrrelevantAssetLibrary;
 	}
