@@ -9,10 +9,12 @@ import {sub} from 'frontend-js-web';
 
 import DefaultPermissionModalContent from '../default_permission/DefaultPermissionModalContent';
 import deleteEntryAction from './actions/deleteEntryAction';
+import manageConnectedSitesAction, {
+	ManageConnectedSitesData,
+} from './actions/manageConnectedSitesAction';
 import manageMembersAction, {
 	ManageMembersData,
 } from './actions/manageMembersAction';
-import manageSitesAction, {ManageSitesData} from './actions/manageSitesAction';
 import SpaceRenderer from './cell_renderers/SpaceRenderer';
 import addOnClickToCreationMenuItems from './utils/addOnClickToCreationMenuItems';
 
@@ -140,11 +142,11 @@ export default function AllSpacesFDSPropsTransformer({
 				const hasAssignMembersPermission =
 					action.data.permissionKey === 'assign-members';
 				const assetLibraryCreatorUserId = itemData.creatorUserId;
-				const assetLibraryId = itemData.id;
+				const externalReferenceCode = itemData.externalReferenceCode;
 
 				const data: ManageMembersData = {
 					assetLibraryCreatorUserId,
-					assetLibraryId,
+					externalReferenceCode,
 					hasAssignMembersPermission,
 					title: Liferay.Language.get('all-members'),
 				};
@@ -155,12 +157,12 @@ export default function AllSpacesFDSPropsTransformer({
 				const hasConnectSitesPermission =
 					action.data.permissionKey === 'connect-sites';
 
-				const data: ManageSitesData = {
-					groupId: itemData.siteId,
+				const data: ManageConnectedSitesData = {
+					externalReferenceCode: itemData.externalReferenceCode,
 					hasConnectSitesPermission,
 				};
 
-				manageSitesAction(data, loadData);
+				manageConnectedSitesAction(data, loadData);
 			}
 		},
 	};

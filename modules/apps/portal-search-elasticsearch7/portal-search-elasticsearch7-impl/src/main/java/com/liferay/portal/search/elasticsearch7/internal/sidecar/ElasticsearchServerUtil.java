@@ -6,7 +6,6 @@
 package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
 import com.liferay.petra.io.unsync.UnsyncByteArrayInputStream;
-import com.liferay.petra.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.petra.process.ProcessException;
 import com.liferay.petra.reflect.ReflectionUtil;
 
@@ -24,13 +23,46 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import org.elasticsearch.cli.ExitCodes;
-import org.elasticsearch.common.io.stream.OutputStreamStreamOutput;
-import org.elasticsearch.common.io.stream.StreamOutput;
+import org.elasticsearch.common.transport.BoundTransportAddress;
+import org.elasticsearch.common.transport.TransportAddress;
+import org.elasticsearch.http.HttpServerTransport;
 
 /**
  * @author Tina Tian
  */
 public class ElasticsearchServerUtil {
+
+	public static String getAddress() throws ProcessException {
+		try {
+			ClassLoader classLoader =
+				ElasticsearchServerUtil.class.getClassLoader();
+
+			Method getInstanceMethod = ReflectionUtil.getDeclaredMethod(
+				classLoader.loadClass(
+					"org.elasticsearch.injection.guice.Injector"),
+				"getInstance", Class.class);
+			Method injectorMethod = ReflectionUtil.getDeclaredMethod(
+				classLoader.loadClass("org.elasticsearch.node.Node"),
+				"injector");
+
+			HttpServerTransport httpServerTransport =
+				(HttpServerTransport)getInstanceMethod.invoke(
+					injectorMethod.invoke(
+						_nodeField.get(_instanceField.get(null))),
+						HttpServerTransport.class);
+
+			BoundTransportAddress boundTransportAddress =
+				httpServerTransport.boundAddress();
+
+			TransportAddress publishAddress =
+				boundTransportAddress.publishAddress();
+
+			return publishAddress.toString();
+		}
+		catch (Exception exception) {
+			throw new ProcessException(exception);
+		}
+	}
 
 	public static void shutdown() {
 		try {
@@ -47,39 +79,26 @@ public class ElasticsearchServerUtil {
 		_shutdownCountDownLatch.countDown();
 	}
 
-	public static Object start(SidecarServerArgs sidecarServerArgs)
-		throws ProcessException {
+	public static void start(byte[] sidecarServerArgs) throws ProcessException {
+		InputStream originalSystemInInputStream = System.in;
 
-		try (UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
-				new UnsyncByteArrayOutputStream();
-			StreamOutput streamOutput = new OutputStreamStreamOutput(
-				unsyncByteArrayOutputStream)) {
+		try (UnsyncByteArrayInputStream unsyncByteArrayInputStream =
+				new UnsyncByteArrayInputStream(sidecarServerArgs)) {
 
-			sidecarServerArgs.writeTo(streamOutput);
+			System.setIn(unsyncByteArrayInputStream);
 
-			InputStream originalSystemInInputStream = System.in;
-
-			try (UnsyncByteArrayInputStream unsyncByteArrayInputStream =
-					new UnsyncByteArrayInputStream(
-						unsyncByteArrayOutputStream.toByteArray())) {
-
-				System.setIn(unsyncByteArrayInputStream);
-
-				_mainMethod.invoke(null, (Object)null);
-			}
-			finally {
-				System.setIn(originalSystemInInputStream);
-			}
+			_mainMethod.invoke(null, (Object)null);
 
 			System.setSecurityManager(null);
 
 			_addShutdownHook();
-
-			return _nodeField.get(_instanceField.get(null));
 		}
 		catch (Exception exception) {
 			throw new ProcessException(
-				"Unable to start elasticsearch server", exception);
+				"Unable to start Elasticsearch server", exception);
+		}
+		finally {
+			System.setIn(originalSystemInInputStream);
 		}
 	}
 

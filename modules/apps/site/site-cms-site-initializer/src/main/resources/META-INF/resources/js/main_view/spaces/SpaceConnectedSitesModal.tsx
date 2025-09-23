@@ -11,7 +11,7 @@ import ClaySticker from '@clayui/sticker';
 import {openToast} from 'frontend-js-components-web';
 import React, {useEffect, useId, useState} from 'react';
 
-import SiteService from '../../common/services/SiteService';
+import ConnectedSiteService from '../../common/services/ConnectedSiteService';
 import {Site} from '../../common/types/Site';
 
 const showErrorMessage = (message: string) => {
@@ -21,13 +21,13 @@ const showErrorMessage = (message: string) => {
 	});
 };
 
-const SiteActions = ({
-	groupId,
+const ConnectedSiteActions = ({
+	externalReferenceCode,
 	onSiteChange,
 	onSiteDisconnected,
 	site,
 }: {
-	groupId: string;
+	externalReferenceCode: string;
 	onSiteChange: (site: Site) => void;
 	onSiteDisconnected: (site: Site) => void;
 	site: Site;
@@ -35,9 +35,9 @@ const SiteActions = ({
 	const {searchable} = site;
 
 	const disconnectSite = async () => {
-		const {error} = await SiteService.disconnectSiteFromSpace(
-			groupId,
-			site.id
+		const {error} = await ConnectedSiteService.disconnectSiteFromSpace(
+			externalReferenceCode,
+			site.externalReferenceCode
 		);
 
 		if (error) {
@@ -50,9 +50,9 @@ const SiteActions = ({
 	};
 
 	const changeSearchable = async () => {
-		const {data, error} = await SiteService.connectSiteToSpace(
-			groupId,
-			site.id,
+		const {data, error} = await ConnectedSiteService.connectSiteToSpace(
+			externalReferenceCode,
+			site.externalReferenceCode,
 			String(!searchable)
 		);
 
@@ -103,10 +103,10 @@ const SiteActions = ({
 };
 
 const SitesSelector = ({
-	groupId,
+	externalReferenceCode,
 	onSiteConnected,
 }: {
-	groupId: string;
+	externalReferenceCode: string;
 	onSiteConnected: (site: Site) => void;
 }) => {
 	const [value, setValue] = useState('');
@@ -115,9 +115,9 @@ const SitesSelector = ({
 
 	const connectSiteToSpace = async () => {
 		if (siteSelected) {
-			const {data, error} = await SiteService.connectSiteToSpace(
-				groupId,
-				siteSelected.id
+			const {data, error} = await ConnectedSiteService.connectSiteToSpace(
+				externalReferenceCode,
+				siteSelected.externalReferenceCode
 			);
 
 			if (data) {
@@ -134,7 +134,7 @@ const SitesSelector = ({
 
 	useEffect(() => {
 		const fetchSites = async () => {
-			const {data} = await SiteService.getAllSites();
+			const {data} = await ConnectedSiteService.getAllSites();
 
 			if (data) {
 				setSites(data.items);
@@ -183,11 +183,11 @@ const SitesSelector = ({
 	);
 };
 
-export default function SpaceSitesModal({
-	groupId,
+export default function SpaceConnectedSitesModal({
+	externalReferenceCode,
 	hasConnectSitesPermission = true,
 }: {
-	groupId: string;
+	externalReferenceCode: string;
 	hasConnectSitesPermission?: boolean;
 }) {
 	const [connectedSites, setConnectedSites] = useState<Site[]>([]);
@@ -196,7 +196,9 @@ export default function SpaceSitesModal({
 	useEffect(() => {
 		const fetchConnectedSitesToSpace = async () => {
 			const {data} =
-				await SiteService.getConnectedSitesFromSpace(groupId);
+				await ConnectedSiteService.getConnectedSitesFromSpace(
+					externalReferenceCode
+				);
 
 			if (data) {
 				setConnectedSites(data.items);
@@ -204,7 +206,7 @@ export default function SpaceSitesModal({
 		};
 
 		fetchConnectedSitesToSpace();
-	}, [groupId]);
+	}, [externalReferenceCode]);
 
 	const onSiteConnected = (site: Site) => {
 		setConnectedSites((currentConnectedSites) => {
@@ -245,7 +247,7 @@ export default function SpaceSitesModal({
 			{hasConnectSitesPermission && (
 				<ClayModal.Item>
 					<SitesSelector
-						groupId={groupId}
+						externalReferenceCode={externalReferenceCode}
 						onSiteConnected={onSiteConnected}
 					/>
 				</ClayModal.Item>
@@ -299,8 +301,10 @@ export default function SpaceSitesModal({
 											</div>
 
 											{hasConnectSitesPermission && (
-												<SiteActions
-													groupId={groupId}
+												<ConnectedSiteActions
+													externalReferenceCode={
+														externalReferenceCode
+													}
 													onSiteChange={onSiteChange}
 													onSiteDisconnected={
 														onSiteDisconnected

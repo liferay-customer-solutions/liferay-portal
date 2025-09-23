@@ -610,7 +610,8 @@ public class EditInfoItemStrutsActionTest {
 		ObjectEntry objectEntry = objectEntries.get(0);
 
 		regularParameters.put(
-			"checkboxNames", Collections.singletonList("myBoolean"));
+			"checkboxNames",
+			Collections.singletonList("ObjectField_myBoolean"));
 		regularParameters.put(
 			"classNameId", Collections.singletonList(_classNameId));
 		regularParameters.put(
@@ -908,7 +909,7 @@ public class EditInfoItemStrutsActionTest {
 
 		ObjectDefinition objectDefinition =
 			_objectDefinitionLocalService.addCustomObjectDefinition(
-				_user.getUserId(), 0, null, false,
+				_user.getUserId(), 0, null, false, true,
 				enableFriendlyURLCustomization, true,
 				FeatureFlagManagerUtil.isEnabled(
 					TestPropsValues.getCompanyId(), "LPD-21926"),

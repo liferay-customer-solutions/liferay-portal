@@ -7,6 +7,8 @@ package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
 import com.liferay.petra.concurrent.FutureListener;
 import com.liferay.petra.concurrent.NoticeableFuture;
+import com.liferay.petra.io.OutputStreamWriter;
+import com.liferay.petra.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.petra.process.ProcessChannel;
 import com.liferay.petra.process.ProcessConfig;
 import com.liferay.petra.process.ProcessException;
@@ -18,10 +20,8 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.JavaDetector;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OSDetector;
 import com.liferay.portal.kernel.util.PropsValues;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.elasticsearch7.internal.configuration.ElasticsearchConfigurationWrapper;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.constants.SidecarConstants;
@@ -35,12 +35,15 @@ import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import java.security.CodeSource;
+import java.security.MessageDigest;
 import java.security.ProtectionDomain;
 
 import java.util.ArrayList;
@@ -49,10 +52,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import org.elasticsearch.common.hash.MessageDigests;
+import org.elasticsearch.common.io.stream.OutputStreamStreamOutput;
+import org.elasticsearch.common.io.stream.StreamOutput;
+import org.elasticsearch.common.settings.KeyStoreWrapper;
 import org.elasticsearch.common.settings.Settings;
 
 /**
@@ -86,15 +92,100 @@ public class Sidecar {
 
 		_installElasticsearchIfNeeded(sidecarVersion);
 
-		ProcessChannel<Serializable> processChannel =
-			_executeSidecarMainProcess();
+		Path configPath = _elasticsearchInstancePaths.getConfigPath();
+
+		Path log4jPropertiesPath = configPath.resolve("log4j2.properties");
+
+		try {
+			byte[] log4jProperties = _getLog4jProperties();
+
+			File log4jPropertiesFile = log4jPropertiesPath.toFile();
+
+			if (log4jPropertiesFile.exists() &&
+				!Arrays.equals(
+					log4jProperties, Files.readAllBytes(log4jPropertiesPath))) {
+
+				log4jPropertiesFile.delete();
+			}
+
+			if (!log4jPropertiesFile.exists()) {
+				Files.createDirectories(configPath);
+
+				Files.write(log4jPropertiesPath, log4jProperties);
+			}
+		}
+		catch (IOException ioException) {
+			_log.error(
+				"Unable to copy log4j2.properties to " + configPath,
+				ioException);
+		}
+
+		if (!Files.isDirectory(_sidecarHomePath)) {
+			throw new IllegalArgumentException(
+				"Sidecar Elasticsearch home does not exist: " +
+					_sidecarHomePath);
+		}
+
+		String bootstrapClassPath = _getBootstrapClassPath();
+		URL bundleURL = _getBundleURL(Sidecar.class);
+
+		ProcessChannel<Serializable> processChannel = null;
+
+		try {
+			processChannel = _processExecutor.execute(
+				_createProcessConfig(
+					_getJVMArguments(), bootstrapClassPath, _getEnvironment(),
+					StringBundler.concat(
+						bundleURL.getPath(), File.pathSeparator,
+						bootstrapClassPath)),
+				new SidecarMainProcessCallable(
+					_elasticsearchConfigurationWrapper.
+						sidecarHeartbeatInterval()));
+		}
+		catch (ProcessException processException) {
+			throw new RuntimeException(
+				"Unable to start sidecar Elasticsearch process",
+				processException);
+		}
 
 		FutureListener<Serializable> futureListener = new RestartFutureListener(
 			_sidecarManager);
 
 		_addFutureListener(processChannel, futureListener);
 
-		String address = _startElasticsearch(processChannel);
+		NoticeableFuture<Serializable> noticeableFuture = processChannel.write(
+			new StartSidecarProcessCallable(_getSidecarServerArgs()));
+
+		try {
+			noticeableFuture.get();
+		}
+		catch (Exception exception) {
+			processChannel.write(new StopSidecarProcessCallable());
+
+			if (exception instanceof RuntimeException) {
+				throw (RuntimeException)exception;
+			}
+
+			throw new RuntimeException(exception);
+		}
+
+		NoticeableFuture<String> getAddressNoticeableFuture =
+			processChannel.write(new GetSidecarAddressProcessCallable());
+
+		String address = null;
+
+		try {
+			address = getAddressNoticeableFuture.get();
+		}
+		catch (Exception exception) {
+			processChannel.write(new StopSidecarProcessCallable());
+
+			if (exception instanceof RuntimeException) {
+				throw (RuntimeException)exception;
+			}
+
+			throw new RuntimeException(exception);
+		}
 
 		if (_log.isInfoEnabled()) {
 			_log.info(
@@ -145,8 +236,6 @@ public class Sidecar {
 
 			_processChannel = null;
 		}
-
-		PathUtil.deleteDir(_sidecarTempDirPath);
 	}
 
 	private void _addFutureListener(
@@ -206,19 +295,22 @@ public class Sidecar {
 		}
 	}
 
-	private ProcessConfig _createProcessConfig() {
+	private ProcessConfig _createProcessConfig(
+		List<String> arguments, String bootstrapClassPath,
+		Map<String, String> environment, String runtimeClassPath) {
+
 		ProcessConfig.Builder builder = new ProcessConfig.Builder();
 
-		URL bundleURL = _getBundleURL(Sidecar.class);
-
-		String bootstrapClassPath = _getBootstrapClassPath();
-
 		return builder.setArguments(
-			_getJVMArguments()
+			arguments
 		).setBootstrapClassPath(
 			bootstrapClassPath
 		).setEnvironment(
-			_getEnvironment()
+			HashMapBuilder.putAll(
+				System.getenv()
+			).putAll(
+				environment
+			).build()
 		).setJavaExecutable(
 			System.getProperty("java.home") + "/bin/java"
 		).setProcessLogConsumer(
@@ -226,30 +318,8 @@ public class Sidecar {
 		).setReactClassLoader(
 			Sidecar.class.getClassLoader()
 		).setRuntimeClassPath(
-			StringBundler.concat(
-				bundleURL.getPath(), File.pathSeparator, bootstrapClassPath)
+			runtimeClassPath
 		).build();
-	}
-
-	private ProcessChannel<Serializable> _executeSidecarMainProcess() {
-		if (!Files.isDirectory(_sidecarHomePath)) {
-			throw new IllegalArgumentException(
-				"Sidecar Elasticsearch home does not exist: " +
-					_sidecarHomePath);
-		}
-
-		try {
-			return _processExecutor.execute(
-				_createProcessConfig(),
-				new SidecarMainProcessCallable(
-					_elasticsearchConfigurationWrapper.
-						sidecarHeartbeatInterval()));
-		}
-		catch (ProcessException processException) {
-			throw new RuntimeException(
-				"Unable to start sidecar Elasticsearch process",
-				processException);
-		}
 	}
 
 	private boolean _fileNameContains(Path path, String s) {
@@ -286,9 +356,7 @@ public class Sidecar {
 	}
 
 	private HashMap<String, String> _getEnvironment() {
-		return HashMapBuilder.putAll(
-			System.getenv()
-		).put(
+		return HashMapBuilder.put(
 			"HOSTNAME", "localhost"
 		).put(
 			"LIBFFI_TMPDIR", _sidecarHomePath.toString()
@@ -318,46 +386,18 @@ public class Sidecar {
 				_elasticsearchConfigurationWrapper.sidecarDebugSettings());
 		}
 
-		try {
-			_sidecarTempDirPath = Files.createTempDirectory("sidecar");
-		}
-		catch (IOException ioException) {
-			throw new IllegalStateException(
-				"Unable to create temp folder", ioException);
-		}
-
-		Path configFolder = _sidecarTempDirPath.resolve("config");
-
-		try {
-			Files.createDirectories(configFolder);
-
-			Files.write(
-				configFolder.resolve("log4j2.properties"),
-				Arrays.asList(
-					"logger.bootstrapchecks.name=org.elasticsearch.bootstrap." +
-						"BootstrapChecks",
-					"logger.bootstrapchecks.level=error",
-					"logger.deprecation.name=org.elasticsearch.deprecation",
-					"logger.deprecation.level=error", _getLogProperties(),
-					ResourceUtil.getResourceAsString(
-						Sidecar.class, "/log4j2.properties")));
-		}
-		catch (IOException ioException) {
-			_log.error(
-				"Unable to copy log4j2.properties to " + configFolder,
-				ioException);
-		}
-
 		arguments.add("-Des.distribution.type=tar");
 		arguments.add("-Des.networkaddress.cache.negative.ttl=10");
 		arguments.add("-Des.networkaddress.cache.ttl=60");
-		arguments.add("-Des.path.conf=" + configFolder);
+		arguments.add(
+			"-Des.path.conf=" + _elasticsearchInstancePaths.getConfigPath());
 		arguments.add("-Dfile.encoding=UTF-8");
 		arguments.add("-Dio.netty.noKeySetOptimization=true");
 		arguments.add("-Dio.netty.noUnsafe=true");
 		arguments.add("-Dio.netty.recycler.maxCapacityPerThread=0");
 		arguments.add("-Djava.awt.headless=true");
-		arguments.add("-Djava.io.tmpdir=" + _sidecarTempDirPath);
+		arguments.add(
+			"-Djava.io.tmpdir=" + System.getProperty("java.io.tmpdir"));
 		arguments.add("-Djna.nosys=true");
 		arguments.add("-Dlog4j.shutdownHookEnabled=false");
 		arguments.add("-Dlog4j2.disable.jmx=true");
@@ -409,8 +449,27 @@ public class Sidecar {
 		return arguments;
 	}
 
-	private String _getLogProperties() {
-		return StringPool.BLANK;
+	private byte[] _getLog4jProperties() throws IOException {
+		try (UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
+				new UnsyncByteArrayOutputStream();
+			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
+				unsyncByteArrayOutputStream)) {
+
+			outputStreamWriter.write(
+				StringBundler.concat(
+					"logger.bootstrapchecks.name=org.elasticsearch.bootstrap.",
+					"BootstrapChecks\nlogger.bootstrapchecks.level=error\n",
+					"logger.deprecation.name=org.elasticsearch.deprecation\n",
+					"logger.deprecation.level=error\n"));
+
+			outputStreamWriter.write(
+				ResourceUtil.getResourceAsString(
+					Sidecar.class, "/log4j2.properties"));
+
+			outputStreamWriter.flush();
+
+			return unsyncByteArrayOutputStream.toByteArray();
+		}
 	}
 
 	private String _getNodeName() {
@@ -440,47 +499,51 @@ public class Sidecar {
 		).build();
 	}
 
-	private SidecarServerArgs _getSidecarServerArgs() {
-		Settings settings = _getSettings();
+	private byte[] _getSidecarServerArgs() {
+		try (UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
+				new UnsyncByteArrayOutputStream();
+			StreamOutput streamOutput = new OutputStreamStreamOutput(
+				unsyncByteArrayOutputStream)) {
 
-		StringBundler sb = new StringBundler((2 * settings.size()) + 1);
+			streamOutput.writeBoolean(false);
+			streamOutput.writeBoolean(false);
+			streamOutput.writeOptionalString(null);
+			streamOutput.writeString(KeyStoreWrapper.class.getName());
 
-		sb.append("Sidecar Elasticsearch properties : {");
+			try (KeyStoreWrapper keyStoreWrapper = KeyStoreWrapper.create()) {
+				streamOutput.writeInt(keyStoreWrapper.getFormatVersion());
+				streamOutput.writeBoolean(keyStoreWrapper.hasPassword());
+				streamOutput.writeBoolean(false);
+				streamOutput.writeVInt(1);
+				streamOutput.writeString(KeyStoreWrapper.SEED_SETTING.getKey());
 
-		Map<String, Serializable> settingsMap = new HashMap<>();
+				ByteBuffer byteBuffer = StandardCharsets.UTF_8.encode(
+					ElasticsearchServerUtil.class.getSimpleName());
 
-		for (String key : settings.keySet()) {
-			List<String> list = settings.getAsList(key);
+				byte[] bytes = byteBuffer.array();
 
-			if (ListUtil.isEmpty(list)) {
-				continue;
+				MessageDigest messageDigest = MessageDigests.sha256();
+
+				streamOutput.writeByteArray(bytes);
+				streamOutput.writeByteArray(messageDigest.digest(bytes));
+				streamOutput.writeBoolean(false);
 			}
 
-			String keyValue = StringBundler.concat(
-				key, StringPool.EQUAL, StringUtil.merge(list));
+			Settings.writeSettingsToStream(_getSettings(), streamOutput);
 
-			sb.append(keyValue);
+			streamOutput.writeString(
+				String.valueOf(_elasticsearchInstancePaths.getConfigPath()));
+			streamOutput.writeString(
+				String.valueOf(_sidecarHomePath.resolve("logs")));
 
-			sb.append(StringPool.COMMA);
+			streamOutput.flush();
 
-			if (list.size() == 1) {
-				settingsMap.put(key, list.get(0));
-			}
-			else {
-				settingsMap.put(key, new ArrayList<>(list));
-			}
+			return unsyncByteArrayOutputStream.toByteArray();
 		}
-
-		sb.setStringAt(StringPool.CLOSE_CURLY_BRACE, sb.index() - 1);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug(sb.toString());
+		catch (Exception exception) {
+			throw new IllegalStateException(
+				"Unable to prepare sidecar server arguments", exception);
 		}
-
-		return new SidecarServerArgs(
-			String.valueOf(_sidecarTempDirPath.resolve("config")), false,
-			String.valueOf(_sidecarHomePath.resolve("logs")), null, false,
-			settingsMap);
 	}
 
 	private String _getSidecarVersion() {
@@ -537,56 +600,6 @@ public class Sidecar {
 		}
 	}
 
-	private String _startElasticsearch(
-		ProcessChannel<Serializable> processChannel) {
-
-		NoticeableFuture<String> noticeableFuture = processChannel.write(
-			new StartSidecarProcessCallable(_getSidecarServerArgs()));
-
-		try {
-			return _waitForPublishedAddress(noticeableFuture);
-		}
-		catch (IOException ioException) {
-			if (Objects.equals(ioException.getMessage(), "Stream closed")) {
-				throw new RuntimeException(
-					StringBundler.concat(
-						"Sidecar JVM did not launch successfully. ",
-						SidecarMainProcessCallable.class.getSimpleName(),
-						" may have crashed, or its classpath may be missing ",
-						"required libraries"),
-					ioException);
-			}
-
-			processChannel.write(new StopSidecarProcessCallable());
-
-			throw new RuntimeException(ioException);
-		}
-		catch (Exception exception) {
-			processChannel.write(new StopSidecarProcessCallable());
-
-			if (exception instanceof RuntimeException) {
-				throw (RuntimeException)exception;
-			}
-
-			throw new RuntimeException(exception);
-		}
-	}
-
-	private String _waitForPublishedAddress(
-			NoticeableFuture<String> noticeableFuture)
-		throws Exception {
-
-		try {
-			return noticeableFuture.get();
-		}
-		catch (ExecutionException executionException) {
-			throw new Exception(executionException.getCause());
-		}
-		catch (InterruptedException interruptedException) {
-			throw new RuntimeException(interruptedException);
-		}
-	}
-
 	private static final String _DEFAULT_MODULES_FOLDER_NAME = "modules";
 
 	private static final String _SIDECAR_MODULES_FOLDER_NAME =
@@ -603,7 +616,6 @@ public class Sidecar {
 	private FutureListener<Serializable> _restartFutureListener;
 	private final Path _sidecarHomePath;
 	private SidecarManager _sidecarManager;
-	private Path _sidecarTempDirPath;
 
 	private static class RestartFutureListener
 		implements FutureListener<Serializable> {

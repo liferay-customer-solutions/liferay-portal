@@ -9,8 +9,6 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.layout.test.util.LayoutTestUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.NoSuchLayoutException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
@@ -21,6 +19,7 @@ import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUti
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.LayoutSetLocalService;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
@@ -71,35 +70,35 @@ public class EmptyLayoutTypeControllerTest {
 	public void testIncludeLayoutContent() throws Exception {
 		Assert.assertEquals(
 			LayoutConstants.TYPE_EMPTY, _layoutTypeController.getType());
-
-		try {
-			_layoutTypeController.includeLayoutContent(
-				_getMockHttpServletRequest(TestPropsValues.getUser()),
-				new MockHttpServletResponse(), _layout);
-
-			Assert.fail();
-		}
-		catch (NoSuchLayoutException noSuchLayoutException) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(noSuchLayoutException);
-			}
-		}
-
 		Assert.assertEquals(
 			StringPool.BLANK,
 			_layoutTypeController.includeEditContent(
-				_getMockHttpServletRequest(TestPropsValues.getUser()),
+				_getMockHttpServletRequest(
+					_layout.getFriendlyURL(), TestPropsValues.getUser()),
+				new MockHttpServletResponse(), _layout));
+		Assert.assertFalse(
+			_layoutTypeController.includeLayoutContent(
+				_getMockHttpServletRequest(
+					_layout.getFriendlyURL(), TestPropsValues.getUser()),
+				new MockHttpServletResponse(), _layout));
+		Assert.assertThrows(
+			NoSuchLayoutException.class,
+			() -> _layoutTypeController.includeLayoutContent(
+				_getMockHttpServletRequest(
+					_layout.getFriendlyURL(),
+					_userLocalService.getGuestUser(
+						TestPropsValues.getCompanyId())),
 				new MockHttpServletResponse(), _layout));
 	}
 
-	private MockHttpServletRequest _getMockHttpServletRequest(User user)
+	private MockHttpServletRequest _getMockHttpServletRequest(
+			String currentURL, User user)
 		throws Exception {
 
 		MockHttpServletRequest mockHttpServletRequest =
 			new MockHttpServletRequest();
 
-		mockHttpServletRequest.setAttribute(
-			WebKeys.CURRENT_URL, "http://www.liferay.com");
+		mockHttpServletRequest.setAttribute(WebKeys.CURRENT_URL, currentURL);
 
 		UserTestUtil.setUser(user);
 
@@ -136,13 +135,12 @@ public class EmptyLayoutTypeControllerTest {
 		themeDisplay.setServerPort(8080);
 		themeDisplay.setSignedIn(true);
 		themeDisplay.setSiteGroupId(_group.getGroupId());
+		themeDisplay.setURLCurrent(
+			(String)mockHttpServletRequest.getAttribute(WebKeys.CURRENT_URL));
 		themeDisplay.setUser(user);
 
 		return themeDisplay;
 	}
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		EmptyLayoutTypeControllerTest.class);
 
 	@Inject
 	private CompanyLocalService _companyLocalService;
@@ -158,5 +156,8 @@ public class EmptyLayoutTypeControllerTest {
 	private LayoutSetLocalService _layoutSetLocalService;
 
 	private LayoutTypeController _layoutTypeController;
+
+	@Inject
+	private UserLocalService _userLocalService;
 
 }

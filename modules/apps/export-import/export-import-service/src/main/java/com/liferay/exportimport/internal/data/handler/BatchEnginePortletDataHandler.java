@@ -8,17 +8,13 @@ package com.liferay.exportimport.internal.data.handler;
 import com.liferay.batch.engine.BatchEngineExportTaskExecutor;
 import com.liferay.batch.engine.BatchEngineImportTaskExecutor;
 import com.liferay.batch.engine.BatchEngineTaskExecuteStatus;
-import com.liferay.batch.engine.BatchEngineTaskItemDelegate;
 import com.liferay.batch.engine.BatchEngineTaskItemDelegateRegistry;
 import com.liferay.batch.engine.BatchEngineTaskOperation;
 import com.liferay.batch.engine.constants.BatchEngineImportTaskConstants;
 import com.liferay.batch.engine.constants.CreateStrategy;
-import com.liferay.batch.engine.jaxrs.uri.BatchEngineUriInfo;
 import com.liferay.batch.engine.model.BatchEngineExportTask;
 import com.liferay.batch.engine.model.BatchEngineImportTask;
-import com.liferay.batch.engine.pagination.Page;
-import com.liferay.batch.engine.pagination.Pagination;
-import com.liferay.batch.engine.service.BatchEngineExportTaskService;
+import com.liferay.batch.engine.service.BatchEngineExportTaskLocalService;
 import com.liferay.batch.engine.service.BatchEngineImportTaskService;
 import com.liferay.exportimport.internal.lar.PortletDataContextThreadLocal;
 import com.liferay.exportimport.kernel.lar.BasePortletDataHandler;
@@ -38,7 +34,6 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONUtil;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.service.CompanyLocalService;
@@ -72,7 +67,7 @@ public class BatchEnginePortletDataHandler extends BasePortletDataHandler {
 
 	public BatchEnginePortletDataHandler(
 		BatchEngineExportTaskExecutor batchEngineExportTaskExecutor,
-		BatchEngineExportTaskService batchEngineExportTaskService,
+		BatchEngineExportTaskLocalService batchEngineExportTaskLocalService,
 		BatchEngineImportTaskExecutor batchEngineImportTaskExecutor,
 		BatchEngineImportTaskService batchEngineImportTaskService,
 		BatchEngineTaskItemDelegateRegistry batchEngineTaskItemDelegateRegistry,
@@ -83,7 +78,7 @@ public class BatchEnginePortletDataHandler extends BasePortletDataHandler {
 		UserLocalService userLocalService) {
 
 		_batchEngineExportTaskExecutor = batchEngineExportTaskExecutor;
-		_batchEngineExportTaskService = batchEngineExportTaskService;
+		_batchEngineExportTaskLocalService = batchEngineExportTaskLocalService;
 		_batchEngineImportTaskExecutor = batchEngineImportTaskExecutor;
 		_batchEngineImportTaskService = batchEngineImportTaskService;
 		_batchEngineTaskItemDelegateRegistry =
@@ -226,36 +221,8 @@ public class BatchEnginePortletDataHandler extends BasePortletDataHandler {
 					setPortletDataContextWithSafeCloseable(
 						portletDataContext)) {
 
-			ExportImportVulcanBatchEngineTaskItemDelegate.ExportImportDescriptor
-				exportImportDescriptor =
-					_exportImportVulcanBatchEngineTaskItemDelegate.
-						getExportImportDescriptor();
-
-			BatchEngineExportTaskExecutor.Result result =
-				_batchEngineExportTaskExecutor.execute(
-					_batchEngineExportTaskService.addBatchEngineExportTask(
-						null, portletDataContext.getCompanyId(), _getUserId(),
-						null, _className, "JSON",
-						BatchEngineTaskExecuteStatus.INITIAL.name(),
-						Collections.emptyList(),
-						BatchEnginePortletDataHandlerUtil.buildExportParameters(
-							exportImportDescriptor.getNestedFields(),
-							exportImportDescriptor.getParameters(),
-							portletDataContext),
-						_taskItemDelegateName),
-					new BatchEngineExportTaskExecutor.Settings() {
-
-						@Override
-						public boolean isCompressContent() {
-							return false;
-						}
-
-						@Override
-						public boolean isPersistContent() {
-							return false;
-						}
-
-					});
+			BatchEngineExportTaskExecutor.Result result = _executeExportTask(
+				Integer.MAX_VALUE, portletDataContext);
 
 			portletDataContext.addZipEntry(
 				_normalize(_fileName, portletDataContext.getScopeGroupId()),
@@ -355,40 +322,24 @@ public class BatchEnginePortletDataHandler extends BasePortletDataHandler {
 			PortletPreferences portletPreferences)
 		throws Exception {
 
-		BatchEngineTaskItemDelegate<?> batchEngineTaskItemDelegate =
-			_batchEngineTaskItemDelegateRegistry.getBatchEngineTaskItemDelegate(
-				portletDataContext.getCompanyId(), _className,
-				_taskItemDelegateName);
+		try (SafeCloseable safeCloseable =
+				PortletDataContextThreadLocal.
+					setPortletDataContextWithSafeCloseable(
+						portletDataContext)) {
 
-		batchEngineTaskItemDelegate.setContextCompany(
-			_companyLocalService.getCompany(portletDataContext.getCompanyId()));
+			BatchEngineExportTaskExecutor.Result result = _executeExportTask(
+				1, portletDataContext);
 
-		BatchEngineUriInfo.Builder builder = new BatchEngineUriInfo.Builder();
+			BatchEngineExportTask batchEngineExportTask =
+				result.getBatchEngineExportTask();
 
-		Map<String, Serializable> parameters =
-			BatchEnginePortletDataHandlerUtil.buildExportParameters(
-				Collections.emptyList(), null, portletDataContext);
+			ManifestSummary manifestSummary =
+				portletDataContext.getManifestSummary();
 
-		for (Map.Entry<String, Serializable> entry : parameters.entrySet()) {
-			builder.queryParameter(
-				entry.getKey(), String.valueOf(entry.getValue()));
+			manifestSummary.addModelAdditionCount(
+				new StagedModelType(_itemClassName),
+				batchEngineExportTask.getTotalItemsCount());
 		}
-
-		batchEngineTaskItemDelegate.setContextUriInfo(builder.build());
-
-		User user = _userLocalService.getUser(_getUserId());
-
-		batchEngineTaskItemDelegate.setContextUser(user);
-		batchEngineTaskItemDelegate.setLanguageId(user.getLanguageId());
-
-		Page<?> page = batchEngineTaskItemDelegate.read(
-			null, Pagination.of(1, 1), null, parameters, null);
-
-		ManifestSummary manifestSummary =
-			portletDataContext.getManifestSummary();
-
-		manifestSummary.addModelAdditionCount(
-			new StagedModelType(_itemClassName), page.getTotalCount());
 	}
 
 	@Override
@@ -403,6 +354,43 @@ public class BatchEnginePortletDataHandler extends BasePortletDataHandler {
 	protected static final TransactionConfig transactionConfig =
 		TransactionConfig.Factory.create(
 			Propagation.REQUIRES_NEW, new Class<?>[] {Exception.class});
+
+	private BatchEngineExportTaskExecutor.Result _executeExportTask(
+		int maxItems, PortletDataContext portletDataContext) {
+
+		ExportImportVulcanBatchEngineTaskItemDelegate.ExportImportDescriptor
+			exportImportDescriptor =
+				_exportImportVulcanBatchEngineTaskItemDelegate.
+					getExportImportDescriptor();
+
+		return _batchEngineExportTaskExecutor.execute(
+			_batchEngineExportTaskLocalService.createBatchEngineExportTask(
+				0L, null, portletDataContext.getCompanyId(), _getUserId(), null,
+				_className, "JSON", BatchEngineTaskExecuteStatus.INITIAL.name(),
+				Collections.emptyList(),
+				BatchEnginePortletDataHandlerUtil.buildExportParameters(
+					exportImportDescriptor.getNestedFields(),
+					exportImportDescriptor.getParameters(), portletDataContext),
+				_taskItemDelegateName),
+			new BatchEngineExportTaskExecutor.Settings() {
+
+				@Override
+				public int getMaxItems() {
+					return maxItems;
+				}
+
+				@Override
+				public boolean isCompressContent() {
+					return false;
+				}
+
+				@Override
+				public boolean isPersist() {
+					return false;
+				}
+
+			});
+	}
 
 	private byte[] _getBytes(String fileName, InputStream inputStream)
 		throws Exception {
@@ -438,7 +426,8 @@ public class BatchEnginePortletDataHandler extends BasePortletDataHandler {
 	}
 
 	private final BatchEngineExportTaskExecutor _batchEngineExportTaskExecutor;
-	private final BatchEngineExportTaskService _batchEngineExportTaskService;
+	private final BatchEngineExportTaskLocalService
+		_batchEngineExportTaskLocalService;
 	private final BatchEngineImportTaskExecutor _batchEngineImportTaskExecutor;
 	private final BatchEngineImportTaskService _batchEngineImportTaskService;
 	private final BatchEngineTaskItemDelegateRegistry

@@ -12,7 +12,10 @@ import com.liferay.portal.kernel.exception.NoSuchLayoutException;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutConstants;
 import com.liferay.portal.kernel.model.LayoutTypeController;
+import com.liferay.portal.kernel.service.permission.LayoutPermission;
 import com.liferay.portal.kernel.servlet.PipingServletResponse;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletResponse;
@@ -55,7 +58,19 @@ public class EmptyLayoutTypeController extends BaseLayoutTypeControllerImpl {
 			HttpServletResponse httpServletResponse, Layout layout)
 		throws Exception {
 
-		throw new NoSuchLayoutException();
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)httpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
+		if (!layout.isTypeEmpty() ||
+			!_layoutPermission.containsLayoutUpdatePermission(
+				themeDisplay.getPermissionChecker(), layout)) {
+
+			throw new NoSuchLayoutException();
+		}
+
+		return super.includeLayoutContent(
+			httpServletRequest, httpServletResponse, layout);
 	}
 
 	@Override
@@ -109,8 +124,13 @@ public class EmptyLayoutTypeController extends BaseLayoutTypeControllerImpl {
 
 	@Override
 	protected String getViewPage() {
-		return null;
+		return _VIEW_PAGE;
 	}
+
+	private static final String _VIEW_PAGE = "/layout/view/empty.jsp";
+
+	@Reference
+	private LayoutPermission _layoutPermission;
 
 	@Reference(
 		target = "(osgi.web.symbolicname=com.liferay.layout.type.controller.empty)"

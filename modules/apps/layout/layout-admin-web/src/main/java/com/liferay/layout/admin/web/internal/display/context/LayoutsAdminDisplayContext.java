@@ -289,6 +289,21 @@ public class LayoutsAdminDisplayContext {
 		).buildString();
 	}
 
+	public String getAddModalTitle() {
+		String title = "add-page";
+
+		String initialType = ParamUtil.getString(
+			httpServletRequest, "initialType");
+		boolean editAction = ParamUtil.getBoolean(
+			httpServletRequest, "editAction");
+
+		if (isConvertEmptyPage(initialType, editAction)) {
+			title = "page-name";
+		}
+
+		return LanguageUtil.get(httpServletRequest, title);
+	}
+
 	public List<SiteNavigationMenu> getAutoSiteNavigationMenus() {
 		return SiteNavigationMenuLocalServiceUtil.getAutoSiteNavigationMenus(
 			themeDisplay.getScopeGroupId());
@@ -1721,6 +1736,14 @@ public class LayoutsAdminDisplayContext {
 		return false;
 	}
 
+	public boolean isConvertEmptyPage(String type, boolean editAction) {
+		if (!editAction) {
+			return false;
+		}
+
+		return Objects.equals(type, LayoutConstants.TYPE_EMPTY);
+	}
+
 	public boolean isDraft() {
 		Layout layout = getSelLayout();
 
@@ -1999,7 +2022,8 @@ public class LayoutsAdminDisplayContext {
 			availableActions.add("exportTranslation");
 		}
 
-		if (LayoutPermissionUtil.contains(
+		if (!layout.isTypeEmpty() &&
+			LayoutPermissionUtil.contains(
 				themeDisplay.getPermissionChecker(), layout,
 				ActionKeys.PERMISSIONS)) {
 

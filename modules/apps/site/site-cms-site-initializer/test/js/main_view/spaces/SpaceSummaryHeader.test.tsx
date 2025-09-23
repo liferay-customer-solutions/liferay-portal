@@ -8,8 +8,8 @@ import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
+import manageConnectedSitesAction from '../../../../src/main/resources/META-INF/resources/js/main_view/props_transformer/actions/manageConnectedSitesAction';
 import manageMembersAction from '../../../../src/main/resources/META-INF/resources/js/main_view/props_transformer/actions/manageMembersAction';
-import manageSitesAction from '../../../../src/main/resources/META-INF/resources/js/main_view/props_transformer/actions/manageSitesAction';
 import SpaceSummaryHeader, {
 	SpaceSummaryHeaderActions,
 } from '../../../../src/main/resources/META-INF/resources/js/main_view/spaces/SpaceSummaryHeader';
@@ -20,7 +20,7 @@ jest.mock(
 );
 
 jest.mock(
-	'../../../../src/main/resources/META-INF/resources/js/main_view/props_transformer/actions/manageSitesAction',
+	'../../../../src/main/resources/META-INF/resources/js/main_view/props_transformer/actions/manageConnectedSitesAction',
 	() => jest.fn()
 );
 
@@ -55,6 +55,7 @@ describe('SpaceSummaryHeader', () => {
 				action: SpaceSummaryHeaderActions.OPEN_MEMBERS_MODAL,
 				assetLibraryCreatorUserId: '1',
 				assetLibraryId: '2',
+				externalReferenceCode: '3',
 			},
 		};
 
@@ -83,7 +84,7 @@ describe('SpaceSummaryHeader', () => {
 				const spaceModalProps = {
 					action: SpaceSummaryHeaderActions.OPEN_MEMBERS_MODAL,
 					assetLibraryCreatorUserId: '123',
-					assetLibraryId: '456',
+					externalReferenceCode: '789',
 				};
 
 				const props = {
@@ -111,7 +112,8 @@ describe('SpaceSummaryHeader', () => {
 					{
 						assetLibraryCreatorUserId:
 							spaceModalProps.assetLibraryCreatorUserId,
-						assetLibraryId: spaceModalProps.assetLibraryId,
+						externalReferenceCode:
+							spaceModalProps.externalReferenceCode,
 						hasAssignMembersPermission:
 							expectedHasAssignMembersPermission,
 						title: defaultProps.title,
@@ -122,7 +124,7 @@ describe('SpaceSummaryHeader', () => {
 		);
 	});
 
-	describe('manageSitesAction', () => {
+	describe('manageConnectedSitesAction', () => {
 		it.each([
 			[false, undefined],
 			[false, false],
@@ -137,6 +139,7 @@ describe('SpaceSummaryHeader', () => {
 					action: SpaceSummaryHeaderActions.OPEN_SITES_MODAL,
 					assetLibraryCreatorUserId: '123',
 					assetLibraryId: '456',
+					externalReferenceCode: '789',
 				};
 
 				const props = {
@@ -159,10 +162,11 @@ describe('SpaceSummaryHeader', () => {
 
 				await userEvent.click(button);
 
-				expect(manageSitesAction).toHaveBeenCalledTimes(1);
-				expect(manageSitesAction).toHaveBeenCalledWith(
+				expect(manageConnectedSitesAction).toHaveBeenCalledTimes(1);
+				expect(manageConnectedSitesAction).toHaveBeenCalledWith(
 					{
-						groupId: spaceModalProps.assetLibraryId,
+						externalReferenceCode:
+							spaceModalProps.externalReferenceCode,
 						hasConnectSitesPermission:
 							expectedHasConnectSitesPermission,
 					},
@@ -178,7 +182,7 @@ describe('SpaceSummaryHeader', () => {
 			spaceModalProps: {
 				action: 'some-other-action' as any,
 				assetLibraryCreatorUserId: '1',
-				assetLibraryId: '2',
+				externalReferenceCode: '3',
 			},
 		};
 

@@ -384,23 +384,13 @@ public class ResourceOpenAPIParser {
 			}
 
 			if (methodName.equals("post" + parentSchemaName + schemaName) ||
-				methodName.equals(
-					StringBundler.concat(
-						"post", parentSchemaName, "ByExternalReferenceCode",
-						schemaName)) ||
-				methodName.equals(
-					StringBundler.concat(
-						"post", parentSchemaName, schemaName,
-						"ByExternalReferenceCode"))) {
+				isExternalReferenceCodeMethod("post", javaMethodSignature)) {
 
 				createStrategies.add("INSERT");
 			}
-			else if ((methodName.equals("putByExternalReferenceCode") ||
-					  methodName.equals(
-						  StringBundler.concat(
-							  "put", parentSchemaName, schemaName,
-							  "ByExternalReferenceCode"))) &&
-					 propertyNames.contains("externalReferenceCode")) {
+			else if (propertyNames.contains("externalReferenceCode") &&
+					 isExternalReferenceCodeMethod(
+						 "put", javaMethodSignature)) {
 
 				createStrategies.add("UPSERT");
 			}
@@ -427,6 +417,21 @@ public class ResourceOpenAPIParser {
 		}
 
 		return updateStrategies;
+	}
+
+	public static boolean hasPathParameter(
+		JavaMethodSignature javaMethodSignature, String parameterName) {
+
+		List<JavaMethodParameter> javaMethodParameters =
+			javaMethodSignature.getPathJavaMethodParameters();
+
+		for (JavaMethodParameter javaMethodParameter : javaMethodParameters) {
+			if (parameterName.equals(javaMethodParameter.getParameterName())) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public static boolean hasReadVulcanBatchImplementation(
@@ -484,6 +489,48 @@ public class ResourceOpenAPIParser {
 		}
 
 		return false;
+	}
+
+	public static boolean isExternalReferenceCodeMethod(
+		String httpMethod, JavaMethodSignature javaMethodSignature) {
+
+		Set<String> validMethodNames = new HashSet<>();
+
+		validMethodNames.add(httpMethod + "ByExternalReferenceCode");
+
+		String parentSchemaName = GetterUtil.getString(
+			javaMethodSignature.getParentSchemaName());
+		String schemaName = GetterUtil.getString(
+			javaMethodSignature.getSchemaName());
+
+		validMethodNames.add(
+			StringBundler.concat(
+				httpMethod, parentSchemaName, "ByExternalReferenceCode",
+				schemaName));
+		validMethodNames.add(
+			StringBundler.concat(
+				httpMethod, parentSchemaName, schemaName,
+				"ByExternalReferenceCode"));
+
+		if (hasPathParameter(
+				javaMethodSignature,
+				OpenAPIParserUtil.getSchemaVarName(schemaName) +
+					"ExternalReferenceCode")) {
+
+			validMethodNames.add(httpMethod + schemaName);
+
+			if (hasPathParameter(
+					javaMethodSignature,
+					OpenAPIParserUtil.getSchemaVarName(parentSchemaName) +
+						"ExternalReferenceCode")) {
+
+				validMethodNames.add(
+					StringBundler.concat(
+						httpMethod, parentSchemaName, schemaName));
+			}
+		}
+
+		return validMethodNames.contains(javaMethodSignature.getMethodName());
 	}
 
 	private static void _addBatchJavaMethodSignature(
@@ -1265,7 +1312,16 @@ public class ResourceOpenAPIParser {
 		String basePath = path;
 
 		if (basePath.endsWith(
-				"/by-external-reference-code/{externalReferenceCode}")) {
+				"/{" + OpenAPIParserUtil.getSchemaVarName(schemaName) +
+					"ExternalReferenceCode}")) {
+
+			basePath = StringUtil.removeLast(
+				path,
+				"/{" + OpenAPIParserUtil.getSchemaVarName(schemaName) +
+					"ExternalReferenceCode}");
+		}
+		else if (basePath.endsWith(
+					"/by-external-reference-code/{externalReferenceCode}")) {
 
 			basePath = StringUtil.removeLast(
 				path, "/by-external-reference-code/{externalReferenceCode}");

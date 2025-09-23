@@ -1,0 +1,113 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+import ClayModal from '@clayui/modal';
+import {sub} from 'frontend-js-web';
+import React, {useCallback, useEffect, useState} from 'react';
+
+import Carousel from './Carousel';
+import Header from './Header';
+
+import '../../../../css/components/ItemNavigation.scss';
+
+interface ItemNavigationModalContent {
+	contentViewURL: string;
+	currentIndex: number;
+	items: ItemData[];
+}
+
+const KEY_CODE = {
+	LEFT: 37,
+	RIGHT: 39,
+};
+
+export default function ItemNavigationModalContent({
+	contentViewURL,
+	currentIndex = 0,
+	items,
+}: ItemNavigationModalContent) {
+	const [currentItemIndex, setCurrentItemIndex] = useState(currentIndex);
+
+	const currentItem = items[currentItemIndex];
+
+	const handleClickNext = useCallback(() => {
+		if (items.length > 1) {
+			setCurrentItemIndex((index) => {
+				const lastIndex = items.length - 1;
+				const shouldResetIndex = index === lastIndex;
+
+				return shouldResetIndex ? 0 : index + 1;
+			});
+		}
+	}, [items.length]);
+
+	const handleClickPrevious = useCallback(() => {
+		if (items.length > 1) {
+			setCurrentItemIndex((index) => {
+				const lastIndex = items.length - 1;
+				const shouldResetIndex = index === 0;
+
+				return shouldResetIndex ? lastIndex : index - 1;
+			});
+		}
+	}, [items.length]);
+
+	const handleOnKeyDown = useCallback(
+		(event: any) => {
+			switch (event.which || event.keyCode) {
+				case KEY_CODE.LEFT:
+					handleClickPrevious();
+					break;
+				case KEY_CODE.RIGHT:
+					handleClickNext();
+					break;
+				default:
+					break;
+			}
+		},
+		[handleClickNext, handleClickPrevious]
+	);
+
+	useEffect(() => {
+		document.documentElement.addEventListener('keydown', handleOnKeyDown);
+
+		return () => {
+			document.documentElement.removeEventListener(
+				'keydown',
+				handleOnKeyDown
+			);
+		};
+	}, [handleOnKeyDown]);
+
+	return (
+		<>
+			<ClayModal.Header>
+				<Header item={currentItem} />
+			</ClayModal.Header>
+
+			<ClayModal.Body>
+				<Carousel
+					contentViewURL={contentViewURL}
+					currentItem={currentItem}
+					handleClickNext={handleClickNext}
+					handleClickPrevious={handleClickPrevious}
+					showArrows={items.length > 1}
+				/>
+			</ClayModal.Body>
+
+			<ClayModal.Footer
+				className="text-center"
+				middle={
+					<span className="text-3">
+						{sub(Liferay.Language.get('x-of-x'), [
+							currentItemIndex + 1,
+							items.length,
+						])}
+					</span>
+				}
+			/>
+		</>
+	);
+}

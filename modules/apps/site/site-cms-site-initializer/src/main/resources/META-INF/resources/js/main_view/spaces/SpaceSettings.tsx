@@ -16,23 +16,25 @@ import SpaceLanguageSettings from './SpaceLanguageSettings';
 interface SpaceSettingsProps {
 	backURL: string;
 	companyAvailableLanguages: LabelValueObject[];
-	depotEntryId: string;
+	externalReferenceCode: string;
 	groupId: string;
 }
 
 export default function SpaceSettings({
 	backURL,
 	companyAvailableLanguages,
-	depotEntryId,
+	externalReferenceCode,
 	groupId,
 }: SpaceSettingsProps) {
 	const [space, setSpace] = useState<Space | null>(null);
 
 	useEffect(() => {
-		SpaceService.getSpace({spaceId: depotEntryId}).then((space) => {
+		SpaceService.getSpace({
+			externalReferenceCode,
+		}).then((space) => {
 			setSpace(space);
 		});
-	}, [depotEntryId]);
+	}, [externalReferenceCode]);
 
 	if (!space) {
 		return null;

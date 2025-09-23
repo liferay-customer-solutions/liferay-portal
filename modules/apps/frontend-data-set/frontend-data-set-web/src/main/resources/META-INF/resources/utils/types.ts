@@ -4,8 +4,7 @@
  */
 
 import {ModalStatus} from 'frontend-js-components-web';
-
-import {TRenderer} from '../FrontendDataSetContext';
+import React from 'react';
 
 export declare function FrontendDataSet({
 	actionParameterName,
@@ -76,6 +75,12 @@ export interface IEmptyStateConfiguration extends IEmptyState {
 		search?: IEmptyState;
 		searchAndFilters?: IEmptyState;
 	};
+}
+
+export enum EStateInURLSettings {
+	OFF = 'off',
+	PUSH = 'push',
+	REPLACE = 'replace',
 }
 
 export interface IInlineEditingSettings {
@@ -328,6 +333,7 @@ export interface IFrontendDataSetProps {
 	showSelectAll?: boolean;
 	sidePanelId?: string;
 	sorts?: TSort[];
+	stateInURLSettings?: EStateInURLSettings;
 	style?: 'default' | 'fluid' | 'stacked';
 	uniformActionsDisplay?: boolean;
 	views: IView[];
@@ -356,11 +362,39 @@ export interface ISuccessNotification {
 	showSuccessNotification?: boolean;
 }
 
-export {
-	IClientExtensionRenderer,
-	IInternalRenderer,
-} from '../FrontendDataSetContext';
-export {INTERNAL_CELL_RENDERERS as FDS_INTERNAL_CELL_RENDERERS} from '../cell_renderers/InternalCellRenderer';
+export interface IDataSetData {
+	items: Array<any>;
+	lastPage: number;
+	page: number;
+	pageSize?: number;
+	totalCount: number;
+}
+
+export interface IHTMLElementBuilder {
+	(args: any): HTMLElement;
+}
+
+export interface IClientExtensionRenderer {
+	externalReferenceCode?: string;
+	htmlElementBuilder?: IHTMLElementBuilder;
+	name?: string;
+	type: 'clientExtension';
+	url?: string;
+}
+
+export interface IInternalRenderer {
+	component: React.ComponentType<any>;
+	default?: boolean;
+	label?: string;
+	name?: string;
+	schema?: ISchema;
+	symbol?: string;
+	type: 'internal';
+	url?: string;
+}
+
+export type TRenderer = IClientExtensionRenderer | IInternalRenderer;
+
 export {
 	DEFAULT_FETCH_HEADERS,
 	FDS_ARRAY_FIELD_NAME_DELIMITER,
@@ -369,4 +403,24 @@ export {
 	FDS_NESTED_FIELD_NAME_PARENT_SUFFIX,
 } from '../constants';
 
-export {Card} from '../views/cards/Cards';
+export enum EStateInURLKeys {
+	DELTA = 'delta',
+	VIEW_NAME = 'view',
+}
+
+export interface IStateInURL {
+	[EStateInURLKeys.DELTA]: number;
+	[EStateInURLKeys.VIEW_NAME]: string;
+}
+
+export type IStateInURLSetter<K extends keyof IStateInURL> = (
+	value: IStateInURL[K]
+) => (viewsDispatch: Function) => void;
+
+export type IStateInURLGetter<K extends keyof IStateInURL> = () =>
+	| IStateInURL[K]
+	| undefined;
+
+export type IStateInitializer<K extends keyof IStateInURL> = (
+	value: IStateInURL[K]
+) => IStateInURL[K] | undefined;

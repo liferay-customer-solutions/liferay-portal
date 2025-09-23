@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.bean.BeanPropertiesUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.model.LayoutConstants;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactoryUtil;
@@ -67,6 +68,10 @@ public class LayoutActionDropdownItemsProvider {
 	public List<DropdownItem> getActionDropdownItems(
 			Layout layout, boolean includeAddChildPageAction)
 		throws Exception {
+
+		if (layout.isTypeEmpty()) {
+			return _getEmptyLayoutActionDropdownItems(layout);
+		}
 
 		Layout draftLayout = _layoutsAdminDisplayContext.getDraftLayout(layout);
 
@@ -462,6 +467,62 @@ public class LayoutActionDropdownItemsProvider {
 
 			dropdownItem.setLabel(label);
 		};
+	}
+
+	private List<DropdownItem> _getEmptyLayoutActionDropdownItems(
+		Layout layout) {
+
+		return DropdownItemListBuilder.addGroup(
+			dropdownGroupItem -> {
+				dropdownGroupItem.setDropdownItems(
+					DropdownItemListBuilder.add(
+						dropdownItem -> {
+							dropdownItem.setHref(
+								_getEmptySelectLayoutPageTemplateEntryURL(
+									layout));
+							dropdownItem.setIcon("pencil");
+							dropdownItem.setLabel(
+								LanguageUtil.get(_httpServletRequest, "edit"));
+						}
+					).build());
+				dropdownGroupItem.setSeparator(true);
+			}
+		).addGroup(
+			dropdownGroupItem -> {
+				dropdownGroupItem.setDropdownItems(
+					DropdownItemListBuilder.add(
+						() -> _layoutActionsHelper.isShowDeleteAction(layout),
+						_getDeleteLayoutActionUnsafeConsumer(layout)
+					).build());
+				dropdownGroupItem.setSeparator(true);
+			}
+		).build();
+	}
+
+	private String _getEmptySelectLayoutPageTemplateEntryURL(Layout layout)
+		throws PortalException {
+
+		return PortletURLBuilder.createActionURL(
+			_liferayPortletResponse
+		).setMVCRenderCommandName(
+			"/layout_admin/select_layout_page_template_entry"
+		).setRedirect(
+			_layoutsAdminDisplayContext.getRedirect()
+		).setBackURL(
+			_getBackURL()
+		).setParameter(
+			"editAction", Boolean.TRUE
+		).setParameter(
+			"externalReferenceCode", layout.getExternalReferenceCode()
+		).setParameter(
+			"groupId", layout.getGroupId()
+		).setParameter(
+			"initialType", LayoutConstants.TYPE_EMPTY
+		).setParameter(
+			"privateLayout", layout.isPrivateLayout()
+		).setParameter(
+			"selPlid", layout.getPlid()
+		).buildString();
 	}
 
 	private UnsafeConsumer<DropdownItem, Exception>

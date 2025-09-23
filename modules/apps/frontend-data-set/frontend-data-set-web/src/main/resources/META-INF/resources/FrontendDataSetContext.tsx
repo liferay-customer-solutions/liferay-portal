@@ -5,7 +5,14 @@
 
 import React from 'react';
 
-import {IInlineEditingSettings, IItemsActions, ISchema} from './utils/types';
+import {
+	EStateInURLKeys,
+	IDataSetData,
+	IInlineEditingSettings,
+	IItemsActions,
+	IStateInURLSetter,
+	TRenderer,
+} from './utils/types';
 
 export interface IFrontendDataSetContext {
 	actionParameterName?: string | null;
@@ -38,7 +45,7 @@ export interface IFrontendDataSetContext {
 	formName?: string;
 	highlightItems: Function;
 	highlightedItemsValue?: Array<string>;
-	id?: string;
+	id: string;
 	infoPanelId?: string;
 	infoPanelOpen?: boolean;
 	inlineAddingSettings?: {
@@ -69,6 +76,7 @@ export interface IFrontendDataSetContext {
 	selectedItemsValue?: Array<any>;
 	selectionType?: 'single' | 'multiple';
 	setSearching: (value: boolean) => void;
+	setView: IStateInURLSetter<EStateInURLKeys.VIEW_NAME>;
 	showBulkActionsManagementBar: boolean;
 	showBulkActionsManagementBarActions: boolean;
 	showInfoPanel: boolean;
@@ -87,45 +95,13 @@ export interface IFrontendDataSetContext {
 	updateItem: Function;
 }
 
-export interface IDataSetData {
-	items: Array<any>;
-	lastPage: number;
-	page: number;
-	pageSize?: number;
-	totalCount: number;
-}
-
-export interface IHTMLElementBuilder {
-	(args: any): HTMLElement;
-}
-
-export interface IClientExtensionRenderer {
-	externalReferenceCode?: string;
-	htmlElementBuilder?: IHTMLElementBuilder;
-	name?: string;
-	type: 'clientExtension';
-	url?: string;
-}
-
-export interface IInternalRenderer {
-	component: React.ComponentType<any>;
-	default?: boolean;
-	label?: string;
-	name?: string;
-	schema?: ISchema;
-	symbol?: string;
-	type: 'internal';
-	url?: string;
-}
-
-export type TRenderer = IClientExtensionRenderer | IInternalRenderer;
-
 const FrontendDataSetContext = React.createContext({
 	allItemsSelectedActive: false,
 	applyItemInlineUpdates: () => {},
 	createInlineItem: () => {},
 	executeAsyncItemAction: () => {},
 	highlightItems: () => {},
+	id: '',
 	loadData: () => {},
 	onActionDropdownItemClick: () => {},
 	onBulkActionItemClick: () => {},
