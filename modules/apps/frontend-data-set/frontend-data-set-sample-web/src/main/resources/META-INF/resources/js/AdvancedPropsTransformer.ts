@@ -24,7 +24,7 @@ import type {
 } from '@liferay/frontend-data-set-web';
 
 export default function propsTransformer({
-	additionalProps: {greeting},
+	additionalProps: {enableItemsActionsGroups, greeting},
 	itemsActions,
 	selectedItemsKey,
 	...otherProps
@@ -110,6 +110,19 @@ export default function propsTransformer({
 		return props;
 	};
 
+	const itemActionsWithStyling = itemsActions.map((action: IItemsActions) => {
+		const key = action?.data?.id as string;
+
+		if (!key || key !== 'sampleDeleteMessage') {
+			return action;
+		}
+
+		return {
+			...action,
+			className: 'text-danger',
+		};
+	});
+
 	return {
 		...otherProps,
 		customRenderers: {
@@ -117,18 +130,53 @@ export default function propsTransformer({
 		},
 		fileDropSettings,
 		infoPanelComponent: SampleInfoPanel,
-		itemsActions: itemsActions.map((action: IItemsActions) => {
-			const key = action?.data?.id as string;
-
-			if (!key || key !== 'sampleDeleteMessage') {
-				return action;
-			}
-
-			return {
-				...action,
-				className: 'text-danger',
-			};
-		}),
+		itemsActions: enableItemsActionsGroups
+			? [
+					{
+						items: itemActionsWithStyling,
+						separator: true,
+						type: 'group',
+					},
+					{
+						items: [
+							{
+								data: {
+									id: 'emptyGroupTest',
+									permissionKey: 'nonexistentPermissionKey',
+								},
+								icon: 'hidden',
+								label: 'Empty Group Test',
+							},
+						],
+						separator: true,
+						type: 'group',
+					},
+					{
+						items: [
+							{
+								data: {
+									id: 'groupItem',
+								},
+								icon: 'separator',
+								label: 'Group Item',
+								onClick: () => {
+									alert('You clicked on an item in a group');
+								},
+							},
+							{
+								data: {
+									id: 'groupPermissionTest',
+									permissionKey: 'nonexistentPermissionKey',
+								},
+								icon: 'hidden',
+								label: 'Group Permission Test',
+							},
+						],
+						separator: true,
+						type: 'group',
+					},
+				]
+			: itemActionsWithStyling,
 		onActionDropdownItemClick({
 			action,
 			itemData,

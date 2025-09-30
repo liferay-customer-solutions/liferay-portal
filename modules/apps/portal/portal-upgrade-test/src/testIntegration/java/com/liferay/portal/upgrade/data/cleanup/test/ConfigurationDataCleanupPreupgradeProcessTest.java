@@ -7,7 +7,9 @@ package com.liferay.portal.upgrade.data.cleanup.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.test.util.ConfigurationTestUtil;
+import com.liferay.portal.kernel.dao.db.DBInspector;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.instance.PortalInstancePool;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
@@ -20,6 +22,8 @@ import com.liferay.portal.test.log.LogCapture;
 import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upgrade.data.cleanup.ConfigurationDataCleanupPreupgradeProcess;
+
+import java.sql.Connection;
 
 import java.util.List;
 import java.util.Set;
@@ -46,12 +50,18 @@ public class ConfigurationDataCleanupPreupgradeProcessTest
 
 	@Before
 	public void setUp() throws Exception {
+		_connection = DataAccess.getConnection();
+
+		_dbInspector = new DBInspector(_connection);
+
 		_originalCacheEnabled = ReflectionTestUtil.getAndSetFieldValue(
 			PortalInstancePool.class, "_cacheEnabled", false);
 	}
 
 	@After
 	public void tearDown() throws Exception {
+		DataAccess.cleanUp(_connection);
+
 		ReflectionTestUtil.setFieldValue(
 			PortalInstancePool.class, "_cacheEnabled", _originalCacheEnabled);
 	}
@@ -135,17 +145,21 @@ public class ConfigurationDataCleanupPreupgradeProcessTest
 				messages.contains(
 					StringBundler.concat(
 						"Table Configuration_, 1 row deleted because ",
-						existentConfigurationId, " has ", existentPrimaryKey,
-						" that was not found in ", tableName, ".",
-						primaryKeyColumnName)));
+						existentConfigurationId, " has scope ",
+						primaryKeyColumnName, StringPool.SPACE,
+						existentPrimaryKey, " that was not found in ",
+						_dbInspector.normalizeName(tableName), ".",
+						_dbInspector.normalizeName(primaryKeyColumnName))));
 
 			Assert.assertTrue(
 				messages.contains(
 					StringBundler.concat(
 						"Table Configuration_, 1 row deleted because ",
-						nonexistentConfigurationId, " has ",
+						nonexistentConfigurationId, " has scope ",
+						primaryKeyColumnName, StringPool.SPACE,
 						nonexistentPrimaryKey, " that was not found in ",
-						tableName, ".", primaryKeyColumnName)));
+						_dbInspector.normalizeName(tableName), ".",
+						_dbInspector.normalizeName(primaryKeyColumnName))));
 		}
 		finally {
 			ConfigurationTestUtil.deleteConfiguration(existentConfigurationId);
@@ -154,6 +168,8 @@ public class ConfigurationDataCleanupPreupgradeProcessTest
 		}
 	}
 
+	private Connection _connection;
+	private DBInspector _dbInspector;
 	private boolean _originalCacheEnabled;
 
 }

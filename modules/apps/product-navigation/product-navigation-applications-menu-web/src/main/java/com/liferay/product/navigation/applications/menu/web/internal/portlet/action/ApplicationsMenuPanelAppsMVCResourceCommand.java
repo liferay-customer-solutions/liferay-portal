@@ -154,6 +154,10 @@ public class ApplicationsMenuPanelAppsMVCResourceCommand
 	private Page<AssetLibrary> _getAssetLibrariesPage(ThemeDisplay themeDisplay)
 		throws Exception {
 
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
+			return null;
+		}
+
 		AssetLibraryResource.Builder builder =
 			_assetLibraryResourceFactory.create();
 
@@ -232,11 +236,25 @@ public class ApplicationsMenuPanelAppsMVCResourceCommand
 			HttpServletRequest httpServletRequest, ThemeDisplay themeDisplay)
 		throws Exception {
 
-		JSONObject cmsJSONObject = _jsonFactory.createJSONObject();
-
+		Page<AssetLibrary> assetLibraryPage = _getAssetLibrariesPage(
+			themeDisplay);
 		Company company = themeDisplay.getCompany();
 
-		return cmsJSONObject.put(
+		return JSONUtil.put(
+			"allSpacesCount",
+			() -> {
+				if (assetLibraryPage == null) {
+					return null;
+				}
+
+				return assetLibraryPage.getTotalCount();
+			}
+		).put(
+			"allSpacesURL",
+			StringBundler.concat(
+				themeDisplay.getPathFriendlyURLPublic(),
+				GroupConstants.CMS_FRIENDLY_URL, "/all-spaces")
+		).put(
 			"firstTimeAccess",
 			() -> {
 				ExpandoBridge bridge = company.getExpandoBridge();
@@ -252,14 +270,12 @@ public class ApplicationsMenuPanelAppsMVCResourceCommand
 		).put(
 			"spaces",
 			() -> {
-				if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
+				if (assetLibraryPage == null) {
 					return null;
 				}
 
-				Page<AssetLibrary> page = _getAssetLibrariesPage(themeDisplay);
-
 				return JSONUtil.toJSONArray(
-					page.getItems(),
+					assetLibraryPage.getItems(),
 					assetLibrary -> JSONUtil.put(
 						"active",
 						_isCMSSpaceAssetLibraryActive(

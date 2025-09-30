@@ -7,16 +7,51 @@ import ClayIcon from '@clayui/icon';
 import ClayLink from '@clayui/link';
 import {openConfirmModal} from 'frontend-js-components-web';
 import {navigate} from 'frontend-js-web';
-import PropTypes from 'prop-types';
 import React, {useContext} from 'react';
 
 import FrontendDataSetContext from '../FrontendDataSetContext';
 import filterItemActions from '../utils/actionItems/filterItemActions';
 import formatActionURL from '../utils/actionItems/formatActionURL';
 import {openPermissionsModal} from '../utils/modals/openPermissionsModal';
+import {EItemActionsType, IItemsActions} from '../utils/types';
 import DefaultContent from './DefaultRenderer';
 
-function ActionLinkRenderer({actions, itemData, itemId, options, value}) {
+interface IActionLinkRendererProps {
+	actions: IItemsActions[];
+	itemData: any;
+	itemId: number | string;
+	options?: {
+		actionId?: string;
+	};
+	value: number | string;
+}
+
+const findAction = (
+	actions: IItemsActions[],
+	actionId: string
+): IItemsActions | undefined => {
+	for (const action of actions) {
+		if (action.data?.id === actionId) {
+			return action;
+		}
+
+		if (action.type === EItemActionsType.GROUP && action.items) {
+			const foundAction = findAction(action.items, actionId);
+
+			if (foundAction) {
+				return foundAction;
+			}
+		}
+	}
+};
+
+function ActionLinkRenderer({
+	actions,
+	itemData,
+	itemId,
+	options,
+	value,
+}: IActionLinkRendererProps) {
 	const {
 		executeAsyncItemAction,
 		highlightItems,
@@ -43,10 +78,10 @@ function ActionLinkRenderer({actions, itemData, itemId, options, value}) {
 	});
 
 	const currentAction = options?.actionId
-		? formattedActions.find(
-				(action) => action.data?.id === options.actionId
-			)
-		: formattedActions[0];
+		? findAction(formattedActions, options.actionId)
+		: formattedActions[0]?.type === EItemActionsType.GROUP
+			? formattedActions[0]?.items?.[0]
+			: formattedActions[0];
 
 	if (!currentAction) {
 		return value ? <DefaultContent value={value} /> : null;
@@ -56,66 +91,64 @@ function ActionLinkRenderer({actions, itemData, itemId, options, value}) {
 		currentAction.href &&
 		formatActionURL(currentAction.href, itemData, currentAction.target);
 
-	function handleClickOnLink(event) {
+	function handleClickOnLink(event: React.MouseEvent) {
 		const doAction = () => {
-			if (currentAction.target === 'modal') {
+			if (currentAction?.target === 'modal') {
 				event.preventDefault();
 
 				openModal({
-					size: currentAction.size || 'lg',
-					title: currentAction.title,
+					size: currentAction?.data?.size || 'lg',
+					title: currentAction?.data?.title,
 					url: formattedHref,
 				});
 			}
-			if (currentAction.target === 'infoPanel') {
+			else if (currentAction?.target === 'infoPanel') {
 				event.preventDefault();
 
 				onInfoPanelToggleButtonClick();
 			}
-			else if (currentAction.target === 'modal-permissions') {
+			else if (currentAction?.target === 'modal-permissions') {
 				event.preventDefault();
 
-				openPermissionsModal(formattedHref);
+				if (formattedHref) {
+					openPermissionsModal(formattedHref);
+				}
 			}
-			else if (currentAction.target === 'sidePanel') {
+			else if (currentAction?.target === 'sidePanel') {
 				event.preventDefault();
 
 				highlightItems([itemId]);
+
 				openSidePanel({
-					size: currentAction.size || 'lg',
-					title: currentAction.title,
+					size: currentAction?.data?.size || 'lg',
+					title: currentAction?.data?.title,
 					url: formattedHref,
 				});
 			}
 			else if (
-				currentAction.target === 'async' ||
-				currentAction.target === 'headless'
+				currentAction?.target === 'async' ||
+				currentAction?.target === 'headless'
 			) {
 				event.preventDefault();
 
-				executeAsyncItemAction({
-					errorMessage: currentAction.data?.errorMessage,
-					method: currentAction.method,
-					url: formattedHref,
-				});
+				if (formattedHref) {
+					executeAsyncItemAction({
+						errorMessage: currentAction?.data?.errorMessage || '',
+						method: currentAction?.method,
+						url: formattedHref,
+					});
+				}
 			}
-			else if (currentAction.onClick) {
+			else if (currentAction?.onClick) {
 				event.preventDefault();
 
-				if (typeof currentAction.onClick === 'function') {
-					currentAction.onClick({itemData});
-				}
-				else {
-					event.target.setAttribute('onClick', currentAction.onClick);
-					event.target.onclick();
-					event.target.removeAttribute('onClick');
-				}
+				currentAction?.onClick({itemData});
 			}
 		};
 
-		if (currentAction?.data?.confirmMessage) {
+		if (currentAction?.data?.confirmationMessage) {
 			openConfirmModal({
-				message: currentAction.data.confirmationMessage,
+				message: currentAction.data.confirmationMessage || '',
 				onConfirm: (isConfirmed) => {
 					if (isConfirmed) {
 						doAction();
@@ -130,8 +163,8 @@ function ActionLinkRenderer({actions, itemData, itemId, options, value}) {
 
 	function isNotALink() {
 		return Boolean(
-			(currentAction.target && currentAction.target !== 'link') ||
-				currentAction.onClick
+			(currentAction?.target && currentAction?.target !== 'link') ||
+				currentAction?.onClick
 		);
 	}
 
@@ -153,7 +186,7 @@ function ActionLinkRenderer({actions, itemData, itemId, options, value}) {
 									openConfirmModal({
 										message: confirmMessage,
 										onConfirm: (isConfirmed) => {
-											if (isConfirmed) {
+											if (formattedHref && isConfirmed) {
 												navigate(formattedHref);
 											}
 										},
@@ -165,45 +198,13 @@ function ActionLinkRenderer({actions, itemData, itemId, options, value}) {
 							}
 				}
 			>
-				{value || <ClayIcon symbol={currentAction.icon} />}
+				{value ||
+					(currentAction.icon && (
+						<ClayIcon symbol={currentAction.icon} />
+					))}
 			</ClayLink>
 		</div>
 	);
 }
-
-ActionLinkRenderer.propTypes = {
-	actions: PropTypes.arrayOf(
-		PropTypes.shape({
-			data: PropTypes.shape({
-				confirmationMessage: PropTypes.string,
-				errorMessage: PropTypes.string,
-				method: PropTypes.oneOf(['delete', 'get', 'patch', 'post']),
-				permissionKey: PropTypes.string,
-				successMessage: PropTypes.string,
-			}),
-			href: PropTypes.string,
-			icon: PropTypes.string,
-			method: PropTypes.oneOf(['delete', 'get', 'patch', 'post']),
-			onClick: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-			size: PropTypes.string,
-			target: PropTypes.oneOf([
-				'infoPanel',
-				'modal',
-				'modal-permissions',
-				'sidePanel',
-				'link',
-				'async',
-				'headless',
-			]),
-			title: PropTypes.string,
-		})
-	),
-	itemData: PropTypes.object,
-	itemId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-	options: PropTypes.shape({
-		actionId: PropTypes.string,
-	}),
-	value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-};
 
 export default ActionLinkRenderer;

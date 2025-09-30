@@ -203,8 +203,6 @@ public abstract class BaseSectionDisplayContext {
 				"L_BASIC_WEB_CONTENT", "content-icon-basic-content"
 			).put(
 				"L_BLOG", "content-icon-blog"
-			).put(
-				"L_KNOWLEDGE_BASE", "content-icon-knowledge-base"
 			).build()
 		).put(
 			"objectDefinitionIcons",
@@ -214,8 +212,6 @@ public abstract class BaseSectionDisplayContext {
 				"L_BASIC_WEB_CONTENT", "forms"
 			).put(
 				"L_BLOG", "blogs"
-			).put(
-				"L_KNOWLEDGE_BASE", "wiki"
 			).build()
 		).put(
 			"parentObjectEntryFolderExternalReferenceCode",
@@ -226,7 +222,7 @@ public abstract class BaseSectionDisplayContext {
 	}
 
 	public String getAPIURL() {
-		StringBundler sb = new StringBundler(8);
+		StringBundler sb = new StringBundler(9);
 
 		sb.append("/o/search/v1.0/search?emptySearch=true&filter=");
 
@@ -250,8 +246,9 @@ public abstract class BaseSectionDisplayContext {
 			sb.append(getCMSSectionFilterString());
 		}
 
-		sb.append("&nestedFields=embedded,file.previewURL,file.");
-		sb.append("thumbnailURL,systemProperties.objectDefinitionBrief");
+		sb.append("&nestedFields=embedded,file.metadata,");
+		sb.append("file.previewURL,file.thumbnailURL,");
+		sb.append("systemProperties.objectDefinitionBrief");
 
 		return sb.toString();
 	}

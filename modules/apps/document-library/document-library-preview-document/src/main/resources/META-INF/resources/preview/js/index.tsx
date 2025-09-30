@@ -12,6 +12,8 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 
 import '@liferay/document-library-preview-css';
 
+import '../css/main.scss';
+
 const KEY_CODE_ENTER = 13;
 
 const KEY_CODE_ESC = 27;
@@ -30,9 +32,9 @@ const VALID_KEY_CODES = [
 const WAIT_BETWEEN_GO_TO_PAGE = 250;
 
 type DocumentPreviewerProps = {
-	alt: string;
+	alt?: string;
 	baseImageURL: string;
-	initialPage: number;
+	initialPage?: number;
 	totalPages: number;
 };
 
@@ -42,9 +44,9 @@ type LoadedPage = {
 };
 
 const DocumentPreviewer = ({
-	alt,
+	alt = '',
 	baseImageURL,
-	initialPage,
+	initialPage = 1,
 	totalPages,
 }: DocumentPreviewerProps) => {
 	const [currentPage, setCurrentPage] = useState(initialPage);
@@ -56,17 +58,14 @@ const DocumentPreviewer = ({
 			pagePromise: Promise.resolve(),
 		},
 	});
-	const [nextPageDisabled, setNextPageDisabled] = useState<boolean>(
-		currentPage === totalPages
-	);
-	const [previousPageDisabled, setPreviousPageDisabled] = useState<boolean>(
-		currentPage === 1
-	);
 	const [showPageInput, setShowPageInput] = useState<boolean>(false);
 
 	const imageContainerRef = useRef<HTMLDivElement>(null);
 	const pageInputRef = useRef<HTMLInputElement>(null);
 	const showPageInputButtonRef = useRef<HTMLButtonElement>(null);
+
+	const nextPageDisabled = currentPage === totalPages;
+	const previousPageDisabled = currentPage === 1;
 
 	const isMounted = useIsMounted();
 
@@ -144,9 +143,6 @@ const DocumentPreviewer = ({
 	}, WAIT_BETWEEN_GO_TO_PAGE);
 
 	const goToPage = (page: number) => {
-		setNextPageDisabled(page === totalPages);
-		setPreviousPageDisabled(page === 1);
-
 		if (!loadedPages[page] || !loadedPages[page].loaded) {
 			setCurrentPageLoading(true);
 			loadCurrentPage(page);
@@ -206,6 +202,10 @@ const DocumentPreviewer = ({
 		loadAdjacentPages(initialPage);
 	}, [initialPage, loadAdjacentPages]);
 
+	useEffect(() => {
+		setCurrentPage(initialPage);
+	}, [initialPage]);
+
 	return (
 		<div className="preview-file">
 			<div
@@ -218,7 +218,7 @@ const DocumentPreviewer = ({
 					<img
 						alt={alt}
 						className={`preview-file-document ${
-							!expanded && 'preview-file-document-fit'
+							!expanded ? 'preview-file-document-fit' : ''
 						}`}
 						src={createImageURL(currentPage)}
 					/>

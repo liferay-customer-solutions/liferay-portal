@@ -6,7 +6,11 @@
 import {getObjectValueFromPath} from 'frontend-js-web';
 
 import {getLocalizedValue} from '../getLocalizedValue';
-import {IItemActionsDataFilter, IItemsActions} from '../types';
+import {
+	EItemActionsType,
+	IItemActionsDataFilter,
+	IItemsActions,
+} from '../types';
 import {ACTION_ITEM_TARGETS} from './constants';
 
 const hasPermission = (action: IItemsActions, itemData: any): boolean => {
@@ -142,14 +146,33 @@ const filterItemActions = ({
 				.filter((action: IItemsActions) =>
 					isVisible(action, itemData, selectable)
 				)
-				.map((action: IItemsActions) =>
-					transformAction({
+				.map((action: IItemsActions) => {
+					const transformedAction = transformAction({
 						action,
 						infoPanelOpen,
 						itemData,
 						selectedItem,
-					})
-				)
+					});
+
+					if (
+						action.type === EItemActionsType.GROUP &&
+						action.items
+					) {
+						return {
+							...transformedAction,
+							items: filterItemActions({
+								actions: action.items,
+								infoPanelOpen,
+								itemData,
+								selectable,
+								selectedItemsKey,
+								selectedItemsValue,
+							}),
+						};
+					}
+
+					return transformedAction;
+				})
 		: [];
 };
 

@@ -12,6 +12,8 @@ import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.function.UnsafeRunnable;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.dao.db.DBInspector;
+import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.Region;
@@ -23,8 +25,11 @@ import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upgrade.data.cleanup.CounterDataCleanupPreupgradeProcess;
 
+import java.sql.Connection;
+
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -46,7 +51,16 @@ public class CounterDataCleanupPreupgradeProcessTest
 
 	@Before
 	public void setUp() throws Exception {
+		_connection = DataAccess.getConnection();
+
+		_dbInspector = new DBInspector(_connection);
+
 		upgrade();
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		DataAccess.cleanUp(_connection);
 	}
 
 	@Test
@@ -109,7 +123,8 @@ public class CounterDataCleanupPreupgradeProcessTest
 						StringBundler.concat(
 							"Counter ", Counter.class.getName(),
 							" has been reset to value ", fileEntryId,
-							" due to table DLFileEntry")));
+							" due to table ",
+							_dbInspector.normalizeName("DLFileEntry"))));
 			});
 	}
 
@@ -159,7 +174,8 @@ public class CounterDataCleanupPreupgradeProcessTest
 						StringBundler.concat(
 							"Counter ", Counter.class.getName(),
 							" has been reset to value ", roleId,
-							" due to table Role_")));
+							" due to table ",
+							_dbInspector.normalizeName("Role_"))));
 			});
 	}
 
@@ -276,5 +292,8 @@ public class CounterDataCleanupPreupgradeProcessTest
 			postUnsafeRunnable.run();
 		}
 	}
+
+	private Connection _connection;
+	private DBInspector _dbInspector;
 
 }
