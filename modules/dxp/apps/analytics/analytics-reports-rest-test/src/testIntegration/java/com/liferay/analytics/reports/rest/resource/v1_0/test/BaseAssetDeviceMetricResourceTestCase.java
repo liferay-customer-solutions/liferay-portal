@@ -181,7 +181,7 @@ public abstract class BaseAssetDeviceMetricResourceTestCase {
 	public void testGraphQLGetGroupAssetMetricAssetTypeDevice()
 		throws Exception {
 
-		Assert.assertTrue(true);
+		Assert.assertTrue(false);
 	}
 
 	@Test

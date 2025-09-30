@@ -195,7 +195,7 @@ public abstract class BaseSkuSubscriptionConfigurationResourceTestCase {
 	public void testGraphQLGetSkuByExternalReferenceCodeSkuSubscriptionConfiguration()
 		throws Exception {
 
-		Assert.assertTrue(true);
+		Assert.assertTrue(false);
 	}
 
 	@Test
@@ -214,7 +214,7 @@ public abstract class BaseSkuSubscriptionConfigurationResourceTestCase {
 	public void testGraphQLGetSkuIdSkuSubscriptionConfiguration()
 		throws Exception {
 
-		Assert.assertTrue(true);
+		Assert.assertTrue(false);
 	}
 
 	@Test

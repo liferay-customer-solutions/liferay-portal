@@ -22,6 +22,7 @@ import com.liferay.object.rest.internal.jaxrs.exception.mapper.ObjectEntryCountE
 import com.liferay.object.rest.internal.jaxrs.exception.mapper.ObjectEntryExpirationDateExceptionMapper;
 import com.liferay.object.rest.internal.jaxrs.exception.mapper.ObjectEntryGroupIdExceptionMapper;
 import com.liferay.object.rest.internal.jaxrs.exception.mapper.ObjectEntryManagerHttpExceptionMapper;
+import com.liferay.object.rest.internal.jaxrs.exception.mapper.ObjectEntryScopeExceptionMapper;
 import com.liferay.object.rest.internal.jaxrs.exception.mapper.ObjectEntryStatusExceptionMapper;
 import com.liferay.object.rest.internal.jaxrs.exception.mapper.ObjectEntryValuesExceptionMapper;
 import com.liferay.object.rest.internal.jaxrs.exception.mapper.ObjectRelationshipDeletionTypeExceptionMapper;
@@ -309,9 +310,7 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 
 				if ((!groupAware && hasScope) ||
 					(groupAware && !hasScope &&
-					 !value.startsWith("/{objectEntryId}")) ||
-					(objectDefinition.isRootDescendantNode() &&
-					 value.endsWith("/permissions"))) {
+					 !value.startsWith("/{objectEntryId}"))) {
 
 					excludedOperationIds.add(method.getName());
 				}
@@ -576,6 +575,10 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 										ObjectDefinition.class.getName())
 							).put(
 								"crud.item.delegate", "true"
+							).put(
+								"export.import.vulcan.batch.engine.task.item." +
+									"delegate",
+								"true"
 							).build()),
 						_bundleContext.registerService(
 							ObjectRelationshipElementsParser.class,
@@ -816,6 +819,7 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 			Arrays.<Supplier<ExceptionMapper<?>>>asList(
 				ObjectEntryManagerHttpExceptionMapper::new,
 				() -> new ObjectAssetCategoryExceptionMapper(_language),
+				ObjectEntryScopeExceptionMapper::new,
 				() -> new ObjectEntryCountExceptionMapper(_language),
 				() -> new ObjectEntryExpirationDateExceptionMapper(_language),
 				() -> new ObjectEntryGroupIdExceptionMapper(_language),

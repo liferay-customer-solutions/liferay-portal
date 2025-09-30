@@ -20,6 +20,8 @@ import com.liferay.oauth2.provider.scope.ScopeChecker;
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONDeserializer;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
@@ -35,6 +37,7 @@ import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PropsValues;
@@ -81,6 +84,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -252,6 +256,103 @@ public abstract class BaseBatchTestEntityResourceTestCase {
 	}
 
 	@Test
+	public void testGraphQLDeleteBatchTestEntityByExternalReferenceCode()
+		throws Exception {
+
+		// No namespace
+
+		BatchTestEntity batchTestEntity1 =
+			testGraphQLDeleteBatchTestEntityByExternalReferenceCode_addBatchTestEntity();
+
+		Assert.assertTrue(
+			JSONUtil.getValueAsBoolean(
+				invokeGraphQLMutation(
+					new GraphQLField(
+						"deleteBatchTestEntityByExternalReferenceCode",
+						new HashMap<String, Object>() {
+							{
+								put(
+									"externalReferenceCode",
+									"\"" +
+										batchTestEntity1.
+											getExternalReferenceCode() + "\"");
+							}
+						})),
+				"JSONObject/data",
+				"Object/deleteBatchTestEntityByExternalReferenceCode"));
+
+		JSONArray errorsJSONArray1 = JSONUtil.getValueAsJSONArray(
+			invokeGraphQLQuery(
+				new GraphQLField(
+					"batchTestEntityByExternalReferenceCode",
+					new HashMap<String, Object>() {
+						{
+							put(
+								"externalReferenceCode",
+								"\"" +
+									batchTestEntity1.
+										getExternalReferenceCode() + "\"");
+						}
+					},
+					getGraphQLFields())),
+			"JSONArray/errors");
+
+		Assert.assertTrue(errorsJSONArray1.length() > 0);
+
+		// Using the namespace test_v1_0
+
+		BatchTestEntity batchTestEntity2 =
+			testGraphQLDeleteBatchTestEntityByExternalReferenceCode_addBatchTestEntity();
+
+		Assert.assertTrue(
+			JSONUtil.getValueAsBoolean(
+				invokeGraphQLMutation(
+					new GraphQLField(
+						"test_v1_0",
+						new GraphQLField(
+							"deleteBatchTestEntityByExternalReferenceCode",
+							new HashMap<String, Object>() {
+								{
+									put(
+										"externalReferenceCode",
+										"\"" +
+											batchTestEntity2.
+												getExternalReferenceCode() +
+													"\"");
+								}
+							}))),
+				"JSONObject/data", "JSONObject/test_v1_0",
+				"Object/deleteBatchTestEntityByExternalReferenceCode"));
+
+		JSONArray errorsJSONArray2 = JSONUtil.getValueAsJSONArray(
+			invokeGraphQLQuery(
+				new GraphQLField(
+					"test_v1_0",
+					new GraphQLField(
+						"batchTestEntityByExternalReferenceCode",
+						new HashMap<String, Object>() {
+							{
+								put(
+									"externalReferenceCode",
+									"\"" +
+										batchTestEntity2.
+											getExternalReferenceCode() + "\"");
+							}
+						},
+						getGraphQLFields()))),
+			"JSONArray/errors");
+
+		Assert.assertTrue(errorsJSONArray2.length() > 0);
+	}
+
+	protected BatchTestEntity
+			testGraphQLDeleteBatchTestEntityByExternalReferenceCode_addBatchTestEntity()
+		throws Exception {
+
+		return testGraphQLBatchTestEntity_addBatchTestEntity();
+	}
+
+	@Test
 	public void testGetBatchTestEntitiesPage() throws Exception {
 		Page<BatchTestEntity> page =
 			batchTestEntityResource.getBatchTestEntitiesPage();
@@ -314,9 +415,12 @@ public abstract class BaseBatchTestEntityResourceTestCase {
 		long totalCount = batchTestEntitiesJSONObject.getLong("totalCount");
 
 		BatchTestEntity batchTestEntity1 =
-			testGraphQLGetBatchTestEntitiesPage_addBatchTestEntity();
+			testGraphQLBatchTestEntity_addBatchTestEntity(
+				randomBatchTestEntity());
+
 		BatchTestEntity batchTestEntity2 =
-			testGraphQLGetBatchTestEntitiesPage_addBatchTestEntity();
+			testGraphQLBatchTestEntity_addBatchTestEntity(
+				randomBatchTestEntity());
 
 		batchTestEntitiesJSONObject = JSONUtil.getValueAsJSONObject(
 			invokeGraphQLQuery(graphQLField), "JSONObject/data",
@@ -356,13 +460,6 @@ public abstract class BaseBatchTestEntityResourceTestCase {
 			Arrays.asList(
 				BatchTestEntitySerDes.toDTOs(
 					batchTestEntitiesJSONObject.getString("items"))));
-	}
-
-	protected BatchTestEntity
-			testGraphQLGetBatchTestEntitiesPage_addBatchTestEntity()
-		throws Exception {
-
-		return testGraphQLBatchTestEntity_addBatchTestEntity();
 	}
 
 	@Test
@@ -833,6 +930,17 @@ public abstract class BaseBatchTestEntityResourceTestCase {
 	}
 
 	@Test
+	public void testGraphQLPostBatchTestEntity() throws Exception {
+		BatchTestEntity randomBatchTestEntity = randomBatchTestEntity();
+
+		BatchTestEntity batchTestEntity =
+			testGraphQLBatchTestEntity_addBatchTestEntity(
+				randomBatchTestEntity);
+
+		Assert.assertTrue(equals(randomBatchTestEntity, batchTestEntity));
+	}
+
+	@Test
 	public void testPutBatchTestEntityByExternalReferenceCode()
 		throws Exception {
 
@@ -950,8 +1058,117 @@ public abstract class BaseBatchTestEntityResourceTestCase {
 	protected BatchTestEntity testGraphQLBatchTestEntity_addBatchTestEntity()
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return testGraphQLBatchTestEntity_addBatchTestEntity(
+			randomBatchTestEntity());
+	}
+
+	protected BatchTestEntity testGraphQLBatchTestEntity_addBatchTestEntity(
+			BatchTestEntity batchTestEntity)
+		throws Exception {
+
+		JSONDeserializer<BatchTestEntity> jsonDeserializer =
+			JSONFactoryUtil.createJSONDeserializer();
+
+		StringBuilder sb = new StringBuilder("{");
+
+		for (java.lang.reflect.Field field :
+				getDeclaredFields(BatchTestEntity.class)) {
+
+			if (getGraphQLValue(field.get(batchTestEntity)) != null) {
+				if (sb.length() > 1) {
+					sb.append(", ");
+				}
+
+				sb.append(field.getName());
+				sb.append(": ");
+				sb.append(getGraphQLValue(field.get(batchTestEntity)));
+			}
+		}
+
+		sb.append("}");
+
+		List<GraphQLField> graphQLFields = getGraphQLFields();
+
+		return jsonDeserializer.deserialize(
+			JSONUtil.getValueAsString(
+				invokeGraphQLMutation(
+					new GraphQLField(
+						"createBatchTestEntity",
+						new HashMap<String, Object>() {
+							{
+								put("batchTestEntity", sb.toString());
+							}
+						},
+						graphQLFields)),
+				"JSONObject/data", "JSONObject/createBatchTestEntity"),
+			BatchTestEntity.class);
+	}
+
+	protected String getGraphQLValue(Object value) throws Exception {
+		if (value == null) {
+			return null;
+		}
+		else if (value instanceof Boolean || value instanceof Number) {
+			return value.toString();
+		}
+		else if (value instanceof Date date) {
+			return "\"" +
+				DateUtil.getDate(
+					date, "yyyy-MM-dd'T'HH:mm:ss'Z'", LocaleUtil.getDefault(),
+					TimeZone.getTimeZone("UTC")) + "\"";
+		}
+		else if (value instanceof Enum<?> enm) {
+			return enm.name();
+		}
+		else if (value instanceof Map<?, ?> map) {
+			List<String> entries = new ArrayList<>();
+
+			for (Map.Entry<?, ?> entry : map.entrySet()) {
+				String graphQLValue = getGraphQLValue(entry.getValue());
+
+				if (graphQLValue != null) {
+					entries.add(entry.getKey() + ": " + graphQLValue);
+				}
+			}
+
+			return "{" + String.join(", ", entries) + "}";
+		}
+		else if (value instanceof Object[] array) {
+			List<String> entries = new ArrayList<>();
+
+			for (Object entry : array) {
+				String graphQLValue = getGraphQLValue(entry);
+
+				if (graphQLValue != null) {
+					entries.add(graphQLValue);
+				}
+			}
+
+			return "[" + String.join(", ", entries) + "]";
+		}
+		else if (value instanceof String) {
+			return "\"" + value + "\"";
+		}
+		else {
+			List<String> entries = new ArrayList<>();
+
+			Class<?> clazz = value.getClass();
+			java.lang.reflect.Field[] declaredFields = getDeclaredFields(clazz);
+
+			if (declaredFields.length == 0) {
+				declaredFields = getDeclaredFields(clazz.getSuperclass());
+			}
+
+			for (java.lang.reflect.Field field : declaredFields) {
+				String graphQLValue = getGraphQLValue(field.get(value));
+
+				if (graphQLValue != null) {
+					entries.add(field.getName() + ": " + graphQLValue);
+				}
+			}
+
+			return "{" + String.join(", ", entries) + "}";
+		}
 	}
 
 	protected void assertContains(
@@ -1039,6 +1256,14 @@ public abstract class BaseBatchTestEntityResourceTestCase {
 
 		for (String additionalAssertFieldName :
 				getAdditionalAssertFieldNames()) {
+
+			if (Objects.equals("customFields", additionalAssertFieldName)) {
+				if (batchTestEntity.getCustomFields() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
 
 			if (Objects.equals(
 					"externalReferenceCode", additionalAssertFieldName)) {
@@ -1135,6 +1360,10 @@ public abstract class BaseBatchTestEntityResourceTestCase {
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
 
+		graphQLFields.add(new GraphQLField("externalReferenceCode"));
+
+		graphQLFields.add(new GraphQLField("id"));
+
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(
 					com.liferay.portal.tools.rest.builder.test.dto.v1_0.
@@ -1195,6 +1424,17 @@ public abstract class BaseBatchTestEntityResourceTestCase {
 
 		for (String additionalAssertFieldName :
 				getAdditionalAssertFieldNames()) {
+
+			if (Objects.equals("customFields", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						batchTestEntity1.getCustomFields(),
+						batchTestEntity2.getCustomFields())) {
+
+					return false;
+				}
+
+				continue;
+			}
 
 			if (Objects.equals(
 					"externalReferenceCode", additionalAssertFieldName)) {
@@ -1361,6 +1601,11 @@ public abstract class BaseBatchTestEntityResourceTestCase {
 		sb.append(" ");
 		sb.append(operator);
 		sb.append(" ");
+
+		if (entityFieldName.equals("customFields")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
+		}
 
 		if (entityFieldName.equals("externalReferenceCode")) {
 			Object object = batchTestEntity.getExternalReferenceCode();

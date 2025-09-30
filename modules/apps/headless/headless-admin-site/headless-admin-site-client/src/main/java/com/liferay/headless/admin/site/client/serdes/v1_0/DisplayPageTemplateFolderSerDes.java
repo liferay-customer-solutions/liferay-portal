@@ -66,25 +66,6 @@ public class DisplayPageTemplateFolderSerDes {
 			sb.append(displayPageTemplateFolder.getCreator());
 		}
 
-		if (displayPageTemplateFolder.getCreatorExternalReferenceCode() !=
-				null) {
-
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"creatorExternalReferenceCode\": ");
-
-			sb.append("\"");
-
-			sb.append(
-				_escape(
-					displayPageTemplateFolder.
-						getCreatorExternalReferenceCode()));
-
-			sb.append("\"");
-		}
-
 		if (displayPageTemplateFolder.getDateCreated() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -210,6 +191,30 @@ public class DisplayPageTemplateFolderSerDes {
 			sb.append("\"");
 		}
 
+		if (displayPageTemplateFolder.getPermissions() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"permissions\": ");
+
+			sb.append("[");
+
+			for (int i = 0;
+				 i < displayPageTemplateFolder.getPermissions().length; i++) {
+
+				sb.append(displayPageTemplateFolder.getPermissions()[i]);
+
+				if ((i + 1) <
+						displayPageTemplateFolder.getPermissions().length) {
+
+					sb.append(", ");
+				}
+			}
+
+			sb.append("]");
+		}
+
 		if (displayPageTemplateFolder.getUuid() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -256,19 +261,6 @@ public class DisplayPageTemplateFolderSerDes {
 			map.put(
 				"creator",
 				String.valueOf(displayPageTemplateFolder.getCreator()));
-		}
-
-		if (displayPageTemplateFolder.getCreatorExternalReferenceCode() ==
-				null) {
-
-			map.put("creatorExternalReferenceCode", null);
-		}
-		else {
-			map.put(
-				"creatorExternalReferenceCode",
-				String.valueOf(
-					displayPageTemplateFolder.
-						getCreatorExternalReferenceCode()));
 		}
 
 		if (displayPageTemplateFolder.getDateCreated() == null) {
@@ -353,6 +345,15 @@ public class DisplayPageTemplateFolderSerDes {
 						getParentDisplayPageTemplateFolderExternalReferenceCode()));
 		}
 
+		if (displayPageTemplateFolder.getPermissions() == null) {
+			map.put("permissions", null);
+		}
+		else {
+			map.put(
+				"permissions",
+				String.valueOf(displayPageTemplateFolder.getPermissions()));
+		}
+
 		if (displayPageTemplateFolder.getUuid() == null) {
 			map.put("uuid", null);
 		}
@@ -380,11 +381,6 @@ public class DisplayPageTemplateFolderSerDes {
 		@Override
 		protected boolean parseMaps(String jsonParserFieldName) {
 			if (Objects.equals(jsonParserFieldName, "creator")) {
-				return false;
-			}
-			else if (Objects.equals(
-						jsonParserFieldName, "creatorExternalReferenceCode")) {
-
 				return false;
 			}
 			else if (Objects.equals(jsonParserFieldName, "dateCreated")) {
@@ -419,6 +415,9 @@ public class DisplayPageTemplateFolderSerDes {
 
 				return false;
 			}
+			else if (Objects.equals(jsonParserFieldName, "permissions")) {
+				return false;
+			}
 			else if (Objects.equals(jsonParserFieldName, "uuid")) {
 				return false;
 			}
@@ -435,14 +434,6 @@ public class DisplayPageTemplateFolderSerDes {
 				if (jsonParserFieldValue != null) {
 					displayPageTemplateFolder.setCreator(
 						CreatorSerDes.toDTO((String)jsonParserFieldValue));
-				}
-			}
-			else if (Objects.equals(
-						jsonParserFieldName, "creatorExternalReferenceCode")) {
-
-				if (jsonParserFieldValue != null) {
-					displayPageTemplateFolder.setCreatorExternalReferenceCode(
-						(String)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "dateCreated")) {
@@ -502,6 +493,26 @@ public class DisplayPageTemplateFolderSerDes {
 					displayPageTemplateFolder.
 						setParentDisplayPageTemplateFolderExternalReferenceCode(
 							(String)jsonParserFieldValue);
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "permissions")) {
+				if (jsonParserFieldValue != null) {
+					Object[] jsonParserFieldValues =
+						(Object[])jsonParserFieldValue;
+
+					com.liferay.headless.admin.site.client.permission.
+						Permission[] permissionsArray = new
+						com.liferay.headless.admin.site.client.permission.
+							Permission[jsonParserFieldValues.length];
+
+					for (int i = 0; i < permissionsArray.length; i++) {
+						permissionsArray[i] =
+							com.liferay.headless.admin.site.client.permission.
+								Permission.toDTO(
+									(String)jsonParserFieldValues[i]);
+					}
+
+					displayPageTemplateFolder.setPermissions(permissionsArray);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "uuid")) {

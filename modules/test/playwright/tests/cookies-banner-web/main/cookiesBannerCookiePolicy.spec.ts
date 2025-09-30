@@ -32,6 +32,10 @@ test.afterEach(async ({systemSettingsPage}) => {
 
 	await test.step('In reverse order, reset each configuration if previously set. We use reverse order since the latter entries will be hidden if the first "Preference Handling" entry is reset.', async () => {
 		for (const menuItem of menuItems.reverse()) {
+			if (await menuItem.getByText('Product Analytics').isVisible()) {
+				continue;
+			}
+
 			await menuItem.click();
 
 			await systemSettingsPage.page.waitForTimeout(1000);
@@ -54,6 +58,15 @@ test.afterEach(async ({systemSettingsPage}) => {
 				});
 			}
 		}
+	});
+
+	await test.step('Clear Consent Cookies if present', async () => {
+		await systemSettingsPage.page
+			.context()
+			.clearCookies({name: /^CONSENT_TYPE_/});
+		await systemSettingsPage.page
+			.context()
+			.clearCookies({name: 'USER_CONSENT_CONFIGURED'});
 	});
 });
 

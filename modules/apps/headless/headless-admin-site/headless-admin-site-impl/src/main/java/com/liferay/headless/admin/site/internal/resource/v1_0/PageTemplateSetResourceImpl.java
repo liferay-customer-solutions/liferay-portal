@@ -5,11 +5,13 @@
 
 package com.liferay.headless.admin.site.internal.resource.v1_0;
 
+import com.liferay.exportimport.vulcan.batch.engine.ExportImportVulcanBatchEngineTaskItemDelegate;
 import com.liferay.headless.admin.site.dto.v1_0.PageTemplateSet;
 import com.liferay.headless.admin.site.internal.odata.entity.v1_0.PageTemplateSetEntityModel;
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.GroupUtil;
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.PageTemplateSetUtil;
 import com.liferay.headless.admin.site.resource.v1_0.PageTemplateSetResource;
+import com.liferay.layout.admin.constants.LayoutAdminPortletKeys;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateCollectionTypeConstants;
 import com.liferay.layout.page.template.model.LayoutPageTemplateCollection;
 import com.liferay.layout.page.template.service.LayoutPageTemplateCollectionService;
@@ -41,7 +43,8 @@ import org.osgi.service.component.annotations.ServiceScope;
 	scope = ServiceScope.PROTOTYPE, service = PageTemplateSetResource.class
 )
 public class PageTemplateSetResourceImpl
-	extends BasePageTemplateSetResourceImpl {
+	extends BasePageTemplateSetResourceImpl
+	implements ExportImportVulcanBatchEngineTaskItemDelegate<PageTemplateSet> {
 
 	@Override
 	public void deleteSitePageTemplateSet(
@@ -66,7 +69,30 @@ public class PageTemplateSetResourceImpl
 	}
 
 	@Override
-	public PageTemplateSet getSitePageTemplateSet(
+	public ExportImportDescriptor getExportImportDescriptor() {
+		return new ExportImportVulcanBatchEngineTaskItemDelegate.
+			ExportImportDescriptor() {
+
+			@Override
+			public String getItemClassName() {
+				return LayoutPageTemplateCollection.class.getName();
+			}
+
+			@Override
+			public String getPortletId() {
+				return LayoutAdminPortletKeys.GROUP_PAGES;
+			}
+
+			@Override
+			public Scope getScope() {
+				return Scope.SITE;
+			}
+
+		};
+	}
+
+	@Override
+	protected PageTemplateSet doGetSitePageTemplateSet(
 			String siteExternalReferenceCode,
 			String pageTemplateSetExternalReferenceCode)
 		throws Exception {
@@ -85,7 +111,7 @@ public class PageTemplateSetResourceImpl
 	}
 
 	@Override
-	public Page<PageTemplateSet> getSitePageTemplateSetsPage(
+	protected Page<PageTemplateSet> doGetSitePageTemplateSetsPage(
 			String siteExternalReferenceCode, String search,
 			Aggregation aggregation, Filter filter, Pagination pagination,
 			Sort[] sorts)
@@ -123,7 +149,7 @@ public class PageTemplateSetResourceImpl
 	}
 
 	@Override
-	public PageTemplateSet postSitePageTemplateSet(
+	protected PageTemplateSet doPostSitePageTemplateSet(
 			String siteExternalReferenceCode, PageTemplateSet pageTemplateSet)
 		throws Exception {
 
@@ -140,7 +166,7 @@ public class PageTemplateSetResourceImpl
 	}
 
 	@Override
-	public PageTemplateSet putSitePageTemplateSet(
+	protected PageTemplateSet doPutSitePageTemplateSet(
 			String siteExternalReferenceCode,
 			String pageTemplateSetExternalReferenceCode,
 			PageTemplateSet pageTemplateSet)
@@ -171,6 +197,28 @@ public class PageTemplateSetResourceImpl
 						getLayoutPageTemplateCollectionId(),
 					pageTemplateSet.getName(),
 					pageTemplateSet.getDescription()));
+	}
+
+	@Override
+	protected Long getPermissionCheckerResourceId(
+			String groupExternalReferenceCode, String externalReferenceCode)
+		throws Exception {
+
+		LayoutPageTemplateCollection layoutPageTemplateCollection =
+			_layoutPageTemplateCollectionService.
+				getLayoutPageTemplateCollection(
+					externalReferenceCode,
+					getPermissionCheckerGroupId(groupExternalReferenceCode));
+
+		return layoutPageTemplateCollection.getPrimaryKey();
+	}
+
+	@Override
+	protected String getPermissionCheckerResourceName(
+			String groupExternalReferenceCode, String externalReferenceCode)
+		throws Exception {
+
+		return LayoutPageTemplateCollection.class.getName();
 	}
 
 	private PageTemplateSet _toPageTemplateSet(

@@ -330,7 +330,7 @@ public abstract class BaseChannelResourceTestCase {
 			testGraphQLGetOrderByExternalReferenceCodeChannel_addChannel()
 		throws Exception {
 
-		return testGraphQLChannel_addChannel();
+		return testGraphQLOrderChannel_addChannel();
 	}
 
 	@Test
@@ -458,7 +458,7 @@ public abstract class BaseChannelResourceTestCase {
 	protected Channel testGraphQLGetOrderIdChannel_addChannel()
 		throws Exception {
 
-		return testGraphQLChannel_addChannel();
+		return testGraphQLOrderChannel_addChannel();
 	}
 
 	@Test
@@ -729,6 +729,11 @@ public abstract class BaseChannelResourceTestCase {
 		return testGraphQLChannel_addChannel();
 	}
 
+	protected Channel testGraphQLOrderChannel_addChannel() throws Exception {
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
 	protected Channel testGraphQLChannel_addChannel() throws Exception {
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
@@ -896,6 +901,10 @@ public abstract class BaseChannelResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("externalReferenceCode"));
+
+		graphQLFields.add(new GraphQLField("id"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

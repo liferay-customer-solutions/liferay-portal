@@ -330,7 +330,7 @@ public abstract class BaseAccountResourceTestCase {
 			testGraphQLGetOrderByExternalReferenceCodeAccount_addAccount()
 		throws Exception {
 
-		return testGraphQLAccount_addAccount();
+		return testGraphQLOrderAccount_addAccount();
 	}
 
 	@Test
@@ -458,7 +458,7 @@ public abstract class BaseAccountResourceTestCase {
 	protected Account testGraphQLGetOrderIdAccount_addAccount()
 		throws Exception {
 
-		return testGraphQLAccount_addAccount();
+		return testGraphQLOrderAccount_addAccount();
 	}
 
 	@Test
@@ -593,6 +593,11 @@ public abstract class BaseAccountResourceTestCase {
 		throws Exception {
 
 		return testGraphQLAccount_addAccount();
+	}
+
+	protected Account testGraphQLOrderAccount_addAccount() throws Exception {
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
 	}
 
 	protected Account testGraphQLAccount_addAccount() throws Exception {
@@ -794,6 +799,10 @@ public abstract class BaseAccountResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("externalReferenceCode"));
+
+		graphQLFields.add(new GraphQLField("id"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

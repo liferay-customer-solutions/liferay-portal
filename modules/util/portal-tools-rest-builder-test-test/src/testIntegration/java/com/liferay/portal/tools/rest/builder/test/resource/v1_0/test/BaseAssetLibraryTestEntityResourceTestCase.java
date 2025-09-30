@@ -245,8 +245,83 @@ public abstract class BaseAssetLibraryTestEntityResourceTestCase {
 			testDeleteAssetLibraryAssetLibraryTestEntityByExternalReferenceCode_getAssetLibraryId()
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return testDepotEntry.getDepotEntryId();
+	}
+
+	@Test
+	public void testGraphQLDeleteAssetLibraryAssetLibraryTestEntityByExternalReferenceCode()
+		throws Exception {
+
+		// No namespace
+
+		AssetLibraryTestEntity assetLibraryTestEntity1 =
+			testGraphQLDeleteAssetLibraryAssetLibraryTestEntityByExternalReferenceCode_addAssetLibraryTestEntity();
+
+		Assert.assertTrue(
+			JSONUtil.getValueAsBoolean(
+				invokeGraphQLMutation(
+					new GraphQLField(
+						"deleteAssetLibraryAssetLibraryTestEntityByExternalReferenceCode",
+						new HashMap<String, Object>() {
+							{
+								put(
+									"assetLibraryId",
+									"\"" +
+										testGraphQLDeleteAssetLibraryAssetLibraryTestEntityByExternalReferenceCode_getAssetLibraryId() +
+											"\"");
+								put(
+									"externalReferenceCode",
+									"\"" +
+										assetLibraryTestEntity1.
+											getExternalReferenceCode() + "\"");
+							}
+						})),
+				"JSONObject/data",
+				"Object/deleteAssetLibraryAssetLibraryTestEntityByExternalReferenceCode"));
+
+		// Using the namespace test_v1_0
+
+		AssetLibraryTestEntity assetLibraryTestEntity2 =
+			testGraphQLDeleteAssetLibraryAssetLibraryTestEntityByExternalReferenceCode_addAssetLibraryTestEntity();
+
+		Assert.assertTrue(
+			JSONUtil.getValueAsBoolean(
+				invokeGraphQLMutation(
+					new GraphQLField(
+						"test_v1_0",
+						new GraphQLField(
+							"deleteAssetLibraryAssetLibraryTestEntityByExternalReferenceCode",
+							new HashMap<String, Object>() {
+								{
+									put(
+										"assetLibraryId",
+										"\"" +
+											testGraphQLDeleteAssetLibraryAssetLibraryTestEntityByExternalReferenceCode_getAssetLibraryId() +
+												"\"");
+									put(
+										"externalReferenceCode",
+										"\"" +
+											assetLibraryTestEntity2.
+												getExternalReferenceCode() +
+													"\"");
+								}
+							}))),
+				"JSONObject/data", "JSONObject/test_v1_0",
+				"Object/deleteAssetLibraryAssetLibraryTestEntityByExternalReferenceCode"));
+	}
+
+	protected Long
+			testGraphQLDeleteAssetLibraryAssetLibraryTestEntityByExternalReferenceCode_getAssetLibraryId()
+		throws Exception {
+
+		return testDepotEntry.getDepotEntryId();
+	}
+
+	protected AssetLibraryTestEntity
+			testGraphQLDeleteAssetLibraryAssetLibraryTestEntityByExternalReferenceCode_addAssetLibraryTestEntity()
+		throws Exception {
+
+		return testGraphQLAssetLibraryAssetLibraryTestEntity_addAssetLibraryTestEntity();
 	}
 
 	@Test
@@ -349,6 +424,14 @@ public abstract class BaseAssetLibraryTestEntityResourceTestCase {
 	@Test
 	public void testBatchEngineDeleteImportTask() throws Exception {
 		Assert.assertTrue(true);
+	}
+
+	protected AssetLibraryTestEntity
+			testGraphQLAssetLibraryAssetLibraryTestEntity_addAssetLibraryTestEntity()
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
 	}
 
 	protected void assertContains(
@@ -543,6 +626,8 @@ public abstract class BaseAssetLibraryTestEntityResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("externalReferenceCode"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

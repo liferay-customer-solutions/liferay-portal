@@ -314,7 +314,7 @@ public abstract class BaseTicketResourceTestCase {
 			testGraphQLGetUserAccountEmailVerificationTicket_addTicket()
 		throws Exception {
 
-		return testGraphQLTicket_addTicket();
+		return testGraphQLUserAccountTicket_addTicket();
 	}
 
 	@Test
@@ -450,10 +450,10 @@ public abstract class BaseTicketResourceTestCase {
 	protected Ticket testGraphQLGetUserAccountPasswordResetTicket_addTicket()
 		throws Exception {
 
-		return testGraphQLTicket_addTicket();
+		return testGraphQLUserAccountTicket_addTicket();
 	}
 
-	protected Ticket testGraphQLTicket_addTicket() throws Exception {
+	protected Ticket testGraphQLUserAccountTicket_addTicket() throws Exception {
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
@@ -607,6 +607,8 @@ public abstract class BaseTicketResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("id"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

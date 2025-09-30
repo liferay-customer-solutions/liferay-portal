@@ -183,7 +183,7 @@ public abstract class BaseProcessMetricResourceTestCase {
 
 	@Test
 	public void testGraphQLGetProcessMetric() throws Exception {
-		Assert.assertTrue(true);
+		Assert.assertTrue(false);
 	}
 
 	@Test
@@ -462,11 +462,6 @@ public abstract class BaseProcessMetricResourceTestCase {
 
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
-	}
-
-	@Test
-	public void testGraphQLGetProcessMetricsPage() throws Exception {
-		Assert.assertTrue(false);
 	}
 
 	@Test

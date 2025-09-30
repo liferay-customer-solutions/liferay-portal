@@ -294,6 +294,38 @@ public class ObjectEntryResourceImpl
 	}
 
 	@Override
+	public ObjectEntry getApprovedByExternalReferenceCode(
+			String externalReferenceCode)
+		throws Exception {
+
+		DefaultObjectEntryManager defaultObjectEntryManager =
+			DefaultObjectEntryManagerProvider.provide(
+				_objectEntryManagerRegistry.getObjectEntryManager(
+					_objectDefinition.getStorageType()));
+
+		return defaultObjectEntryManager.getApprovedObjectEntry(
+			contextCompany.getCompanyId(), _getDTOConverterContext(null),
+			externalReferenceCode, _objectDefinition, null);
+	}
+
+	@Override
+	public Page<ObjectEntry> getApprovedPage(
+			String search, Aggregation aggregation, Filter filter,
+			Pagination pagination, Sort[] sorts)
+		throws Exception {
+
+		DefaultObjectEntryManager defaultObjectEntryManager =
+			DefaultObjectEntryManagerProvider.provide(
+				_objectEntryManagerRegistry.getObjectEntryManager(
+					_objectDefinition.getStorageType()));
+
+		return defaultObjectEntryManager.getApprovedObjectEntries(
+			contextCompany.getCompanyId(), _objectDefinition, null, aggregation,
+			_getDTOConverterContext(null), _getFilterString(), pagination,
+			search, sorts);
+	}
+
+	@Override
 	public ObjectEntry getByExternalReferenceCode(String externalReferenceCode)
 		throws Exception {
 
@@ -363,6 +395,11 @@ public class ObjectEntryResourceImpl
 			@Override
 			public String getItemClassName() {
 				return _objectDefinition.getClassName();
+			}
+
+			@Override
+			public String getItemModelName() {
+				return _objectDefinition.getShortName();
 			}
 
 			@Override
@@ -467,6 +504,38 @@ public class ObjectEntryResourceImpl
 	@Override
 	public String getResourceName() {
 		return _objectDefinition.getShortName();
+	}
+
+	@Override
+	public ObjectEntry getScopeScopeKeyApprovedByExternalReferenceCode(
+			String scopeKey, String externalReferenceCode)
+		throws Exception {
+
+		DefaultObjectEntryManager defaultObjectEntryManager =
+			DefaultObjectEntryManagerProvider.provide(
+				_objectEntryManagerRegistry.getObjectEntryManager(
+					_objectDefinition.getStorageType()));
+
+		return defaultObjectEntryManager.getApprovedObjectEntry(
+			contextCompany.getCompanyId(), _getDTOConverterContext(null),
+			externalReferenceCode, _objectDefinition, scopeKey);
+	}
+
+	@Override
+	public Page<ObjectEntry> getScopeScopeKeyApprovedPage(
+			String scopeKey, String search, Aggregation aggregation,
+			Filter filter, Pagination pagination, Sort[] sorts)
+		throws Exception {
+
+		DefaultObjectEntryManager defaultObjectEntryManager =
+			DefaultObjectEntryManagerProvider.provide(
+				_objectEntryManagerRegistry.getObjectEntryManager(
+					_objectDefinition.getStorageType()));
+
+		return defaultObjectEntryManager.getApprovedObjectEntries(
+			contextCompany.getCompanyId(), _objectDefinition, scopeKey,
+			aggregation, _getDTOConverterContext(null), _getFilterString(),
+			pagination, search, sorts);
 	}
 
 	@Override
@@ -907,7 +976,7 @@ public class ObjectEntryResourceImpl
 			String externalReferenceCode)
 		throws Exception {
 
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-53981")) {
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
 			throw new UnsupportedOperationException();
 		}
 
@@ -1037,7 +1106,7 @@ public class ObjectEntryResourceImpl
 			String scopeKey, String externalReferenceCode)
 		throws Exception {
 
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-53981")) {
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
 			throw new UnsupportedOperationException();
 		}
 

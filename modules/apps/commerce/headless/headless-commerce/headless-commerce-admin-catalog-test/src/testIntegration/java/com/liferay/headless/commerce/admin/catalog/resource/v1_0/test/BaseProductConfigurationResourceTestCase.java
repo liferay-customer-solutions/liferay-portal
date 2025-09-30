@@ -292,7 +292,7 @@ public abstract class BaseProductConfigurationResourceTestCase {
 							put("id", productConfiguration1.getId());
 						}
 					},
-					new GraphQLField("id"))),
+					getGraphQLFields())),
 			"JSONArray/errors");
 
 		Assert.assertTrue(errorsJSONArray1.length() > 0);
@@ -329,7 +329,7 @@ public abstract class BaseProductConfigurationResourceTestCase {
 								put("id", productConfiguration2.getId());
 							}
 						},
-						new GraphQLField("id")))),
+						getGraphQLFields()))),
 			"JSONArray/errors");
 
 		Assert.assertTrue(errorsJSONArray2.length() > 0);
@@ -456,6 +456,104 @@ public abstract class BaseProductConfigurationResourceTestCase {
 
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
+	}
+
+	@Test
+	public void testGraphQLDeleteProductConfigurationByExternalReferenceCode()
+		throws Exception {
+
+		// No namespace
+
+		ProductConfiguration productConfiguration1 =
+			testGraphQLDeleteProductConfigurationByExternalReferenceCode_addProductConfiguration();
+
+		Assert.assertTrue(
+			JSONUtil.getValueAsBoolean(
+				invokeGraphQLMutation(
+					new GraphQLField(
+						"deleteProductConfigurationByExternalReferenceCode",
+						new HashMap<String, Object>() {
+							{
+								put(
+									"externalReferenceCode",
+									"\"" +
+										productConfiguration1.
+											getExternalReferenceCode() + "\"");
+							}
+						})),
+				"JSONObject/data",
+				"Object/deleteProductConfigurationByExternalReferenceCode"));
+
+		JSONArray errorsJSONArray1 = JSONUtil.getValueAsJSONArray(
+			invokeGraphQLQuery(
+				new GraphQLField(
+					"productConfigurationByExternalReferenceCode",
+					new HashMap<String, Object>() {
+						{
+							put(
+								"externalReferenceCode",
+								"\"" +
+									productConfiguration1.
+										getExternalReferenceCode() + "\"");
+						}
+					},
+					getGraphQLFields())),
+			"JSONArray/errors");
+
+		Assert.assertTrue(errorsJSONArray1.length() > 0);
+
+		// Using the namespace headlessCommerceAdminCatalog_v1_0
+
+		ProductConfiguration productConfiguration2 =
+			testGraphQLDeleteProductConfigurationByExternalReferenceCode_addProductConfiguration();
+
+		Assert.assertTrue(
+			JSONUtil.getValueAsBoolean(
+				invokeGraphQLMutation(
+					new GraphQLField(
+						"headlessCommerceAdminCatalog_v1_0",
+						new GraphQLField(
+							"deleteProductConfigurationByExternalReferenceCode",
+							new HashMap<String, Object>() {
+								{
+									put(
+										"externalReferenceCode",
+										"\"" +
+											productConfiguration2.
+												getExternalReferenceCode() +
+													"\"");
+								}
+							}))),
+				"JSONObject/data",
+				"JSONObject/headlessCommerceAdminCatalog_v1_0",
+				"Object/deleteProductConfigurationByExternalReferenceCode"));
+
+		JSONArray errorsJSONArray2 = JSONUtil.getValueAsJSONArray(
+			invokeGraphQLQuery(
+				new GraphQLField(
+					"headlessCommerceAdminCatalog_v1_0",
+					new GraphQLField(
+						"productConfigurationByExternalReferenceCode",
+						new HashMap<String, Object>() {
+							{
+								put(
+									"externalReferenceCode",
+									"\"" +
+										productConfiguration2.
+											getExternalReferenceCode() + "\"");
+							}
+						},
+						getGraphQLFields()))),
+			"JSONArray/errors");
+
+		Assert.assertTrue(errorsJSONArray2.length() > 0);
+	}
+
+	protected ProductConfiguration
+			testGraphQLDeleteProductConfigurationByExternalReferenceCode_addProductConfiguration()
+		throws Exception {
+
+		return testGraphQLProductConfiguration_addProductConfiguration();
 	}
 
 	@Test
@@ -612,7 +710,7 @@ public abstract class BaseProductConfigurationResourceTestCase {
 			testGraphQLGetProductByExternalReferenceCodeConfiguration_addProductConfiguration()
 		throws Exception {
 
-		return testGraphQLProductConfiguration_addProductConfiguration();
+		return testGraphQLProductProductConfiguration_addProductConfiguration();
 	}
 
 	@Test
@@ -2191,7 +2289,7 @@ public abstract class BaseProductConfigurationResourceTestCase {
 			testGraphQLGetProductIdConfiguration_addProductConfiguration()
 		throws Exception {
 
-		return testGraphQLProductConfiguration_addProductConfiguration();
+		return testGraphQLProductProductConfiguration_addProductConfiguration();
 	}
 
 	@Test
@@ -2431,6 +2529,14 @@ public abstract class BaseProductConfigurationResourceTestCase {
 
 	protected ProductConfiguration
 			testGraphQLProductConfiguration_addProductConfiguration()
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	protected ProductConfiguration
+			testGraphQLProductProductConfiguration_addProductConfiguration()
 		throws Exception {
 
 		throw new UnsupportedOperationException(
@@ -2792,6 +2898,10 @@ public abstract class BaseProductConfigurationResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("externalReferenceCode"));
+
+		graphQLFields.add(new GraphQLField("id"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

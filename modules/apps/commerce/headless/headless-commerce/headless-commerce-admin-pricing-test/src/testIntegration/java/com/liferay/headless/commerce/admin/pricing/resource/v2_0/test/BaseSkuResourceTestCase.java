@@ -423,10 +423,15 @@ public abstract class BaseSkuResourceTestCase {
 	}
 
 	protected Sku testGraphQLGetPriceEntryIdSku_addSku() throws Exception {
-		return testGraphQLSku_addSku();
+		return testGraphQLPriceEntrySku_addSku();
 	}
 
 	protected Sku testGraphQLSku_addSku() throws Exception {
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	protected Sku testGraphQLPriceEntrySku_addSku() throws Exception {
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
@@ -596,6 +601,8 @@ public abstract class BaseSkuResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("id"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

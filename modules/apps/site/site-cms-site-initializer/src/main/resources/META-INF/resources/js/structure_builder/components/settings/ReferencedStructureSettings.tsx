@@ -18,6 +18,7 @@ import Breadcrumb from '../Breadcrumb';
 import ERCInput from '../ERCInput';
 import Input from '../Input';
 import Spaces from '../Spaces';
+import WorkflowTab from './WorkflowTab';
 
 export default function ReferencedStructureSettings({
 	referencedStructure,
@@ -38,7 +39,9 @@ export default function ReferencedStructureSettings({
 			>
 				<span>
 					{sub(
-						Liferay.Language.get('x-is-a-referenced-structure'),
+						Liferay.Language.get(
+							'x-is-a-referenced-content-structure'
+						),
 						label
 					)}
 				</span>
@@ -65,7 +68,7 @@ export default function ReferencedStructureSettings({
 					</ClayTabs.Item>
 
 					<ClayTabs.Item>
-						{Liferay.Language.get('validations')}
+						{Liferay.Language.get('workflow')}
 					</ClayTabs.Item>
 				</ClayTabs.List>
 
@@ -75,7 +78,7 @@ export default function ReferencedStructureSettings({
 					</ClayTabs.TabPane>
 
 					<ClayTabs.TabPane className="px-0">
-						<ValidationsTab />
+						<WorkflowTab disabled={true} />
 					</ClayTabs.TabPane>
 				</ClayTabs.Panels>
 			</ClayTabs>
@@ -98,13 +101,13 @@ function GeneralTab({
 				</p>
 
 				<ClayLabel displayType="warning">
-					{Liferay.Language.get('referenced-structure')}
+					{Liferay.Language.get('referenced-content-structure')}
 				</ClayLabel>
 			</div>
 
 			<Input
 				disabled
-				label={Liferay.Language.get('structure-name')}
+				label={Liferay.Language.get('content-structure-name')}
 				onValueChange={() => {}}
 				required
 				value={name}
@@ -115,8 +118,4 @@ function GeneralTab({
 			<Spaces disabled structure={referencedStructure} />
 		</div>
 	);
-}
-
-function ValidationsTab() {
-	return <div></div>;
 }

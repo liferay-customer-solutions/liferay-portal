@@ -333,7 +333,7 @@ public abstract class BaseProductTaxConfigurationResourceTestCase {
 			testGraphQLGetProductByExternalReferenceCodeTaxConfiguration_addProductTaxConfiguration()
 		throws Exception {
 
-		return testGraphQLProductTaxConfiguration_addProductTaxConfiguration();
+		return testGraphQLProductProductTaxConfiguration_addProductTaxConfiguration();
 	}
 
 	@Test
@@ -474,7 +474,7 @@ public abstract class BaseProductTaxConfigurationResourceTestCase {
 			testGraphQLGetProductIdTaxConfiguration_addProductTaxConfiguration()
 		throws Exception {
 
-		return testGraphQLProductTaxConfiguration_addProductTaxConfiguration();
+		return testGraphQLProductProductTaxConfiguration_addProductTaxConfiguration();
 	}
 
 	@Test
@@ -490,7 +490,7 @@ public abstract class BaseProductTaxConfigurationResourceTestCase {
 	}
 
 	protected ProductTaxConfiguration
-			testGraphQLProductTaxConfiguration_addProductTaxConfiguration()
+			testGraphQLProductProductTaxConfiguration_addProductTaxConfiguration()
 		throws Exception {
 
 		throw new UnsupportedOperationException(
@@ -669,6 +669,8 @@ public abstract class BaseProductTaxConfigurationResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("id"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

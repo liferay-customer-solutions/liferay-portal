@@ -76,7 +76,7 @@ public class AssetLibraryResourceTest extends BaseAssetLibraryResourceTestCase {
 		Page<AssetLibrary> page = assetLibraryResource.getAssetLibrariesPage(
 			null, null, "type eq 'Space'", Pagination.of(1, 10), null);
 
-		Assert.assertEquals(0, page.getTotalCount());
+		long originalTotalCount = page.getTotalCount();
 
 		AssetLibrary randomAssetLibrary = randomAssetLibrary();
 
@@ -88,7 +88,7 @@ public class AssetLibraryResourceTest extends BaseAssetLibraryResourceTestCase {
 		page = assetLibraryResource.getAssetLibrariesPage(
 			null, null, "type eq 'Space'", Pagination.of(1, 10), null);
 
-		Assert.assertEquals(1, page.getTotalCount());
+		Assert.assertEquals(originalTotalCount + 1, page.getTotalCount());
 
 		assetLibraryResource.deleteAssetLibrary(assetLibrary.getId());
 	}
@@ -171,10 +171,17 @@ public class AssetLibraryResourceTest extends BaseAssetLibraryResourceTestCase {
 
 		AssetLibrary randomAssetLibrary = randomAssetLibrary();
 
+		randomAssetLibrary.setSettings(new Settings());
 		randomAssetLibrary.setType(AssetLibrary.Type.SPACE);
 
 		AssetLibrary postedAssetLibrary = assetLibraryResource.postAssetLibrary(
 			randomAssetLibrary);
+
+		Settings settings = postedAssetLibrary.getSettings();
+
+		Assert.assertEquals("outline-0", settings.getLogoColor());
+		Assert.assertTrue(settings.getSharingEnabled());
+		Assert.assertTrue(settings.getTrashEnabled());
 
 		Assert.assertEquals(
 			AssetLibrary.Type.SPACE, postedAssetLibrary.getType());
@@ -271,6 +278,7 @@ public class AssetLibraryResourceTest extends BaseAssetLibraryResourceTestCase {
 		return _addAssetLibrary();
 	}
 
+	@Override
 	protected AssetLibrary
 			testDeleteAssetLibraryByExternalReferenceCode_addAssetLibrary()
 		throws Exception {
@@ -563,7 +571,7 @@ public class AssetLibraryResourceTest extends BaseAssetLibraryResourceTestCase {
 
 		_assertSettings(
 			assetLibrary, autoTaggingEnabled, availableLanguageIds,
-			defaultLanguageId, "outline-0", new MimeTypeLimit[0], false,
+			defaultLanguageId, "outline-0", new MimeTypeLimit[0], true,
 			trashEnabled, trashEntriesMaxAge, useCustomLanguages);
 	}
 

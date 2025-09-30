@@ -6,6 +6,7 @@
 import {expect, mergeTests} from '@playwright/test';
 
 import {apiHelpersTest} from '../../../fixtures/apiHelpersTest';
+import {backendPageTest} from '../../../fixtures/backendPageTest';
 import {featureFlagsTest} from '../../../fixtures/featureFlagsTest';
 import {isolatedSiteTest} from '../../../fixtures/isolatedSiteTest';
 import {loginTest} from '../../../fixtures/loginTest';
@@ -17,6 +18,7 @@ import getPageDefinition from '../../layout-content-page-editor-web/main/utils/g
 
 const test = mergeTests(
 	apiHelpersTest,
+	backendPageTest,
 	featureFlagsTest({
 		'LPS-178052': {enabled: true},
 	}),

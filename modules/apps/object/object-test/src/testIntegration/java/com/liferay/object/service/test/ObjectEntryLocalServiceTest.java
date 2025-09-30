@@ -33,6 +33,10 @@ import com.liferay.expando.kernel.model.ExpandoColumnConstants;
 import com.liferay.expando.kernel.model.ExpandoTable;
 import com.liferay.expando.kernel.model.ExpandoTableConstants;
 import com.liferay.expando.test.util.ExpandoTestUtil;
+import com.liferay.exportimport.kernel.lar.ExportImportThreadLocal;
+import com.liferay.exportimport.report.constants.ExportImportReportEntryConstants;
+import com.liferay.exportimport.report.model.ExportImportReportEntry;
+import com.liferay.exportimport.report.service.ExportImportReportEntryLocalService;
 import com.liferay.friendly.url.model.FriendlyURLEntry;
 import com.liferay.friendly.url.service.FriendlyURLEntryLocalService;
 import com.liferay.list.type.entry.util.ListTypeEntryUtil;
@@ -1722,6 +1726,35 @@ public class ObjectEntryLocalServiceTest {
 			0,
 			_counterLocalService.getCurrentId(
 				ObjectFieldUtil.getCounterName(objectField)));
+	}
+
+	@FeatureFlag("LPD-17564")
+	@Test
+	public void testAddObjectEntryWithDraftWorkflowDefinition()
+		throws Exception {
+
+		WorkflowDefinitionLink workflowDefinitionLink =
+			_workflowDefinitionLinkLocalService.createWorkflowDefinitionLink(
+				0L);
+
+		workflowDefinitionLink.setUserId(TestPropsValues.getUserId());
+		workflowDefinitionLink.setWorkflowDefinitionName(
+			RandomTestUtil.randomString());
+
+		ObjectDefinition objectDefinition =
+			ObjectDefinitionTestUtil.addCustomObjectDefinition(
+				ObjectDefinitionTestUtil.getRandomName(),
+				List.of(workflowDefinitionLink));
+
+		objectDefinition =
+			_objectDefinitionLocalService.publishCustomObjectDefinition(
+				TestPropsValues.getUserId(),
+				objectDefinition.getObjectDefinitionId());
+
+		ObjectEntry objectEntry = _addObjectEntry(
+			0, objectDefinition.getObjectDefinitionId(), Map.of());
+
+		Assert.assertTrue(objectEntry.isApproved());
 	}
 
 	@Test
@@ -4635,15 +4668,62 @@ public class ObjectEntryLocalServiceTest {
 		try (SafeCloseable safeCloseable =
 				LazyReferencingThreadLocal.setEnabledWithSafeCloseable(true)) {
 
+			long exportImportConfigurationId = RandomTestUtil.randomLong();
+
+			ExportImportThreadLocal.setExportImportConfigurationId(
+				exportImportConfigurationId);
+
 			ObjectEntry objectEntry =
 				_objectEntryLocalService.getOrAddEmptyObjectEntry(
-					RandomTestUtil.randomString(), groupId,
-					TestPropsValues.getUserId(),
+					externalReferenceCode, groupId, TestPropsValues.getUserId(),
 					_siteObjectDefinition.getObjectDefinitionId());
 
 			Assert.assertEquals(groupId, objectEntry.getGroupId());
 			Assert.assertEquals(
 				WorkflowConstants.STATUS_EMPTY, objectEntry.getStatus());
+
+			List<ExportImportReportEntry> exportImportReportEntries =
+				_exportImportReportEntryLocalService.
+					getExportImportReportEntries(
+						TestPropsValues.getCompanyId(),
+						exportImportConfigurationId);
+
+			Assert.assertEquals(
+				exportImportReportEntries.toString(), 1,
+				exportImportReportEntries.size());
+
+			ExportImportReportEntry exportImportReportEntry =
+				exportImportReportEntries.get(0);
+
+			Assert.assertEquals(
+				externalReferenceCode,
+				exportImportReportEntry.getClassExternalReferenceCode());
+			Assert.assertEquals(
+				_classNameLocalService.getClassNameId(
+					_siteObjectDefinition.getClassName()),
+				exportImportReportEntry.getClassNameId());
+			Assert.assertEquals(
+				exportImportConfigurationId,
+				exportImportReportEntry.getExportImportConfigurationId());
+			Assert.assertEquals(
+				_siteObjectDefinition.getShortName(),
+				exportImportReportEntry.getModelName());
+			Assert.assertEquals(
+				ObjectDefinitionConstants.SCOPE_SITE,
+				exportImportReportEntry.getScope());
+
+			Group group = _groupLocalService.getGroup(groupId);
+
+			Assert.assertEquals(
+				exportImportReportEntry.getScopeKey(),
+				group.getExternalReferenceCode());
+
+			Assert.assertEquals(
+				ExportImportReportEntryConstants.TYPE_EMPTY,
+				exportImportReportEntry.getType());
+			Assert.assertEquals(
+				ExportImportReportEntryConstants.STATUS_UNRESOLVED,
+				exportImportReportEntry.getStatus());
 
 			objectEntry = _objectEntryLocalService.updateObjectEntry(
 				objectEntry.getUserId(), objectEntry.getObjectEntryId(),
@@ -4896,7 +4976,7 @@ public class ObjectEntryLocalServiceTest {
 			24, values3, valuesList.get(2), selectedObjectFieldNames);
 	}
 
-	@FeatureFlag("LPD-53981")
+	@FeatureFlag("LPD-17564")
 	@Test
 	public void testMoveObjectEntryToTrashWithComments() throws Exception {
 		Group group = GroupTestUtil.addGroup();
@@ -4916,7 +4996,7 @@ public class ObjectEntryLocalServiceTest {
 		_assertCommentsCount(0, _siteObjectDefinition, objectEntry);
 	}
 
-	@FeatureFlag("LPD-53981")
+	@FeatureFlag("LPD-17564")
 	@Test
 	public void testMoveObjectEntryToTrashWithObjectAction() throws Exception {
 		_addObjectAction(
@@ -4938,7 +5018,7 @@ public class ObjectEntryLocalServiceTest {
 		_assertCount(1);
 	}
 
-	@FeatureFlag("LPD-53981")
+	@FeatureFlag("LPD-17564")
 	@Test
 	public void testMoveObjectEntryToTrashWithObjectEntryFolder()
 		throws Exception {
@@ -4970,7 +5050,7 @@ public class ObjectEntryLocalServiceTest {
 				trashEntry.getTypeSettingsProperty("objectEntryFolderId")));
 	}
 
-	@FeatureFlag("LPD-53981")
+	@FeatureFlag("LPD-17564")
 	@Test
 	public void testMoveObjectEntryToTrashWithOngoingWorkflowInstances()
 		throws Exception {
@@ -5358,7 +5438,7 @@ public class ObjectEntryLocalServiceTest {
 		_testPartialUpdateObjectEntryWithObjectRelationship();
 	}
 
-	@FeatureFlag("LPD-53981")
+	@FeatureFlag("LPD-17564")
 	@Test
 	public void testRestoreObjectEntryFromTrashWithComments() throws Exception {
 		Group group = GroupTestUtil.addGroup();
@@ -5379,7 +5459,7 @@ public class ObjectEntryLocalServiceTest {
 		_assertCommentsCount(1, _siteObjectDefinition, objectEntry);
 	}
 
-	@FeatureFlag("LPD-53981")
+	@FeatureFlag("LPD-17564")
 	@Test
 	public void testRestoreObjectEntryFromTrashWithObjectAction()
 		throws Exception {
@@ -5414,7 +5494,7 @@ public class ObjectEntryLocalServiceTest {
 		_assertCount(2);
 	}
 
-	@FeatureFlag("LPD-53981")
+	@FeatureFlag("LPD-17564")
 	@Test
 	public void testRestoreObjectEntryFromTrashWithObjectEntryFolder()
 		throws Exception {
@@ -5460,7 +5540,7 @@ public class ObjectEntryLocalServiceTest {
 				objectEntry.getObjectEntryId()));
 	}
 
-	@FeatureFlag("LPD-53981")
+	@FeatureFlag("LPD-17564")
 	@Test
 	public void testRestoreObjectEntryFromTrashWithOngoingWorkflowInstances()
 		throws Exception {
@@ -9123,6 +9203,10 @@ public class ObjectEntryLocalServiceTest {
 
 	@Inject
 	private Encryptor _encryptor;
+
+	@Inject
+	private ExportImportReportEntryLocalService
+		_exportImportReportEntryLocalService;
 
 	@Inject
 	private FriendlyURLEntryLocalService _friendlyURLEntryLocalService;

@@ -65,6 +65,13 @@ public interface ObjectEntryLocalService
 	 *
 	 * Never modify this interface directly. Add custom service methods to <code>com.liferay.object.service.impl.ObjectEntryLocalServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface. Consume the object entry local service via injection or a <code>org.osgi.util.tracker.ServiceTracker</code>. Use {@link ObjectEntryLocalServiceUtil} if injection and service tracking are not available.
 	 */
+	public ObjectEntry addLatestApprovedObjectEntry(
+			String externalReferenceCode, long groupId, long userId,
+			long headObjectEntryId, ObjectDefinition objectDefinition,
+			long objectEntryFolderId, String defaultLanguageId, int version,
+			Map<String, Serializable> values)
+		throws PortalException;
+
 	public ObjectEntry addObjectEntry(
 			long groupId, long userId, long objectDefinitionId,
 			long objectEntryFolderId, String defaultLanguageId,
@@ -255,6 +262,10 @@ public interface ObjectEntryLocalService
 	public ObjectEntry fetchObjectEntry(
 		String externalReferenceCode, long groupId, long objectDefinitionId);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public ObjectEntry fetchObjectEntryByHeadObjectEntryId(
+		long headObjectEntryId);
+
 	/**
 	 * Returns the object entry matching the UUID and group.
 	 *
@@ -272,7 +283,7 @@ public interface ObjectEntryLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Map<Object, Long> getAggregationCounts(
 			long groupId, long objectDefinitionId, String aggregationTerm,
-			Predicate predicate, int start, int end)
+			Predicate predicate, boolean preferApproved, int start, int end)
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -420,8 +431,8 @@ public interface ObjectEntryLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<ObjectEntry> getOneToManyObjectEntries(
 			long groupId, long objectRelationshipId, Predicate predicate,
-			long primaryKey, boolean related, String search, int start, int end,
-			Sort[] sorts)
+			boolean preferApproved, long primaryKey, boolean related,
+			String search, int start, int end, Sort[] sorts)
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -455,8 +466,9 @@ public interface ObjectEntryLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Long> getPrimaryKeys(
 			Long[] groupIds, long companyId, long userId,
-			long objectDefinitionId, Predicate predicate, String search,
-			int start, int end, Sort[] sorts)
+			long objectDefinitionId, Predicate predicate,
+			boolean preferApproved, String search, int start, int end,
+			Sort[] sorts)
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -490,7 +502,8 @@ public interface ObjectEntryLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getValuesListCount(
 			Long[] groupIds, long companyId, long userId,
-			long objectDefinitionId, Predicate predicate, String search)
+			long objectDefinitionId, Predicate predicate,
+			boolean preferApproved, String search)
 		throws PortalException;
 
 	public void insertIntoOrUpdateExtensionTable(

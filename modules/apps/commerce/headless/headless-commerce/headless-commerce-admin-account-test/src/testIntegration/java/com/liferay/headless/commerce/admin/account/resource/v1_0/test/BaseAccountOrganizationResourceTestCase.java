@@ -193,7 +193,21 @@ public abstract class BaseAccountOrganizationResourceTestCase {
 	}
 
 	@Test
+	public void testGraphQLDeleteAccountByExternalReferenceCodeAccountOrganization()
+		throws Exception {
+
+		Assert.assertTrue(false);
+	}
+
+	@Test
 	public void testDeleteAccountIdAccountOrganization() throws Exception {
+		Assert.assertTrue(false);
+	}
+
+	@Test
+	public void testGraphQLDeleteAccountIdAccountOrganization()
+		throws Exception {
+
 		Assert.assertTrue(false);
 	}
 
@@ -208,7 +222,7 @@ public abstract class BaseAccountOrganizationResourceTestCase {
 	public void testGraphQLGetAccountByExternalReferenceCodeAccountOrganization()
 		throws Exception {
 
-		Assert.assertTrue(true);
+		Assert.assertTrue(false);
 	}
 
 	@Test
@@ -441,7 +455,7 @@ public abstract class BaseAccountOrganizationResourceTestCase {
 
 	@Test
 	public void testGraphQLGetAccountIdAccountOrganization() throws Exception {
-		Assert.assertTrue(true);
+		Assert.assertTrue(false);
 	}
 
 	@Test

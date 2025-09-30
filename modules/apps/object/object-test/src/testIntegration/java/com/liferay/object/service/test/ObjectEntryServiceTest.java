@@ -566,7 +566,7 @@ public class ObjectEntryServiceTest {
 		tree = TreeTestUtil.createObjectEntryTree(
 			"1", _objectDefinitionLocalService, _objectEntryLocalService,
 			_objectFieldLocalService, _objectRelationshipLocalService,
-			_rootObjectDefinition.getRootObjectDefinitionId());
+			_rootObjectDefinition.getObjectDefinitionId());
 
 		objectEntryRootNode = tree.getRootNode();
 
@@ -583,15 +583,11 @@ public class ObjectEntryServiceTest {
 			tree.iterator(TreeConstants.ITERATOR_TYPE_POST_ORDER),
 			_objectEntryLocalService,
 			objectEntry -> {
-				if (objectEntry.getRootObjectEntryId() ==
-						objectEntry.getObjectEntryId()) {
-
-					return;
+				if (objectEntry.isRootDescendantNode()) {
+					Assert.assertNotNull(
+						_objectEntryService.deleteObjectEntry(
+							objectEntry.getObjectEntryId()));
 				}
-
-				Assert.assertNotNull(
-					_objectEntryService.deleteObjectEntry(
-						objectEntry.getObjectEntryId()));
 			});
 
 		long rootObjectEntryId = objectEntryRootNode.getPrimaryKey();
@@ -741,15 +737,11 @@ public class ObjectEntryServiceTest {
 		TreeTestUtil.forEachNodeObjectEntry(
 			tree.iterator(), _objectEntryLocalService,
 			objectEntry -> {
-				if (objectEntry.getRootObjectEntryId() ==
-						objectEntry.getObjectEntryId()) {
-
-					return;
+				if (objectEntry.isRootDescendantNode()) {
+					Assert.assertNotNull(
+						_objectEntryService.getObjectEntry(
+							objectEntry.getObjectEntryId()));
 				}
-
-				Assert.assertNotNull(
-					_objectEntryService.getObjectEntry(
-						objectEntry.getObjectEntryId()));
 			});
 
 		long rootObjectEntryId = objectEntryRootNode.getPrimaryKey();

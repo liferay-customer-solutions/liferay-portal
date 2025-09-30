@@ -16,8 +16,8 @@ import com.liferay.exportimport.kernel.model.ExportImportConfiguration;
 import com.liferay.exportimport.kernel.service.ExportImportConfigurationLocalService;
 import com.liferay.exportimport.kernel.service.ExportImportLocalService;
 import com.liferay.exportimport.test.util.lar.BasePortletDataHandlerTestCase;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Company;
-import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.Role;
@@ -39,7 +39,6 @@ import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.test.rule.FeatureFlag;
-import com.liferay.portal.test.rule.FeatureFlags;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
@@ -65,11 +64,7 @@ import org.junit.runner.RunWith;
 /**
  * @author Zoltan Csaszi
  */
-@FeatureFlags(
-	featureFlags = {
-		@FeatureFlag(value = "LPD-35914"), @FeatureFlag(value = "LPD-47858")
-	}
-)
+@FeatureFlag("LPD-35914")
 @RunWith(Arquillian.class)
 public class RolesAdminPortletDataHandlerTest
 	extends BasePortletDataHandlerTestCase {
@@ -82,15 +77,15 @@ public class RolesAdminPortletDataHandlerTest
 			PermissionCheckerMethodTestRule.INSTANCE);
 
 	@BeforeClass
-	public static void setUpClass() {
+	public static void setUpClass() throws PortalException {
 		FeatureFlagTestUtil.invokeFeatureFlagListeners(
-			CompanyConstants.SYSTEM, true, "LPD-35914");
+			TestPropsValues.getCompanyId(), true, "LPD-35914");
 	}
 
 	@AfterClass
-	public static void tearDownClass() {
+	public static void tearDownClass() throws PortalException {
 		FeatureFlagTestUtil.invokeFeatureFlagListeners(
-			CompanyConstants.SYSTEM, false, "LPD-35914");
+			TestPropsValues.getCompanyId(), false, "LPD-35914");
 	}
 
 	@Test

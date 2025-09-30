@@ -46,6 +46,7 @@ export default function buildStructure({
 		status: isPublished ? 'published' : 'draft',
 		type: mainObjectDefinition.objectFolderExternalReferenceCode as Structure['type'],
 		uuid: getUuid(),
+		workflows: getWorkflows(mainObjectDefinition),
 	};
 }
 
@@ -140,6 +141,7 @@ export function buildField({
 		indexableConfig,
 		label: objectField.label,
 		localized: objectField.localized,
+		locked: objectField.system,
 		name: objectField.name,
 		parent,
 		required: objectField.required,
@@ -203,6 +205,7 @@ export function buildReferencedStructure({
 		spaces: getSpaces(objectDefinition),
 		type: 'referenced-structure',
 		uuid,
+		workflows: getWorkflows(objectDefinition),
 	};
 }
 
@@ -328,6 +331,21 @@ export function getSpaces(objectDefinition: ObjectDefinition) {
 			: acceptedGroupExternalReferenceCodes?.split(',') || [];
 
 	return spaces;
+}
+
+export function getWorkflows(objectDefinition: ObjectDefinition) {
+	const workflows: Structure['workflows'] = {};
+
+	const definitionLinks = objectDefinition.workflowDefinitionLinks || [];
+
+	for (const {
+		groupExternalReferenceCode,
+		workflowDefinitionName,
+	} of definitionLinks) {
+		workflows[groupExternalReferenceCode] = workflowDefinitionName;
+	}
+
+	return workflows;
 }
 
 function isRepeatableGroup(

@@ -284,7 +284,7 @@ public abstract class BasePriceModifierResourceTestCase {
 							put("id", priceModifier1.getId());
 						}
 					},
-					new GraphQLField("id"))),
+					getGraphQLFields())),
 			"JSONArray/errors");
 
 		Assert.assertTrue(errorsJSONArray1.length() > 0);
@@ -321,7 +321,7 @@ public abstract class BasePriceModifierResourceTestCase {
 								put("id", priceModifier2.getId());
 							}
 						},
-						new GraphQLField("id")))),
+						getGraphQLFields()))),
 			"JSONArray/errors");
 
 		Assert.assertTrue(errorsJSONArray2.length() > 0);
@@ -441,6 +441,104 @@ public abstract class BasePriceModifierResourceTestCase {
 
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
+	}
+
+	@Test
+	public void testGraphQLDeletePriceModifierByExternalReferenceCode()
+		throws Exception {
+
+		// No namespace
+
+		PriceModifier priceModifier1 =
+			testGraphQLDeletePriceModifierByExternalReferenceCode_addPriceModifier();
+
+		Assert.assertTrue(
+			JSONUtil.getValueAsBoolean(
+				invokeGraphQLMutation(
+					new GraphQLField(
+						"deletePriceModifierByExternalReferenceCode",
+						new HashMap<String, Object>() {
+							{
+								put(
+									"externalReferenceCode",
+									"\"" +
+										priceModifier1.
+											getExternalReferenceCode() + "\"");
+							}
+						})),
+				"JSONObject/data",
+				"Object/deletePriceModifierByExternalReferenceCode"));
+
+		JSONArray errorsJSONArray1 = JSONUtil.getValueAsJSONArray(
+			invokeGraphQLQuery(
+				new GraphQLField(
+					"priceModifierByExternalReferenceCode",
+					new HashMap<String, Object>() {
+						{
+							put(
+								"externalReferenceCode",
+								"\"" +
+									priceModifier1.getExternalReferenceCode() +
+										"\"");
+						}
+					},
+					getGraphQLFields())),
+			"JSONArray/errors");
+
+		Assert.assertTrue(errorsJSONArray1.length() > 0);
+
+		// Using the namespace headlessCommerceAdminPricing_v2_0
+
+		PriceModifier priceModifier2 =
+			testGraphQLDeletePriceModifierByExternalReferenceCode_addPriceModifier();
+
+		Assert.assertTrue(
+			JSONUtil.getValueAsBoolean(
+				invokeGraphQLMutation(
+					new GraphQLField(
+						"headlessCommerceAdminPricing_v2_0",
+						new GraphQLField(
+							"deletePriceModifierByExternalReferenceCode",
+							new HashMap<String, Object>() {
+								{
+									put(
+										"externalReferenceCode",
+										"\"" +
+											priceModifier2.
+												getExternalReferenceCode() +
+													"\"");
+								}
+							}))),
+				"JSONObject/data",
+				"JSONObject/headlessCommerceAdminPricing_v2_0",
+				"Object/deletePriceModifierByExternalReferenceCode"));
+
+		JSONArray errorsJSONArray2 = JSONUtil.getValueAsJSONArray(
+			invokeGraphQLQuery(
+				new GraphQLField(
+					"headlessCommerceAdminPricing_v2_0",
+					new GraphQLField(
+						"priceModifierByExternalReferenceCode",
+						new HashMap<String, Object>() {
+							{
+								put(
+									"externalReferenceCode",
+									"\"" +
+										priceModifier2.
+											getExternalReferenceCode() + "\"");
+							}
+						},
+						getGraphQLFields()))),
+			"JSONArray/errors");
+
+		Assert.assertTrue(errorsJSONArray2.length() > 0);
+	}
+
+	protected PriceModifier
+			testGraphQLDeletePriceModifierByExternalReferenceCode_addPriceModifier()
+		throws Exception {
+
+		return testGraphQLPriceModifier_addPriceModifier();
 	}
 
 	@Test
@@ -1958,6 +2056,10 @@ public abstract class BasePriceModifierResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("externalReferenceCode"));
+
+		graphQLFields.add(new GraphQLField("id"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

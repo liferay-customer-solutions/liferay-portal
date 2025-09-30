@@ -56,7 +56,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -109,6 +108,12 @@ public class SiteResourceTest extends BaseSiteResourceTestCase {
 				TestPropsValues.getCompanyId());
 
 			if (group != null) {
+				List<Group> childGroups = group.getChildren(true);
+
+				for (Group childGroup : childGroups) {
+					_groupLocalService.deleteGroup(childGroup);
+				}
+
 				_groupLocalService.deleteGroup(group);
 			}
 		}
@@ -201,7 +206,6 @@ public class SiteResourceTest extends BaseSiteResourceTestCase {
 		_testPostSiteFailureDuplicateName();
 		_testPostSiteFailureInvalidKey();
 		_testPostSiteFailureNoName();
-		_testPostSiteFailureParentSiteNotFound();
 		_testPostSiteFailureSiteInitializerInactive();
 		_testPostSiteFailureSiteInitializerNotFound();
 		_testPostSiteFailureSiteTemplateInactive();
@@ -215,6 +219,7 @@ public class SiteResourceTest extends BaseSiteResourceTestCase {
 		_testPostSiteWithLocalizedDescription();
 		_testPostSiteWithLocalizedName();
 		_testPostSiteWithNondefaultLocales();
+		_testPostSiteWithParentSiteExternalReferenceCode();
 		_testPostSiteWithTypeSettings();
 		_testPostSiteWithoutAuthentication();
 	}
@@ -226,7 +231,9 @@ public class SiteResourceTest extends BaseSiteResourceTestCase {
 		super.testPutSite();
 
 		_testPutSiteBatch();
+		_testPutSiteBatchWithParentSiteExternalReferenceCode();
 		_testPutSiteWithExcludedTypeSettings();
+		_testPutSiteWithParentSiteExternalReferenceCode();
 	}
 
 	@Override
@@ -269,10 +276,8 @@ public class SiteResourceTest extends BaseSiteResourceTestCase {
 					GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION;
 				membershipType = MembershipType.create(
 					GroupConstants.getTypeLabel(GroupConstants.TYPE_SITE_OPEN));
-				name = LinkedHashMapBuilder.put(
-					String.valueOf(LocaleUtil.getDefault()),
-					RandomTestUtil.randomString()
-				).build();
+				name = RandomTestUtil.randomString();
+				parentSiteExternalReferenceCode = StringPool.BLANK;
 				typeSettings = LinkedHashMapBuilder.put(
 					RandomTestUtil.randomString(), RandomTestUtil.randomString()
 				).build();
@@ -367,11 +372,7 @@ public class SiteResourceTest extends BaseSiteResourceTestCase {
 			Site.MembershipType.create(
 				GroupConstants.getTypeLabel(group.getType())));
 		Assert.assertEquals(
-			site.getName(
-			).get(
-				String.valueOf(LocaleUtil.getDefault())
-			),
-			group.getName(LocaleUtil.getDefault()));
+			site.getName(), group.getName(LocaleUtil.getDefault()));
 	}
 
 	private void _testGetSiteByExternalReferenceCodeWithDollar()
@@ -498,10 +499,7 @@ public class SiteResourceTest extends BaseSiteResourceTestCase {
 
 		Site randomSite = new Site();
 
-		randomSite.setName(
-			LinkedHashMapBuilder.put(
-				String.valueOf(LocaleUtil.getDefault()), name
-			).build());
+		randomSite.setName(name);
 
 		Site postSite = _testPostSite_addSite(randomSite);
 
@@ -561,11 +559,7 @@ public class SiteResourceTest extends BaseSiteResourceTestCase {
 	private void _testPostSiteFailureDuplicateName() throws Exception {
 		Site randomSite = new Site() {
 			{
-				name = LinkedHashMapBuilder.put(
-					StringUtil.toLowerCase(
-						String.valueOf(LocaleUtil.getDefault())),
-					RandomTestUtil.randomString()
-				).build();
+				name = StringUtil.toLowerCase(RandomTestUtil.randomString());
 			}
 		};
 
@@ -592,10 +586,7 @@ public class SiteResourceTest extends BaseSiteResourceTestCase {
 	private void _testPostSiteFailureInvalidKey() throws Exception {
 		Site randomSite = randomSite();
 
-		randomSite.setName(
-			LinkedHashMapBuilder.put(
-				String.valueOf(LocaleUtil.getDefault()), "*"
-			).build());
+		randomSite.setName("*");
 
 		try {
 			_testPostSite_addSite(randomSite);
@@ -613,12 +604,7 @@ public class SiteResourceTest extends BaseSiteResourceTestCase {
 	private void _testPostSiteFailureNoName() throws Exception {
 		Site randomSite = randomSite();
 
-		randomSite.setName(
-			new LinkedHashMap<String, String>() {
-				{
-					put(String.valueOf(LocaleUtil.getDefault()), null);
-				}
-			});
+		randomSite.setName((String)null);
 
 		try {
 			_testPostSite_addSite(randomSite);
@@ -629,25 +615,6 @@ public class SiteResourceTest extends BaseSiteResourceTestCase {
 			Problem problem = problemException.getProblem();
 
 			Assert.assertEquals("BAD_REQUEST", problem.getStatus());
-		}
-	}
-
-	private void _testPostSiteFailureParentSiteNotFound() throws Exception {
-		Site randomSite = randomSite();
-
-		randomSite.setParentSiteKey(
-			StringUtil.toLowerCase(RandomTestUtil.randomString()));
-
-		try {
-			_testPostSite_addSite(randomSite);
-
-			Assert.fail();
-		}
-		catch (Problem.ProblemException problemException) {
-			Problem problem = problemException.getProblem();
-
-			Assert.assertEquals("NOT_FOUND", problem.getStatus());
-			Assert.assertNull(problem.getTitle());
 		}
 	}
 
@@ -846,6 +813,25 @@ public class SiteResourceTest extends BaseSiteResourceTestCase {
 		Group parentGroup = group.getParentGroup();
 
 		Assert.assertEquals(parentSite.getKey(), parentGroup.getGroupKey());
+
+		parentSite = _testPostSite_addSite(randomSite());
+
+		randomSite = randomSite();
+
+		randomSite.setParentSiteExternalReferenceCode(
+			parentSite.getExternalReferenceCode());
+
+		postSite = _testPostSiteSuccess(randomSite);
+
+		group = _groupLocalService.fetchGroupByExternalReferenceCode(
+			postSite.getExternalReferenceCode(),
+			TestPropsValues.getCompanyId());
+
+		parentGroup = group.getParentGroup();
+
+		Assert.assertEquals(
+			parentSite.getExternalReferenceCode(),
+			parentGroup.getExternalReferenceCode());
 	}
 
 	private void _testPostSiteSuccessMembershipTypePrivate() throws Exception {
@@ -932,21 +918,19 @@ public class SiteResourceTest extends BaseSiteResourceTestCase {
 		String name1 = RandomTestUtil.randomString();
 		String name2 = RandomTestUtil.randomString();
 
-		randomSite.setName(
+		randomSite.setName_i18n(
 			LinkedHashMapBuilder.put(
-				String.valueOf(LocaleUtil.getDefault()), name1
+				"en-US", name1
 			).put(
-				String.valueOf(LocaleUtil.BRAZIL), name2
+				"pt-BR", name2
 			).build());
 
 		Site postSite = _testPostSite_addSite(randomSite);
 
-		Map<String, String> nameMap = postSite.getName();
+		Map<String, String> nameMap = postSite.getName_i18n();
 
-		Assert.assertEquals(
-			name1, nameMap.get(String.valueOf(LocaleUtil.getDefault())));
-		Assert.assertEquals(
-			name2, nameMap.get(String.valueOf(LocaleUtil.BRAZIL)));
+		Assert.assertEquals(name1, nameMap.get("en-US"));
+		Assert.assertEquals(name2, nameMap.get("pt-BR"));
 	}
 
 	private void _testPostSiteWithNondefaultLocales() throws Exception {
@@ -987,6 +971,58 @@ public class SiteResourceTest extends BaseSiteResourceTestCase {
 
 			Assert.assertEquals("403", problem.getStatus());
 		}
+	}
+
+	private void _testPostSiteWithParentSiteExternalReferenceCode()
+		throws Exception {
+
+		Site postParentSite = testPostSite_addSite(randomSite());
+
+		Site randomSite = randomSite();
+
+		randomSite.setParentSiteExternalReferenceCode(
+			postParentSite.getExternalReferenceCode());
+
+		Site postSite = siteResource.postSite(randomSite);
+
+		Assert.assertEquals(
+			randomSite.getParentSiteExternalReferenceCode(),
+			postSite.getParentSiteExternalReferenceCode());
+		assertEquals(randomSite, postSite);
+		assertValid(postSite);
+
+		randomSite = randomSite();
+
+		randomSite.setParentSiteExternalReferenceCode(StringPool.BLANK);
+
+		postSite = siteResource.postSite(randomSite);
+
+		Assert.assertNotNull(postSite.getParentSiteExternalReferenceCode());
+		assertEquals(randomSite, postSite);
+		assertValid(postSite);
+
+		randomSite = randomSite();
+
+		randomSite.setParentSiteExternalReferenceCode(
+			RandomTestUtil.randomString());
+
+		postSite = siteResource.postSite(randomSite);
+
+		Assert.assertEquals(
+			StringPool.BLANK, postSite.getParentSiteExternalReferenceCode());
+		assertEquals(randomSite, postSite);
+		assertValid(postSite);
+
+		randomSite = randomSite();
+
+		randomSite.setParentSiteExternalReferenceCode(StringPool.BLANK);
+
+		postSite = siteResource.postSite(randomSite);
+
+		Assert.assertEquals(
+			StringPool.BLANK, postSite.getParentSiteExternalReferenceCode());
+		assertEquals(randomSite, postSite);
+		assertValid(postSite);
 	}
 
 	private void _testPostSiteWithTypeSettings() throws Exception {
@@ -1065,6 +1101,97 @@ public class SiteResourceTest extends BaseSiteResourceTestCase {
 				updatedSite.getExternalReferenceCode()));
 	}
 
+	private void _testPutSiteBatchWithParentSiteExternalReferenceCode()
+		throws Exception {
+
+		Site postParentSite = testPutSite_addSite();
+
+		Site postSite = testPutSite_addSite();
+
+		Site site = randomSite();
+
+		site.setExternalReferenceCode(postSite.getExternalReferenceCode());
+
+		site.setParentSiteExternalReferenceCode(
+			postParentSite.getExternalReferenceCode());
+
+		waitForFinish(
+			"COMPLETED",
+			HTTPTestUtil.invokeToJSONObject(
+				JSONUtil.put(
+					_jsonFactory.createJSONObject(site.toString())
+				).toString(),
+				"headless-site/v1.0/sites/batch", Http.Method.PUT));
+
+		Group group = _groupLocalService.getGroupByExternalReferenceCode(
+			site.getExternalReferenceCode(), TestPropsValues.getCompanyId());
+
+		Assert.assertEquals(
+			GroupConstants.DEFAULT_PARENT_GROUP_ID, group.getParentGroupId());
+
+		site.setParentSiteExternalReferenceCode(RandomTestUtil.randomString());
+
+		waitForFinish(
+			"COMPLETED",
+			HTTPTestUtil.invokeToJSONObject(
+				JSONUtil.put(
+					_jsonFactory.createJSONObject(site.toString())
+				).toString(),
+				"headless-site/v1.0/sites/batch", Http.Method.PUT));
+
+		group = _groupLocalService.getGroupByExternalReferenceCode(
+			site.getExternalReferenceCode(), TestPropsValues.getCompanyId());
+
+		Assert.assertEquals(
+			GroupConstants.DEFAULT_PARENT_GROUP_ID, group.getParentGroupId());
+
+		site.setParentSiteExternalReferenceCode(StringPool.BLANK);
+
+		waitForFinish(
+			"COMPLETED",
+			HTTPTestUtil.invokeToJSONObject(
+				JSONUtil.put(
+					_jsonFactory.createJSONObject(site.toString())
+				).toString(),
+				"headless-site/v1.0/sites/batch", Http.Method.PUT));
+
+		group = _groupLocalService.getGroupByExternalReferenceCode(
+			site.getExternalReferenceCode(), TestPropsValues.getCompanyId());
+
+		Assert.assertEquals(
+			GroupConstants.DEFAULT_PARENT_GROUP_ID, group.getParentGroupId());
+
+		site = randomSite();
+
+		site.setParentSiteExternalReferenceCode(
+			postParentSite.getExternalReferenceCode());
+
+		postSite = siteResource.postSite(site);
+
+		site = randomSite();
+
+		site.setExternalReferenceCode(postSite.getExternalReferenceCode());
+		site.setParentSiteExternalReferenceCode(
+			postSite.getParentSiteExternalReferenceCode());
+
+		waitForFinish(
+			"COMPLETED",
+			HTTPTestUtil.invokeToJSONObject(
+				JSONUtil.put(
+					_jsonFactory.createJSONObject(site.toString())
+				).toString(),
+				"headless-site/v1.0/sites/batch", Http.Method.PUT));
+
+		group = _groupLocalService.getGroupByExternalReferenceCode(
+			site.getExternalReferenceCode(), TestPropsValues.getCompanyId());
+
+		Group parentGroup = _groupLocalService.getGroupByExternalReferenceCode(
+			site.getParentSiteExternalReferenceCode(),
+			TestPropsValues.getCompanyId());
+
+		Assert.assertEquals(parentGroup.getGroupId(), group.getParentGroupId());
+	}
+
 	private void _testPutSiteWithExcludedTypeSettings() throws Exception {
 		Site postSite = testPutSite_addSite();
 
@@ -1128,6 +1255,30 @@ public class SiteResourceTest extends BaseSiteResourceTestCase {
 				putSiteUnicodeProperties.get(randomSiteTypeSetting.getKey()),
 				randomSiteTypeSetting.getValue());
 		}
+	}
+
+	private void _testPutSiteWithParentSiteExternalReferenceCode()
+		throws Exception {
+
+		Site postParentSite = testPutSite_addSite();
+
+		Site randomSite = randomSite();
+
+		randomSite.setParentSiteExternalReferenceCode(
+			postParentSite.getExternalReferenceCode());
+
+		Site putSite = siteResource.putSite(randomSite);
+
+		Assert.assertEquals(
+			postParentSite.getExternalReferenceCode(),
+			putSite.getParentSiteExternalReferenceCode());
+
+		randomSite.setParentSiteExternalReferenceCode(StringPool.BLANK);
+
+		putSite = siteResource.putSite(randomSite);
+
+		Assert.assertEquals(
+			StringPool.BLANK, putSite.getParentSiteExternalReferenceCode());
 	}
 
 	private static final String _CLASS_NAME_EXCEPTION_MAPPER =

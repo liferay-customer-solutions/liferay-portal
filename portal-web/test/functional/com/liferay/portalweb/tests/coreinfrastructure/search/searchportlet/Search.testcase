@@ -128,7 +128,6 @@ definition {
 	@description = "This is a use case for LPS-160922."
 	@priority = 4
 	test AssertDefaultSearchResultsDisplayTemplate {
-		property portal.acceptance = "quarantine";
 		property test.liferay.virtual.instance = "false";
 		property test.run.type = "single";
 
@@ -161,9 +160,10 @@ definition {
 			fieldName = "displayStyleGroupId",
 			fieldValue = ${siteId});
 
-		FormFields.editTextMultiline(
-			fieldName = "displayStyle",
-			fieldValue = "ddmTemplate_${templateKey}");
+		Type(
+			key_fieldName = "displayStyle",
+			locator1 = "FormFields#TEXT_MULTILINE_FIELD_EXACT_MATCH",
+			value1 = "ddmTemplate_${templateKey}");
 
 		PortletEntry.save();
 
@@ -3184,8 +3184,6 @@ definition {
 
 	@priority = 4
 	test ViewSortedSearchResults {
-		property portal.acceptance = "quarantine";
-
 		JSONWebcontent.addWebContent(
 			content = "Fruit",
 			groupName = "Guest",
@@ -3218,6 +3216,8 @@ definition {
 		SearchPage.chooseSortOption(sortOption = "Created (oldest first)");
 
 		SearchResults.viewSearchResultsSpecificOrder(resultsList = "Apple,Banana,Cantaloupe");
+
+		Portlet.deletePG(portletName = "Sort");
 	}
 
 	@description = "This is a use case for LPS-134052."
@@ -3346,6 +3346,10 @@ definition {
 				key_position = 1,
 				locator1 = "Search#SORT_WIDGET_SORT_OPTION_POSITION",
 				value1 = "Relevant Test");
+		}
+
+		task ("Remove Sort widget for teardown") {
+			Portlet.deletePG(portletName = "Sort");
 		}
 	}
 

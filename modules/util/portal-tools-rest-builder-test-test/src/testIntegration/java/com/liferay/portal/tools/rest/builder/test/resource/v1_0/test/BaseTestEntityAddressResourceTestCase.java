@@ -314,11 +314,11 @@ public abstract class BaseTestEntityAddressResourceTestCase {
 			testGraphQLGetTestEntityTestEntityAddress_addTestEntityAddress()
 		throws Exception {
 
-		return testGraphQLTestEntityAddress_addTestEntityAddress();
+		return testGraphQLTestEntityTestEntityAddress_addTestEntityAddress();
 	}
 
 	protected TestEntityAddress
-			testGraphQLTestEntityAddress_addTestEntityAddress()
+			testGraphQLTestEntityTestEntityAddress_addTestEntityAddress()
 		throws Exception {
 
 		throw new UnsupportedOperationException(
@@ -511,6 +511,8 @@ public abstract class BaseTestEntityAddressResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("id"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

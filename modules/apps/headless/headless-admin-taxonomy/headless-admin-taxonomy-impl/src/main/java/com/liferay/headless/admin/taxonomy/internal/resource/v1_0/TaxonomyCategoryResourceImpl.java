@@ -80,6 +80,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	properties = "OSGI-INF/liferay/rest/v1_0/taxonomy-category.properties",
+	property = "export.import.vulcan.batch.engine.task.item.delegate=true",
 	scope = ServiceScope.PROTOTYPE, service = TaxonomyCategoryResource.class
 )
 public class TaxonomyCategoryResourceImpl
@@ -709,40 +710,18 @@ public class TaxonomyCategoryResourceImpl
 			TaxonomyCategory taxonomyCategory)
 		throws Exception {
 
-		if (taxonomyCategory.getTaxonomyVocabularyId() != null) {
-			if (taxonomyCategory.getTaxonomyVocabularyId() !=
-					assetCategory.getVocabularyId()) {
-
-				_assetVocabularyService.getVocabulary(
-					taxonomyCategory.getTaxonomyVocabularyId());
-			}
+		if ((taxonomyCategory.getTaxonomyVocabularyId() != null) &&
+			(taxonomyCategory.getTaxonomyVocabularyId() ==
+				assetCategory.getVocabularyId())) {
 
 			return taxonomyCategory.getTaxonomyVocabularyId();
 		}
-		else if (taxonomyCategory.getParentTaxonomyVocabulary() != null) {
-			ParentTaxonomyVocabulary parentTaxonomyVocabulary =
-				taxonomyCategory.getParentTaxonomyVocabulary();
 
-			String taxonomyVocabularyExternalReferenceCode =
-				parentTaxonomyVocabulary.getExternalReferenceCode();
+		Long taxonomyVocabularyId = _getTaxonomyVocabularyId(
+			groupId, taxonomyCategory);
 
-			if (Validator.isNotNull(taxonomyVocabularyExternalReferenceCode)) {
-				if (!FeatureFlagManagerUtil.isEnabled("LPD-17564")) {
-					AssetVocabulary assetVocabulary =
-						_assetVocabularyService.
-							getAssetVocabularyByExternalReferenceCode(
-								groupId,
-								taxonomyVocabularyExternalReferenceCode);
-
-					return assetVocabulary.getVocabularyId();
-				}
-
-				AssetVocabulary assetVocabulary =
-					_assetVocabularyService.getOrAddEmptyVocabulary(
-						taxonomyVocabularyExternalReferenceCode, groupId);
-
-				return assetVocabulary.getVocabularyId();
-			}
+		if (taxonomyVocabularyId != null) {
+			return taxonomyVocabularyId;
 		}
 
 		return assetCategory.getVocabularyId();
@@ -912,8 +891,7 @@ public class TaxonomyCategoryResourceImpl
 		}
 
 		if (Validator.isBlank(taxonomyVocabularyExternalReferenceCode)) {
-			throw new BadRequestException(
-				"Taxonomy vocabulary external reference code is required");
+			return null;
 		}
 
 		AssetVocabulary assetVocabulary = null;
@@ -992,12 +970,20 @@ public class TaxonomyCategoryResourceImpl
 			long groupId, TaxonomyCategory taxonomyCategory)
 		throws Exception {
 
+		Long taxonomyVocabularyId = _getTaxonomyVocabularyId(
+			groupId, taxonomyCategory);
+
+		if (taxonomyVocabularyId == null) {
+			throw new BadRequestException(
+				"External reference code is taxonomy vocabulary ID or is " +
+					"required");
+		}
+
 		return _addTaxonomyCategory(
 			taxonomyCategory.getExternalReferenceCode(), groupId,
 			contextAcceptLanguage.getPreferredLanguageId(),
 			_getParentTaxonomyCategoryId(groupId, taxonomyCategory),
-			taxonomyCategory,
-			_getTaxonomyVocabularyId(groupId, taxonomyCategory));
+			taxonomyCategory, taxonomyVocabularyId);
 	}
 
 	private TaxonomyCategory _putTaxonomyCategory(

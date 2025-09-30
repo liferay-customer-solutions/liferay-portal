@@ -72,6 +72,8 @@ public class ViewAllSpacesDisplayContext {
 
 	public Map<String, Object> getAdditionalProps() {
 		return HashMapBuilder.<String, Object>put(
+			"baseSpaceURL", ActionUtil.getBaseSpaceURL(_themeDisplay)
+		).put(
 			"defaultPermissionAdditionalProps",
 			_getDefaultPermissionAdditionalProps()
 		).put(
@@ -107,7 +109,11 @@ public class ViewAllSpacesDisplayContext {
 			new FDSActionDropdownItem(
 				"#", "document", "sampleBulkAction",
 				LanguageUtil.get(_httpServletRequest, "label"), null, null,
-				null));
+				null),
+			new FDSActionDropdownItem(
+				StringPool.BLANK, "password-policies", "default-permissions",
+				LanguageUtil.get(_httpServletRequest, "default-permissions"),
+				null, null, null));
 	}
 
 	public CreationMenu getCreationMenu() {
@@ -185,6 +191,8 @@ public class ViewAllSpacesDisplayContext {
 					"modelResource", DepotEntry.class.getName()
 				).setParameter(
 					"modelResourceDescription", "{name}"
+				).setParameter(
+					"resourceGroupId", "{siteId}"
 				).setParameter(
 					"resourcePrimKey", "{id}"
 				).setWindowState(

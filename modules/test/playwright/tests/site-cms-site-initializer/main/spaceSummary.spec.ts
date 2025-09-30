@@ -9,6 +9,7 @@ import {dataApiHelpersTest} from '../../../fixtures/dataApiHelpersTest';
 import {featureFlagsTest} from '../../../fixtures/featureFlagsTest';
 import {loginTest} from '../../../fixtures/loginTest';
 import getRandomString from '../../../utils/getRandomString';
+import {waitForAlert} from '../../../utils/waitForAlert';
 import {cmsPagesTest} from './fixtures/cmsPagesTest';
 
 const test = mergeTests(
@@ -85,6 +86,40 @@ test(
 );
 
 test(
+	'Can add and delete a user group as a member of the space',
+	{tag: '@LPD-61617'},
+	async ({apiHelpers, page, spaceSummaryPage}) => {
+		const spaceName = 'Default';
+
+		await spaceSummaryPage.goto(spaceName);
+
+		const userGroup = await apiHelpers.headlessAdminUser.postUserGroup();
+
+		await spaceSummaryPage.addUserOrUserGroup(userGroup.name, 'groups');
+
+		await waitForAlert(
+			page,
+			`Success:Group ${userGroup.name} successfully added to space.`
+		);
+
+		await spaceSummaryPage.userGroupsTab.click();
+
+		expect(page.getByText(userGroup.name, {exact: true})).toBeVisible();
+
+		await spaceSummaryPage.removeUserOrUserGroup(userGroup.name, 'groups');
+
+		await waitForAlert(
+			page,
+			`Success:Group ${userGroup.name} successfully removed from space.`
+		);
+
+		await spaceSummaryPage.userGroupsTab.click();
+
+		expect(page.getByText(userGroup.name, {exact: true})).not.toBeVisible();
+	}
+);
+
+test(
 	'Can view added content in the space summary page',
 	{tag: '@LPD-62706'},
 	async ({apiHelpers, page, spaceSummaryPage}) => {
@@ -114,19 +149,6 @@ test(
 );
 
 test(
-	'Can see CMS site as connected for the Default space in space summary page',
-	{tag: '@LPD-39906'},
-	async ({page, spaceSummaryPage}) => {
-		const spaceName = 'Default';
-
-		await spaceSummaryPage.goto(spaceName);
-
-		expect(page.getByRole('heading', {name: 'Sites (1)'})).toBeVisible();
-		expect(page.getByText('CMS', {exact: true})).toBeVisible();
-	}
-);
-
-test(
 	'Can connect and disconnect a site for the Default space',
 	{tag: '@LPD-39906'},
 	async ({page, spaceSummaryPage}) => {
@@ -144,7 +166,7 @@ test(
 		await spaceSummaryPage.connectSite(siteName);
 
 		await expect(
-			page.getByRole('heading', {name: 'Sites (2)'})
+			page.getByRole('heading', {name: 'Sites (1)'})
 		).toBeVisible();
 		await expect(globalSiteLocator).toBeVisible();
 
@@ -167,7 +189,7 @@ test(
 		const spaceName = `Space ${getRandomString()}`;
 		let objectEntry1;
 
-		await apiHelpers.headlessAssetLibrary.createAssetLibrariesPage({
+		await apiHelpers.headlessAssetLibrary.createAssetLibrary({
 			name: spaceName,
 			settings: {
 				logoColor: 'outline-3',

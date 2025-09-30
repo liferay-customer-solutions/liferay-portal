@@ -391,7 +391,9 @@ public class ContactsEngineClientImpl
 
 		post(
 			faroProject, Collections.emptyMap(), "/projects",
-			Collections.emptyMap(), new AsahProject(projectId), Void.class);
+			Collections.emptyMap(),
+			new AsahProject(projectId, faroProject.getLastAnniversaryDate()),
+			Void.class);
 
 		return projectId;
 	}
@@ -2454,6 +2456,24 @@ public class ContactsEngineClientImpl
 	}
 
 	@Override
+	public void insertBQProjects(List<FaroProject> faroProjects)
+		throws Exception {
+
+		List<AsahProject> asahProjects = new ArrayList<>();
+
+		for (FaroProject faroProject : faroProjects) {
+			asahProjects.add(
+				new AsahProject(
+					faroProject.getProjectId(), faroProject.getStartDate()));
+		}
+
+		post(
+			faroProjects.get(0), Collections.emptyMap(), "/bq-projects",
+			Collections.emptyMap(), new AsahProject(asahProjects), Void.class,
+			Collections.emptyMap());
+	}
+
+	@Override
 	public Channel patchChannel(
 		FaroProject faroProject, String id, String name) {
 
@@ -2621,6 +2641,17 @@ public class ContactsEngineClientImpl
 
 		return post(
 			faroProject, Rels.DATA_SOURCE_REFRESH_LIFERAY, null, List.class);
+	}
+
+	@Override
+	public void updateBQProject(FaroProject faroProject, Date startDate)
+		throws Exception {
+
+		patch(
+			faroProject, Collections.emptyMap(), "/bq-projects",
+			Collections.emptyMap(),
+			new AsahProject(faroProject.getProjectId(), startDate), Void.class,
+			Collections.emptyMap());
 	}
 
 	@Override

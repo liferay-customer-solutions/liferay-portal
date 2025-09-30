@@ -300,10 +300,12 @@ public abstract class BaseSLAResultResourceTestCase {
 	protected SLAResult testGraphQLGetProcessLastSLAResult_addSLAResult()
 		throws Exception {
 
-		return testGraphQLSLAResult_addSLAResult();
+		return testGraphQLProcessSLAResult_addSLAResult();
 	}
 
-	protected SLAResult testGraphQLSLAResult_addSLAResult() throws Exception {
+	protected SLAResult testGraphQLProcessSLAResult_addSLAResult()
+		throws Exception {
+
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
@@ -484,6 +486,8 @@ public abstract class BaseSLAResultResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("id"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

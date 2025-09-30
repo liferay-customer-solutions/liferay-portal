@@ -226,8 +226,7 @@ public abstract class BasePageElementResourceTestCase {
 			testDeleteSitePageSpecificationPageExperiencePageElement_getSiteExternalReferenceCode()
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return testGroup.getExternalReferenceCode();
 	}
 
 	protected String
@@ -277,8 +276,7 @@ public abstract class BasePageElementResourceTestCase {
 			testGetSitePageSpecificationPageExperiencePageElement_getSiteExternalReferenceCode()
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return testGroup.getExternalReferenceCode();
 	}
 
 	protected String
@@ -768,8 +766,7 @@ public abstract class BasePageElementResourceTestCase {
 			testPutSitePageSpecificationPageExperiencePageElement_getSiteExternalReferenceCode()
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return testGroup.getExternalReferenceCode();
 	}
 
 	protected String
@@ -969,6 +966,8 @@ public abstract class BasePageElementResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("externalReferenceCode"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

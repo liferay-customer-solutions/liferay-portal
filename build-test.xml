@@ -930,6 +930,7 @@ jdbc.default.connectionProperties=oracle.jdbc.ReadTimeout=0;oracle.net.CONNECT_T
 	</macrodef>
 
 	<macrodef name="get-browser-property">
+		<attribute default="" name="browser.version" />
 		<attribute name="property.name" />
 
 		<sequential>
@@ -942,7 +943,14 @@ jdbc.default.connectionProperties=oracle.jdbc.ReadTimeout=0;oracle.net.CONNECT_T
 
 			<beanshell>
 				<![CDATA[
+					String browserVersion = "@{browser.version}";
 					String propertyName = project.getProperty("property.name");
+
+					if (!browserVersion.isEmpty() && propertyName.equals("browser.version")) {
+						project.setProperty(propertyName, browserVersion);
+
+						return;
+					}
 
 					StringBuilder sb = new StringBuilder();
 
@@ -950,6 +958,12 @@ jdbc.default.connectionProperties=oracle.jdbc.ReadTimeout=0;oracle.net.CONNECT_T
 					sb.append(project.getProperty("browser.type"));
 					sb.append(".");
 					sb.append(propertyName.substring(8));
+
+					if (!browserVersion.isEmpty()) {
+						sb.append("[");
+						sb.append(browserVersion);
+						sb.append("]");
+					}
 
 					propertyValue = project.getProperty(sb.toString());
 
@@ -7713,10 +7727,12 @@ org.apache.catalina.startup.ClassLoaderFactory.level=INFO]]>
 
 	<macrodef name="start-docker-browser">
 		<sequential>
+			<get-testcase-property property.name="browser.chrome.version" />
 			<get-browser-property property.name="browser.docker.browser.options" />
-			<get-browser-property property.name="browser.docker.image" />
 			<get-browser-property property.name="browser.docker.run.options" />
 			<get-browser-property property.name="browser.host" />
+
+			<get-browser-property browser.version="${browser.chrome.version}" property.name="browser.docker.image" />
 
 			<propertyregex
 				input="${portal.dir}"
@@ -12921,18 +12937,20 @@ jdbc.test.password=${database.password}</echo>
 			<equals arg1="${ms.exchange.enabled}" arg2="true" />
 
 			<then>
-				<echo append="true" file="portal-impl/src/portal-ext.properties">
-mail.session.mail=true
-mail.session.mail.pop3.host=outlook.office365.com
-mail.session.mail.pop3.port=995
-mail.session.mail.pop3.user=qa-exchange-pop-test@liferay0.onmicrosoft.com
-mail.session.mail.smtp.host=smtp.office365.com
-mail.session.mail.smtp.port=587
-mail.session.mail.smtp.user=qa-exchange-pop-test@liferay0.onmicrosoft.com
-mail.session.mail.store.protocol=pop3s
+				<echo append="true" file="${liferay.home}/osgi/configs/com.liferay.mail.settings.configuration.MailSettingCompanyConfiguration.config"><![CDATA[
+enablePOPServerNotifications=b"true"
+incomingPOPPort="995"
+incomingPOPServer="outlook.office365.com"
+outgoingSMTPPort="587"
+outgoingSMTPServer="smtp.office365.com"
+popUserName="qa-exchange-pop-test@liferay0.onmicrosoft.com"
+smtpUserName="qa-exchange-pop-test@liferay0.onmicrosoft.com"
+storeProtocol="pop3s"
+]]>
+				</echo>
 
+				<echo append="true" file="portal-impl/src/portal-ext.properties">
 pop.server.subdomain=
-pop.server.notifications.enabled=true
 				</echo>
 			</then>
 		</if>
@@ -13201,9 +13219,9 @@ include-and-override=${liferay.home}/portal-setup-wizard.properties</echo>
 		<if>
 			<isset property="test.smtp.server.enabled" />
 			<then>
-				<echo append="true" file="portal-impl/src/portal-ext.properties">
-
-mail.session.mail.smtp.port=25000</echo>
+				<echo append="true" file="${liferay.home}/osgi/configs/com.liferay.mail.settings.configuration.MailSettingCompanyConfiguration.config"><![CDATA[
+outgoingSMTPPort="25000"
+]]></echo>
 			</then>
 		</if>
 
@@ -14522,8 +14540,7 @@ analytics.cloud.domain.allowed=*</echo>
 	</target>
 
 	<target name="prepare-system-ext-properties">
-		<echo file="${app.server.classes.portal.dir}/system-ext.properties">jdbc.data.source.anti.time.drift=true
-log.sanitizer.enabled=false</echo>
+		<echo file="${app.server.classes.portal.dir}/system-ext.properties">log.sanitizer.enabled=false</echo>
 
 		<get-testcase-property property.name="custom.system.properties" />
 
@@ -17433,17 +17450,6 @@ CATALINA_OPTS="$CATALINA_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.managemen
 				<stop-docker-os />
 
 				<start-docker-os />
-			</then>
-		</if>
-
-		<get-browser-property property.name="browser.docker.image" />
-
-		<if>
-			<isset property="browser.docker.image" />
-			<then>
-				<stop-docker-browser />
-
-				<start-docker-browser />
 			</then>
 		</if>
 

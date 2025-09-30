@@ -80,6 +80,19 @@
 	},
 	{
 		"classNames": [
+			"BasePanelApp"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-7870",
+		"methodsToFormat": [
+			{
+				"from": "regex:@Override\\s*@Reference\\s*\\(\\s*target\\s*=\\s*(?<target>\"[\\s\\S]*?\"\\)\"),[\\s\\S]*?\\)\\s*public\\s+void\\s+setPortlet\\(Portlet\\s+portlet\\)\\s*\\{[\\s\\S]*?\\}",
+				"to": "@Reference(\n\t\ttarget = ${target}\n\t)\n\tprivate Portlet _portlet;\n\n\t@Override\n\tpublic Portlet getPortlet() {\n\t\treturn _portlet;\n\t}"
+			}
+		]
+	},
+	{
+		"classNames": [
 			"AssetDisplayPageFriendlyURLProvider"
 		],
 		"from": "getFriendlyURL(String paramName, long paramName, Locale paramName, ThemeDisplay paramName)",
@@ -4910,12 +4923,25 @@
 		"to": "getHelperUtilities(param#1#)"
 	},
 	{
+		"from": "Liferay.Notice",
+		"hasMessage": true,
+		"issueKey": "LPD-56577",
+		"validExtensions": [
+			"jsp"
+		]
+	},
+	{
 		"classNames": [
 			"SitemapManager"
 		],
 		"from": "getSiteMapManager(long paramName, boolean paramName, ThemeDisplay paramName)",
 		"issueKey": "LPD-59820",
 		"to": "getSitemap(param#0#, param#1#, param#2#)"
+	},
+	{
+		"from": "PluginPackage.REPOSITORY_XML_FILENAME_EXTENSION",
+		"issueKey": "LPD-61573",
+		"to": "\"xml\""
 	},
 	{
 		"from": "CookieKeys.COMMERCE_CONTINUE_AS_GUEST",

@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PropsValues;
@@ -69,6 +70,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -267,6 +269,127 @@ public abstract class BaseERCScopedTestEntityResourceTestCase {
 	}
 
 	@Test
+	public void testGraphQLDeleteAssetLibraryERCScopedTestEntity()
+		throws Exception {
+
+		// No namespace
+
+		ERCScopedTestEntity ercScopedTestEntity1 =
+			testGraphQLDeleteAssetLibraryERCScopedTestEntity_addERCScopedTestEntity();
+
+		Assert.assertTrue(
+			JSONUtil.getValueAsBoolean(
+				invokeGraphQLMutation(
+					new GraphQLField(
+						"deleteAssetLibraryERCScopedTestEntity",
+						new HashMap<String, Object>() {
+							{
+								put(
+									"assetLibraryExternalReferenceCode",
+									"\"" +
+										ercScopedTestEntity1.
+											getAssetLibraryExternalReferenceCode() +
+												"\"");
+								put(
+									"ercScopedTestEntityExternalReferenceCode",
+									"\"" +
+										ercScopedTestEntity1.
+											getExternalReferenceCode() + "\"");
+							}
+						})),
+				"JSONObject/data",
+				"Object/deleteAssetLibraryERCScopedTestEntity"));
+
+		JSONArray errorsJSONArray1 = JSONUtil.getValueAsJSONArray(
+			invokeGraphQLQuery(
+				new GraphQLField(
+					"assetLibraryERCScopedTestEntity",
+					new HashMap<String, Object>() {
+						{
+							put(
+								"assetLibraryExternalReferenceCode",
+								"\"" +
+									ercScopedTestEntity1.
+										getAssetLibraryExternalReferenceCode() +
+											"\"");
+							put(
+								"ercScopedTestEntityExternalReferenceCode",
+								"\"" +
+									ercScopedTestEntity1.
+										getExternalReferenceCode() + "\"");
+						}
+					},
+					getGraphQLFields())),
+			"JSONArray/errors");
+
+		Assert.assertTrue(errorsJSONArray1.length() > 0);
+
+		// Using the namespace test_v1_0
+
+		ERCScopedTestEntity ercScopedTestEntity2 =
+			testGraphQLDeleteAssetLibraryERCScopedTestEntity_addERCScopedTestEntity();
+
+		Assert.assertTrue(
+			JSONUtil.getValueAsBoolean(
+				invokeGraphQLMutation(
+					new GraphQLField(
+						"test_v1_0",
+						new GraphQLField(
+							"deleteAssetLibraryERCScopedTestEntity",
+							new HashMap<String, Object>() {
+								{
+									put(
+										"assetLibraryExternalReferenceCode",
+										"\"" +
+											ercScopedTestEntity2.
+												getAssetLibraryExternalReferenceCode() +
+													"\"");
+									put(
+										"ercScopedTestEntityExternalReferenceCode",
+										"\"" +
+											ercScopedTestEntity2.
+												getExternalReferenceCode() +
+													"\"");
+								}
+							}))),
+				"JSONObject/data", "JSONObject/test_v1_0",
+				"Object/deleteAssetLibraryERCScopedTestEntity"));
+
+		JSONArray errorsJSONArray2 = JSONUtil.getValueAsJSONArray(
+			invokeGraphQLQuery(
+				new GraphQLField(
+					"test_v1_0",
+					new GraphQLField(
+						"assetLibraryERCScopedTestEntity",
+						new HashMap<String, Object>() {
+							{
+								put(
+									"assetLibraryExternalReferenceCode",
+									"\"" +
+										ercScopedTestEntity2.
+											getAssetLibraryExternalReferenceCode() +
+												"\"");
+								put(
+									"ercScopedTestEntityExternalReferenceCode",
+									"\"" +
+										ercScopedTestEntity2.
+											getExternalReferenceCode() + "\"");
+							}
+						},
+						getGraphQLFields()))),
+			"JSONArray/errors");
+
+		Assert.assertTrue(errorsJSONArray2.length() > 0);
+	}
+
+	protected ERCScopedTestEntity
+			testGraphQLDeleteAssetLibraryERCScopedTestEntity_addERCScopedTestEntity()
+		throws Exception {
+
+		return testGraphQLAssetLibraryERCScopedTestEntity_addERCScopedTestEntity();
+	}
+
+	@Test
 	public void testDeleteSiteERCScopedTestEntity() throws Exception {
 		@SuppressWarnings("PMD.UnusedLocalVariable")
 		ERCScopedTestEntity ercScopedTestEntity =
@@ -310,9 +433,15 @@ public abstract class BaseERCScopedTestEntityResourceTestCase {
 			JSONUtil.getValueAsBoolean(
 				invokeGraphQLMutation(
 					new GraphQLField(
-						"deleteERCScopedTestEntity",
+						"deleteSiteERCScopedTestEntity",
 						new HashMap<String, Object>() {
 							{
+								put(
+									"siteExternalReferenceCode",
+									"\"" +
+										ercScopedTestEntity1.
+											getSiteExternalReferenceCode() +
+												"\"");
 								put(
 									"ercScopedTestEntityExternalReferenceCode",
 									"\"" +
@@ -320,7 +449,7 @@ public abstract class BaseERCScopedTestEntityResourceTestCase {
 											getExternalReferenceCode() + "\"");
 							}
 						})),
-				"JSONObject/data", "Object/deleteERCScopedTestEntity"));
+				"JSONObject/data", "Object/deleteSiteERCScopedTestEntity"));
 
 		JSONArray errorsJSONArray1 = JSONUtil.getValueAsJSONArray(
 			invokeGraphQLQuery(
@@ -329,13 +458,18 @@ public abstract class BaseERCScopedTestEntityResourceTestCase {
 					new HashMap<String, Object>() {
 						{
 							put(
+								"siteExternalReferenceCode",
+								"\"" +
+									ercScopedTestEntity1.
+										getSiteExternalReferenceCode() + "\"");
+							put(
 								"ercScopedTestEntityExternalReferenceCode",
 								"\"" +
 									ercScopedTestEntity1.
 										getExternalReferenceCode() + "\"");
 						}
 					},
-					new GraphQLField("ercScopedTestEntityId"))),
+					getGraphQLFields())),
 			"JSONArray/errors");
 
 		Assert.assertTrue(errorsJSONArray1.length() > 0);
@@ -351,9 +485,15 @@ public abstract class BaseERCScopedTestEntityResourceTestCase {
 					new GraphQLField(
 						"test_v1_0",
 						new GraphQLField(
-							"deleteERCScopedTestEntity",
+							"deleteSiteERCScopedTestEntity",
 							new HashMap<String, Object>() {
 								{
+									put(
+										"siteExternalReferenceCode",
+										"\"" +
+											ercScopedTestEntity2.
+												getSiteExternalReferenceCode() +
+													"\"");
 									put(
 										"ercScopedTestEntityExternalReferenceCode",
 										"\"" +
@@ -363,7 +503,7 @@ public abstract class BaseERCScopedTestEntityResourceTestCase {
 								}
 							}))),
 				"JSONObject/data", "JSONObject/test_v1_0",
-				"Object/deleteERCScopedTestEntity"));
+				"Object/deleteSiteERCScopedTestEntity"));
 
 		JSONArray errorsJSONArray2 = JSONUtil.getValueAsJSONArray(
 			invokeGraphQLQuery(
@@ -374,13 +514,19 @@ public abstract class BaseERCScopedTestEntityResourceTestCase {
 						new HashMap<String, Object>() {
 							{
 								put(
+									"siteExternalReferenceCode",
+									"\"" +
+										ercScopedTestEntity2.
+											getSiteExternalReferenceCode() +
+												"\"");
+								put(
 									"ercScopedTestEntityExternalReferenceCode",
 									"\"" +
 										ercScopedTestEntity2.
 											getExternalReferenceCode() + "\"");
 							}
 						},
-						new GraphQLField("ercScopedTestEntityId")))),
+						getGraphQLFields()))),
 			"JSONArray/errors");
 
 		Assert.assertTrue(errorsJSONArray2.length() > 0);
@@ -390,7 +536,7 @@ public abstract class BaseERCScopedTestEntityResourceTestCase {
 			testGraphQLDeleteSiteERCScopedTestEntity_addERCScopedTestEntity()
 		throws Exception {
 
-		return testGraphQLERCScopedTestEntity_addERCScopedTestEntity();
+		return testGraphQLSiteERCScopedTestEntity_addERCScopedTestEntity();
 	}
 
 	@Test
@@ -499,6 +645,91 @@ public abstract class BaseERCScopedTestEntityResourceTestCase {
 		throws Exception {
 
 		return irrelevantDepotEntryGroup.getExternalReferenceCode();
+	}
+
+	@Test
+	public void testGraphQLGetAssetLibraryERCScopedTestEntitiesPage()
+		throws Exception {
+
+		String assetLibraryExternalReferenceCode =
+			testGetAssetLibraryERCScopedTestEntitiesPage_getAssetLibraryExternalReferenceCode();
+
+		GraphQLField graphQLField = new GraphQLField(
+			"assetLibraryERCScopedTestEntities",
+			new HashMap<String, Object>() {
+				{
+					put(
+						"assetLibraryExternalReferenceCode",
+						"\"" + assetLibraryExternalReferenceCode + "\"");
+				}
+			},
+			new GraphQLField("items", getGraphQLFields()),
+			new GraphQLField("page"), new GraphQLField("totalCount"));
+
+		// No namespace
+
+		JSONObject assetLibraryERCScopedTestEntitiesJSONObject =
+			JSONUtil.getValueAsJSONObject(
+				invokeGraphQLQuery(graphQLField), "JSONObject/data",
+				"JSONObject/assetLibraryERCScopedTestEntities");
+
+		long totalCount = assetLibraryERCScopedTestEntitiesJSONObject.getLong(
+			"totalCount");
+
+		ERCScopedTestEntity ercScopedTestEntity1 =
+			testGraphQLAssetLibraryERCScopedTestEntity_addERCScopedTestEntity(
+				assetLibraryExternalReferenceCode, randomERCScopedTestEntity());
+
+		ERCScopedTestEntity ercScopedTestEntity2 =
+			testGraphQLAssetLibraryERCScopedTestEntity_addERCScopedTestEntity(
+				assetLibraryExternalReferenceCode, randomERCScopedTestEntity());
+
+		assetLibraryERCScopedTestEntitiesJSONObject =
+			JSONUtil.getValueAsJSONObject(
+				invokeGraphQLQuery(graphQLField), "JSONObject/data",
+				"JSONObject/assetLibraryERCScopedTestEntities");
+
+		Assert.assertEquals(
+			totalCount + 2,
+			assetLibraryERCScopedTestEntitiesJSONObject.getLong("totalCount"));
+
+		assertContains(
+			ercScopedTestEntity1,
+			Arrays.asList(
+				ERCScopedTestEntitySerDes.toDTOs(
+					assetLibraryERCScopedTestEntitiesJSONObject.getString(
+						"items"))));
+		assertContains(
+			ercScopedTestEntity2,
+			Arrays.asList(
+				ERCScopedTestEntitySerDes.toDTOs(
+					assetLibraryERCScopedTestEntitiesJSONObject.getString(
+						"items"))));
+
+		// Using the namespace test_v1_0
+
+		assetLibraryERCScopedTestEntitiesJSONObject =
+			JSONUtil.getValueAsJSONObject(
+				invokeGraphQLQuery(new GraphQLField("test_v1_0", graphQLField)),
+				"JSONObject/data", "JSONObject/test_v1_0",
+				"JSONObject/assetLibraryERCScopedTestEntities");
+
+		Assert.assertEquals(
+			totalCount + 2,
+			assetLibraryERCScopedTestEntitiesJSONObject.getLong("totalCount"));
+
+		assertContains(
+			ercScopedTestEntity1,
+			Arrays.asList(
+				ERCScopedTestEntitySerDes.toDTOs(
+					assetLibraryERCScopedTestEntitiesJSONObject.getString(
+						"items"))));
+		assertContains(
+			ercScopedTestEntity2,
+			Arrays.asList(
+				ERCScopedTestEntitySerDes.toDTOs(
+					assetLibraryERCScopedTestEntitiesJSONObject.getString(
+						"items"))));
 	}
 
 	@Test
@@ -657,7 +888,7 @@ public abstract class BaseERCScopedTestEntityResourceTestCase {
 			testGraphQLGetAssetLibraryERCScopedTestEntity_addERCScopedTestEntity()
 		throws Exception {
 
-		return testGraphQLERCScopedTestEntity_addERCScopedTestEntity();
+		return testGraphQLAssetLibraryERCScopedTestEntity_addERCScopedTestEntity();
 	}
 
 	@Test
@@ -759,6 +990,82 @@ public abstract class BaseERCScopedTestEntityResourceTestCase {
 		throws Exception {
 
 		return irrelevantGroup.getExternalReferenceCode();
+	}
+
+	@Test
+	public void testGraphQLGetSiteERCScopedTestEntitiesPage() throws Exception {
+		String siteExternalReferenceCode =
+			testGetSiteERCScopedTestEntitiesPage_getSiteExternalReferenceCode();
+
+		GraphQLField graphQLField = new GraphQLField(
+			"eRCScopedTestEntities",
+			new HashMap<String, Object>() {
+				{
+					put(
+						"siteExternalReferenceCode",
+						"\"" + siteExternalReferenceCode + "\"");
+				}
+			},
+			new GraphQLField("items", getGraphQLFields()),
+			new GraphQLField("page"), new GraphQLField("totalCount"));
+
+		// No namespace
+
+		JSONObject eRCScopedTestEntitiesJSONObject =
+			JSONUtil.getValueAsJSONObject(
+				invokeGraphQLQuery(graphQLField), "JSONObject/data",
+				"JSONObject/eRCScopedTestEntities");
+
+		long totalCount = eRCScopedTestEntitiesJSONObject.getLong("totalCount");
+
+		ERCScopedTestEntity ercScopedTestEntity1 =
+			testGraphQLSiteERCScopedTestEntity_addERCScopedTestEntity(
+				siteExternalReferenceCode, randomERCScopedTestEntity());
+
+		ERCScopedTestEntity ercScopedTestEntity2 =
+			testGraphQLSiteERCScopedTestEntity_addERCScopedTestEntity(
+				siteExternalReferenceCode, randomERCScopedTestEntity());
+
+		eRCScopedTestEntitiesJSONObject = JSONUtil.getValueAsJSONObject(
+			invokeGraphQLQuery(graphQLField), "JSONObject/data",
+			"JSONObject/eRCScopedTestEntities");
+
+		Assert.assertEquals(
+			totalCount + 2,
+			eRCScopedTestEntitiesJSONObject.getLong("totalCount"));
+
+		assertContains(
+			ercScopedTestEntity1,
+			Arrays.asList(
+				ERCScopedTestEntitySerDes.toDTOs(
+					eRCScopedTestEntitiesJSONObject.getString("items"))));
+		assertContains(
+			ercScopedTestEntity2,
+			Arrays.asList(
+				ERCScopedTestEntitySerDes.toDTOs(
+					eRCScopedTestEntitiesJSONObject.getString("items"))));
+
+		// Using the namespace test_v1_0
+
+		eRCScopedTestEntitiesJSONObject = JSONUtil.getValueAsJSONObject(
+			invokeGraphQLQuery(new GraphQLField("test_v1_0", graphQLField)),
+			"JSONObject/data", "JSONObject/test_v1_0",
+			"JSONObject/eRCScopedTestEntities");
+
+		Assert.assertEquals(
+			totalCount + 2,
+			eRCScopedTestEntitiesJSONObject.getLong("totalCount"));
+
+		assertContains(
+			ercScopedTestEntity1,
+			Arrays.asList(
+				ERCScopedTestEntitySerDes.toDTOs(
+					eRCScopedTestEntitiesJSONObject.getString("items"))));
+		assertContains(
+			ercScopedTestEntity2,
+			Arrays.asList(
+				ERCScopedTestEntitySerDes.toDTOs(
+					eRCScopedTestEntitiesJSONObject.getString("items"))));
 	}
 
 	@Test
@@ -913,7 +1220,7 @@ public abstract class BaseERCScopedTestEntityResourceTestCase {
 			testGraphQLGetSiteERCScopedTestEntity_addERCScopedTestEntity()
 		throws Exception {
 
-		return testGraphQLERCScopedTestEntity_addERCScopedTestEntity();
+		return testGraphQLSiteERCScopedTestEntity_addERCScopedTestEntity();
 	}
 
 	@Test
@@ -936,6 +1243,22 @@ public abstract class BaseERCScopedTestEntityResourceTestCase {
 
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
+	}
+
+	@Test
+	public void testGraphQLPostAssetLibraryERCScopedTestEntity()
+		throws Exception {
+
+		ERCScopedTestEntity randomERCScopedTestEntity =
+			randomERCScopedTestEntity();
+
+		ERCScopedTestEntity ercScopedTestEntity =
+			testGraphQLAssetLibraryERCScopedTestEntity_addERCScopedTestEntity(
+				testDepotEntryGroup.getExternalReferenceCode(),
+				randomERCScopedTestEntity);
+
+		Assert.assertTrue(
+			equals(randomERCScopedTestEntity, ercScopedTestEntity));
 	}
 
 	@Test
@@ -966,7 +1289,8 @@ public abstract class BaseERCScopedTestEntityResourceTestCase {
 			randomERCScopedTestEntity();
 
 		ERCScopedTestEntity ercScopedTestEntity =
-			testGraphQLERCScopedTestEntity_addERCScopedTestEntity(
+			testGraphQLSiteERCScopedTestEntity_addERCScopedTestEntity(
+				testGroup.getExternalReferenceCode(),
 				randomERCScopedTestEntity);
 
 		Assert.assertTrue(
@@ -1119,61 +1443,18 @@ public abstract class BaseERCScopedTestEntityResourceTestCase {
 		}
 	}
 
-	protected void appendGraphQLFieldValue(StringBuilder sb, Object value)
-		throws Exception {
-
-		if (value instanceof Object[]) {
-			StringBuilder arraySB = new StringBuilder("[");
-
-			for (Object object : (Object[])value) {
-				if (arraySB.length() > 1) {
-					arraySB.append(", ");
-				}
-
-				arraySB.append("{");
-
-				Class<?> clazz = object.getClass();
-
-				for (java.lang.reflect.Field field :
-						getDeclaredFields(clazz.getSuperclass())) {
-
-					arraySB.append(field.getName());
-					arraySB.append(": ");
-
-					appendGraphQLFieldValue(arraySB, field.get(object));
-
-					arraySB.append(", ");
-				}
-
-				arraySB.setLength(arraySB.length() - 2);
-
-				arraySB.append("}");
-			}
-
-			arraySB.append("]");
-
-			sb.append(arraySB.toString());
-		}
-		else if (value instanceof String) {
-			sb.append("\"");
-			sb.append(value);
-			sb.append("\"");
-		}
-		else {
-			sb.append(value);
-		}
-	}
-
 	protected ERCScopedTestEntity
-			testGraphQLERCScopedTestEntity_addERCScopedTestEntity()
+			testGraphQLAssetLibraryERCScopedTestEntity_addERCScopedTestEntity()
 		throws Exception {
 
-		return testGraphQLERCScopedTestEntity_addERCScopedTestEntity(
+		return testGraphQLAssetLibraryERCScopedTestEntity_addERCScopedTestEntity(
+			testDepotEntryGroup.getExternalReferenceCode(),
 			randomERCScopedTestEntity());
 	}
 
 	protected ERCScopedTestEntity
-			testGraphQLERCScopedTestEntity_addERCScopedTestEntity(
+			testGraphQLAssetLibraryERCScopedTestEntity_addERCScopedTestEntity(
+				String assetLibraryExternalReferenceCode,
 				ERCScopedTestEntity ercScopedTestEntity)
 		throws Exception {
 
@@ -1185,27 +1466,77 @@ public abstract class BaseERCScopedTestEntityResourceTestCase {
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(ERCScopedTestEntity.class)) {
 
-			if (!ArrayUtil.contains(
-					getAdditionalAssertFieldNames(), field.getName())) {
+			if (getGraphQLValue(field.get(ercScopedTestEntity)) != null) {
+				if (sb.length() > 1) {
+					sb.append(", ");
+				}
 
-				continue;
+				sb.append(field.getName());
+				sb.append(": ");
+				sb.append(getGraphQLValue(field.get(ercScopedTestEntity)));
 			}
-
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append(field.getName());
-			sb.append(": ");
-
-			appendGraphQLFieldValue(sb, field.get(ercScopedTestEntity));
 		}
 
 		sb.append("}");
 
 		List<GraphQLField> graphQLFields = getGraphQLFields();
 
-		graphQLFields.add(new GraphQLField("externalReferenceCode"));
+		return jsonDeserializer.deserialize(
+			JSONUtil.getValueAsString(
+				invokeGraphQLMutation(
+					new GraphQLField(
+						"createAssetLibraryERCScopedTestEntity",
+						new HashMap<String, Object>() {
+							{
+								put(
+									"assetLibraryExternalReferenceCode",
+									"\"" + assetLibraryExternalReferenceCode +
+										"\"");
+								put("ercScopedTestEntity", sb.toString());
+							}
+						},
+						graphQLFields)),
+				"JSONObject/data",
+				"JSONObject/createAssetLibraryERCScopedTestEntity"),
+			ERCScopedTestEntity.class);
+	}
+
+	protected ERCScopedTestEntity
+			testGraphQLSiteERCScopedTestEntity_addERCScopedTestEntity()
+		throws Exception {
+
+		return testGraphQLSiteERCScopedTestEntity_addERCScopedTestEntity(
+			testGroup.getExternalReferenceCode(), randomERCScopedTestEntity());
+	}
+
+	protected ERCScopedTestEntity
+			testGraphQLSiteERCScopedTestEntity_addERCScopedTestEntity(
+				String siteExternalReferenceCode,
+				ERCScopedTestEntity ercScopedTestEntity)
+		throws Exception {
+
+		JSONDeserializer<ERCScopedTestEntity> jsonDeserializer =
+			JSONFactoryUtil.createJSONDeserializer();
+
+		StringBuilder sb = new StringBuilder("{");
+
+		for (java.lang.reflect.Field field :
+				getDeclaredFields(ERCScopedTestEntity.class)) {
+
+			if (getGraphQLValue(field.get(ercScopedTestEntity)) != null) {
+				if (sb.length() > 1) {
+					sb.append(", ");
+				}
+
+				sb.append(field.getName());
+				sb.append(": ");
+				sb.append(getGraphQLValue(field.get(ercScopedTestEntity)));
+			}
+		}
+
+		sb.append("}");
+
+		List<GraphQLField> graphQLFields = getGraphQLFields();
 
 		return jsonDeserializer.deserialize(
 			JSONUtil.getValueAsString(
@@ -1215,14 +1546,81 @@ public abstract class BaseERCScopedTestEntityResourceTestCase {
 						new HashMap<String, Object>() {
 							{
 								put(
-									"siteKey",
-									"\"" + testGroup.getGroupId() + "\"");
+									"siteExternalReferenceCode",
+									"\"" + siteExternalReferenceCode + "\"");
 								put("ercScopedTestEntity", sb.toString());
 							}
 						},
 						graphQLFields)),
 				"JSONObject/data", "JSONObject/createSiteERCScopedTestEntity"),
 			ERCScopedTestEntity.class);
+	}
+
+	protected String getGraphQLValue(Object value) throws Exception {
+		if (value == null) {
+			return null;
+		}
+		else if (value instanceof Boolean || value instanceof Number) {
+			return value.toString();
+		}
+		else if (value instanceof Date date) {
+			return "\"" +
+				DateUtil.getDate(
+					date, "yyyy-MM-dd'T'HH:mm:ss'Z'", LocaleUtil.getDefault(),
+					TimeZone.getTimeZone("UTC")) + "\"";
+		}
+		else if (value instanceof Enum<?> enm) {
+			return enm.name();
+		}
+		else if (value instanceof Map<?, ?> map) {
+			List<String> entries = new ArrayList<>();
+
+			for (Map.Entry<?, ?> entry : map.entrySet()) {
+				String graphQLValue = getGraphQLValue(entry.getValue());
+
+				if (graphQLValue != null) {
+					entries.add(entry.getKey() + ": " + graphQLValue);
+				}
+			}
+
+			return "{" + String.join(", ", entries) + "}";
+		}
+		else if (value instanceof Object[] array) {
+			List<String> entries = new ArrayList<>();
+
+			for (Object entry : array) {
+				String graphQLValue = getGraphQLValue(entry);
+
+				if (graphQLValue != null) {
+					entries.add(graphQLValue);
+				}
+			}
+
+			return "[" + String.join(", ", entries) + "]";
+		}
+		else if (value instanceof String) {
+			return "\"" + value + "\"";
+		}
+		else {
+			List<String> entries = new ArrayList<>();
+
+			Class<?> clazz = value.getClass();
+			java.lang.reflect.Field[] declaredFields = getDeclaredFields(clazz);
+
+			if (declaredFields.length == 0) {
+				declaredFields = getDeclaredFields(clazz.getSuperclass());
+			}
+
+			for (java.lang.reflect.Field field : declaredFields) {
+				String graphQLValue = getGraphQLValue(field.get(value));
+
+				if (graphQLValue != null) {
+					entries.add(field.getName() + ": " + graphQLValue);
+				}
+			}
+
+			return "{" + String.join(", ", entries) + "}";
+		}
 	}
 
 	protected void assertContains(
@@ -1432,6 +1830,8 @@ public abstract class BaseERCScopedTestEntityResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("externalReferenceCode"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

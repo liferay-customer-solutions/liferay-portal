@@ -156,33 +156,35 @@ public abstract class Base${schemaName}ResourceImpl
 			parentSchemaName = javaMethodSignature.parentSchemaName!
 		/>
 
-		<#if stringUtil.equals(javaMethodSignature.methodName, "delete" + schemaName)>
-			<#assign deleteByIdBatchJavaMethodSignature = javaMethodSignature />
-		<#elseif stringUtil.equals(javaMethodSignature.methodName, "deleteAssetLibrary" + schemaName)>
-			<#assign deleteAssetLibraryBatchJavaMethodSignature = javaMethodSignature />
-		<#elseif stringUtil.equals(javaMethodSignature.methodName, "deleteByExternalReferenceCode") || stringUtil.equals(javaMethodSignature.methodName, "delete" + schemaName + "ByExternalReferenceCode")>
-			<#assign deleteByExternalReferenceCodeBatchJavaMethodSignature = javaMethodSignature />
-		<#elseif stringUtil.equals(javaMethodSignature.methodName, "deleteSite" + schemaName)>
-			<#assign deleteSiteBatchJavaMethodSignature = javaMethodSignature />
-		<#elseif stringUtil.equals(javaMethodSignature.methodName, "get" + schemaName)>
-			<#assign getByIdJavaMethodSignature = javaMethodSignature />
-		<#elseif freeMarkerTool.isExternalReferenceCodeMethod("get", javaMethodSignature)>
+		<#if freeMarkerTool.isExternalReferenceCodeMethod("get", javaMethodSignature)>
 			<#if parentSchemaName?has_content>
 				<#assign getParentByExternalReferenceCodeBatchJavaMethodSignatures = getParentByExternalReferenceCodeBatchJavaMethodSignatures + [javaMethodSignature] />
 			<#else>
 				<#assign getByExternalReferenceCodeBatchJavaMethodSignature = javaMethodSignature />
 			</#if>
+		<#elseif freeMarkerTool.isExternalReferenceCodeMethod("post", javaMethodSignature) && parentSchemaName?has_content>
+			<#assign postParentByExternalReferenceCodeBatchJavaMethodSignatures = postParentByExternalReferenceCodeBatchJavaMethodSignatures + [javaMethodSignature] />
+		<#elseif freeMarkerTool.isExternalReferenceCodeMethod("put", javaMethodSignature)>
+			<#if parentSchemaName?has_content>
+				<#assign putParentByExternalReferenceCodeBatchJavaMethodSignatures = putParentByExternalReferenceCodeBatchJavaMethodSignatures + [javaMethodSignature] />
+			<#else>
+				<#assign putByExternalReferenceCodeBatchJavaMethodSignature = javaMethodSignature />
+			</#if>
+		<#elseif stringUtil.equals(javaMethodSignature.methodName, "deleteAssetLibrary" + schemaName)>
+			<#assign deleteAssetLibraryBatchJavaMethodSignature = javaMethodSignature />
+		<#elseif stringUtil.equals(javaMethodSignature.methodName, "deleteByExternalReferenceCode") || stringUtil.equals(javaMethodSignature.methodName, "delete" + schemaName + "ByExternalReferenceCode")>
+			<#assign deleteByExternalReferenceCodeBatchJavaMethodSignature = javaMethodSignature />
+		<#elseif stringUtil.equals(javaMethodSignature.methodName, "delete" + schemaName)>
+			<#assign deleteByIdBatchJavaMethodSignature = javaMethodSignature />
+		<#elseif stringUtil.equals(javaMethodSignature.methodName, "deleteSite" + schemaName)>
+			<#assign deleteSiteBatchJavaMethodSignature = javaMethodSignature />
+		<#elseif stringUtil.equals(javaMethodSignature.methodName, "get" + schemaName)>
+			<#assign getByIdJavaMethodSignature = javaMethodSignature />
 		<#elseif stringUtil.equals(javaMethodSignature.methodName, "get" + parentSchemaName + schemaNames + "Page")>
-			<#if stringUtil.equals(javaMethodSignature.methodName, "getAssetLibrary" + schemaNames + "Page")>
-				<#assign getAssetLibraryBatchJavaMethodSignature = javaMethodSignature />
-			<#elseif stringUtil.equals(javaMethodSignature.methodName, "getSite" + schemaNames + "Page")>
-				<#assign getSiteBatchJavaMethodSignature = javaMethodSignature />
-			<#elseif stringUtil.equals(javaMethodSignature.methodName, "get" + parentSchemaName + schemaNames + "Page")>
-				<#if parentSchemaName?has_content>
-					<#assign getParentBatchJavaMethodSignatures = getParentBatchJavaMethodSignatures + [javaMethodSignature] />
-				<#else>
-					<#assign getBatchJavaMethodSignature = javaMethodSignature />
-				</#if>
+			<#if parentSchemaName?has_content>
+				<#assign getParentBatchJavaMethodSignatures = getParentBatchJavaMethodSignatures + [javaMethodSignature] />
+			<#else>
+				<#assign getBatchJavaMethodSignature = javaMethodSignature />
 			</#if>
 		<#elseif stringUtil.equals(javaMethodSignature.methodName, "patch" + schemaName)>
 			<#assign patchBatchJavaMethodSignature = javaMethodSignature />
@@ -192,16 +194,8 @@ public abstract class Base${schemaName}ResourceImpl
 			<#else>
 				<#assign postBatchJavaMethodSignature = javaMethodSignature />
 			</#if>
-		<#elseif freeMarkerTool.isExternalReferenceCodeMethod("post", javaMethodSignature) && parentSchemaName?has_content>
-			<#assign postParentByExternalReferenceCodeBatchJavaMethodSignatures = postParentByExternalReferenceCodeBatchJavaMethodSignatures + [javaMethodSignature] />
 		<#elseif stringUtil.equals(javaMethodSignature.methodName, "put" + schemaName)>
 			<#assign putBatchJavaMethodSignature = javaMethodSignature />
-		<#elseif freeMarkerTool.isExternalReferenceCodeMethod("put", javaMethodSignature)>
-			<#if parentSchemaName?has_content>
-				<#assign putParentByExternalReferenceCodeBatchJavaMethodSignatures = putParentByExternalReferenceCodeBatchJavaMethodSignatures + [javaMethodSignature] />
-			<#else>
-				<#assign putByExternalReferenceCodeBatchJavaMethodSignature = javaMethodSignature />
-			</#if>
 		</#if>
 
 		<#if freeMarkerTool.isGeneratePermissions(configYAML, javaMethodSignature, javaMethodSignatures, schema, schemaName)>
@@ -1193,45 +1187,19 @@ public abstract class Base${schemaName}ResourceImpl
 			<#if freeMarkerTool.hasReadVulcanBatchImplementation(javaMethodSignatures)>
 				<#assign parentParameterNames = [] />
 
-				<#if getAssetLibraryBatchJavaMethodSignature??>
-					<#assign parentParameterNames = parentParameterNames + ["assetLibraryId"] />
+				<#list getParentBatchJavaMethodSignatures as getParentBatchJavaMethodSignature>
+					<#assign parentParameterNames = parentParameterNames + [getParentBatchJavaMethodSignature.javaMethodParameters[0].parameterName] />
 
-					if (parameters.containsKey("assetLibraryId")) {
-						return ${getAssetLibraryBatchJavaMethodSignature.methodName}(
-							<@getReadBatchJavaMethodParameters javaMethodParameters = getAssetLibraryBatchJavaMethodSignature.javaMethodParameters />
+					if (parameters.containsKey("${getParentBatchJavaMethodSignature.javaMethodParameters[0].parameterName}")) {
+						return ${getParentBatchJavaMethodSignature.methodName}(
+							<@getReadBatchJavaMethodParameters javaMethodParameters = getParentBatchJavaMethodSignature.javaMethodParameters />
 						);
 					}
 					else
-				</#if>
-
-				<#if getSiteBatchJavaMethodSignature??>
-					<#assign parentParameterNames = parentParameterNames + ["siteId"] />
-
-					if (parameters.containsKey("siteId")) {
-						return ${getSiteBatchJavaMethodSignature.methodName}(
-							<@getReadBatchJavaMethodParameters javaMethodParameters = getSiteBatchJavaMethodSignature.javaMethodParameters />
-						);
-					}
-					else
-				</#if>
-
-				<#if getParentBatchJavaMethodSignatures?has_content>
-					<#list getParentBatchJavaMethodSignatures as parentBatchJavaMethodSignature>
-						<#assign
-							parentParameterNames = parentParameterNames + [parentBatchJavaMethodSignature.parentSchemaName!?uncap_first + "Id"]
-						/>
-
-						if (parameters.containsKey("${parentBatchJavaMethodSignature.parentSchemaName!?uncap_first + "Id"}")) {
-							return ${parentBatchJavaMethodSignature.methodName}(
-								<@getReadBatchJavaMethodParameters javaMethodParameters = parentBatchJavaMethodSignature.javaMethodParameters />
-							);
-						}
-						else
-					</#list>
-				</#if>
+				</#list>
 
 				<#if getBatchJavaMethodSignature??>
-					<#if getAssetLibraryBatchJavaMethodSignature?? || getSiteBatchJavaMethodSignature?? || getParentBatchJavaMethodSignatures?has_content>
+					<#if getParentBatchJavaMethodSignatures?has_content>
 						{
 					</#if>
 
@@ -1239,7 +1207,7 @@ public abstract class Base${schemaName}ResourceImpl
 						<@getReadBatchJavaMethodParameters javaMethodParameters = getBatchJavaMethodSignature.javaMethodParameters />
 					);
 
-					<#if getAssetLibraryBatchJavaMethodSignature?? || getSiteBatchJavaMethodSignature?? || getParentBatchJavaMethodSignatures?has_content>
+					<#if getParentBatchJavaMethodSignatures?has_content>
 						}
 					</#if>
 				<#else>

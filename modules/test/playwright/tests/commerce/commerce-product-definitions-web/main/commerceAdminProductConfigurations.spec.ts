@@ -9,7 +9,6 @@ import {applicationsMenuPageTest} from '../../../../fixtures/applicationsMenuPag
 import {commercePagesTest} from '../../../../fixtures/commercePagesTest';
 import {customFieldsPagesTest} from '../../../../fixtures/customFieldsPagesTest';
 import {dataApiHelpersTest} from '../../../../fixtures/dataApiHelpersTest';
-import {featureFlagsTest} from '../../../../fixtures/featureFlagsTest';
 import {loginTest} from '../../../../fixtures/loginTest';
 import {createCategories} from '../../../../helpers/CreateCategories';
 import {TCustomField} from '../../../../helpers/CustomFieldTypesHelper';
@@ -23,9 +22,6 @@ export const test = mergeTests(
 	commercePagesTest,
 	customFieldsPagesTest,
 	dataApiHelpersTest,
-	featureFlagsTest({
-		'LPD-10889': {enabled: true},
-	}),
 	loginTest()
 );
 
@@ -307,7 +303,7 @@ test('LPD-43013 Configuration Entry form in side panel', async ({
 
 	await (
 		await commerceAdminProductConfigurationListsPage.tableRowLink({
-			colIndex: 0,
+			colIndex: 1,
 			rowValue: configurationList.name,
 		})
 	).click();
@@ -492,7 +488,7 @@ test('LPD-43013 Configuration Entry form in side panel for virtual products', as
 
 	await (
 		await commerceAdminProductConfigurationListsPage.tableRowLink({
-			colIndex: 0,
+			colIndex: 1,
 			rowValue: configurationList.name,
 		})
 	).click();
@@ -555,7 +551,7 @@ test('LPD-43013 Edit configuration template', async ({
 
 	await (
 		await commerceAdminProductConfigurationListsPage.tableRowLink({
-			colIndex: 0,
+			colIndex: 1,
 			rowValue: configurationList.name,
 		})
 	).click();
@@ -844,7 +840,7 @@ test(
 
 		await (
 			await commerceAdminProductConfigurationListsPage.tableRowLink({
-				colIndex: 0,
+				colIndex: 1,
 				rowValue: productConfigurationList.name,
 			})
 		).click();
@@ -903,6 +899,7 @@ test(
 		await commerceAdminProductConfigurationEntriesPage.addDataSetFilter(
 			'Product Type',
 			'Simple',
+			true,
 			true
 		);
 
@@ -914,7 +911,8 @@ test(
 		await commerceAdminProductConfigurationEntriesPage.addDataSetFilter(
 			'Purchasable',
 			'Yes',
-			false
+			false,
+			true
 		);
 
 		await expect(
@@ -946,7 +944,8 @@ test(
 		await commerceAdminProductConfigurationEntriesPage.addDataSetFilter(
 			'Shippable',
 			'Yes',
-			false
+			false,
+			true
 		);
 
 		await expect(

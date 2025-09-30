@@ -184,7 +184,7 @@ public abstract class BaseAssetHistogramMetricResourceTestCase {
 	public void testGraphQLGetGroupAssetMetricAssetTypeHistogram()
 		throws Exception {
 
-		Assert.assertTrue(true);
+		Assert.assertTrue(false);
 	}
 
 	@Test

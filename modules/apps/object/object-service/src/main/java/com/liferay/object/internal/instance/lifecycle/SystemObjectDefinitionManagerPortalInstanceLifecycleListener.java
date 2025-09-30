@@ -312,7 +312,8 @@ public class SystemObjectDefinitionManagerPortalInstanceLifecycleListener
 				).put(
 					"info.item.identifier",
 					new String[] {
-						"com.liferay.info.item.ClassPKInfoItemIdentifier"
+						"com.liferay.info.item.ClassPKInfoItemIdentifier",
+						"com.liferay.info.item.ERCInfoItemIdentifier"
 					}
 				).put(
 					"item.class.name", itemClassName

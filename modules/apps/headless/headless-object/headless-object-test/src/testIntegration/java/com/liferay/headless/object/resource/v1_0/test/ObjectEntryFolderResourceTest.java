@@ -115,6 +115,8 @@ public class ObjectEntryFolderResourceTest
 
 		_testDepotEntryGroup = _groupLocalService.getGroup(
 			_testDepotEntry.getGroupId());
+
+		_updateGroup(false);
 	}
 
 	@Override
@@ -195,7 +197,7 @@ public class ObjectEntryFolderResourceTest
 		_testPostScopeScopeKeyObjectEntryFolderWithNonexistentParentObjectEntryFolderByObjectEntryFolderId();
 	}
 
-	@FeatureFlag("LPD-53981")
+	@FeatureFlag("LPD-17564")
 	@Override
 	@Test
 	public void testPostScopeScopeKeyObjectEntryFolderByExternalReferenceCodeRestore()
@@ -203,6 +205,8 @@ public class ObjectEntryFolderResourceTest
 
 		super.
 			testPostScopeScopeKeyObjectEntryFolderByExternalReferenceCodeRestore();
+
+		_updateGroup(true);
 
 		ObjectEntryFolder postObjectEntryFolder =
 			testPostScopeScopeKeyObjectEntryFolderByExternalReferenceCodeRestore_addObjectEntryFolder(
@@ -484,6 +488,15 @@ public class ObjectEntryFolderResourceTest
 	@Override
 	protected String testGetScopeScopeKeyObjectEntryFoldersPage_getScopeKey() {
 		return String.valueOf(_testDepotEntry.getGroupId());
+	}
+
+	@Override
+	protected String
+			testGraphQLDeleteScopeScopeKeyObjectEntryFolderByExternalReferenceCode_getScopeKey(
+				ObjectEntryFolder objectEntryFolder)
+		throws Exception {
+
+		return objectEntryFolder.getScopeKey();
 	}
 
 	@Override
@@ -1229,6 +1242,17 @@ public class ObjectEntryFolderResourceTest
 			Assert.assertEquals("NOT_FOUND", problem.getStatus());
 			Assert.assertNull(problem.getTitle());
 		}
+	}
+
+	private void _updateGroup(boolean trashEnabled) throws Exception {
+		UnicodeProperties unicodeProperties =
+			_testDepotEntryGroup.getTypeSettingsProperties();
+
+		unicodeProperties.setProperty(
+			"trashEnabled", String.valueOf(trashEnabled));
+
+		_testDepotEntryGroup = _groupLocalService.updateGroup(
+			_testDepotEntryGroup.getGroupId(), unicodeProperties.toString());
 	}
 
 	@Inject

@@ -33,6 +33,7 @@
 		"@clayui/tooltip": "3.145.0",
 		"@liferay/analytics-reports-js-components-web": "*",
 		"@liferay/frontend-data-set-web": "*",
+		"@liferay/frontend-js-item-selector-web": "*",
 		"@liferay/frontend-js-react-web": "*",
 		"@liferay/layout-js-components-web": "*",
 		"@liferay/object-js-components-web": "*",

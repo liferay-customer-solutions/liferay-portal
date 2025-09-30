@@ -123,6 +123,7 @@ import {config as portalWorkflowKaleoFormsWebConfig} from './tests/portal-workfl
 import {config as portalWorkflowMetricsWebConfig} from './tests/portal-workflow-metrics-web/main/config';
 import {config as portalWorkflowTaskWebConfig} from './tests/portal-workflow-task-web/main/config';
 import {config as portletConfigurationCssWebConfig} from './tests/portlet-configuration-css-web/main/config';
+import {config as productAnalyticsWebConfig} from './tests/product-analytics-web/main/config';
 import {config as productNavigationControlMenuWeb} from './tests/product-navigation-control-menu-web/main/config';
 import {config as productNavigationProductMenuWeb} from './tests/product-navigation-product-menu-web/main/config';
 import {config as productNavigationUserPersonalBarWebConfig} from './tests/product-navigation-user-personal-bar-web/main/config';
@@ -154,6 +155,7 @@ import {config as templateWebConfig} from './tests/template-web/main/config';
 import {config as usersAdminWebEmailConfig} from './tests/users-admin-web/email/config';
 import {config as usersAdminWebConfig} from './tests/users-admin-web/main/config';
 import {config as usersAdminWebPermissionsConfig} from './tests/users-admin-web/permissions/config';
+import {config as utilTaglibConfig} from './tests/util-taglib/main/config';
 import {config as wikiWebConfig} from './tests/wiki-web/main/config';
 import {config as customerConfig} from './tests/workspaces/liferay-customer-workspace/main/config';
 import {config as commerceWorkspaceConfig} from './tests/workspaces/liferay-workspace-commerce/main/config';
@@ -294,6 +296,7 @@ export default defineConfig({
 		portalWorkflowMetricsWebConfig,
 		portalWorkflowTaskWebConfig,
 		portletConfigurationCssWebConfig,
+		productAnalyticsWebConfig,
 		productNavigationControlMenuWeb,
 		productNavigationProductMenuWeb,
 		productNavigationUserPersonalBarWebConfig,
@@ -323,6 +326,7 @@ export default defineConfig({
 		usersAdminWebConfig,
 		usersAdminWebEmailConfig,
 		usersAdminWebPermissionsConfig,
+		utilTaglibConfig,
 		wikiWebConfig,
 		...setupProjects,
 	],

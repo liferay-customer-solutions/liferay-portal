@@ -80,7 +80,7 @@ public class ObjectDefinitionTreeUtil {
 			objectDefinitionPersistence.findByPrimaryKey(
 				objectRelationship.getObjectDefinitionId1());
 
-		if (objectDefinition1.getRootObjectDefinitionId() == 0) {
+		if (ArrayUtil.isEmpty(objectDefinition1.getRootObjectDefinitionIds())) {
 			_setRootObjectDefinitionIds(
 				new long[] {objectDefinition1.getObjectDefinitionId()},
 				objectDefinition1, objectDefinitionSettingLocalService,
@@ -153,13 +153,17 @@ public class ObjectDefinitionTreeUtil {
 			}
 		}
 
-		ObjectDefinition rootObjectDefinition =
-			objectDefinitionPersistence.findByPrimaryKey(
-				objectDefinition1.getRootObjectDefinitionId());
+		for (long rootObjectDefinitionId :
+				objectDefinition1.getRootObjectDefinitionIds()) {
 
-		if (rootObjectDefinition.isApproved()) {
-			objectDefinitionLocalService.deployObjectDefinition(
-				rootObjectDefinition);
+			ObjectDefinition rootObjectDefinition =
+				objectDefinitionPersistence.findByPrimaryKey(
+					rootObjectDefinitionId);
+
+			if (rootObjectDefinition.isApproved()) {
+				objectDefinitionLocalService.deployObjectDefinition(
+					rootObjectDefinition);
+			}
 		}
 	}
 

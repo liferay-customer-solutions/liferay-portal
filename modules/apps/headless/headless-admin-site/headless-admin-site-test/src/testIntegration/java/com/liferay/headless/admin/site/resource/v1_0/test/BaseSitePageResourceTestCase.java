@@ -129,6 +129,18 @@ public abstract class BaseSitePageResourceTestCase {
 		).locale(
 			LocaleUtil.getDefault()
 		).build();
+
+		permissionsSitePageResource = SitePageResource.builder(
+		).authentication(
+			_testCompanyAdminUser.getEmailAddress(),
+			PropsValues.DEFAULT_ADMIN_PASSWORD
+		).endpoint(
+			testCompany.getVirtualHostname(), 8080, "http"
+		).locale(
+			LocaleUtil.getDefault()
+		).parameter(
+			"nestedFields", "permissions"
+		).build();
 	}
 
 	@After
@@ -187,7 +199,6 @@ public abstract class BaseSitePageResourceTestCase {
 
 		SitePage sitePage = randomSitePage();
 
-		sitePage.setCreatorExternalReferenceCode(regex);
 		sitePage.setExternalReferenceCode(regex);
 		sitePage.setParentSitePageExternalReferenceCode(regex);
 		sitePage.setUuid(regex);
@@ -198,7 +209,6 @@ public abstract class BaseSitePageResourceTestCase {
 
 		sitePage = SitePageSerDes.toDTO(json);
 
-		Assert.assertEquals(regex, sitePage.getCreatorExternalReferenceCode());
 		Assert.assertEquals(regex, sitePage.getExternalReferenceCode());
 		Assert.assertEquals(
 			regex, sitePage.getParentSitePageExternalReferenceCode());
@@ -235,8 +245,7 @@ public abstract class BaseSitePageResourceTestCase {
 	protected String testDeleteSiteSitePage_getSiteExternalReferenceCode()
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return testGroup.getExternalReferenceCode();
 	}
 
 	@Test
@@ -249,6 +258,14 @@ public abstract class BaseSitePageResourceTestCase {
 
 		assertEquals(postSitePage, getSitePage);
 		assertValid(getSitePage);
+
+		Assert.assertNull(getSitePage.getPermissions());
+
+		getSitePage = permissionsSitePageResource.getSiteSitePage(
+			testGetSiteSitePage_getSiteExternalReferenceCode(),
+			postSitePage.getExternalReferenceCode());
+
+		Assert.assertNotNull(getSitePage.getPermissions());
 	}
 
 	protected SitePage testGetSiteSitePage_addSitePage() throws Exception {
@@ -259,8 +276,7 @@ public abstract class BaseSitePageResourceTestCase {
 	protected String testGetSiteSitePage_getSiteExternalReferenceCode()
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return testGroup.getExternalReferenceCode();
 	}
 
 	@Test
@@ -332,6 +348,18 @@ public abstract class BaseSitePageResourceTestCase {
 			page,
 			testGetSiteSitePagesPage_getExpectedActions(
 				siteExternalReferenceCode));
+
+		for (SitePage sitePage : page.getItems()) {
+			Assert.assertNull(sitePage.getPermissions());
+		}
+
+		page = permissionsSitePageResource.getSiteSitePagesPage(
+			siteExternalReferenceCode, null, null, null, Pagination.of(1, 10),
+			null);
+
+		for (SitePage sitePage : page.getItems()) {
+			Assert.assertNotNull(sitePage.getPermissions());
+		}
 	}
 
 	protected Map<String, Map<String, String>>
@@ -718,6 +746,21 @@ public abstract class BaseSitePageResourceTestCase {
 
 		assertEquals(randomSitePage, postSitePage);
 		assertValid(postSitePage);
+
+		SitePage randomPermissionsSitePage1 = randomPermissionsSitePage();
+
+		SitePage postPermissionsSitePage1 = testPostSiteSitePage_addSitePage(
+			randomPermissionsSitePage1);
+
+		Assert.assertNull(postPermissionsSitePage1.getPermissions());
+
+		SitePage randomPermissionsSitePage2 = randomPermissionsSitePage();
+
+		SitePage postPermissionsSitePage2 =
+			testPostSiteSitePage_addPermissionsSitePage(
+				randomPermissionsSitePage2);
+
+		Assert.assertNotNull(postPermissionsSitePage2.getPermissions());
 	}
 
 	protected SitePage testPostSiteSitePage_addSitePage(SitePage sitePage)
@@ -725,6 +768,14 @@ public abstract class BaseSitePageResourceTestCase {
 
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
+	}
+
+	protected SitePage testPostSiteSitePage_addPermissionsSitePage(
+			SitePage sitePage)
+		throws Exception {
+
+		return permissionsSitePageResource.postSiteSitePage(
+			testGetSiteSitePagesPage_getSiteExternalReferenceCode(), sitePage);
 	}
 
 	@Test
@@ -740,12 +791,31 @@ public abstract class BaseSitePageResourceTestCase {
 		assertEquals(randomSitePage, putSitePage);
 		assertValid(putSitePage);
 
+		Assert.assertNull(putSitePage.getPermissions());
+
 		SitePage getSitePage = sitePageResource.getSiteSitePage(
 			testPutSiteSitePage_getSiteExternalReferenceCode(),
 			putSitePage.getExternalReferenceCode());
 
 		assertEquals(randomSitePage, getSitePage);
 		assertValid(getSitePage);
+
+		SitePage randomPermissionsSitePage = randomPermissionsSitePage();
+
+		putSitePage = sitePageResource.putSiteSitePage(
+			testPutSiteSitePage_getSiteExternalReferenceCode(),
+			postSitePage.getExternalReferenceCode(), randomPermissionsSitePage);
+
+		assertEquals(randomPermissionsSitePage, putSitePage);
+		assertValid(putSitePage);
+
+		Assert.assertNull(putSitePage.getPermissions());
+
+		putSitePage = permissionsSitePageResource.putSiteSitePage(
+			testPutSiteSitePage_getSiteExternalReferenceCode(),
+			postSitePage.getExternalReferenceCode(), randomPermissionsSitePage);
+
+		Assert.assertNotNull(putSitePage.getPermissions());
 	}
 
 	protected SitePage testPutSiteSitePage_addSitePage() throws Exception {
@@ -756,8 +826,7 @@ public abstract class BaseSitePageResourceTestCase {
 	protected String testPutSiteSitePage_getSiteExternalReferenceCode()
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return testGroup.getExternalReferenceCode();
 	}
 
 	@Test
@@ -862,8 +931,7 @@ public abstract class BaseSitePageResourceTestCase {
 			testBatchEngineDeleteImportTask_getSiteExternalReferenceCode()
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return testGroup.getExternalReferenceCode();
 	}
 
 	@Rule
@@ -979,17 +1047,6 @@ public abstract class BaseSitePageResourceTestCase {
 				continue;
 			}
 
-			if (Objects.equals(
-					"creatorExternalReferenceCode",
-					additionalAssertFieldName)) {
-
-				if (sitePage.getCreatorExternalReferenceCode() == null) {
-					valid = false;
-				}
-
-				continue;
-			}
-
 			if (Objects.equals("datePublished", additionalAssertFieldName)) {
 				if (sitePage.getDatePublished() == null) {
 					valid = false;
@@ -1067,6 +1124,14 @@ public abstract class BaseSitePageResourceTestCase {
 					additionalAssertFieldName)) {
 
 				if (sitePage.getParentSitePageExternalReferenceCode() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("permissions", additionalAssertFieldName)) {
+				if (sitePage.getPermissions() == null) {
 					valid = false;
 				}
 
@@ -1209,6 +1274,8 @@ public abstract class BaseSitePageResourceTestCase {
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
 
+		graphQLFields.add(new GraphQLField("externalReferenceCode"));
+
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(
 					com.liferay.headless.admin.site.dto.v1_0.SitePage.class)) {
@@ -1283,20 +1350,6 @@ public abstract class BaseSitePageResourceTestCase {
 			if (Objects.equals("creator", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
 						sitePage1.getCreator(), sitePage2.getCreator())) {
-
-					return false;
-				}
-
-				continue;
-			}
-
-			if (Objects.equals(
-					"creatorExternalReferenceCode",
-					additionalAssertFieldName)) {
-
-				if (!Objects.deepEquals(
-						sitePage1.getCreatorExternalReferenceCode(),
-						sitePage2.getCreatorExternalReferenceCode())) {
 
 					return false;
 				}
@@ -1428,6 +1481,17 @@ public abstract class BaseSitePageResourceTestCase {
 				if (!Objects.deepEquals(
 						sitePage1.getParentSitePageExternalReferenceCode(),
 						sitePage2.getParentSitePageExternalReferenceCode())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("permissions", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						sitePage1.getPermissions(),
+						sitePage2.getPermissions())) {
 
 					return false;
 				}
@@ -1643,52 +1707,6 @@ public abstract class BaseSitePageResourceTestCase {
 				"Invalid entity field " + entityFieldName);
 		}
 
-		if (entityFieldName.equals("creatorExternalReferenceCode")) {
-			Object object = sitePage.getCreatorExternalReferenceCode();
-
-			String value = String.valueOf(object);
-
-			if (operator.equals("contains")) {
-				sb = new StringBundler();
-
-				sb.append("contains(");
-				sb.append(entityFieldName);
-				sb.append(",'");
-
-				if ((object != null) && (value.length() > 2)) {
-					sb.append(value.substring(1, value.length() - 1));
-				}
-				else {
-					sb.append(value);
-				}
-
-				sb.append("')");
-			}
-			else if (operator.equals("startswith")) {
-				sb = new StringBundler();
-
-				sb.append("startswith(");
-				sb.append(entityFieldName);
-				sb.append(",'");
-
-				if ((object != null) && (value.length() > 1)) {
-					sb.append(value.substring(0, value.length() - 1));
-				}
-				else {
-					sb.append(value);
-				}
-
-				sb.append("')");
-			}
-			else {
-				sb.append("'");
-				sb.append(value);
-				sb.append("'");
-			}
-
-			return sb.toString();
-		}
-
 		if (entityFieldName.equals("dateCreated")) {
 			if (operator.equals("between")) {
 				Date date = sitePage.getDateCreated();
@@ -1898,6 +1916,11 @@ public abstract class BaseSitePageResourceTestCase {
 			return sb.toString();
 		}
 
+		if (entityFieldName.equals("permissions")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
+		}
+
 		if (entityFieldName.equals("taxonomyCategoryItemExternalReferences")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
@@ -2004,8 +2027,6 @@ public abstract class BaseSitePageResourceTestCase {
 	protected SitePage randomSitePage() throws Exception {
 		return new SitePage() {
 			{
-				creatorExternalReferenceCode = StringUtil.toLowerCase(
-					RandomTestUtil.randomString());
 				dateCreated = RandomTestUtil.nextDate();
 				dateModified = RandomTestUtil.nextDate();
 				datePublished = RandomTestUtil.nextDate();
@@ -2026,6 +2047,25 @@ public abstract class BaseSitePageResourceTestCase {
 
 	protected SitePage randomPatchSitePage() throws Exception {
 		return randomSitePage();
+	}
+
+	protected SitePage randomPermissionsSitePage() throws Exception {
+		SitePage sitePage = randomSitePage();
+
+		com.liferay.portal.kernel.model.Role role = RoleTestUtil.addRole(
+			RoleConstants.TYPE_REGULAR);
+
+		sitePage.setPermissions(
+			new Permission[] {
+				new Permission() {
+					{
+						setActionIds(new String[] {"VIEW"});
+						setRoleName(role.getName());
+					}
+				}
+			});
+
+		return sitePage;
 	}
 
 	protected ContentPageSpecification randomContentPageSpecification()
@@ -2064,6 +2104,7 @@ public abstract class BaseSitePageResourceTestCase {
 	protected SitePageResource sitePageResource;
 	protected ImportTaskResource importTaskResource;
 	protected com.liferay.portal.kernel.model.Group irrelevantGroup;
+	protected SitePageResource permissionsSitePageResource;
 	protected com.liferay.portal.kernel.model.Company testCompany;
 	protected com.liferay.portal.kernel.model.Group testGroup;
 

@@ -312,7 +312,7 @@ public abstract class BaseCartResourceTestCase {
 							put("cartId", cart1.getId());
 						}
 					},
-					new GraphQLField("id"))),
+					getGraphQLFields())),
 			"JSONArray/errors");
 
 		Assert.assertTrue(errorsJSONArray1.length() > 0);
@@ -348,7 +348,7 @@ public abstract class BaseCartResourceTestCase {
 								put("cartId", cart2.getId());
 							}
 						},
-						new GraphQLField("id")))),
+						getGraphQLFields()))),
 			"JSONArray/errors");
 
 		Assert.assertTrue(errorsJSONArray2.length() > 0);
@@ -441,6 +441,95 @@ public abstract class BaseCartResourceTestCase {
 
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
+	}
+
+	@Test
+	public void testGraphQLDeleteCartByExternalReferenceCode()
+		throws Exception {
+
+		// No namespace
+
+		Cart cart1 = testGraphQLDeleteCartByExternalReferenceCode_addCart();
+
+		Assert.assertTrue(
+			JSONUtil.getValueAsBoolean(
+				invokeGraphQLMutation(
+					new GraphQLField(
+						"deleteCartByExternalReferenceCode",
+						new HashMap<String, Object>() {
+							{
+								put(
+									"externalReferenceCode",
+									"\"" + cart1.getExternalReferenceCode() +
+										"\"");
+							}
+						})),
+				"JSONObject/data", "Object/deleteCartByExternalReferenceCode"));
+
+		JSONArray errorsJSONArray1 = JSONUtil.getValueAsJSONArray(
+			invokeGraphQLQuery(
+				new GraphQLField(
+					"cartByExternalReferenceCode",
+					new HashMap<String, Object>() {
+						{
+							put(
+								"externalReferenceCode",
+								"\"" + cart1.getExternalReferenceCode() + "\"");
+						}
+					},
+					getGraphQLFields())),
+			"JSONArray/errors");
+
+		Assert.assertTrue(errorsJSONArray1.length() > 0);
+
+		// Using the namespace headlessCommerceDeliveryCart_v1_0
+
+		Cart cart2 = testGraphQLDeleteCartByExternalReferenceCode_addCart();
+
+		Assert.assertTrue(
+			JSONUtil.getValueAsBoolean(
+				invokeGraphQLMutation(
+					new GraphQLField(
+						"headlessCommerceDeliveryCart_v1_0",
+						new GraphQLField(
+							"deleteCartByExternalReferenceCode",
+							new HashMap<String, Object>() {
+								{
+									put(
+										"externalReferenceCode",
+										"\"" +
+											cart2.getExternalReferenceCode() +
+												"\"");
+								}
+							}))),
+				"JSONObject/data",
+				"JSONObject/headlessCommerceDeliveryCart_v1_0",
+				"Object/deleteCartByExternalReferenceCode"));
+
+		JSONArray errorsJSONArray2 = JSONUtil.getValueAsJSONArray(
+			invokeGraphQLQuery(
+				new GraphQLField(
+					"headlessCommerceDeliveryCart_v1_0",
+					new GraphQLField(
+						"cartByExternalReferenceCode",
+						new HashMap<String, Object>() {
+							{
+								put(
+									"externalReferenceCode",
+									"\"" + cart2.getExternalReferenceCode() +
+										"\"");
+							}
+						},
+						getGraphQLFields()))),
+			"JSONArray/errors");
+
+		Assert.assertTrue(errorsJSONArray2.length() > 0);
+	}
+
+	protected Cart testGraphQLDeleteCartByExternalReferenceCode_addCart()
+		throws Exception {
+
+		return testGraphQLCart_addCart();
 	}
 
 	@Test
@@ -3037,6 +3126,10 @@ public abstract class BaseCartResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("externalReferenceCode"));
+
+		graphQLFields.add(new GraphQLField("id"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

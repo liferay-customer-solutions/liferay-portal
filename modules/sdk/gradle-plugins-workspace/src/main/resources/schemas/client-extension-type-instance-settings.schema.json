@@ -2345,6 +2345,84 @@
 		},
 		{
 			"properties": {
+				"additionalJavaMailProperties": {
+					"default": "",
+					"description": "Manually specify additional JavaMail properties to override the existing configuration.",
+					"title": "Additional Java Mail Properties",
+					"type": "string"
+				},
+				"enablePOPServerNotifications": {
+					"default": false,
+					"title": "Enable POP Server Notifications",
+					"type": "boolean"
+				},
+				"enableStartTLS": {
+					"default": true,
+					"title": "Enable StartTLS",
+					"type": "boolean"
+				},
+				"incomingPOPPort": {
+					"default": "110",
+					"title": "Incoming Port",
+					"type": "string"
+				},
+				"incomingPOPServer": {
+					"default": "localhost",
+					"title": "Incoming POP Server",
+					"type": "string"
+				},
+				"outgoingSMTPPort": {
+					"default": "25",
+					"title": "Outgoing Port",
+					"type": "string"
+				},
+				"outgoingSMTPServer": {
+					"default": "localhost",
+					"title": "Outgoing SMTP Server",
+					"type": "string"
+				},
+				"pid": {
+					"const": "com.liferay.mail.settings.configuration.MailSettingCompanyConfiguration",
+					"title": "Mail Settings"
+				},
+				"popPassword": {
+					"default": "",
+					"title": "POP Password",
+					"type": "string"
+				},
+				"popUserName": {
+					"default": "",
+					"title": "POP User Name",
+					"type": "string"
+				},
+				"smtpPassword": {
+					"default": "",
+					"title": "SMTP Password",
+					"type": "string"
+				},
+				"smtpUserName": {
+					"default": "",
+					"title": "SMTP User Name",
+					"type": "string"
+				},
+				"storeProtocol": {
+					"default": "pop3",
+					"title": "Store Protocol",
+					"type": "string"
+				},
+				"transportProtocol": {
+					"default": "smtp",
+					"title": "Transport Protocol",
+					"type": "string"
+				}
+			},
+			"required": [
+				"pid"
+			],
+			"title": "Mail Settings"
+		},
+		{
+			"properties": {
 				"emailFromAddress": {
 					"description": "Set the sender address on the one-time password email.",
 					"title": "Template for Email \"From\" Field",
@@ -3798,7 +3876,7 @@
 		},
 		{
 			"properties": {
-				"authorizationEndPoint": {
+				"authorizationEndpoint": {
 					"default": "",
 					"description": "Set the authorization endpoint for the OpenID Connect provider.",
 					"title": "Authorization Endpoint",
@@ -3822,13 +3900,13 @@
 					"title": "Custom Token Request Parameters",
 					"type": "array"
 				},
-				"discoveryEndPoint": {
+				"discoveryEndpoint": {
 					"default": "",
 					"description": "Set the discovery endpoint for the OpenID Connect provider. If this is set, manually set endpoints will be ignored.",
 					"title": "Discovery Endpoint",
 					"type": "string"
 				},
-				"discoveryEndPointCacheInMillis": {
+				"discoveryEndpointCacheInMillis": {
 					"default": 360000,
 					"description": "Discovery endpoint metadata will be cached on this interval in milliseconds. If set to 0, Ehcache's default time to live value of 600 seconds will be used.",
 					"title": "Discovery Endpoint Cache in Milliseconds",
@@ -3904,13 +3982,13 @@
 					"title": "Token Connection Timeout in Milliseconds",
 					"type": "number"
 				},
-				"tokenEndPoint": {
+				"tokenEndpoint": {
 					"default": "",
 					"description": "Set the token endpoint for the OpenID Connect provider.",
 					"title": "Token Endpoint",
 					"type": "string"
 				},
-				"userInfoEndPoint": {
+				"userInfoEndpoint": {
 					"default": "",
 					"description": "Set the user information endpoint for the OpenID Connect provider.",
 					"title": "User Information Endpoint",
@@ -4407,6 +4485,25 @@
 		},
 		{
 			"properties": {
+				"checkInterval": {
+					"default": 15,
+					"description": "Set the check interval in minutes.",
+					"min": 1,
+					"title": "Check Interval",
+					"type": "number"
+				},
+				"pid": {
+					"const": "com.liferay.site.cms.site.initializer.configuration.BulkActionTaskConfiguration",
+					"title": "Bulk Action Task Configuration"
+				}
+			},
+			"required": [
+				"pid"
+			],
+			"title": "Bulk Action Task Configuration"
+		},
+		{
+			"properties": {
 				"companySitemapGroupIds": {
 					"default": "",
 					"items": {
@@ -4760,6 +4857,7 @@
 				"com.liferay.layout.seo.internal.configuration.LayoutSEOCompanyConfiguration",
 				"com.liferay.layout.set.prototype.configuration.LayoutSetPrototypeConfiguration",
 				"com.liferay.mail.outlook.auth.connector.provider.internal.configuration.MailOutlookAuthConnectorCompanyConfiguration",
+				"com.liferay.mail.settings.configuration.MailSettingCompanyConfiguration",
 				"com.liferay.multi.factor.authentication.email.otp.configuration.MFAEmailOTPConfiguration",
 				"com.liferay.multi.factor.authentication.fido2.web.internal.configuration.MFAFIDO2Configuration",
 				"com.liferay.multi.factor.authentication.ip.address.internal.configuration.MFAIPAddressConfiguration",
@@ -4804,6 +4902,7 @@
 				"com.liferay.segments.context.vocabulary.internal.configuration.SegmentsContextVocabularyCompanyConfiguration",
 				"com.liferay.sharepoint.rest.repository.internal.configuration.SharepointRepositoryConfiguration",
 				"com.liferay.sharing.internal.configuration.SharingCompanyConfiguration",
+				"com.liferay.site.cms.site.initializer.configuration.BulkActionTaskConfiguration",
 				"com.liferay.site.internal.configuration.SitemapCompanyConfiguration",
 				"com.liferay.social.activity.internal.configuration.SocialActivityCompanyConfiguration",
 				"com.liferay.staging.configuration.StagingConfiguration",

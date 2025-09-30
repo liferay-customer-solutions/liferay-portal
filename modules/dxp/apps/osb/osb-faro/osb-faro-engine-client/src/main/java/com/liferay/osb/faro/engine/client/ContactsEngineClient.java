@@ -454,6 +454,9 @@ public interface ContactsEngineClient {
 		FaroProject faroProject, int cur, int delta,
 		List<OrderByField> orderByFields);
 
+	public void insertBQProjects(List<FaroProject> faroProjects)
+		throws Exception;
+
 	public Channel patchChannel(
 		FaroProject faroProject, String id, String name);
 
@@ -483,6 +486,9 @@ public interface ContactsEngineClient {
 	public List<Map<String, Object>> refreshLiferay(FaroProject faroProject);
 
 	public void setEngineURL(String engineURL);
+
+	public void updateBQProject(FaroProject faroProject, Date startDate)
+		throws Exception;
 
 	public DataSource updateDataSource(
 		FaroProject faroProject, String id, Credentials credentials,

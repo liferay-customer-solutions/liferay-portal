@@ -20,6 +20,7 @@ import com.liferay.object.constants.ObjectFieldConstants;
 import com.liferay.object.constants.ObjectFieldSettingConstants;
 import com.liferay.object.constants.ObjectRelationshipConstants;
 import com.liferay.object.definition.security.permission.resource.util.ObjectDefinitionResourcePermissionUtil;
+import com.liferay.object.definition.setting.util.ObjectDefinitionSettingUtil;
 import com.liferay.object.definition.tree.util.ObjectDefinitionTreeUtil;
 import com.liferay.object.definition.util.ObjectDefinitionThreadLocal;
 import com.liferay.object.definition.util.ObjectDefinitionUtil;
@@ -161,6 +162,7 @@ import com.liferay.portal.kernel.service.WorkflowInstanceLinkLocalService;
 import com.liferay.portal.kernel.service.persistence.ResourcePermissionPersistence;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.transaction.TransactionCommitCallbackUtil;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizer;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -182,6 +184,7 @@ import com.liferay.portal.search.spi.model.query.contributor.ModelPreFilterContr
 import com.liferay.portal.service.impl.LayoutLocalServiceHelper;
 import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
+import com.liferay.portal.workflow.constants.WorkflowDefinitionConstants;
 import com.liferay.portal.workflow.kaleo.model.KaleoDefinition;
 import com.liferay.portal.workflow.kaleo.service.KaleoDefinitionLocalService;
 import com.liferay.sharing.security.permission.resource.SharingModelResourcePermissionConfigurator;
@@ -509,7 +512,9 @@ public class ObjectDefinitionLocalServiceImpl
 			throw new RequiredObjectDefinitionException();
 		}
 
-		if (objectDefinition.getRootObjectDefinitionId() != 0) {
+		if (ArrayUtil.isNotEmpty(
+				objectDefinition.getRootObjectDefinitionIds())) {
+
 			throw new ObjectRelationshipEdgeException(
 				"To delete this object, you must first disable inheritance " +
 					"and delete its relationships",
@@ -616,9 +621,6 @@ public class ObjectDefinitionLocalServiceImpl
 						_subscriptionLocalService.deleteSubscriptions(
 							objectDefinition.getCompanyId(),
 							objectDefinition.getClassName());
-					}
-
-					if (FeatureFlagManagerUtil.isEnabled("LPD-53981")) {
 						_trashEntryLocalService.deleteTrashEntries(
 							objectDefinition.getCompanyId(),
 							objectDefinition.getClassName());
@@ -1051,8 +1053,8 @@ public class ObjectDefinitionLocalServiceImpl
 				_accountEntryOrganizationRelLocalService,
 				_assetEntryLocalService, _bundleContext,
 				_dynamicQueryBatchIndexingActionableFactory, _groupLocalService,
-				_listTypeLocalService, _objectActionLocalService,
-				objectDefinitionLocalService,
+				_kaleoDefinitionLocalService, _listTypeLocalService,
+				_objectActionLocalService, objectDefinitionLocalService,
 				_objectDefinitionSettingLocalService,
 				_objectEntryFolderLocalService, _objectEntryLocalService,
 				_objectEntryService, _objectFieldLocalService,
@@ -1301,6 +1303,9 @@ public class ObjectDefinitionLocalServiceImpl
 		_validateExternalReferenceCode(
 			externalReferenceCode, objectDefinition.isSystem());
 		_validateObjectFieldId(objectDefinition, titleObjectFieldId);
+		_validateWorkflowDefinitionLinks(
+			objectDefinition.getCompanyId(), objectDefinitionSettings,
+			objectDefinition.getScope(), workflowDefinitionLinks);
 
 		long oldObjectFolderId = objectDefinition.getObjectFolderId();
 
@@ -1468,6 +1473,9 @@ public class ObjectDefinitionLocalServiceImpl
 		_validatePluralLabel(pluralLabelMap);
 		_validateScope(scope, storageType);
 		_validateVersion(system, version);
+		_validateWorkflowDefinitionLinks(
+			user.getCompanyId(), objectDefinitionSettings, scope,
+			workflowDefinitionLinks);
 
 		ObjectDefinition objectDefinition = objectDefinitionPersistence.create(
 			counterLocalService.increment());
@@ -1771,7 +1779,6 @@ public class ObjectDefinitionLocalServiceImpl
 			return;
 		}
 
-		long groupId = 0;
 		Set<Long> oldWorkflowDefinitionLinkIds = new HashSet<>(
 			TransformUtil.transform(
 				_workflowDefinitionLinkLocalService.getWorkflowDefinitionLinks(
@@ -1786,27 +1793,33 @@ public class ObjectDefinitionLocalServiceImpl
 		for (WorkflowDefinitionLink workflowDefinitionLink :
 				workflowDefinitionLinks) {
 
-			if (!Objects.equals(
-					objectDefinition.getScope(),
-					ObjectDefinitionConstants.SCOPE_COMPANY)) {
+			String workflowDefinitionName =
+				workflowDefinitionLink.getWorkflowDefinitionName();
 
-				groupId = workflowDefinitionLink.getGroupId();
+			KaleoDefinition kaleoDefinition =
+				_kaleoDefinitionLocalService.fetchKaleoDefinition(
+					workflowDefinitionName, serviceContext);
+
+			if (kaleoDefinition == null) {
+				kaleoDefinition =
+					_kaleoDefinitionLocalService.addKaleoDefinition(
+						workflowDefinitionName, workflowDefinitionName,
+						workflowDefinitionName, null, null,
+						WorkflowDefinitionConstants.SCOPE_ALL, 0,
+						serviceContext);
 			}
 
 			WorkflowDefinitionLink existingWorkflowDefinitionLink =
 				_workflowDefinitionLinkLocalService.fetchWorkflowDefinitionLink(
-					objectDefinition.getCompanyId(), groupId,
+					objectDefinition.getCompanyId(),
+					workflowDefinitionLink.getGroupId(),
 					objectDefinition.getClassName(), 0, 0, true);
-
-			KaleoDefinition kaleoDefinition =
-				_kaleoDefinitionLocalService.getKaleoDefinition(
-					workflowDefinitionLink.getWorkflowDefinitionName(),
-					serviceContext);
 
 			if (existingWorkflowDefinitionLink == null) {
 				_workflowDefinitionLinkLocalService.addWorkflowDefinitionLink(
 					null, workflowDefinitionLink.getUserId(),
-					objectDefinition.getCompanyId(), groupId,
+					objectDefinition.getCompanyId(),
+					workflowDefinitionLink.getGroupId(),
 					objectDefinition.getClassName(), 0, 0,
 					kaleoDefinition.getName(), kaleoDefinition.getVersion());
 
@@ -2375,33 +2388,6 @@ public class ObjectDefinitionLocalServiceImpl
 				"at-least-one-object-field-must-be-added");
 		}
 
-		if ((objectDefinition.getStatus() == WorkflowConstants.STATUS_DRAFT) &&
-			objectDefinition.isRootNode()) {
-
-			for (ObjectRelationship objectRelationship :
-					_objectRelationshipLocalService.getObjectRelationships(
-						objectDefinition.getObjectDefinitionId())) {
-
-				int objectEntriesCount =
-					_objectEntryLocalService.getObjectEntriesCount(
-						objectRelationship.getObjectDefinitionId2());
-
-				if (objectEntriesCount > 0) {
-					throw new ObjectRelationshipEdgeException(
-						StringBundler.concat(
-							"There must be no unrelated object entries when ",
-							"both object definitions are published so that ",
-							"the object relationship can be an edge to a root ",
-							"context"),
-						StringBundler.concat(
-							"there-must-be-no-unrelated-object-entries-when-",
-							"both-object-definitions-are-published-so-that-",
-							"the-object-relationship-can-be-an-edge-to-a-root-",
-							"context"));
-				}
-			}
-		}
-
 		_validateFriendlyURLSeparator(objectDefinition);
 
 		objectDefinition.setActive(true);
@@ -2450,10 +2436,14 @@ public class ObjectDefinitionLocalServiceImpl
 
 		deployObjectDefinition(objectDefinition);
 
-		if (objectDefinition.isRootDescendantNode()) {
-			deployObjectDefinition(
-				objectDefinitionLocalService.fetchObjectDefinition(
-					objectDefinition.getRootObjectDefinitionId()));
+		if (!objectDefinition.isRootNode()) {
+			for (long rootObjectDefinitionId :
+					objectDefinition.getRootObjectDefinitionIds()) {
+
+				deployObjectDefinition(
+					objectDefinitionLocalService.fetchObjectDefinition(
+						rootObjectDefinitionId));
+			}
 		}
 
 		_registerTransactionCallbackForCluster(
@@ -2568,6 +2558,9 @@ public class ObjectDefinitionLocalServiceImpl
 			objectDefinition, objectDefinition.isSystem());
 		_validateLabel(labelMap);
 		_validatePluralLabel(pluralLabelMap);
+		_validateWorkflowDefinitionLinks(
+			objectDefinition.getCompanyId(), objectDefinitionSettings, scope,
+			workflowDefinitionLinks);
 
 		if (objectDefinition.getAccountEntryRestrictedObjectFieldId() != 0) {
 			_objectFieldLocalService.updateRequired(
@@ -3387,6 +3380,62 @@ public class ObjectDefinitionLocalServiceImpl
 			if (version != 0) {
 				throw new ObjectDefinitionVersionException(
 					"Custom object definition versions must be 0");
+			}
+		}
+	}
+
+	private void _validateWorkflowDefinitionLinks(
+			long companyId,
+			List<ObjectDefinitionSetting> objectDefinitionSettings,
+			String scope, List<WorkflowDefinitionLink> workflowDefinitionLinks)
+		throws PortalException {
+
+		if (!FeatureFlagManagerUtil.isEnabled(companyId, "LPD-17564")) {
+			return;
+		}
+
+		for (WorkflowDefinitionLink workflowDefinitionLink :
+				workflowDefinitionLinks) {
+
+			if (workflowDefinitionLink.getGroupId() == 0) {
+				continue;
+			}
+
+			ObjectScopeProvider objectScopeProvider =
+				_objectScopeProviderRegistry.getObjectScopeProvider(scope);
+
+			if (!objectScopeProvider.isValidGroupId(
+					workflowDefinitionLink.getGroupId())) {
+
+				throw new ObjectDefinitionScopeException(
+					"An object definition can only be linked to a workflow " +
+						"definition within the same scope");
+			}
+
+			if (!StringUtil.equals(
+					scope, ObjectDefinitionConstants.SCOPE_DEPOT) ||
+				GetterUtil.getBoolean(
+					ObjectDefinitionSettingUtil.getValue(
+						ObjectDefinitionSettingConstants.NAME_ACCEPT_ALL_GROUPS,
+						objectDefinitionSettings))) {
+
+				return;
+			}
+
+			String acceptedGroupIds = ObjectDefinitionSettingUtil.getValue(
+				ObjectDefinitionSettingConstants.NAME_ACCEPTED_GROUP_IDS,
+				objectDefinitionSettings);
+
+			if (Validator.isNull(acceptedGroupIds) ||
+				!ArrayUtil.exists(
+					acceptedGroupIds.split("\\s*,\\s*"),
+					acceptedGroupId -> acceptedGroupId.equals(
+						String.valueOf(workflowDefinitionLink.getGroupId())))) {
+
+				throw new ObjectDefinitionScopeException(
+					StringBundler.concat(
+						"The group ", workflowDefinitionLink.getGroupId(),
+						" is not included in the object definition scope"));
 			}
 		}
 	}

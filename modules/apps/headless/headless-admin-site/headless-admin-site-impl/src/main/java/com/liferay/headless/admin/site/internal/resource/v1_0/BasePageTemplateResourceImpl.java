@@ -43,6 +43,7 @@ import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
 import com.liferay.portal.vulcan.batch.engine.VulcanBatchEngineTaskItemDelegate;
 import com.liferay.portal.vulcan.batch.engine.resource.VulcanBatchEngineExportTaskResource;
 import com.liferay.portal.vulcan.batch.engine.resource.VulcanBatchEngineImportTaskResource;
+import com.liferay.portal.vulcan.fields.NestedFieldsSupplier;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.permission.ModelPermissionsUtil;
@@ -124,6 +125,11 @@ public abstract class BasePageTemplateResourceImpl
 		throws Exception {
 	}
 
+	protected abstract PageTemplate doGetSitePageTemplate(
+			String siteExternalReferenceCode,
+			String pageTemplateExternalReferenceCode)
+		throws Exception;
+
 	/**
 	 * Invoke this method with the command line:
 	 *
@@ -165,7 +171,7 @@ public abstract class BasePageTemplateResourceImpl
 	)
 	@jakarta.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public PageTemplate getSitePageTemplate(
+	public final PageTemplate getSitePageTemplate(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@jakarta.validation.constraints.NotNull
 			@jakarta.ws.rs.PathParam("siteExternalReferenceCode")
@@ -176,7 +182,26 @@ public abstract class BasePageTemplateResourceImpl
 			String pageTemplateExternalReferenceCode)
 		throws Exception {
 
-		return null;
+		PageTemplate getPageTemplate = doGetSitePageTemplate(
+			siteExternalReferenceCode, pageTemplateExternalReferenceCode);
+
+		getPageTemplate.setPermissions(
+			() -> NestedFieldsSupplier.supply(
+				"permissions",
+				nestedField -> {
+					Page<Permission> permissionsPage =
+						getSitePageTemplatePermissionsPage(
+							siteExternalReferenceCode,
+							getPageTemplate.getExternalReferenceCode(), null);
+
+					Collection<Permission> permissions =
+						permissionsPage.getItems();
+
+					return permissions.toArray(
+						new Permission[permissions.size()]);
+				}));
+
+		return getPageTemplate;
 	}
 
 	/**
@@ -319,6 +344,14 @@ public abstract class BasePageTemplateResourceImpl
 		return Page.of(Collections.emptyList());
 	}
 
+	protected abstract Page<PageTemplate> doGetSitePageTemplatesPage(
+			String siteExternalReferenceCode, String search,
+			com.liferay.portal.vulcan.aggregation.Aggregation aggregation,
+			com.liferay.portal.kernel.search.filter.Filter filter,
+			Pagination pagination,
+			com.liferay.portal.kernel.search.Sort[] sorts)
+		throws Exception;
+
 	/**
 	 * Invoke this method with the command line:
 	 *
@@ -378,7 +411,7 @@ public abstract class BasePageTemplateResourceImpl
 	@jakarta.ws.rs.Path("/sites/{siteExternalReferenceCode}/page-templates")
 	@jakarta.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public Page<PageTemplate> getSitePageTemplatesPage(
+	public final Page<PageTemplate> getSitePageTemplatesPage(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@jakarta.validation.constraints.NotNull
 			@jakarta.ws.rs.PathParam("siteExternalReferenceCode")
@@ -395,13 +428,35 @@ public abstract class BasePageTemplateResourceImpl
 				sorts)
 		throws Exception {
 
-		return Page.of(Collections.emptyList());
+		Page<PageTemplate> pageTemplatesPage = doGetSitePageTemplatesPage(
+			siteExternalReferenceCode, search, aggregation, filter, pagination,
+			sorts);
+
+		for (PageTemplate pageTemplate : pageTemplatesPage.getItems()) {
+			pageTemplate.setPermissions(
+				() -> NestedFieldsSupplier.supply(
+					"permissions",
+					nestedField -> {
+						Page<Permission> permissionsPage =
+							getSitePageTemplatePermissionsPage(
+								siteExternalReferenceCode,
+								pageTemplate.getExternalReferenceCode(), null);
+
+						Collection<Permission> permissions =
+							permissionsPage.getItems();
+
+						return permissions.toArray(
+							new Permission[permissions.size()]);
+					}));
+		}
+
+		return pageTemplatesPage;
 	}
 
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'PATCH' 'http://localhost:8080/o/headless-admin-site/v1.0/sites/{siteExternalReferenceCode}/page-templates/{pageTemplateExternalReferenceCode}' -d $'{"creatorExternalReferenceCode": ___, "dateCreated": ___, "dateModified": ___, "datePublished": ___, "externalReferenceCode": ___, "key": ___, "keywords": ___, "name": ___, "pageSpecifications": ___, "pageTemplateSet": ___, "pageTemplateSettings": ___, "taxonomyCategoryItemExternalReferences": ___, "type": ___, "uuid": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'PATCH' 'http://localhost:8080/o/headless-admin-site/v1.0/sites/{siteExternalReferenceCode}/page-templates/{pageTemplateExternalReferenceCode}' -d $'{"dateCreated": ___, "dateModified": ___, "datePublished": ___, "externalReferenceCode": ___, "key": ___, "keywords": ___, "name": ___, "pageSpecifications": ___, "pageTemplateSet": ___, "pageTemplateSettings": ___, "permissions": ___, "taxonomyCategoryItemExternalReferences": ___, "type": ___, "uuid": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Operation(
 		description = "Updates only the fields received in the request body, leaving any other fields untouched."
@@ -455,11 +510,6 @@ public abstract class BasePageTemplateResourceImpl
 		PageTemplate existingPageTemplate = getSitePageTemplate(
 			siteExternalReferenceCode, pageTemplateExternalReferenceCode);
 
-		if (pageTemplate.getCreatorExternalReferenceCode() != null) {
-			existingPageTemplate.setCreatorExternalReferenceCode(
-				pageTemplate.getCreatorExternalReferenceCode());
-		}
-
 		if (pageTemplate.getDateCreated() != null) {
 			existingPageTemplate.setDateCreated(pageTemplate.getDateCreated());
 		}
@@ -491,6 +541,10 @@ public abstract class BasePageTemplateResourceImpl
 			existingPageTemplate.setName(pageTemplate.getName());
 		}
 
+		if (pageTemplate.getPermissions() != null) {
+			existingPageTemplate.setPermissions(pageTemplate.getPermissions());
+		}
+
 		if (pageTemplate.getType() != null) {
 			existingPageTemplate.setType(pageTemplate.getType());
 		}
@@ -506,10 +560,14 @@ public abstract class BasePageTemplateResourceImpl
 			existingPageTemplate);
 	}
 
+	protected abstract PageTemplate doPostSitePageTemplate(
+			String siteExternalReferenceCode, PageTemplate pageTemplate)
+		throws Exception;
+
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'POST' 'http://localhost:8080/o/headless-admin-site/v1.0/sites/{siteExternalReferenceCode}/page-templates' -d $'{"creatorExternalReferenceCode": ___, "dateCreated": ___, "dateModified": ___, "datePublished": ___, "externalReferenceCode": ___, "key": ___, "keywords": ___, "name": ___, "pageSpecifications": ___, "pageTemplateSet": ___, "pageTemplateSettings": ___, "taxonomyCategoryItemExternalReferences": ___, "type": ___, "uuid": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'POST' 'http://localhost:8080/o/headless-admin-site/v1.0/sites/{siteExternalReferenceCode}/page-templates' -d $'{"dateCreated": ___, "dateModified": ___, "datePublished": ___, "externalReferenceCode": ___, "key": ___, "keywords": ___, "name": ___, "pageSpecifications": ___, "pageTemplateSet": ___, "pageTemplateSettings": ___, "permissions": ___, "taxonomyCategoryItemExternalReferences": ___, "type": ___, "uuid": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Operation(
 		description = "Adds a new page template"
@@ -530,7 +588,7 @@ public abstract class BasePageTemplateResourceImpl
 	@jakarta.ws.rs.POST
 	@jakarta.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public PageTemplate postSitePageTemplate(
+	public final PageTemplate postSitePageTemplate(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@jakarta.validation.constraints.NotNull
 			@jakarta.ws.rs.PathParam("siteExternalReferenceCode")
@@ -538,7 +596,30 @@ public abstract class BasePageTemplateResourceImpl
 			PageTemplate pageTemplate)
 		throws Exception {
 
-		return null;
+		Permission[] permissions = pageTemplate.getPermissions();
+
+		PageTemplate postPageTemplate = doPostSitePageTemplate(
+			siteExternalReferenceCode, pageTemplate);
+
+		if (permissions != null) {
+			Page<Permission> permissionsPage =
+				putSitePageTemplatePermissionsPage(
+					siteExternalReferenceCode,
+					postPageTemplate.getExternalReferenceCode(), permissions);
+
+			postPageTemplate.setPermissions(
+				() -> NestedFieldsSupplier.supply(
+					"permissions",
+					nestedField -> {
+						Collection<Permission> collection =
+							permissionsPage.getItems();
+
+						return collection.toArray(
+							new Permission[collection.size()]);
+					}));
+		}
+
+		return postPageTemplate;
 	}
 
 	/**
@@ -655,7 +736,7 @@ public abstract class BasePageTemplateResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'POST' 'http://localhost:8080/o/headless-admin-site/v1.0/sites/{siteExternalReferenceCode}/page-template-sets/{pageTemplateSetExternalReferenceCode}/page-templates' -d $'{"creatorExternalReferenceCode": ___, "dateCreated": ___, "dateModified": ___, "datePublished": ___, "externalReferenceCode": ___, "key": ___, "keywords": ___, "name": ___, "pageSpecifications": ___, "pageTemplateSet": ___, "pageTemplateSettings": ___, "taxonomyCategoryItemExternalReferences": ___, "type": ___, "uuid": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'POST' 'http://localhost:8080/o/headless-admin-site/v1.0/sites/{siteExternalReferenceCode}/page-template-sets/{pageTemplateSetExternalReferenceCode}/page-templates' -d $'{"dateCreated": ___, "dateModified": ___, "datePublished": ___, "externalReferenceCode": ___, "key": ___, "keywords": ___, "name": ___, "pageSpecifications": ___, "pageTemplateSet": ___, "pageTemplateSettings": ___, "permissions": ___, "taxonomyCategoryItemExternalReferences": ___, "type": ___, "uuid": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Operation(
 		description = "Adds a new page template in draft status to a page template set."
@@ -799,10 +880,15 @@ public abstract class BasePageTemplateResourceImpl
 		).build();
 	}
 
+	protected abstract PageTemplate doPutSitePageTemplate(
+			String siteExternalReferenceCode,
+			String pageTemplateExternalReferenceCode, PageTemplate pageTemplate)
+		throws Exception;
+
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'PUT' 'http://localhost:8080/o/headless-admin-site/v1.0/sites/{siteExternalReferenceCode}/page-templates/{pageTemplateExternalReferenceCode}' -d $'{"creatorExternalReferenceCode": ___, "dateCreated": ___, "dateModified": ___, "datePublished": ___, "externalReferenceCode": ___, "key": ___, "keywords": ___, "name": ___, "pageSpecifications": ___, "pageTemplateSet": ___, "pageTemplateSettings": ___, "taxonomyCategoryItemExternalReferences": ___, "type": ___, "uuid": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'PUT' 'http://localhost:8080/o/headless-admin-site/v1.0/sites/{siteExternalReferenceCode}/page-templates/{pageTemplateExternalReferenceCode}' -d $'{"dateCreated": ___, "dateModified": ___, "datePublished": ___, "externalReferenceCode": ___, "key": ___, "keywords": ___, "name": ___, "pageSpecifications": ___, "pageTemplateSet": ___, "pageTemplateSettings": ___, "permissions": ___, "taxonomyCategoryItemExternalReferences": ___, "type": ___, "uuid": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Operation(
 		description = "Updates the page template with the given external reference code, or creates it if it does not exist."
@@ -841,7 +927,7 @@ public abstract class BasePageTemplateResourceImpl
 	@jakarta.ws.rs.Produces({"application/json", "application/xml"})
 	@jakarta.ws.rs.PUT
 	@Override
-	public PageTemplate putSitePageTemplate(
+	public final PageTemplate putSitePageTemplate(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@jakarta.validation.constraints.NotNull
 			@jakarta.ws.rs.PathParam("siteExternalReferenceCode")
@@ -853,7 +939,31 @@ public abstract class BasePageTemplateResourceImpl
 			PageTemplate pageTemplate)
 		throws Exception {
 
-		return null;
+		Permission[] permissions = pageTemplate.getPermissions();
+
+		PageTemplate putPageTemplate = doPutSitePageTemplate(
+			siteExternalReferenceCode, pageTemplateExternalReferenceCode,
+			pageTemplate);
+
+		if (permissions != null) {
+			Page<Permission> permissionsPage =
+				putSitePageTemplatePermissionsPage(
+					siteExternalReferenceCode,
+					putPageTemplate.getExternalReferenceCode(), permissions);
+
+			putPageTemplate.setPermissions(
+				() -> NestedFieldsSupplier.supply(
+					"permissions",
+					nestedField -> {
+						Collection<Permission> collection =
+							permissionsPage.getItems();
+
+						return collection.toArray(
+							new Permission[collection.size()]);
+					}));
+		}
+
+		return putPageTemplate;
 	}
 
 	/**
@@ -1096,14 +1206,14 @@ public abstract class BasePageTemplateResourceImpl
 			Map<String, Serializable> parameters, String search)
 		throws Exception {
 
-		if (parameters.containsKey("siteId")) {
+		if (parameters.containsKey("siteExternalReferenceCode")) {
 			return getSitePageTemplatesPage(
 				(String)parameters.get("siteExternalReferenceCode"), search,
 				null, filter, pagination, sorts);
 		}
 		else {
 			throw new NotSupportedException(
-				"One of the following parameters must be specified: [siteId]");
+				"One of the following parameters must be specified: [siteExternalReferenceCode]");
 		}
 	}
 

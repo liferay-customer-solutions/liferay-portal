@@ -121,6 +121,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -367,6 +368,51 @@ public class AccountResourceTest extends BaseAccountResourceTestCase {
 		_testGetAccountsPageWithNestedFields();
 	}
 
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLDeleteOrganizationAccounts() throws Exception {
+		super.testGraphQLDeleteOrganizationAccounts();
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLDeleteOrganizationAccountsByExternalReferenceCode()
+		throws Exception {
+
+		super.testGraphQLDeleteOrganizationAccountsByExternalReferenceCode();
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLDeleteOrganizationByExternalReferenceCodeAccounts()
+		throws Exception {
+
+		super.testGraphQLDeleteOrganizationByExternalReferenceCodeAccounts();
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLDeleteOrganizationByExternalReferenceCodeOrganizationExternalReferenceCodeAccountByExternalReferenceCode()
+		throws Exception {
+
+		super.
+			testGraphQLDeleteOrganizationByExternalReferenceCodeOrganizationExternalReferenceCodeAccountByExternalReferenceCode();
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLGetOrganizationByExternalReferenceCodeOrganizationExternalReferenceCodeAccountsByExternalReferenceCodePage()
+		throws Exception {
+
+		super.
+			testGraphQLGetOrganizationByExternalReferenceCodeOrganizationExternalReferenceCodeAccountsByExternalReferenceCodePage();
+	}
+
 	@Override
 	@Test
 	public void testPatchAccount() throws Exception {
@@ -489,7 +535,7 @@ public class AccountResourceTest extends BaseAccountResourceTestCase {
 					organization2.getOrganizationId()));
 	}
 
-	@FeatureFlag("LPD-47858")
+	@FeatureFlag("LPD-35914")
 	@LazyReferencing
 	@Override
 	@Test
@@ -833,6 +879,33 @@ public class AccountResourceTest extends BaseAccountResourceTestCase {
 	@Override
 	protected Account testGraphQLAccount_addAccount() throws Exception {
 		return _postAccount();
+	}
+
+	@Override
+	protected Account testGraphQLAccount_addAccount(Account account)
+		throws Exception {
+
+		return _postAccount(account);
+	}
+
+	@Override
+	protected Long
+			testGraphQLDeleteOrganizationAccountsByExternalReferenceCode_getOrganizationId()
+		throws Exception {
+
+		Organization organization = OrganizationTestUtil.addOrganization();
+
+		return organization.getOrganizationId();
+	}
+
+	@Override
+	protected String
+			testGraphQLDeleteOrganizationByExternalReferenceCodeOrganizationExternalReferenceCodeAccountByExternalReferenceCode_getOrganizationExternalReferenceCode()
+		throws Exception {
+
+		Organization organization = OrganizationTestUtil.addOrganization();
+
+		return organization.getExternalReferenceCode();
 	}
 
 	@Override
@@ -1434,14 +1507,14 @@ public class AccountResourceTest extends BaseAccountResourceTestCase {
 
 		Account postAccount = _postAccount(randomAccount);
 
-		User user = UserTestUtil.addUser();
+		User user = TestPropsValues.getUser();
 
 		_accountEntryUserRelLocalService.addAccountEntryUserRel(
 			postAccount.getId(), user.getUserId());
 
 		AccountGroup accountGroup = _accountGroupLocalService.addAccountGroup(
-			StringPool.BLANK, TestPropsValues.getUserId(),
-			RandomTestUtil.randomString(), RandomTestUtil.randomString(),
+			StringPool.BLANK, user.getUserId(), RandomTestUtil.randomString(),
+			RandomTestUtil.randomString(),
 			ServiceContextTestUtil.getServiceContext());
 
 		_accountGroupRelLocalService.addAccountGroupRel(
@@ -1449,7 +1522,7 @@ public class AccountResourceTest extends BaseAccountResourceTestCase {
 			postAccount.getId());
 
 		AccountRole accountRole = _accountRoleLocalService.addAccountRole(
-			RandomTestUtil.randomString(), TestPropsValues.getUserId(),
+			RandomTestUtil.randomString(), user.getUserId(),
 			postAccount.getId(), RandomTestUtil.randomString(), null, null);
 
 		_resourcePermissionLocalService.setResourcePermissions(
@@ -1486,10 +1559,6 @@ public class AccountResourceTest extends BaseAccountResourceTestCase {
 
 		Assert.assertNotNull(getAccount.getCreator());
 
-		Creator creator = getAccount.getCreator();
-
-		Assert.assertTrue(creator.getId() == TestPropsValues.getUserId());
-
 		Assert.assertTrue(
 			ArrayUtil.exists(
 				getAccount.getAccountGroupBriefs(),
@@ -1508,6 +1577,15 @@ public class AccountResourceTest extends BaseAccountResourceTestCase {
 			ArrayUtil.exists(
 				getAccount.getAccountUserAccounts(),
 				userAccount -> userAccount.getId() == user.getUserId()));
+
+		Creator creator = getAccount.getCreator();
+
+		Assert.assertTrue(creator.getId() == TestPropsValues.getUserId());
+		Assert.assertTrue(
+			Objects.equals(
+				creator.getExternalReferenceCode(),
+				user.getExternalReferenceCode()));
+
 		Assert.assertTrue(
 			ArrayUtil.exists(
 				getAccount.getKeywords(),

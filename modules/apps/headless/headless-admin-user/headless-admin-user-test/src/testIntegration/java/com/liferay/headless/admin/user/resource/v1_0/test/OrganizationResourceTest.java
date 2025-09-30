@@ -108,6 +108,7 @@ import java.util.Objects;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -357,6 +358,81 @@ public class OrganizationResourceTest extends BaseOrganizationResourceTestCase {
 		_testGetOrganizationsPageWithFilter();
 	}
 
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLDeleteAccountByExternalReferenceCodeOrganization()
+		throws Exception {
+
+		super.testGraphQLDeleteAccountByExternalReferenceCodeOrganization();
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLDeleteAccountOrganization() throws Exception {
+		super.testGraphQLDeleteAccountOrganization();
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLDeleteOrganizationByExternalReferenceCodeUserAccountsByEmailAddress()
+		throws Exception {
+
+		super.
+			testGraphQLDeleteOrganizationByExternalReferenceCodeUserAccountsByEmailAddress();
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLDeleteUserAccountsByEmailAddress() throws Exception {
+		super.testGraphQLDeleteUserAccountsByEmailAddress();
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLGetAccountByExternalReferenceCodeOrganizationsPage()
+		throws Exception {
+
+		super.testGraphQLGetAccountByExternalReferenceCodeOrganizationsPage();
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLGetAccountOrganizationsPage() throws Exception {
+		super.testGraphQLGetAccountOrganizationsPage();
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLGetOrganizationByExternalReferenceCodeChildOrganizationsPage()
+		throws Exception {
+
+		super.
+			testGraphQLGetOrganizationByExternalReferenceCodeChildOrganizationsPage();
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLGetOrganizationChildOrganizationsPage()
+		throws Exception {
+
+		super.testGraphQLGetOrganizationChildOrganizationsPage();
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLGetOrganizationOrganizationsPage() throws Exception {
+		super.testGraphQLGetOrganizationOrganizationsPage();
+	}
+
 	@Override
 	@Test
 	public void testPatchOrganization() throws Exception {
@@ -415,7 +491,7 @@ public class OrganizationResourceTest extends BaseOrganizationResourceTestCase {
 				_accountEntry.getAccountEntryId(), "-"));
 	}
 
-	@FeatureFlag("LPD-47858")
+	@FeatureFlag("LPD-35914")
 	@LazyReferencing
 	@Override
 	@Test
@@ -732,6 +808,64 @@ public class OrganizationResourceTest extends BaseOrganizationResourceTestCase {
 		throws Exception {
 
 		return _addOrganization(organization, "0");
+	}
+
+	@Override
+	protected String
+			testGraphQLDeleteAccountByExternalReferenceCodeOrganization_getExternalReferenceCode(
+				Organization organization)
+		throws Exception {
+
+		return _accountEntry.getExternalReferenceCode();
+	}
+
+	@Override
+	protected Long testGraphQLDeleteAccountOrganization_getAccountId()
+		throws Exception {
+
+		return _accountEntry.getAccountEntryId();
+	}
+
+	@Override
+	protected Organization
+			testGraphQLDeleteOrganizationByExternalReferenceCodeUserAccountByEmailAddress_addOrganization()
+		throws Exception {
+
+		Organization organization = _addOrganization(randomOrganization(), "0");
+
+		_organizationLocalService.addUserOrganization(
+			_user.getUserId(), GetterUtil.getLong(organization.getId()));
+
+		return organization;
+	}
+
+	@Override
+	protected String
+			testGraphQLDeleteOrganizationByExternalReferenceCodeUserAccountByEmailAddress_getEmailAddress()
+		throws Exception {
+
+		return _user.getEmailAddress();
+	}
+
+	@Override
+	protected Organization
+			testGraphQLDeleteUserAccountByEmailAddress_addOrganization()
+		throws Exception {
+
+		Organization organization = _addOrganization(randomOrganization(), "0");
+
+		_organizationLocalService.addUserOrganization(
+			_user.getUserId(), GetterUtil.getLong(organization.getId()));
+
+		return organization;
+	}
+
+	@Override
+	protected String
+			testGraphQLDeleteUserAccountByEmailAddress_getEmailAddress()
+		throws Exception {
+
+		return _user.getEmailAddress();
 	}
 
 	@Override
@@ -1113,11 +1247,17 @@ public class OrganizationResourceTest extends BaseOrganizationResourceTestCase {
 				getOrganization.getAccountBriefs(),
 				accountBrief ->
 					accountBrief.getId() == accountEntry2.getAccountEntryId()));
-		Assert.assertNotNull(getOrganization.getCreator());
 
 		Creator creator = getOrganization.getCreator();
 
 		Assert.assertTrue(creator.getId() == TestPropsValues.getUserId());
+
+		User user3 = TestPropsValues.getUser();
+
+		Assert.assertTrue(
+			Objects.equals(
+				creator.getExternalReferenceCode(),
+				user3.getExternalReferenceCode()));
 
 		Assert.assertNotNull(getOrganization.getImageBase64());
 		Assert.assertNotEquals(

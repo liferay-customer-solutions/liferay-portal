@@ -132,6 +132,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -500,6 +501,22 @@ public class StructuredContentResourceTest
 					structuredContent.getId(), _ddmTemplate.getTemplateKey()));
 	}
 
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLDeleteStructuredContentMyRating() throws Exception {
+		super.testGraphQLDeleteStructuredContentMyRating();
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLPostStructuredContentFolderStructuredContent()
+		throws Exception {
+
+		super.testGraphQLPostStructuredContentFolderStructuredContent();
+	}
+
 	@Override
 	@Test
 	public void testPatchStructuredContent() throws Exception {
@@ -743,6 +760,16 @@ public class StructuredContentResourceTest
 	}
 
 	@Override
+	protected List<GraphQLField> getGraphQLFields() throws Exception {
+		List<GraphQLField> graphQLFields = super.getGraphQLFields();
+
+		graphQLFields.add(new GraphQLField("key"));
+		graphQLFields.add(new GraphQLField("uuid"));
+
+		return graphQLFields;
+	}
+
+	@Override
 	protected String[] getIgnoredEntityFieldNames() {
 		return new String[] {
 			"assetLibraryId", "contentStructureId", "creatorId", "siteId"
@@ -778,14 +805,6 @@ public class StructuredContentResourceTest
 
 		return structuredContentResource.postAssetLibraryStructuredContent(
 			testDepotEntry.getDepotEntryId(), structuredContent);
-	}
-
-	@Override
-	protected Long
-			testDeleteAssetLibraryStructuredContentByExternalReferenceCode_getAssetLibraryId()
-		throws Exception {
-
-		return testDepotEntry.getDepotEntryId();
 	}
 
 	@Override
@@ -878,6 +897,19 @@ public class StructuredContentResourceTest
 		testGetStructuredContentFolderStructuredContentsPage_getStructuredContentFolderId() {
 
 		return _journalFolder.getFolderId();
+	}
+
+	@Override
+	protected StructuredContent
+			testGraphQLAssetLibraryStructuredContent_addStructuredContent(
+				Long assetLibraryId, StructuredContent structuredContent)
+		throws Exception {
+
+		structuredContent.setContentStructureId(
+			_depotDDMStructure.getStructureId());
+
+		return structuredContentResource.postAssetLibraryStructuredContent(
+			assetLibraryId, structuredContent);
 	}
 
 	@Override

@@ -126,8 +126,11 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	properties = "OSGI-INF/liferay/rest/v1_0/organization.properties",
-	property = "nested.field.support=true", scope = ServiceScope.PROTOTYPE,
-	service = OrganizationResource.class
+	property = {
+		"export.import.vulcan.batch.engine.task.item.delegate=true",
+		"nested.field.support=true"
+	},
+	scope = ServiceScope.PROTOTYPE, service = OrganizationResource.class
 )
 public class OrganizationResourceImpl
 	extends BaseOrganizationResourceImpl
@@ -309,7 +312,7 @@ public class OrganizationResourceImpl
 			@Override
 			public List<String> getNestedFields() {
 				return List.of(
-					"accountBriefs", "imageBase64", "roleBriefs",
+					"accountBriefs", "creator", "imageBase64", "roleBriefs",
 					"taxonomyCategoryBriefs", "userAccountBriefs");
 			}
 
@@ -871,7 +874,7 @@ public class OrganizationResourceImpl
 	}
 
 	private long[] _getAssetCategoryIds(Organization organization) {
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-47858")) {
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-35914")) {
 			return null;
 		}
 
@@ -1136,7 +1139,7 @@ public class OrganizationResourceImpl
 			return Long.valueOf(parentOrganization.getId());
 		}
 
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-47858")) {
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-35914")) {
 			com.liferay.portal.kernel.model.Organization
 				serviceBuilderOrganization =
 					_organizationService.
@@ -1427,7 +1430,7 @@ public class OrganizationResourceImpl
 				serviceBuilderOrganization)
 		throws Exception {
 
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-47858")) {
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-35914")) {
 			return serviceBuilderOrganization;
 		}
 

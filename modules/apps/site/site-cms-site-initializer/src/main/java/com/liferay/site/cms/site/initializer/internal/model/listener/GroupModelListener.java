@@ -213,13 +213,17 @@ public class GroupModelListener extends BaseModelListener<Group> {
 					originalGroup.getTypeSettingsProperty("trashEnabled"),
 					group.getTypeSettingsProperty("trashEnabled")) ||
 				!FeatureFlagManagerUtil.isEnabled(
-					group.getCompanyId(), "LPD-53981")) {
+					group.getCompanyId(), "LPD-17564")) {
 
 				return;
 			}
 
-			Group siteGroup = _groupLocalService.getGroup(
+			Group siteGroup = _groupLocalService.fetchGroup(
 				group.getCompanyId(), GroupConstants.CMS);
+
+			if (siteGroup == null) {
+				return;
+			}
 
 			Long[] groupIds = _getDepotGroupIds(group.getCompanyId());
 

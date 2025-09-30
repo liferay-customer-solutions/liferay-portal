@@ -176,6 +176,20 @@ public class MockContactsEngineClientImpl
 		return new Results<>(individuals, individuals.size());
 	}
 
+	@Override
+	public void insertBQProjects(List<FaroProject> faroProjects)
+		throws Exception {
+
+		contactsEngineClient.insertBQProjects(faroProjects);
+	}
+
+	@Override
+	public void updateBQProject(FaroProject faroProject, Date startDate)
+		throws Exception {
+
+		contactsEngineClient.updateBQProject(faroProject, startDate);
+	}
+
 	protected Results<Individual> getIndividuals(
 		FaroProject faroProject, String fieldName, String fieldValue,
 		String query, List<String> fields, int cur, int delta,

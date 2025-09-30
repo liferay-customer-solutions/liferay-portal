@@ -29,10 +29,15 @@ async function addSpace({
 
 async function getSpace({
 	externalReferenceCode,
-}: {
-	externalReferenceCode: string;
-}): Promise<Space> {
-	const url = `/o/headless-asset-library/v1.0/asset-libraries/by-external-reference-code/${externalReferenceCode}`;
+	spaceId,
+}:
+	| {externalReferenceCode: string; spaceId?: undefined}
+	| {externalReferenceCode?: undefined; spaceId: string}): Promise<Space> {
+	let url = `/o/headless-asset-library/v1.0/asset-libraries/by-external-reference-code/${externalReferenceCode}`;
+
+	if (spaceId) {
+		url = `/o/headless-asset-library/v1.0/asset-libraries/${spaceId}`;
+	}
 
 	const {data, error} = await ApiHelper.get<Space>(url);
 
@@ -128,15 +133,10 @@ async function getSpaceUsers({
 }
 
 async function getSpaces(): Promise<Space[]> {
-	const {data, error} = await ApiHelper.get<{items: Space[]}>(
-		"/o/headless-asset-library/v1.0/asset-libraries?filter=type eq 'Space'"
-	);
-
-	if (data) {
-		return data.items;
-	}
-
-	throw new Error(error);
+	return await ApiHelper.getAll<Space>({
+		filter: "type eq 'Space'",
+		url: '/o/headless-asset-library/v1.0/asset-libraries',
+	});
 }
 
 async function linkUserToSpace({
@@ -183,7 +183,7 @@ async function unlinkUserGroupFromSpace({
 	userGroupExternalReferenceCode: string;
 }) {
 	return await ApiHelper.delete(
-		`/o/headless-asset-library/v1.0/asset-libraries/by-external-reference-code/${spaceExternalReferenceCode}/by-external-reference-code/${userGroupExternalReferenceCode}`
+		`/o/headless-asset-library/v1.0/asset-libraries/by-external-reference-code/${spaceExternalReferenceCode}/user-groups/by-external-reference-code/${userGroupExternalReferenceCode}`
 	);
 }
 

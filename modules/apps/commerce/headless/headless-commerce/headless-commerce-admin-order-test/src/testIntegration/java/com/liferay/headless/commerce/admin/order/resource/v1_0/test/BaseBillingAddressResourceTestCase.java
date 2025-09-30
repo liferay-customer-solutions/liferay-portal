@@ -352,7 +352,7 @@ public abstract class BaseBillingAddressResourceTestCase {
 			testGraphQLGetOrderByExternalReferenceCodeBillingAddress_addBillingAddress()
 		throws Exception {
 
-		return testGraphQLBillingAddress_addBillingAddress();
+		return testGraphQLOrderBillingAddress_addBillingAddress();
 	}
 
 	@Test
@@ -488,7 +488,7 @@ public abstract class BaseBillingAddressResourceTestCase {
 			testGraphQLGetOrderIdBillingAddress_addBillingAddress()
 		throws Exception {
 
-		return testGraphQLBillingAddress_addBillingAddress();
+		return testGraphQLOrderBillingAddress_addBillingAddress();
 	}
 
 	@Test
@@ -503,7 +503,7 @@ public abstract class BaseBillingAddressResourceTestCase {
 		Assert.assertTrue(false);
 	}
 
-	protected BillingAddress testGraphQLBillingAddress_addBillingAddress()
+	protected BillingAddress testGraphQLOrderBillingAddress_addBillingAddress()
 		throws Exception {
 
 		throw new UnsupportedOperationException(
@@ -769,6 +769,10 @@ public abstract class BaseBillingAddressResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("externalReferenceCode"));
+
+		graphQLFields.add(new GraphQLField("id"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

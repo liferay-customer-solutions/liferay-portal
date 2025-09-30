@@ -23,7 +23,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -56,36 +55,6 @@ public class ListTypeDefinitionResourceTest
 						listTypeDefinition2, entityField.getName(), 1);
 				}
 			});
-	}
-
-	@Ignore
-	@Override
-	@Test
-	public void testGraphQLGetListTypeDefinition() throws Exception {
-	}
-
-	@Ignore
-	@Override
-	@Test
-	public void testGraphQLGetListTypeDefinitionByExternalReferenceCode() {
-	}
-
-	@Ignore
-	@Override
-	@Test
-	public void testGraphQLGetListTypeDefinitionByExternalReferenceCodeNotFound() {
-	}
-
-	@Ignore
-	@Override
-	@Test
-	public void testGraphQLGetListTypeDefinitionNotFound() {
-	}
-
-	@Ignore
-	@Override
-	@Test
-	public void testGraphQLGetListTypeDefinitionsPage() throws Exception {
 	}
 
 	@Override
@@ -194,6 +163,15 @@ public class ListTypeDefinitionResourceTest
 		throws Exception {
 
 		return _addListTypeDefinition(randomListTypeDefinition());
+	}
+
+	@Override
+	protected ListTypeDefinition
+			testGraphQLListTypeDefinition_addListTypeDefinition(
+				ListTypeDefinition listTypeDefinition)
+		throws Exception {
+
+		return _addListTypeDefinition(listTypeDefinition);
 	}
 
 	@Override

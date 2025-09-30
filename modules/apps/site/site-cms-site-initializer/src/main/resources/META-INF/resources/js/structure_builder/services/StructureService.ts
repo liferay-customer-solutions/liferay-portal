@@ -16,6 +16,7 @@ async function createStructure({
 	name,
 	spaces,
 	status,
+	workflows,
 }: {
 	children: Structure['children'];
 	erc?: Structure['erc'];
@@ -23,6 +24,7 @@ async function createStructure({
 	name: Structure['name'];
 	spaces: Structure['spaces'];
 	status: Structure['status'];
+	workflows: Structure['workflows'];
 }) {
 
 	// Publish object definitions for repeatable groups
@@ -38,7 +40,7 @@ async function createStructure({
 		if (error) {
 			return {
 				error: Liferay.Language.get(
-					'an-unexpected-error-occurred-while-saving-or-publishing-the-structure'
+					'an-unexpected-error-occurred-while-saving-or-publishing-the-content-structure'
 				),
 			};
 		}
@@ -53,6 +55,7 @@ async function createStructure({
 		name,
 		spaces,
 		status,
+		workflows,
 	});
 
 	return await ApiHelper.post<{id: number}>(
@@ -68,6 +71,7 @@ async function updateStructure({
 	name,
 	spaces,
 	status,
+	workflows,
 }: {
 	children: Structure['children'];
 	erc: Structure['erc'];
@@ -75,6 +79,7 @@ async function updateStructure({
 	name: Structure['name'];
 	spaces: Structure['spaces'];
 	status: Structure['status'];
+	workflows: Structure['workflows'];
 }) {
 
 	// Publish object definitions for repeatable groups
@@ -90,7 +95,7 @@ async function updateStructure({
 		if (error) {
 			return {
 				error: Liferay.Language.get(
-					'an-unexpected-error-occurred-while-saving-or-publishing-the-structure'
+					'an-unexpected-error-occurred-while-saving-or-publishing-the-content-structure'
 				),
 			};
 		}
@@ -105,6 +110,7 @@ async function updateStructure({
 		name,
 		spaces,
 		status,
+		workflows,
 	});
 
 	return await ApiHelper.put(

@@ -4,6 +4,7 @@
  */
 
 import {CMSDefaultPermissionObjectEntryDTO} from '../../main_view/default_permission/DefaultPermissionTypes';
+import {Space} from '../types/Space';
 import ApiHelper from './ApiHelper';
 
 const BASE_PATH = '/o/cms/default-permissions';
@@ -21,6 +22,37 @@ async function addObjectEntry({
 		classExternalReferenceCode,
 		className,
 		defaultPermissions,
+	});
+}
+
+async function batchUpdateObjectEntry({
+	bulkActionItems,
+	configuration,
+	defaultPermissions,
+	depotGroupId,
+	selectAll,
+	treePath,
+	type = 'DefaultPermissionBulkAction',
+}: {
+	bulkActionItems?: Array<{
+		classExternalReferenceCode: string;
+		className: string;
+	}>;
+	configuration?: string;
+	defaultPermissions?: string;
+	depotGroupId?: number;
+	selectAll: boolean;
+	treePath?: string;
+	type?: string;
+}) {
+	return await ApiHelper.post(`/o/headless-cms/v1.0/bulk-action`, {
+		bulkActionItems,
+		configuration,
+		defaultPermissions,
+		depotGroupId,
+		selectAll,
+		treePath,
+		type,
 	});
 }
 
@@ -47,6 +79,18 @@ async function getObjectEntry({
 	throw new Error(error || '');
 }
 
+async function getSpace(spaceId: number): Promise<Space> {
+	const url = `/o/headless-asset-library/v1.0/asset-libraries/${spaceId}`;
+
+	const {data, error} = await ApiHelper.get<Space>(url);
+
+	if (data) {
+		return data;
+	}
+
+	throw new Error(error || '');
+}
+
 async function updateObjectEntry({
 	defaultPermissions,
 	externalReferenceCode,
@@ -62,27 +106,10 @@ async function updateObjectEntry({
 	);
 }
 
-async function batchUpdateObjectEntry({
-	defaultPermissions,
-	depotGroupId,
-	treePath,
-}: {
-	defaultPermissions: string;
-	depotGroupId?: number;
-	treePath?: string;
-}) {
-	return await ApiHelper.post(`/o/headless-cms/v1.0/bulk-action`, {
-		defaultPermissions,
-		depotGroupId,
-		selectAll: true,
-		treePath,
-		type: 'DefaultPermissionBulkAction',
-	});
-}
-
 export default {
 	addObjectEntry,
 	batchUpdateObjectEntry,
 	getObjectEntry,
+	getSpace,
 	updateObjectEntry,
 };

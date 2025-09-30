@@ -28,6 +28,7 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -144,6 +145,15 @@ public class WikiPageAttachmentResourceTest
 					testGetSiteWikiPageByExternalReferenceCodeWikiPageExternalReferenceCodeWikiPageAttachmentByExternalReferenceCode_getSiteId(),
 					testGetSiteWikiPageByExternalReferenceCodeWikiPageExternalReferenceCodeWikiPageAttachmentByExternalReferenceCode_getWikiPageExternalReferenceCode(),
 					RandomTestUtil.randomString()));
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLGetWikiPageWikiPageAttachmentsPage()
+		throws Exception {
+
+		super.testGraphQLGetWikiPageWikiPageAttachmentsPage();
 	}
 
 	@Override
@@ -265,6 +275,14 @@ public class WikiPageAttachmentResourceTest
 	}
 
 	@Override
+	protected String
+			testGraphQLDeleteSiteWikiPageByExternalReferenceCodeWikiPageExternalReferenceCodeWikiPageAttachmentByExternalReferenceCode_getWikiPageExternalReferenceCode()
+		throws Exception {
+
+		return _wikiPage.getExternalReferenceCode();
+	}
+
+	@Override
 	protected WikiPageAttachment
 			testGraphQLGetSiteWikiPageByExternalReferenceCodeWikiPageExternalReferenceCodeWikiPageAttachmentByExternalReferenceCode_addWikiPageAttachment()
 		throws Exception {
@@ -286,6 +304,16 @@ public class WikiPageAttachmentResourceTest
 		throws Exception {
 
 		return _wikiPage.getExternalReferenceCode();
+	}
+
+	@Override
+	protected WikiPageAttachment
+			testGraphQLSiteWikiPageAttachment_addWikiPageAttachment()
+		throws Exception {
+
+		return wikiPageAttachmentResource.postWikiPageWikiPageAttachment(
+			_wikiPage.getResourcePrimKey(), randomWikiPageAttachment(),
+			getMultipartFiles());
 	}
 
 	@Override

@@ -193,7 +193,7 @@ public abstract class BaseDisplayPageTemplateResourceTestCase {
 
 	@Test
 	public void testGraphQLGetSiteDisplayPageTemplate() throws Exception {
-		Assert.assertTrue(true);
+		Assert.assertTrue(false);
 	}
 
 	@Test
@@ -549,11 +549,6 @@ public abstract class BaseDisplayPageTemplateResourceTestCase {
 		throws Exception {
 
 		return irrelevantGroup.getGroupId();
-	}
-
-	@Test
-	public void testGraphQLGetSiteDisplayPageTemplatesPage() throws Exception {
-		Assert.assertTrue(false);
 	}
 
 	protected void assertContains(

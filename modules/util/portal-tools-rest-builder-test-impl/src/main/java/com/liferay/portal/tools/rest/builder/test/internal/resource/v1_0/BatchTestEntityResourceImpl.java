@@ -10,14 +10,15 @@ import com.liferay.exportimport.vulcan.batch.engine.ExportImportVulcanBatchEngin
 import com.liferay.portal.kernel.exception.NoSuchModelException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.LongWrapper;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.tools.rest.builder.test.dto.v1_0.BatchTestEntity;
 import com.liferay.portal.tools.rest.builder.test.dto.v1_0.CompanyTestEntity;
 import com.liferay.portal.tools.rest.builder.test.resource.v1_0.BatchTestEntityResource;
 import com.liferay.portal.tools.rest.builder.test.resource.v1_0.CompanyTestEntityResource;
+import com.liferay.portal.vulcan.custom.field.CustomField;
 import com.liferay.portal.vulcan.fields.NestedFieldsSupplier;
 import com.liferay.portal.vulcan.pagination.Page;
-
-import jakarta.ws.rs.core.Response;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,6 +35,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	properties = "OSGI-INF/liferay/rest/v1_0/batch-test-entity.properties",
+	property = "export.import.vulcan.batch.engine.task.item.delegate=true",
 	scope = ServiceScope.PROTOTYPE, service = BatchTestEntityResource.class
 )
 public class BatchTestEntityResourceImpl
@@ -41,26 +43,16 @@ public class BatchTestEntityResourceImpl
 	implements ExportImportVulcanBatchEngineTaskItemDelegate<BatchTestEntity> {
 
 	@Override
-	public Response deleteBatchTestEntityByExternalReferenceCode(
+	public void deleteBatchTestEntityByExternalReferenceCode(
 		String externalReferenceCode) {
 
 		BatchTestEntity batchTestEntity = _fetchBatchTestEntity(
 			externalReferenceCode);
 
-		if (batchTestEntity == null) {
-			return Response.status(
-				204
-			).build();
+		if (batchTestEntity != null) {
+			_batchTestEntities.remove(batchTestEntity.getId());
+			_relationships.remove(batchTestEntity.getId());
 		}
-
-		long batchTestEntityId = batchTestEntity.getId();
-
-		_batchTestEntities.remove(batchTestEntityId);
-		_relationships.remove(batchTestEntityId);
-
-		return Response.status(
-			204
-		).build();
 	}
 
 	@Override
@@ -131,6 +123,10 @@ public class BatchTestEntityResourceImpl
 		throws Exception {
 
 		long batchTestEntityId = _counter.increment();
+
+		if (Validator.isNull(batchTestEntity.getExternalReferenceCode())) {
+			batchTestEntity.setExternalReferenceCode(StringUtil.randomString());
+		}
 
 		batchTestEntity.setId(batchTestEntityId);
 
@@ -299,6 +295,27 @@ public class BatchTestEntityResourceImpl
 
 		return new BatchTestEntity() {
 			{
+				setCustomFields(
+					() -> transform(
+						originalBatchTestEntity.getCustomFields(),
+						originalCustomField -> {
+							CustomField customField = new CustomField();
+
+							customField.setAttributeType(
+								() -> NestedFieldsSupplier.supply(
+									"customFields.attributeType",
+									nestedField ->
+										originalCustomField.
+											getAttributeType()));
+							customField.setCustomValue(
+								originalCustomField.getCustomValue());
+							customField.setDataType(
+								originalCustomField.getDataType());
+							customField.setName(originalCustomField.getName());
+
+							return customField;
+						},
+						CustomField.class));
 				setExternalReferenceCode(
 					originalBatchTestEntity.getExternalReferenceCode());
 				setId(originalBatchTestEntity.getId());

@@ -10,12 +10,16 @@ import ClayList from '@clayui/list';
 import {useModal} from '@clayui/modal';
 import ClaySticker from '@clayui/sticker';
 import {IFrontendDataSetProps} from '@liferay/frontend-data-set-web';
-import {ItemSelector, ItemSelectorModal} from 'frontend-js-item-selector-web';
+import {
+	ItemSelector,
+	ItemSelectorModal,
+	openItemSelectorModal,
+} from '@liferay/frontend-js-item-selector-web';
 import React, {useState} from 'react';
 
+import CMSFilesItemSelectorModal from './CMSFilesItemSelectorModal';
 import {
 	assetLibraryViews,
-	cmsFileViews,
 	documentViews,
 	userViews,
 } from './utils/defaultViews';
@@ -113,21 +117,6 @@ const userAccountsItemSelectorConfig = {
 	views: userViews,
 };
 
-const cmsFileItemSelectorConfig = {
-	apiURL: `${location.origin}/o/search/v1.0/search?${[
-		'emptySearch=true',
-		'nestedFields=embedded,file.thumbnailURL',
-		"filter=(cmsKind eq 'object') and (cmsSection eq 'files') and (status in (0, 2, 3))",
-	].join('&')}`,
-	itemTypeLabel: Liferay.Language.get('file'),
-	locator: {
-		id: 'embedded.id',
-		label: 'embedded.title',
-		value: 'embedded.id',
-	},
-	views: cmsFileViews,
-};
-
 function getRandomId(): string {
 	return Math.random().toString(36).substring(2, 9);
 }
@@ -136,6 +125,7 @@ export default function ItemSelectorSamples() {
 	const [documents, setDocuments] = useState<Document[]>([]);
 	const [space, setSpace] = useState<Space>();
 
+	const [cmsFiles, setCMSFiles] = useState<CMSFile[]>([]);
 	const [documentsItemSelectorModal, setDocumentsItemSelectorModal] =
 		useState<Document[]>([]);
 	const [spacesItemSelectorModal, setSpacesItemSelectorModal] = useState<
@@ -144,7 +134,6 @@ export default function ItemSelectorSamples() {
 	const [usersItemSelectorModal, setUsersItemSelectorModal] = useState<
 		User[]
 	>([]);
-	const [cmsFile, setCMSFile] = useState<CMSFile | null>(null);
 	const [user2, setUser2] = useState<User | null>();
 	const [space3, setSpace3] = useState<Space | null>();
 	const [spacesMultiSelect, setSpacesMultiSelect] = useState<Space[]>([]);
@@ -166,9 +155,9 @@ export default function ItemSelectorSamples() {
 		open: userItemSelectorOpen,
 	} = useModal();
 	const {
-		observer: cmsFileItemSelectorObserver,
-		onOpenChange: cmsFileItemSelectorOpenChange,
-		open: cmsFileItemSelectorOpen,
+		observer: cmsFilesItemSelectorObserver,
+		onOpenChange: cmsFilesItemSelectorOpenChange,
+		open: cmsFilesItemSelectorOpen,
 	} = useModal();
 
 	return (
@@ -474,113 +463,81 @@ export default function ItemSelectorSamples() {
 			</SampleContainer>
 
 			<SampleContainer label="Item Selector Modal">
-				<ItemSelectorModal<Document>
-					{...{
-						apiURL: documentsItemSelectorConfig.apiURL,
-						fdsProps: {
-							...FDS_DEFAULT_PROPS,
-							id: `itemSelectorModal-documents-${getRandomId()}`,
-							views: getDefaultItemSelectorModalViews({
-								viewsConfig:
-									EItemSelectorModalViewsConfig.DOCUMENTS,
-							}),
-						},
-						itemTypeLabel:
-							documentsItemSelectorConfig.itemTypeLabel,
-						items: documentsItemSelectorModal,
-						locator: documentsItemSelectorConfig.locator,
-						multiSelect: true,
-						observer: documentItemSelectorObserver,
-						onItemsChange: (items: Document[]) => {
-							setDocumentsItemSelectorModal(items);
-						},
-						onOpenChange: documentItemSelectorOpenChange,
-						open: documentItemSelectorOpen,
+				<CMSFilesItemSelectorModal
+					items={cmsFiles}
+					multiSelect
+					observer={cmsFilesItemSelectorObserver}
+					onItemsChange={(items: any) => {
+						setCMSFiles(items);
 					}}
+					onOpenChange={cmsFilesItemSelectorOpenChange}
+					open={cmsFilesItemSelectorOpen}
+				/>
+
+				<ItemSelectorModal<Document>
+					apiURL={documentsItemSelectorConfig.apiURL}
+					fdsProps={{
+						...FDS_DEFAULT_PROPS,
+						id: `itemSelectorModal-documents-${getRandomId()}`,
+						views: getDefaultItemSelectorModalViews({
+							viewsConfig:
+								EItemSelectorModalViewsConfig.DOCUMENTS,
+						}),
+					}}
+					itemTypeLabel={documentsItemSelectorConfig.itemTypeLabel}
+					items={documentsItemSelectorModal}
+					locator={documentsItemSelectorConfig.locator}
+					multiSelect
+					observer={documentItemSelectorObserver}
+					onItemsChange={(items: Document[]) => {
+						setDocumentsItemSelectorModal(items);
+					}}
+					onOpenChange={documentItemSelectorOpenChange}
+					open={documentItemSelectorOpen}
 				/>
 
 				<ItemSelectorModal<Space>
-					{...{
-						apiURL: assetLibrariesItemSelectorConfig.apiURL,
-						fdsProps: {
-							...FDS_DEFAULT_PROPS,
-							id: `itemSelectorModal-assets-${getRandomId()}`,
-							views: getDefaultItemSelectorModalViews({
-								viewsConfig:
-									EItemSelectorModalViewsConfig.ASSET_LIBRARIES,
-							}),
-						},
-						itemTypeLabel:
-							assetLibrariesItemSelectorConfig.itemTypeLabel,
-						items: spacesItemSelectorModal,
-						locator: assetLibrariesItemSelectorConfig.locator,
-						observer: spaceItemSelectorObserver,
-						onItemsChange: (items: Space[]) => {
-							setSpacesItemSelectorModal(items);
-						},
-						onOpenChange: spaceItemSelectorOpenChange,
-						open: spaceItemSelectorOpen,
+					apiURL={assetLibrariesItemSelectorConfig.apiURL}
+					fdsProps={{
+						...FDS_DEFAULT_PROPS,
+						id: `itemSelectorModal-assets-${getRandomId()}`,
+						views: getDefaultItemSelectorModalViews({
+							viewsConfig:
+								EItemSelectorModalViewsConfig.ASSET_LIBRARIES,
+						}),
 					}}
+					itemTypeLabel={
+						assetLibrariesItemSelectorConfig.itemTypeLabel
+					}
+					items={spacesItemSelectorModal}
+					locator={assetLibrariesItemSelectorConfig.locator}
+					observer={spaceItemSelectorObserver}
+					onItemsChange={(items: Space[]) => {
+						setSpacesItemSelectorModal(items);
+					}}
+					onOpenChange={spaceItemSelectorOpenChange}
+					open={spaceItemSelectorOpen}
 				/>
 
 				<ItemSelectorModal<User>
-					{...{
-						apiURL: userAccountsItemSelectorConfig.apiURL,
-						fdsProps: {
-							...FDS_DEFAULT_PROPS,
-							id: `itemSelectorModal-users-${getRandomId()}`,
-							views: getDefaultItemSelectorModalViews({
-								viewsConfig:
-									EItemSelectorModalViewsConfig.USER_ACCOUNTS,
-							}),
-						},
-						itemTypeLabel:
-							userAccountsItemSelectorConfig.itemTypeLabel,
-						items: usersItemSelectorModal,
-						locator: userAccountsItemSelectorConfig.locator,
-						observer: userItemSelectorObserver,
-						onItemsChange: (items: User[]) => {
-							setUsersItemSelectorModal(items);
-						},
-						onOpenChange: userItemSelectorOpenChange,
-						open: userItemSelectorOpen,
+					apiURL={userAccountsItemSelectorConfig.apiURL}
+					fdsProps={{
+						...FDS_DEFAULT_PROPS,
+						id: `itemSelectorModal-users-${getRandomId()}`,
+						views: getDefaultItemSelectorModalViews({
+							viewsConfig:
+								EItemSelectorModalViewsConfig.USER_ACCOUNTS,
+						}),
 					}}
-				/>
-
-				<ItemSelectorModal<CMSFile>
-					{...{
-						apiURL: cmsFileItemSelectorConfig.apiURL,
-						fdsProps: {
-							...FDS_DEFAULT_PROPS,
-							filters: [
-								{
-									apiURL: '/o/headless-asset-library/v1.0/asset-libraries',
-									entityFieldType: 'collection',
-									id: 'groupIds',
-									itemKey: 'siteId',
-									itemLabel: 'name',
-									label: Liferay.Language.get('space'),
-									multiple: true,
-									type: 'selection',
-								},
-							],
-
-							id: `itemSelectorModal-cms-files-${getRandomId()}`,
-							views: getDefaultItemSelectorModalViews({
-								viewsConfig:
-									EItemSelectorModalViewsConfig.CMS_FILES,
-							}),
-						},
-						itemTypeLabel: cmsFileItemSelectorConfig.itemTypeLabel,
-						items: cmsFile ? [cmsFile] : [],
-						locator: cmsFileItemSelectorConfig.locator,
-						observer: cmsFileItemSelectorObserver,
-						onItemsChange: (items: CMSFile[]) => {
-							setCMSFile(items[0]);
-						},
-						onOpenChange: cmsFileItemSelectorOpenChange,
-						open: cmsFileItemSelectorOpen,
+					itemTypeLabel={userAccountsItemSelectorConfig.itemTypeLabel}
+					items={usersItemSelectorModal}
+					locator={userAccountsItemSelectorConfig.locator}
+					observer={userItemSelectorObserver}
+					onItemsChange={(items: User[]) => {
+						setUsersItemSelectorModal(items);
 					}}
+					onOpenChange={userItemSelectorOpenChange}
+					open={userItemSelectorOpen}
 				/>
 
 				<ClayButton.Group className="mb-3" spaced>
@@ -614,12 +571,48 @@ export default function ItemSelectorSamples() {
 					<ClayButton
 						displayType="primary"
 						onClick={() => {
-							cmsFileItemSelectorOpenChange(true);
+							cmsFilesItemSelectorOpenChange(true);
 						}}
 					>
-						Select CMS File
+						Select CMS Files
+					</ClayButton>
+
+					<ClayButton
+						displayType="primary"
+						onClick={() => {
+							openItemSelectorModal({
+								apiURL: userAccountsItemSelectorConfig.apiURL,
+								fdsProps: {
+									...FDS_DEFAULT_PROPS,
+									id: `itemSelectorModal-users-${getRandomId()}`,
+									views: getDefaultItemSelectorModalViews({
+										viewsConfig:
+											EItemSelectorModalViewsConfig.USER_ACCOUNTS,
+									}),
+								},
+								itemTypeLabel:
+									userAccountsItemSelectorConfig.itemTypeLabel,
+								items: usersItemSelectorModal,
+								locator: userAccountsItemSelectorConfig.locator,
+								onItemsChange: (items: User[]) => {
+									setUsersItemSelectorModal(items);
+								},
+							});
+						}}
+					>
+						Open Modal With JS Utility
 					</ClayButton>
 				</ClayButton.Group>
+
+				{!!cmsFiles.length &&
+					cmsFiles.map((cmsFile: any) => (
+						<ClayAlert
+							displayType="info"
+							key={cmsFile.title}
+							symbol="document"
+							title={cmsFile.title}
+						/>
+					))}
 
 				{!!documentsItemSelectorModal.length &&
 					documentsItemSelectorModal.map((document) => (
@@ -644,14 +637,6 @@ export default function ItemSelectorSamples() {
 						displayType="info"
 						symbol="user"
 						title={usersItemSelectorModal[0].name}
-					/>
-				)}
-
-				{cmsFile && (
-					<ClayAlert
-						displayType="info"
-						symbol="file-template"
-						title={cmsFile.title}
 					/>
 				)}
 			</SampleContainer>

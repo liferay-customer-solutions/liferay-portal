@@ -336,7 +336,7 @@ public abstract class BaseSkuVirtualSettingsResourceTestCase {
 			testGraphQLGetSkuByExternalReferenceCodeSkuVirtualSettings_addSkuVirtualSettings()
 		throws Exception {
 
-		return testGraphQLSkuVirtualSettings_addSkuVirtualSettings();
+		return testGraphQLSkuSkuVirtualSettings_addSkuVirtualSettings();
 	}
 
 	@Test
@@ -475,11 +475,11 @@ public abstract class BaseSkuVirtualSettingsResourceTestCase {
 			testGraphQLGetSkuIdSkuVirtualSettings_addSkuVirtualSettings()
 		throws Exception {
 
-		return testGraphQLSkuVirtualSettings_addSkuVirtualSettings();
+		return testGraphQLSkuSkuVirtualSettings_addSkuVirtualSettings();
 	}
 
 	protected SkuVirtualSettings
-			testGraphQLSkuVirtualSettings_addSkuVirtualSettings()
+			testGraphQLSkuSkuVirtualSettings_addSkuVirtualSettings()
 		throws Exception {
 
 		throw new UnsupportedOperationException(
@@ -779,6 +779,8 @@ public abstract class BaseSkuVirtualSettingsResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("id"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

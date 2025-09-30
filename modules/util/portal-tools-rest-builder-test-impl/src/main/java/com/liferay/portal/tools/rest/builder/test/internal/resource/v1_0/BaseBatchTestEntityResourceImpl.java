@@ -94,17 +94,14 @@ public abstract class BaseBatchTestEntityResourceImpl
 	@jakarta.ws.rs.Path(
 		"/batch-test-entities/by-external-reference-code/{externalReferenceCode}"
 	)
+	@jakarta.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public Response deleteBatchTestEntityByExternalReferenceCode(
+	public void deleteBatchTestEntityByExternalReferenceCode(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@jakarta.validation.constraints.NotNull
 			@jakarta.ws.rs.PathParam("externalReferenceCode")
 			String externalReferenceCode)
 		throws Exception {
-
-		Response.ResponseBuilder responseBuilder = Response.ok();
-
-		return responseBuilder.build();
 	}
 
 	/**
@@ -257,7 +254,7 @@ public abstract class BaseBatchTestEntityResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'POST' 'http://localhost:8080/o/test/v1.0/batch-test-entities' -d $'{"externalReferenceCode": ___, "name": ___, "nestedField": ___, "relatedCompanyTestEntity": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'POST' 'http://localhost:8080/o/test/v1.0/batch-test-entities' -d $'{"customFields": ___, "externalReferenceCode": ___, "name": ___, "nestedField": ___, "relatedCompanyTestEntity": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.tags.Tags(
 		value = {
@@ -324,7 +321,7 @@ public abstract class BaseBatchTestEntityResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'PUT' 'http://localhost:8080/o/test/v1.0/batch-test-entities/by-external-reference-code/{externalReferenceCode}' -d $'{"externalReferenceCode": ___, "name": ___, "nestedField": ___, "relatedCompanyTestEntity": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'PUT' 'http://localhost:8080/o/test/v1.0/batch-test-entities/by-external-reference-code/{externalReferenceCode}' -d $'{"customFields": ___, "externalReferenceCode": ___, "name": ___, "nestedField": ___, "relatedCompanyTestEntity": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {

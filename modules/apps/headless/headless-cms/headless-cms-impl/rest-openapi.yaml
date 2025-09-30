@@ -6,6 +6,8 @@ components:
                     type: string
                 type:
                     type: string
+                url:
+                    type: string
         BulkAction:
             discriminator:
                 mapping:
@@ -23,6 +25,7 @@ components:
                         $ref: "#/components/schemas/BulkActionItem"
                     type: array
                 selectAll:
+                    default: false
                     type: boolean
                 type:
                     enum:
@@ -107,6 +110,8 @@ components:
             allOf:
                 -   $ref: "#/components/schemas/BulkAction"
                 -   properties:
+                        configuration:
+                            type: string
                         permissions:
                             items:
                                 type: permission

@@ -18,6 +18,7 @@ export class ItemSelectorSamplePage {
 	readonly multiselectGridItem: (name: string) => Locator;
 	readonly page: Page;
 	readonly filtersButton: Locator;
+	readonly jsUtilityButton: Locator;
 	readonly publishPageButton: Locator;
 	readonly samplePageHeader: Locator;
 	readonly selectCMSFileButton: Locator;
@@ -60,6 +61,10 @@ export class ItemSelectorSamplePage {
 		this.filtersButton = page.getByRole('button', {
 			name: 'Filter',
 		});
+		this.jsUtilityButton = page.getByRole('button', {
+			exact: true,
+			name: 'Open Modal With JS Utility',
+		});
 		this.publishPageButton = page.getByRole('button', {
 			name: 'Publish',
 		});
@@ -69,11 +74,11 @@ export class ItemSelectorSamplePage {
 		});
 		this.selectCMSFileButton = page.getByRole('button', {
 			exact: true,
-			name: 'Select CMS File',
+			name: 'Select CMS Files',
 		});
 		this.selectCMSFileModalHeader = page.getByRole('heading', {
 			exact: true,
-			name: 'Select File',
+			name: 'Select Files',
 		});
 		this.selectDocumentButton = page.getByRole('button', {
 			exact: true,

@@ -184,7 +184,6 @@ public abstract class BaseFragmentCompositionResourceTestCase {
 
 		FragmentComposition fragmentComposition = randomFragmentComposition();
 
-		fragmentComposition.setCreatorExternalReferenceCode(regex);
 		fragmentComposition.setDescription(regex);
 		fragmentComposition.setExternalReferenceCode(regex);
 		fragmentComposition.setFragmentSetExternalReferenceCode(regex);
@@ -197,8 +196,6 @@ public abstract class BaseFragmentCompositionResourceTestCase {
 
 		fragmentComposition = FragmentCompositionSerDes.toDTO(json);
 
-		Assert.assertEquals(
-			regex, fragmentComposition.getCreatorExternalReferenceCode());
 		Assert.assertEquals(regex, fragmentComposition.getDescription());
 		Assert.assertEquals(
 			regex, fragmentComposition.getExternalReferenceCode());
@@ -245,8 +242,7 @@ public abstract class BaseFragmentCompositionResourceTestCase {
 			testDeleteSiteFragmentComposition_getSiteExternalReferenceCode()
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return testGroup.getExternalReferenceCode();
 	}
 
 	@Test
@@ -275,8 +271,7 @@ public abstract class BaseFragmentCompositionResourceTestCase {
 			testGetSiteFragmentComposition_getSiteExternalReferenceCode()
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return testGroup.getExternalReferenceCode();
 	}
 
 	@Test
@@ -852,8 +847,7 @@ public abstract class BaseFragmentCompositionResourceTestCase {
 			testPutSiteFragmentComposition_getSiteExternalReferenceCode()
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return testGroup.getExternalReferenceCode();
 	}
 
 	@Test
@@ -915,8 +909,7 @@ public abstract class BaseFragmentCompositionResourceTestCase {
 			testBatchEngineDeleteImportTask_getSiteExternalReferenceCode()
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return testGroup.getExternalReferenceCode();
 	}
 
 	@Rule
@@ -1020,19 +1013,6 @@ public abstract class BaseFragmentCompositionResourceTestCase {
 
 			if (Objects.equals("creator", additionalAssertFieldName)) {
 				if (fragmentComposition.getCreator() == null) {
-					valid = false;
-				}
-
-				continue;
-			}
-
-			if (Objects.equals(
-					"creatorExternalReferenceCode",
-					additionalAssertFieldName)) {
-
-				if (fragmentComposition.getCreatorExternalReferenceCode() ==
-						null) {
-
 					valid = false;
 				}
 
@@ -1169,6 +1149,8 @@ public abstract class BaseFragmentCompositionResourceTestCase {
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
 
+		graphQLFields.add(new GraphQLField("externalReferenceCode"));
+
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(
 					com.liferay.headless.admin.site.dto.v1_0.
@@ -1235,21 +1217,6 @@ public abstract class BaseFragmentCompositionResourceTestCase {
 				if (!Objects.deepEquals(
 						fragmentComposition1.getCreator(),
 						fragmentComposition2.getCreator())) {
-
-					return false;
-				}
-
-				continue;
-			}
-
-			if (Objects.equals(
-					"creatorExternalReferenceCode",
-					additionalAssertFieldName)) {
-
-				if (!Objects.deepEquals(
-						fragmentComposition1.getCreatorExternalReferenceCode(),
-						fragmentComposition2.
-							getCreatorExternalReferenceCode())) {
 
 					return false;
 				}
@@ -1485,53 +1452,6 @@ public abstract class BaseFragmentCompositionResourceTestCase {
 		if (entityFieldName.equals("creator")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
-		}
-
-		if (entityFieldName.equals("creatorExternalReferenceCode")) {
-			Object object =
-				fragmentComposition.getCreatorExternalReferenceCode();
-
-			String value = String.valueOf(object);
-
-			if (operator.equals("contains")) {
-				sb = new StringBundler();
-
-				sb.append("contains(");
-				sb.append(entityFieldName);
-				sb.append(",'");
-
-				if ((object != null) && (value.length() > 2)) {
-					sb.append(value.substring(1, value.length() - 1));
-				}
-				else {
-					sb.append(value);
-				}
-
-				sb.append("')");
-			}
-			else if (operator.equals("startswith")) {
-				sb = new StringBundler();
-
-				sb.append("startswith(");
-				sb.append(entityFieldName);
-				sb.append(",'");
-
-				if ((object != null) && (value.length() > 1)) {
-					sb.append(value.substring(0, value.length() - 1));
-				}
-				else {
-					sb.append(value);
-				}
-
-				sb.append("')");
-			}
-			else {
-				sb.append("'");
-				sb.append(value);
-				sb.append("'");
-			}
-
-			return sb.toString();
 		}
 
 		if (entityFieldName.equals("dateCreated")) {
@@ -1909,8 +1829,6 @@ public abstract class BaseFragmentCompositionResourceTestCase {
 	protected FragmentComposition randomFragmentComposition() throws Exception {
 		return new FragmentComposition() {
 			{
-				creatorExternalReferenceCode = StringUtil.toLowerCase(
-					RandomTestUtil.randomString());
 				dateCreated = RandomTestUtil.nextDate();
 				dateModified = RandomTestUtil.nextDate();
 				datePublished = RandomTestUtil.nextDate();

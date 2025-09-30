@@ -1,5 +1,5 @@
 {
-	"@generated": "a50e03a4859f04be3783524a58d3faa6d96c8f20",
+	"@generated": "efa255497c09d793a09edc0cc157d605d717b4d8",
 	"@readonly": "** AUTO-GENERATED: DO NOT EDIT **",
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
@@ -12,10 +12,13 @@
 		"moduleResolution": "node",
 		"paths": {
 			"@liferay/analytics-reports-js-components-web": [
-				"../../../../../../../../dxp/apps/analytics/analytics-reports-js-components-web/src/main/resources/META-INF/resources/js/index.ts"
+				"../../../../../../../analytics/analytics-reports-js-components-web/src/main/resources/META-INF/resources/js/index.ts"
 			],
 			"@liferay/frontend-data-set-web": [
 				"../../../../../../../frontend-data-set/frontend-data-set-web/src/main/resources/META-INF/resources/index.ts"
+			],
+			"@liferay/frontend-js-item-selector-web": [
+				"../../../../../../../frontend-js/frontend-js-item-selector-web/src/main/resources/META-INF/resources/index.ts"
 			],
 			"@liferay/frontend-js-react-web": [
 				"../../../../../../../frontend-js/frontend-js-react-web/src/main/resources/META-INF/resources/js/index.ts"
@@ -65,10 +68,13 @@
 	],
 	"references": [
 		{
-			"path": "../../../../../../../../dxp/apps/analytics/analytics-reports-js-components-web/src/main/resources/META-INF/resources/tsconfig.json"
+			"path": "../../../../../../../analytics/analytics-reports-js-components-web/src/main/resources/META-INF/resources/tsconfig.json"
 		},
 		{
 			"path": "../../../../../../../frontend-data-set/frontend-data-set-web/src/main/resources/META-INF/resources/tsconfig.json"
+		},
+		{
+			"path": "../../../../../../../frontend-js/frontend-js-item-selector-web/src/main/resources/META-INF/resources/tsconfig.json"
 		},
 		{
 			"path": "../../../../../../../frontend-js/frontend-js-react-web/src/main/resources/META-INF/resources/tsconfig.json"

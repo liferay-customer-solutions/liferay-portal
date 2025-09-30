@@ -8,6 +8,8 @@ package com.liferay.portal.tools.rest.builder.test.internal.graphql.query.v1_0;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.ResourceActionLocalService;
+import com.liferay.portal.kernel.service.ResourcePermissionLocalService;
 import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.tools.rest.builder.test.dto.v1_0.AssetLibraryTestEntity;
 import com.liferay.portal.tools.rest.builder.test.dto.v1_0.BatchTestEntity;
@@ -235,7 +237,7 @@ public class Query {
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {batchTestEntity(batchTestEntityId: ___){externalReferenceCode, id, name, nestedField, relatedCompanyTestEntity}}"}' -u 'test@liferay.com:test'
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {batchTestEntity(batchTestEntityId: ___){customFields, externalReferenceCode, id, name, nestedField, relatedCompanyTestEntity}}"}' -u 'test@liferay.com:test'
 	 */
 	@GraphQLField
 	public BatchTestEntity batchTestEntity(
@@ -252,7 +254,7 @@ public class Query {
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {batchTestEntityByExternalReferenceCode(externalReferenceCode: ___){externalReferenceCode, id, name, nestedField, relatedCompanyTestEntity}}"}' -u 'test@liferay.com:test'
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {batchTestEntityByExternalReferenceCode(externalReferenceCode: ___){customFields, externalReferenceCode, id, name, nestedField, relatedCompanyTestEntity}}"}' -u 'test@liferay.com:test'
 	 */
 	@GraphQLField
 	public BatchTestEntity batchTestEntityByExternalReferenceCode(
@@ -686,43 +688,10 @@ public class Query {
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {scopedTestEntities{items {__}, page, pageSize, totalCount}}"}' -u 'test@liferay.com:test'
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {scopedTestEntities(siteKey: ___){items {__}, page, pageSize, totalCount}}"}' -u 'test@liferay.com:test'
 	 */
 	@GraphQLField
-	public ScopedTestEntityPage scopedTestEntities() throws Exception {
-		return _applyComponentServiceObjects(
-			_scopedTestEntityResourceComponentServiceObjects,
-			this::_populateResourceContext,
-			scopedTestEntityResource -> new ScopedTestEntityPage(
-				scopedTestEntityResource.getScopedTestEntitiesPage()));
-	}
-
-	/**
-	 * Invoke this method with the command line:
-	 *
-	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {scopedTestEntityByExternalReferenceCode(externalReferenceCode: ___){assetLibraryKey, dateCreated, dateModified, description, externalReferenceCode, id, permissions, siteId}}"}' -u 'test@liferay.com:test'
-	 */
-	@GraphQLField
-	public ScopedTestEntity scopedTestEntityByExternalReferenceCode(
-			@GraphQLName("externalReferenceCode") String externalReferenceCode)
-		throws Exception {
-
-		return _applyComponentServiceObjects(
-			_scopedTestEntityResourceComponentServiceObjects,
-			this::_populateResourceContext,
-			scopedTestEntityResource ->
-				scopedTestEntityResource.
-					getScopedTestEntityByExternalReferenceCode(
-						externalReferenceCode));
-	}
-
-	/**
-	 * Invoke this method with the command line:
-	 *
-	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {siteScopedTestEntities(siteKey: ___){items {__}, page, pageSize, totalCount}}"}' -u 'test@liferay.com:test'
-	 */
-	@GraphQLField
-	public ScopedTestEntityPage siteScopedTestEntities(
+	public ScopedTestEntityPage scopedTestEntities(
 			@GraphQLName("siteKey") @NotEmpty String siteKey)
 		throws Exception {
 
@@ -737,10 +706,10 @@ public class Query {
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {siteScopedTestEntityByExternalReferenceCode(externalReferenceCode: ___, siteKey: ___){assetLibraryKey, dateCreated, dateModified, description, externalReferenceCode, id, permissions, siteId}}"}' -u 'test@liferay.com:test'
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {scopedTestEntityByExternalReferenceCode(externalReferenceCode: ___, siteKey: ___){assetLibraryKey, dateCreated, dateModified, description, externalReferenceCode, id, permissions, siteId}}"}' -u 'test@liferay.com:test'
 	 */
 	@GraphQLField
-	public ScopedTestEntity siteScopedTestEntityByExternalReferenceCode(
+	public ScopedTestEntity scopedTestEntityByExternalReferenceCode(
 			@GraphQLName("siteKey") @NotEmpty String siteKey,
 			@GraphQLName("externalReferenceCode") String externalReferenceCode)
 		throws Exception {
@@ -953,32 +922,6 @@ public class Query {
 		}
 
 		private TestEntity _testEntity;
-
-	}
-
-	@GraphQLTypeExtension(BatchTestEntity.class)
-	public class GetScopedTestEntityByExternalReferenceCodeTypeExtension {
-
-		public GetScopedTestEntityByExternalReferenceCodeTypeExtension(
-			BatchTestEntity batchTestEntity) {
-
-			_batchTestEntity = batchTestEntity;
-		}
-
-		@GraphQLField
-		public ScopedTestEntity scopedTestEntityByExternalReferenceCode()
-			throws Exception {
-
-			return _applyComponentServiceObjects(
-				_scopedTestEntityResourceComponentServiceObjects,
-				Query.this::_populateResourceContext,
-				scopedTestEntityResource ->
-					scopedTestEntityResource.
-						getScopedTestEntityByExternalReferenceCode(
-							_batchTestEntity.getExternalReferenceCode()));
-		}
-
-		private BatchTestEntity _batchTestEntity;
 
 	}
 
@@ -1601,6 +1544,10 @@ public class Query {
 		assetLibraryTestEntityResource.setContextUriInfo(_uriInfo);
 		assetLibraryTestEntityResource.setContextUser(_user);
 		assetLibraryTestEntityResource.setGroupLocalService(_groupLocalService);
+		assetLibraryTestEntityResource.setResourceActionLocalService(
+			_resourceActionLocalService);
+		assetLibraryTestEntityResource.setResourcePermissionLocalService(
+			_resourcePermissionLocalService);
 		assetLibraryTestEntityResource.setRoleLocalService(_roleLocalService);
 	}
 
@@ -1617,6 +1564,10 @@ public class Query {
 		batchTestEntityResource.setContextUriInfo(_uriInfo);
 		batchTestEntityResource.setContextUser(_user);
 		batchTestEntityResource.setGroupLocalService(_groupLocalService);
+		batchTestEntityResource.setResourceActionLocalService(
+			_resourceActionLocalService);
+		batchTestEntityResource.setResourcePermissionLocalService(
+			_resourcePermissionLocalService);
 		batchTestEntityResource.setRoleLocalService(_roleLocalService);
 	}
 
@@ -1633,6 +1584,10 @@ public class Query {
 		companyTestEntityResource.setContextUriInfo(_uriInfo);
 		companyTestEntityResource.setContextUser(_user);
 		companyTestEntityResource.setGroupLocalService(_groupLocalService);
+		companyTestEntityResource.setResourceActionLocalService(
+			_resourceActionLocalService);
+		companyTestEntityResource.setResourcePermissionLocalService(
+			_resourcePermissionLocalService);
 		companyTestEntityResource.setRoleLocalService(_roleLocalService);
 	}
 
@@ -1651,6 +1606,10 @@ public class Query {
 		ercAssetLibraryTestEntityResource.setContextUser(_user);
 		ercAssetLibraryTestEntityResource.setGroupLocalService(
 			_groupLocalService);
+		ercAssetLibraryTestEntityResource.setResourceActionLocalService(
+			_resourceActionLocalService);
+		ercAssetLibraryTestEntityResource.setResourcePermissionLocalService(
+			_resourcePermissionLocalService);
 		ercAssetLibraryTestEntityResource.setRoleLocalService(
 			_roleLocalService);
 	}
@@ -1668,6 +1627,10 @@ public class Query {
 		ercScopedTestEntityResource.setContextUriInfo(_uriInfo);
 		ercScopedTestEntityResource.setContextUser(_user);
 		ercScopedTestEntityResource.setGroupLocalService(_groupLocalService);
+		ercScopedTestEntityResource.setResourceActionLocalService(
+			_resourceActionLocalService);
+		ercScopedTestEntityResource.setResourcePermissionLocalService(
+			_resourcePermissionLocalService);
 		ercScopedTestEntityResource.setRoleLocalService(_roleLocalService);
 	}
 
@@ -1684,6 +1647,10 @@ public class Query {
 		ercSiteTestEntityResource.setContextUriInfo(_uriInfo);
 		ercSiteTestEntityResource.setContextUser(_user);
 		ercSiteTestEntityResource.setGroupLocalService(_groupLocalService);
+		ercSiteTestEntityResource.setResourceActionLocalService(
+			_resourceActionLocalService);
+		ercSiteTestEntityResource.setResourcePermissionLocalService(
+			_resourcePermissionLocalService);
 		ercSiteTestEntityResource.setRoleLocalService(_roleLocalService);
 	}
 
@@ -1703,6 +1670,10 @@ public class Query {
 		entityModelResourceTestEntity1Resource.setContextUser(_user);
 		entityModelResourceTestEntity1Resource.setGroupLocalService(
 			_groupLocalService);
+		entityModelResourceTestEntity1Resource.setResourceActionLocalService(
+			_resourceActionLocalService);
+		entityModelResourceTestEntity1Resource.
+			setResourcePermissionLocalService(_resourcePermissionLocalService);
 		entityModelResourceTestEntity1Resource.setRoleLocalService(
 			_roleLocalService);
 	}
@@ -1723,6 +1694,10 @@ public class Query {
 		entityModelResourceTestEntity2Resource.setContextUser(_user);
 		entityModelResourceTestEntity2Resource.setGroupLocalService(
 			_groupLocalService);
+		entityModelResourceTestEntity2Resource.setResourceActionLocalService(
+			_resourceActionLocalService);
+		entityModelResourceTestEntity2Resource.
+			setResourcePermissionLocalService(_resourcePermissionLocalService);
 		entityModelResourceTestEntity2Resource.setRoleLocalService(
 			_roleLocalService);
 	}
@@ -1737,6 +1712,10 @@ public class Query {
 		filterResource.setContextUriInfo(_uriInfo);
 		filterResource.setContextUser(_user);
 		filterResource.setGroupLocalService(_groupLocalService);
+		filterResource.setResourceActionLocalService(
+			_resourceActionLocalService);
+		filterResource.setResourcePermissionLocalService(
+			_resourcePermissionLocalService);
 		filterResource.setRoleLocalService(_roleLocalService);
 	}
 
@@ -1753,6 +1732,10 @@ public class Query {
 		multipartTestEntityResource.setContextUriInfo(_uriInfo);
 		multipartTestEntityResource.setContextUser(_user);
 		multipartTestEntityResource.setGroupLocalService(_groupLocalService);
+		multipartTestEntityResource.setResourceActionLocalService(
+			_resourceActionLocalService);
+		multipartTestEntityResource.setResourcePermissionLocalService(
+			_resourcePermissionLocalService);
 		multipartTestEntityResource.setRoleLocalService(_roleLocalService);
 	}
 
@@ -1766,6 +1749,10 @@ public class Query {
 		schemaResource.setContextUriInfo(_uriInfo);
 		schemaResource.setContextUser(_user);
 		schemaResource.setGroupLocalService(_groupLocalService);
+		schemaResource.setResourceActionLocalService(
+			_resourceActionLocalService);
+		schemaResource.setResourcePermissionLocalService(
+			_resourcePermissionLocalService);
 		schemaResource.setRoleLocalService(_roleLocalService);
 	}
 
@@ -1782,6 +1769,10 @@ public class Query {
 		scopedTestEntityResource.setContextUriInfo(_uriInfo);
 		scopedTestEntityResource.setContextUser(_user);
 		scopedTestEntityResource.setGroupLocalService(_groupLocalService);
+		scopedTestEntityResource.setResourceActionLocalService(
+			_resourceActionLocalService);
+		scopedTestEntityResource.setResourcePermissionLocalService(
+			_resourcePermissionLocalService);
 		scopedTestEntityResource.setRoleLocalService(_roleLocalService);
 	}
 
@@ -1798,6 +1789,10 @@ public class Query {
 		siteTestEntityResource.setContextUriInfo(_uriInfo);
 		siteTestEntityResource.setContextUser(_user);
 		siteTestEntityResource.setGroupLocalService(_groupLocalService);
+		siteTestEntityResource.setResourceActionLocalService(
+			_resourceActionLocalService);
+		siteTestEntityResource.setResourcePermissionLocalService(
+			_resourcePermissionLocalService);
 		siteTestEntityResource.setRoleLocalService(_roleLocalService);
 	}
 
@@ -1811,6 +1806,9 @@ public class Query {
 		sortResource.setContextUriInfo(_uriInfo);
 		sortResource.setContextUser(_user);
 		sortResource.setGroupLocalService(_groupLocalService);
+		sortResource.setResourceActionLocalService(_resourceActionLocalService);
+		sortResource.setResourcePermissionLocalService(
+			_resourcePermissionLocalService);
 		sortResource.setRoleLocalService(_roleLocalService);
 	}
 
@@ -1824,6 +1822,10 @@ public class Query {
 		testEntityResource.setContextUriInfo(_uriInfo);
 		testEntityResource.setContextUser(_user);
 		testEntityResource.setGroupLocalService(_groupLocalService);
+		testEntityResource.setResourceActionLocalService(
+			_resourceActionLocalService);
+		testEntityResource.setResourcePermissionLocalService(
+			_resourcePermissionLocalService);
 		testEntityResource.setRoleLocalService(_roleLocalService);
 	}
 
@@ -1840,6 +1842,10 @@ public class Query {
 		testEntityAddressResource.setContextUriInfo(_uriInfo);
 		testEntityAddressResource.setContextUser(_user);
 		testEntityAddressResource.setGroupLocalService(_groupLocalService);
+		testEntityAddressResource.setResourceActionLocalService(
+			_resourceActionLocalService);
+		testEntityAddressResource.setResourcePermissionLocalService(
+			_resourcePermissionLocalService);
 		testEntityAddressResource.setRoleLocalService(_roleLocalService);
 	}
 
@@ -1886,6 +1892,8 @@ public class Query {
 	private GroupLocalService _groupLocalService;
 	private HttpServletRequest _httpServletRequest;
 	private HttpServletResponse _httpServletResponse;
+	private ResourceActionLocalService _resourceActionLocalService;
+	private ResourcePermissionLocalService _resourcePermissionLocalService;
 	private RoleLocalService _roleLocalService;
 	private BiFunction<Object, String, com.liferay.portal.kernel.search.Sort[]>
 		_sortsBiFunction;

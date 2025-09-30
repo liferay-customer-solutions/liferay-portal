@@ -21,6 +21,7 @@ import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONDeserializer;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
@@ -36,6 +37,7 @@ import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PropsValues;
@@ -87,6 +89,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.function.Supplier;
 
 import org.junit.After;
@@ -277,7 +280,7 @@ public abstract class BaseTestEntityResourceTestCase {
 							put("testEntityId", testEntity1.getId());
 						}
 					},
-					new GraphQLField("id"))),
+					getGraphQLFields())),
 			"JSONArray/errors");
 
 		Assert.assertTrue(errorsJSONArray1.length() > 0);
@@ -312,7 +315,7 @@ public abstract class BaseTestEntityResourceTestCase {
 								put("testEntityId", testEntity2.getId());
 							}
 						},
-						new GraphQLField("id")))),
+						getGraphQLFields()))),
 			"JSONArray/errors");
 
 		Assert.assertTrue(errorsJSONArray2.length() > 0);
@@ -505,8 +508,11 @@ public abstract class BaseTestEntityResourceTestCase {
 
 		long totalCount = testEntitiesJSONObject.getLong("totalCount");
 
-		TestEntity testEntity1 = testGraphQLGetTestEntitiesPage_addTestEntity();
-		TestEntity testEntity2 = testGraphQLGetTestEntitiesPage_addTestEntity();
+		TestEntity testEntity1 = testGraphQLTestEntity_addTestEntity(
+			randomTestEntity());
+
+		TestEntity testEntity2 = testGraphQLTestEntity_addTestEntity(
+			randomTestEntity());
 
 		testEntitiesJSONObject = JSONUtil.getValueAsJSONObject(
 			invokeGraphQLQuery(graphQLField), "JSONObject/data",
@@ -546,12 +552,6 @@ public abstract class BaseTestEntityResourceTestCase {
 			Arrays.asList(
 				TestEntitySerDes.toDTOs(
 					testEntitiesJSONObject.getString("items"))));
-	}
-
-	protected TestEntity testGraphQLGetTestEntitiesPage_addTestEntity()
-		throws Exception {
-
-		return testGraphQLTestEntity_addTestEntity();
 	}
 
 	@Test
@@ -980,6 +980,16 @@ public abstract class BaseTestEntityResourceTestCase {
 	}
 
 	@Test
+	public void testGraphQLPostTestEntity() throws Exception {
+		TestEntity randomTestEntity = randomTestEntity();
+
+		TestEntity testEntity = testGraphQLTestEntity_addTestEntity(
+			randomTestEntity);
+
+		Assert.assertTrue(equals(randomTestEntity, testEntity));
+	}
+
+	@Test
 	public void testPostTestEntityMultipartBulk() throws Exception {
 		Assert.assertTrue(false);
 	}
@@ -1107,8 +1117,116 @@ public abstract class BaseTestEntityResourceTestCase {
 	protected TestEntity testGraphQLTestEntity_addTestEntity()
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return testGraphQLTestEntity_addTestEntity(randomTestEntity());
+	}
+
+	protected TestEntity testGraphQLTestEntity_addTestEntity(
+			TestEntity testEntity)
+		throws Exception {
+
+		JSONDeserializer<TestEntity> jsonDeserializer =
+			JSONFactoryUtil.createJSONDeserializer();
+
+		StringBuilder sb = new StringBuilder("{");
+
+		for (java.lang.reflect.Field field :
+				getDeclaredFields(TestEntity.class)) {
+
+			if (getGraphQLValue(field.get(testEntity)) != null) {
+				if (sb.length() > 1) {
+					sb.append(", ");
+				}
+
+				sb.append(field.getName());
+				sb.append(": ");
+				sb.append(getGraphQLValue(field.get(testEntity)));
+			}
+		}
+
+		sb.append("}");
+
+		List<GraphQLField> graphQLFields = getGraphQLFields();
+
+		return jsonDeserializer.deserialize(
+			JSONUtil.getValueAsString(
+				invokeGraphQLMutation(
+					new GraphQLField(
+						"createTestEntity",
+						new HashMap<String, Object>() {
+							{
+								put("testEntity", sb.toString());
+							}
+						},
+						graphQLFields)),
+				"JSONObject/data", "JSONObject/createTestEntity"),
+			TestEntity.class);
+	}
+
+	protected String getGraphQLValue(Object value) throws Exception {
+		if (value == null) {
+			return null;
+		}
+		else if (value instanceof Boolean || value instanceof Number) {
+			return value.toString();
+		}
+		else if (value instanceof Date date) {
+			return "\"" +
+				DateUtil.getDate(
+					date, "yyyy-MM-dd'T'HH:mm:ss'Z'", LocaleUtil.getDefault(),
+					TimeZone.getTimeZone("UTC")) + "\"";
+		}
+		else if (value instanceof Enum<?> enm) {
+			return enm.name();
+		}
+		else if (value instanceof Map<?, ?> map) {
+			List<String> entries = new ArrayList<>();
+
+			for (Map.Entry<?, ?> entry : map.entrySet()) {
+				String graphQLValue = getGraphQLValue(entry.getValue());
+
+				if (graphQLValue != null) {
+					entries.add(entry.getKey() + ": " + graphQLValue);
+				}
+			}
+
+			return "{" + String.join(", ", entries) + "}";
+		}
+		else if (value instanceof Object[] array) {
+			List<String> entries = new ArrayList<>();
+
+			for (Object entry : array) {
+				String graphQLValue = getGraphQLValue(entry);
+
+				if (graphQLValue != null) {
+					entries.add(graphQLValue);
+				}
+			}
+
+			return "[" + String.join(", ", entries) + "]";
+		}
+		else if (value instanceof String) {
+			return "\"" + value + "\"";
+		}
+		else {
+			List<String> entries = new ArrayList<>();
+
+			Class<?> clazz = value.getClass();
+			java.lang.reflect.Field[] declaredFields = getDeclaredFields(clazz);
+
+			if (declaredFields.length == 0) {
+				declaredFields = getDeclaredFields(clazz.getSuperclass());
+			}
+
+			for (java.lang.reflect.Field field : declaredFields) {
+				String graphQLValue = getGraphQLValue(field.get(value));
+
+				if (graphQLValue != null) {
+					entries.add(field.getName() + ": " + graphQLValue);
+				}
+			}
+
+			return "{" + String.join(", ", entries) + "}";
+		}
 	}
 
 	protected void assertContains(
@@ -1359,6 +1477,8 @@ public abstract class BaseTestEntityResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("id"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

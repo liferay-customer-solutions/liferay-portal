@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
-import {useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {
 	Outlet,
 	useLocation,
@@ -14,6 +15,7 @@ import {
 
 import Loading from '../../components/Loading';
 import ProductPurchase from '../../components/ProductPurchase';
+import {MarketplaceDeliveryProduct} from '../../entity/MarketplaceDeliveryProduct';
 import {SolutionTypes} from '../../enums/Product';
 import useProductPurchaseCart from '../../hooks/useProductPurchaseCart';
 import i18n from '../../i18n';
@@ -24,6 +26,7 @@ import {productTypeRoutes} from './ProductPurchaseRouter';
 import useAccounts from './hooks/useAccounts';
 import ProductPurchaseService from './services/ProductPurchase';
 import ProductPurchaseApp from './services/ProductPurchaseApp';
+import {productPurchaseStore} from './store/AppPurchaseStore';
 
 type ProductPurchaseOutletProps = {
 	product: DeliveryProduct;
@@ -46,6 +49,7 @@ export type ProductPurchaseOutletContext = {
 		cart?: Cart | undefined,
 		cartOptions?: any
 	) => Promise<void>;
+	marketplaceDeliveryProduct: MarketplaceDeliveryProduct;
 	product: DeliveryProduct;
 	productPurchaseCart: ReturnType<typeof useProductPurchaseCart>;
 	productTypeRoute: ProductPurchaseOutletProps['productTypeRoute'];
@@ -59,6 +63,7 @@ const ProductPurchaseOutlet: React.FC<ProductPurchaseOutletProps> = ({
 }) => {
 	const [isSubmitting, setSubmitting] = useState(false);
 	const {accounts, selectedAccount, setSelectedAccount} = useAccounts();
+
 	const {pathname} = useLocation();
 	const navigate = useNavigate();
 
@@ -70,6 +75,10 @@ const ProductPurchaseOutlet: React.FC<ProductPurchaseOutletProps> = ({
 
 		ProductPurchaseApp.getOrderTypeExternalReferenceCode(product)
 	);
+
+	const marketplaceDeliveryProduct = useMemo(() => {
+		return new MarketplaceDeliveryProduct(product);
+	}, [product]);
 
 	const {metadata, routes = []} = productTypeRoute || {};
 
@@ -130,9 +139,7 @@ const ProductPurchaseOutlet: React.FC<ProductPurchaseOutletProps> = ({
 		setSubmitting(false);
 	};
 
-	const displaySteps = metadata?.isNavigationStepVisible
-		? metadata.isNavigationStepVisible(product)
-		: true;
+	const isTinyDisplay = metadata?.tinyStepsDisplay;
 
 	const context = {
 		accounts,
@@ -141,6 +148,7 @@ const ProductPurchaseOutlet: React.FC<ProductPurchaseOutletProps> = ({
 			previousStep: () => stepNavigate(-1),
 		},
 		handlePurchase,
+		marketplaceDeliveryProduct,
 		product,
 		productPurchaseCart,
 		routes: steps,
@@ -148,6 +156,15 @@ const ProductPurchaseOutlet: React.FC<ProductPurchaseOutletProps> = ({
 		setSelectedAccount,
 		solutionTypeSpecificationValue,
 	};
+
+	useEffect(() => {
+		if (selectedAccount?.taxId) {
+			productPurchaseStore.send({
+				taxId: selectedAccount.taxId,
+				type: 'setAccountTaxId',
+			});
+		}
+	}, [selectedAccount?.taxId]);
 
 	return (
 		<ProductPurchase className="my-7">
@@ -163,16 +180,30 @@ const ProductPurchaseOutlet: React.FC<ProductPurchaseOutletProps> = ({
 				rightNode={
 					metadata.useCart ? (
 						<ProductPurchasePrice
-							activeStepIndex={activeStepIndex}
 							product={product}
+							productPurchaseCart={productPurchaseCart}
 						/>
 					) : null
 				}
 			>
+				{marketplaceDeliveryProduct.isPerpetualLicense && (
+					<div className="mt-2 text-black-50">
+						<ClayIcon
+							className="mr-1"
+							color="#2E5AAC"
+							symbol="exclamation-full"
+						/>{' '}
+						<small>
+							A perpetual license never expires. Support is not
+							included.
+						</small>
+					</div>
+				)}
+
 				<ProductPurchase.HeaderAccount account={selectedAccount} />
 			</ProductPurchase.Header>
 
-			{displaySteps && (
+			{!isTinyDisplay && (
 				<ProductPurchase.Steps
 					className="mt-5 px-8"
 					onClickIndicator={(step) => navigate(step.key)}
@@ -181,8 +212,16 @@ const ProductPurchaseOutlet: React.FC<ProductPurchaseOutletProps> = ({
 			)}
 
 			<ProductPurchase.Body
-				className={classNames({'mt-7': accounts.length === 1})}
+				className={classNames('mt-7', {'mt-7': accounts.length === 1})}
 			>
+				{isTinyDisplay && (
+					<ProductPurchase.CircleSteps
+						className="my-5 px-8"
+						onClickIndicator={(step) => navigate(step.key)}
+						steps={steps}
+					/>
+				)}
+
 				<Outlet context={context} />
 			</ProductPurchase.Body>
 		</ProductPurchase>

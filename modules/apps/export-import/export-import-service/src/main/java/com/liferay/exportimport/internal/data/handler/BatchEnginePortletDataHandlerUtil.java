@@ -10,6 +10,7 @@ import com.liferay.batch.engine.constants.CreateStrategy;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.exportimport.kernel.lar.PortletDataHandlerKeys;
 import com.liferay.exportimport.kernel.lar.UserIdStrategy;
+import com.liferay.exportimport.vulcan.batch.engine.ExportImportVulcanBatchEngineTaskItemDelegate;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.petra.string.StringUtil;
@@ -36,13 +37,16 @@ import java.util.Map;
 public class BatchEnginePortletDataHandlerUtil {
 
 	public static Map<String, Serializable> buildExportParameters(
-		List<String> nestedFields, Map<String, Serializable> parameters,
+		ExportImportVulcanBatchEngineTaskItemDelegate.ExportImportDescriptor
+			exportImportDescriptor,
 		PortletDataContext portletDataContext) {
 
 		return HashMapBuilder.<String, Serializable>put(
 			"batchNestedFields",
 			() -> {
 				List<String> batchNestedFields = new ArrayList<>();
+
+				batchNestedFields.add("customFields.attributeType");
 
 				if (MapUtil.getBoolean(
 						portletDataContext.getParameterMap(),
@@ -51,8 +55,11 @@ public class BatchEnginePortletDataHandlerUtil {
 					batchNestedFields.add("permissions");
 				}
 
-				if (ListUtil.isNotEmpty(nestedFields)) {
-					batchNestedFields.addAll(nestedFields);
+				if (ListUtil.isNotEmpty(
+						exportImportDescriptor.getNestedFields())) {
+
+					batchNestedFields.addAll(
+						exportImportDescriptor.getNestedFields());
 				}
 
 				if (batchNestedFields.isEmpty()) {
@@ -90,6 +97,10 @@ public class BatchEnginePortletDataHandlerUtil {
 				return sb.toString();
 			}
 		).put(
+			"itemClassName", exportImportDescriptor.getItemClassName()
+		).put(
+			"itemModelName", exportImportDescriptor.getItemModelName()
+		).put(
 			"siteId",
 			() -> {
 				Map<String, String[]> map =
@@ -105,11 +116,13 @@ public class BatchEnginePortletDataHandlerUtil {
 				return portletDataContext.getScopeGroupId();
 			}
 		).putAll(
-			parameters
+			exportImportDescriptor.getParameters()
 		).build();
 	}
 
 	public static Map<String, Serializable> buildImportParameters(
+		ExportImportVulcanBatchEngineTaskItemDelegate.ExportImportDescriptor
+			exportImportDescriptor,
 		PortletDataContext portletDataContext) {
 
 		return HashMapBuilder.<String, Serializable>put(
@@ -140,6 +153,10 @@ public class BatchEnginePortletDataHandlerUtil {
 				return BatchEngineImportTaskConstants.
 					IMPORT_CREATOR_STRATEGY_KEEP_CREATOR;
 			}
+		).put(
+			"itemClassName", exportImportDescriptor.getItemClassName()
+		).put(
+			"itemModelName", exportImportDescriptor.getItemModelName()
 		).put(
 			"siteId", portletDataContext.getScopeGroupId()
 		).build();

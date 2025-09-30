@@ -5,13 +5,22 @@
 
 import getPaginatedList from '../../main_view/home/util/getPaginatedList';
 import {AssignableUser} from '../types/AssignableUser';
+import {Workflow} from '../types/Workflow';
 import {WorkflowTask} from '../types/WorkflowTask';
 import ApiHelper from './ApiHelper';
 
+export async function getWorkflowDefinitions(): Promise<Workflow[]> {
+	return await ApiHelper.getAll<Workflow>({
+		url: '/o/headless-admin-workflow/v1.0/workflow-definitions',
+	});
+}
+
 export async function getWorkflowTasksAssignedToMe({
+	objectDefinitions,
 	page,
 	pageSize,
 }: {
+	objectDefinitions: any[];
 	page: number;
 	pageSize: number;
 }): Promise<{items: WorkflowTask[]; totalCount: number}> {
@@ -31,8 +40,15 @@ export async function getWorkflowTasksAssignedToMe({
 	}>(fetchUrl);
 
 	if (data) {
+		const assetTypes = objectDefinitions.map(
+			(item) => item.label[item.defaultLanguageId]
+		);
+
 		const filteredWorkflowTasks = data.items.filter(
-			(item) => !item.completed && item.name === 'review'
+			(item) =>
+				!item.completed &&
+				item.name === 'review' &&
+				assetTypes.includes(item.objectReviewed.assetType)
 		);
 
 		const transformedWorkflowTasks = filteredWorkflowTasks.map(
@@ -71,9 +87,11 @@ export async function getWorkflowTasksAssignedToMe({
 }
 
 export async function getWorkflowTasksAssignedToMyRoles({
+	objectDefinitions,
 	page,
 	pageSize,
 }: {
+	objectDefinitions: any[];
 	page: number;
 	pageSize: number;
 }): Promise<{items: WorkflowTask[]; totalCount: number}> {
@@ -93,8 +111,15 @@ export async function getWorkflowTasksAssignedToMyRoles({
 	}>(fetchUrl);
 
 	if (data) {
+		const assetTypes = objectDefinitions.map(
+			(item) => item.label[item.defaultLanguageId]
+		);
+
 		const filteredWorkflowTasks = data.items.filter(
-			(item) => !item.completed && item.name === 'review'
+			(item) =>
+				!item.completed &&
+				item.name === 'review' &&
+				assetTypes.includes(item.objectReviewed.assetType)
 		);
 
 		const transformedWorkflowTasks = filteredWorkflowTasks.map(

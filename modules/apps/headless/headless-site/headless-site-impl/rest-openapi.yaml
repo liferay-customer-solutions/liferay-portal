@@ -37,9 +37,13 @@ components:
                         -   restricted
                     type: string
                 name:
+                    type: string
+                name_i18n:
                     additionalProperties:
                         type: string
                     type: object
+                parentSiteExternalReferenceCode:
+                    type: string
                 parentSiteKey:
                     type: string
                     writeOnly: true

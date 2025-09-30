@@ -12,6 +12,8 @@ import React, {
 	useReducer,
 } from 'react';
 
+import {Space} from '../../common/types/Space';
+import {Workflow} from '../../common/types/Workflow';
 import {ObjectDefinitions} from '../types/ObjectDefinition';
 import {
 	ReferencedStructure,
@@ -33,8 +35,9 @@ import {getChildrenUuids} from '../utils/getChildrenUuids';
 import getRandomId from '../utils/getRandomId';
 import getUuid from '../utils/getUuid';
 import insertGroup from '../utils/insertGroup';
+import isLocked from '../utils/isLocked';
+import isReferenced from '../utils/isReferenced';
 import normalizeName from '../utils/normalizeName';
-import openDeletionModal from '../utils/openDeletionModal';
 import refreshReferencedStructures from '../utils/refreshReferencedStructures';
 import sortChildren from '../utils/sortChildren';
 import ungroup from '../utils/ungroup';
@@ -46,7 +49,9 @@ import {
 	validateStructure,
 } from '../utils/validation';
 
-const DEFAULT_STRUCTURE_LABEL = Liferay.Language.get('untitled-structure');
+const DEFAULT_STRUCTURE_LABEL = Liferay.Language.get(
+	'untitled-content-structure'
+);
 
 type History = {
 	deletedChildren: boolean;
@@ -81,6 +86,7 @@ const INITIAL_STATE: State = {
 		spaces: [],
 		status: 'new',
 		uuid: getUuid(),
+		workflows: {},
 	},
 	unsavedChanges: false,
 };
@@ -127,6 +133,12 @@ type SetErrorAction = {error: string | null; type: 'set-error'};
 type SetSelection = {
 	selection: State['selection'];
 	type: 'set-selection';
+};
+
+type SetWorkflowAction = {
+	name: Workflow['name'];
+	spaceERC?: Space['externalReferenceCode'];
+	type: 'set-workflow';
 };
 
 type UngroupAction = {
@@ -180,6 +192,7 @@ export type Action =
 	| RefreshReferencedStructuresAction
 	| SetErrorAction
 	| SetSelection
+	| SetWorkflowAction
 	| UngroupAction
 	| UpdateFieldAction
 	| UpdateRepeatableGroupAction
@@ -271,7 +284,23 @@ function reducer(state: State, action: Action): State {
 			}
 
 			for (const child of groupChildren) {
-				if (publishedChildren.has(child.uuid)) {
+				if (isLocked(child)) {
+					showWarning({
+						text: Liferay.Language.get(
+							'the-repeatable-group-cannot-be-created-because-one-or-more-fields-of-the-selection-are-system-fields'
+						),
+						title: Liferay.Language.get(
+							'repeatable-group-creation-not-allowed'
+						),
+					});
+
+					return state;
+				}
+
+				if (
+					publishedChildren.has(child.uuid) ||
+					isReferenced({item: child, root: structure})
+				) {
 					showWarning({
 						text: Liferay.Language.get(
 							'the-repeatable-group-cannot-be-created-because-one-or-more-fields-of-the-selection-are-already-published'
@@ -378,15 +407,6 @@ function reducer(state: State, action: Action): State {
 				return state;
 			}
 
-			if (
-				child.parent === structure.uuid &&
-				structure.children.size === 1
-			) {
-				openDeletionModal();
-
-				return state;
-			}
-
 			const nextChildren = deleteChildren({
 				root: structure,
 				uuids: [child.uuid],
@@ -421,20 +441,46 @@ function reducer(state: State, action: Action): State {
 		case 'delete-selection': {
 			const {selection, structure} = state;
 
+			const items = selection.map(
+				(uuid) => findChild({root: structure, uuid})!
+			);
+
+			if (items.some((item) => isLocked(item))) {
+				showWarning({
+					text: Liferay.Language.get(
+						'system-fields-cannot-be-deleted'
+					),
+					title: Liferay.Language.get(
+						'some-fields-cannot-be-deleted'
+					),
+				});
+			}
+			else if (
+				items.some((item) => isReferenced({item, root: structure}))
+			) {
+				showWarning({
+					text: Liferay.Language.get(
+						'referenced-content-structure-fields-cannot-be-deleted'
+					),
+					title: Liferay.Language.get(
+						'some-fields-cannot-be-deleted'
+					),
+				});
+			}
+
 			const nextChildren = deleteChildren({
 				root: structure,
 				uuids: selection,
 			});
 
-			if (nextChildren.size === 0) {
-				openDeletionModal();
-
-				return state;
-			}
+			const undeletableItems = items.filter(
+				(item) =>
+					isLocked(item) || isReferenced({item, root: structure})
+			);
 
 			return {
 				...state,
-				selection: INITIAL_STATE.selection,
+				selection: undeletableItems.map(({uuid}) => uuid),
 				structure: {
 					...structure,
 					children: nextChildren,
@@ -485,6 +531,21 @@ function reducer(state: State, action: Action): State {
 			const {selection} = action;
 
 			return {...state, selection};
+		}
+		case 'set-workflow': {
+			const {name, spaceERC} = action;
+
+			const {structure} = state;
+
+			const nextStructure = {
+				...structure,
+				workflows: {
+					...structure.workflows,
+					[spaceERC || '']: name,
+				},
+			};
+
+			return {...state, structure: nextStructure};
 		}
 		case 'ungroup': {
 			const {publishedChildren, structure} = state;
@@ -761,6 +822,7 @@ function getDefaultChildren(structureUuid: Uuid) {
 
 	const title = getDefaultField({
 		label: Liferay.Language.get('title'),
+		locked: true,
 		name: 'title',
 		parent: structureUuid,
 		required: true,
@@ -772,6 +834,7 @@ function getDefaultChildren(structureUuid: Uuid) {
 	if (type === 'L_CMS_FILE_TYPES') {
 		const file = getDefaultField({
 			label: Liferay.Language.get('file'),
+			locked: true,
 			name: 'file',
 			parent: structureUuid,
 			required: true,

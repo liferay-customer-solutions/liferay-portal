@@ -6,6 +6,7 @@
 package com.liferay.headless.admin.site.internal.resource.v1_0;
 
 import com.liferay.client.extension.type.manager.CETManager;
+import com.liferay.exportimport.vulcan.batch.engine.ExportImportVulcanBatchEngineTaskItemDelegate;
 import com.liferay.headless.admin.site.dto.v1_0.ClassSubtypeReference;
 import com.liferay.headless.admin.site.dto.v1_0.ContentPageSpecification;
 import com.liferay.headless.admin.site.dto.v1_0.DisplayPageTemplate;
@@ -28,6 +29,7 @@ import com.liferay.headless.common.spi.service.context.ServiceContextBuilder;
 import com.liferay.info.item.InfoItemFormVariation;
 import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.info.item.provider.InfoItemFormVariationsProvider;
+import com.liferay.layout.admin.constants.LayoutAdminPortletKeys;
 import com.liferay.layout.admin.kernel.model.LayoutTypePortletConstants;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateCollectionTypeConstants;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateConstants;
@@ -42,7 +44,6 @@ import com.liferay.portal.kernel.lazy.referencing.LazyReferencingThreadLocal;
 import com.liferay.portal.kernel.model.ClassName;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutConstants;
-import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
@@ -59,12 +60,12 @@ import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
-import com.liferay.portal.vulcan.util.SearchUtil;
 
 import jakarta.ws.rs.core.MultivaluedMap;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -82,7 +83,9 @@ import org.osgi.service.component.annotations.ServiceScope;
 	scope = ServiceScope.PROTOTYPE, service = DisplayPageTemplateResource.class
 )
 public class DisplayPageTemplateResourceImpl
-	extends BaseDisplayPageTemplateResourceImpl {
+	extends BaseDisplayPageTemplateResourceImpl
+	implements ExportImportVulcanBatchEngineTaskItemDelegate
+		<DisplayPageTemplate> {
 
 	@Override
 	public void deleteSiteDisplayPageTemplate(
@@ -107,31 +110,30 @@ public class DisplayPageTemplateResourceImpl
 	}
 
 	@Override
-	public DisplayPageTemplate getSiteDisplayPageTemplate(
-			String siteExternalReferenceCode,
-			String displayPageTemplateExternalReferenceCode)
-		throws Exception {
+	public ExportImportDescriptor getExportImportDescriptor() {
+		return new ExportImportDescriptor() {
 
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
-			throw new UnsupportedOperationException();
-		}
+			@Override
+			public String getItemClassName() {
+				return LayoutPageTemplateEntry.class.getName();
+			}
 
-		LayoutPageTemplateEntry layoutPageTemplateEntry =
-			_layoutPageTemplateEntryService.
-				getLayoutPageTemplateEntryByExternalReferenceCode(
-					displayPageTemplateExternalReferenceCode,
-					GroupUtil.getGroupId(
-						true, contextCompany.getCompanyId(),
-						siteExternalReferenceCode));
+			@Override
+			public List<String> getNestedFields() {
+				return List.of("friendlyUrlHistory", "pageSpecifications");
+			}
 
-		if (!Objects.equals(
-				LayoutPageTemplateEntryTypeConstants.DISPLAY_PAGE,
-				layoutPageTemplateEntry.getType())) {
+			@Override
+			public String getPortletId() {
+				return LayoutAdminPortletKeys.GROUP_PAGES;
+			}
 
-			throw new UnsupportedOperationException();
-		}
+			@Override
+			public Scope getScope() {
+				return Scope.SITE;
+			}
 
-		return _displayPageTemplateDTOConverter.toDTO(layoutPageTemplateEntry);
+		};
 	}
 
 	@Override
@@ -171,61 +173,6 @@ public class DisplayPageTemplateResourceImpl
 				layoutPageTemplateEntry ->
 					_displayPageTemplateDTOConverter.toDTO(
 						layoutPageTemplateEntry)));
-	}
-
-	@Override
-	public Page<DisplayPageTemplate> getSiteDisplayPageTemplatesPage(
-			String siteExternalReferenceCode, String search,
-			Aggregation aggregation, Filter filter, Pagination pagination,
-			Sort[] sorts)
-		throws Exception {
-
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
-			throw new UnsupportedOperationException();
-		}
-
-		long groupId = GroupUtil.getGroupId(
-			true, contextCompany.getCompanyId(), siteExternalReferenceCode);
-
-		return SearchUtil.search(
-			Collections.emptyMap(),
-			booleanQuery -> {
-			},
-			filter, LayoutPageTemplateEntry.class.getName(), search, pagination,
-			queryConfig -> queryConfig.setSelectedFieldNames(
-				Field.ENTRY_CLASS_PK),
-			searchContext -> {
-				searchContext.setAttribute(
-					"types",
-					new String[] {
-						String.valueOf(
-							LayoutPageTemplateEntryTypeConstants.DISPLAY_PAGE)
-					});
-				searchContext.setCompanyId(contextCompany.getCompanyId());
-				searchContext.setGroupIds(new long[] {groupId});
-			},
-			sorts,
-			document -> _displayPageTemplateDTOConverter.toDTO(
-				_layoutPageTemplateEntryService.fetchLayoutPageTemplateEntry(
-					GetterUtil.getLong(document.get(Field.ENTRY_CLASS_PK)))));
-	}
-
-	@Override
-	public DisplayPageTemplate postSiteDisplayPageTemplate(
-			String siteExternalReferenceCode,
-			DisplayPageTemplate displayPageTemplate)
-		throws Exception {
-
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
-			throw new UnsupportedOperationException();
-		}
-
-		long groupId = GroupUtil.getGroupId(
-			false, contextCompany.getCompanyId(), siteExternalReferenceCode);
-
-		return _addDisplayPageTemplate(
-			displayPageTemplate, groupId,
-			_getLayoutPageTemplateCollectionId(displayPageTemplate, groupId));
 	}
 
 	@Override
@@ -298,7 +245,81 @@ public class DisplayPageTemplateResourceImpl
 	}
 
 	@Override
-	public DisplayPageTemplate putSiteDisplayPageTemplate(
+	protected DisplayPageTemplate doGetSiteDisplayPageTemplate(
+			String siteExternalReferenceCode,
+			String displayPageTemplateExternalReferenceCode)
+		throws Exception {
+
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
+			throw new UnsupportedOperationException();
+		}
+
+		LayoutPageTemplateEntry layoutPageTemplateEntry =
+			_layoutPageTemplateEntryService.
+				getLayoutPageTemplateEntryByExternalReferenceCode(
+					displayPageTemplateExternalReferenceCode,
+					GroupUtil.getGroupId(
+						true, contextCompany.getCompanyId(),
+						siteExternalReferenceCode));
+
+		if (!Objects.equals(
+				LayoutPageTemplateEntryTypeConstants.DISPLAY_PAGE,
+				layoutPageTemplateEntry.getType())) {
+
+			throw new UnsupportedOperationException();
+		}
+
+		return _displayPageTemplateDTOConverter.toDTO(layoutPageTemplateEntry);
+	}
+
+	@Override
+	protected Page<DisplayPageTemplate> doGetSiteDisplayPageTemplatesPage(
+			String siteExternalReferenceCode, String search,
+			Aggregation aggregation, Filter filter, Pagination pagination,
+			Sort[] sorts)
+		throws Exception {
+
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
+			throw new UnsupportedOperationException();
+		}
+
+		long groupId = GroupUtil.getGroupId(
+			true, contextCompany.getCompanyId(), siteExternalReferenceCode);
+
+		return Page.of(
+			transform(
+				_layoutPageTemplateEntryService.getLayoutPageTemplateEntries(
+					groupId, LayoutPageTemplateEntryTypeConstants.DISPLAY_PAGE,
+					pagination.getStartPosition(), pagination.getEndPosition(),
+					null),
+				layoutPageTemplateEntry ->
+					_displayPageTemplateDTOConverter.toDTO(
+						layoutPageTemplateEntry)),
+			pagination,
+			_layoutPageTemplateEntryService.getLayoutPageTemplateEntriesCount(
+				groupId, LayoutPageTemplateEntryTypeConstants.DISPLAY_PAGE));
+	}
+
+	@Override
+	protected DisplayPageTemplate doPostSiteDisplayPageTemplate(
+			String siteExternalReferenceCode,
+			DisplayPageTemplate displayPageTemplate)
+		throws Exception {
+
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
+			throw new UnsupportedOperationException();
+		}
+
+		long groupId = GroupUtil.getGroupId(
+			false, contextCompany.getCompanyId(), siteExternalReferenceCode);
+
+		return _addDisplayPageTemplate(
+			displayPageTemplate, groupId,
+			_getLayoutPageTemplateCollectionId(displayPageTemplate, groupId));
+	}
+
+	@Override
+	protected DisplayPageTemplate doPutSiteDisplayPageTemplate(
 			String siteExternalReferenceCode,
 			String displayPageTemplateExternalReferenceCode,
 			DisplayPageTemplate displayPageTemplate)
@@ -422,6 +443,28 @@ public class DisplayPageTemplateResourceImpl
 			_layoutPageTemplateEntryService.updateLayoutPageTemplateEntry(
 				layoutPageTemplateEntry.getLayoutPageTemplateEntryId(),
 				displayPageTemplate.getName()));
+	}
+
+	@Override
+	protected Long getPermissionCheckerResourceId(
+			String groupExternalReferenceCode, String externalReferenceCode)
+		throws Exception {
+
+		LayoutPageTemplateEntry layoutPageTemplateEntry =
+			_layoutPageTemplateEntryService.
+				getLayoutPageTemplateEntryByExternalReferenceCode(
+					externalReferenceCode,
+					getPermissionCheckerGroupId(groupExternalReferenceCode));
+
+		return layoutPageTemplateEntry.getPrimaryKey();
+	}
+
+	@Override
+	protected String getPermissionCheckerResourceName(
+			String groupExternalReferenceCode, String externalReferenceCode)
+		throws Exception {
+
+		return LayoutPageTemplateEntry.class.getName();
 	}
 
 	@Override

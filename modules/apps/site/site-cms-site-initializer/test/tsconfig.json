@@ -1,5 +1,5 @@
 {
-	"@generated": "cb1cf6452a93b6c0c23f9e29a688cd1a105cdc25",
+	"@generated": "285a22d55a46f2a2b9b3ee00eea9b5c9278fc78a",
 	"@readonly": "** AUTO-GENERATED: DO NOT EDIT **",
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
@@ -12,10 +12,13 @@
 		"moduleResolution": "node",
 		"paths": {
 			"@liferay/analytics-reports-js-components-web": [
-				"../../../../dxp/apps/analytics/analytics-reports-js-components-web/src/main/resources/META-INF/resources/js/index.ts"
+				"../../../analytics/analytics-reports-js-components-web/src/main/resources/META-INF/resources/js/index.ts"
 			],
 			"@liferay/frontend-data-set-web": [
 				"../../../frontend-data-set/frontend-data-set-web/src/main/resources/META-INF/resources/index.ts"
+			],
+			"@liferay/frontend-js-item-selector-web": [
+				"../../../frontend-js/frontend-js-item-selector-web/src/main/resources/META-INF/resources/index.ts"
 			],
 			"@liferay/frontend-js-react-web": [
 				"../../../frontend-js/frontend-js-react-web/src/main/resources/META-INF/resources/js/index.ts"
@@ -67,10 +70,13 @@
 	],
 	"references": [
 		{
-			"path": "../../../../dxp/apps/analytics/analytics-reports-js-components-web/src/main/resources/META-INF/resources/tsconfig.json"
+			"path": "../../../analytics/analytics-reports-js-components-web/src/main/resources/META-INF/resources/tsconfig.json"
 		},
 		{
 			"path": "../../../frontend-data-set/frontend-data-set-web/src/main/resources/META-INF/resources/tsconfig.json"
+		},
+		{
+			"path": "../../../frontend-js/frontend-js-item-selector-web/src/main/resources/META-INF/resources/tsconfig.json"
 		},
 		{
 			"path": "../../../frontend-js/frontend-js-react-web/src/main/resources/META-INF/resources/tsconfig.json"

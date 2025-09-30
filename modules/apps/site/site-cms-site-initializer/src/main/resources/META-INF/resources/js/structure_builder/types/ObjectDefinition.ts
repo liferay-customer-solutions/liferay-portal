@@ -18,7 +18,7 @@ export type ObjectField = {
 	name: string;
 	objectFieldSettings?: {name: string; value: boolean | string | number}[];
 	required: boolean;
-	system?: boolean;
+	system: boolean;
 };
 
 export type ObjectRelationship = {
@@ -59,6 +59,10 @@ export type ObjectDefinition = {
 		code: number;
 	};
 	titleObjectFieldName?: string;
+	workflowDefinitionLinks?: {
+		groupExternalReferenceCode: string;
+		workflowDefinitionName: string;
+	}[];
 };
 
 export type ObjectDefinitions = Record<

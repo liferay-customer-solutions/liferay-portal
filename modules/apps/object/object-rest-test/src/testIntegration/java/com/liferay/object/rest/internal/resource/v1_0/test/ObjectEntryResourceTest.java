@@ -9331,6 +9331,7 @@ public class ObjectEntryResourceTest {
 	}
 
 	@Test
+	@TestInfo("LPD-55622")
 	public void testPostCustomObjectEntryWithNestedCustomObjectEntriesInManyToManyRelationship()
 		throws Exception {
 
@@ -9384,15 +9385,144 @@ public class ObjectEntryResourceTest {
 
 		_assertEquals(nestedObjectEntriesJSONArray);
 
+		// Company-Site scope: with 'scopeKey'
+
+		_objectRelationship2 = ObjectRelationshipTestUtil.addObjectRelationship(
+			_objectDefinition1, _siteScopedObjectDefinition2,
+			TestPropsValues.getUserId(),
+			ObjectRelationshipConstants.TYPE_MANY_TO_MANY);
+
+		objectEntryJSONObject = JSONUtil.put(
+			_objectRelationship2.getName(),
+			_withScopeKey(
+				_createObjectEntriesJSONArray(
+					new String[] {_ERC_VALUE_1, _ERC_VALUE_2},
+					_OBJECT_FIELD_NAME_2,
+					new String[] {
+						_NEW_OBJECT_FIELD_VALUE_1, _NEW_OBJECT_FIELD_VALUE_2
+					}),
+				"Guest"));
+
+		jsonObject = HTTPTestUtil.invokeToJSONObject(
+			objectEntryJSONObject.toString(),
+			_objectDefinition1.getRESTContextPath(), Http.Method.POST);
+
+		Assert.assertEquals(
+			0,
+			jsonObject.getJSONObject(
+				"status"
+			).get(
+				"code"
+			));
+
+		nestedObjectEntriesJSONArray = jsonObject.getJSONArray(
+			_objectRelationship2.getName());
+
+		Assert.assertEquals(2, nestedObjectEntriesJSONArray.length());
+
+		_assertEquals(nestedObjectEntriesJSONArray);
+
+		objectEntryId = jsonObject.getString("id");
+
+		jsonObject = HTTPTestUtil.invokeToJSONObject(
+			null,
+			StringBundler.concat(
+				_objectDefinition1.getRESTContextPath(), StringPool.SLASH,
+				objectEntryId, "?nestedFields=",
+				_objectRelationship2.getName()),
+			Http.Method.GET);
+
+		nestedObjectEntriesJSONArray = jsonObject.getJSONArray(
+			_objectRelationship2.getName());
+
+		Assert.assertEquals(2, nestedObjectEntriesJSONArray.length());
+
+		_assertEquals(nestedObjectEntriesJSONArray);
+
+		// Company-Site scope: with empty 'scopeKey'
+
+		objectEntryJSONObject = JSONUtil.put(
+			_objectRelationship2.getName(),
+			_withScopeKey(
+				_createObjectEntriesJSONArray(
+					new String[] {_ERC_VALUE_1, _ERC_VALUE_2},
+					_OBJECT_FIELD_NAME_2,
+					new String[] {
+						_NEW_OBJECT_FIELD_VALUE_1, _NEW_OBJECT_FIELD_VALUE_2
+					}),
+				StringPool.BLANK));
+
+		jsonObject = HTTPTestUtil.invokeToJSONObject(
+			objectEntryJSONObject.toString(),
+			_objectDefinition1.getRESTContextPath(), Http.Method.POST);
+
+		JSONAssert.assertEquals(
+			JSONUtil.put(
+				"status", "BAD_REQUEST"
+			).put(
+				"title", "Group ID 0 is not valid for scope \"site\""
+			).toString(),
+			jsonObject.toString(), JSONCompareMode.LENIENT);
+
+		// Company-Site scope: with nonexistent 'scopeKey'
+
+		objectEntryJSONObject = JSONUtil.put(
+			_objectRelationship2.getName(),
+			_withScopeKey(
+				_createObjectEntriesJSONArray(
+					new String[] {_ERC_VALUE_1, _ERC_VALUE_2},
+					_OBJECT_FIELD_NAME_2,
+					new String[] {
+						_NEW_OBJECT_FIELD_VALUE_1, _NEW_OBJECT_FIELD_VALUE_2
+					}),
+				RandomTestUtil.randomString()));
+
+		jsonObject = HTTPTestUtil.invokeToJSONObject(
+			objectEntryJSONObject.toString(),
+			_objectDefinition1.getRESTContextPath(), Http.Method.POST);
+
+		JSONAssert.assertEquals(
+			JSONUtil.put(
+				"status", "BAD_REQUEST"
+			).put(
+				"title", "Group ID 0 is not valid for scope \"site\""
+			).toString(),
+			jsonObject.toString(), JSONCompareMode.LENIENT);
+
+		// Company-Site scope: without 'scopeKey'
+
+		objectEntryJSONObject = JSONUtil.put(
+			_objectRelationship2.getName(),
+			_createObjectEntriesJSONArray(
+				new String[] {_ERC_VALUE_1, _ERC_VALUE_2}, _OBJECT_FIELD_NAME_2,
+				new String[] {
+					_NEW_OBJECT_FIELD_VALUE_1, _NEW_OBJECT_FIELD_VALUE_2
+				}));
+
+		jsonObject = HTTPTestUtil.invokeToJSONObject(
+			objectEntryJSONObject.toString(),
+			_objectDefinition1.getRESTContextPath(), Http.Method.POST);
+
+		JSONAssert.assertEquals(
+			JSONUtil.put(
+				"status", "BAD_REQUEST"
+			).put(
+				"title",
+				StringBundler.concat(
+					"No scope key was provided for the \"",
+					_siteScopedObjectDefinition2.getName(), "\" entry.")
+			).toString(),
+			jsonObject.toString(), JSONCompareMode.LENIENT);
+
 		// Site scope
 
-		_objectRelationship6 = ObjectRelationshipTestUtil.addObjectRelationship(
+		_objectRelationship3 = ObjectRelationshipTestUtil.addObjectRelationship(
 			_siteScopedObjectDefinition1, _siteScopedObjectDefinition2,
 			TestPropsValues.getUserId(),
 			ObjectRelationshipConstants.TYPE_MANY_TO_MANY);
 
 		objectEntryJSONObject = JSONUtil.put(
-			_objectRelationship6.getName(),
+			_objectRelationship3.getName(),
 			_createObjectEntriesJSONArray(
 				new String[] {_ERC_VALUE_1, _ERC_VALUE_2}, _OBJECT_FIELD_NAME_2,
 				new String[] {
@@ -9413,7 +9543,7 @@ public class ObjectEntryResourceTest {
 			));
 
 		nestedObjectEntriesJSONArray = jsonObject.getJSONArray(
-			_objectRelationship6.getName());
+			_objectRelationship3.getName());
 
 		Assert.assertEquals(2, nestedObjectEntriesJSONArray.length());
 
@@ -9426,11 +9556,11 @@ public class ObjectEntryResourceTest {
 			StringBundler.concat(
 				_siteScopedObjectDefinition1.getRESTContextPath(),
 				StringPool.SLASH, objectEntryId, "?nestedFields=",
-				_objectRelationship6.getName()),
+				_objectRelationship3.getName()),
 			Http.Method.GET);
 
 		nestedObjectEntriesJSONArray = jsonObject.getJSONArray(
-			_objectRelationship6.getName());
+			_objectRelationship3.getName());
 
 		Assert.assertEquals(2, nestedObjectEntriesJSONArray.length());
 
@@ -14584,7 +14714,8 @@ public class ObjectEntryResourceTest {
 	}
 
 	private void _assertCustomObjectEntryWithPermissions(
-		JSONArray expectedPermissionsJSONArray, JSONObject jsonObject) {
+			JSONArray expectedPermissionsJSONArray, JSONObject jsonObject)
+		throws Exception {
 
 		JSONArray actualPermissionsJSONArray = jsonObject.getJSONArray(
 			"permissions");
@@ -14599,7 +14730,9 @@ public class ObjectEntryResourceTest {
 			JSONCompareMode.LENIENT);
 	}
 
-	private void _assertEquals(JSONArray nestedObjectEntriesJSONArray) {
+	private void _assertEquals(JSONArray nestedObjectEntriesJSONArray)
+		throws Exception {
+
 		JSONAssert.assertEquals(
 			JSONUtil.putAll(
 				JSONUtil.put(
@@ -19273,6 +19406,16 @@ public class ObjectEntryResourceTest {
 		}
 
 		return objectEntryResource.postValidate(validationRequest);
+	}
+
+	private JSONArray _withScopeKey(JSONArray jsonArray, String scopeKey) {
+		for (int i = 0; i < jsonArray.length(); i++) {
+			JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+			jsonObject.put("scopeKey", scopeKey);
+		}
+
+		return jsonArray;
 	}
 
 	private static final String _ERC_VALUE_1 =

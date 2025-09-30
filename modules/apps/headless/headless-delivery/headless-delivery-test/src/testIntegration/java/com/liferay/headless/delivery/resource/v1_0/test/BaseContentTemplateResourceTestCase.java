@@ -807,7 +807,7 @@ public abstract class BaseContentTemplateResourceTestCase {
 			testGraphQLGetSiteContentTemplate_addContentTemplate()
 		throws Exception {
 
-		return testGraphQLContentTemplate_addContentTemplate();
+		return testGraphQLSiteContentTemplate_addContentTemplate();
 	}
 
 	@Test
@@ -1248,84 +1248,6 @@ public abstract class BaseContentTemplateResourceTestCase {
 	}
 
 	@Test
-	public void testGraphQLGetSiteContentTemplatesPage() throws Exception {
-		Long siteId = testGetSiteContentTemplatesPage_getSiteId();
-
-		GraphQLField graphQLField = new GraphQLField(
-			"contentTemplates",
-			new HashMap<String, Object>() {
-				{
-					put("page", 1);
-					put("pageSize", 10);
-
-					put("siteKey", "\"" + siteId + "\"");
-				}
-			},
-			new GraphQLField("items", getGraphQLFields()),
-			new GraphQLField("page"), new GraphQLField("totalCount"));
-
-		// No namespace
-
-		JSONObject contentTemplatesJSONObject = JSONUtil.getValueAsJSONObject(
-			invokeGraphQLQuery(graphQLField), "JSONObject/data",
-			"JSONObject/contentTemplates");
-
-		long totalCount = contentTemplatesJSONObject.getLong("totalCount");
-
-		ContentTemplate contentTemplate1 =
-			testGraphQLGetSiteContentTemplatesPage_addContentTemplate();
-		ContentTemplate contentTemplate2 =
-			testGraphQLGetSiteContentTemplatesPage_addContentTemplate();
-
-		contentTemplatesJSONObject = JSONUtil.getValueAsJSONObject(
-			invokeGraphQLQuery(graphQLField), "JSONObject/data",
-			"JSONObject/contentTemplates");
-
-		Assert.assertEquals(
-			totalCount + 2, contentTemplatesJSONObject.getLong("totalCount"));
-
-		assertContains(
-			contentTemplate1,
-			Arrays.asList(
-				ContentTemplateSerDes.toDTOs(
-					contentTemplatesJSONObject.getString("items"))));
-		assertContains(
-			contentTemplate2,
-			Arrays.asList(
-				ContentTemplateSerDes.toDTOs(
-					contentTemplatesJSONObject.getString("items"))));
-
-		// Using the namespace headlessDelivery_v1_0
-
-		contentTemplatesJSONObject = JSONUtil.getValueAsJSONObject(
-			invokeGraphQLQuery(
-				new GraphQLField("headlessDelivery_v1_0", graphQLField)),
-			"JSONObject/data", "JSONObject/headlessDelivery_v1_0",
-			"JSONObject/contentTemplates");
-
-		Assert.assertEquals(
-			totalCount + 2, contentTemplatesJSONObject.getLong("totalCount"));
-
-		assertContains(
-			contentTemplate1,
-			Arrays.asList(
-				ContentTemplateSerDes.toDTOs(
-					contentTemplatesJSONObject.getString("items"))));
-		assertContains(
-			contentTemplate2,
-			Arrays.asList(
-				ContentTemplateSerDes.toDTOs(
-					contentTemplatesJSONObject.getString("items"))));
-	}
-
-	protected ContentTemplate
-			testGraphQLGetSiteContentTemplatesPage_addContentTemplate()
-		throws Exception {
-
-		return testGraphQLContentTemplate_addContentTemplate();
-	}
-
-	@Test
 	public void testBatchEngineDeleteImportTask() throws Exception {
 		Assert.assertTrue(true);
 	}
@@ -1333,7 +1255,8 @@ public abstract class BaseContentTemplateResourceTestCase {
 	@Rule
 	public SearchTestRule searchTestRule = new SearchTestRule();
 
-	protected ContentTemplate testGraphQLContentTemplate_addContentTemplate()
+	protected ContentTemplate
+			testGraphQLSiteContentTemplate_addContentTemplate()
 		throws Exception {
 
 		throw new UnsupportedOperationException(
@@ -1593,6 +1516,8 @@ public abstract class BaseContentTemplateResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("id"));
 
 		graphQLFields.add(new GraphQLField("siteId"));
 

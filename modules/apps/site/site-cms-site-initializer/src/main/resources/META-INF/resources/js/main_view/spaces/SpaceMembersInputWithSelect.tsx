@@ -29,6 +29,50 @@ export interface SpaceMembersInputWithSelectProps {
 	selectValue?: SelectOptions;
 }
 
+function MembersResource({
+	children,
+	endpoint,
+	onNetworkStatusChange,
+	value,
+}: {
+	children: (args: {refetch: () => void; resource: any}) => React.ReactNode;
+	endpoint: string;
+	onNetworkStatusChange: (status: number) => void;
+	value: string;
+}) {
+	const {refetch, resource} = useResource({
+		fetch: async (link, options) => {
+			const result = await fetch(link, {
+				...options,
+				headers: {
+					...(options?.headers ? options.headers : {}),
+					'x-csrf-token': Liferay.authToken,
+				},
+			});
+
+			const json = await result.json();
+
+			return {
+				cursor: json.next,
+				items: json.items.map((item: any) => {
+					return {
+						...item,
+						numberOfUserAccounts: item.usersCount,
+					};
+				}),
+			};
+		},
+		fetchPolicy: 'no-cache' as FetchPolicy.NoCache,
+		link: `${window.location.origin}${endpoint}`,
+		onNetworkStatusChange: (status) => {
+			setTimeout(() => onNetworkStatusChange(status), 0);
+		},
+		variables: {search: value},
+	});
+
+	return <>{children({refetch, resource})}</>;
+}
+
 export function SpaceMembersInputWithSelect({
 	className,
 	disabled,
@@ -45,62 +89,31 @@ export function SpaceMembersInputWithSelect({
 			? '/o/headless-admin-user/v1.0/user-accounts'
 			: '/o/headless-admin-user/v1.0/user-groups';
 
-	const {refetch, resource} = useResource({
-		fetch: async (link, options) => {
-			const result = await fetch(link, {
-				...options,
-				headers: {
-					...(options?.headers ? options.headers : {}),
-					'x-csrf-token': Liferay.authToken,
-				},
-			});
-
-			const json = await result.json();
-
-			return {
-				cursor: json.next,
-				items: json.items.map((item: any) => {
-					return {...item, numberOfUserAccounts: item.usersCount};
-				}),
-			};
-		},
-		fetchPolicy: 'no-cache' as FetchPolicy.NoCache,
-		link: `${window.location.origin}${endpoint}`,
-		onNetworkStatusChange: setNetworkStatus,
-		variables: {search: value},
-	});
-
 	const renderAutocompleteItem = () => {
 		if (selectValue === SelectOptions.USERS) {
-			return (item: UserAccount) => {
-				return (
-					<Autocomplete.Item
-						className="align-items-center d-flex text-truncate"
-						key={item.id}
-						onClick={() => {
-							onAutocompleteItemSelected?.(item);
-							setTimeout(() => setValue(''), 0);
-						}}
-						textValue={item.name}
-					>
-						<ClaySticker
-							displayType="primary"
-							shape="circle"
-							size="sm"
-						>
-							<img
-								alt={item.name}
-								className="sticker-img"
-								src={item.image || '/image/user_portrait'}
-							/>
-						</ClaySticker>
+			return (item: UserAccount) => (
+				<Autocomplete.Item
+					className="align-items-center d-flex text-truncate"
+					key={item.id}
+					onClick={() => {
+						onAutocompleteItemSelected?.(item);
+						setTimeout(() => setValue(''), 0);
+					}}
+					textValue={item.name}
+				>
+					<ClaySticker displayType="primary" shape="circle" size="sm">
+						<img
+							alt={item.name}
+							className="sticker-img"
+							src={item.image || '/image/user_portrait'}
+						/>
+					</ClaySticker>
 
-						<span className="ml-2 text-truncate">
-							{item.name} ({item.emailAddress?.split('@')[0]})
-						</span>
-					</Autocomplete.Item>
-				);
-			};
+					<span className="ml-2 text-truncate">
+						{item.name} ({item.emailAddress?.split('@')[0]})
+					</span>
+				</Autocomplete.Item>
+			);
 		}
 
 		return (item: UserGroup) => {
@@ -180,26 +193,37 @@ export function SpaceMembersInputWithSelect({
 							)}
 						/>
 					) : (
-						<Autocomplete
-							allowsCustomValue
-							id="autocomplete"
-							items={(resource?.items ?? []) as any}
-							loadingState={networkStatus}
-							menuTrigger="focus"
-							messages={{
-								loading: Liferay.Language.get('loading...'),
-								notFound:
-									Liferay.Language.get('no-results-found'),
-							}}
-							onChange={setValue}
-							onFocusCapture={refetch}
-							placeholder={Liferay.Language.get(
-								'enter-name-or-email'
-							)}
+						<MembersResource
+							endpoint={endpoint}
+							onNetworkStatusChange={setNetworkStatus}
 							value={value}
 						>
-							{renderAutocompleteItem()}
-						</Autocomplete>
+							{({refetch, resource}) => (
+								<Autocomplete
+									allowsCustomValue
+									id="autocomplete"
+									items={(resource?.items ?? []) as any}
+									loadingState={networkStatus}
+									menuTrigger="focus"
+									messages={{
+										loading:
+											Liferay.Language.get('loading...'),
+										notFound:
+											Liferay.Language.get(
+												'no-results-found'
+											),
+									}}
+									onChange={setValue}
+									onFocusCapture={refetch}
+									placeholder={Liferay.Language.get(
+										'enter-name-or-email'
+									)}
+									value={value}
+								>
+									{renderAutocompleteItem()}
+								</Autocomplete>
+							)}
+						</MembersResource>
 					)}
 				</ClayInput.GroupItem>
 			</ClayInput.Group>

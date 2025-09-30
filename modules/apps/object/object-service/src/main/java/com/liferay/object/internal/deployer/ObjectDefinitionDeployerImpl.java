@@ -13,10 +13,12 @@ import com.liferay.frontend.taglib.servlet.taglib.ScreenNavigationEntry;
 import com.liferay.notification.handler.NotificationHandler;
 import com.liferay.notification.term.evaluator.NotificationTermEvaluator;
 import com.liferay.object.constants.ObjectActionTriggerConstants;
+import com.liferay.object.constants.ObjectDefinitionConstants;
 import com.liferay.object.constants.ObjectDefinitionSettingConstants;
 import com.liferay.object.definition.security.permission.resource.util.ObjectDefinitionResourcePermissionUtil;
 import com.liferay.object.definition.tree.util.ObjectDefinitionTreeUtil;
 import com.liferay.object.deployer.ObjectDefinitionDeployer;
+import com.liferay.object.internal.defaultpermissions.resource.ObjectEntryPortalDefaultPermissionsModelResource;
 import com.liferay.object.internal.layout.tab.screen.navigation.category.ObjectLayoutTabScreenNavigationCategory;
 import com.liferay.object.internal.notification.handler.ObjectDefinitionNotificationHandler;
 import com.liferay.object.internal.notification.term.contributor.ObjectDefinitionNotificationTermEvaluator;
@@ -60,14 +62,15 @@ import com.liferay.object.service.ObjectLayoutLocalService;
 import com.liferay.object.service.ObjectLayoutTabLocalService;
 import com.liferay.object.service.ObjectRelationshipLocalService;
 import com.liferay.object.service.ObjectViewLocalService;
-import com.liferay.object.tree.Edge;
 import com.liferay.object.tree.Node;
 import com.liferay.object.tree.ObjectDefinitionTreeFactory;
 import com.liferay.object.tree.Tree;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClassDefinition;
 import com.liferay.portal.db.partition.util.DBPartitionUtil;
+import com.liferay.portal.kernel.defaultpermissions.resource.PortalDefaultPermissionsModelResource;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.security.permission.ResourceActions;
@@ -86,8 +89,8 @@ import com.liferay.portal.kernel.service.UserGroupRoleLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.service.WorkflowDefinitionLinkLocalService;
 import com.liferay.portal.kernel.trash.TrashHandler;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.workflow.WorkflowHandler;
@@ -100,6 +103,7 @@ import com.liferay.portal.search.spi.model.query.contributor.KeywordQueryContrib
 import com.liferay.portal.search.spi.model.query.contributor.ModelPreFilterContributor;
 import com.liferay.portal.search.spi.model.registrar.ModelSearchConfigurator;
 import com.liferay.portal.search.spi.model.result.contributor.ModelSummaryContributor;
+import com.liferay.portal.workflow.kaleo.service.KaleoDefinitionLocalService;
 import com.liferay.sharing.security.permission.SharingPermissionChecker;
 import com.liferay.sharing.security.permission.resource.SharingModelResourcePermissionConfigurator;
 import com.liferay.user.associated.data.anonymizer.UADAnonymizer;
@@ -111,6 +115,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -133,6 +138,7 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 		DynamicQueryBatchIndexingActionableFactory
 			dynamicQueryBatchIndexingActionableFactory,
 		GroupLocalService groupLocalService,
+		KaleoDefinitionLocalService kaleoDefinitionLocalService,
 		ListTypeLocalService listTypeLocalService,
 		ObjectActionLocalService objectActionLocalService,
 		ObjectDefinitionLocalService objectDefinitionLocalService,
@@ -168,6 +174,7 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 		_dynamicQueryBatchIndexingActionableFactory =
 			dynamicQueryBatchIndexingActionableFactory;
 		_groupLocalService = groupLocalService;
+		_kaleoDefinitionLocalService = kaleoDefinitionLocalService;
 		_listTypeLocalService = listTypeLocalService;
 		_objectActionLocalService = objectActionLocalService;
 		_objectDefinitionLocalService = objectDefinitionLocalService;
@@ -399,6 +406,14 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 				MapUtil.singletonDictionary(
 					"model.class.name", objectDefinition.getClassName())),
 			_bundleContext.registerService(
+				PortalDefaultPermissionsModelResource.class,
+				new ObjectEntryPortalDefaultPermissionsModelResource(
+					objectDefinition.getClassName(),
+					objectDefinition.getLabel(), _getScope(objectDefinition)),
+				MapUtil.singletonDictionary(
+					"portal.default.permissions.model.resource.key",
+					objectDefinition.getClassName())),
+			_bundleContext.registerService(
 				RESTContextPathResolver.class,
 				new RESTContextPathResolverImpl(
 					objectDefinition,
@@ -507,8 +522,8 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 			_bundleContext.registerService(
 				WorkflowHandler.class,
 				new ObjectEntryWorkflowHandler(
-					objectDefinition, _objectDefinitionLocalService,
-					_objectEntryLocalService,
+					_kaleoDefinitionLocalService, objectDefinition,
+					_objectDefinitionLocalService, _objectEntryLocalService,
 					_workflowDefinitionLinkLocalService),
 				HashMapDictionaryBuilder.<String, Object>put(
 					"model.class.name", objectDefinition.getClassName()
@@ -544,9 +559,11 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 				objectRelationships);
 
 		try {
-			if (objectDefinition.isRootNode()) {
+			if (ArrayUtil.isNotEmpty(
+					objectDefinition.getRootObjectDefinitionIds())) {
+
 				_registerRootObjectLayoutTabScreenNavigationCategories(
-					objectDefinition.getRootObjectDefinitionId());
+					objectDefinition.getObjectDefinitionId());
 			}
 		}
 		catch (PortalException portalException) {
@@ -554,6 +571,18 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 		}
 
 		return serviceRegistrations;
+	}
+
+	private String _getScope(ObjectDefinition objectDefinition) {
+		if (Objects.equals(
+				objectDefinition.getScope(),
+				ObjectDefinitionConstants.SCOPE_COMPANY)) {
+
+			return ExtendedObjectClassDefinition.Scope.PORTLET_INSTANCE.
+				toString();
+		}
+
+		return ExtendedObjectClassDefinition.Scope.GROUP.toString();
 	}
 
 	private String _getServiceRegistrationKey(
@@ -574,10 +603,11 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 	}
 
 	private void _registerRootObjectLayoutTabScreenNavigationCategories(
-			long rootObjectDefinitionId)
+			long objectDefinitionId)
 		throws PortalException {
 
-		Tree tree = _objectDefinitionTreeFactory.create(rootObjectDefinitionId);
+		Tree tree = _objectDefinitionTreeFactory.create(
+			false, true, objectDefinitionId);
 
 		Iterator<Node> iterator = tree.iterator();
 
@@ -585,31 +615,16 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 			Node node = iterator.next();
 
 			ObjectDefinition objectDefinition =
-				_objectDefinitionLocalService.fetchObjectDefinition(
+				_objectDefinitionLocalService.getObjectDefinition(
 					node.getPrimaryKey());
 
-			if (objectDefinition == null) {
-				continue;
-			}
+			List<ObjectRelationship> objectRelationships =
+				_objectRelationshipLocalService.getObjectRelationships(
+					objectDefinition.getObjectDefinitionId());
 
-			List<Node> childNodes = node.getChildNodes();
-
-			if (ListUtil.isEmpty(childNodes)) {
+			for (ObjectRelationship objectRelationship : objectRelationships) {
 				_registerRootObjectLayoutTabScreenNavigationCategory(
-					objectDefinition, null);
-
-				continue;
-			}
-
-			for (int i = childNodes.size() - 1; i >= 0; i--) {
-				Node childNode = childNodes.get(i);
-
-				Edge edge = childNode.getEdge();
-
-				_registerRootObjectLayoutTabScreenNavigationCategory(
-					objectDefinition,
-					_objectRelationshipLocalService.fetchObjectRelationship(
-						edge.getObjectRelationshipId()));
+					objectDefinition, objectRelationship);
 			}
 
 			_registerRootObjectLayoutTabScreenNavigationCategory(
@@ -650,6 +665,7 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 	private final DynamicQueryBatchIndexingActionableFactory
 		_dynamicQueryBatchIndexingActionableFactory;
 	private final GroupLocalService _groupLocalService;
+	private final KaleoDefinitionLocalService _kaleoDefinitionLocalService;
 	private final ListTypeLocalService _listTypeLocalService;
 	private final ObjectActionLocalService _objectActionLocalService;
 	private final ObjectDefinitionLocalService _objectDefinitionLocalService;

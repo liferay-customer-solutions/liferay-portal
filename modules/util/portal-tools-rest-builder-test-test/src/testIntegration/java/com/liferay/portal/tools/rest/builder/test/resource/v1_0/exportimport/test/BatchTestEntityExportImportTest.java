@@ -19,8 +19,8 @@ import com.liferay.exportimport.kernel.service.ExportImportLocalService;
 import com.liferay.exportimport.report.constants.ExportImportReportEntryConstants;
 import com.liferay.exportimport.report.model.ExportImportReportEntry;
 import com.liferay.exportimport.report.service.ExportImportReportEntryLocalService;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Company;
-import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
@@ -41,6 +41,8 @@ import com.liferay.portal.test.rule.FeatureFlag;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
+import com.liferay.portal.tools.rest.builder.test.client.custom.field.CustomField;
+import com.liferay.portal.tools.rest.builder.test.client.custom.field.CustomValue;
 import com.liferay.portal.tools.rest.builder.test.client.dto.v1_0.BatchTestEntity;
 import com.liferay.portal.tools.rest.builder.test.client.dto.v1_0.CompanyTestEntity;
 import com.liferay.portal.tools.rest.builder.test.client.http.HttpInvoker;
@@ -83,15 +85,15 @@ public class BatchTestEntityExportImportTest {
 			PermissionCheckerMethodTestRule.INSTANCE);
 
 	@BeforeClass
-	public static void setUpClass() {
+	public static void setUpClass() throws PortalException {
 		FeatureFlagTestUtil.invokeFeatureFlagListeners(
-			CompanyConstants.SYSTEM, true, "LPD-35914");
+			TestPropsValues.getCompanyId(), true, "LPD-35914");
 	}
 
 	@AfterClass
-	public static void tearDownClass() {
+	public static void tearDownClass() throws PortalException {
 		FeatureFlagTestUtil.invokeFeatureFlagListeners(
-			CompanyConstants.SYSTEM, false, "LPD-35914");
+			TestPropsValues.getCompanyId(), false, "LPD-35914");
 	}
 
 	@Before
@@ -113,7 +115,8 @@ public class BatchTestEntityExportImportTest {
 		).locale(
 			LocaleUtil.getDefault()
 		).parameters(
-			"nestedFields", "nestedField,relatedCompanyTestEntity"
+			"nestedFields",
+			"customFields.attributeType,nestedField,relatedCompanyTestEntity"
 		).build();
 		_companyTestEntityResource = CompanyTestEntityResource.builder(
 		).authentication(
@@ -151,6 +154,21 @@ public class BatchTestEntityExportImportTest {
 			_batchTestEntityResource.postBatchTestEntity(
 				new BatchTestEntity() {
 					{
+						customFields = new CustomField[] {
+							new CustomField() {
+								{
+									attributeType = AttributeType.STRING;
+									customValue = new CustomValue() {
+										{
+											data =
+												RandomTestUtil.randomString();
+										}
+									};
+									dataType = "Text";
+									name = RandomTestUtil.randomString();
+								}
+							}
+						};
 						externalReferenceCode = StringUtil.toLowerCase(
 							RandomTestUtil.randomString());
 						id = RandomTestUtil.randomLong();
@@ -164,6 +182,20 @@ public class BatchTestEntityExportImportTest {
 			_batchTestEntityResource.postBatchTestEntity(
 				new BatchTestEntity() {
 					{
+						customFields = new CustomField[] {
+							new CustomField() {
+								{
+									attributeType = AttributeType.INTEGER;
+									customValue = new CustomValue() {
+										{
+											data = RandomTestUtil.randomInt();
+										}
+									};
+									dataType = "Integer";
+									name = RandomTestUtil.randomString();
+								}
+							}
+						};
 						externalReferenceCode = StringUtil.toLowerCase(
 							RandomTestUtil.randomString());
 						id = RandomTestUtil.randomLong();
@@ -602,6 +634,9 @@ public class BatchTestEntityExportImportTest {
 		BatchTestEntity batchTestEntity1, BatchTestEntity batchTestEntity2) {
 
 		Assert.assertEquals(
+			batchTestEntity1.getCustomFields(),
+			batchTestEntity2.getCustomFields());
+		Assert.assertEquals(
 			batchTestEntity1.getExternalReferenceCode(),
 			batchTestEntity2.getExternalReferenceCode());
 		Assert.assertEquals(
@@ -639,7 +674,7 @@ public class BatchTestEntityExportImportTest {
 		Assert.assertEquals(
 			expectedClass.getName(), exportImportReportEntry.getClassName());
 		Assert.assertEquals(
-			expectedErrorMessage, exportImportReportEntry.getError());
+			expectedErrorMessage, exportImportReportEntry.getErrorMessage());
 
 		if (expectedErrorMessage == null) {
 			Assert.assertNull(exportImportReportEntry.getErrorStacktrace());

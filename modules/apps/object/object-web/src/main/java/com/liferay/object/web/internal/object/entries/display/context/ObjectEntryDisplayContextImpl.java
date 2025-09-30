@@ -104,6 +104,7 @@ import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -508,22 +509,28 @@ public class ObjectEntryDisplayContextImpl
 				objectDefinition2.getScope());
 
 		if ((getObjectLayoutTab() == null) && objectRelationship.isEdge()) {
-			ObjectDefinition rootObjectDefinition =
-				_objectDefinitionLocalService.getObjectDefinition(
-					objectDefinition2.getRootObjectDefinitionId());
+			for (long rootObjectDefinitionId :
+					objectDefinition2.getRootObjectDefinitionIds()) {
 
-			if (ObjectEntryServiceUtil.hasModelResourcePermission(
-					rootObjectDefinition.getObjectDefinitionId(),
-					_objectEntry.getId(), ActionKeys.UPDATE) ||
-				ObjectEntryServiceUtil.hasPortletResourcePermission(
-					objectScopeProvider.getGroupId(
-						_objectRequestHelper.getRequest()),
-					rootObjectDefinition.getObjectDefinitionId(),
-					ObjectActionKeys.ADD_OBJECT_ENTRY)) {
+				ObjectDefinition rootObjectDefinition =
+					_objectDefinitionLocalService.getObjectDefinition(
+						rootObjectDefinitionId);
 
-				creationMenu.addDropdownItem(
-					_getCreateNewRelatedModelDropdownItem(
-						objectDefinition2, objectRelationship));
+				if (ObjectEntryServiceUtil.hasModelResourcePermission(
+						rootObjectDefinition.getObjectDefinitionId(),
+						_objectEntry.getId(), ActionKeys.UPDATE) ||
+					ObjectEntryServiceUtil.hasPortletResourcePermission(
+						objectScopeProvider.getGroupId(
+							_objectRequestHelper.getRequest()),
+						rootObjectDefinition.getObjectDefinitionId(),
+						ObjectActionKeys.ADD_OBJECT_ENTRY)) {
+
+					creationMenu.addDropdownItem(
+						_getCreateNewRelatedModelDropdownItem(
+							objectDefinition2, objectRelationship));
+
+					break;
+				}
 			}
 
 			return creationMenu;
@@ -825,7 +832,7 @@ public class ObjectEntryDisplayContextImpl
 		ObjectDefinition objectDefinition = getObjectDefinition1();
 
 		if ((objectLayoutTab == null) &&
-			(objectDefinition.getRootObjectDefinitionId() == 0)) {
+			ArrayUtil.isEmpty(objectDefinition.getRootObjectDefinitionIds())) {
 
 			return _ddmFormRenderer.render(ddmForm, ddmFormRenderingContext);
 		}
@@ -837,7 +844,8 @@ public class ObjectEntryDisplayContextImpl
 		ddmFormLayout.addDDMFormLayoutPage(ddmFormLayoutPage);
 
 		if ((objectLayoutTab == null) &&
-			(objectDefinition.getRootObjectDefinitionId() > 0)) {
+			ArrayUtil.isNotEmpty(
+				objectDefinition.getRootObjectDefinitionIds())) {
 
 			_addDDMFormLayoutRow(
 				ddmFormLayoutPage,
@@ -1089,7 +1097,9 @@ public class ObjectEntryDisplayContextImpl
 				_addDDMFormField(
 					ddmFormFields, objectEntry, objectField, readOnly);
 
-				if (objectDefinition.getRootObjectDefinitionId() == 0) {
+				if (ArrayUtil.isEmpty(
+						objectDefinition.getRootObjectDefinitionIds())) {
+
 					continue;
 				}
 
@@ -1104,7 +1114,9 @@ public class ObjectEntryDisplayContextImpl
 							))));
 			}
 
-			if (objectDefinition.getRootObjectDefinitionId() == 0) {
+			if (ArrayUtil.isEmpty(
+					objectDefinition.getRootObjectDefinitionIds())) {
+
 				ddmForm.setDDMFormFields(ddmFormFields);
 			}
 			else {

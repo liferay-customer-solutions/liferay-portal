@@ -435,7 +435,7 @@ public abstract class BaseProductResourceTestCase {
 	protected Product testGraphQLGetPriceEntryIdProduct_addProduct()
 		throws Exception {
 
-		return testGraphQLProduct_addProduct();
+		return testGraphQLPriceEntryProduct_addProduct();
 	}
 
 	@Test
@@ -577,6 +577,13 @@ public abstract class BaseProductResourceTestCase {
 	}
 
 	protected Product testGraphQLProduct_addProduct() throws Exception {
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	protected Product testGraphQLPriceEntryProduct_addProduct()
+		throws Exception {
+
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
@@ -733,6 +740,8 @@ public abstract class BaseProductResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("id"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

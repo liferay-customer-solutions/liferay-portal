@@ -64,6 +64,16 @@ public abstract class BaseContentsSectionDisplayContext
 				null, "pencil", "edit-tags",
 				LanguageUtil.get(httpServletRequest, "edit-tags"), "post",
 				"edit-tags", null));
+		fdsBulkActionDropdownItems.add(
+			new FDSActionDropdownItem(
+				"#", "password-policies", "permissions",
+				LanguageUtil.get(httpServletRequest, "permissions"), null, null,
+				null));
+		fdsBulkActionDropdownItems.add(
+			new FDSActionDropdownItem(
+				"#", "password-policies", "default-permissions",
+				LanguageUtil.get(httpServletRequest, "default-permissions"),
+				null, null, null));
 
 		return fdsBulkActionDropdownItems;
 	}

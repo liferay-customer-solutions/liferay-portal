@@ -195,7 +195,7 @@ public abstract class BaseProductShippingConfigurationResourceTestCase {
 	public void testGraphQLGetProductByExternalReferenceCodeShippingConfiguration()
 		throws Exception {
 
-		Assert.assertTrue(true);
+		Assert.assertTrue(false);
 	}
 
 	@Test
@@ -214,7 +214,7 @@ public abstract class BaseProductShippingConfigurationResourceTestCase {
 	public void testGraphQLGetProductIdShippingConfiguration()
 		throws Exception {
 
-		Assert.assertTrue(true);
+		Assert.assertTrue(false);
 	}
 
 	@Test

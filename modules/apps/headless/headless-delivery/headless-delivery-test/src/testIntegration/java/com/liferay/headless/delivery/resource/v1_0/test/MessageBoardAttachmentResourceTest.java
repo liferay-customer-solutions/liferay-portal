@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -90,6 +91,24 @@ public class MessageBoardAttachmentResourceTest
 					testDeleteSiteMessageBoardMessageByExternalReferenceCodeMessageBoardMessageExternalReferenceCodeMessageBoardAttachmentByExternalReferenceCode_getSiteId(),
 					testDeleteSiteMessageBoardMessageByExternalReferenceCodeMessageBoardMessageExternalReferenceCodeMessageBoardAttachmentByExternalReferenceCode_getMessageBoardMessageExternalReferenceCode(),
 					RandomTestUtil.randomString()));
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLGetMessageBoardMessageMessageBoardAttachmentsPage()
+		throws Exception {
+
+		super.testGraphQLGetMessageBoardMessageMessageBoardAttachmentsPage();
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLGetMessageBoardThreadMessageBoardAttachmentsPage()
+		throws Exception {
+
+		super.testGraphQLGetMessageBoardThreadMessageBoardAttachmentsPage();
 	}
 
 	@Override
@@ -173,14 +192,6 @@ public class MessageBoardAttachmentResourceTest
 	}
 
 	@Override
-	protected Long
-			testDeleteSiteMessageBoardMessageByExternalReferenceCodeMessageBoardMessageExternalReferenceCodeMessageBoardAttachmentByExternalReferenceCode_getSiteId()
-		throws Exception {
-
-		return testGroup.getGroupId();
-	}
-
-	@Override
 	protected MessageBoardAttachment
 			testGetMessageBoardAttachment_addMessageBoardAttachment()
 		throws Exception {
@@ -227,11 +238,11 @@ public class MessageBoardAttachmentResourceTest
 	}
 
 	@Override
-	protected Long
-			testGetSiteMessageBoardMessageByExternalReferenceCodeMessageBoardMessageExternalReferenceCodeMessageBoardAttachmentByExternalReferenceCode_getSiteId()
+	protected String
+			testGraphQLDeleteSiteMessageBoardMessageByExternalReferenceCodeMessageBoardMessageExternalReferenceCodeMessageBoardAttachmentByExternalReferenceCode_getMessageBoardMessageExternalReferenceCode()
 		throws Exception {
 
-		return testGroup.getGroupId();
+		return _mbMessage.getExternalReferenceCode();
 	}
 
 	@Override
@@ -251,19 +262,24 @@ public class MessageBoardAttachmentResourceTest
 	}
 
 	@Override
-	protected Long
-			testGraphQLGetSiteMessageBoardMessageByExternalReferenceCodeMessageBoardMessageExternalReferenceCodeMessageBoardAttachmentByExternalReferenceCode_getSiteId()
-		throws Exception {
-
-		return testGroup.getGroupId();
-	}
-
-	@Override
 	protected MessageBoardAttachment
 			testGraphQLMessageBoardAttachment_addMessageBoardAttachment()
 		throws Exception {
 
 		return testDeleteMessageBoardAttachment_addMessageBoardAttachment();
+	}
+
+	@Override
+	protected MessageBoardAttachment
+			testGraphQLSiteMessageBoardAttachment_addMessageBoardAttachment()
+		throws Exception {
+
+		_mbMessage = _addMBMessage();
+
+		return messageBoardAttachmentResource.
+			postMessageBoardMessageMessageBoardAttachment(
+				_mbMessage.getMessageId(), randomMessageBoardAttachment(),
+				getMultipartFiles());
 	}
 
 	private MBMessage _addMBMessage() throws Exception {

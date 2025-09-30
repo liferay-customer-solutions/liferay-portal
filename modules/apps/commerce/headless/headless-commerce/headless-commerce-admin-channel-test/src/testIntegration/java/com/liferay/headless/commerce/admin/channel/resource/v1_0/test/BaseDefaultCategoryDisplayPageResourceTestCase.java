@@ -195,7 +195,21 @@ public abstract class BaseDefaultCategoryDisplayPageResourceTestCase {
 	}
 
 	@Test
+	public void testGraphQLDeleteChannelByExternalReferenceCodeDefaultCategoryDisplayPage()
+		throws Exception {
+
+		Assert.assertTrue(false);
+	}
+
+	@Test
 	public void testDeleteChannelIdDefaultCategoryDisplayPage()
+		throws Exception {
+
+		Assert.assertTrue(false);
+	}
+
+	@Test
+	public void testGraphQLDeleteChannelIdDefaultCategoryDisplayPage()
 		throws Exception {
 
 		Assert.assertTrue(false);
@@ -212,7 +226,7 @@ public abstract class BaseDefaultCategoryDisplayPageResourceTestCase {
 	public void testGraphQLGetChannelByExternalReferenceCodeDefaultCategoryDisplayPage()
 		throws Exception {
 
-		Assert.assertTrue(true);
+		Assert.assertTrue(false);
 	}
 
 	@Test
@@ -231,7 +245,7 @@ public abstract class BaseDefaultCategoryDisplayPageResourceTestCase {
 	public void testGraphQLGetChannelIdDefaultCategoryDisplayPage()
 		throws Exception {
 
-		Assert.assertTrue(true);
+		Assert.assertTrue(false);
 	}
 
 	@Test

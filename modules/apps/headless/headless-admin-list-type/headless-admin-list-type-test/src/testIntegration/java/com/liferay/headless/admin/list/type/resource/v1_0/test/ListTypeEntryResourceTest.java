@@ -170,13 +170,39 @@ public class ListTypeEntryResourceTest
 	@Ignore
 	@Override
 	@Test
-	public void testGraphQLGetListTypeEntry() throws Exception {
+	public void testGraphQLGetListTypeDefinitionByExternalReferenceCodeListTypeEntriesPage()
+		throws Exception {
+
+		super.
+			testGraphQLGetListTypeDefinitionByExternalReferenceCodeListTypeEntriesPage();
 	}
 
 	@Ignore
 	@Override
 	@Test
-	public void testGraphQLGetListTypeEntryNotFound() throws Exception {
+	public void testGraphQLGetListTypeDefinitionListTypeEntriesPage()
+		throws Exception {
+
+		super.testGraphQLGetListTypeDefinitionListTypeEntriesPage();
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLPostListTypeDefinitionByExternalReferenceCodeListTypeEntry()
+		throws Exception {
+
+		super.
+			testGraphQLPostListTypeDefinitionByExternalReferenceCodeListTypeEntry();
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLPostListTypeDefinitionListTypeEntry()
+		throws Exception {
+
+		super.testGraphQLPostListTypeDefinitionListTypeEntry();
 	}
 
 	@Override

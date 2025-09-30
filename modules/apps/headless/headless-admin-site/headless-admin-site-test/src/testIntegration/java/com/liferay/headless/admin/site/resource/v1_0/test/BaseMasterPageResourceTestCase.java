@@ -129,6 +129,18 @@ public abstract class BaseMasterPageResourceTestCase {
 		).locale(
 			LocaleUtil.getDefault()
 		).build();
+
+		permissionsMasterPageResource = MasterPageResource.builder(
+		).authentication(
+			_testCompanyAdminUser.getEmailAddress(),
+			PropsValues.DEFAULT_ADMIN_PASSWORD
+		).endpoint(
+			testCompany.getVirtualHostname(), 8080, "http"
+		).locale(
+			LocaleUtil.getDefault()
+		).parameter(
+			"nestedFields", "permissions"
+		).build();
 	}
 
 	@After
@@ -187,7 +199,6 @@ public abstract class BaseMasterPageResourceTestCase {
 
 		MasterPage masterPage = randomMasterPage();
 
-		masterPage.setCreatorExternalReferenceCode(regex);
 		masterPage.setExternalReferenceCode(regex);
 		masterPage.setKey(regex);
 		masterPage.setName(regex);
@@ -199,8 +210,6 @@ public abstract class BaseMasterPageResourceTestCase {
 
 		masterPage = MasterPageSerDes.toDTO(json);
 
-		Assert.assertEquals(
-			regex, masterPage.getCreatorExternalReferenceCode());
 		Assert.assertEquals(regex, masterPage.getExternalReferenceCode());
 		Assert.assertEquals(regex, masterPage.getKey());
 		Assert.assertEquals(regex, masterPage.getName());
@@ -239,8 +248,7 @@ public abstract class BaseMasterPageResourceTestCase {
 	protected String testDeleteSiteMasterPage_getSiteExternalReferenceCode()
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return testGroup.getExternalReferenceCode();
 	}
 
 	@Test
@@ -253,6 +261,14 @@ public abstract class BaseMasterPageResourceTestCase {
 
 		assertEquals(postMasterPage, getMasterPage);
 		assertValid(getMasterPage);
+
+		Assert.assertNull(getMasterPage.getPermissions());
+
+		getMasterPage = permissionsMasterPageResource.getSiteMasterPage(
+			testGetSiteMasterPage_getSiteExternalReferenceCode(),
+			postMasterPage.getExternalReferenceCode());
+
+		Assert.assertNotNull(getMasterPage.getPermissions());
 	}
 
 	protected MasterPage testGetSiteMasterPage_addMasterPage()
@@ -265,8 +281,7 @@ public abstract class BaseMasterPageResourceTestCase {
 	protected String testGetSiteMasterPage_getSiteExternalReferenceCode()
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return testGroup.getExternalReferenceCode();
 	}
 
 	@Test
@@ -341,6 +356,18 @@ public abstract class BaseMasterPageResourceTestCase {
 			page,
 			testGetSiteMasterPagesPage_getExpectedActions(
 				siteExternalReferenceCode));
+
+		for (MasterPage masterPage : page.getItems()) {
+			Assert.assertNull(masterPage.getPermissions());
+		}
+
+		page = permissionsMasterPageResource.getSiteMasterPagesPage(
+			siteExternalReferenceCode, null, null, null, Pagination.of(1, 10),
+			null);
+
+		for (MasterPage masterPage : page.getItems()) {
+			Assert.assertNotNull(masterPage.getPermissions());
+		}
 	}
 
 	protected Map<String, Map<String, String>>
@@ -738,6 +765,21 @@ public abstract class BaseMasterPageResourceTestCase {
 
 		assertEquals(randomMasterPage, postMasterPage);
 		assertValid(postMasterPage);
+
+		MasterPage randomPermissionsMasterPage1 = randomPermissionsMasterPage();
+
+		MasterPage postPermissionsMasterPage1 =
+			testPostSiteMasterPage_addMasterPage(randomPermissionsMasterPage1);
+
+		Assert.assertNull(postPermissionsMasterPage1.getPermissions());
+
+		MasterPage randomPermissionsMasterPage2 = randomPermissionsMasterPage();
+
+		MasterPage postPermissionsMasterPage2 =
+			testPostSiteMasterPage_addPermissionsMasterPage(
+				randomPermissionsMasterPage2);
+
+		Assert.assertNotNull(postPermissionsMasterPage2.getPermissions());
 	}
 
 	protected MasterPage testPostSiteMasterPage_addMasterPage(
@@ -746,6 +788,15 @@ public abstract class BaseMasterPageResourceTestCase {
 
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
+	}
+
+	protected MasterPage testPostSiteMasterPage_addPermissionsMasterPage(
+			MasterPage masterPage)
+		throws Exception {
+
+		return permissionsMasterPageResource.postSiteMasterPage(
+			testGetSiteMasterPagesPage_getSiteExternalReferenceCode(),
+			masterPage);
 	}
 
 	@Test
@@ -761,12 +812,33 @@ public abstract class BaseMasterPageResourceTestCase {
 		assertEquals(randomMasterPage, putMasterPage);
 		assertValid(putMasterPage);
 
+		Assert.assertNull(putMasterPage.getPermissions());
+
 		MasterPage getMasterPage = masterPageResource.getSiteMasterPage(
 			testPutSiteMasterPage_getSiteExternalReferenceCode(),
 			putMasterPage.getExternalReferenceCode());
 
 		assertEquals(randomMasterPage, getMasterPage);
 		assertValid(getMasterPage);
+
+		MasterPage randomPermissionsMasterPage = randomPermissionsMasterPage();
+
+		putMasterPage = masterPageResource.putSiteMasterPage(
+			testPutSiteMasterPage_getSiteExternalReferenceCode(),
+			postMasterPage.getExternalReferenceCode(),
+			randomPermissionsMasterPage);
+
+		assertEquals(randomPermissionsMasterPage, putMasterPage);
+		assertValid(putMasterPage);
+
+		Assert.assertNull(putMasterPage.getPermissions());
+
+		putMasterPage = permissionsMasterPageResource.putSiteMasterPage(
+			testPutSiteMasterPage_getSiteExternalReferenceCode(),
+			postMasterPage.getExternalReferenceCode(),
+			randomPermissionsMasterPage);
+
+		Assert.assertNotNull(putMasterPage.getPermissions());
 	}
 
 	protected MasterPage testPutSiteMasterPage_addMasterPage()
@@ -779,8 +851,7 @@ public abstract class BaseMasterPageResourceTestCase {
 	protected String testPutSiteMasterPage_getSiteExternalReferenceCode()
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return testGroup.getExternalReferenceCode();
 	}
 
 	@Test
@@ -887,8 +958,7 @@ public abstract class BaseMasterPageResourceTestCase {
 			testBatchEngineDeleteImportTask_getSiteExternalReferenceCode()
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
+		return testGroup.getExternalReferenceCode();
 	}
 
 	@Rule
@@ -998,17 +1068,6 @@ public abstract class BaseMasterPageResourceTestCase {
 				continue;
 			}
 
-			if (Objects.equals(
-					"creatorExternalReferenceCode",
-					additionalAssertFieldName)) {
-
-				if (masterPage.getCreatorExternalReferenceCode() == null) {
-					valid = false;
-				}
-
-				continue;
-			}
-
 			if (Objects.equals("datePublished", additionalAssertFieldName)) {
 				if (masterPage.getDatePublished() == null) {
 					valid = false;
@@ -1063,6 +1122,14 @@ public abstract class BaseMasterPageResourceTestCase {
 					"pageSpecifications", additionalAssertFieldName)) {
 
 				if (masterPage.getPageSpecifications() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("permissions", additionalAssertFieldName)) {
+				if (masterPage.getPermissions() == null) {
 					valid = false;
 				}
 
@@ -1198,6 +1265,8 @@ public abstract class BaseMasterPageResourceTestCase {
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
 
+		graphQLFields.add(new GraphQLField("externalReferenceCode"));
+
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(
 					com.liferay.headless.admin.site.dto.v1_0.MasterPage.
@@ -1260,20 +1329,6 @@ public abstract class BaseMasterPageResourceTestCase {
 			if (Objects.equals("creator", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
 						masterPage1.getCreator(), masterPage2.getCreator())) {
-
-					return false;
-				}
-
-				continue;
-			}
-
-			if (Objects.equals(
-					"creatorExternalReferenceCode",
-					additionalAssertFieldName)) {
-
-				if (!Objects.deepEquals(
-						masterPage1.getCreatorExternalReferenceCode(),
-						masterPage2.getCreatorExternalReferenceCode())) {
 
 					return false;
 				}
@@ -1374,6 +1429,17 @@ public abstract class BaseMasterPageResourceTestCase {
 				if (!Objects.deepEquals(
 						masterPage1.getPageSpecifications(),
 						masterPage2.getPageSpecifications())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("permissions", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						masterPage1.getPermissions(),
+						masterPage2.getPermissions())) {
 
 					return false;
 				}
@@ -1573,52 +1639,6 @@ public abstract class BaseMasterPageResourceTestCase {
 		if (entityFieldName.equals("creator")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
-		}
-
-		if (entityFieldName.equals("creatorExternalReferenceCode")) {
-			Object object = masterPage.getCreatorExternalReferenceCode();
-
-			String value = String.valueOf(object);
-
-			if (operator.equals("contains")) {
-				sb = new StringBundler();
-
-				sb.append("contains(");
-				sb.append(entityFieldName);
-				sb.append(",'");
-
-				if ((object != null) && (value.length() > 2)) {
-					sb.append(value.substring(1, value.length() - 1));
-				}
-				else {
-					sb.append(value);
-				}
-
-				sb.append("')");
-			}
-			else if (operator.equals("startswith")) {
-				sb = new StringBundler();
-
-				sb.append("startswith(");
-				sb.append(entityFieldName);
-				sb.append(",'");
-
-				if ((object != null) && (value.length() > 1)) {
-					sb.append(value.substring(0, value.length() - 1));
-				}
-				else {
-					sb.append(value);
-				}
-
-				sb.append("')");
-			}
-			else {
-				sb.append("'");
-				sb.append(value);
-				sb.append("'");
-			}
-
-			return sb.toString();
 		}
 
 		if (entityFieldName.equals("dateCreated")) {
@@ -1861,6 +1881,11 @@ public abstract class BaseMasterPageResourceTestCase {
 				"Invalid entity field " + entityFieldName);
 		}
 
+		if (entityFieldName.equals("permissions")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
+		}
+
 		if (entityFieldName.equals("taxonomyCategoryItemExternalReferences")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
@@ -1962,8 +1987,6 @@ public abstract class BaseMasterPageResourceTestCase {
 	protected MasterPage randomMasterPage() throws Exception {
 		return new MasterPage() {
 			{
-				creatorExternalReferenceCode = StringUtil.toLowerCase(
-					RandomTestUtil.randomString());
 				dateCreated = RandomTestUtil.nextDate();
 				dateModified = RandomTestUtil.nextDate();
 				datePublished = RandomTestUtil.nextDate();
@@ -1985,6 +2008,25 @@ public abstract class BaseMasterPageResourceTestCase {
 
 	protected MasterPage randomPatchMasterPage() throws Exception {
 		return randomMasterPage();
+	}
+
+	protected MasterPage randomPermissionsMasterPage() throws Exception {
+		MasterPage masterPage = randomMasterPage();
+
+		com.liferay.portal.kernel.model.Role role = RoleTestUtil.addRole(
+			RoleConstants.TYPE_REGULAR);
+
+		masterPage.setPermissions(
+			new Permission[] {
+				new Permission() {
+					{
+						setActionIds(new String[] {"VIEW"});
+						setRoleName(role.getName());
+					}
+				}
+			});
+
+		return masterPage;
 	}
 
 	protected ContentPageSpecification randomContentPageSpecification()
@@ -2023,6 +2065,7 @@ public abstract class BaseMasterPageResourceTestCase {
 	protected MasterPageResource masterPageResource;
 	protected ImportTaskResource importTaskResource;
 	protected com.liferay.portal.kernel.model.Group irrelevantGroup;
+	protected MasterPageResource permissionsMasterPageResource;
 	protected com.liferay.portal.kernel.model.Company testCompany;
 	protected com.liferay.portal.kernel.model.Group testGroup;
 

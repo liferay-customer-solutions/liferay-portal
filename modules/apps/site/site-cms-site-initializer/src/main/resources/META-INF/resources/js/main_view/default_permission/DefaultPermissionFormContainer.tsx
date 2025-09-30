@@ -36,6 +36,7 @@ const DEFAULT_ASSET_TYPES: Array<AssetType> = [
 export default function DefaultPermissionFormContainer({
 	actions,
 	disabled,
+	infoBoxMessage,
 	onChange,
 	roles,
 	types,
@@ -83,8 +84,10 @@ export default function DefaultPermissionFormContainer({
 	);
 
 	useEffect(() => {
-		setActiveActions(actions[tabs[activeIndex].key]);
-		setActiveValues((data || {})[tabs[activeIndex].key]);
+		if (tabs && tabs.length) {
+			setActiveActions(actions[tabs[activeIndex]?.key]);
+			setActiveValues((data || {})[tabs[activeIndex]?.key]);
+		}
 	}, [actions, activeIndex, data, tabs]);
 
 	useEffect(() => {
@@ -131,6 +134,7 @@ export default function DefaultPermissionFormContainer({
 				<DefaultPermissionForm
 					actions={activeActions}
 					disabled={disabled}
+					infoBoxMessage={infoBoxMessage}
 					onChange={handlePermissionsChange}
 					roles={roles}
 					values={activeValues}

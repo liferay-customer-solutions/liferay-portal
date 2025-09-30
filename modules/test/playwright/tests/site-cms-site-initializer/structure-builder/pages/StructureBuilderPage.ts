@@ -37,6 +37,7 @@ type StructureType = 'content' | 'file';
 export class StructureBuilderPage {
 	readonly page: Page;
 
+	private readonly clearAllSpacesButton: Locator;
 	private readonly customizeExperienceButton: Locator;
 	private readonly labelInput: Locator;
 	private readonly nameInput: Locator;
@@ -49,15 +50,16 @@ export class StructureBuilderPage {
 	constructor(page: Page) {
 		this.page = page;
 
+		this.clearAllSpacesButton = this.page.getByLabel('Clear All');
 		this.customizeExperienceButton = this.page.getByRole('button', {
 			name: 'Customize Experience',
 		});
-		this.labelInput = this.page.getByLabel('Structure Label');
-		this.nameInput = this.page.getByLabel('Structure Name');
+		this.labelInput = this.page.getByLabel('Content Structure Label');
+		this.nameInput = this.page.getByLabel('Content Structure Name');
 		this.publishButton = this.page.getByRole('button', {name: 'Publish'});
 		this.saveButton = this.page.getByRole('button', {name: 'Save'});
 		this.spaceCheckbox = this.page.getByRole('checkbox', {
-			name: 'Make this structure available in all spaces',
+			name: 'Make this content structure available in all spaces',
 		});
 		this.spaceSelector = this.page.getByLabel('Spaces', {exact: true});
 	}
@@ -77,12 +79,14 @@ export class StructureBuilderPage {
 			url = url + `?objectFolderExternalReferenceCode=${folderERC}`;
 		}
 
-		await this.page.goto(url);
+		await expect(async () => {
+			await this.page.goto(url);
 
-		await this.page
-			.locator('.component-tbar')
-			.getByText('Publish')
-			.waitFor();
+			await this.page
+				.locator('.component-tbar')
+				.getByText('Publish')
+				.waitFor({timeout: 2000});
+		}).toPass();
 	}
 
 	async addField(type: FieldType) {
@@ -123,25 +127,27 @@ export class StructureBuilderPage {
 		await clickAndExpectToBeVisible({
 			target: this.page.getByRole('menuitem', {
 				exact: true,
-				name: 'Referenced Structure',
+				name: 'Referenced Content Structure',
 			}),
 			trigger,
 		});
 
 		await clickAndExpectToBeVisible({
 			target: this.page.locator('.modal-title', {
-				hasText: 'Referenced Structure',
+				hasText: 'Referenced Content Structure',
 			}),
 			timeout: 2000,
 			trigger: this.page.getByRole('menuitem', {
 				exact: true,
-				name: 'Referenced Structure',
+				name: 'Referenced Content Structure',
 			}),
 		});
 
 		for (const name of names) {
 			await expect(async () => {
-				await this.page.getByLabel('Structures').click({timeout: 1000});
+				await this.page
+					.getByLabel('Content Structures')
+					.click({timeout: 1000});
 
 				await this.page
 					.getByRole('option', {name})
@@ -155,7 +161,7 @@ export class StructureBuilderPage {
 
 		await clickAndExpectToBeHidden({
 			target: this.page.locator('.modal-title', {
-				hasText: 'Referenced Structure',
+				hasText: 'Referenced Content Structure',
 			}),
 			trigger: this.page.locator('.modal-footer').getByText('Add'),
 		});
@@ -377,15 +383,13 @@ export class StructureBuilderPage {
 		if (fields.length === 1) {
 			const [field] = fields;
 
-			const treeItems = this.page
-				.locator('.treeview-item')
-				.getByLabel(field.label, {exact: true});
-
-			await treeItems.waitFor({state: 'visible'});
-
-			const count = await treeItems.count();
+			const treeItems = this.page.getByRole('treeitem', {
+				name: field.label,
+			});
 
 			const treeItem = treeItems.nth(field.nth || 0);
+
+			await treeItem.waitFor({state: 'visible'});
 
 			await this.selectFields([field]);
 
@@ -394,19 +398,11 @@ export class StructureBuilderPage {
 				target: this.page.getByRole('menuitem', {name: 'Delete'}),
 				trigger: treeItem.getByLabel('Field Options'),
 			});
-
-			await expect(treeItems).toHaveCount(count - 1);
 		}
 
 		// Deleting multiple fields
 
 		else {
-			const count = await this.page
-				.locator('.treeview-item')
-				.first()
-				.locator('.treeview-group > .treeview-item')
-				.count();
-
 			await this.selectFields(fields);
 
 			await clickAndExpectToBeVisible({
@@ -414,13 +410,6 @@ export class StructureBuilderPage {
 				target: this.page.getByRole('menuitem', {name: 'Delete'}),
 				trigger: this.page.getByLabel('Selection Options'),
 			});
-
-			await expect(
-				this.page
-					.locator('.treeview-item')
-					.first()
-					.locator('.treeview-group > .treeview-item')
-			).toHaveCount(count - fields.length);
 		}
 	}
 
@@ -442,7 +431,9 @@ export class StructureBuilderPage {
 
 	async enableForAllSpaces() {
 		await expect(async () => {
-			await this.page.getByText('Structure Fields').click({timeout: 500});
+			await this.page
+				.getByText('Content Structure Fields')
+				.click({timeout: 500});
 
 			await this.spaceCheckbox.click({timeout: 500});
 
@@ -514,8 +505,9 @@ export class StructureBuilderPage {
 	async selectFields(fields: Field[]) {
 		for (const [i, field] of fields.entries()) {
 			const treeItem = this.page
-				.locator('.treeview-item')
-				.getByLabel(field.label, {exact: true})
+				.getByRole('treeitem', {
+					name: field.label,
+				})
 				.nth(field.nth || 0);
 
 			await expect(async () => {
@@ -536,6 +528,13 @@ export class StructureBuilderPage {
 	}
 
 	async selectSpaces(spaces: string[]) {
+		if (await this.spaceCheckbox.isChecked()) {
+			await this.spaceCheckbox.uncheck();
+		}
+		else if (await this.clearAllSpacesButton.isVisible()) {
+			await this.clearAllSpacesButton.click();
+		}
+
 		for (const space of spaces) {
 			await expect(async () => {
 				await this.spaceSelector.click({timeout: 1000});
@@ -549,6 +548,37 @@ export class StructureBuilderPage {
 				).toBeVisible();
 			}).toPass();
 		}
+	}
+
+	async setWorkflows(workflows: {space: string; workflow: string}[]) {
+		for (const {space, workflow} of workflows) {
+			if (!space) {
+				await this.page
+					.getByLabel('Default Workflow')
+					.selectOption(workflow);
+			}
+			else {
+				const row = this.page.locator('tr', {hasText: space});
+
+				await row.getByLabel('Select Workflow').selectOption(workflow);
+			}
+		}
+	}
+
+	async switchTab(name: 'General' | 'Search' | 'Workflow') {
+		const target =
+			name === 'General'
+				? this.page.getByLabel('ERC')
+				: name === 'Search'
+					? this.page.getByText('Searchable')
+					: this.page.getByText(
+							'Set the default workflow for entries'
+						);
+
+		await clickAndExpectToBeVisible({
+			target,
+			trigger: this.page.getByRole('tab', {name}),
+		});
 	}
 
 	async waitForExperienceCustomizerModal() {

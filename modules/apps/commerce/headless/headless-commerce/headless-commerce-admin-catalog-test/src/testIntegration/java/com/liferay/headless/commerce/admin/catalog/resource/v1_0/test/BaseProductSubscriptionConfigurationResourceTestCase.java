@@ -197,7 +197,7 @@ public abstract class BaseProductSubscriptionConfigurationResourceTestCase {
 	public void testGraphQLGetProductByExternalReferenceCodeSubscriptionConfiguration()
 		throws Exception {
 
-		Assert.assertTrue(true);
+		Assert.assertTrue(false);
 	}
 
 	@Test
@@ -216,7 +216,7 @@ public abstract class BaseProductSubscriptionConfigurationResourceTestCase {
 	public void testGraphQLGetProductIdSubscriptionConfiguration()
 		throws Exception {
 
-		Assert.assertTrue(true);
+		Assert.assertTrue(false);
 	}
 
 	@Test

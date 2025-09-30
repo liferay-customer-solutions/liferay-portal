@@ -43,7 +43,23 @@ export default function ({
 	const editMode = document.body.classList.contains('has-edit-mode-menu');
 
 	if (!editMode) {
-		setBannerVisibility(cookieBanner);
+		const cookieManager = document.getElementById(
+			'_com_liferay_my_account_web_portlet_MyAccountPortlet_cookiesBannerConfigurationForm'
+		);
+		const productAnalyticsBanner = document.querySelector(
+			'.product-analytics-banner'
+		);
+
+		if (
+			cookieManager ||
+			(productAnalyticsBanner &&
+				productAnalyticsBanner.style.display === 'block')
+		) {
+			cookieBanner.style.display = 'none';
+		}
+		else {
+			setBannerVisibility(cookieBanner);
+		}
 
 		const cookiePreferences = {};
 

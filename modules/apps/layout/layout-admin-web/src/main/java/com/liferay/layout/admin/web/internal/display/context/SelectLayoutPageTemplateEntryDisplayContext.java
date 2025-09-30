@@ -13,12 +13,14 @@ import com.liferay.layout.page.template.service.LayoutPageTemplateEntryServiceUt
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutConstants;
 import com.liferay.portal.kernel.model.LayoutTypeController;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayPortletURL;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
+import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.HtmlUtil;
@@ -29,6 +31,8 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.util.LayoutTypeControllerTracker;
+
+import jakarta.portlet.PortletURL;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -161,6 +165,15 @@ public class SelectLayoutPageTemplateEntryDisplayContext {
 			String.valueOf(
 				layoutPageTemplateEntry.getLayoutPageTemplateEntryId())
 		).put(
+			"modalTitle",
+			() -> {
+				if (ParamUtil.getBoolean(_httpServletRequest, "emptyLayout")) {
+					return LanguageUtil.get(_httpServletRequest, "page-name");
+				}
+
+				return LanguageUtil.get(_httpServletRequest, "add-page");
+			}
+		).put(
 			"subtitle",
 			() -> {
 				if (Objects.equals(
@@ -271,7 +284,7 @@ public class SelectLayoutPageTemplateEntryDisplayContext {
 				LayoutTypeController layoutTypeController =
 					LayoutTypeControllerTracker.getLayoutTypeController(type);
 
-				if (isEmptyPage()) {
+				if (ParamUtil.getBoolean(_httpServletRequest, "emptyLayout")) {
 					return layoutTypeController.isInstanceable() &&
 						   !layoutTypeController.isPrimaryType() &&
 						   !type.equals(LayoutConstants.TYPE_URL) &&
@@ -309,13 +322,6 @@ public class SelectLayoutPageTemplateEntryDisplayContext {
 		return false;
 	}
 
-	public boolean isEmptyPage() {
-		String initialType = ParamUtil.getString(
-			_httpServletRequest, "initialType");
-
-		return Objects.equals(initialType, LayoutConstants.TYPE_EMPTY);
-	}
-
 	public boolean isGlobalTemplates() {
 		if ((getLayoutPageTemplateCollectionId() != 0) ||
 			!Objects.equals(getSelectedTab(), "global-templates")) {
@@ -329,7 +335,9 @@ public class SelectLayoutPageTemplateEntryDisplayContext {
 	private String _getLayoutPageTemplateEntryAddLayoutURL(
 		LayoutPageTemplateEntry layoutPageTemplateEntry) {
 
-		return PortletURLBuilder.createRenderURL(
+		long selPlid = ParamUtil.getLong(_httpServletRequest, "selPlid");
+
+		PortletURL addLayoutURL = PortletURLBuilder.createRenderURL(
 			_liferayPortletResponse
 		).setMVCRenderCommandName(
 			"/layout_admin/add_layout"
@@ -342,10 +350,26 @@ public class SelectLayoutPageTemplateEntryDisplayContext {
 			"privateLayout",
 			ParamUtil.getBoolean(_httpServletRequest, "privateLayout")
 		).setParameter(
-			"selPlid", ParamUtil.getLong(_httpServletRequest, "selPlid")
+			"selPlid", selPlid
 		).setWindowState(
 			LiferayWindowState.POP_UP
-		).buildString();
+		).buildPortletURL();
+
+		if (selPlid != LayoutConstants.DEFAULT_PLID) {
+			Layout layout = LayoutLocalServiceUtil.fetchLayout(selPlid);
+
+			if ((layout != null) && layout.isTypeEmpty()) {
+				addLayoutURL.setParameter(
+					"emptyLayout",
+					String.valueOf(
+						ParamUtil.getBoolean(
+							_httpServletRequest, "emptyLayout")));
+				addLayoutURL.setParameter(
+					"externalReferenceCode", layout.getExternalReferenceCode());
+			}
+		}
+
+		return addLayoutURL.toString();
 	}
 
 	private String _backURL;

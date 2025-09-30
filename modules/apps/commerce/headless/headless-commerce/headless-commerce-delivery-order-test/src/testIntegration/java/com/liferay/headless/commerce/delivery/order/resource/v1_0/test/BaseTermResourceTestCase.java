@@ -331,7 +331,7 @@ public abstract class BaseTermResourceTestCase {
 			testGraphQLGetPlacedOrderByExternalReferenceCodeDeliveryTerm_addTerm()
 		throws Exception {
 
-		return testGraphQLTerm_addTerm();
+		return testGraphQLPlacedOrderTerm_addTerm();
 	}
 
 	@Test
@@ -485,7 +485,7 @@ public abstract class BaseTermResourceTestCase {
 			testGraphQLGetPlacedOrderByExternalReferenceCodePaymentTerm_addTerm()
 		throws Exception {
 
-		return testGraphQLTerm_addTerm();
+		return testGraphQLPlacedOrderTerm_addTerm();
 	}
 
 	@Test
@@ -615,7 +615,7 @@ public abstract class BaseTermResourceTestCase {
 	protected Term testGraphQLGetPlacedOrderDeliveryTerm_addTerm()
 		throws Exception {
 
-		return testGraphQLTerm_addTerm();
+		return testGraphQLPlacedOrderTerm_addTerm();
 	}
 
 	@Test
@@ -745,10 +745,10 @@ public abstract class BaseTermResourceTestCase {
 	protected Term testGraphQLGetPlacedOrderPaymentTerm_addTerm()
 		throws Exception {
 
-		return testGraphQLTerm_addTerm();
+		return testGraphQLPlacedOrderTerm_addTerm();
 	}
 
-	protected Term testGraphQLTerm_addTerm() throws Exception {
+	protected Term testGraphQLPlacedOrderTerm_addTerm() throws Exception {
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
@@ -903,6 +903,10 @@ public abstract class BaseTermResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("externalReferenceCode"));
+
+		graphQLFields.add(new GraphQLField("id"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

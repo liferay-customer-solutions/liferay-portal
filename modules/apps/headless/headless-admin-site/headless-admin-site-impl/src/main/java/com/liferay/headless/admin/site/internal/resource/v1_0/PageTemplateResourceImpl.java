@@ -6,6 +6,7 @@
 package com.liferay.headless.admin.site.internal.resource.v1_0;
 
 import com.liferay.client.extension.type.manager.CETManager;
+import com.liferay.exportimport.vulcan.batch.engine.ExportImportVulcanBatchEngineTaskItemDelegate;
 import com.liferay.headless.admin.site.dto.v1_0.ContentPageSpecification;
 import com.liferay.headless.admin.site.dto.v1_0.ContentPageTemplate;
 import com.liferay.headless.admin.site.dto.v1_0.NavigationSettings;
@@ -23,6 +24,7 @@ import com.liferay.headless.admin.site.internal.resource.v1_0.util.PageSpecifica
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.PageTemplateSetUtil;
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.ServiceContextUtil;
 import com.liferay.headless.admin.site.resource.v1_0.PageTemplateResource;
+import com.liferay.layout.admin.constants.LayoutAdminPortletKeys;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateCollectionTypeConstants;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateConstants;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateEntryTypeConstants;
@@ -39,7 +41,6 @@ import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutConstants;
 import com.liferay.portal.kernel.model.LayoutPrototype;
 import com.liferay.portal.kernel.model.LayoutTypePortletConstants;
-import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.service.LayoutLocalService;
@@ -59,11 +60,11 @@ import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
-import com.liferay.portal.vulcan.util.SearchUtil;
 
 import jakarta.ws.rs.core.MultivaluedMap;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -79,7 +80,9 @@ import org.osgi.service.component.annotations.ServiceScope;
 	properties = "OSGI-INF/liferay/rest/v1_0/page-template.properties",
 	scope = ServiceScope.PROTOTYPE, service = PageTemplateResource.class
 )
-public class PageTemplateResourceImpl extends BasePageTemplateResourceImpl {
+public class PageTemplateResourceImpl
+	extends BasePageTemplateResourceImpl
+	implements ExportImportVulcanBatchEngineTaskItemDelegate<PageTemplate> {
 
 	@Override
 	public void deleteSitePageTemplate(
@@ -104,34 +107,30 @@ public class PageTemplateResourceImpl extends BasePageTemplateResourceImpl {
 	}
 
 	@Override
-	public PageTemplate getSitePageTemplate(
-			String siteExternalReferenceCode,
-			String pageTemplateExternalReferenceCode)
-		throws Exception {
+	public ExportImportDescriptor getExportImportDescriptor() {
+		return new ExportImportDescriptor() {
 
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
-			throw new UnsupportedOperationException();
-		}
+			@Override
+			public String getItemClassName() {
+				return LayoutPageTemplateEntry.class.getName();
+			}
 
-		LayoutPageTemplateEntry layoutPageTemplateEntry =
-			_layoutPageTemplateEntryService.
-				getLayoutPageTemplateEntryByExternalReferenceCode(
-					pageTemplateExternalReferenceCode,
-					GroupUtil.getGroupId(
-						true, true, contextCompany.getCompanyId(),
-						siteExternalReferenceCode));
+			@Override
+			public List<String> getNestedFields() {
+				return List.of("friendlyUrlHistory", "pageSpecifications");
+			}
 
-		if (!Objects.equals(
-				LayoutPageTemplateEntryTypeConstants.BASIC,
-				layoutPageTemplateEntry.getType()) &&
-			!Objects.equals(
-				LayoutPageTemplateEntryTypeConstants.WIDGET_PAGE,
-				layoutPageTemplateEntry.getType())) {
+			@Override
+			public String getPortletId() {
+				return LayoutAdminPortletKeys.GROUP_PAGES;
+			}
 
-			throw new UnsupportedOperationException();
-		}
+			@Override
+			public Scope getScope() {
+				return Scope.SITE;
+			}
 
-		return _pageTemplateDTOConverter.toDTO(layoutPageTemplateEntry);
+		};
 	}
 
 	@Override
@@ -168,62 +167,6 @@ public class PageTemplateResourceImpl extends BasePageTemplateResourceImpl {
 					QueryUtil.ALL_POS, QueryUtil.ALL_POS, null),
 				layoutPageTemplateEntry -> _pageTemplateDTOConverter.toDTO(
 					layoutPageTemplateEntry)));
-	}
-
-	@Override
-	public Page<PageTemplate> getSitePageTemplatesPage(
-			String siteExternalReferenceCode, String search,
-			Aggregation aggregation, Filter filter, Pagination pagination,
-			Sort[] sorts)
-		throws Exception {
-
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
-			throw new UnsupportedOperationException();
-		}
-
-		long groupId = GroupUtil.getGroupId(
-			true, true, contextCompany.getCompanyId(),
-			siteExternalReferenceCode);
-
-		return SearchUtil.search(
-			Collections.emptyMap(),
-			booleanQuery -> {
-			},
-			filter, LayoutPageTemplateEntry.class.getName(), search, pagination,
-			queryConfig -> queryConfig.setSelectedFieldNames(
-				Field.ENTRY_CLASS_PK),
-			searchContext -> {
-				searchContext.setAttribute(
-					"types",
-					new String[] {
-						String.valueOf(
-							LayoutPageTemplateEntryTypeConstants.BASIC),
-						String.valueOf(
-							LayoutPageTemplateEntryTypeConstants.WIDGET_PAGE)
-					});
-				searchContext.setCompanyId(contextCompany.getCompanyId());
-				searchContext.setGroupIds(new long[] {groupId});
-			},
-			sorts,
-			document -> _pageTemplateDTOConverter.toDTO(
-				_layoutPageTemplateEntryService.fetchLayoutPageTemplateEntry(
-					GetterUtil.getLong(document.get(Field.ENTRY_CLASS_PK)))));
-	}
-
-	@Override
-	public PageTemplate postSitePageTemplate(
-			String siteExternalReferenceCode, PageTemplate pageTemplate)
-		throws Exception {
-
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
-			throw new UnsupportedOperationException();
-		}
-
-		return _addPageTemplate(
-			GroupUtil.getGroupId(
-				_isTypeWidgetPageTemplate(pageTemplate), false,
-				contextCompany.getCompanyId(), siteExternalReferenceCode),
-			pageTemplate);
 	}
 
 	@Override
@@ -295,7 +238,90 @@ public class PageTemplateResourceImpl extends BasePageTemplateResourceImpl {
 	}
 
 	@Override
-	public PageTemplate putSitePageTemplate(
+	protected PageTemplate doGetSitePageTemplate(
+			String siteExternalReferenceCode,
+			String pageTemplateExternalReferenceCode)
+		throws Exception {
+
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
+			throw new UnsupportedOperationException();
+		}
+
+		LayoutPageTemplateEntry layoutPageTemplateEntry =
+			_layoutPageTemplateEntryService.
+				getLayoutPageTemplateEntryByExternalReferenceCode(
+					pageTemplateExternalReferenceCode,
+					GroupUtil.getGroupId(
+						true, true, contextCompany.getCompanyId(),
+						siteExternalReferenceCode));
+
+		if (!Objects.equals(
+				LayoutPageTemplateEntryTypeConstants.BASIC,
+				layoutPageTemplateEntry.getType()) &&
+			!Objects.equals(
+				LayoutPageTemplateEntryTypeConstants.WIDGET_PAGE,
+				layoutPageTemplateEntry.getType())) {
+
+			throw new UnsupportedOperationException();
+		}
+
+		return _pageTemplateDTOConverter.toDTO(layoutPageTemplateEntry);
+	}
+
+	@Override
+	protected Page<PageTemplate> doGetSitePageTemplatesPage(
+			String siteExternalReferenceCode, String search,
+			Aggregation aggregation, Filter filter, Pagination pagination,
+			Sort[] sorts)
+		throws Exception {
+
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
+			throw new UnsupportedOperationException();
+		}
+
+		long groupId = GroupUtil.getGroupId(
+			true, true, contextCompany.getCompanyId(),
+			siteExternalReferenceCode);
+
+		return Page.of(
+			transform(
+				_layoutPageTemplateEntryService.getLayoutPageTemplateEntries(
+					groupId,
+					new int[] {
+						LayoutPageTemplateEntryTypeConstants.BASIC,
+						LayoutPageTemplateEntryTypeConstants.WIDGET_PAGE
+					},
+					pagination.getStartPosition(), pagination.getEndPosition(),
+					null),
+				layoutPageTemplateEntry -> _pageTemplateDTOConverter.toDTO(
+					layoutPageTemplateEntry)),
+			pagination,
+			_layoutPageTemplateEntryService.getLayoutPageTemplateEntriesCount(
+				groupId,
+				new int[] {
+					LayoutPageTemplateEntryTypeConstants.BASIC,
+					LayoutPageTemplateEntryTypeConstants.WIDGET_PAGE
+				}));
+	}
+
+	@Override
+	protected PageTemplate doPostSitePageTemplate(
+			String siteExternalReferenceCode, PageTemplate pageTemplate)
+		throws Exception {
+
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
+			throw new UnsupportedOperationException();
+		}
+
+		return _addPageTemplate(
+			GroupUtil.getGroupId(
+				_isTypeWidgetPageTemplate(pageTemplate), false,
+				contextCompany.getCompanyId(), siteExternalReferenceCode),
+			pageTemplate);
+	}
+
+	@Override
+	protected PageTemplate doPutSitePageTemplate(
 			String siteExternalReferenceCode,
 			String pageTemplateExternalReferenceCode, PageTemplate pageTemplate)
 		throws Exception {
@@ -362,6 +388,28 @@ public class PageTemplateResourceImpl extends BasePageTemplateResourceImpl {
 
 		return _updatePageTemplate(
 			layoutPageTemplateEntry, (WidgetPageTemplate)pageTemplate);
+	}
+
+	@Override
+	protected Long getPermissionCheckerResourceId(
+			String groupExternalReferenceCode, String externalReferenceCode)
+		throws Exception {
+
+		LayoutPageTemplateEntry layoutPageTemplateEntry =
+			_layoutPageTemplateEntryLocalService.
+				getLayoutPageTemplateEntryByExternalReferenceCode(
+					externalReferenceCode,
+					getPermissionCheckerGroupId(groupExternalReferenceCode));
+
+		return layoutPageTemplateEntry.getPrimaryKey();
+	}
+
+	@Override
+	protected String getPermissionCheckerResourceName(
+			String groupExternalReferenceCode, String externalReferenceCode)
+		throws Exception {
+
+		return LayoutPageTemplateEntry.class.getName();
 	}
 
 	@Override
@@ -638,7 +686,8 @@ public class PageTemplateResourceImpl extends BasePageTemplateResourceImpl {
 			pageTemplate.getTaxonomyCategoryItemExternalReferences(),
 			contextCompany.getCompanyId(), pageTemplate.getDateCreated(),
 			groupId, contextHttpServletRequest, pageTemplate.getKeywords(),
-			pageTemplate.getDateModified(), contextUser.getUserId(), uuid);
+			pageTemplate.getDateModified(), contextUser.getUserId(), uuid,
+			null);
 	}
 
 	private UnicodeProperties

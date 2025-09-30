@@ -36,6 +36,7 @@ import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.Role;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
@@ -133,7 +134,7 @@ public class AccountGroupResourceTest extends BaseAccountGroupResourceTestCase {
 		_testPatchAccountGroupByExternalReferenceCodeWithoutName();
 	}
 
-	@FeatureFlag("LPD-47858")
+	@FeatureFlag("LPD-35914")
 	@LazyReferencing
 	@Override
 	@Test
@@ -289,6 +290,14 @@ public class AccountGroupResourceTest extends BaseAccountGroupResourceTestCase {
 		throws Exception {
 
 		return _postAccountGroup(randomAccountGroup());
+	}
+
+	@Override
+	protected String
+			testGraphQLDeleteAccountGroupByExternalReferenceCodeAccountByExternalReferenceCode_getAccountExternalReferenceCode()
+		throws Exception {
+
+		return _accountEntry.getExternalReferenceCode();
 	}
 
 	@Override
@@ -543,6 +552,13 @@ public class AccountGroupResourceTest extends BaseAccountGroupResourceTestCase {
 		Creator creator = getAccountGroup.getCreator();
 
 		Assert.assertTrue(creator.getId() == TestPropsValues.getUserId());
+
+		User user = TestPropsValues.getUser();
+
+		Assert.assertTrue(
+			Objects.equals(
+				creator.getExternalReferenceCode(),
+				user.getExternalReferenceCode()));
 
 		Assert.assertTrue(
 			ArrayUtil.exists(

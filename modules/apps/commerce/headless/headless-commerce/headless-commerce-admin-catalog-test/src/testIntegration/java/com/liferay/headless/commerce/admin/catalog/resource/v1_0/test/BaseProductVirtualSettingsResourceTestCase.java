@@ -343,7 +343,7 @@ public abstract class BaseProductVirtualSettingsResourceTestCase {
 			testGraphQLGetProductByExternalReferenceCodeProductVirtualSettings_addProductVirtualSettings()
 		throws Exception {
 
-		return testGraphQLProductVirtualSettings_addProductVirtualSettings();
+		return testGraphQLProductProductVirtualSettings_addProductVirtualSettings();
 	}
 
 	@Test
@@ -486,11 +486,11 @@ public abstract class BaseProductVirtualSettingsResourceTestCase {
 			testGraphQLGetProductIdProductVirtualSettings_addProductVirtualSettings()
 		throws Exception {
 
-		return testGraphQLProductVirtualSettings_addProductVirtualSettings();
+		return testGraphQLProductProductVirtualSettings_addProductVirtualSettings();
 	}
 
 	protected ProductVirtualSettings
-			testGraphQLProductVirtualSettings_addProductVirtualSettings()
+			testGraphQLProductProductVirtualSettings_addProductVirtualSettings()
 		throws Exception {
 
 		throw new UnsupportedOperationException(
@@ -786,6 +786,8 @@ public abstract class BaseProductVirtualSettingsResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("id"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

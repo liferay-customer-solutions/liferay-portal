@@ -265,7 +265,7 @@ public class RoleResourceTest extends BaseRoleResourceTestCase {
 		}
 	}
 
-	@FeatureFlag("LPD-47858")
+	@FeatureFlag("LPD-35914")
 	@LazyReferencing
 	@Override
 	@Test
@@ -551,14 +551,6 @@ public class RoleResourceTest extends BaseRoleResourceTestCase {
 
 	@Override
 	protected Long
-			testDeleteSiteRoleByExternalReferenceCodeUserAccountAssociation_getSiteId()
-		throws Exception {
-
-		return testGroup.getGroupId();
-	}
-
-	@Override
-	protected Long
 			testDeleteSiteRoleByExternalReferenceCodeUserAccountAssociation_getUserAccountId()
 		throws Exception {
 
@@ -570,13 +562,6 @@ public class RoleResourceTest extends BaseRoleResourceTestCase {
 		throws Exception {
 
 		return _addRole(true, RoleConstants.TYPE_SITE);
-	}
-
-	@Override
-	protected Long testDeleteSiteRoleUserAccountAssociation_getSiteId()
-		throws Exception {
-
-		return testGroup.getGroupId();
 	}
 
 	@Override
@@ -604,8 +589,86 @@ public class RoleResourceTest extends BaseRoleResourceTestCase {
 	}
 
 	@Override
+	protected Long
+			testGraphQLDeleteOrganizationRoleByExternalReferenceCodeUserAccountAssociation_getOrganizationId()
+		throws Exception {
+
+		return _organization.getOrganizationId();
+	}
+
+	@Override
+	protected Long
+			testGraphQLDeleteOrganizationRoleByExternalReferenceCodeUserAccountAssociation_getUserAccountId()
+		throws Exception {
+
+		return _user.getUserId();
+	}
+
+	@Override
+	protected Long
+			testGraphQLDeleteOrganizationRoleUserAccountAssociation_getOrganizationId()
+		throws Exception {
+
+		return _organization.getOrganizationId();
+	}
+
+	@Override
+	protected Long
+			testGraphQLDeleteOrganizationRoleUserAccountAssociation_getUserAccountId()
+		throws Exception {
+
+		return _user.getUserId();
+	}
+
+	@Override
+	protected Long
+		testGraphQLDeleteRoleByExternalReferenceCodeUserAccountAssociation_getUserAccountId() {
+
+		return _user.getUserId();
+	}
+
+	@Override
+	protected Long
+			testGraphQLDeleteRoleUserAccountAssociation_getUserAccountId()
+		throws Exception {
+
+		return _user.getUserId();
+	}
+
+	@Override
+	protected Role
+			testGraphQLDeleteSiteRoleByExternalReferenceCodeUserAccountAssociation_addRole()
+		throws Exception {
+
+		return _addRole(true, RoleConstants.TYPE_SITE);
+	}
+
+	@Override
+	protected Long
+			testGraphQLDeleteSiteRoleByExternalReferenceCodeUserAccountAssociation_getUserAccountId()
+		throws Exception {
+
+		return _user.getUserId();
+	}
+
+	@Override
+	protected Role testGraphQLDeleteSiteRoleUserAccountAssociation_addRole()
+		throws Exception {
+
+		return _addRole(true, RoleConstants.TYPE_SITE);
+	}
+
+	@Override
+	protected Long
+			testGraphQLDeleteSiteRoleUserAccountAssociation_getUserAccountId()
+		throws Exception {
+
+		return _user.getUserId();
+	}
+
+	@Override
 	protected Role testGraphQLRole_addRole() throws Exception {
-		return testGetRole_addRole();
+		return _addRole(true, RoleConstants.TYPE_ORGANIZATION);
 	}
 
 	@Override

@@ -210,15 +210,13 @@ test(
 );
 
 test(
-	'Latest version of Web Content should not have delete option',
-	{
-		tag: '@LPD-52126',
-	},
+	'Delete option should not be available when there is only one version available',
+	{tag: '@LPD-65083'},
 	async ({apiHelpers, journalPage, page, site}) => {
 		const basicWebContentStructureId =
 			await getBasicWebContentStructureId(apiHelpers);
 
-		await apiHelpers.jsonWebServicesJournal.addWebContent({
+		const article = await apiHelpers.jsonWebServicesJournal.addWebContent({
 			ddmStructureId: basicWebContentStructureId,
 			groupId: site.id,
 			titleMap: {en_US: 'Basic Web content'},
@@ -236,9 +234,23 @@ test(
 			page.getByRole('menuitem', {name: 'Delete'})
 		).not.toBeVisible();
 
-		await page.locator('.management-bar input[type="checkbox"]').click();
+		await apiHelpers.jsonWebServicesJournal.editWebContent(
+			{title: 'Updated Basic Web content'},
+			site.id,
+			article
+		);
 
-		await expect(page.getByRole('button', {name: 'Delete'})).toBeDisabled();
+		await journalPage.goto(site.friendlyUrlPath);
+
+		await page.getByRole('button', {name: 'Actions'}).click();
+
+		await page.getByRole('menuitem', {name: 'View History'}).click();
+
+		await page.getByRole('button', {name: 'Actions'}).first().click();
+
+		await expect(
+			page.getByRole('menuitem', {name: 'Delete'})
+		).toBeVisible();
 	}
 );
 

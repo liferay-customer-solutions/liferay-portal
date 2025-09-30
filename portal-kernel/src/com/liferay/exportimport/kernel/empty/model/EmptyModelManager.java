@@ -37,6 +37,16 @@ public interface EmptyModelManager {
 			long groupId)
 		throws E;
 
+	public <T, E extends Exception> T getOrAddEmptyModel(
+			String className, Long companyId,
+			UnsafeSupplier<T, E> emptyModelUnsafeSupplier,
+			String externalReferenceCode,
+			BiFunction<String, Long, T> fetchByExternalReferenceCodeBiFunction,
+			UnsafeBiFunction<String, Long, T, E>
+				getByExternalReferenceCodeUnsafeBiFunction,
+			long groupId, String modelName)
+		throws E;
+
 	public boolean isEmptyModel();
 
 }

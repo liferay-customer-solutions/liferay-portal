@@ -186,7 +186,7 @@ public abstract class BaseSamlProviderResourceTestCase {
 
 	@Test
 	public void testGraphQLGetSamlProvider() throws Exception {
-		Assert.assertTrue(true);
+		Assert.assertTrue(false);
 	}
 
 	@Test
@@ -216,6 +216,11 @@ public abstract class BaseSamlProviderResourceTestCase {
 
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
+	}
+
+	@Test
+	public void testGraphQLPostSamlProvider() throws Exception {
+		Assert.assertTrue(false);
 	}
 
 	@Test

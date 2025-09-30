@@ -327,7 +327,7 @@ public abstract class BaseAddressResourceTestCase {
 	protected Address testGraphQLGetCartBillingAddres_addAddress()
 		throws Exception {
 
-		return testGraphQLAddress_addAddress();
+		return testGraphQLCartAddress_addAddress();
 	}
 
 	@Test
@@ -481,7 +481,7 @@ public abstract class BaseAddressResourceTestCase {
 			testGraphQLGetCartByExternalReferenceCodeBillingAddress_addAddress()
 		throws Exception {
 
-		return testGraphQLAddress_addAddress();
+		return testGraphQLCartAddress_addAddress();
 	}
 
 	@Test
@@ -635,7 +635,7 @@ public abstract class BaseAddressResourceTestCase {
 			testGraphQLGetCartByExternalReferenceCodeShippingAddress_addAddress()
 		throws Exception {
 
-		return testGraphQLAddress_addAddress();
+		return testGraphQLCartAddress_addAddress();
 	}
 
 	@Test
@@ -759,10 +759,10 @@ public abstract class BaseAddressResourceTestCase {
 	protected Address testGraphQLGetCartShippingAddres_addAddress()
 		throws Exception {
 
-		return testGraphQLAddress_addAddress();
+		return testGraphQLCartAddress_addAddress();
 	}
 
-	protected Address testGraphQLAddress_addAddress() throws Exception {
+	protected Address testGraphQLCartAddress_addAddress() throws Exception {
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
@@ -1049,6 +1049,10 @@ public abstract class BaseAddressResourceTestCase {
 
 	protected List<GraphQLField> getGraphQLFields() throws Exception {
 		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("externalReferenceCode"));
+
+		graphQLFields.add(new GraphQLField("id"));
 
 		for (java.lang.reflect.Field field :
 				getDeclaredFields(

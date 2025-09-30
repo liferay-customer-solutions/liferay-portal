@@ -5,6 +5,7 @@
 
 package com.liferay.site.cms.site.initializer.internal.display.context;
 
+import com.liferay.depot.constants.DepotConstants;
 import com.liferay.depot.model.DepotEntry;
 import com.liferay.depot.service.DepotEntryLocalService;
 import com.liferay.document.library.configuration.DLConfiguration;
@@ -448,25 +449,6 @@ public abstract class BaseSectionDisplayContext {
 				null));
 	}
 
-	public Map<String, Object> getToolbarProps() throws PortalException {
-		return HashMapBuilder.<String, Object>put(
-			"title",
-			() -> {
-				Layout layout = themeDisplay.getLayout();
-
-				if (layout == null) {
-					return null;
-				}
-
-				return layout.getName(themeDisplay.getLocale(), true);
-			}
-		).put(
-			"toolbarClassName", "section-toolbar tbar-light"
-		).put(
-			"toolbarTitleClassName", "section-toolbar-title"
-		).build();
-	}
-
 	protected void addBreadcrumbItem(
 		JSONArray jsonArray, boolean active, String friendlyURL, String label) {
 
@@ -645,7 +627,7 @@ public abstract class BaseSectionDisplayContext {
 		return _getDepotEntriesJSONArray(
 			TransformUtil.transform(
 				depotEntryLocalService.getDepotEntries(
-					QueryUtil.ALL_POS, QueryUtil.ALL_POS),
+					themeDisplay.getCompanyId(), DepotConstants.TYPE_SPACE),
 				DepotEntry::getGroupId));
 	}
 

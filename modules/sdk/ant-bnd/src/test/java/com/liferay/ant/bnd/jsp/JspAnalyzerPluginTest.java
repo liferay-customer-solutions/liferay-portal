@@ -35,6 +35,23 @@ import org.junit.Test;
 public class JspAnalyzerPluginTest {
 
 	@Test
+	public void testAddTaglibRequirements() throws Exception {
+		List<String> expectedTaglibURIs = Arrays.asList(
+			"http://java.sun.com/portlet_2_0", "http://liferay.com/tld/aui",
+			"http://liferay.com/tld/portlet", "http://liferay.com/tld/security",
+			"http://liferay.com/tld/theme", "http://liferay.com/tld/ui",
+			"http://liferay.com/tld/util");
+
+		_testAddTaglibRequirements(
+			expectedTaglibURIs, "dependencies/imports_without_comments.jsp",
+			"jakarta.tags.core");
+		_testAddTaglibRequirements(
+			expectedTaglibURIs,
+			"dependencies/imports_without_comments_with_javax.jsp",
+			"http://java.sun.com/jsp/jstl/core");
+	}
+
+	@Test
 	public void testGetTaglibURIsWithComments() throws Exception {
 		JspAnalyzerPlugin jspAnalyzerPlugin = new JspAnalyzerPlugin();
 
@@ -184,6 +201,37 @@ public class JspAnalyzerPluginTest {
 		Class<?> clazz = getClass();
 
 		return clazz.getResource(path);
+	}
+
+	private void _testAddTaglibRequirements(
+			List<String> expectedURIs, String jspPath, String unexpectedURI)
+		throws Exception {
+
+		JspAnalyzerPlugin jspAnalyzerPlugin = new JspAnalyzerPlugin();
+
+		Builder builder = new Builder();
+
+		builder.build();
+
+		URL url = getResource(jspPath);
+
+		String content = null;
+
+		try (InputStream inputStream = url.openStream()) {
+			content = IO.collect(inputStream);
+		}
+
+		jspAnalyzerPlugin.addTaglibRequirements(
+			builder, content, new HashSet<>());
+
+		String requireCapability = builder.getProperty(
+			Constants.REQUIRE_CAPABILITY);
+
+		for (String expectedURI : expectedURIs) {
+			Assert.assertTrue(requireCapability.contains(expectedURI));
+		}
+
+		Assert.assertFalse(requireCapability.contains(unexpectedURI));
 	}
 
 	private void _testImplicitImports(

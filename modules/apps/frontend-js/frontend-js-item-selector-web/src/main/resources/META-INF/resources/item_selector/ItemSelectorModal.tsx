@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import ClayBreadcrumb from '@clayui/breadcrumb';
 import ClayButton from '@clayui/button';
+import ClayLayout from '@clayui/layout';
 import ClayModal from '@clayui/modal';
 import {InternalDispatch} from '@clayui/shared';
 import {
@@ -33,6 +35,11 @@ export interface IItemSelectorModalProps<T> {
 	 * The URL that will be fetched to return the items.
 	 */
 	apiURL: string;
+
+	/**
+	 * Configuration of @clayui/breadcrumb items to show above the FDS table
+	 */
+	breadcrumbs?: React.ComponentProps<typeof ClayBreadcrumb>['items'];
 
 	/**
 	 * Configuration properties of the Frontend Data Set used to display data.
@@ -88,6 +95,7 @@ export interface IItemSelectorModalProps<T> {
 
 function ItemSelectorModal<T extends Record<string, any>>({
 	apiURL,
+	breadcrumbs,
 	fdsProps,
 	itemTypeLabel,
 	items: externalItems,
@@ -126,6 +134,21 @@ function ItemSelectorModal<T extends Record<string, any>>({
 			</ClayModal.Header>
 
 			<ClayModal.Body className="p-0">
+				{breadcrumbs && (
+					<ClayLayout.Container fluid>
+						<h2 className="mb-0 mt-2">
+							{breadcrumbs[breadcrumbs.length - 1].label}
+						</h2>
+
+						<ClayBreadcrumb
+							items={breadcrumbs.map((breadcrumb, index) => ({
+								...breadcrumb,
+								active: index === breadcrumbs.length - 1,
+							}))}
+						/>
+					</ClayLayout.Container>
+				)}
+
 				<FrontendDataSet
 					{...fdsProps}
 					apiURL={apiURL}

@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.LayoutJavaScriptException;
 import com.liferay.portal.kernel.exception.LayoutNameException;
+import com.liferay.portal.kernel.exception.LayoutTypeException;
 import com.liferay.portal.kernel.exception.MasterLayoutException;
 import com.liferay.portal.kernel.exception.NoSuchLayoutException;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -2980,6 +2981,10 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 
 		// Layout
 
+		if (Objects.equals(type, LayoutConstants.TYPE_EMPTY)) {
+			throw new LayoutTypeException(LayoutTypeException.EMPTY);
+		}
+
 		parentLayoutId = layoutLocalServiceHelper.getParentLayoutId(
 			groupId, privateLayout, parentLayoutId);
 
@@ -3088,6 +3093,13 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 		}
 
 		layout.setExpandoBridgeAttributes(serviceContext);
+
+		if (layout.getStatus() == WorkflowConstants.STATUS_EMPTY) {
+			layout.setStatus(
+				Objects.equals(type, LayoutConstants.TYPE_CONTENT) ?
+					WorkflowConstants.STATUS_DRAFT :
+						WorkflowConstants.STATUS_APPROVED);
+		}
 
 		layout = layoutLocalService.updateLayout(layout);
 

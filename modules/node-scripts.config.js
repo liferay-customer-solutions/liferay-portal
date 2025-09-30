@@ -10,7 +10,7 @@
  */
 
 module.exports = {
-	hash: '772706fa41f1ee672712c1fff8e726bd60ebefbd7518cd8e94ace353a8963eef',
+	hash: '176dd84b5475ca7c9adc096f3d956929e84bacdb8547cd0ab22f884a22880357',
 	imports: {
 		'@liferay/accessibility-menu-web': [],
 		'@liferay/accessibility-settings-state-web': [],
@@ -136,6 +136,7 @@ module.exports = {
 		],
 		'@liferay/frontend-js-importmaps-extender': [],
 		'@liferay/frontend-js-item-selector-sample-web': [],
+		'@liferay/frontend-js-item-selector-web': [],
 		'@liferay/frontend-js-react-web': [
 			'classnames',
 			'formik',
@@ -196,6 +197,7 @@ module.exports = {
 		'@liferay/portal-tools-rest-builder-test-client-js': [],
 		'@liferay/portal-workflow-instance-tracker-web': [],
 		'@liferay/portal-workflow-taglib': [],
+		'@liferay/product-analytics-web': [],
 		'@liferay/product-navigation-control-menu-theme-contributor': [],
 		'@liferay/product-navigation-product-menu-theme-contributor': [],
 		'@liferay/product-navigation-site-administration': [],
@@ -276,7 +278,6 @@ module.exports = {
 		'frontend-js-aui-web': [],
 		'frontend-js-clay-sample-web': [],
 		'frontend-js-components-web': [],
-		'frontend-js-item-selector-web': [],
 		'frontend-js-loader-modules-extender': [],
 		'frontend-js-lodash-web': [],
 		'frontend-js-recharts': ['recharts'],

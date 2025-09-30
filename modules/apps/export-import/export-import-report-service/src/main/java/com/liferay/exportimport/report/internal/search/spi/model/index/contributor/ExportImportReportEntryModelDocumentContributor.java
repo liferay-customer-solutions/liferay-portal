@@ -32,7 +32,8 @@ public class ExportImportReportEntryModelDocumentContributor
 			Field.CREATE_DATE, exportImportReportEntry.getCreateDate());
 		document.addDate(
 			Field.MODIFIED_DATE, exportImportReportEntry.getModifiedDate());
-		document.addText("error", exportImportReportEntry.getError());
+		document.addText(
+			"errorMessage", exportImportReportEntry.getErrorMessage());
 		document.addNumber(
 			"exportImportConfigurationId_long",
 			exportImportReportEntry.getExportImportConfigurationId());

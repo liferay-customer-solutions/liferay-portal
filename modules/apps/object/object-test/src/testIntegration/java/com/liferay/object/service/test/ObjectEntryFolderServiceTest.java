@@ -73,10 +73,17 @@ public class ObjectEntryFolderServiceTest {
 
 		_setUser(_adminUser);
 
+		String externalReferenceCode = RandomTestUtil.randomString();
+
 		AssertUtils.assertFailure(
-			NoSuchObjectEntryFolderException.class, null,
+			NoSuchObjectEntryFolderException.class,
+			StringBundler.concat(
+				"No ObjectEntryFolder exists with the key {",
+				"externalReferenceCode=", externalReferenceCode, ", groupId=",
+				_group.getGroupId(), ", companyId=",
+				TestPropsValues.getCompanyId(), "}"),
 			() -> _objectEntryFolderService.getOrAddEmptyObjectEntryFolder(
-				RandomTestUtil.randomString(), _group.getGroupId(),
+				externalReferenceCode, _group.getGroupId(),
 				TestPropsValues.getCompanyId(),
 				ServiceContextTestUtil.getServiceContext()));
 
@@ -128,7 +135,7 @@ public class ObjectEntryFolderServiceTest {
 		}
 	}
 
-	@FeatureFlag("LPD-53981")
+	@FeatureFlag("LPD-17564")
 	@Test
 	public void testMoveObjectEntryFolderTrash() throws Exception {
 		try {
@@ -148,7 +155,7 @@ public class ObjectEntryFolderServiceTest {
 		_testMoveObjectEntryFolderTrash(_user, _user);
 	}
 
-	@FeatureFlag("LPD-53981")
+	@FeatureFlag("LPD-17564")
 	@Test
 	public void testRestoreObjectEntryFolderFromTrash() throws Exception {
 		try {
