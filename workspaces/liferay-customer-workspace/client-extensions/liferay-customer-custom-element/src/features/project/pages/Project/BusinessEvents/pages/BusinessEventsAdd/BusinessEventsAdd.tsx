@@ -430,7 +430,7 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 								<Select
 									badgeClassName="mt-1 mx-3"
 									label={i18n.translate('event-type')}
-									link="https://support.liferay.com/w/business-events"
+									link="https://help.liferay.com/hc/articles/36002102323597"
 									name="businessEvent.eventType.key"
 									onChange={(value: string) =>
 										handleOptionChange(
@@ -653,10 +653,7 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 				dangerouslySetInnerHTML={{
 					__html: i18n.sub(
 						'we-apologize-for-the-inconvenience-but-we-ve-detected-a-system-error-with-this-project',
-						[
-							'<a href="https://liferay.atlassian.net/servicedesk/customer/portals">',
-							'</a>',
-						]
+						['<a href="https://help.liferay.com">', '</a>']
 					),
 				}}
 			/>
