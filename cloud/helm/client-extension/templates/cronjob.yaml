@@ -1,0 +1,89 @@
+{{- if eq .Values.clientExtensionConfig.kind "CronJob" -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+    {{- with .Values.annotations }}
+    annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    labels:
+        {{- include "liferay-client-extension.labels" . | nindent 8 }}
+    name: {{ include "liferay-client-extension.fullname" . }}
+spec:
+    concurrencyPolicy: Forbid
+    jobTemplate:
+        spec:
+            template:
+                metadata:
+                    {{- with .Values.podAnnotations }}
+                    annotations:
+                        {{- toYaml . | nindent 24 }}
+                    {{- end }}
+                    labels:
+                        {{- include "liferay-client-extension.labels" . | nindent 24 }}
+                        {{- with .Values.podLabels }}
+                        {{- toYaml . | nindent 24 }}
+                        {{- end }}
+                spec:
+                    {{- with .Values.affinity }}
+                    affinity:
+                        {{- toYaml . | nindent 24 }}
+                    {{- end }}
+                    containers:
+                        -   env:
+                                -   name: LIFERAY_ROUTES_CLIENT_EXTENSION
+                                    value: /etc/liferay/lxc/ext-init-metadata
+                                -   name: LIFERAY_ROUTES_DXP
+                                    value: /etc/liferay/lxc/dxp-metadata
+                                {{- range $k, $v := .Values.env }}
+                                -   name: {{ $k }}
+                                    value: {{ $v | quote }}
+                                {{- end }}
+                            image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+                            name: {{ .Chart.Name }}
+                            {{- with .Values.resources }}
+                            resources:
+                                {{- toYaml . | nindent 32 }}
+                            {{- end }}
+                            {{- with .Values.securityContext }}
+                            securityContext:
+                                {{- toYaml . | nindent 32 }}
+                            {{- end }}
+                            volumeMounts:
+                                -   mountPath: /etc/liferay/lxc/dxp-metadata
+                                    name: lxc-dxp-metadata
+                                    readOnly: true
+                                {{- if .Values.clientExtensionConfig.mountInitConfig }}
+                                -   mountPath: /etc/liferay/lxc/ext-init-metadata
+                                    name: lxc-ext-init-metadata
+                                    readOnly: true
+                                {{- end }}
+                    {{- with .Values.imagePullSecrets }}
+                    imagePullSecrets:
+                        {{- toYaml . | nindent 24 }}
+                    {{- end }}
+                    {{- with .Values.nodeSelector }}
+                    nodeSelector:
+                        {{- toYaml . | nindent 24 }}
+                    {{- end }}
+                    restartPolicy: Never
+                    {{- with .Values.podSecurityContext }}
+                    securityContext:
+                        {{- toYaml . | nindent 24 }}
+                    {{- end }}
+                    serviceAccountName: {{ include "liferay-client-extension.serviceAccountName" . }}
+                    {{- with .Values.tolerations }}
+                    tolerations:
+                        {{- toYaml . | nindent 24 }}
+                    {{- end }}
+                    volumes:
+                        -   configMap:
+                                name: {{ include "dxp-configmap.name" . }}
+                            name: lxc-dxp-metadata
+                        {{- if .Values.clientExtensionConfig.mountInitConfig }}
+                        -   configMap:
+                                name: {{ include "liferay-client-extension.ext-init-configmap.name" . }}
+                            name: lxc-ext-init-metadata
+                        {{- end }}
+    schedule: {{ .Values.clientExtensionConfig.cronSchedule | quote }}
+{{- end }}

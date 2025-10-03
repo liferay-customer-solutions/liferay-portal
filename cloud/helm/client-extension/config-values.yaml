@@ -1,0 +1,23 @@
+clientExtensionConfig:
+    configJsons:
+        - |
+            {
+                "com.liferay.client.extension.type.configuration.CETConfiguration~liferay-sample-editor-config-contributor" : {
+                    ":configurator:policy" : "force",
+                    "baseURL" : "${portalURL}/o/liferay-sample-editor-config-contributor",
+                    "buildTimestamp" : 1748527783183,
+                    "description" : "",
+                    "dxp.lxc.liferay.com.virtualInstanceId" : "default",
+                    "name" : "Liferay Sample Editor Config Contributor",
+                    "projectId" : "liferaysampleeditorconfigcontributor",
+                    "projectName" : "liferay-sample-editor-config-contributor",
+                    "properties" : [ ],
+                    "sourceCodeURL" : "",
+                    "type" : "editorConfigContributor",
+                    "typeSettings" : [ "url=index.js", "editorConfigKeys=description\nfragmentEntryLinkRichTextEditor\nsampleAlloyEditor\nsampleClassicEditor\nsampleLegacyEditor\nsampleReactClassicEditor" ],
+                    "webContextPath" : "/liferay-sample-editor-config-contributor"
+                }
+            }
+    mainDomain: "config.localtest.me"
+    setupMainDomainOnCoreDNS: true
+    virtualInstanceId: "main.dxp.localtest.me"

@@ -1,0 +1,57 @@
+affinity: {}
+annotations: {}
+autoscaling:
+    enabled: false
+    maxReplicas: 100
+    minReplicas: 1
+    targetCPUUtilizationPercentage: 80
+clientExtensionConfig:
+    configJsons: []
+    cronSchedule: ""
+    kind: ""
+    mainDomain: ""
+    mountInitConfig: false
+    setupMainDomainOnCoreDNS: false
+    virtualInstanceId: ""
+env: {}
+fullnameOverride: ""
+image:
+    pullPolicy: Always
+    repository: ""
+    tag: latest
+imagePullSecrets: []
+ingress:
+    annotations: {}
+    className: ""
+    enabled: false
+    hosts: []
+    tls: []
+labels: {}
+livenessProbe:
+    httpGet:
+        path: /
+        port: http
+nameOverride: ""
+nodeSelector: {}
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+readinessProbe:
+    httpGet:
+        path: /
+        port: http
+replicaCount: 1
+resources: {}
+securityContext: {}
+service:
+    enabled: false
+    port: 80
+    type: ClusterIP
+serviceAccount:
+    annotations: {}
+    automount: true
+    create: false
+    name: ""
+tolerations: []
+volumeMounts: []
+volumes: []

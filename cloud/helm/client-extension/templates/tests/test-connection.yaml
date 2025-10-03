@@ -1,0 +1,17 @@
+{{- if .Values.service.enabled -}}
+apiVersion: v1
+kind: Pod
+metadata:
+    annotations:
+        "helm.sh/hook": test
+    labels:
+        {{- include "liferay-client-extension.labels" . | nindent 8 }}
+    name: "{{ include "liferay-client-extension.fullname" . }}-test-connection"
+spec:
+    containers:
+        -   args: ['{{ include "liferay-client-extension.fullname" . }}:{{ .Values.service.port }}']
+            command: ['wget']
+            image: busybox
+            name: wget
+    restartPolicy: Never
+{{- end -}}
