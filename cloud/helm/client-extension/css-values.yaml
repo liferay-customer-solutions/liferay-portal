@@ -1,0 +1,31 @@
+clientExtensionConfig:
+    configJsons:
+        - |
+            {
+                "com.liferay.client.extension.type.configuration.CETConfiguration~liferay-sample-theme-css-1" : {
+                    ":configurator:policy" : "force",
+                    "baseURL" : "${portalURL}/o/liferay-sample-theme-css-1",
+                    "buildTimestamp" : 1747768702891,
+                    "description" : "",
+                    "dxp.lxc.liferay.com.virtualInstanceId" : "default",
+                    "name" : "Liferay Sample Theme CSS 1",
+                    "projectId" : "liferaysamplethemecss1",
+                    "projectName" : "liferay-sample-theme-css-1",
+                    "properties" : [ ],
+                    "sourceCodeURL" : "",
+                    "type" : "themeCSS",
+                    "typeSettings" : [ "mainRTLURL=css/main_rtl.css", "clayRTLURL=css/clay_rtl.css", "clayURL=css/clay.css", "mainURL=css/main.css" ],
+                    "webContextPath" : "/liferay-sample-theme-css-1"
+                }
+            }
+    kind: Deployment
+    mainDomain: "css.localtest.me"
+    setupMainDomainOnCoreDNS: true
+    virtualInstanceId: "main.dxp.localtest.me"
+image:
+    repository: registry:5000/css
+ingress:
+    enabled: true
+service:
+    enabled: true
+    port: 80

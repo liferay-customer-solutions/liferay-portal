@@ -1,0 +1,34 @@
+clientExtensionConfig:
+    configJsons:
+        - |
+            {
+                "com.liferay.oauth2.provider.configuration.OAuth2ProviderApplicationHeadlessServerConfiguration~liferay-sample-batch-oauth-application-headless-server" : {
+                    ".serviceAddress" : "localhost:8080",
+                    ".serviceScheme" : "http",
+                    ":configurator:policy" : "force",
+                    "baseURL" : "${portalURL}/o/liferay-sample-batch",
+                    "buildTimestamp" : 1748461343506,
+                    "description" : "",
+                    "dxp.lxc.liferay.com.virtualInstanceId" : "default",
+                    "homePageURL" : "$[conf:.serviceScheme]://$[conf:.serviceAddress]",
+                    "name" : "Liferay Sample OAuth Application Headless Server",
+                    "projectId" : "liferaysamplebatch",
+                    "projectName" : "liferay-sample-batch",
+                    "properties" : [ ],
+                    "scopes" : [ "Liferay.Headless.Admin.Workflow.everything", "Liferay.Headless.Batch.Engine.everything", "Liferay.Object.Admin.REST.everything" ],
+                    "sourceCodeURL" : "",
+                    "type" : "oAuthApplicationHeadlessServer",
+                    "typeSettings" : [ ".serviceAddress=localhost:8080", ".serviceScheme=http", "scopes=Liferay.Headless.Admin.Workflow.everything\nLiferay.Headless.Batch.Engine.everything\nLiferay.Object.Admin.REST.everything" ],
+                    "webContextPath" : "/liferay-sample-batch"
+                }
+            }
+    kind: Job
+    mainDomain: "batch.localtest.me"
+    mountInitConfig: true
+    setupMainDomainOnCoreDNS: true
+    virtualInstanceId: "main.dxp.localtest.me"
+env:
+    LIFERAY_BATCH_CURL_OPTIONS: "-v"
+    LIFERAY_BATCH_OAUTH_APP_ERC: liferay-sample-batch-oauth-application-headless-server
+image:
+    repository: registry:5000/batch

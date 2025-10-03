@@ -1,0 +1,31 @@
+clientExtensionConfig:
+    configJsons:
+        - |
+            {
+                "com.liferay.client.extension.type.configuration.CETConfiguration~liferay-sample-custom-element-2" : {
+                    ":configurator:policy" : "force",
+                    "baseURL" : "${portalURL}/o/liferay-sample-custom-element-2",
+                    "buildTimestamp" : 1747935535775,
+                    "description" : "",
+                    "dxp.lxc.liferay.com.virtualInstanceId" : "default",
+                    "name" : "Liferay Sample Custom Element 2",
+                    "projectId" : "liferaysamplecustomelement2",
+                    "projectName" : "liferay-sample-custom-element-2",
+                    "properties" : [ ],
+                    "sourceCodeURL" : "",
+                    "type" : "customElement",
+                    "typeSettings" : [ "friendlyURLMapping=liferay-sample-custom-element-2", "instanceable=false", "urls=index.RVAWSJX4.js", "useESM=true", "portletCategoryName=category.client-extensions", "htmlElementName=liferay-sample-custom-element-2" ],
+                    "webContextPath" : "/liferay-sample-custom-element-2"
+                }
+            }
+    kind: Deployment
+    mainDomain: "element.localtest.me"
+    setupMainDomainOnCoreDNS: true
+    virtualInstanceId: "main.dxp.localtest.me"
+image:
+    repository: registry:5000/element
+ingress:
+    enabled: true
+service:
+    enabled: true
+    port: 80

@@ -1,0 +1,32 @@
+{{- if .Values.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+    labels:
+        {{- include "liferay-client-extension.labels" . | nindent 8 }}
+    name: {{ include "liferay-client-extension.fullname" . }}
+spec:
+    maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+    metrics:
+        {{- if .Values.autoscaling.targetCPUUtilizationPercentage }}
+        -   type: Resource
+            resource:
+                name: cpu
+                target:
+                    type: Utilization
+                    averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
+        {{- end }}
+        {{- if .Values.autoscaling.targetMemoryUtilizationPercentage }}
+        -   type: Resource
+            resource:
+                name: memory
+                target:
+                    type: Utilization
+                    averageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
+        {{- end }}
+    minReplicas: {{ .Values.autoscaling.minReplicas }}
+    scaleTargetRef:
+        apiVersion: apps/v1
+        kind: Deployment
+        name: {{ include "liferay-client-extension.fullname" . }}
+{{- end }}

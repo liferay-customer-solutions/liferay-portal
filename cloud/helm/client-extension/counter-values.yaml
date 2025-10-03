@@ -1,0 +1,31 @@
+clientExtensionConfig:
+    configJsons:
+        - |
+            {
+                "com.liferay.client.extension.type.configuration.CETConfiguration~liferay-sample-custom-element-1" : {
+                    ":configurator:policy" : "force",
+                    "baseURL" : "${portalURL}/o/liferay-sample-custom-element-1",
+                    "buildTimestamp" : 1747947209235,
+                    "description" : "",
+                    "dxp.lxc.liferay.com.virtualInstanceId" : "default",
+                    "name" : "Liferay Sample Custom Element 1",
+                    "projectId" : "liferaysamplecustomelement1",
+                    "projectName" : "liferay-sample-custom-element-1",
+                    "properties" : [ ],
+                    "sourceCodeURL" : "",
+                    "type" : "customElement",
+                    "typeSettings" : [ "friendlyURLMapping=vanilla-counter", "instanceable=false", "urls=index.58829bb7a75441944031f8527403cf45456d7360.js", "useESM=false", "htmlElementName=vanilla-counter", "cssURLs=style.29ce553a40c0647dcaaa1b4e07c42ba2032a9d51.css", "portletCategoryName=category.client-extensions" ],
+                    "webContextPath" : "/liferay-sample-custom-element-1"
+                }
+            }
+    kind: Deployment
+    mainDomain: "counter.localtest.me"
+    setupMainDomainOnCoreDNS: true
+    virtualInstanceId: "main.dxp.localtest.me"
+image:
+    repository: registry:5000/counter
+ingress:
+    enabled: true
+service:
+    enabled: true
+    port: 80

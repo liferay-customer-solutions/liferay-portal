@@ -1,0 +1,76 @@
+clientExtensionConfig:
+    configJsons:
+        - |
+            {
+                "com.liferay.oauth2.provider.configuration.OAuth2ProviderApplicationUserAgentConfiguration~liferay-sample-etc-node-oauth-application-user-agent" : {
+                    ".serviceAddress" : "localhost:3001",
+                    ".serviceScheme" : "http",
+                    ":configurator:policy" : "force",
+                    "baseURL" : "${portalURL}/o/liferay-sample-etc-node",
+                    "buildTimestamp" : 1747930762217,
+                    "description" : "",
+                    "dxp.lxc.liferay.com.virtualInstanceId" : "default",
+                    "homePageURL" : "$[conf:.serviceScheme]://$[conf:.serviceAddress]",
+                    "name" : "Liferay Sample Etc Node OAuth Application User Agent",
+                    "projectId" : "liferaysampleetcnode",
+                    "projectName" : "liferay-sample-etc-node",
+                    "properties" : [ ],
+                    "scopes" : [ "Liferay.Headless.Admin.Workflow.everything" ],
+                    "sourceCodeURL" : "",
+                    "type" : "oAuthApplicationUserAgent",
+                    "typeSettings" : [ ".serviceAddress=localhost:3001", ".serviceScheme=http", "scopes=Liferay.Headless.Admin.Workflow.everything" ],
+                    "webContextPath" : "/liferay-sample-etc-node"
+                },
+                "com.liferay.object.internal.configuration.FunctionObjectActionExecutorImplConfiguration~liferay-sample-etc-node-object-action-1" : {
+                    ":configurator:policy" : "force",
+                    "baseURL" : "${portalURL}/o/liferay-sample-etc-node",
+                    "buildTimestamp" : 1747930762219,
+                    "description" : "",
+                    "dxp.lxc.liferay.com.virtualInstanceId" : "default",
+                    "name" : "Liferay Sample Node Object Action 1",
+                    "oAuth2ApplicationExternalReferenceCode" : "liferay-sample-etc-node-oauth-application-user-agent",
+                    "projectId" : "liferaysampleetcnode",
+                    "projectName" : "liferay-sample-etc-node",
+                    "properties" : [ ],
+                    "resourcePath" : "/sample/object/action/1",
+                    "sourceCodeURL" : "",
+                    "type" : "objectAction",
+                    "typeSettings" : [ "oAuth2ApplicationExternalReferenceCode=liferay-sample-etc-node-oauth-application-user-agent", "resourcePath=/sample/object/action/1" ],
+                    "webContextPath" : "/liferay-sample-etc-node"
+                },
+                "com.liferay.object.internal.configuration.FunctionObjectActionExecutorImplConfiguration~liferay-sample-etc-node-object-action-2" : {
+                    ":configurator:policy" : "force",
+                    "baseURL" : "${portalURL}/o/liferay-sample-etc-node",
+                    "buildTimestamp" : 1747930762219,
+                    "description" : "",
+                    "dxp.lxc.liferay.com.virtualInstanceId" : "default",
+                    "name" : "Liferay Sample Node Object Action 2",
+                    "oAuth2ApplicationExternalReferenceCode" : "liferay-sample-etc-node-oauth-application-user-agent",
+                    "projectId" : "liferaysampleetcnode",
+                    "projectName" : "liferay-sample-etc-node",
+                    "properties" : [ ],
+                    "resourcePath" : "/sample/object/action/2",
+                    "sourceCodeURL" : "",
+                    "type" : "objectAction",
+                    "typeSettings" : [ "oAuth2ApplicationExternalReferenceCode=liferay-sample-etc-node-oauth-application-user-agent", "resourcePath=/sample/object/action/2" ],
+                    "webContextPath" : "/liferay-sample-etc-node"
+                }
+            }
+    kind: Deployment
+    mainDomain: "node.localtest.me"
+    mountInitConfig: true
+    setupMainDomainOnCoreDNS: true
+    virtualInstanceId: "main.dxp.localtest.me"
+image:
+    repository: registry:5000/node
+ingress:
+    enabled: true
+livenessProbe:
+    httpGet:
+        path: /ready
+readinessProbe:
+    httpGet:
+        path: /ready
+service:
+    enabled: true
+    port: 3001

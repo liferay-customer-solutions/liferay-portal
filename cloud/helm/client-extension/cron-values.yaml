@@ -1,0 +1,36 @@
+clientExtensionConfig:
+    configJsons:
+        - |
+            {
+                "com.liferay.oauth2.provider.configuration.OAuth2ProviderApplicationHeadlessServerConfiguration~liferay-sample-etc-cron-oauth-application-headless-server" : {
+                    ".serviceAddress" : "localhost:8080",
+                    ".serviceScheme" : "http",
+                    ":configurator:policy" : "force",
+                    "baseURL" : "${portalURL}/o/liferay-sample-etc-cron",
+                    "buildTimestamp" : 1748961768226,
+                    "description" : "",
+                    "dxp.lxc.liferay.com.virtualInstanceId" : "default",
+                    "homePageURL" : "$[conf:.serviceScheme]://$[conf:.serviceAddress]",
+                    "name" : "Liferay Sample Etc Cron OAuth Application Headless Server",
+                    "projectId" : "liferaysampleetccron",
+                    "projectName" : "liferay-sample-etc-cron",
+                    "properties" : [ ],
+                    "scopes" : [ "Liferay.Headless.Admin.User.everything.read", "Liferay.Headless.Delivery.everything" ],
+                    "sourceCodeURL" : "",
+                    "type" : "oAuthApplicationHeadlessServer",
+                    "typeSettings" : [ ".serviceAddress=localhost:8080", ".serviceScheme=http", "scopes=Liferay.Headless.Admin.User.everything.read\nLiferay.Headless.Delivery.everything" ],
+                    "webContextPath" : "/liferay-sample-etc-cron"
+                }
+            }
+    cronSchedule: "*/15 * * * *"
+    kind: CronJob
+    mainDomain: "cron.localtest.me"
+    setupMainDomainOnCoreDNS: true
+    virtualInstanceId: "main.dxp.localtest.me"
+env:
+    EXTERNAL_LIFERAY_OAUTH2_HEADLESS_SERVER_CLIENT_ID: "@external-liferay-client-id"
+    EXTERNAL_LIFERAY_OAUTH2_HEADLESS_SERVER_CLIENT_SECRET: "@external-liferay-client-secret"
+    EXTERNAL_LIFERAY_OAUTH2_HEADLESS_SERVER_HOME_PAGE_URL: "https://myhomepage.com"
+    EXTERNAL_LIFERAY_OAUTH2_TOKEN_URI: "https://myhomepage.com/o/oauth2/token"
+image:
+    repository: registry:5000/cron
