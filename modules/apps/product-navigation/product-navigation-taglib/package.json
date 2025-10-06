@@ -1,7 +1,7 @@
 {
 	"dependencies": {
 		"@clayui/button": "3.144.1",
-		"@clayui/drop-down": "3.146.0",
+		"@clayui/drop-down": "3.149.0",
 		"@clayui/icon": "3.144.1",
 		"@clayui/loading-indicator": "3.144.1",
 		"@clayui/sticker": "3.147.0",
@@ -16,5 +16,5 @@
 		"checkFormat": "node-scripts format --check",
 		"format": "node-scripts format"
 	},
-	"version": "7.0.8"
+	"version": "7.0.9"
 }

@@ -21,7 +21,9 @@ import com.liferay.jenkins.results.parser.JobHistory;
 import com.liferay.jenkins.results.parser.PortalGitWorkingDirectory;
 import com.liferay.jenkins.results.parser.PortalTestClassJob;
 import com.liferay.jenkins.results.parser.RootCauseAnalysisToolJob;
+import com.liferay.jenkins.results.parser.TestClassReport;
 import com.liferay.jenkins.results.parser.TestHistory;
+import com.liferay.jenkins.results.parser.TestReport;
 import com.liferay.jenkins.results.parser.TestSuiteJob;
 import com.liferay.jenkins.results.parser.TestTaskHistory;
 import com.liferay.jenkins.results.parser.Workspace;
@@ -46,8 +48,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -209,96 +213,73 @@ public abstract class BatchTestClassGroup extends BaseTestClassGroup {
 		return batchName;
 	}
 
-	public List<DownstreamBuildReport> getCachedDownstreamBuildReports() {
-		List<DownstreamBuildReport> cachedDownstreamBuildReports =
-			new ArrayList<>();
+	public DownstreamBuildReport getCachedDownstreamBuildReport(
+		String axisName) {
 
 		if (!isBuildCachingEnabled() ||
 			!JenkinsResultsParserUtil.isCloudCINode()) {
 
-			return cachedDownstreamBuildReports;
+			return null;
 		}
 
-		BuildDatabase buildDatabase = BuildDatabaseUtil.getBuildDatabase();
-
-		List<Workspace> workspaces = buildDatabase.getWorkspaces();
-
-		if (workspaces.isEmpty()) {
-			return cachedDownstreamBuildReports;
+		if (!_cachedReportsInitialized) {
+			_initializeCachedReports();
 		}
 
-		Workspace workspace = workspaces.get(0);
-
-		WorkspaceGitRepository workspaceGitRepository =
-			workspace.getPrimaryWorkspaceGitRepository();
-
-		String path = JenkinsResultsParserUtil.combine(
-			workspaceGitRepository.getName(), "/",
-			workspaceGitRepository.getBaseBranchSHA(), "/",
-			workspaceGitRepository.getSenderBranchSHA(), "/", getBatchName());
-
-		File baseDir = new File(
-			System.getProperty("java.io.tmpdir"),
-			"cached-build-report-files/" + path);
-
-		if (!baseDir.exists()) {
-			baseDir.mkdirs();
-
-			StringBuilder sb = new StringBuilder();
-
-			try {
-				sb.append(
-					JenkinsResultsParserUtil.getBuildProperty(
-						"cloud.ci.s3.bucket.build.reports.path"));
-
-				sb.append("/");
-				sb.append(path);
-
-				CloudBucketUtil.syncS3Files(
-					JenkinsResultsParserUtil.getCanonicalPath(baseDir),
-					sb.toString());
-			}
-			catch (IOException | TimeoutException exception) {
-				System.out.println(
-					"Unable to sync cached build reports for " + path + ":" +
-						exception.getMessage());
-			}
+		if (_cachedDownstreamBuildReportsMap.containsKey(axisName)) {
+			return _cachedDownstreamBuildReportsMap.get(axisName);
 		}
 
-		File[] buildReportFiles = baseDir.listFiles();
+		return null;
+	}
 
-		if (buildReportFiles == null) {
-			return cachedDownstreamBuildReports;
+	public TestClassReport getCachedTestClassReport(String testName) {
+		if (!isBuildCachingEnabled() ||
+			!JenkinsResultsParserUtil.isCloudCINode()) {
+
+			return null;
 		}
 
-		for (File buildReportFile : buildReportFiles) {
-			try {
-				String buildReportFileName = buildReportFile.getName();
-
-				if (buildReportFileName.endsWith(".sha512")) {
-					continue;
-				}
-
-				String buildReportFileContent = JenkinsResultsParserUtil.read(
-					buildReportFile);
-
-				if (JenkinsResultsParserUtil.isNullOrEmpty(
-						buildReportFileContent)) {
-
-					continue;
-				}
-
-				cachedDownstreamBuildReports.add(
-					BuildReportFactory.newDownstreamBuildReport(
-						getBatchName(), new JSONObject(buildReportFileContent),
-						null));
-			}
-			catch (IOException | JSONException exception) {
-				System.out.println("WARNING: " + exception.getMessage());
-			}
+		if (!_cachedReportsInitialized) {
+			_initializeCachedReports();
 		}
 
-		return cachedDownstreamBuildReports;
+		if (_cachedTestClassReportsMap.containsKey(testName)) {
+			return _cachedTestClassReportsMap.get(testName);
+		}
+
+		return null;
+	}
+
+	public List<TestClassReport> getCachedTestClassReportByPrefix(
+		String testClassName) {
+
+		TreeMap<String, TestClassReport> testClassReportsMap =
+			(TreeMap)_cachedTestClassReportsMap;
+
+		SortedMap<String, TestClassReport> prefixedTestClassReportsMap =
+			testClassReportsMap.subMap(
+				testClassName, testClassName + Character.MAX_VALUE);
+
+		return new ArrayList<>(prefixedTestClassReportsMap.values());
+	}
+
+	public TestReport getCachedTestReport(String testName) {
+		if (!isBuildCachingEnabled() ||
+			!JenkinsResultsParserUtil.isCloudCINode()) {
+
+			return null;
+		}
+
+		if (!_cachedReportsInitialized) {
+			_initializeCachedReports();
+		}
+
+		if (_cachedTestReportsMap.containsKey(testName)) {
+			return _cachedTestReportsMap.get(testName);
+		}
+
+		return null;
 	}
 
 	public String getCohortName() {
@@ -1209,6 +1190,64 @@ public abstract class BatchTestClassGroup extends BaseTestClassGroup {
 
 	}
 
+	private synchronized void _downloadBuildReports() {
+		if (_buildReportsDownloaded.get()) {
+			return;
+		}
+
+		BuildDatabase buildDatabase = BuildDatabaseUtil.getBuildDatabase();
+
+		List<Workspace> workspaces = buildDatabase.getWorkspaces();
+
+		Workspace workspace = workspaces.get(0);
+
+		WorkspaceGitRepository workspaceGitRepository =
+			workspace.getPrimaryWorkspaceGitRepository();
+
+		String path = JenkinsResultsParserUtil.combine(
+			workspaceGitRepository.getName(), "/",
+			workspaceGitRepository.getBaseBranchSHA(), "/",
+			workspaceGitRepository.getSenderBranchSHA());
+
+		File baseDir = new File(
+			System.getProperty("java.io.tmpdir"),
+			"cached-build-report-files/" + path);
+
+		if (!baseDir.exists()) {
+			baseDir.mkdirs();
+
+			StringBuilder sb = new StringBuilder();
+
+			try {
+				sb.append(
+					JenkinsResultsParserUtil.getBuildProperty(
+						"cloud.ci.s3.bucket.build.reports.path"));
+
+				sb.append("/");
+				sb.append(path);
+
+				long start = System.currentTimeMillis();
+
+				CloudBucketUtil.syncS3Files(
+					JenkinsResultsParserUtil.getCanonicalPath(baseDir),
+					sb.toString());
+
+				long duration = System.currentTimeMillis() - start;
+
+				System.out.println(
+					"Downloaded build reports from AWS S3 bucket in " +
+						JenkinsResultsParserUtil.toDurationString(duration));
+			}
+			catch (IOException | TimeoutException exception) {
+				System.out.println(
+					"Unable to sync cached build reports for " + path + ":" +
+						exception.getMessage());
+			}
+		}
+
+		_buildReportsDownloaded.set(true);
+	}
+
 	private long _getDefaultTestDuration() {
 		JobProperty jobProperty = getJobProperty(
 			"test.batch.default.test.duration");
@@ -1405,6 +1444,111 @@ public abstract class BatchTestClassGroup extends BaseTestClassGroup {
 		return _testTaskHistories.get(testName);
 	}
 
+	private void _initializeCachedReports() {
+		if (_cachedReportsInitialized) {
+			return;
+		}
+
+		_downloadBuildReports();
+
+		BuildDatabase buildDatabase = BuildDatabaseUtil.getBuildDatabase();
+
+		List<Workspace> workspaces = buildDatabase.getWorkspaces();
+
+		if (workspaces.isEmpty()) {
+			_cachedReportsInitialized = true;
+
+			return;
+		}
+
+		Workspace workspace = workspaces.get(0);
+
+		WorkspaceGitRepository workspaceGitRepository =
+			workspace.getPrimaryWorkspaceGitRepository();
+
+		String path = JenkinsResultsParserUtil.combine(
+			workspaceGitRepository.getName(), "/",
+			workspaceGitRepository.getBaseBranchSHA(), "/",
+			workspaceGitRepository.getSenderBranchSHA(), "/", getBatchName());
+
+		File baseDir = new File(
+			System.getProperty("java.io.tmpdir"),
+			"cached-build-report-files/" + path);
+
+		if (!baseDir.exists()) {
+			_cachedReportsInitialized = true;
+
+			return;
+		}
+
+		File[] buildReportFiles = baseDir.listFiles();
+
+		if (buildReportFiles == null) {
+			_cachedReportsInitialized = true;
+
+			return;
+		}
+
+		for (File buildReportFile : buildReportFiles) {
+			try {
+				String buildReportFileName = buildReportFile.getName();
+
+				if (buildReportFileName.endsWith(".sha512")) {
+					continue;
+				}
+
+				String buildReportFileContent = JenkinsResultsParserUtil.read(
+					buildReportFile);
+
+				if (JenkinsResultsParserUtil.isNullOrEmpty(
+						buildReportFileContent)) {
+
+					continue;
+				}
+
+				DownstreamBuildReport downstreamBuildReport =
+					BuildReportFactory.newDownstreamBuildReport(
+						getBatchName(), new JSONObject(buildReportFileContent),
+						null);
+
+				_cachedDownstreamBuildReportsMap.put(
+					downstreamBuildReport.getAxisName(), downstreamBuildReport);
+
+				for (TestReport testReport :
+						downstreamBuildReport.getTestReports()) {
+
+					_cachedTestReportsMap.put(
+						testReport.getTestName(), testReport);
+				}
+
+				for (TestClassReport testClassReport :
+						downstreamBuildReport.getTestClassReports()) {
+
+					String testClassName = testClassReport.getTestClassName();
+
+					if (testClassName.equals("junit.framework.TestSuite")) {
+						for (TestReport testReport :
+								testClassReport.getTestReports()) {
+
+							_cachedTestClassReportsMap.put(
+								testReport.getTestName(), testClassReport);
+						}
+
+						continue;
+					}
+
+					_cachedTestClassReportsMap.put(
+						testClassReport.getTestClassName(), testClassReport);
+				}
+			}
+			catch (IOException | JSONException exception) {
+				System.out.println("WARNING: " + exception.getMessage());
+			}
+		}
+
+		_cachedReportsInitialized = true;
+	}
+
 	private boolean _isIgnoreTargetAxisDuration() {
 		JobProperty jobProperty = getJobProperty(
 			"test.batch.ignore.target.axis.duration");
@@ -1596,6 +1740,8 @@ public abstract class BatchTestClassGroup extends BaseTestClassGroup {
 
 	private static final int _SEGMENT_MAX_CHILDREN_DEFAULT = 25;
 
+	private static final AtomicBoolean _buildReportsDownloaded =
+		new AtomicBoolean();
 	private static final Pattern _jobNamePattern = Pattern.compile(
 		"(?<jobBaseName>.*)(?<jobVariant>\\([^\\)]+\\))");
 
@@ -1603,6 +1749,13 @@ public abstract class BatchTestClassGroup extends BaseTestClassGroup {
 	private final Map<String, Long> _averageTestOverheadDurations =
 		new HashMap<>();
 	private BatchHistory _batchHistory;
+	private final Map<String, DownstreamBuildReport>
+		_cachedDownstreamBuildReportsMap = new TreeMap<>();
+	private boolean _cachedReportsInitialized;
+	private final Map<String, TestClassReport> _cachedTestClassReportsMap =
+		new TreeMap<>();
+	private final Map<String, TestReport> _cachedTestReportsMap =
+		new TreeMap<>();
 	private final Map<String, List<String>> _globTestClassMethodNamesMap =
 		new HashMap<>();
 	private final List<JobProperty> _jobProperties = new ArrayList<>();

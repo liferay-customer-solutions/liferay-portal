@@ -5,8 +5,8 @@
 
 import React, {useCallback} from 'react';
 
+import {IAssetObjectEntry} from '../../../common/types/AssetType';
 import AssetCategorization from '../../../main_view/info_panel/components/AssetCategorization';
-import {IAssetObjectEntry} from '../../../structure_builder/types/AssetType';
 import {
 	CategorizationFields,
 	UpdateCategorizationProps,
@@ -18,7 +18,7 @@ export default function CategorizationPanel({
 	onUpdateCategorization,
 }: {
 	contentAPIURL: string;
-	groupId: string;
+	groupId: number | string;
 	onUpdateCategorization: (props: UpdateCategorizationProps) => void;
 }) {
 	const updateCategorization = useCallback(

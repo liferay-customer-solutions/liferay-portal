@@ -391,7 +391,8 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 				InfoItemObjectProvider.class,
 				new ObjectEntryInfoItemObjectProvider(
 					_groupLocalService, objectDefinition,
-					_objectEntryLocalService, _objectEntryManagerRegistry),
+					_objectEntryLocalService, _objectEntryManagerRegistry,
+					_userLocalService),
 				HashMapDictionaryBuilder.<String, Object>put(
 					Constants.SERVICE_RANKING, 100
 				).put(
@@ -487,7 +488,7 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 					_objectDefinitionLocalService, _objectEntryLocalService,
 					_objectEntryManagerRegistry.getObjectEntryManager(
 						objectDefinition.getStorageType()),
-					_userLocalService),
+					_objectRelationshipLocalService, _userLocalService),
 				HashMapDictionaryBuilder.<String, Object>put(
 					"item.class.name", objectDefinition.getClassName()
 				).build()),

@@ -760,7 +760,8 @@ public class FragmentEntryConfigurationParserImpl
 			false, fragmentEntryMenuDisplayConfiguration.getRootItemId(),
 			fragmentEntryMenuDisplayConfiguration.getRootItemLevel(),
 			fragmentEntryMenuDisplayConfiguration.getRootItemType(),
-			fragmentEntryMenuDisplayConfiguration.getSiteNavigationMenuId());
+			fragmentEntryMenuDisplayConfiguration.getSiteNavigationMenuId(
+				serviceContext.getScopeGroupId()));
 	}
 
 	private Object _getURLValue(String value) {

@@ -6,6 +6,7 @@
 package com.liferay.site.cms.site.initializer.internal.display.context.test;
 
 import com.liferay.depot.constants.DepotConstants;
+import com.liferay.depot.constants.DepotRolesConstants;
 import com.liferay.depot.model.DepotEntry;
 import com.liferay.depot.service.DepotEntryLocalService;
 import com.liferay.frontend.data.set.model.FDSActionDropdownItem;
@@ -216,8 +217,6 @@ public abstract class BaseSectionDisplayContextTestCase
 				"L_BASIC_WEB_CONTENT", "content-icon-basic-content"
 			).put(
 				"L_BLOG", "content-icon-blog"
-			).put(
-				"L_KNOWLEDGE_BASE", "content-icon-knowledge-base"
 			).build()
 		).put(
 			"objectDefinitionIcons",
@@ -227,8 +226,6 @@ public abstract class BaseSectionDisplayContextTestCase
 				"L_BASIC_WEB_CONTENT", "forms"
 			).put(
 				"L_BLOG", "blogs"
-			).put(
-				"L_KNOWLEDGE_BASE", "wiki"
 			).build()
 		).put(
 			"parentObjectEntryFolderExternalReferenceCode",
@@ -770,11 +767,10 @@ public abstract class BaseSectionDisplayContextTestCase
 					TestPropsValues.getCompanyId(), null,
 					Arrays.asList(
 						RoleConstants.ADMINISTRATOR,
-						RoleConstants.SITE_ADMINISTRATOR,
-						RoleConstants.SITE_OWNER),
+						DepotRolesConstants.ASSET_LIBRARY_OWNER),
 					null, null,
 					new int[] {
-						RoleConstants.TYPE_REGULAR, RoleConstants.TYPE_SITE
+						RoleConstants.TYPE_REGULAR, RoleConstants.TYPE_DEPOT
 					},
 					0, 0, QueryUtil.ALL_POS, QueryUtil.ALL_POS),
 				role -> HashMapBuilder.put(
@@ -819,6 +815,9 @@ public abstract class BaseSectionDisplayContextTestCase
 			if (group != null) {
 				jsonArray.put(
 					JSONUtil.put(
+						"externalReferenceCode",
+						group.getExternalReferenceCode()
+					).put(
 						"groupId", group.getGroupId()
 					).put(
 						"name", group.getName(LocaleUtil.getDefault())
@@ -837,6 +836,8 @@ public abstract class BaseSectionDisplayContextTestCase
 		}
 
 		return JSONUtil.put(
+			"externalReferenceCode", group.getExternalReferenceCode()
+		).put(
 			"groupId", group.getGroupId()
 		).put(
 			"name", group.getName(LocaleUtil.getDefault())

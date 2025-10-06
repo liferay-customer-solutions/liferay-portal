@@ -985,7 +985,7 @@ test(
 
 		await page
 			.getByRole('dialog')
-			.getByRole('button', {name: 'close'})
+			.getByRole('button', {name: 'Close'})
 			.click();
 
 		await page.click('button[title="Options"]');

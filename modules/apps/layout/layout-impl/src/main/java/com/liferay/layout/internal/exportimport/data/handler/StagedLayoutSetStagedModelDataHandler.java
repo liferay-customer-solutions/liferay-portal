@@ -32,6 +32,7 @@ import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
@@ -231,9 +232,14 @@ public class StagedLayoutSetStagedModelDataHandler
 
 		List<Element> layoutElements = layoutsElement.elements();
 
-		// Delete missing pages
+		if (portletDataContext.isPrivateLayout() ||
+			!FeatureFlagManagerUtil.isEnabled("LPD-35443") ||
+			!FeatureFlagManagerUtil.isEnabled("LPD-35914")) {
 
-		_deleteMissingLayouts(portletDataContext, layoutElements);
+			// Delete missing pages
+
+			_deleteMissingLayouts(portletDataContext, layoutElements);
+		}
 
 		// Remove layouts that were deleted from the layout set prototype
 
@@ -500,6 +506,13 @@ public class StagedLayoutSetStagedModelDataHandler
 		// Force to always have a layout group element
 
 		portletDataContext.getExportDataGroupElement(Layout.class);
+
+		if (!portletDataContext.isPrivateLayout() &&
+			FeatureFlagManagerUtil.isEnabled("LPD-35443") &&
+			FeatureFlagManagerUtil.isEnabled("LPD-35914")) {
+
+			return;
+		}
 
 		long[] layoutIds = portletDataContext.getLayoutIds();
 

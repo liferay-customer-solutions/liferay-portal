@@ -16,9 +16,11 @@ export class NavigationMenuWidgetPage {
 	constructor(page: Page) {
 		this.page = page;
 
-		this.closeConfigurationModalButton = page.getByLabel('close', {
-			exact: true,
-		});
+		this.closeConfigurationModalButton = page
+			.locator('.modal')
+			.getByLabel('Close', {
+				exact: true,
+			});
 		this.menuDisplayModal = page.frameLocator('#modalIframe');
 		this.navigationSelector = this.menuDisplayModal.locator(
 			'[id="_com_liferay_portlet_configuration_web_portlet_PortletConfigurationPortlet_selectSiteNavigationMenuType"]'

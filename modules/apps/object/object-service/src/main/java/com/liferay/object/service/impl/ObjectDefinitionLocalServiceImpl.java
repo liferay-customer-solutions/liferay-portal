@@ -180,6 +180,7 @@ import com.liferay.portal.kernel.workflow.WorkflowInstanceManager;
 import com.liferay.portal.language.override.service.PLOEntryLocalService;
 import com.liferay.portal.search.batch.DynamicQueryBatchIndexingActionableFactory;
 import com.liferay.portal.search.localization.SearchLocalizationHelper;
+import com.liferay.portal.search.ml.embedding.text.TextEmbeddingDocumentContributor;
 import com.liferay.portal.search.spi.model.query.contributor.ModelPreFilterContributor;
 import com.liferay.portal.service.impl.LayoutLocalServiceHelper;
 import com.liferay.portal.util.PortalInstances;
@@ -682,6 +683,9 @@ public class ObjectDefinitionLocalServiceImpl
 			ResourceConstants.SCOPE_INDIVIDUAL,
 			objectDefinition.getObjectDefinitionId());
 
+		_workflowDefinitionLinkLocalService.deleteWorkflowDefinitionLinks(
+			objectDefinition.getCompanyId(), objectDefinition.getClassName());
+
 		if (objectDefinition.isUnmodifiableSystemObject()) {
 			_dropTable(objectDefinition.getExtensionDBTableName());
 		}
@@ -1065,7 +1069,8 @@ public class ObjectDefinitionLocalServiceImpl
 				_portletLocalService, _resourceActions, _userLocalService,
 				_resourcePermissionLocalService, _searchLocalizationHelper,
 				_sharingModelResourcePermissionConfigurator,
-				_systemEventLocalService, _workflowDefinitionLinkLocalService,
+				_systemEventLocalService, _textEmbeddingDocumentContributor,
+				_workflowDefinitionLinkLocalService,
 				_workflowStatusModelPreFilterContributor,
 				_userGroupRoleLocalService);
 
@@ -1805,7 +1810,7 @@ public class ObjectDefinitionLocalServiceImpl
 					_kaleoDefinitionLocalService.addKaleoDefinition(
 						workflowDefinitionName, workflowDefinitionName,
 						workflowDefinitionName, null, null,
-						WorkflowDefinitionConstants.SCOPE_ALL, 0,
+						WorkflowDefinitionConstants.SCOPE_ALL, 1,
 						serviceContext);
 			}
 
@@ -3618,6 +3623,9 @@ public class ObjectDefinitionLocalServiceImpl
 
 	@Reference
 	private SystemEventLocalService _systemEventLocalService;
+
+	@Reference
+	private TextEmbeddingDocumentContributor _textEmbeddingDocumentContributor;
 
 	@Reference
 	private TrashEntryLocalService _trashEntryLocalService;

@@ -6,6 +6,7 @@
 package com.liferay.headless.admin.site.internal.resource.v1_0;
 
 import com.liferay.client.extension.type.manager.CETManager;
+import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.exportimport.vulcan.batch.engine.ExportImportVulcanBatchEngineTaskItemDelegate;
 import com.liferay.headless.admin.site.dto.v1_0.ContentPageSpecification;
 import com.liferay.headless.admin.site.dto.v1_0.MasterPage;
@@ -17,6 +18,7 @@ import com.liferay.headless.admin.site.internal.resource.v1_0.util.LayoutUtil;
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.PageSpecificationUtil;
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.ServiceContextUtil;
 import com.liferay.headless.admin.site.resource.v1_0.MasterPageResource;
+import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.layout.admin.constants.LayoutAdminPortletKeys;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateConstants;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateEntryTypeConstants;
@@ -58,6 +60,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	properties = "OSGI-INF/liferay/rest/v1_0/master-page.properties",
+	property = "export.import.vulcan.batch.engine.task.item.delegate=true",
 	scope = ServiceScope.PROTOTYPE, service = MasterPageResource.class
 )
 public class MasterPageResourceImpl
@@ -96,6 +99,11 @@ public class MasterPageResourceImpl
 			}
 
 			@Override
+			public String getLabel() {
+				return "master-pages";
+			}
+
+			@Override
 			public List<String> getNestedFields() {
 				return List.of("friendlyUrlHistory", "pageSpecifications");
 			}
@@ -108,6 +116,11 @@ public class MasterPageResourceImpl
 			@Override
 			public Scope getScope() {
 				return Scope.SITE;
+			}
+
+			@Override
+			public boolean isActive(PortletDataContext portletDataContext) {
+				return FeatureFlagManagerUtil.isEnabled("LPD-35443");
 			}
 
 		};
@@ -141,7 +154,7 @@ public class MasterPageResourceImpl
 
 		return (ContentPageSpecification)_pageSpecificationDTOConverter.toDTO(
 			LayoutUtil.addDraftToLayout(
-				_cetManager, contentPageSpecification,
+				_cetManager, contentPageSpecification, _infoItemServiceRegistry,
 				_layoutLocalService.getLayout(
 					layoutPageTemplateEntry.getPlid()),
 				ServiceContextUtil.createServiceContext(
@@ -270,10 +283,11 @@ public class MasterPageResourceImpl
 		ServiceContext serviceContext = _getServiceContext(groupId, masterPage);
 
 		layout = LayoutUtil.updateContentLayout(
-			_cetManager, layout, layout.getNameMap(), layout.getTitleMap(),
-			layout.getDescriptionMap(), layout.getRobotsMap(),
-			layout.getFriendlyURLMap(), masterPage.getPageSpecifications(),
-			serviceContext);
+			_cetManager, _infoItemServiceRegistry, layout, layout.getNameMap(),
+			layout.getTitleMap(), layout.getDescriptionMap(),
+			layout.getKeywordsMap(), layout.getRobotsMap(),
+			layout.getFriendlyURLMap(), layout.getTypeSettingsProperties(),
+			masterPage.getPageSpecifications(), serviceContext);
 
 		if (!layoutPageTemplateEntry.isApproved() && layout.isPublished()) {
 			layoutPageTemplateEntry =
@@ -391,9 +405,10 @@ public class MasterPageResourceImpl
 			LayoutPageTemplateEntryTypeConstants.MASTER_LAYOUT);
 
 		Layout layout = LayoutUtil.addContentLayout(
-			_cetManager, groupId, masterPage.getPageSpecifications(),
-			LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, true, nameMap, nameMap,
-			nameMap, null, LayoutConstants.TYPE_CONTENT, null, true, true,
+			_cetManager, groupId, _infoItemServiceRegistry,
+			masterPage.getPageSpecifications(),
+			LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, true, nameMap, null, null,
+			null, null, LayoutConstants.TYPE_CONTENT, null, true, true,
 			Collections.emptyMap(), WorkflowConstants.STATUS_APPROVED,
 			serviceContext);
 
@@ -416,6 +431,9 @@ public class MasterPageResourceImpl
 
 	@Reference
 	private CETManager _cetManager;
+
+	@Reference
+	private InfoItemServiceRegistry _infoItemServiceRegistry;
 
 	@Reference
 	private LayoutLocalService _layoutLocalService;

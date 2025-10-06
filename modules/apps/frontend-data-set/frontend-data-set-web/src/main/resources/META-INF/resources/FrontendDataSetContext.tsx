@@ -6,11 +6,11 @@
 import React from 'react';
 
 import {
-	EStateInURLKeys,
+	EConfigInURLKeys,
+	IConfigInURLUpdaterThunk,
 	IDataSetData,
 	IInlineEditingSettings,
 	IItemsActions,
-	IStateInURLSetter,
 	TRenderer,
 } from './utils/types';
 
@@ -76,7 +76,6 @@ export interface IFrontendDataSetContext {
 	selectedItemsValue?: Array<any>;
 	selectionType?: 'single' | 'multiple';
 	setSearching: (value: boolean) => void;
-	setView: IStateInURLSetter<EStateInURLKeys.VIEW_NAME>;
 	showBulkActionsManagementBar: boolean;
 	showBulkActionsManagementBarActions: boolean;
 	showInfoPanel: boolean;
@@ -85,6 +84,7 @@ export interface IFrontendDataSetContext {
 	style?: string;
 	toggleItemInlineEdit: Function;
 	uniformActionsDisplay?: boolean;
+	updateActiveSorts: IConfigInURLUpdaterThunk<EConfigInURLKeys.ACTIVE_SORTS>;
 	updateDataSetItems: ({
 		items,
 		lastPage,
@@ -92,7 +92,10 @@ export interface IFrontendDataSetContext {
 		pageSize,
 		totalCount,
 	}: IDataSetData) => void;
+	updateFilters: IConfigInURLUpdaterThunk<EConfigInURLKeys.ACTIVE_FILTERS>;
 	updateItem: Function;
+	updateView: IConfigInURLUpdaterThunk<EConfigInURLKeys.VIEW_NAME>;
+	updateVisibleFields: IConfigInURLUpdaterThunk<EConfigInURLKeys.VISIBLE_FIELDS>;
 }
 
 const FrontendDataSetContext = React.createContext({

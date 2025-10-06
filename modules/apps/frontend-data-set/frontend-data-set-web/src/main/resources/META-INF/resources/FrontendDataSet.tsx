@@ -42,7 +42,6 @@ import {InfoPanel} from './info_panel/InfoPanel';
 // @ts-ignore
 
 import ManagementBar from './management_bar/ManagementBar';
-import {FILTER_IMPLEMENTATIONS} from './management_bar/controls/filters/Filter';
 
 // @ts-ignore
 
@@ -52,7 +51,10 @@ import Modal from './modal/Modal';
 
 import SidePanel from './side_panel/SidePanel';
 import filterCreationActions from './utils/actionItems/filterCreationActions';
+import {contains} from './utils/configInURL';
 import EVENTS from './utils/eventsDefinitions';
+import {activateFilter} from './utils/filters/activateFilter';
+import {deactivateFilter} from './utils/filters/deactivateFilter';
 import getRandomId from './utils/getRandomId';
 
 // @ts-ignore
@@ -64,22 +66,23 @@ import {loadData} from './utils/loadData';
 
 import {logError} from './utils/logError';
 import {saveViewSettings} from './utils/saveViewSettings';
-import {writeStateInURL} from './utils/stateInURL';
 import {
-	EStateInURLKeys,
-	EStateInURLSettings,
+	EConfigInURLBehavior,
+	EConfigInURLKeys,
+	IConfigInURL,
 	IDataSetData,
 	IField,
 	IFrontendDataSetProps,
 	IModalConfig,
 	IRequestOptions,
-	IStateInURL,
 	ISuccessNotification,
+	ITableSchema,
 	IView,
 	TRenderer,
 	TSort,
+	VisibleFieldNames,
 } from './utils/types';
-import useStateInURL from './utils/useStateInURL';
+import useConfigInURL, {useUpdateConfig} from './utils/useConfigInURL';
 import ViewsContext from './views/ViewsContext';
 
 // @ts-ignore
@@ -88,7 +91,7 @@ import getViewComponent from './views/getViewComponent';
 
 // @ts-ignore
 
-import {VIEWS_ACTION_TYPES, viewsReducer} from './views/viewsReducer';
+import viewsReducer, {EViewsActionTypes} from './views/viewsReducer';
 
 const DEFAULT_PAGINATION_DELTA = 20;
 const DEFAULT_PAGINATION_PAGE_NUMBER = 1;
@@ -100,12 +103,14 @@ const FrontendDataSetContent = ({
 	apiURL,
 	appURL,
 	bulkActions = [],
+	configInURLSettings = EConfigInURLBehavior.OFF,
 	creationMenu: initialCreationMenu,
 	currentURL,
 	customDataRenderers,
 	customRenderers,
 	customViews = '{}',
 	customViewsEnabled,
+	defaultSelectedItems,
 	emptyState,
 	filters: initialFilters,
 	formId,
@@ -138,7 +143,6 @@ const FrontendDataSetContent = ({
 	showSelectAll = false,
 	sidePanelId,
 	sorts: sortsProp = [],
-	stateInURLSettings = EStateInURLSettings.OFF,
 	style = 'default',
 	uniformActionsDisplay,
 	views,
@@ -146,30 +150,148 @@ const FrontendDataSetContent = ({
 	const fdsRef = useRef(null);
 	const dataSetWrapperRef: RefObject<HTMLDivElement> = useRef(null);
 
-	const [getDelta, setDelta] = useStateInURL({
+	const [getActiveSorts, updateActiveSorts] = useConfigInURL({
+		configInURLSettings,
+		configReader: (sorts: Array<TSort> | undefined) => {
+			return sorts;
+		},
+		configWriter: (
+			sorts: Array<TSort> | undefined
+		): Array<TSort> | undefined => {
+			if (sorts?.every((sort: TSort) => !sort.active)) {
+				return [];
+			}
+
+			return sorts
+				?.filter((sort: TSort) => sort.active)
+				.map((sort: TSort) => {
+					return {
+						direction: sort.direction,
+						key: sort.key,
+					};
+				});
+		},
 		id,
 		stateDispatcher: {
-			key: EStateInURLKeys.DELTA,
-			type: VIEWS_ACTION_TYPES.UPDATE_PAGINATION_DELTA,
+			key: EConfigInURLKeys.ACTIVE_SORTS,
+			type: EViewsActionTypes.UPDATE_SORTING,
 		},
-		stateInURLSettings,
-		stateInitializer: (delta: number) => {
-			if (isNaN(delta) || delta < 1) {
+	});
+
+	const [getFilters, updateFilters] = useConfigInURL({
+		configInURLSettings,
+		configReader: (filters: Array<any> | undefined) => {
+			return filters;
+		},
+		configWriter: (
+			filters: Array<any> | undefined
+		): Array<any> | undefined => {
+			if (filters?.every((filter) => !filter.active)) {
+				return [];
+			}
+
+			return filters
+				?.filter((filter: any) => filter.active)
+				.map((filter: any) => {
+					return {
+						id: filter.id,
+						selectedData:
+							filter.type === 'selection'
+								? {
+										...filter.selectedData,
+										selectedItems:
+											filter.selectedData.selectedItems.map(
+												(item: any) => {
+													if (filter.items?.length) {
+														const newSelectedItem =
+															{...item};
+
+														delete newSelectedItem.label;
+
+														return newSelectedItem;
+													}
+
+													return item;
+												}
+											),
+									}
+								: filter.selectedData,
+					};
+				});
+		},
+		id,
+		stateDispatcher: {
+			key: EConfigInURLKeys.ACTIVE_FILTERS,
+			type: EViewsActionTypes.UPDATE_FILTERS,
+		},
+	});
+
+	const [getDelta, updateDelta] = useConfigInURL({
+		additionalStateDispatchers: [
+			{
+				key: EConfigInURLKeys.PAGE_NUMBER,
+				type: EViewsActionTypes.UPDATE_PAGE_NUMBER,
+				value: 1,
+			},
+		],
+		configInURLSettings,
+		configReader: (delta: number | undefined) => {
+			if (!delta || isNaN(delta) || delta < 1) {
 				return undefined;
 			}
 
 			return delta;
 		},
-	});
-
-	const [getView, setView] = useStateInURL({
 		id,
 		stateDispatcher: {
-			key: EStateInURLKeys.VIEW_NAME,
-			type: VIEWS_ACTION_TYPES.UPDATE_ACTIVE_VIEW,
+			key: EConfigInURLKeys.DELTA,
+			type: EViewsActionTypes.UPDATE_PAGINATION_DELTA,
 		},
-		stateInURLSettings,
-		stateInitializer: (viewName: string) => {
+	});
+
+	const [getPageNumber, updatePageNumber] = useConfigInURL({
+		configInURLSettings,
+		configReader: (pageNumber: number | undefined) => {
+			if (!pageNumber || isNaN(pageNumber) || pageNumber < 1) {
+				return 1;
+			}
+
+			return pageNumber;
+		},
+		id,
+		stateDispatcher: {
+			key: EConfigInURLKeys.PAGE_NUMBER,
+			type: EViewsActionTypes.UPDATE_PAGE_NUMBER,
+		},
+	});
+
+	const [getSearchParam, updateSearchParam] = useConfigInURL({
+		configInURLSettings,
+
+		configReader: (searchParam: string | undefined) => {
+			if (!searchParam) {
+				return '';
+			}
+
+			return searchParam;
+		},
+		configWriter: (searchParam: string | undefined): string | undefined => {
+			if (!searchParam || !searchParam.length) {
+				return undefined;
+			}
+
+			return searchParam;
+		},
+		id,
+		stateDispatcher: {
+			key: EConfigInURLKeys.SEARCH_PARAM,
+			type: EViewsActionTypes.UPDATE_SEARCH_PARAM,
+		},
+	});
+
+	const [getView, updateView] = useConfigInURL({
+		configInURLSettings,
+		configReader: (viewName: string | undefined) => {
 			const view = views.find(({name}) => name === viewName);
 
 			if (view) {
@@ -178,6 +300,59 @@ const FrontendDataSetContent = ({
 
 			return undefined;
 		},
+		id,
+		stateDispatcher: {
+			key: EConfigInURLKeys.VIEW_NAME,
+			type: EViewsActionTypes.UPDATE_ACTIVE_VIEW,
+		},
+	});
+
+	const [getVisibleFields, updateVisibleFields] = useConfigInURL({
+		configInURLSettings,
+		configReader: (visibleFieldNames: VisibleFieldNames | undefined) => {
+			const view = views.find(
+				({name}) => name && name.toLowerCase().includes('table')
+			);
+
+			if (view && visibleFieldNames) {
+				const tableSchema = view.schema as ITableSchema;
+
+				const updatedVisibleFieldNames: VisibleFieldNames = {};
+
+				tableSchema.fields.forEach((field: IField) => {
+					const fieldName: string = String(field.fieldName);
+
+					if (visibleFieldNames[fieldName] !== undefined) {
+						{
+							updatedVisibleFieldNames[fieldName] =
+								visibleFieldNames[fieldName];
+						}
+					}
+					else {
+						updatedVisibleFieldNames[fieldName] = true;
+					}
+				});
+
+				return updatedVisibleFieldNames;
+			}
+
+			return undefined;
+		},
+		configWriter: (
+			visibleFields: VisibleFieldNames | undefined
+		): VisibleFieldNames | undefined => {
+			return visibleFields;
+		},
+		id,
+		stateDispatcher: {
+			key: EConfigInURLKeys.VISIBLE_FIELDS,
+			type: EViewsActionTypes.UPDATE_VISIBLE_FIELD_NAMES,
+		},
+	});
+
+	const updateConfig = useUpdateConfig({
+		configInURLSettings,
+		id,
 	});
 
 	const [componentLoading, setComponentLoading] = useState(false);
@@ -196,20 +371,16 @@ const FrontendDataSetContent = ({
 	const [searching, setSearching] = useState(!!apiURL);
 	const [items, setItems] = useState(itemsProp || []);
 	const [itemsChanges, setItemsChanges] = useState<{[key: string]: any}>({});
-	const [pageNumber, setPageNumber] = useState(
-		pagination?.initialPageNumber || DEFAULT_PAGINATION_PAGE_NUMBER
-	);
-	const [searchParam, setSearchParam] = useState('');
 
 	const [allItemsSelectedActive, setAllItemsSelectedActive] = useState(false);
 
-	const [selectedItems, setSelectedItems] = useControlledState({
+	const [selectedItems = [], setSelectedItems] = useControlledState({
 		defaultName: 'selectedItems',
-		defaultValue: externalSelectedItems ?? [],
+		defaultValue: defaultSelectedItems ?? undefined,
 		handleName: 'onSelectedItemsChange',
 		name: 'selectedItems',
 		onChange: onSelectedItemsChange,
-		value: externalSelectedItems ?? undefined,
+		value: externalSelectedItems,
 	});
 
 	let selectedItemsValue = selectedItems.map((item) =>
@@ -227,6 +398,102 @@ const FrontendDataSetContent = ({
 	const {fileDropSettings} = useContext(DnDContext);
 
 	const isMounted = useIsMounted();
+
+	const updateFilterActivation = ({
+		newFilters,
+		oldFilters,
+	}: {
+		newFilters: Array<any> | undefined;
+		oldFilters: Array<any>;
+	}): Array<any> => {
+		if (!newFilters) {
+			return oldFilters;
+		}
+
+		return oldFilters?.map((filter: any): any => {
+			const newFilter = newFilters.find(
+				(newFilter: any) => newFilter.id === filter.id
+			);
+
+			if (newFilter) {
+				return activateFilter({
+					filter,
+					selectedData:
+						filter.type === 'selection' && filter.items?.length
+							? {
+									...filter.selectedData,
+									selectedItems:
+										newFilter.selectedData.selectedItems.map(
+											(newItem: any) => {
+												const selectedItem =
+													filter.items.find(
+														(item: any) =>
+															item.value ===
+															newItem.value
+													);
+
+												if (selectedItem) {
+													return selectedItem;
+												}
+
+												return newItem;
+											}
+										),
+								}
+							: {
+									...filter.selectedData,
+									...newFilter.selectedData,
+								},
+				});
+			}
+
+			return deactivateFilter(filter);
+		});
+	};
+
+	const updateSortsActivation = ({
+		newSorts,
+		oldSorts,
+	}: {
+		newSorts: Array<TSort> | undefined;
+		oldSorts: Array<TSort>;
+	}): Array<TSort> => {
+		if (!newSorts) {
+			return oldSorts;
+		}
+
+		const remainingNewSorts = [...newSorts];
+
+		return [
+			...oldSorts?.map((sort: TSort) => {
+				const activeSortIndex = remainingNewSorts?.findIndex(
+					(activeSort: TSort) => {
+						return activeSort.key === sort.key;
+					}
+				);
+
+				if (activeSortIndex !== -1) {
+					const activeSort = remainingNewSorts[activeSortIndex];
+
+					remainingNewSorts.splice(activeSortIndex, 1);
+
+					return {
+						...sort,
+						active: true,
+						direction: activeSort.direction,
+					};
+				}
+
+				return {
+					...sort,
+					active: false,
+				};
+			}),
+			...remainingNewSorts.map((sort: TSort) => {
+				return {...sort, active: true};
+			}),
+		];
+	};
 
 	const getInitialViewsState = () => {
 		const customInternalViews =
@@ -272,42 +539,54 @@ const FrontendDataSetContent = ({
 			}
 		}
 
+		const visibleFieldNames = getVisibleFields();
+
+		let saveVisibleFieldNames = false;
+
+		if (visibleFieldNames) {
+			if (!contains(visibleFieldNames, initialVisibleFieldNames)) {
+				saveVisibleFieldNames = true;
+			}
+
+			initialVisibleFieldNames = visibleFieldNames;
+		}
+
+		let saveViewName = false;
+
 		const view = getView();
 
 		if (view) {
 			const activeView = views.find(({name}) => name === view);
 
 			if (activeView) {
+				if (initialActiveView !== activeView) {
+					saveViewName = true;
+				}
+
 				initialActiveView = activeView;
 			}
 		}
 
 		const activeView = {
-			component: getViewComponent(initialActiveView),
+			component: getViewComponent(initialActiveView as IView),
 			...initialActiveView,
 		};
 
 		const filters = initialFilters
-			? initialFilters.map((filter) => {
-					const preloadedData = filter.preloadedData;
+			? updateFilterActivation({
+					newFilters: getFilters(),
+					oldFilters: initialFilters.map((filter) => {
+						const preloadedData = filter.preloadedData;
 
-					if (preloadedData) {
-						filter.active = true;
-						filter.selectedData = preloadedData;
+						if (preloadedData) {
+							filter = activateFilter({
+								filter,
+								selectedData: preloadedData,
+							});
+						}
 
-						const filterType: keyof typeof FILTER_IMPLEMENTATIONS =
-							filter.type;
-
-						const filterImplementation =
-							FILTER_IMPLEMENTATIONS[filterType];
-
-						filter.odataFilterString =
-							filterImplementation.getOdataString(filter);
-						filter.selectedItemsLabel =
-							filterImplementation.getSelectedItemsLabel(filter);
-					}
-
-					return filter;
+						return filter;
+					}),
 				})
 			: [];
 
@@ -317,19 +596,44 @@ const FrontendDataSetContent = ({
 				pagination?.initialDelta ||
 				DEFAULT_PAGINATION_DELTA);
 
-		// viewsDispatch is not available here, so we can't use state in url
-		// setters at this point. writeStateInURL low level utility does the job
+		const pageNumber =
+			getPageNumber() ||
+			pagination?.initialPageNumber ||
+			DEFAULT_PAGINATION_PAGE_NUMBER;
 
-		writeStateInURL(
-			id,
-			{
-				...(paginationDelta && {
-					[EStateInURLKeys.DELTA]: paginationDelta,
-				}),
-				[EStateInURLKeys.VIEW_NAME]: activeView.name,
-			},
-			stateInURLSettings
-		);
+		const searchParam = getSearchParam();
+
+		const sorts = updateSortsActivation({
+			newSorts: getActiveSorts(),
+			oldSorts: sortsProp,
+		});
+
+		// viewsDispatch is not available here, so we can't use state in url
+		// setters at this point. hook does the job
+
+		updateConfig({
+			[EConfigInURLKeys.ACTIVE_FILTERS]: filters,
+			[EConfigInURLKeys.ACTIVE_SORTS]: sorts,
+			[EConfigInURLKeys.DELTA]: paginationDelta,
+			[EConfigInURLKeys.PAGE_NUMBER]: pageNumber,
+			[EConfigInURLKeys.SEARCH_PARAM]: searchParam,
+			[EConfigInURLKeys.VIEW_NAME]: activeView.name,
+			[EConfigInURLKeys.VISIBLE_FIELDS]: initialVisibleFieldNames,
+		});
+
+		if (saveVisibleFieldNames || saveViewName) {
+			saveViewSettings({
+				appURL,
+				id,
+				portletId,
+				settings: {
+					...(saveViewName && {name: activeView.name}),
+					...(saveVisibleFieldNames && {
+						visibleFieldNames: initialVisibleFieldNames,
+					}),
+				},
+			});
+		}
 
 		return {
 			activeView,
@@ -339,13 +643,15 @@ const FrontendDataSetContent = ({
 				activeView,
 				filters,
 				paginationDelta,
-				sorts: sortsProp,
+				sorts,
 				visibleFieldNames: initialVisibleFieldNames,
 			},
 			filters,
 			modifiedFields: {},
+			pageNumber,
 			paginationDelta,
-			sorts: sortsProp,
+			searchParam,
+			sorts,
 			views: [...views, ...customInternalViews],
 			visibleFieldNames: initialVisibleFieldNames,
 		};
@@ -355,15 +661,20 @@ const FrontendDataSetContent = ({
 		useReducer(viewsReducer, getInitialViewsState())
 	);
 
-	const {activeView, filters, paginationDelta, sorts} = viewsState;
+	const {
+		activeView,
+		filters,
+		pageNumber,
+		paginationDelta,
+		searchParam,
+		sorts,
+	} = viewsState;
 
 	const handleDeltaChange = useCallback(
 		(delta: number) => {
-			setPageNumber(1);
-
-			viewsDispatch(setDelta(delta));
+			viewsDispatch(updateDelta(delta));
 		},
-		[setDelta, setPageNumber, viewsDispatch]
+		[updateDelta, viewsDispatch]
 	);
 
 	const {
@@ -420,7 +731,7 @@ const FrontendDataSetContent = ({
 			if (apiURL || appURL) {
 				setSearching(true);
 
-				setSearchParam(query);
+				viewsDispatch(updateSearchParam(query));
 			}
 			else {
 				setItems(
@@ -434,50 +745,49 @@ const FrontendDataSetContent = ({
 				);
 			}
 		},
-		[apiURL, appURL, itemsProp]
+		[apiURL, appURL, itemsProp, updateSearchParam, viewsDispatch]
 	);
 
 	const onClearFilters = useCallback(() => {
 		setSearching(true);
 
-		viewsDispatch({
-			type: VIEWS_ACTION_TYPES.UPDATE_FILTERS,
-			value: filters.map((filter: any) => ({
-				...filter,
-				active: false,
-				odataFilterString: undefined,
-				selectedData: undefined,
-			})),
-		});
+		viewsDispatch(
+			updateFilters(
+				filters.map((filter: any) => deactivateFilter(filter))
+			)
+		);
 
 		onSearch({query: ''});
-	}, [filters, onSearch, viewsDispatch]);
+	}, [filters, onSearch, updateFilters, viewsDispatch]);
 
-	function updateDataSetItems(dataSetData: IDataSetData) {
-		const remappedItems = dataSetData.items.map((item) => {
-			if (item.embedded && item.embedded.actions) {
-				const actions = item.embedded.actions;
+	const updateDataSetItems = useCallback(
+		(dataSetData: IDataSetData) => {
+			const remappedItems = dataSetData.items.map((item) => {
+				if (item.embedded && item.embedded.actions) {
+					const actions = item.embedded.actions;
 
-				delete item.embedded.actions;
+					delete item.embedded.actions;
+
+					return {
+						...item,
+						actions,
+					};
+				}
 
 				return {
 					...item,
-					actions,
 				};
+			});
+
+			setItems(remappedItems);
+			setTotal(dataSetData.totalCount);
+
+			if (!dataSetData.items.length && dataSetData.totalCount > 0) {
+				viewsDispatch(updatePageNumber(dataSetData.lastPage));
 			}
-
-			return {
-				...item,
-			};
-		});
-
-		setItems(remappedItems);
-		setTotal(dataSetData.totalCount);
-
-		if (!dataSetData.items.length && dataSetData.totalCount > 0) {
-			setPageNumber(() => dataSetData.lastPage);
-		}
-	}
+		},
+		[updatePageNumber, viewsDispatch]
+	);
 
 	useEffect(() => {
 		loadClientExtensions([
@@ -519,10 +829,7 @@ const FrontendDataSetContent = ({
 						return filter;
 					});
 
-					viewsDispatch({
-						type: VIEWS_ACTION_TYPES.UPDATE_FILTERS,
-						value: newFilters,
-					});
+					viewsDispatch(updateFilters(newFilters || []));
 				},
 			},
 			{
@@ -568,7 +875,7 @@ const FrontendDataSetContent = ({
 
 						if (error) {
 							viewsDispatch({
-								type: VIEWS_ACTION_TYPES.UPDATE_FIELD,
+								type: EViewsActionTypes.UPDATE_FIELD,
 								value: {
 									clientExtensionResolutionError: error,
 									name: field.fieldName,
@@ -579,7 +886,7 @@ const FrontendDataSetContent = ({
 						}
 
 						viewsDispatch({
-							type: VIEWS_ACTION_TYPES.UPDATE_FIELD,
+							type: EViewsActionTypes.UPDATE_FIELD,
 							value: {
 								htmlElementBuilder: binding,
 								name: field.fieldName,
@@ -589,7 +896,7 @@ const FrontendDataSetContent = ({
 				},
 			},
 		]);
-	}, [initialFilters, views, viewsDispatch]);
+	}, [initialFilters, views, updateFilters, viewsDispatch]);
 
 	useEffect(() => {
 		if (itemsProp) {
@@ -603,7 +910,7 @@ const FrontendDataSetContent = ({
 				totalCount: itemsProp.length,
 			});
 		}
-	}, [itemsProp]);
+	}, [itemsProp, updateDataSetItems]);
 
 	function deselectItems(value: any) {
 		const values = Array.isArray(value) ? value : [value];
@@ -697,16 +1004,39 @@ const FrontendDataSetContent = ({
 
 	const handlePopState = useCallback(() => {
 		const stateUpdates: Array<{
-			type: keyof VIEWS_ACTION_TYPES;
-			value: IStateInURL[keyof IStateInURL];
+			type: EViewsActionTypes;
+			value: IConfigInURL[keyof IConfigInURL];
 		}> = [];
+
+		const activeFilters = getFilters();
+
+		if (activeFilters) {
+			stateUpdates.push({
+				type: EViewsActionTypes.UPDATE_FILTERS,
+				value: updateFilterActivation({
+					newFilters: activeFilters,
+					oldFilters: filters,
+				}),
+			});
+		}
+
+		const activeSorts = getActiveSorts();
+
+		if (activeSorts) {
+			stateUpdates.push({
+				type: EViewsActionTypes.UPDATE_SORTING,
+				value: updateSortsActivation({
+					newSorts: activeSorts,
+					oldSorts: sorts,
+				}),
+			});
+		}
 
 		const delta = getDelta();
 
 		if (delta && delta !== paginationDelta) {
-			setPageNumber(1);
 			stateUpdates.push({
-				type: VIEWS_ACTION_TYPES.UPDATE_PAGINATION_DELTA,
+				type: EViewsActionTypes.UPDATE_PAGINATION_DELTA,
 				value: delta,
 			});
 		}
@@ -722,24 +1052,61 @@ const FrontendDataSetContent = ({
 			});
 
 			stateUpdates.push({
-				type: VIEWS_ACTION_TYPES.UPDATE_ACTIVE_VIEW,
+				type: EViewsActionTypes.UPDATE_ACTIVE_VIEW,
 				value: view,
+			});
+		}
+
+		stateUpdates.push({
+			type: EViewsActionTypes.UPDATE_PAGE_NUMBER,
+			value: getPageNumber() || 1,
+		});
+
+		const searchParam = getSearchParam();
+
+		if (searchParam !== undefined) {
+			stateUpdates.push({
+				type: EViewsActionTypes.UPDATE_SEARCH_PARAM,
+				value: searchParam,
+			});
+		}
+
+		const visibleFields = getVisibleFields();
+
+		if (visibleFields) {
+			stateUpdates.push({
+				type: EViewsActionTypes.UPDATE_VISIBLE_FIELD_NAMES,
+				value: visibleFields,
+			});
+
+			saveViewSettings({
+				appURL,
+				id,
+				portletId,
+				settings: {visibleFieldNames: visibleFields},
 			});
 		}
 
 		if (stateUpdates.length) {
 			viewsDispatch({
-				type: VIEWS_ACTION_TYPES.BATCH_UPDATE,
+				type: EViewsActionTypes.BATCH_UPDATE,
 				value: stateUpdates,
 			});
 		}
 	}, [
 		appURL,
+		filters,
+		getFilters,
+		getActiveSorts,
 		getDelta,
+		getPageNumber,
+		getSearchParam,
 		getView,
+		getVisibleFields,
 		id,
 		paginationDelta,
 		portletId,
+		sorts,
 		viewsDispatch,
 	]);
 
@@ -792,6 +1159,7 @@ const FrontendDataSetContent = ({
 			selectedItemsKey,
 			selectedItemsValue,
 			setSelectedItems,
+			updateDataSetItems,
 		]
 	);
 
@@ -806,7 +1174,7 @@ const FrontendDataSetContent = ({
 			.then((view: IView) => {
 				if (isMounted()) {
 					viewsDispatch({
-						type: VIEWS_ACTION_TYPES.UPDATE_VIEW_COMPONENT,
+						type: EViewsActionTypes.UPDATE_VIEW_COMPONENT,
 						value: {component: view, name: activeViewName},
 					});
 
@@ -898,7 +1266,15 @@ const FrontendDataSetContent = ({
 				setSearching(false);
 			}
 		});
-	}, [apiURL, filters, isMounted, requestData, setDataLoading, setSearching]);
+	}, [
+		apiURL,
+		filters,
+		isMounted,
+		requestData,
+		setDataLoading,
+		setSearching,
+		updateDataSetItems,
+	]);
 
 	useEffect(() => {
 		function handleRefreshFromTheOutside(event: any) {
@@ -915,7 +1291,7 @@ const FrontendDataSetContent = ({
 		Liferay.on(EVENTS.UPDATE_DISPLAY, handleRefreshFromTheOutside);
 
 		const registerPopstateEvent =
-			stateInURLSettings === EStateInURLSettings.PUSH &&
+			configInURLSettings === EConfigInURLBehavior.PUSH &&
 			(!Liferay.SPA || !Liferay.SPA.app);
 
 		if (registerPopstateEvent) {
@@ -932,7 +1308,7 @@ const FrontendDataSetContent = ({
 				window.removeEventListener('popstate', handlePopState);
 			}
 		};
-	}, [handlePopState, id, refreshData, stateInURLSettings]);
+	}, [configInURLSettings, handlePopState, id, refreshData]);
 
 	const managementBar = showManagementBar ? (
 		<div className="management-bar-wrapper">
@@ -1056,7 +1432,9 @@ const FrontendDataSetContent = ({
 						perPageItems: Liferay.Language.get('x-items'),
 						selectPerPageItems: Liferay.Language.get('x-items'),
 					}}
-					onActiveChange={setPageNumber}
+					onActiveChange={(page: number) =>
+						viewsDispatch(updatePageNumber(page))
+					}
 					onDeltaChange={handleDeltaChange}
 					totalItems={total}
 				/>
@@ -1360,7 +1738,6 @@ const FrontendDataSetContent = ({
 				selectedItemsValue,
 				selectionType,
 				setSearching,
-				setView,
 				showBulkActionsManagementBar,
 				showBulkActionsManagementBarActions,
 				showInfoPanel: infoPanelComponent ? true : false,
@@ -1369,8 +1746,12 @@ const FrontendDataSetContent = ({
 				style,
 				toggleItemInlineEdit,
 				uniformActionsDisplay,
+				updateActiveSorts,
 				updateDataSetItems,
+				updateFilters,
 				updateItem,
+				updateView,
+				updateVisibleFields,
 			}}
 		>
 			<ViewsContext.Provider value={[viewsState, viewsDispatch]}>

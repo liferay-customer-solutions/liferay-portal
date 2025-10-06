@@ -6,7 +6,7 @@
 import {IInternalRenderer} from '@liferay/frontend-data-set-web';
 import {openModal} from 'frontend-js-components-web';
 
-import ItemNavigationModalContent from '../modal/item_navigation_view/ItemNavigationModalContent';
+import AssetNavigationModalContent from '../modal/asset_navigation_view/AssetNavigationModalContent';
 import {AdditionalProps} from './AssetsFDSPropsTransformer';
 import shareAction from './actions/shareAction';
 import AuthorRenderer from './cell_renderers/AuthorRenderer';
@@ -134,11 +134,16 @@ export default function SharedWithMeFDSPropsTransformer({
 			) {
 				event?.preventDefault();
 
-				const currentItemPos = items.findIndex(
+				const filteredItems = items.filter(
+					(item: any) =>
+						item?.className !== OBJECT_ENTRY_FOLDER_CLASS_NAME
+				);
+
+				const currentItemPos = filteredItems.findIndex(
 					(item: any) => item.id === itemData.id
 				);
 
-				const transformedItems = items.map((item: any) => ({
+				const transformedItems = filteredItems.map((item: any) => ({
 					...item,
 					embedded: {
 						file: item.file ?? undefined,
@@ -152,10 +157,12 @@ export default function SharedWithMeFDSPropsTransformer({
 						className: '',
 					},
 					contentComponent: () =>
-						ItemNavigationModalContent({
+						AssetNavigationModalContent({
+							additionalProps,
 							contentViewURL: additionalProps.contentViewURL,
 							currentIndex: currentItemPos,
 							items: transformedItems,
+							showInfoPanel: false,
 						}),
 					size: 'full-screen',
 				});

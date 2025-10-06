@@ -5,15 +5,26 @@
 
 package com.liferay.portal.security.sso.openid.connect.web.internal.display.context;
 
+import com.liferay.configuration.admin.constants.ConfigurationAdminPortletKeys;
+import com.liferay.expando.kernel.model.ExpandoColumn;
+import com.liferay.expando.kernel.service.ExpandoColumnLocalService;
+import com.liferay.oauth.client.persistence.constants.OAuthClientEntryConstants;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
+import com.liferay.portal.kernel.util.PortalUtil;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
 
 import java.util.Dictionary;
+import java.util.List;
+import java.util.Objects;
 
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.cm.Configuration;
@@ -25,13 +36,30 @@ import org.osgi.service.cm.ConfigurationAdmin;
 public class OpenIdConnectProviderConfigurationDisplayContext {
 
 	public OpenIdConnectProviderConfigurationDisplayContext(
-			ConfigurationAdmin configurationAdmin, String pid)
+			ConfigurationAdmin configurationAdmin,
+			ExpandoColumnLocalService expandoColumnLocalService,
+			HttpServletRequest httpServletRequest)
 		throws InvalidSyntaxException, IOException {
 
+		_expandoColumnLocalService = expandoColumnLocalService;
+
+		String filterString = null;
+
+		if (Objects.equals(
+				PortalUtil.getPortletId(httpServletRequest),
+				ConfigurationAdminPortletKeys.INSTANCE_SETTINGS)) {
+
+			filterString = StringBundler.concat(
+				"(&(companyId=", PortalUtil.getCompanyId(httpServletRequest),
+				")(service.pid=", httpServletRequest.getParameter("pid"), "))");
+		}
+		else {
+			filterString =
+				"(service.pid=" + httpServletRequest.getParameter("pid") + ")";
+		}
+
 		Configuration[] configurations = configurationAdmin.listConfigurations(
-			StringBundler.concat(
-				"(&(companyId=", CompanyThreadLocal.getCompanyId(),
-				")(service.pid=", pid, "))"));
+			filterString);
 
 		if (configurations != null) {
 			_properties = configurations[0].getProperties();
@@ -42,9 +70,12 @@ public class OpenIdConnectProviderConfigurationDisplayContext {
 			_properties = HashMapDictionaryBuilder.<String, Object>put(
 				"customAuthorizationRequestParameters", defaultValue
 			).put(
+				"customClaims", defaultValue
+			).put(
 				"customTokenRequestParameters", defaultValue
 			).put(
-				"discoveryEndpointCacheInMillis", 36000
+				"discoveryEndpointCacheInMillis",
+				OAuthClientEntryConstants.METADATA_CACHE_TIME_DEFAULT
 			).put(
 				"idTokenSigningAlgValues", new String[] {"RS256"}
 			).put(
@@ -55,29 +86,6 @@ public class OpenIdConnectProviderConfigurationDisplayContext {
 				"tokenConnectionTimeout", 1000
 			).build();
 		}
-
-		_customAuthorizationRequestParameters = GetterUtil.getStringValues(
-			_properties.get("customAuthorizationRequestParameters"));
-
-		_customAuthorizationRequestParametersIndexes = _createIndexes(
-			_customAuthorizationRequestParameters.length);
-
-		_customTokenRequestParameters = GetterUtil.getStringValues(
-			_properties.get("customTokenRequestParameters"));
-
-		_customTokenRequestParametersIndexes = _createIndexes(
-			_customTokenRequestParameters.length);
-
-		_idTokenSigningAlgValues = GetterUtil.getStringValues(
-			_properties.get("idTokenSigningAlgValues"));
-
-		_idTokenSigningAlgValuesIndexes = _createIndexes(
-			_idTokenSigningAlgValues.length);
-
-		_subjectTypes = GetterUtil.getStringValues(
-			_properties.get("subjectTypes"));
-
-		_subjectTypesIndexes = _createIndexes(_subjectTypes.length);
 	}
 
 	public String getAuthorizationEndpoint() {
@@ -85,19 +93,64 @@ public class OpenIdConnectProviderConfigurationDisplayContext {
 	}
 
 	public String[] getCustomAuthorizationRequestParameters() {
-		return _customAuthorizationRequestParameters;
+		return GetterUtil.getStringValues(
+			_properties.get("customAuthorizationRequestParameters"));
 	}
 
 	public int[] getCustomAuthorizationRequestParametersIndexes() {
-		return _customAuthorizationRequestParametersIndexes;
+		return _createIndexes(
+			ArrayUtil.getLength(getCustomAuthorizationRequestParameters()));
+	}
+
+	public int[] getCustomClaimsIndexes() {
+		return _createIndexes(
+			ArrayUtil.getLength(
+				GetterUtil.getStringValues(_properties.get("customClaims"))));
+	}
+
+	public String[] getCustomClaimsKeys() {
+		String[] customClaims = GetterUtil.getStringValues(
+			_properties.get("customClaims"));
+
+		String[] customClaimsKeys = new String[customClaims.length];
+
+		for (int i = 0; i < customClaims.length; i++) {
+			String[] customClaim = customClaims[i].split(StringPool.EQUAL);
+
+			customClaimsKeys[i] = customClaim[0];
+		}
+
+		return customClaimsKeys;
+	}
+
+	public String[] getCustomClaimsValues() {
+		String[] customClaims = GetterUtil.getStringValues(
+			_properties.get("customClaims"));
+
+		String[] customClaimsValues = new String[customClaims.length];
+
+		for (int i = 0; i < customClaimsValues.length; i++) {
+			String[] customClaim = customClaims[i].split(StringPool.EQUAL);
+
+			if (customClaim.length > 1) {
+				customClaimsValues[i] = customClaim[1];
+			}
+			else {
+				customClaimsValues[i] = StringPool.BLANK;
+			}
+		}
+
+		return customClaimsValues;
 	}
 
 	public String[] getCustomTokenRequestParameters() {
-		return _customTokenRequestParameters;
+		return GetterUtil.getStringValues(
+			_properties.get("customTokenRequestParameters"));
 	}
 
 	public int[] getCustomTokenRequestParametersIndexes() {
-		return _customTokenRequestParametersIndexes;
+		return _createIndexes(
+			ArrayUtil.getLength(getCustomTokenRequestParameters()));
 	}
 
 	public String getDiscoveryEndpoint() {
@@ -109,12 +162,19 @@ public class OpenIdConnectProviderConfigurationDisplayContext {
 			_properties.get("discoveryEndpointCacheInMillis"));
 	}
 
+	public List<ExpandoColumn> getExpandoColumns() {
+		return _expandoColumnLocalService.getDefaultTableColumns(
+			CompanyThreadLocal.getCompanyId(), User.class.getName());
+	}
+
 	public String[] getIdTokenSigningAlgValues() {
-		return _idTokenSigningAlgValues;
+		return GetterUtil.getStringValues(
+			_properties.get("idTokenSigningAlgValues"));
 	}
 
 	public int[] getIdTokenSigningAlgValuesIndexes() {
-		return _idTokenSigningAlgValuesIndexes;
+		return _createIndexes(
+			ArrayUtil.getLength(getIdTokenSigningAlgValues()));
 	}
 
 	public String getIssuerURL() {
@@ -148,11 +208,11 @@ public class OpenIdConnectProviderConfigurationDisplayContext {
 	}
 
 	public String[] getSubjectTypes() {
-		return _subjectTypes;
+		return GetterUtil.getStringValues(_properties.get("subjectTypes"));
 	}
 
 	public int[] getSubjectTypesIndexes() {
-		return _subjectTypesIndexes;
+		return _createIndexes(ArrayUtil.getLength(getSubjectTypes()));
 	}
 
 	public int getTokenConnectionTimeout() {
@@ -177,14 +237,7 @@ public class OpenIdConnectProviderConfigurationDisplayContext {
 		return indexes;
 	}
 
-	private final String[] _customAuthorizationRequestParameters;
-	private final int[] _customAuthorizationRequestParametersIndexes;
-	private final String[] _customTokenRequestParameters;
-	private final int[] _customTokenRequestParametersIndexes;
-	private final String[] _idTokenSigningAlgValues;
-	private final int[] _idTokenSigningAlgValuesIndexes;
+	private final ExpandoColumnLocalService _expandoColumnLocalService;
 	private final Dictionary<String, Object> _properties;
-	private final String[] _subjectTypes;
-	private final int[] _subjectTypesIndexes;
 
 }

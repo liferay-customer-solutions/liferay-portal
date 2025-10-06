@@ -73,7 +73,9 @@ test('LPD-53979 Assert warning alert appears when sandbox mode is enabled and Ow
 
 	await saveButton.click();
 
-	const closeButton = page.getByLabel('close', {exact: true});
+	const closeButton = page
+		.locator('.modal')
+		.getByLabel('Close', {exact: true});
 
 	await closeButton.click();
 

@@ -6,6 +6,7 @@
 package com.liferay.headless.admin.site.internal.resource.v1_0;
 
 import com.liferay.client.extension.type.manager.CETManager;
+import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.exportimport.vulcan.batch.engine.ExportImportVulcanBatchEngineTaskItemDelegate;
 import com.liferay.headless.admin.site.dto.v1_0.ClassSubtypeReference;
 import com.liferay.headless.admin.site.dto.v1_0.ContentPageSpecification;
@@ -80,6 +81,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	properties = "OSGI-INF/liferay/rest/v1_0/display-page-template.properties",
+	property = "export.import.vulcan.batch.engine.task.item.delegate=true",
 	scope = ServiceScope.PROTOTYPE, service = DisplayPageTemplateResource.class
 )
 public class DisplayPageTemplateResourceImpl
@@ -119,6 +121,11 @@ public class DisplayPageTemplateResourceImpl
 			}
 
 			@Override
+			public String getLabel() {
+				return "display-page-templates";
+			}
+
+			@Override
 			public List<String> getNestedFields() {
 				return List.of("friendlyUrlHistory", "pageSpecifications");
 			}
@@ -131,6 +138,11 @@ public class DisplayPageTemplateResourceImpl
 			@Override
 			public Scope getScope() {
 				return Scope.SITE;
+			}
+
+			@Override
+			public boolean isActive(PortletDataContext portletDataContext) {
+				return FeatureFlagManagerUtil.isEnabled("LPD-35443");
 			}
 
 		};
@@ -236,7 +248,7 @@ public class DisplayPageTemplateResourceImpl
 
 		return (ContentPageSpecification)_pageSpecificationDTOConverter.toDTO(
 			LayoutUtil.addDraftToLayout(
-				_cetManager, contentPageSpecification,
+				_cetManager, contentPageSpecification, _infoItemServiceRegistry,
 				_layoutLocalService.getLayout(
 					layoutPageTemplateEntry.getPlid()),
 				ServiceContextUtil.createServiceContext(
@@ -417,16 +429,14 @@ public class DisplayPageTemplateResourceImpl
 		UnicodeProperties typeSettingsUnicodeProperties = _getUnicodeProperties(
 			displayPageTemplate.getDisplayPageTemplateSettings());
 
-		layout = _layoutLocalService.updateLayout(
-			layout.getGroupId(), layout.isPrivateLayout(), layout.getLayoutId(),
-			typeSettingsUnicodeProperties.toString());
-
 		layout = LayoutUtil.updateContentLayout(
-			_cetManager, layout, layout.getNameMap(), layout.getTitleMap(),
-			layout.getDescriptionMap(),
+			_cetManager, _infoItemServiceRegistry, layout, layout.getNameMap(),
+			layout.getTitleMap(), layout.getDescriptionMap(),
+			layout.getKeywordsMap(),
 			_getRobotsMap(displayPageTemplate.getDisplayPageTemplateSettings()),
 			LocalizedMapUtil.getLocalizedMap(
 				displayPageTemplate.getFriendlyUrlPath_i18n()),
+			typeSettingsUnicodeProperties,
 			displayPageTemplate.getPageSpecifications(),
 			_getServiceContext(displayPageTemplate, groupId));
 
@@ -532,9 +542,10 @@ public class DisplayPageTemplateResourceImpl
 			LayoutPageTemplateEntryTypeConstants.DISPLAY_PAGE);
 
 		Layout layout = LayoutUtil.addContentLayout(
-			_cetManager, groupId, displayPageTemplate.getPageSpecifications(),
-			LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, false, nameMap, nameMap,
-			null, _getRobotsMap(displayPageTemplateSettings),
+			_cetManager, groupId, _infoItemServiceRegistry,
+			displayPageTemplate.getPageSpecifications(),
+			LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, false, nameMap, null,
+			null, null, _getRobotsMap(displayPageTemplateSettings),
 			LayoutConstants.TYPE_ASSET_DISPLAY,
 			_getUnicodeProperties(displayPageTemplateSettings), true, true,
 			LocalizedMapUtil.getLocalizedMap(

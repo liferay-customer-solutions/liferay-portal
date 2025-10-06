@@ -84,9 +84,8 @@ export class FiltersPage {
 			.and(page.getByTitle('New Filter'));
 		this.newFilterForm = {
 			cancelButton: page.getByRole('button', {name: 'Cancel'}),
-			closeButton: page.getByRole('button', {
+			closeButton: page.locator('.modal').getByText('Close', {
 				exact: true,
-				name: 'close',
 			}),
 			filterByDropdown: page.locator('.fds-field-name-dropdown-menu'),
 			filterBySelect: page.getByLabel('Filter By'),

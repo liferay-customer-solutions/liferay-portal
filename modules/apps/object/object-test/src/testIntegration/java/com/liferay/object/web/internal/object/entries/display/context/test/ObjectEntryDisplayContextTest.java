@@ -19,6 +19,7 @@ import com.liferay.object.rest.manager.v1_0.ObjectEntryManager;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectRelationshipLocalService;
 import com.liferay.object.test.util.ObjectDefinitionTestUtil;
+import com.liferay.object.test.util.ObjectEntryTestUtil;
 import com.liferay.object.test.util.TreeTestUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.model.Group;
@@ -223,6 +224,48 @@ public class ObjectEntryDisplayContextTest {
 				_companyObjectRelationshipA_AA.getObjectRelationshipId()
 			).buildString(),
 			_getBackURL(mockHttpServletRequest));
+	}
+
+	@Test
+	public void testIsShowScreenNavigation() throws Exception {
+		com.liferay.object.model.ObjectEntry objectEntry =
+			ObjectEntryTestUtil.addObjectEntry(_companyObjectDefinitionAA);
+
+		ObjectEntryDisplayContext objectEntryDisplayContext =
+			_objectEntryDisplayContextFactory.create(
+				_getMockHttpServletRequest(
+					objectEntry.getExternalReferenceCode(),
+					_companyObjectDefinitionAA, 0L, null));
+
+		Assert.assertFalse(objectEntryDisplayContext.isShowScreenNavigation());
+	}
+
+	@Test
+	public void testIsShowScreenNavigationWithRootDescendantObjectEntry()
+		throws Exception {
+
+		ObjectEntryDisplayContext objectEntryDisplayContext =
+			_objectEntryDisplayContextFactory.create(
+				_getMockHttpServletRequest(
+					_companyObjectEntryAA.getExternalReferenceCode(),
+					_companyObjectDefinitionAA,
+					_companyObjectRelationshipA_AA.getObjectRelationshipId(),
+					_companyObjectEntryA.getExternalReferenceCode()));
+
+		Assert.assertTrue(objectEntryDisplayContext.isShowScreenNavigation());
+	}
+
+	@Test
+	public void testIsShowScreenNavigationWithRootObjectEntry()
+		throws Exception {
+
+		ObjectEntryDisplayContext objectEntryDisplayContext =
+			_objectEntryDisplayContextFactory.create(
+				_getMockHttpServletRequest(
+					_companyObjectEntryA.getExternalReferenceCode(),
+					_companyObjectDefinitionA, 0L, null));
+
+		Assert.assertTrue(objectEntryDisplayContext.isShowScreenNavigation());
 	}
 
 	private static ObjectDefinition _addObjectDefinition(String scope)

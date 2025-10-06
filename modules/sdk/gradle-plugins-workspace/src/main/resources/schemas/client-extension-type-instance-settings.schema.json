@@ -2809,6 +2809,10 @@
 					"default": "",
 					"type": "string"
 				},
+				"googleCloudHotfixBucket": {
+					"default": "",
+					"type": "string"
+				},
 				"helpCenterApiPassword": {
 					"default": "",
 					"type": "string"
@@ -3889,6 +3893,15 @@
 						"type": "string"
 					},
 					"title": "Custom Authorization Request Parameters",
+					"type": "array"
+				},
+				"customClaims": {
+					"default": "",
+					"description": "Map the custom claims from the OpenId Connect provider to custom fields.",
+					"items": {
+						"type": "string"
+					},
+					"title": "Custom Claims",
 					"type": "array"
 				},
 				"customTokenRequestParameters": {

@@ -10,6 +10,7 @@ import com.liferay.headless.admin.site.internal.resource.v1_0.layout.structure.i
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.GroupUtil;
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.LayoutStructureUtil;
 import com.liferay.headless.admin.site.resource.v1_0.PageElementResource;
+import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.layout.page.template.model.LayoutPageTemplateStructure;
 import com.liferay.layout.page.template.service.LayoutPageTemplateStructureLocalService;
 import com.liferay.layout.util.structure.LayoutStructure;
@@ -25,9 +26,6 @@ import com.liferay.portal.vulcan.dto.converter.DefaultDTOConverterContext;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.segments.model.SegmentsExperience;
 import com.liferay.segments.service.SegmentsExperienceLocalService;
-
-import java.util.List;
-import java.util.Objects;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -148,7 +146,8 @@ public class PageElementResourceImpl extends BasePageElementResourceImpl {
 		}
 
 		return _pageElementDTOConverter.toDTO(
-			_getDTOConverterContext(layoutStructure), layoutStructureItem);
+			_getDTOConverterContext(layoutStructure, groupId),
+			layoutStructureItem);
 	}
 
 	@Override
@@ -201,7 +200,7 @@ public class PageElementResourceImpl extends BasePageElementResourceImpl {
 				LayoutStructureItemUtil.getChildrenItemIds(
 					layoutStructureItem.getItemId(), layoutStructure),
 				itemId -> _pageElementDTOConverter.toDTO(
-					_getDTOConverterContext(layoutStructure),
+					_getDTOConverterContext(layoutStructure, groupId),
 					layoutStructure.getLayoutStructureItem(itemId))));
 	}
 
@@ -250,7 +249,7 @@ public class PageElementResourceImpl extends BasePageElementResourceImpl {
 				LayoutStructureItemUtil.getChildrenItemIds(
 					layoutStructure.getMainItemId(), layoutStructure),
 				itemId -> _pageElementDTOConverter.toDTO(
-					_getDTOConverterContext(layoutStructure),
+					_getDTOConverterContext(layoutStructure, groupId),
 					layoutStructure.getLayoutStructureItem(itemId))));
 	}
 
@@ -293,7 +292,15 @@ public class PageElementResourceImpl extends BasePageElementResourceImpl {
 			layoutPageTemplateStructure.getData(
 				segmentsExperience.getSegmentsExperienceId()));
 
-		return _addPageElement(
+		LayoutStructureItem layoutStructureItem =
+			layoutStructure.getLayoutStructureItem(
+				pageElement.getExternalReferenceCode());
+
+		if (layoutStructureItem != null) {
+			throw new UnsupportedOperationException();
+		}
+
+		return _addOrUpdatePageElement(
 			groupId, layout, layoutStructure, pageElement,
 			segmentsExperience.getSegmentsExperienceId());
 	}
@@ -334,50 +341,15 @@ public class PageElementResourceImpl extends BasePageElementResourceImpl {
 				fetchLayoutPageTemplateStructure(
 					layout.getGroupId(), layout.getPlid());
 
-		LayoutStructure layoutStructure = LayoutStructure.of(
-			layoutPageTemplateStructure.getData(
-				segmentsExperience.getSegmentsExperienceId()));
-
-		LayoutStructureItem layoutStructureItem =
-			layoutStructure.getLayoutStructureItem(
-				pageElementExternalReferenceCode);
-
-		if (layoutStructureItem == null) {
-			return _addPageElement(
-				groupId, layout, layoutStructure, pageElement,
-				segmentsExperience.getSegmentsExperienceId());
-		}
-
-		LayoutStructureItem parentLayoutStructureItem =
-			layoutStructure.getLayoutStructureItem(
-				layoutStructureItem.getParentItemId());
-
-		List<String> childrenItemIds =
-			parentLayoutStructureItem.getChildrenItemIds();
-
-		if (!Objects.equals(
-				layoutStructureItem.getParentItemId(),
-				pageElement.getParentExternalReferenceCode()) ||
-			(childrenItemIds.indexOf(layoutStructureItem.getItemId()) !=
-				pageElement.getPosition())) {
-
-			layoutStructure.moveLayoutStructureItem(
-				layoutStructureItem.getItemId(),
-				LayoutStructureUtil.getParentExternalReferenceCode(
-					pageElement, layoutStructure),
-				pageElement.getPosition());
-
-			_layoutPageTemplateStructureLocalService.
-				updateLayoutPageTemplateStructureData(
-					contextUser.getUserId(), layout.getGroupId(),
-					layout.getPlid(), layoutStructure.toString());
-		}
-
-		return _pageElementDTOConverter.toDTO(
-			_getDTOConverterContext(layoutStructure), layoutStructureItem);
+		return _addOrUpdatePageElement(
+			groupId, layout,
+			LayoutStructure.of(
+				layoutPageTemplateStructure.getData(
+					segmentsExperience.getSegmentsExperienceId())),
+			pageElement, segmentsExperience.getSegmentsExperienceId());
 	}
 
-	private PageElement _addPageElement(
+	private PageElement _addOrUpdatePageElement(
 			long groupId, Layout layout, LayoutStructure layoutStructure,
 			PageElement pageElement, long segmentsExperienceId)
 		throws Exception {
@@ -386,7 +358,8 @@ public class PageElementResourceImpl extends BasePageElementResourceImpl {
 			LayoutStructureUtil.addLayoutStructureItem(
 				layoutStructure,
 				new LayoutStructureItemImporterContext(
-					groupId, layout, segmentsExperienceId,
+					contextCompany.getCompanyId(), groupId,
+					_infoItemServiceRegistry, layout, segmentsExperienceId,
 					contextUser.getUserId()),
 				pageElement);
 
@@ -396,20 +369,25 @@ public class PageElementResourceImpl extends BasePageElementResourceImpl {
 				layoutStructure.toString());
 
 		return _pageElementDTOConverter.toDTO(
-			_getDTOConverterContext(layoutStructure), layoutStructureItem);
+			_getDTOConverterContext(layoutStructure, groupId),
+			layoutStructureItem);
 	}
 
 	private DTOConverterContext _getDTOConverterContext(
-		LayoutStructure layoutStructure) {
+		LayoutStructure layoutStructure, long scopeGroupId) {
 
 		DTOConverterContext dtoConverterContext =
 			new DefaultDTOConverterContext(null, null, null, null, null);
 
 		dtoConverterContext.setAttribute(
 			LayoutStructure.class.getName(), layoutStructure);
+		dtoConverterContext.setAttribute("scopeGroupId", scopeGroupId);
 
 		return dtoConverterContext;
 	}
+
+	@Reference
+	private InfoItemServiceRegistry _infoItemServiceRegistry;
 
 	@Reference
 	private LayoutLocalService _layoutLocalService;

@@ -188,6 +188,11 @@ public class ObjectEntryModelResourcePermission
 			objectEntryModelResourcePermissionLogic =
 				_objectEntryModelResourcePermissionLogicSupplier.get();
 
+		if (!objectEntry.isHead()) {
+			objectEntry = _objectEntryLocalService.fetchObjectEntry(
+				objectEntry.getHeadObjectEntryId());
+		}
+
 		if ((!actionId.equals(ActionKeys.VIEW) || objectEntry.isApproved()) &&
 			(objectEntryModelResourcePermissionLogic != null) &&
 			Objects.equals(
@@ -338,7 +343,7 @@ public class ObjectEntryModelResourcePermission
 		long classPK = GetterUtil.getLong(assigneeMap.get("classPK"));
 
 		if (StringUtil.equals(className, Role.class.getName())) {
-			UserBag userBag = UserBagFactoryUtil.create(user.getUserId());
+			UserBag userBag = UserBagFactoryUtil.create(user);
 
 			for (long roleId : userBag.getRoleIds()) {
 				if (roleId == classPK) {
@@ -395,11 +400,11 @@ public class ObjectEntryModelResourcePermission
 
 			throw new PrincipalException.MustHavePermission(
 				permissionChecker, objectDefinition.getClassName(),
-				objectEntry.getObjectEntryId(), actionId);
+				objectEntry.getHeadObjectEntryId(), actionId);
 		}
 
 		throw new PrincipalException.MustHavePermission(
-			permissionChecker, _modelName, objectEntry.getObjectEntryId(),
+			permissionChecker, _modelName, objectEntry.getHeadObjectEntryId(),
 			actionId);
 	}
 

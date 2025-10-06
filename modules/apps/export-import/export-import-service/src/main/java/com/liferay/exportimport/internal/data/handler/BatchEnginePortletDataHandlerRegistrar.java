@@ -16,12 +16,14 @@ import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerList;
 import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerListFactory;
 import com.liferay.petra.concurrent.DCLSingleton;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagListener;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.vulcan.batch.engine.VulcanBatchEngineTaskItemDelegate;
+import com.liferay.staging.StagingGroupHelper;
 
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -141,6 +143,10 @@ public class BatchEnginePortletDataHandlerRegistrar {
 	private final Map<String, BatchEnginePortletDataHandler>
 		_batchEnginePortletDataHandlers = new HashMap<>();
 	private final List<Long> _enabledCompanyIds = new CopyOnWriteArrayList<>();
+
+	@Reference
+	private GroupLocalService _groupLocalService;
+
 	private volatile ServiceRegistration<FeatureFlagListener>
 		_serviceRegistration;
 	private final Map<String, ServiceRegistration<PortletDataHandler>>
@@ -148,6 +154,9 @@ public class BatchEnginePortletDataHandlerRegistrar {
 	private final DCLSingleton
 		<ServiceTrackerList<ServiceRegistration<PortletDataHandler>>>
 			_serviceTrackerListDCLSingleton = new DCLSingleton<>();
+
+	@Reference
+	private StagingGroupHelper _stagingGroupHelper;
 
 	private class VulcanBatchEngineTaskItemDelegateServiceTrackerCustomizer
 		implements EagerServiceTrackerCustomizer
@@ -190,7 +199,8 @@ public class BatchEnginePortletDataHandlerRegistrar {
 						_batchEngineExportTaskExecutor,
 						_batchEngineExportTaskLocalService,
 						_batchEngineImportTaskExecutor,
-						_batchEngineImportTaskService);
+						_batchEngineImportTaskService, _groupLocalService,
+						_stagingGroupHelper);
 
 				batchEnginePortletDataHandler.setPortletId(
 					exportImportDescriptor.getPortletId());

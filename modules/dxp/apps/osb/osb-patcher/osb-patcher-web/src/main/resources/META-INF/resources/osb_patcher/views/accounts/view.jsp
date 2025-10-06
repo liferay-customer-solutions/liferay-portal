@@ -233,7 +233,7 @@ PatcherAccountsViewDisplayContext patcherAccountsViewDisplayContext = new Patche
 
 		<liferay-ui:search-container-column-text
 			cssClass="nobr"
-			href='<%= fileName.contains("/liferay-dxp-") ? "https://releases-cdn.liferay.com/dxp/hotfix" : patcherConfiguration.patcherBuildDownloadURL() + "/" + fileName %>'
+			href='<%= patcherConfiguration.patcherBuildDownloadURL() + "/" + fileName %>'
 			name="hotfix"
 			target="_blank"
 			value="<%= PatcherBuildUtil.isCompleteReadyOrReleased(patcherBuild) ? PatcherBuildUtil.getLiferayHotfixFileName(fileName) : StringPool.BLANK %>"

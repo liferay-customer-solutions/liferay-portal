@@ -27,20 +27,19 @@ import Actions from '../../actions/Actions';
 import {getInternalCellRenderer} from '../../cell_renderers/getInternalCellRenderer';
 import FDSDndProvider from '../../dnd/FDSDndProvider';
 import useFDSDrop from '../../dnd/useFDSDrop';
-import persistVisibleFieldNames, {
-	VisibleFieldNames,
-} from '../../thunks/persistVisibleFieldNames';
 import {
 	ILocalizedItemDetails,
 	getLocalizedValue,
 } from '../../utils/getLocalizedValue';
 import {getInputRendererById} from '../../utils/renderer';
+import {saveViewSettings} from '../../utils/saveViewSettings';
 import {
 	IItemsActions,
 	ITableSchema,
 	IView,
 	TRenderer,
 	TSort,
+	VisibleFieldNames,
 } from '../../utils/types';
 import ViewsContext, {
 	IViewsContext,
@@ -50,7 +49,7 @@ import getCellColumnClassName from '../utils/getCellColumnClassName';
 
 // @ts-ignore
 
-import {VIEWS_ACTION_TYPES} from '../viewsReducer';
+import {EViewsActionTypes} from '../viewsReducer';
 import TableContext from './TableContext';
 import TableContextProvider from './TableContextProvider';
 
@@ -469,7 +468,7 @@ function HeadCellResizer({
 			const boundingClientRect = cellRef.current.getBoundingClientRect();
 
 			viewsDispatch({
-				type: VIEWS_ACTION_TYPES.UPDATE_FIELD,
+				type: EViewsActionTypes.UPDATE_FIELD,
 				value: {
 					name: columnName,
 					resizable: true,
@@ -739,6 +738,8 @@ const Table = ({
 		portletId,
 		selectable,
 		selectionType,
+		updateActiveSorts,
+		updateVisibleFields,
 	} = useContext(FrontendDataSetContext);
 
 	const [{sorts, visibleFieldNames}, viewsDispatch] =
@@ -811,10 +812,7 @@ const Table = ({
 			});
 		}
 
-		viewsDispatch({
-			type: VIEWS_ACTION_TYPES.UPDATE_SORTING,
-			value: updatedSorts,
-		});
+		viewsDispatch(updateActiveSorts(updatedSorts));
 	};
 
 	return (
@@ -848,23 +846,21 @@ const Table = ({
 					const visibleFieldNames: VisibleFieldNames = {};
 
 					schema.fields.forEach(({fieldName}) => {
-						if (typeof fieldName === 'string') {
-							visibleFieldNames[fieldName] = false;
-						}
+						visibleFieldNames[String(fieldName)] = false;
 					});
 
 					visibleColumns.forEach((value: any, key: any) => {
 						visibleFieldNames[key] = true;
 					});
 
-					viewsDispatch(
-						persistVisibleFieldNames({
-							appURL,
-							id,
-							portletId,
-							visibleFieldNames,
-						})
-					);
+					viewsDispatch(updateVisibleFields(visibleFieldNames));
+
+					saveViewSettings({
+						appURL,
+						id,
+						portletId,
+						settings: {visibleFieldNames},
+					});
 
 					setVisibleColumns(visibleColumns);
 				}}

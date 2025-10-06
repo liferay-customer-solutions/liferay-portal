@@ -6,6 +6,7 @@
 package com.liferay.headless.admin.site.internal.resource.v1_0;
 
 import com.liferay.client.extension.type.manager.CETManager;
+import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.exportimport.vulcan.batch.engine.ExportImportVulcanBatchEngineTaskItemDelegate;
 import com.liferay.headless.admin.site.dto.v1_0.ContentPageSpecification;
 import com.liferay.headless.admin.site.dto.v1_0.PageSpecification;
@@ -18,6 +19,7 @@ import com.liferay.headless.admin.site.internal.resource.v1_0.util.GroupUtil;
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.LayoutUtil;
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.ServiceContextUtil;
 import com.liferay.headless.admin.site.resource.v1_0.UtilityPageResource;
+import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.layout.admin.constants.LayoutAdminPortletKeys;
 import com.liferay.layout.utility.page.kernel.constants.LayoutUtilityPageEntryConstants;
 import com.liferay.layout.utility.page.model.LayoutUtilityPageEntry;
@@ -59,6 +61,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	properties = "OSGI-INF/liferay/rest/v1_0/utility-page.properties",
+	property = "export.import.vulcan.batch.engine.task.item.delegate=true",
 	scope = ServiceScope.PROTOTYPE, service = UtilityPageResource.class
 )
 public class UtilityPageResourceImpl
@@ -97,6 +100,11 @@ public class UtilityPageResourceImpl
 			}
 
 			@Override
+			public String getLabel() {
+				return "utility-pages";
+			}
+
+			@Override
 			public List<String> getNestedFields() {
 				return List.of("friendlyUrlHistory", "pageSpecifications");
 			}
@@ -109,6 +117,11 @@ public class UtilityPageResourceImpl
 			@Override
 			public Scope getScope() {
 				return Scope.SITE;
+			}
+
+			@Override
+			public boolean isActive(PortletDataContext portletDataContext) {
+				return FeatureFlagManagerUtil.isEnabled("LPD-35443");
 			}
 
 		};
@@ -135,7 +148,7 @@ public class UtilityPageResourceImpl
 
 		return (ContentPageSpecification)_pageSpecificationDTOConverter.toDTO(
 			LayoutUtil.addDraftToLayout(
-				_cetManager, contentPageSpecification,
+				_cetManager, contentPageSpecification, _infoItemServiceRegistry,
 				_layoutLocalService.getLayout(layoutUtilityPageEntry.getPlid()),
 				ServiceContextUtil.createServiceContext(
 					layoutUtilityPageEntry.getGroupId(),
@@ -255,10 +268,12 @@ public class UtilityPageResourceImpl
 		}
 
 		LayoutUtil.updateContentLayout(
-			_cetManager, layout, layout.getNameMap(), titleMap, descriptionMap,
+			_cetManager, _infoItemServiceRegistry, layout, layout.getNameMap(),
+			titleMap, descriptionMap, layout.getKeywordsMap(),
 			layout.getRobotsMap(),
 			LocalizedMapUtil.getLocalizedMap(
 				utilityPage.getFriendlyUrlPath_i18n()),
+			layout.getTypeSettingsProperties(),
 			utilityPage.getPageSpecifications(),
 			_getServiceContext(groupId, utilityPage));
 
@@ -387,10 +402,11 @@ public class UtilityPageResourceImpl
 			"layout.instanceable.allowed", Boolean.TRUE);
 
 		Layout layout = LayoutUtil.addContentLayout(
-			_cetManager, groupId, utilityPage.getPageSpecifications(),
+			_cetManager, groupId, _infoItemServiceRegistry,
+			utilityPage.getPageSpecifications(),
 			LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, false, nameMap, titleMap,
-			descriptionMap, null, LayoutConstants.TYPE_UTILITY, null, true,
-			true,
+			descriptionMap, null, null, LayoutConstants.TYPE_UTILITY, null,
+			true, true,
 			LocalizedMapUtil.getLocalizedMap(
 				utilityPage.getFriendlyUrlPath_i18n()),
 			WorkflowConstants.STATUS_DRAFT, serviceContext);
@@ -462,6 +478,9 @@ public class UtilityPageResourceImpl
 
 	@Reference
 	private CETManager _cetManager;
+
+	@Reference
+	private InfoItemServiceRegistry _infoItemServiceRegistry;
 
 	@Reference
 	private LayoutLocalService _layoutLocalService;

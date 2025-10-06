@@ -2341,6 +2341,10 @@ public class ObjectEntryLocalServiceImpl
 				"friendlyUrlMap");
 		}
 
+		if (friendlyUrlMap == null) {
+			friendlyUrlMap = new HashMap<>();
+		}
+
 		long groupId = objectEntry.getNonzeroGroupId();
 		ObjectField objectField = _objectFieldLocalService.fetchObjectField(
 			objectDefinition.getTitleObjectFieldId());
@@ -7069,7 +7073,9 @@ public class ObjectEntryLocalServiceImpl
 			DLFileEntry dlFileEntry = _dlFileEntryLocalService.fetchDLFileEntry(
 				GetterUtil.getLong(value));
 
-			if (dlFileEntry != null) {
+			if ((dlFileEntry != null) &&
+				(dlFileEntry.getCompanyId() == objectField.getCompanyId())) {
+
 				_validateFileExtension(
 					dlFileEntry.getExtension(), objectField.getObjectFieldId(),
 					objectField.getName(), validationErrors);

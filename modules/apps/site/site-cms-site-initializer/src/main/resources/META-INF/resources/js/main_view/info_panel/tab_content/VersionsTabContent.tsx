@@ -8,7 +8,7 @@ import List from '@clayui/list';
 import {fetch} from 'frontend-js-web';
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 
-import {IAssetObjectEntry} from '../../../structure_builder/types/AssetType';
+import {IAssetObjectEntry} from '../../../common/types/AssetType';
 import AssetVersionsListItem from '../components/AssetVersionsListItem';
 import {
 	AssetTypeInfoPanelContext,
@@ -63,9 +63,11 @@ const VersionsTabContent = () => {
 
 	return (
 		<>
-			<List>
-				<AssetVersionsListItem {...objectEntryVersions} />
-			</List>
+			{objectEntryVersions.count > 0 && (
+				<List>
+					<AssetVersionsListItem {...objectEntryVersions} />
+				</List>
+			)}
 
 			{objectEntryVersions.count > MAX_LIST_SIZE && (
 				<div className="d-flex justify-content-center">

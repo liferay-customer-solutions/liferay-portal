@@ -4,6 +4,7 @@
  */
 
 import ClayIcon from '@clayui/icon';
+import {useSelector} from '@xstate/store/react';
 import classNames from 'classnames';
 import {useEffect, useMemo, useState} from 'react';
 import {
@@ -20,6 +21,7 @@ import {SolutionTypes} from '../../enums/Product';
 import useProductPurchaseCart from '../../hooks/useProductPurchaseCart';
 import i18n from '../../i18n';
 import {Liferay} from '../../liferay/liferay';
+import marketplaceOAuth2 from '../../services/oauth/Marketplace';
 import {scrollToMiddleOfPage} from '../../utils/browser';
 import ProductPurchasePrice from './ProductPurchasePrice';
 import {productTypeRoutes} from './ProductPurchaseRouter';
@@ -49,6 +51,7 @@ export type ProductPurchaseOutletContext = {
 		cart?: Cart | undefined,
 		cartOptions?: any
 	) => Promise<void>;
+	isSingleAccount: boolean;
 	marketplaceDeliveryProduct: MarketplaceDeliveryProduct;
 	product: DeliveryProduct;
 	productPurchaseCart: ReturnType<typeof useProductPurchaseCart>;
@@ -74,6 +77,11 @@ const ProductPurchaseOutlet: React.FC<ProductPurchaseOutletProps> = ({
 		// Currently only the App Purchase uses the cart hook
 
 		ProductPurchaseApp.getOrderTypeExternalReferenceCode(product)
+	);
+
+	const licenseType = useSelector(
+		productPurchaseStore,
+		(state) => state.context.licenseType
 	);
 
 	const marketplaceDeliveryProduct = useMemo(() => {
@@ -121,6 +129,10 @@ const ProductPurchaseOutlet: React.FC<ProductPurchaseOutletProps> = ({
 
 			const link = await _productPurchase.getNextStepsLink(order);
 
+			if (licenseType === 'PAID') {
+				await marketplaceOAuth2.taxCalculate(cart?.id);
+			}
+
 			if (link.startsWith('http')) {
 				return sendRedirect(link);
 			}
@@ -140,6 +152,7 @@ const ProductPurchaseOutlet: React.FC<ProductPurchaseOutletProps> = ({
 	};
 
 	const isTinyDisplay = metadata?.tinyStepsDisplay;
+	const isSingleAccount = accounts.length === 1;
 
 	const context = {
 		accounts,
@@ -148,6 +161,7 @@ const ProductPurchaseOutlet: React.FC<ProductPurchaseOutletProps> = ({
 			previousStep: () => stepNavigate(-1),
 		},
 		handlePurchase,
+		isSingleAccount,
 		marketplaceDeliveryProduct,
 		product,
 		productPurchaseCart,
@@ -217,7 +231,6 @@ const ProductPurchaseOutlet: React.FC<ProductPurchaseOutletProps> = ({
 				{isTinyDisplay && (
 					<ProductPurchase.CircleSteps
 						className="my-5 px-8"
-						onClickIndicator={(step) => navigate(step.key)}
 						steps={steps}
 					/>
 				)}

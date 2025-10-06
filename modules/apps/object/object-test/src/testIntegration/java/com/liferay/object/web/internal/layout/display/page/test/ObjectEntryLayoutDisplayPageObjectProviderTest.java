@@ -80,6 +80,23 @@ public class ObjectEntryLayoutDisplayPageObjectProviderTest {
 				objectDefinition.getObjectDefinitionId(),
 				objectField.getObjectFieldId());
 
+		ObjectEntry objectEntry = ObjectEntryTestUtil.addObjectEntry(
+			0, objectDefinition.getObjectDefinitionId(),
+			ServiceContextTestUtil.getServiceContext(), Collections.emptyMap());
+
+		LayoutDisplayPageProvider<?> layoutDisplayPageProvider =
+			layoutDisplayPageProviderRegistry.
+				getLayoutDisplayPageProviderByURLSeparator(
+					FriendlyURLResolverConstants.URL_SEPARATOR_OBJECT_ENTRY);
+
+		LayoutDisplayPageObjectProvider<?> layoutDisplayPageObjectProvider =
+			layoutDisplayPageProvider.getLayoutDisplayPageObjectProvider(
+				0, String.valueOf(objectEntry.getObjectEntryId()));
+
+		Assert.assertEquals(
+			objectDefinition.getLabel(LocaleUtil.getDefault()),
+			layoutDisplayPageObjectProvider.getTitle(LocaleUtil.getDefault()));
+
 		Map<String, String> localizedValues = HashMapBuilder.put(
 			"en_US", RandomTestUtil.randomString()
 		).put(
@@ -93,19 +110,14 @@ public class ObjectEntryLayoutDisplayPageObjectProviderTest {
 
 		serviceContext.setAssetTagNames(assetTagNames);
 
-		ObjectEntry objectEntry = ObjectEntryTestUtil.addObjectEntry(
+		objectEntry = ObjectEntryTestUtil.addObjectEntry(
 			0, objectDefinition.getObjectDefinitionId(), serviceContext,
 			HashMapBuilder.<String, Serializable>put(
 				objectField.getI18nObjectFieldName(),
 				(Serializable)localizedValues
 			).build());
 
-		LayoutDisplayPageProvider<?> layoutDisplayPageProvider =
-			layoutDisplayPageProviderRegistry.
-				getLayoutDisplayPageProviderByURLSeparator(
-					FriendlyURLResolverConstants.URL_SEPARATOR_OBJECT_ENTRY);
-
-		LayoutDisplayPageObjectProvider<?> layoutDisplayPageObjectProvider =
+		layoutDisplayPageObjectProvider =
 			layoutDisplayPageProvider.getLayoutDisplayPageObjectProvider(
 				0, String.valueOf(objectEntry.getObjectEntryId()));
 

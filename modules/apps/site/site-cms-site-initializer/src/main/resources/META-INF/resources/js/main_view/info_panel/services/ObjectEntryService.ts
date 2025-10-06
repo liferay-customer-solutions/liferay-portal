@@ -4,10 +4,12 @@
  */
 
 import ApiHelper, {RequestResult} from '../../../common/services/ApiHelper';
-import {IAssetObjectEntry} from '../../../structure_builder/types/AssetType';
+import {IAssetObjectEntry} from '../../../common/types/AssetType';
 
-export type Categorization = {
+export type EntryCategorizationDTO = {
 	keywords?: IAssetObjectEntry['keywords'];
+	lastAddedBrief?: any;
+	taxonomyCategoryBriefs?: IAssetObjectEntry['taxonomyCategoryBriefs'];
 	taxonomyCategoryIds?: IAssetObjectEntry['taxonomyCategoryIds'];
 };
 
@@ -18,7 +20,7 @@ async function getObjectEntry(
 }
 
 async function patchObjectEntry(
-	data: Categorization,
+	data: EntryCategorizationDTO,
 	url: string
 ): Promise<RequestResult<IAssetObjectEntry>> {
 	return await ApiHelper.patch(

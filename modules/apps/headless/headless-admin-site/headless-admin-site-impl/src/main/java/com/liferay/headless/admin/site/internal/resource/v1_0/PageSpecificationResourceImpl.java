@@ -9,7 +9,6 @@ import com.liferay.client.extension.type.manager.CETManager;
 import com.liferay.headless.admin.site.dto.v1_0.ContentPageSpecification;
 import com.liferay.headless.admin.site.dto.v1_0.DisplayPageTemplate;
 import com.liferay.headless.admin.site.dto.v1_0.MasterPage;
-import com.liferay.headless.admin.site.dto.v1_0.PageExperience;
 import com.liferay.headless.admin.site.dto.v1_0.PageSpecification;
 import com.liferay.headless.admin.site.dto.v1_0.PageTemplate;
 import com.liferay.headless.admin.site.dto.v1_0.SitePage;
@@ -18,6 +17,7 @@ import com.liferay.headless.admin.site.internal.resource.v1_0.util.GroupUtil;
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.LayoutUtil;
 import com.liferay.headless.admin.site.resource.v1_0.PageSpecificationResource;
 import com.liferay.headless.common.spi.service.context.ServiceContextBuilder;
+import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.layout.constants.LayoutTypeSettingsConstants;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateEntryTypeConstants;
 import com.liferay.layout.page.template.model.LayoutPageTemplateEntry;
@@ -313,8 +313,9 @@ public class PageSpecificationResourceImpl
 
 			return _pageSpecificationDTOConverter.toDTO(
 				LayoutUtil.updateLayout(
-					_cetManager, layout, layout.getNameMap(),
-					layout.getTitleMap(), layout.getDescriptionMap(),
+					_cetManager, _infoItemServiceRegistry, layout,
+					layout.getNameMap(), layout.getTitleMap(),
+					layout.getDescriptionMap(), layout.getKeywordsMap(),
 					layout.getRobotsMap(), layout.getFriendlyURLMap(),
 					pageSpecification, layout.getStatus(), serviceContext));
 		}
@@ -332,10 +333,12 @@ public class PageSpecificationResourceImpl
 
 		return _pageSpecificationDTOConverter.toDTO(
 			LayoutUtil.updateLayout(
-				_cetManager, layout, layout.getNameMap(), layout.getTitleMap(),
-				layout.getDescriptionMap(), layout.getRobotsMap(),
-				layout.getFriendlyURLMap(), pageSpecification,
-				WorkflowConstants.STATUS_DRAFT, serviceContext));
+				_cetManager, _infoItemServiceRegistry, layout,
+				layout.getNameMap(), layout.getTitleMap(),
+				layout.getDescriptionMap(), layout.getKeywordsMap(),
+				layout.getRobotsMap(), layout.getFriendlyURLMap(),
+				pageSpecification, WorkflowConstants.STATUS_DRAFT,
+				serviceContext));
 	}
 
 	@Override
@@ -411,43 +414,13 @@ public class PageSpecificationResourceImpl
 			pageSpecificationExternalReferenceCode, groupId);
 	}
 
-	private PageExperience _getPageExperience(
-		ContentPageSpecification contentPageSpecification,
-		String pageExperienceExternalReferenceCode) {
-
-		for (PageExperience pageExperience :
-				contentPageSpecification.getPageExperiences()) {
-
-			if (!Objects.equals(
-					pageExperience.getExternalReferenceCode(),
-					pageExperienceExternalReferenceCode)) {
-
-				continue;
-			}
-
-			return pageExperience;
-		}
-
-		throw new UnsupportedOperationException();
-	}
-
 	private void _preparePatch(
 		ContentPageSpecification contentPageSpecification,
 		ContentPageSpecification existingContentPageSpecification) {
 
-		if (contentPageSpecification.getPageExperiences() == null) {
-			return;
-		}
-
-		for (PageExperience pageExperience :
-				contentPageSpecification.getPageExperiences()) {
-
-			PageExperience existingPageExperience = _getPageExperience(
-				existingContentPageSpecification,
-				pageExperience.getExternalReferenceCode());
-
-			existingPageExperience.setPageElements(
-				pageExperience::getPageElements);
+		if (contentPageSpecification.getPageExperiences() != null) {
+			existingContentPageSpecification.setPageExperiences(
+				contentPageSpecification::getPageExperiences);
 		}
 	}
 
@@ -472,6 +445,9 @@ public class PageSpecificationResourceImpl
 
 	@Reference
 	private CETManager _cetManager;
+
+	@Reference
+	private InfoItemServiceRegistry _infoItemServiceRegistry;
 
 	@Reference
 	private LayoutLocalService _layoutLocalService;

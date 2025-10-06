@@ -24,6 +24,7 @@ import com.liferay.object.rest.manager.v1_0.ObjectEntryManager;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.object.service.ObjectEntryVersionLocalServiceUtil;
+import com.liferay.object.service.ObjectRelationshipLocalService;
 import com.liferay.object.web.internal.util.ObjectEntryUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
@@ -59,6 +60,7 @@ public class ObjectEntryLayoutDisplayPageProvider
 		ObjectDefinitionLocalService objectDefinitionLocalService,
 		ObjectEntryLocalService objectEntryLocalService,
 		ObjectEntryManager objectEntryManager,
+		ObjectRelationshipLocalService objectRelationshipLocalService,
 		UserLocalService userLocalService) {
 
 		_assetHelper = assetHelper;
@@ -67,6 +69,7 @@ public class ObjectEntryLayoutDisplayPageProvider
 		_objectDefinitionLocalService = objectDefinitionLocalService;
 		_objectEntryLocalService = objectEntryLocalService;
 		_objectEntryManager = objectEntryManager;
+		_objectRelationshipLocalService = objectRelationshipLocalService;
 		_userLocalService = userLocalService;
 	}
 
@@ -83,8 +86,38 @@ public class ObjectEntryLayoutDisplayPageProvider
 
 	@Override
 	public LayoutDisplayPageObjectProvider<ObjectEntry>
-		getLayoutDisplayPageObjectProvider(
-			InfoItemReference infoItemReference) {
+		getLayoutDisplayPageObjectProvider(long groupId, String urlTitle) {
+
+		if (FeatureFlagManagerUtil.isEnabled("LPD-21926")) {
+			ObjectEntry objectEntry = _objectEntryLocalService.fetchObjectEntry(
+				groupId, _objectDefinition, urlTitle);
+
+			if (objectEntry != null) {
+				return new ObjectEntryLayoutDisplayPageObjectProvider(
+					_assetHelper, _infoItemFriendlyURLProvider,
+					_objectDefinition, _objectDefinitionLocalService,
+					objectEntry, _objectEntryLocalService,
+					_objectRelationshipLocalService);
+			}
+		}
+
+		if (!_objectDefinition.isDefaultStorageType()) {
+			return getLayoutDisplayPageObjectProvider(
+				new InfoItemReference(
+					ObjectEntry.class.getName(),
+					new ERCInfoItemIdentifier(urlTitle)));
+		}
+
+		return getLayoutDisplayPageObjectProvider(
+			new InfoItemReference(
+				ObjectEntry.class.getName(),
+				new ClassPKInfoItemIdentifier(GetterUtil.getLong(urlTitle))));
+	}
+
+	@Override
+	protected LayoutDisplayPageObjectProvider<ObjectEntry>
+		doGetLayoutDisplayPageObjectProvider(
+			long groupId, InfoItemReference infoItemReference) {
 
 		InfoItemIdentifier infoItemIdentifier =
 			infoItemReference.getInfoItemIdentifier();
@@ -124,7 +157,8 @@ public class ObjectEntryLayoutDisplayPageProvider
 
 			return new ObjectEntryLayoutDisplayPageObjectProvider(
 				_assetHelper, _infoItemFriendlyURLProvider, objectDefinition,
-				objectEntry);
+				_objectDefinitionLocalService, objectEntry,
+				_objectEntryLocalService, _objectRelationshipLocalService);
 		}
 
 		ERCInfoItemIdentifier ercInfoItemIdentifier =
@@ -157,10 +191,10 @@ public class ObjectEntryLayoutDisplayPageProvider
 			if (objectEntry != null) {
 				return new ObjectEntryLayoutDisplayPageObjectProvider(
 					_assetHelper, _infoItemFriendlyURLProvider,
-					_objectDefinition,
+					_objectDefinition, _objectDefinitionLocalService,
 					ObjectEntryUtil.toObjectEntry(
-						_objectDefinition.getObjectDefinitionId(),
-						objectEntry));
+						_objectDefinition.getObjectDefinitionId(), objectEntry),
+					_objectEntryLocalService, _objectRelationshipLocalService);
 			}
 		}
 		catch (Exception exception) {
@@ -170,43 +204,6 @@ public class ObjectEntryLayoutDisplayPageProvider
 		}
 
 		return null;
-	}
-
-	@Override
-	public LayoutDisplayPageObjectProvider<ObjectEntry>
-		getLayoutDisplayPageObjectProvider(long groupId, String urlTitle) {
-
-		if (FeatureFlagManagerUtil.isEnabled("LPD-21926")) {
-			ObjectEntry objectEntry = _objectEntryLocalService.fetchObjectEntry(
-				groupId, _objectDefinition, urlTitle);
-
-			if (objectEntry != null) {
-				return new ObjectEntryLayoutDisplayPageObjectProvider(
-					_assetHelper, _infoItemFriendlyURLProvider,
-					_objectDefinition, objectEntry);
-			}
-		}
-
-		if (!_objectDefinition.isDefaultStorageType()) {
-			return getLayoutDisplayPageObjectProvider(
-				new InfoItemReference(
-					ObjectEntry.class.getName(),
-					new ERCInfoItemIdentifier(urlTitle)));
-		}
-
-		return getLayoutDisplayPageObjectProvider(
-			new InfoItemReference(
-				ObjectEntry.class.getName(),
-				new ClassPKInfoItemIdentifier(GetterUtil.getLong(urlTitle))));
-	}
-
-	@Override
-	public LayoutDisplayPageObjectProvider<ObjectEntry>
-		getLayoutDisplayPageObjectProvider(ObjectEntry objectEntry) {
-
-		return new ObjectEntryLayoutDisplayPageObjectProvider(
-			_assetHelper, _infoItemFriendlyURLProvider, _objectDefinition,
-			objectEntry);
 	}
 
 	private JSONObject _getContentJSONObject(
@@ -274,6 +271,8 @@ public class ObjectEntryLayoutDisplayPageProvider
 	private final ObjectDefinitionLocalService _objectDefinitionLocalService;
 	private final ObjectEntryLocalService _objectEntryLocalService;
 	private final ObjectEntryManager _objectEntryManager;
+	private final ObjectRelationshipLocalService
+		_objectRelationshipLocalService;
 	private final UserLocalService _userLocalService;
 
 }

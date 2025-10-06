@@ -105,7 +105,7 @@ export class ViewObjectEntriesPage {
 		this.schedulePublicationButton = page
 			.getByLabel('Schedule Publication')
 			.getByRole('button', {name: 'Schedule'});
-		this.schedulePublicationCloseButton = page.getByLabel('close');
+		this.schedulePublicationCloseButton = page.getByLabel('Close');
 		this.schedulePublicationOption = page.getByRole('menuitem', {
 			name: 'Schedule Publication',
 		});
@@ -154,7 +154,10 @@ export class ViewObjectEntriesPage {
 
 	async clickAddObjectEntry(objectName?: string) {
 		objectName
-			? await this.page.getByLabel('Add ' + objectName).click()
+			? await this.page
+					.getByLabel('Add ' + objectName)
+					.first()
+					.click()
 			: await this.addObjectEntryButton.click();
 
 		await this.editObjectEntryForm.waitFor({state: 'visible'});

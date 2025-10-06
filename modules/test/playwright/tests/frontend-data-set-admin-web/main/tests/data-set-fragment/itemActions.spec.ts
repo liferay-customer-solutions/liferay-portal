@@ -271,7 +271,7 @@ test.describe('Item Actions in Data Set fragment', () => {
 				modalItemActionTitle
 			);
 
-			await dialog.getByRole('button', {name: 'close'}).click();
+			await dialog.getByRole('button', {name: 'Close'}).click();
 
 			await expect(dialog).not.toBeInViewport();
 		});

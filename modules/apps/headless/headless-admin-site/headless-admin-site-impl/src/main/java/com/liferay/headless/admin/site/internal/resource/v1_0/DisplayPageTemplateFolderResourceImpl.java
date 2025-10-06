@@ -5,6 +5,7 @@
 
 package com.liferay.headless.admin.site.internal.resource.v1_0;
 
+import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.exportimport.vulcan.batch.engine.ExportImportVulcanBatchEngineTaskItemDelegate;
 import com.liferay.headless.admin.site.dto.v1_0.DisplayPageTemplateFolder;
 import com.liferay.headless.admin.site.internal.odata.entity.v1_0.DisplayPageTemplateFolderEntityModel;
@@ -42,6 +43,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	properties = "OSGI-INF/liferay/rest/v1_0/display-page-template-folder.properties",
+	property = "export.import.vulcan.batch.engine.task.item.delegate=true",
 	scope = ServiceScope.PROTOTYPE,
 	service = DisplayPageTemplateFolderResource.class
 )
@@ -68,7 +70,63 @@ public class DisplayPageTemplateFolderResourceImpl
 	}
 
 	@Override
-	public Page<DisplayPageTemplateFolder>
+	public EntityModel getEntityModel(MultivaluedMap multivaluedMap) {
+		return _entityModel;
+	}
+
+	@Override
+	public ExportImportDescriptor getExportImportDescriptor() {
+		return new ExportImportDescriptor() {
+
+			@Override
+			public String getItemClassName() {
+				return LayoutPageTemplateCollection.class.getName();
+			}
+
+			@Override
+			public String getLabel() {
+				return "display-page-template-folders";
+			}
+
+			@Override
+			public String getPortletId() {
+				return LayoutAdminPortletKeys.GROUP_PAGES;
+			}
+
+			@Override
+			public Scope getScope() {
+				return Scope.SITE;
+			}
+
+			@Override
+			public boolean isActive(PortletDataContext portletDataContext) {
+				return FeatureFlagManagerUtil.isEnabled("LPD-35443");
+			}
+
+		};
+	}
+
+	@Override
+	protected DisplayPageTemplateFolder doGetSiteDisplayPageTemplateFolder(
+			String siteExternalReferenceCode,
+			String displayPageTemplateFolderExternalReferenceCode)
+		throws Exception {
+
+		if (!FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
+			throw new UnsupportedOperationException();
+		}
+
+		return _toDisplayPageTemplateFolder(
+			_layoutPageTemplateCollectionService.
+				getLayoutPageTemplateCollection(
+					displayPageTemplateFolderExternalReferenceCode,
+					GroupUtil.getGroupId(
+						true, contextCompany.getCompanyId(),
+						siteExternalReferenceCode)));
+	}
+
+	@Override
+	protected Page<DisplayPageTemplateFolder>
 			doGetSiteDisplayPageTemplateFoldersPage(
 				String siteExternalReferenceCode, String search,
 				Aggregation aggregation, Filter filter, Pagination pagination,
@@ -105,52 +163,6 @@ public class DisplayPageTemplateFolderResourceImpl
 					fetchLayoutPageTemplateCollection(
 						GetterUtil.getLong(
 							document.get(Field.ENTRY_CLASS_PK)))));
-	}
-
-	@Override
-	public EntityModel getEntityModel(MultivaluedMap multivaluedMap) {
-		return _entityModel;
-	}
-
-	@Override
-	public ExportImportDescriptor getExportImportDescriptor() {
-		return new ExportImportDescriptor() {
-
-			@Override
-			public String getItemClassName() {
-				return LayoutPageTemplateCollection.class.getName();
-			}
-
-			@Override
-			public String getPortletId() {
-				return LayoutAdminPortletKeys.GROUP_PAGES;
-			}
-
-			@Override
-			public Scope getScope() {
-				return Scope.SITE;
-			}
-
-		};
-	}
-
-	@Override
-	protected DisplayPageTemplateFolder doGetSiteDisplayPageTemplateFolder(
-			String siteExternalReferenceCode,
-			String displayPageTemplateFolderExternalReferenceCode)
-		throws Exception {
-
-		if (!FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
-			throw new UnsupportedOperationException();
-		}
-
-		return _toDisplayPageTemplateFolder(
-			_layoutPageTemplateCollectionService.
-				getLayoutPageTemplateCollection(
-					displayPageTemplateFolderExternalReferenceCode,
-					GroupUtil.getGroupId(
-						true, contextCompany.getCompanyId(),
-						siteExternalReferenceCode)));
 	}
 
 	@Override

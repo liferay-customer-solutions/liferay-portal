@@ -67,15 +67,19 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 						</p>
 						<p className="d-flex justify-content-center m-0 next-step-page-text-bold">
 							Need help?&nbsp;{' '}
-							<a href="mailto:support@liferay.com">
-								support@liferay.com
+							<a href="mailto:marketplace-admin@liferay.com">
+								marketplace-admin@liferay.com
 							</a>
 						</p>
 					</span>
 				}
 				icon={
 					<span className="d-flex justify-content-center">
-						<img alt="payment pending icon" src={timesCircleIcon} />
+						<img
+							alt="payment pending icon"
+							draggable="false"
+							src={timesCircleIcon}
+						/>
 					</span>
 				}
 				title={
@@ -113,7 +117,11 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 				}
 				icon={
 					<span className="d-flex justify-content-center">
-						<img alt="check circle icon" src={checkCircleIcon} />
+						<img
+							alt="check circle icon"
+							draggable="false"
+							src={checkCircleIcon}
+						/>
 					</span>
 				}
 				title={
@@ -137,8 +145,8 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 						</p>
 						<p className="d-flex justify-content-center m-0 next-step-page-text-bold">
 							Need help?&nbsp;{' '}
-							<a href="mailto:support@liferay.com">
-								support@liferay.com
+							<a href="mailto:marketplace-admin@liferay.com">
+								marketplace-admin@liferay.com
 							</a>
 						</p>
 					</span>
@@ -147,6 +155,7 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 					<span className="d-flex justify-content-center">
 						<img
 							alt="payment pending icon"
+							draggable="false"
 							src={paymentPendingIcon}
 						/>
 					</span>

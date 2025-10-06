@@ -194,6 +194,7 @@ import com.liferay.portal.kernel.util.SubscriptionSender;
 import com.liferay.portal.kernel.util.TempFileEntryUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.UnicodePropertiesBuilder;
+import com.liferay.portal.kernel.util.UniqueUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.workflow.WorkflowHandler;
@@ -7581,7 +7582,7 @@ public class JournalArticleLocalServiceImpl
 			for (Map.Entry<Locale, String> entry : titleMap.entrySet()) {
 				Locale locale = entry.getKey();
 
-				String uniqueUrlTitle = _getUniqueUrlTitle(
+				String uniqueUrlTitle = _getUniqueCopyUrlTitle(
 					groupId, targetArticleId, entry.getValue());
 
 				titleMap.put(locale, uniqueUrlTitle);
@@ -8286,39 +8287,24 @@ public class JournalArticleLocalServiceImpl
 		return JournalArticleConstants.SMALL_IMAGE_SOURCE_USER_COMPUTER;
 	}
 
-	private String _getUniqueUrlTitle(
-		long groupId, String articleId, String urlTitle) {
+	private String _getUniqueCopyUrlTitle(
+			long groupId, String articleId, String urlTitle)
+		throws PortalException {
 
-		String copy = _language.get(LocaleUtil.getSiteDefault(), "copy");
-		String prefix = urlTitle;
-		String title = urlTitle;
+		return UniqueUtil.getCopyValue(
+			copyValue -> {
+				JournalArticle article = fetchArticleByUrlTitle(
+					groupId, copyValue);
 
-		for (int i = 1;; i++) {
-			JournalArticle article = fetchArticleByUrlTitle(groupId, urlTitle);
+				if ((article == null) ||
+					Objects.equals(articleId, article.getArticleId())) {
 
-			if ((article == null) ||
-				Objects.equals(articleId, article.getArticleId())) {
+					return true;
+				}
 
-				return title;
-			}
-
-			if (i == 1) {
-				title = StringBundler.concat(
-					prefix, StringPool.SPACE, StringPool.OPEN_PARENTHESIS, copy,
-					StringPool.CLOSE_PARENTHESIS);
-				urlTitle = StringBundler.concat(
-					prefix, StringPool.DASH, copy, StringPool.DASH);
-
-				continue;
-			}
-
-			title = StringBundler.concat(
-				prefix, StringPool.SPACE, StringPool.OPEN_PARENTHESIS, copy,
-				StringPool.SPACE, i - 1, StringPool.CLOSE_PARENTHESIS);
-			urlTitle = StringBundler.concat(
-				prefix, StringPool.DASH, copy, StringPool.DASH, i - 1,
-				StringPool.DASH);
-		}
+				return false;
+			},
+			urlTitle);
 	}
 
 	private Map<String, String> _getURLTitleMap(

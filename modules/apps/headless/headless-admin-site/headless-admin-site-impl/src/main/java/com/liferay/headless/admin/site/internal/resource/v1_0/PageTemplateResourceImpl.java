@@ -6,6 +6,7 @@
 package com.liferay.headless.admin.site.internal.resource.v1_0;
 
 import com.liferay.client.extension.type.manager.CETManager;
+import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.exportimport.vulcan.batch.engine.ExportImportVulcanBatchEngineTaskItemDelegate;
 import com.liferay.headless.admin.site.dto.v1_0.ContentPageSpecification;
 import com.liferay.headless.admin.site.dto.v1_0.ContentPageTemplate;
@@ -24,6 +25,7 @@ import com.liferay.headless.admin.site.internal.resource.v1_0.util.PageSpecifica
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.PageTemplateSetUtil;
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.ServiceContextUtil;
 import com.liferay.headless.admin.site.resource.v1_0.PageTemplateResource;
+import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.layout.admin.constants.LayoutAdminPortletKeys;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateCollectionTypeConstants;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateConstants;
@@ -78,6 +80,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	properties = "OSGI-INF/liferay/rest/v1_0/page-template.properties",
+	property = "export.import.vulcan.batch.engine.task.item.delegate=true",
 	scope = ServiceScope.PROTOTYPE, service = PageTemplateResource.class
 )
 public class PageTemplateResourceImpl
@@ -116,6 +119,11 @@ public class PageTemplateResourceImpl
 			}
 
 			@Override
+			public String getLabel() {
+				return "page-templates";
+			}
+
+			@Override
 			public List<String> getNestedFields() {
 				return List.of("friendlyUrlHistory", "pageSpecifications");
 			}
@@ -128,6 +136,11 @@ public class PageTemplateResourceImpl
 			@Override
 			public Scope getScope() {
 				return Scope.SITE;
+			}
+
+			@Override
+			public boolean isActive(PortletDataContext portletDataContext) {
+				return FeatureFlagManagerUtil.isEnabled("LPD-35443");
 			}
 
 		};
@@ -197,7 +210,7 @@ public class PageTemplateResourceImpl
 
 		return (ContentPageSpecification)_pageSpecificationDTOConverter.toDTO(
 			LayoutUtil.addDraftToLayout(
-				_cetManager, contentPageSpecification,
+				_cetManager, contentPageSpecification, _infoItemServiceRegistry,
 				_layoutLocalService.getLayout(
 					layoutPageTemplateEntry.getPlid()),
 				ServiceContextUtil.createServiceContext(
@@ -537,14 +550,9 @@ public class PageTemplateResourceImpl
 				throw new UnsupportedOperationException();
 			}
 
-			Layout prototypeLayout = LayoutUtil.getLayoutPrototypeLayout(
+			ServiceContextUtil.setLayoutSetPrototypeLayoutERC(
 				serviceContext.getScopeGroupId(), widgetPageSpecification,
 				serviceContext);
-
-			if (prototypeLayout != null) {
-				serviceContext.setAttribute(
-					"sourcePrototypeLayoutUuid", prototypeLayout.getUuid());
-			}
 		}
 
 		LayoutPrototype layoutPrototype =
@@ -579,7 +587,9 @@ public class PageTemplateResourceImpl
 			layoutPageTemplateEntry.getPlid());
 
 		LayoutUtil.updatePortletLayout(
-			_cetManager, layout, nameMap, layout.getFriendlyURLMap(),
+			_cetManager, layout, nameMap, layout.getTitleMap(),
+			layout.getDescriptionMap(), layout.getKeywordsMap(),
+			layout.getRobotsMap(), layout.getFriendlyURLMap(),
 			_getWidgetPageTemplateTypeSettingsUnicodeProperties(
 				layout, widgetPageTemplate.getPageTemplateSettings()),
 			serviceContext, widgetPageSpecification);
@@ -624,9 +634,10 @@ public class PageTemplateResourceImpl
 			LayoutPageTemplateEntryTypeConstants.BASIC);
 
 		Layout layout = LayoutUtil.addContentLayout(
-			_cetManager, groupId, contentPageTemplate.getPageSpecifications(),
-			LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, true, nameMap, nameMap,
-			nameMap, null, LayoutConstants.TYPE_CONTENT, null, true, true,
+			_cetManager, groupId, _infoItemServiceRegistry,
+			contentPageTemplate.getPageSpecifications(),
+			LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, true, nameMap, null, null,
+			null, null, LayoutConstants.TYPE_CONTENT, null, true, true,
 			Collections.emptyMap(), WorkflowConstants.STATUS_APPROVED,
 			serviceContext);
 
@@ -785,9 +796,10 @@ public class PageTemplateResourceImpl
 			layoutPageTemplateEntry.getGroupId(), contentPageTemplate);
 
 		layout = LayoutUtil.updateContentLayout(
-			_cetManager, layout, layout.getNameMap(), layout.getTitleMap(),
-			layout.getDescriptionMap(), layout.getRobotsMap(),
-			layout.getFriendlyURLMap(),
+			_cetManager, _infoItemServiceRegistry, layout, layout.getNameMap(),
+			layout.getTitleMap(), layout.getDescriptionMap(),
+			layout.getKeywordsMap(), layout.getRobotsMap(),
+			layout.getFriendlyURLMap(), layout.getTypeSettingsProperties(),
 			contentPageTemplate.getPageSpecifications(), serviceContext);
 
 		if (layout.isPublished() && !layoutPageTemplateEntry.isApproved()) {
@@ -850,7 +862,9 @@ public class PageTemplateResourceImpl
 			layoutPageTemplateEntry.getPlid());
 
 		LayoutUtil.updatePortletLayout(
-			_cetManager, layout, nameMap, layout.getFriendlyURLMap(),
+			_cetManager, layout, nameMap, layout.getTitleMap(),
+			layout.getDescriptionMap(), layout.getKeywordsMap(),
+			layout.getRobotsMap(), layout.getFriendlyURLMap(),
 			_getWidgetPageTemplateTypeSettingsUnicodeProperties(
 				layout, widgetPageTemplate.getPageTemplateSettings()),
 			serviceContext,
@@ -867,6 +881,9 @@ public class PageTemplateResourceImpl
 
 	@Reference
 	private CETManager _cetManager;
+
+	@Reference
+	private InfoItemServiceRegistry _infoItemServiceRegistry;
 
 	@Reference
 	private LayoutLocalService _layoutLocalService;

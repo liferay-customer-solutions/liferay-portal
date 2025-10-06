@@ -35,13 +35,17 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONUtil;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.TransactionConfig;
 import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.staging.StagingGroupHelper;
 
 import jakarta.portlet.PortletPreferences;
 
@@ -72,18 +76,24 @@ public class BatchEnginePortletDataHandler extends BasePortletDataHandler {
 		BatchEngineExportTaskExecutor batchEngineExportTaskExecutor,
 		BatchEngineExportTaskLocalService batchEngineExportTaskLocalService,
 		BatchEngineImportTaskExecutor batchEngineImportTaskExecutor,
-		BatchEngineImportTaskService batchEngineImportTaskService) {
+		BatchEngineImportTaskService batchEngineImportTaskService,
+		GroupLocalService groupLocalService,
+		StagingGroupHelper stagingGroupHelper) {
 
 		_batchEngineExportTaskExecutor = batchEngineExportTaskExecutor;
 		_batchEngineExportTaskLocalService = batchEngineExportTaskLocalService;
 		_batchEngineImportTaskExecutor = batchEngineImportTaskExecutor;
 		_batchEngineImportTaskService = batchEngineImportTaskService;
+		_groupLocalService = groupLocalService;
+		_stagingGroupHelper = stagingGroupHelper;
 	}
 
 	public void exportDeletionSystemEvents(
 		PortletDataContext portletDataContext) {
 
-		for (Registration registration : _registrations) {
+		for (Registration registration :
+				_getActiveRegistrations(portletDataContext)) {
+
 			ExportImportVulcanBatchEngineTaskItemDelegate.ExportImportDescriptor
 				exportImportDescriptor =
 					registration.getExportImportDescriptor();
@@ -223,7 +233,9 @@ public class BatchEnginePortletDataHandler extends BasePortletDataHandler {
 			return portletPreferences;
 		}
 
-		for (Registration registration : _registrations) {
+		for (Registration registration :
+				_getActiveRegistrations(portletDataContext)) {
+
 			InputStream inputStream =
 				portletDataContext.getZipEntryAsInputStream(
 					_normalize(
@@ -269,12 +281,15 @@ public class BatchEnginePortletDataHandler extends BasePortletDataHandler {
 					setPortletDataContextWithSafeCloseable(
 						portletDataContext)) {
 
-			for (Registration registration : _registrations) {
+			List<Registration> activeRegistrations = _getActiveRegistrations(
+				portletDataContext);
+
+			for (Registration registration : activeRegistrations) {
 				ExportImportVulcanBatchEngineTaskItemDelegate.
 					ExportImportDescriptor exportImportDescriptor =
 						registration.getExportImportDescriptor();
 
-				if ((_registrations.size() > 1) &&
+				if ((activeRegistrations.size() > 1) &&
 					!portletDataContext.getBooleanParameter(
 						getPortletId(),
 						exportImportDescriptor.getItemClassName())) {
@@ -285,6 +300,10 @@ public class BatchEnginePortletDataHandler extends BasePortletDataHandler {
 				BatchEngineExportTaskExecutor.Result result =
 					_executeExportTask(
 						Integer.MAX_VALUE, portletDataContext, registration);
+
+				if (result == null) {
+					continue;
+				}
 
 				portletDataContext.addZipEntry(
 					_normalize(
@@ -316,12 +335,15 @@ public class BatchEnginePortletDataHandler extends BasePortletDataHandler {
 			PortletPreferences portletPreferences, String data)
 		throws Exception {
 
-		for (Registration registration : _registrations) {
+		List<Registration> activeRegistrations = _getActiveRegistrations(
+			portletDataContext);
+
+		for (Registration registration : activeRegistrations) {
 			ExportImportVulcanBatchEngineTaskItemDelegate.ExportImportDescriptor
 				exportImportDescriptor =
 					registration.getExportImportDescriptor();
 
-			if ((_registrations.size() > 1) &&
+			if ((activeRegistrations.size() > 1) &&
 				!portletDataContext.getBooleanParameter(
 					getPortletId(),
 					exportImportDescriptor.getItemClassName())) {
@@ -352,7 +374,8 @@ public class BatchEnginePortletDataHandler extends BasePortletDataHandler {
 					BatchEngineTaskOperation.CREATE.name(),
 					BatchEnginePortletDataHandlerUtil.buildImportParameters(
 						registration.getExportImportDescriptor(),
-						portletDataContext),
+						portletDataContext,
+						_getSiteExternalReferenceCode(portletDataContext)),
 					registration.getTaskItemDelegateName());
 
 			try {
@@ -403,7 +426,9 @@ public class BatchEnginePortletDataHandler extends BasePortletDataHandler {
 		PortletDataContext portletDataContext,
 		PortletPreferences portletPreferences) {
 
-		for (Registration registration : _registrations) {
+		for (Registration registration :
+				_getActiveRegistrations(portletDataContext)) {
+
 			try (SafeCloseable safeCloseable =
 					PortletDataContextThreadLocal.
 						setPortletDataContextWithSafeCloseable(
@@ -411,6 +436,10 @@ public class BatchEnginePortletDataHandler extends BasePortletDataHandler {
 
 				BatchEngineExportTaskExecutor.Result result =
 					_executeExportTask(1, portletDataContext, registration);
+
+				if (result == null) {
+					continue;
+				}
 
 				BatchEngineExportTask batchEngineExportTask =
 					result.getBatchEngineExportTask();
@@ -458,7 +487,8 @@ public class BatchEnginePortletDataHandler extends BasePortletDataHandler {
 				Collections.emptyList(),
 				BatchEnginePortletDataHandlerUtil.buildExportParameters(
 					registration.getExportImportDescriptor(),
-					portletDataContext),
+					portletDataContext,
+					_getSiteExternalReferenceCode(portletDataContext)),
 				registration.getTaskItemDelegateName()),
 			new BatchEngineExportTaskExecutor.Settings() {
 
@@ -477,6 +507,20 @@ public class BatchEnginePortletDataHandler extends BasePortletDataHandler {
 					return false;
 				}
 
+			});
+	}
+
+	private List<Registration> _getActiveRegistrations(
+		PortletDataContext portletDataContext) {
+
+		return ListUtil.filter(
+			_registrations,
+			registration -> {
+				ExportImportVulcanBatchEngineTaskItemDelegate.
+					ExportImportDescriptor exportImportDescriptor =
+						registration.getExportImportDescriptor();
+
+				return exportImportDescriptor.isActive(portletDataContext);
 			});
 	}
 
@@ -509,6 +553,19 @@ public class BatchEnginePortletDataHandler extends BasePortletDataHandler {
 			getPortletId(), exportImportDescriptor.getItemClassName(),
 			exportImportDescriptor.getLabel(), true, false, null,
 			exportImportDescriptor.getItemClassName(), null);
+	}
+
+	private String _getSiteExternalReferenceCode(
+		PortletDataContext portletDataContext) {
+
+		Group group = _groupLocalService.fetchGroup(
+			portletDataContext.getScopeGroupId());
+
+		if ((group != null) && !_stagingGroupHelper.isCompanyGroup(group)) {
+			return group.getExternalReferenceCode();
+		}
+
+		return null;
 	}
 
 	private StagedModelType _getStagedModelType(Registration registration) {
@@ -559,7 +616,9 @@ public class BatchEnginePortletDataHandler extends BasePortletDataHandler {
 		_batchEngineExportTaskLocalService;
 	private final BatchEngineImportTaskExecutor _batchEngineImportTaskExecutor;
 	private final BatchEngineImportTaskService _batchEngineImportTaskService;
+	private final GroupLocalService _groupLocalService;
 	private final List<Registration> _registrations = new ArrayList<>();
+	private final StagingGroupHelper _stagingGroupHelper;
 
 	private interface Registration {
 

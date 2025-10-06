@@ -4419,6 +4419,19 @@
 	},
 	{
 		"classNames": [
+			"CommerceDiscountRuleType"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-48183",
+		"newImports": [
+			"com.liferay.portal.kernel.util.Validator"
+		],
+		"newMethods": [
+			"@Override\n\tpublic boolean validate(String typeSettings) {\n\t\treturn Validator.isNotNull(typeSettings);\n\t}"
+		]
+	},
+	{
+		"classNames": [
 			"PortletSharedSearchSettings"
 		],
 		"from": "getParameterValues71",
@@ -4876,6 +4889,14 @@
 	},
 	{
 		"classNames": [
+			"LayoutCopyHelper"
+		],
+		"from": "copyLayout",
+		"issueKey": "LPD-58415",
+		"to": "copyLayoutContent"
+	},
+	{
+		"classNames": [
 			"CompanyThreadLocal"
 		],
 		"from": "setWithSafeCloseable",
@@ -4892,14 +4913,6 @@
 	},
 	{
 		"classNames": [
-			"LayoutCopyHelper"
-		],
-		"from": "copyLayout",
-		"issueKey": "LPD-58415",
-		"to": "copyLayoutContent"
-	},
-	{
-		"classNames": [
 			"SitemapManager"
 		],
 		"from": "getSiteMapManager(long paramName, boolean paramName, ThemeDisplay paramName)",
@@ -4910,6 +4923,21 @@
 		"from": "PluginPackage.REPOSITORY_XML_FILENAME_EXTENSION",
 		"issueKey": "LPD-61573",
 		"to": "\"xml\""
+	},
+	{
+		"from": "PropsFiles.CAPTCHA",
+		"issueKey": "LPD-66321",
+		"to": "\"captcha\""
+	},
+	{
+		"from": "PropsFiles.CONTENT_TYPES",
+		"issueKey": "LPD-66321",
+		"to": "\"content-types\""
+	},
+	{
+		"from": "PropsFiles.PORTAL",
+		"issueKey": "LPD-66321",
+		"to": "\"portal\""
 	},
 	{
 		"classNames": [

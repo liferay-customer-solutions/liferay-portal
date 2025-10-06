@@ -6,6 +6,7 @@
 package com.liferay.jenkins.results.parser.testray;
 
 import com.liferay.jenkins.results.parser.BuildDatabase;
+import com.liferay.jenkins.results.parser.BuildReport;
 import com.liferay.jenkins.results.parser.ControllerBuildReport;
 import com.liferay.jenkins.results.parser.Dom4JUtil;
 import com.liferay.jenkins.results.parser.JenkinsMaster;
@@ -948,11 +949,43 @@ public class TestrayImporter {
 				testBaseDir = axisTestClassGroup.getTestBaseDir();
 			}
 
-			TopLevelBuildTestrayCaseResult topLevelBuildTestrayCaseResult =
-				TestrayFactory.newTopLevelBuildTestrayCaseResult(
-					getTestrayBuild(testBaseDir), _topLevelBuildReport);
+			TestrayBuild testrayBuild = getTestrayBuild(testBaseDir);
 
-			topLevelBuildTestrayCaseResult.recordTestrayCaseResult(job);
+			TopLevelStandaloneBuildTestrayCaseResult
+				topLevelStandaloneBuildTestrayCaseResult =
+					TestrayFactory.newTopLevelStandaloneBuildTestrayCaseResult(
+						testrayBuild, _topLevelBuildReport);
+
+			topLevelStandaloneBuildTestrayCaseResult.recordTestrayCaseResult(
+				job);
+
+			AppServerBundleStandaloneBuildTestrayCaseResult
+				portalAppServerBundleStandaloneBuildTestrayCaseResult =
+					new AppServerBundleStandaloneBuildTestrayCaseResult(
+						testrayBuild, _topLevelBuildReport, "portal");
+
+			BuildReport portalAppServerBundleBuildReport =
+				portalAppServerBundleStandaloneBuildTestrayCaseResult.
+					getBuildReport();
+
+			if (portalAppServerBundleBuildReport != null) {
+				portalAppServerBundleStandaloneBuildTestrayCaseResult.
+					recordTestrayCaseResult(job);
+			}
+
+			AppServerBundleStandaloneBuildTestrayCaseResult
+				analyticsCloudAppServerBundleStandaloneBuildTestrayCaseResult =
+					new AppServerBundleStandaloneBuildTestrayCaseResult(
+						testrayBuild, _topLevelBuildReport, "analytics.cloud");
+
+			BuildReport analyticsCloudAppServerBundleBuildReport =
+				analyticsCloudAppServerBundleStandaloneBuildTestrayCaseResult.
+					getBuildReport();
+
+			if (analyticsCloudAppServerBundleBuildReport != null) {
+				analyticsCloudAppServerBundleStandaloneBuildTestrayCaseResult.
+					recordTestrayCaseResult(job);
+			}
 
 			for (final AxisTestClassGroup axisTestClassGroup :
 					axisTestClassGroups) {
@@ -1387,6 +1420,8 @@ public class TestrayImporter {
 		_addPropertyElements(
 			rootElement.addElement("properties"), propertiesMap);
 
+		String[] warnings = null;
+
 		List<TestrayCaseResult> testrayCaseResults = new ArrayList<>();
 
 		if (axisTestClassGroup instanceof FunctionalAxisTestClassGroup ||
@@ -1488,7 +1523,9 @@ public class TestrayImporter {
 
 			_addPropertyElements(propertiesElement, testcasePropertiesMap);
 
-			String[] warnings = testrayCaseResult.getWarnings();
+			if (warnings == null) {
+				warnings = testrayCaseResult.getWarnings();
+			}
 
 			if ((warnings != null) && (warnings.length > 0)) {
 				Element warningsPropertyElement = propertiesElement.addElement(

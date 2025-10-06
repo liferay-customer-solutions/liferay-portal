@@ -31,10 +31,14 @@ import java.util.Set;
  */
 public class UserBagFactoryUtil {
 
-	public static UserBag create(long userId) throws PortalException {
+	public static UserBag create(User user) throws PortalException {
+		long userId = user.getUserId();
+
 		UserBag userBag = PermissionCacheUtil.getUserBag(userId);
 
-		if (userBag != null) {
+		if ((userBag != null) &&
+			(user.getMvccVersion() == userBag.getUserMVCCVersion())) {
+
 			return userBag;
 		}
 
@@ -49,8 +53,6 @@ public class UserBagFactoryUtil {
 		}
 
 		allGroupIds.addAll(userOrgGroupIds);
-
-		User user = UserLocalServiceUtil.getUser(userId);
 
 		List<UserGroup> userUserGroups = user.getUserGroups();
 
@@ -96,16 +98,18 @@ public class UserBagFactoryUtil {
 				userId);
 
 			userBag = new UserBagImpl(
-				userId, userGroupIds, userOrgs, userOrgGroupIds, userUserGroups,
-				userUserGroupGroupIds, userRoleIds);
+				userId, user.getMvccVersion(), userGroupIds, userOrgs,
+				userOrgGroupIds, userUserGroups, userUserGroupGroupIds,
+				userRoleIds);
 		}
 		else {
 			List<Role> userRoles = RoleLocalServiceUtil.getUserRelatedRoles(
 				userId, ArrayUtil.toLongArray(allGroupIds));
 
 			userBag = new UserBagImpl(
-				userId, userGroupIds, userOrgs, userOrgGroupIds, userUserGroups,
-				userUserGroupGroupIds, userRoles);
+				userId, user.getMvccVersion(), userGroupIds, userOrgs,
+				userOrgGroupIds, userUserGroups, userUserGroupGroupIds,
+				userRoles);
 		}
 
 		PermissionCacheUtil.putUserBag(userId, userBag);

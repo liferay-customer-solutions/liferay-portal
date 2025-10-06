@@ -228,6 +228,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
@@ -5798,6 +5799,39 @@ public class ObjectEntryResourceTest {
 	}
 
 	@Test
+	public void testGetObjectEntriesPageActions() throws Exception {
+		JSONObject jsonObject1 = HTTPTestUtil.invokeToJSONObject(
+			null, _objectDefinition4.getRESTContextPath(), Http.Method.GET);
+
+		JSONObject actionsJSONObject1 = jsonObject1.getJSONObject("actions");
+
+		Assert.assertFalse(actionsJSONObject1.isNull("create"));
+		Assert.assertFalse(actionsJSONObject1.isNull("createBatch"));
+		Assert.assertTrue(actionsJSONObject1.isNull("deleteBatch"));
+		Assert.assertTrue(actionsJSONObject1.isNull("get"));
+		Assert.assertTrue(actionsJSONObject1.isNull("updateBatch"));
+
+		HTTPTestUtil.customize(
+		).withGuest(
+		).apply(
+			() -> {
+				JSONObject jsonObject2 = HTTPTestUtil.invokeToJSONObject(
+					null, _objectDefinition4.getRESTContextPath(),
+					Http.Method.GET);
+
+				JSONObject actionsJSONObject2 = jsonObject2.getJSONObject(
+					"actions");
+
+				Assert.assertTrue(actionsJSONObject2.isNull("create"));
+				Assert.assertTrue(actionsJSONObject2.isNull("createBatch"));
+				Assert.assertTrue(actionsJSONObject2.isNull("deleteBatch"));
+				Assert.assertTrue(actionsJSONObject2.isNull("get"));
+				Assert.assertTrue(actionsJSONObject2.isNull("updateBatch"));
+			}
+		);
+	}
+
+	@Test
 	public void testGetObjectEntriesPageWithLocalizedObjectField()
 		throws Exception {
 
@@ -8794,23 +8828,31 @@ public class ObjectEntryResourceTest {
 	}
 
 	@Test
+	@TestInfo("LPD-64453")
 	public void testPostCustomObjectEntryWithAttachmentObjectFieldInDifferentCompany()
 		throws Exception {
-
-		com.liferay.object.rest.dto.v1_0.FileEntry fileEntry = _toFileEntry(
-			Base64::encode, RandomTestUtil.randomString(),
-			RandomTestUtil.randomString() + ".txt", null, null,
-			ContentTypes.TEXT_PLAIN);
 
 		JSONObject objectEntryJSONObject = HTTPTestUtil.invokeToJSONObject(
 			JSONUtil.put(
 				_OBJECT_FIELD_NAME_ATTACHMENT_DOCS_AND_MEDIA_SOURCE,
-				JSONFactoryUtil.createJSONObject(fileEntry.toString())
+				JSONFactoryUtil.createJSONObject(
+					String.valueOf(
+						_toFileEntry(
+							Base64::encode, RandomTestUtil.randomString(),
+							RandomTestUtil.randomString() + ".txt", null, null,
+							ContentTypes.TEXT_PLAIN)))
 			).toString(),
 			StringBundler.concat(
 				_objectDefinition1.getRESTContextPath(), "?nestedFields=",
 				_OBJECT_FIELD_NAME_ATTACHMENT_DOCS_AND_MEDIA_SOURCE, ".folder"),
 			Http.Method.POST);
+
+		com.liferay.object.rest.dto.v1_0.FileEntry fileEntry =
+			com.liferay.object.rest.dto.v1_0.FileEntry.toDTO(
+				JSONUtil.getValueAsString(
+					objectEntryJSONObject,
+					"JSONObject/" +
+						_OBJECT_FIELD_NAME_ATTACHMENT_DOCS_AND_MEDIA_SOURCE));
 
 		JSONObject portalInstanceJSONObject = _addPortalInstanceJSONObject();
 
@@ -8927,14 +8969,54 @@ public class ObjectEntryResourceTest {
 					JSONObject jsonObject = HTTPTestUtil.invokeToJSONObject(
 						JSONUtil.put(
 							_OBJECT_FIELD_NAME_ATTACHMENT_DOCS_AND_MEDIA_SOURCE,
-							objectEntryJSONObject.getJSONObject(
-								_OBJECT_FIELD_NAME_ATTACHMENT_DOCS_AND_MEDIA_SOURCE)
+							JSONFactoryUtil.createJSONObject(
+								fileEntry.toString())
 						).toString(),
 						objectDefinition.getRESTContextPath(),
 						Http.Method.POST);
 
 					Assert.assertEquals(
 						"NOT_FOUND", jsonObject.getString("status"));
+				}
+			);
+
+			HTTPTestUtil.customize(
+			).withBaseURL(
+				"http://www.able.com:8080"
+			).withCredentials(
+				"test@able.com", PropsValues.DEFAULT_ADMIN_PASSWORD
+			).apply(
+				() -> {
+					JSONObject jsonObject = HTTPTestUtil.invokeToJSONObject(
+						JSONUtil.put(
+							_OBJECT_FIELD_NAME_ATTACHMENT_DOCS_AND_MEDIA_SOURCE,
+							JSONUtil.put("id", RandomTestUtil.randomLong())
+						).toString(),
+						objectDefinition.getRESTContextPath(),
+						Http.Method.POST);
+
+					Assert.assertEquals(
+						"BAD_REQUEST", jsonObject.getString("status"));
+				}
+			);
+
+			HTTPTestUtil.customize(
+			).withBaseURL(
+				"http://www.able.com:8080"
+			).withCredentials(
+				"test@able.com", PropsValues.DEFAULT_ADMIN_PASSWORD
+			).apply(
+				() -> {
+					JSONObject jsonObject = HTTPTestUtil.invokeToJSONObject(
+						JSONUtil.put(
+							_OBJECT_FIELD_NAME_ATTACHMENT_DOCS_AND_MEDIA_SOURCE,
+							JSONUtil.put("id", fileEntry.getId())
+						).toString(),
+						objectDefinition.getRESTContextPath(),
+						Http.Method.POST);
+
+					Assert.assertEquals(
+						"BAD_REQUEST", jsonObject.getString("status"));
 				}
 			);
 		}
@@ -9351,6 +9433,76 @@ public class ObjectEntryResourceTest {
 			_testPostCustomObjectEntryWithInvalidNestedCustomObjectEntriesInOneToManyRelationship(
 				_objectDefinition1.getRESTContextPath(), _objectRelationship1);
 		}
+	}
+
+	@FeatureFlag("LPD-65423")
+	@Test
+	public void testPostCustomObjectEntryWithLargeAttachmentObjectField()
+		throws Exception {
+
+		String attachmentFieldName = "x" + RandomTestUtil.randomString();
+
+		ObjectField objectField = ObjectFieldUtil.createObjectField(
+			ObjectFieldConstants.BUSINESS_TYPE_ATTACHMENT,
+			ObjectFieldConstants.DB_TYPE_LONG, true, false, null,
+			attachmentFieldName, attachmentFieldName,
+			Arrays.asList(
+				new ObjectFieldSettingBuilder(
+				).name(
+					ObjectFieldSettingConstants.NAME_ACCEPTED_FILE_EXTENSIONS
+				).value(
+					"txt"
+				).build(),
+				new ObjectFieldSettingBuilder(
+				).name(
+					ObjectFieldSettingConstants.NAME_FILE_SOURCE
+				).value(
+					ObjectFieldSettingConstants.VALUE_USER_COMPUTER
+				).build(),
+				new ObjectFieldSettingBuilder(
+				).name(
+					ObjectFieldSettingConstants.NAME_MAX_FILE_SIZE
+				).value(
+					String.valueOf(100)
+				).build()),
+			false);
+
+		objectField.setObjectDefinitionId(
+			_objectDefinition1.getObjectDefinitionId());
+
+		ObjectFieldTestUtil.addCustomObjectField(
+			TestPropsValues.getUserId(), objectField);
+
+		byte[] data = new byte[50000000];
+
+		Random random = new Random();
+
+		random.nextBytes(data);
+
+		JSONObject jsonObject = HTTPTestUtil.invokeToJSONObject(
+			JSONUtil.put(
+				attachmentFieldName,
+				JSONUtil.put(
+					"fileBase64",
+					java.util.Base64.getEncoder(
+					).encodeToString(
+						data
+					)
+				).put(
+					"name", StringUtil.randomString() + ".txt"
+				)
+			).toString(),
+			_objectDefinition1.getRESTContextPath(), Http.Method.POST);
+
+		_assertAttachmentJSONObject(
+			_dlFileEntryLocalService.getDLFileEntry(
+				_testDLFileEntryModelListener.getLastFileEntryId()),
+			null, jsonObject.getJSONObject(attachmentFieldName),
+			JSONUtil.put(
+				"externalReferenceCode", "L_GLOBAL"
+			).put(
+				"type", Scope.Type.SITE.getValue()
+			));
 	}
 
 	@Test
@@ -14790,7 +14942,9 @@ public class ObjectEntryResourceTest {
 			Assert.assertNotNull(jsonObject.get("externalReferenceCode"));
 		}
 
-		Assert.assertEquals(fileBase64, jsonObject.get("fileBase64"));
+		if (fileBase64 != null) {
+			Assert.assertEquals(fileBase64, jsonObject.get("fileBase64"));
+		}
 
 		if (scopeJSONObject == null) {
 			Assert.assertFalse(jsonObject.has("scope"));

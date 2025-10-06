@@ -219,7 +219,10 @@ test(
 
 			await permissionsModal.getByRole('button', {name: 'Save'}).click();
 
-			await page.getByLabel('close', {exact: true}).click();
+			await page
+				.locator('.modal')
+				.getByLabel('Close', {exact: true})
+				.click();
 
 			const layout = await apiHelpers.jsonWebServicesLayout.addLayout({
 				groupId: site.id,

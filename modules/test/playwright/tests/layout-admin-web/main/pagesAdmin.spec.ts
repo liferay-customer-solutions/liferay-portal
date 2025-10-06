@@ -755,7 +755,7 @@ test('Changes the permissions of a group of pages', async ({
 
 	await expect(permission).toHaveValue('indeterminate');
 
-	await page.getByLabel('close', {exact: true}).click();
+	await page.getByLabel('Close', {exact: true}).click();
 
 	// Change the Guest-View permission for both pages
 

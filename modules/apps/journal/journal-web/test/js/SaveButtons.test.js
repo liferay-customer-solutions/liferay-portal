@@ -141,7 +141,7 @@ describe('SaveButtons', () => {
 			)
 		).toBeInTheDocument();
 
-		userEvent.click(screen.getByLabelText('close'));
+		userEvent.click(screen.getByLabelText('Close'));
 
 		userEvent.click(
 			screen.getByText('publish-with-permissions', {
@@ -155,7 +155,7 @@ describe('SaveButtons', () => {
 			)
 		).toBeInTheDocument();
 
-		userEvent.click(screen.getByLabelText('close'));
+		userEvent.click(screen.getByLabelText('Close'));
 
 		await waitFor(() => {
 			expect(

@@ -353,7 +353,7 @@ const EditCategoryPage = ({
 
 	return (
 		<div className="categorization-section">
-			<div className="d-flex edit-vocabulary flex-column">
+			<div className="edit-page">
 				<CategorizationManagementToolbar
 					backURL={backURL}
 					handleSave={handleSave}

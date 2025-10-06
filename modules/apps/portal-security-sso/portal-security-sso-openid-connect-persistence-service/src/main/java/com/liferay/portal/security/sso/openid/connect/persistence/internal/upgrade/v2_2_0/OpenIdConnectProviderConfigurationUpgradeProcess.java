@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.sql.PreparedStatement;
@@ -71,24 +72,36 @@ public class OpenIdConnectProviderConfigurationUpgradeProcess
 						new UnsyncByteArrayInputStream(
 							dictionaryString.getBytes(StringPool.UTF8)));
 
-				dictionary.put(
+				dictionary = HashMapDictionaryBuilder.putAll(
+					dictionary
+				).put(
 					"authorizationEndpoint",
 					GetterUtil.getString(
-						dictionary.remove("authorizationEndPoint")));
-				dictionary.put(
+						dictionary.get("authorizationEndPoint"))
+				).put(
 					"discoveryEndpoint",
-					GetterUtil.getString(
-						dictionary.remove("discoveryEndPoint")));
-				dictionary.put(
+					GetterUtil.getString(dictionary.get("discoveryEndPoint"))
+				).put(
 					"discoveryEndpointCacheInMillis",
 					GetterUtil.getLong(
-						dictionary.remove("discoveryEndPointCacheInMillis")));
-				dictionary.put(
+						dictionary.get("discoveryEndPointCacheInMillis"))
+				).put(
 					"tokenEndpoint",
-					GetterUtil.getString(dictionary.remove("tokenEndPoint")));
-				dictionary.put(
+					GetterUtil.getString(dictionary.get("tokenEndPoint"))
+				).put(
 					"userInfoEndpoint",
-					GetterUtil.getString(dictionary.get("userInfoEndPoint")));
+					GetterUtil.getString(dictionary.get("userInfoEndPoint"))
+				).remove(
+					"authorizationEndPoint"
+				).remove(
+					"discoveryEndPoint"
+				).remove(
+					"discoveryEndPointCacheInMillis"
+				).remove(
+					"tokenEndPoint"
+				).remove(
+					"userInfoEndPoint"
+				).build();
 
 				UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
 					new UnsyncByteArrayOutputStream();

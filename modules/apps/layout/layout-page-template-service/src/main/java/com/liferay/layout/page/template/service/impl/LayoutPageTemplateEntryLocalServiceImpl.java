@@ -33,7 +33,6 @@ import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.LockedLayoutException;
 import com.liferay.portal.kernel.exception.NoSuchClassNameException;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.ColorScheme;
@@ -75,6 +74,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
+import com.liferay.portal.kernel.util.UniqueUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.staging.StagingGroupHelper;
@@ -295,10 +295,20 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 			layoutPageTemplateEntryPersistence.findByPrimaryKey(
 				sourceLayoutPageTemplateEntryId);
 
-		String name = _getUniqueCopyName(
-			groupId, layoutPageTemplateCollectionId,
-			sourceLayoutPageTemplateEntry.getName(),
-			sourceLayoutPageTemplateEntry.getType());
+		String name = UniqueUtil.getCopyValue(
+			copyValue -> {
+				LayoutPageTemplateEntry layoutPageTemplateEntry =
+					layoutPageTemplateEntryPersistence.fetchByG_L_N_T(
+						groupId, layoutPageTemplateCollectionId, copyValue,
+						sourceLayoutPageTemplateEntry.getType());
+
+				if (layoutPageTemplateEntry == null) {
+					return true;
+				}
+
+				return false;
+			},
+			sourceLayoutPageTemplateEntry.getName());
 
 		long masterLayoutPlid = 0;
 
@@ -1101,35 +1111,6 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 		return colorSchemeId;
 	}
 
-	private String _getUniqueCopyName(
-		long groupId, long layoutPageTemplateCollectionId, String sourceName,
-		int type) {
-
-		String copy = _language.get(LocaleUtil.getSiteDefault(), "copy");
-
-		String name = sourceName;
-
-		for (int i = 0;; i++) {
-			LayoutPageTemplateEntry layoutPageTemplateEntry =
-				layoutPageTemplateEntryPersistence.fetchByG_L_N_T(
-					groupId, layoutPageTemplateCollectionId, name, type);
-
-			if (layoutPageTemplateEntry == null) {
-				break;
-			}
-
-			if (i == 0) {
-				name = StringUtil.appendParentheticalSuffix(sourceName, copy);
-			}
-			else {
-				name = StringUtil.appendParentheticalSuffix(
-					sourceName, copy + StringPool.SPACE + i);
-			}
-		}
-
-		return name;
-	}
-
 	private void _validate(
 			long groupId, long layoutPageTemplateCollectionId, int type)
 		throws PortalException {
@@ -1360,9 +1341,6 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 
 	@Reference
 	private InfoItemServiceRegistry _infoItemServiceRegistry;
-
-	@Reference
-	private Language _language;
 
 	@Reference
 	private LayoutLocalService _layoutLocalService;

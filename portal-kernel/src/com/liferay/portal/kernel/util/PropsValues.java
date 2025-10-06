@@ -326,6 +326,10 @@ public class PropsValues {
 	public static final boolean CLUSTER_LINK_ENABLED = GetterUtil.getBoolean(
 		PropsUtil.get(PropsKeys.CLUSTER_LINK_ENABLED));
 
+	public static final boolean CMS_BROKEN_LINKS_CHECKER_ENABLED =
+		GetterUtil.getBoolean(
+			PropsUtil.get(PropsKeys.CMS_BROKEN_LINKS_CHECKER_ENABLED));
+
 	public static final String[] COMBO_ALLOWED_FILE_EXTENSIONS =
 		PropsUtil.getArray(PropsKeys.COMBO_ALLOWED_FILE_EXTENSIONS);
 
@@ -1244,14 +1248,8 @@ public class PropsValues {
 	public static final String[] LOGOUT_EVENTS_PRE = PropsUtil.getArray(
 		PropsKeys.LOGOUT_EVENTS_PRE);
 
-	public static final String MAIL_AUDIT_TRAIL = PropsUtil.get(
-		PropsKeys.MAIL_AUDIT_TRAIL);
-
 	public static final boolean MAIL_MX_UPDATE = GetterUtil.getBoolean(
 		PropsUtil.get(PropsKeys.MAIL_MX_UPDATE));
-
-	public static final String[] MAIL_SEND_BLACKLIST = PropsUtil.getArray(
-		PropsKeys.MAIL_SEND_BLACKLIST);
 
 	public static final String MARKETPLACE_CLIENT_ID = PropsUtil.get(
 		PropsKeys.MARKETPLACE_CLIENT_ID);
@@ -1695,9 +1693,6 @@ public class PropsValues {
 		GetterUtil.getBoolean(
 			PropsUtil.get(PropsKeys.PERMISSIONS_CHECK_GUEST_ENABLED));
 
-	public static final String PERMISSIONS_CHECKER = PropsUtil.get(
-		PropsKeys.PERMISSIONS_CHECKER);
-
 	public static boolean PERMISSIONS_CUSTOM_ATTRIBUTE_READ_CHECK_BY_DEFAULT =
 		GetterUtil.getBoolean(
 			PropsUtil.get(
@@ -1729,9 +1724,6 @@ public class PropsValues {
 
 	public static String PHONE_NUMBER_FORMAT_USA_REGEXP = GetterUtil.getString(
 		PropsUtil.get(PropsKeys.PHONE_NUMBER_FORMAT_USA_REGEXP));
-
-	public static final String POP_SERVER_SUBDOMAIN = PropsUtil.get(
-		PropsKeys.POP_SERVER_SUBDOMAIN);
 
 	public static final boolean PORTAL_IMPERSONATION_ENABLE =
 		GetterUtil.getBoolean(

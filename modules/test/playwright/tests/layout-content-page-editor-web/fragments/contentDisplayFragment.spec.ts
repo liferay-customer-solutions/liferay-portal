@@ -218,7 +218,7 @@ test(
 
 		await page
 			.getByRole('dialog')
-			.getByLabel('close', {exact: true})
+			.getByLabel('Close', {exact: true})
 			.click();
 
 		// Select specific document and media file
@@ -354,7 +354,7 @@ test(
 
 		await page
 			.getByRole('dialog')
-			.getByLabel('close', {exact: true})
+			.getByLabel('Close', {exact: true})
 			.click();
 
 		// Select animal

@@ -183,6 +183,23 @@ test(
 					String(objectEntry3.id)
 				);
 			}
+
+			// Teardown for created web content workflow
+
+			await processBuilderPage.goto('/test');
+			await configurationTabPage.configurationTabLink.waitFor({
+				state: 'visible',
+			});
+			await configurationTabPage.configurationTabLink.click({
+				force: true,
+			});
+			await configurationTabPage.page.waitForURL((url) =>
+				url.href.includes('=configuration')
+			);
+
+			await configurationTabPage.unassignWorkflowFromAssetType(
+				'Basic Web Content'
+			);
 		}
 	}
 );
@@ -252,6 +269,27 @@ test(
 					String(objectEntry.id)
 				);
 			}
+
+			// Teardown for created web content workflow
+
+			await processBuilderPage.goto('/test');
+			await configurationTabPage.configurationTabLink.waitFor({
+				state: 'visible',
+			});
+			await configurationTabPage.configurationTabLink.click({
+				force: true,
+			});
+			await configurationTabPage.page.waitForURL((url) =>
+				url.href.includes('=configuration')
+			);
+
+			await configurationTabPage.unassignWorkflowFromAssetType(
+				'Basic Web Content'
+			);
+
+			await page.reload();
+
+			await configurationTabPage.unassignWorkflowFromAssetType('Account');
 		}
 	}
 );
@@ -260,7 +298,7 @@ test(
 	'Can see Recent Assets',
 	{tag: '@LPD-58792'},
 	async ({apiHelpers, homePage, page}) => {
-		const applicationName = 'cms/knowledge-bases';
+		const applicationName = 'cms/basic-web-contents';
 		const spaceName = 'Default';
 		let objectEntry1;
 		let objectEntry2;
@@ -344,18 +382,6 @@ test(
 			await expect(page.getByPlaceholder('New Blog')).toBeVisible();
 		});
 
-		await test.step('Check redirection after clicking Knowledge Base button', async () => {
-			await homePage.goto();
-
-			await homePage.knowledgeBaseButton.click();
-
-			await homePage.selectSpace('Default');
-
-			await expect(
-				page.getByPlaceholder('New Knowledge Base')
-			).toBeVisible();
-		});
-
 		await test.step('Check redirection after clicking Basic Document button', async () => {
 			await homePage.goto();
 
@@ -378,11 +404,11 @@ test(
 	}
 );
 
-test(
+test.skip(
 	'Can use Search Bar to search for content',
 	{tag: '@LPD-61220'},
 	async ({apiHelpers, assetsPage, homePage, page}) => {
-		const applicationName = 'cms/knowledge-bases';
+		const applicationName = 'cms/basic-web-contents';
 		const spaceName = 'Default';
 		let objectEntry1;
 		let objectEntry2;

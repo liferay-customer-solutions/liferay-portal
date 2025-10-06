@@ -1036,6 +1036,12 @@ public class WebSsoProfileImpl extends BaseProfile implements WebSsoProfile {
 			httpServletRequest, httpServletResponse,
 			SamlWebKeys.SAML_SSO_SESSION_ID,
 			samlSsoRequestContext.getSamlSsoSessionId());
+
+		HttpSession httpSession = httpServletRequest.getSession();
+
+		httpSession.setAttribute(
+			SamlWebKeys.SAML_SSO_SESSION_ID,
+			samlSsoRequestContext.getSamlSsoSessionId());
 	}
 
 	private Decrypter _createDecrypter() {
@@ -2057,9 +2063,12 @@ public class WebSsoProfileImpl extends BaseProfile implements WebSsoProfile {
 			messageContext.getSubcontext(SAMLPeerEntityContext.class);
 
 		SAMLEndpointContext samlPeerEndpointContext =
-			samlPeerEntityContext.getSubcontext(SAMLEndpointContext.class);
+			samlPeerEntityContext.getSubcontext(
+				SAMLEndpointContext.class, true);
 
 		samlPeerEndpointContext.setEndpoint(assertionConsumerService);
+
+		samlPeerEntityContext.addSubcontext(samlPeerEndpointContext);
 
 		Credential credential = getSigningCredential();
 
@@ -2068,6 +2077,8 @@ public class WebSsoProfileImpl extends BaseProfile implements WebSsoProfile {
 
 		MessageContext<Response> outboundMessageContext =
 			inOutOperationContext.getOutboundMessageContext();
+
+		outboundMessageContext.addSubcontext(samlPeerEntityContext);
 
 		SecurityParametersContext securityParametersContext =
 			outboundMessageContext.getSubcontext(
@@ -2083,6 +2094,7 @@ public class WebSsoProfileImpl extends BaseProfile implements WebSsoProfile {
 		Response response = OpenSamlUtil.buildResponse();
 
 		response.setDestination(assertionConsumerService.getLocation());
+		response.setID(generateIdentifier(20));
 
 		MessageContext<?> inboundMessageContext =
 			inOutOperationContext.getInboundMessageContext();
@@ -2102,7 +2114,10 @@ public class WebSsoProfileImpl extends BaseProfile implements WebSsoProfile {
 		response.setIssuer(
 			OpenSamlUtil.buildIssuer(samlSelfEntityContext.getEntityId()));
 
-		StatusCode statusCode = OpenSamlUtil.buildStatusCode(statusURI);
+		StatusCode statusCode = OpenSamlUtil.buildStatusCode(
+			StatusCode.RESPONDER);
+
+		statusCode.setStatusCode(OpenSamlUtil.buildStatusCode(statusURI));
 
 		response.setStatus(OpenSamlUtil.buildStatus(statusCode));
 

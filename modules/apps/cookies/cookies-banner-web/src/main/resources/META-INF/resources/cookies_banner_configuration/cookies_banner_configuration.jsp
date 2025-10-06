@@ -125,11 +125,22 @@ CookiesBannerConfigurationDisplayContext cookiesBannerConfigurationDisplayContex
 			noGutters="true"
 			verticalAlign="center"
 		>
+			<c:if test="<%= cookiesBannerConfigurationDisplayContext.isIncludeDeclineAllButton() %>">
+				<clay:content-col>
+					<clay:button
+						displayType="secondary"
+						id='<%= liferayPortletResponse.getNamespace() + "useNecessaryCookiesOnlyButton" %>'
+						label='<%= LanguageUtil.get(request, "use-necessary-cookies-only") %>'
+						small="<%= true %>"
+					/>
+				</clay:content-col>
+			</c:if>
+
 			<clay:content-col>
 				<clay:button
 					displayType="secondary"
-					id='<%= liferayPortletResponse.getNamespace() + "confirmButton" %>'
-					label='<%= LanguageUtil.get(request, "confirm") %>'
+					id='<%= liferayPortletResponse.getNamespace() + "acceptSelectedButton" %>'
+					label='<%= LanguageUtil.get(request, "accept-selected") %>'
 					small="<%= true %>"
 				/>
 			</clay:content-col>
@@ -142,17 +153,6 @@ CookiesBannerConfigurationDisplayContext cookiesBannerConfigurationDisplayContex
 					small="<%= true %>"
 				/>
 			</clay:content-col>
-
-			<c:if test="<%= cookiesBannerConfigurationDisplayContext.isIncludeDeclineAllButton() %>">
-				<clay:content-col>
-					<clay:button
-						displayType="secondary"
-						id='<%= liferayPortletResponse.getNamespace() + "declineAllButton" %>'
-						label='<%= LanguageUtil.get(request, "decline-all") %>'
-						small="<%= true %>"
-					/>
-				</clay:content-col>
-			</c:if>
 		</clay:content-row>
 	</clay:row>
 </c:if>

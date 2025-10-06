@@ -6,11 +6,21 @@
 package com.liferay.headless.admin.site.internal.resource.v1_0;
 
 import com.liferay.client.extension.type.manager.CETManager;
+import com.liferay.document.library.kernel.model.DLFileEntry;
+import com.liferay.document.library.kernel.service.DLFileEntryService;
+import com.liferay.exportimport.kernel.lar.PortletDataContext;
+import com.liferay.exportimport.vulcan.batch.engine.ExportImportVulcanBatchEngineTaskItemDelegate;
 import com.liferay.headless.admin.site.dto.v1_0.ContentPageSettings;
 import com.liferay.headless.admin.site.dto.v1_0.ContentPageSpecification;
+import com.liferay.headless.admin.site.dto.v1_0.CustomMetaTag;
+import com.liferay.headless.admin.site.dto.v1_0.ItemExternalReference;
+import com.liferay.headless.admin.site.dto.v1_0.NavigationSettings;
+import com.liferay.headless.admin.site.dto.v1_0.OpenGraphSettings;
 import com.liferay.headless.admin.site.dto.v1_0.PageSettings;
 import com.liferay.headless.admin.site.dto.v1_0.PageSpecification;
+import com.liferay.headless.admin.site.dto.v1_0.SEOSettings;
 import com.liferay.headless.admin.site.dto.v1_0.SitePage;
+import com.liferay.headless.admin.site.dto.v1_0.SitemapSettings;
 import com.liferay.headless.admin.site.dto.v1_0.WidgetPageSettings;
 import com.liferay.headless.admin.site.internal.dto.v1_0.util.SitePageTypeUtil;
 import com.liferay.headless.admin.site.internal.odata.entity.v1_0.SitePageEntityModel;
@@ -19,27 +29,37 @@ import com.liferay.headless.admin.site.internal.resource.v1_0.util.LayoutUtil;
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.PageSpecificationUtil;
 import com.liferay.headless.admin.site.internal.resource.v1_0.util.ServiceContextUtil;
 import com.liferay.headless.admin.site.resource.v1_0.SitePageResource;
+import com.liferay.info.item.InfoItemServiceRegistry;
+import com.liferay.layout.admin.constants.LayoutAdminPortletKeys;
+import com.liferay.layout.admin.kernel.model.LayoutTypePortletConstants;
 import com.liferay.layout.page.template.model.LayoutPageTemplateEntry;
 import com.liferay.layout.page.template.service.LayoutPageTemplateEntryLocalService;
+import com.liferay.layout.seo.model.LayoutSEOEntryCustomMetaTagProperty;
+import com.liferay.layout.seo.service.LayoutSEOEntryService;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.CustomizedPages;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutConstants;
-import com.liferay.portal.kernel.model.LayoutTypePortletConstants;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.search.filter.TermFilter;
-import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.LayoutService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.UnicodePropertiesBuilder;
 import com.liferay.portal.kernel.util.Validator;
@@ -56,14 +76,16 @@ import com.liferay.portal.vulcan.util.SearchUtil;
 
 import jakarta.validation.ValidationException;
 
-import jakarta.ws.rs.NotSupportedException;
 import jakarta.ws.rs.core.MultivaluedMap;
 
 import java.io.Serializable;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -74,9 +96,12 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	properties = "OSGI-INF/liferay/rest/v1_0/site-page.properties",
+	property = "export.import.vulcan.batch.engine.task.item.delegate=true",
 	scope = ServiceScope.PROTOTYPE, service = SitePageResource.class
 )
-public class SitePageResourceImpl extends BaseSitePageResourceImpl {
+public class SitePageResourceImpl
+	extends BaseSitePageResourceImpl
+	implements ExportImportVulcanBatchEngineTaskItemDelegate<SitePage> {
 
 	@Override
 	public void deleteSiteSitePage(
@@ -108,6 +133,96 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 		return _entityModel;
 	}
 
+	public ExportImportDescriptor getExportImportDescriptor() {
+		return new ExportImportDescriptor() {
+
+			@Override
+			public String getItemClassName() {
+				return Layout.class.getName();
+			}
+
+			@Override
+			public Map<String, Serializable> getParameters(
+				PortletDataContext portletDataContext) {
+
+				return HashMapBuilder.<String, Serializable>put(
+					"filter",
+					() -> {
+						if ((portletDataContext.getLayoutIds() == null) ||
+							(portletDataContext.getLayoutIds().length == 0) ||
+							((portletDataContext.getLayoutIds().length == 1) &&
+							 (portletDataContext.getLayoutIds()[0] == 0))) {
+
+							return null;
+						}
+
+						Set<String> layoutExternalReferenceCodes =
+							new HashSet<>();
+
+						for (long layoutId :
+								portletDataContext.getLayoutIds()) {
+
+							Layout layout = null;
+
+							try {
+								layout = _layoutService.fetchLayout(
+									portletDataContext.getScopeGroupId(),
+									portletDataContext.isPrivateLayout(),
+									layoutId);
+							}
+							catch (PortalException portalException) {
+								if (_log.isWarnEnabled()) {
+									_log.warn(portalException);
+								}
+							}
+
+							if (layout != null) {
+								layoutExternalReferenceCodes.add(
+									layout.getExternalReferenceCode());
+							}
+						}
+
+						StringBundler sb = new StringBundler(3);
+
+						sb.append("externalReferenceCode in ('");
+
+						sb.append(
+							ListUtil.toString(
+								ListUtil.fromCollection(
+									layoutExternalReferenceCodes),
+								StringPool.BLANK, "', '"));
+
+						sb.append("')");
+
+						return sb.toString();
+					}
+				).build();
+			}
+
+			@Override
+			public String getPortletId() {
+				return LayoutAdminPortletKeys.LAYOUT_SET_LAYOUTS;
+			}
+
+			@Override
+			public Scope getScope() {
+				return Scope.SITE;
+			}
+
+			@Override
+			public boolean isActive(PortletDataContext portletDataContext) {
+				if (!portletDataContext.isPrivateLayout() &&
+					FeatureFlagManagerUtil.isEnabled("LPD-35443")) {
+
+					return true;
+				}
+
+				return false;
+			}
+
+		};
+	}
+
 	@Override
 	public ContentPageSpecification postSiteSitePagePageSpecification(
 			String siteExternalReferenceCode,
@@ -131,7 +246,8 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 
 		return (ContentPageSpecification)_pageSpecificationDTOConverter.toDTO(
 			LayoutUtil.addDraftToLayout(
-				_cetManager, contentPageSpecification, layout,
+				_cetManager, contentPageSpecification, _infoItemServiceRegistry,
+				layout,
 				ServiceContextUtil.createServiceContext(
 					layout.getGroupId(), contextHttpServletRequest,
 					contextUser.getUserId())));
@@ -147,17 +263,7 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 			throw new UnsupportedOperationException();
 		}
 
-		if (parameters.containsKey("siteId")) {
-			Group group = _groupLocalService.getGroup(
-				(Long)parameters.get("siteId"));
-
-			return getSiteSitePagesPage(
-				group.getExternalReferenceCode(), search, null, filter,
-				pagination, sorts);
-		}
-
-		throw new NotSupportedException(
-			"One of the following parameters must be specified: [siteId]");
+		return super.read(filter, pagination, sorts, parameters, search);
 	}
 
 	@Override
@@ -347,6 +453,28 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 		Map<Locale, String> nameMap = LocalizedMapUtil.getLocalizedMap(
 			sitePage.getName_i18n());
 
+		Map<Locale, String> titleMap = new HashMap<>();
+		Map<Locale, String> descriptionMap = new HashMap<>();
+		Map<Locale, String> keywordsMap = new HashMap<>();
+		Map<Locale, String> robotsMap = new HashMap<>();
+
+		if (sitePage.getPageSettings() != null) {
+			PageSettings pageSettings = sitePage.getPageSettings();
+
+			if (pageSettings.getSeoSettings() != null) {
+				SEOSettings seoSettings = pageSettings.getSeoSettings();
+
+				titleMap = LocalizedMapUtil.getLocalizedMap(
+					seoSettings.getHtmlTitle_i18n());
+				descriptionMap = LocalizedMapUtil.getLocalizedMap(
+					seoSettings.getDescription_i18n());
+				keywordsMap = LocalizedMapUtil.getLocalizedMap(
+					seoSettings.getSeoKeywords_i18n());
+				robotsMap = LocalizedMapUtil.getLocalizedMap(
+					seoSettings.getRobots_i18n());
+			}
+		}
+
 		UnicodeProperties typeSettingsUnicodeProperties =
 			_getTypeSettingsUnicodeProperties(sitePage);
 
@@ -354,13 +482,14 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 
 		if (Objects.equals(sitePage.getType(), SitePage.Type.CONTENT_PAGE)) {
 			layout = LayoutUtil.addContentLayout(
-				_cetManager, groupId, sitePage.getPageSpecifications(),
+				_cetManager, groupId, _infoItemServiceRegistry,
+				sitePage.getPageSpecifications(),
 				_getParentLayoutId(
 					LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, groupId,
 					sitePage.getParentSitePageExternalReferenceCode(),
 					serviceContext),
-				false, nameMap, null, null, null,
-				SitePageTypeUtil.toInternalType(sitePage.getType()),
+				false, nameMap, titleMap, descriptionMap, keywordsMap,
+				robotsMap, SitePageTypeUtil.toInternalType(sitePage.getType()),
 				typeSettingsUnicodeProperties,
 				_isHiddenFromNavigation(false, sitePage.getPageSettings()),
 				false,
@@ -370,12 +499,14 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 		}
 		else {
 			layout = LayoutUtil.addPortletLayout(
-				_cetManager, sitePage.getExternalReferenceCode(), groupId,
+				_cetManager, sitePage.getExternalReferenceCode(),
+				_infoItemServiceRegistry, groupId,
 				_getParentLayoutId(
 					LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, groupId,
 					sitePage.getParentSitePageExternalReferenceCode(),
 					serviceContext),
-				nameMap, typeSettingsUnicodeProperties,
+				nameMap, titleMap, descriptionMap, keywordsMap, robotsMap,
+				typeSettingsUnicodeProperties,
 				_isHiddenFromNavigation(false, sitePage.getPageSettings()),
 				LocalizedMapUtil.getLocalizedMap(
 					sitePage.getFriendlyUrlPath_i18n()),
@@ -386,12 +517,43 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 
 		PageSettings pageSettings = sitePage.getPageSettings();
 
+		_updateSEOEntry(
+			layout.getGroupId(), layout.getLayoutId(), pageSettings,
+			serviceContext);
+
 		if ((pageSettings != null) && (pageSettings.getPriority() != null)) {
 			layout = _layoutService.updatePriority(
 				layout.getPlid(), pageSettings.getPriority());
 		}
 
 		return layout;
+	}
+
+	private long _getFileEntryId(
+			ItemExternalReference itemExternalReference,
+			ServiceContext serviceContext)
+		throws Exception {
+
+		long groupId = serviceContext.getScopeGroupId();
+
+		com.liferay.headless.admin.site.dto.v1_0.Scope scope =
+			itemExternalReference.getScope();
+
+		if (scope != null) {
+			groupId = GroupUtil.getGroupId(
+				true, true, serviceContext.getCompanyId(),
+				scope.getExternalReferenceCode());
+		}
+
+		DLFileEntry dlFileEntry =
+			_dlFileEntryService.fetchFileEntryByExternalReferenceCode(
+				groupId, itemExternalReference.getExternalReferenceCode());
+
+		if (dlFileEntry == null) {
+			throw new UnsupportedOperationException();
+		}
+
+		return dlFileEntry.getFileEntryId();
 	}
 
 	private long _getParentLayoutId(
@@ -423,31 +585,98 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 			return null;
 		}
 
-		if (sitePage.getType() == SitePage.Type.CONTENT_PAGE) {
-			if (!(pageSettings instanceof ContentPageSettings)) {
-				throw new UnsupportedOperationException();
-			}
+		if ((sitePage.getType() == SitePage.Type.CONTENT_PAGE) &&
+			!(pageSettings instanceof ContentPageSettings)) {
 
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
-		if ((sitePage.getType() != SitePage.Type.WIDGET_PAGE) ||
+		if ((sitePage.getType() == SitePage.Type.WIDGET_PAGE) &&
 			!(pageSettings instanceof WidgetPageSettings)) {
 
 			throw new UnsupportedOperationException();
 		}
 
-		WidgetPageSettings widgetPageSettings =
-			(WidgetPageSettings)pageSettings;
+		String target = StringPool.BLANK;
+		String targetTypeString = StringPool.BLANK;
+		NavigationSettings navigationSettings =
+			pageSettings.getNavigationSettings();
+
+		if (navigationSettings != null) {
+			target = navigationSettings.getTarget();
+
+			NavigationSettings.TargetType targetType =
+				navigationSettings.getTargetType();
+
+			if (targetType == NavigationSettings.TargetType.NEW_TAB) {
+				targetTypeString = "useNewTab";
+			}
+		}
+
+		SitemapSettings.ChangeFrequency changeFrequency =
+			SitemapSettings.ChangeFrequency.DAILY;
+		String sitemapInclude = "1";
+		String sitemapIncludeChildLayouts = "true";
+		String sitemapPagePriority = "0.0";
+		SEOSettings seoSettings = pageSettings.getSeoSettings();
+
+		if (seoSettings != null) {
+			SitemapSettings sitemapSettings = seoSettings.getSitemapSettings();
+
+			if (sitemapSettings != null) {
+				if (sitemapSettings.getChangeFrequency() != null) {
+					changeFrequency = sitemapSettings.getChangeFrequency();
+				}
+
+				if (Boolean.FALSE.equals(sitemapSettings.getInclude())) {
+					sitemapInclude = "0";
+				}
+
+				if (Boolean.FALSE.equals(
+						sitemapSettings.getIncludeChildSitePages())) {
+
+					sitemapIncludeChildLayouts = "false";
+				}
+
+				if (sitemapSettings.getPagePriority() != null) {
+					sitemapPagePriority = String.valueOf(
+						sitemapSettings.getPagePriority());
+				}
+			}
+		}
 
 		UnicodePropertiesBuilder.UnicodePropertiesWrapper
 			unicodePropertiesWrapper = UnicodePropertiesBuilder.create(
 				true
 			).setProperty(
-				LayoutConstants.CUSTOMIZABLE_LAYOUT,
-				String.valueOf(
-					GetterUtil.getBoolean(widgetPageSettings.getCustomizable()))
+				LayoutTypePortletConstants.QUERY_STRING,
+				GetterUtil.getString(pageSettings.getQueryString())
+			).setProperty(
+				LayoutTypePortletConstants.SITEMAP_CHANGEFREQ,
+				StringUtil.toLowerCase(changeFrequency.getValue())
+			).setProperty(
+				LayoutTypePortletConstants.SITEMAP_INCLUDE, sitemapInclude
+			).setProperty(
+				LayoutTypePortletConstants.SITEMAP_PRIORITY, sitemapPagePriority
+			).setProperty(
+				LayoutTypePortletConstants.TARGET, target
+			).setProperty(
+				"sitemap-include-child-layouts", sitemapIncludeChildLayouts
+			).setProperty(
+				"targetType", targetTypeString
 			);
+
+		if (sitePage.getType() == SitePage.Type.CONTENT_PAGE) {
+			return unicodePropertiesWrapper.build();
+		}
+
+		WidgetPageSettings widgetPageSettings =
+			(WidgetPageSettings)pageSettings;
+
+		unicodePropertiesWrapper.setProperty(
+			LayoutConstants.CUSTOMIZABLE_LAYOUT,
+			String.valueOf(
+				GetterUtil.getBoolean(widgetPageSettings.getCustomizable())));
 
 		if (widgetPageSettings.getLayoutTemplateId() != null) {
 			unicodePropertiesWrapper.setProperty(
@@ -501,6 +730,28 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 			nameMap = LocalizedMapUtil.getLocalizedMap(sitePage.getName_i18n());
 		}
 
+		Map<Locale, String> titleMap = new HashMap<>();
+		Map<Locale, String> descriptionMap = new HashMap<>();
+		Map<Locale, String> keywordsMap = new HashMap<>();
+		Map<Locale, String> robotsMap = new HashMap<>();
+
+		if (sitePage.getPageSettings() != null) {
+			PageSettings pageSettings = sitePage.getPageSettings();
+
+			if (pageSettings.getSeoSettings() != null) {
+				SEOSettings seoSettings = pageSettings.getSeoSettings();
+
+				titleMap = LocalizedMapUtil.getLocalizedMap(
+					seoSettings.getHtmlTitle_i18n());
+				descriptionMap = LocalizedMapUtil.getLocalizedMap(
+					seoSettings.getDescription_i18n());
+				keywordsMap = LocalizedMapUtil.getLocalizedMap(
+					seoSettings.getSeoKeywords_i18n());
+				robotsMap = LocalizedMapUtil.getLocalizedMap(
+					seoSettings.getRobots_i18n());
+			}
+		}
+
 		Map<Locale, String> friendlyURLMap = layout.getFriendlyURLMap();
 
 		if (sitePage.getFriendlyUrlPath_i18n() != null) {
@@ -529,22 +780,27 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 
 		if (Objects.equals(sitePage.getType(), SitePage.Type.CONTENT_PAGE)) {
 			layout = LayoutUtil.updateContentLayout(
-				_cetManager, layout, nameMap, layout.getTitleMap(),
-				layout.getDescriptionMap(), layout.getRobotsMap(),
-				friendlyURLMap, sitePage.getPageSpecifications(),
-				serviceContext);
+				_cetManager, _infoItemServiceRegistry, layout, nameMap,
+				titleMap, descriptionMap, keywordsMap, robotsMap,
+				friendlyURLMap, _getTypeSettingsUnicodeProperties(sitePage),
+				sitePage.getPageSpecifications(), serviceContext);
 		}
 		else {
 			layout = LayoutUtil.updatePortletLayout(
-				_cetManager, layout, nameMap, friendlyURLMap,
+				_cetManager, layout, nameMap, titleMap, descriptionMap,
+				keywordsMap, robotsMap, friendlyURLMap,
 				_getTypeSettingsUnicodeProperties(sitePage), serviceContext,
 				PageSpecificationUtil.getWidgetPageSpecification(
 					sitePage.getPageSpecifications()));
 		}
 
-		int priority = Integer.MAX_VALUE;
-
 		PageSettings pageSettings = sitePage.getPageSettings();
+
+		_updateSEOEntry(
+			layout.getGroupId(), layout.getLayoutId(), pageSettings,
+			serviceContext);
+
+		int priority = Integer.MAX_VALUE;
 
 		if ((pageSettings != null) && (pageSettings.getPriority() != null)) {
 			priority = pageSettings.getPriority();
@@ -555,6 +811,88 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 		}
 
 		return _layoutService.updatePriority(layout.getPlid(), priority);
+	}
+
+	private void _updateSEOEntry(
+			long groupId, long layoutId, PageSettings pageSettings,
+			ServiceContext serviceContext)
+		throws Exception {
+
+		boolean canonicalURLEnabled = false;
+
+		Map<Locale, String> canonicalURLMap = new HashMap<>();
+
+		if ((pageSettings != null) && (pageSettings.getSeoSettings() != null)) {
+			SEOSettings seoSettings = pageSettings.getSeoSettings();
+
+			canonicalURLMap = LocalizedMapUtil.getLocalizedMap(
+				seoSettings.getCustomCanonicalURL_i18n());
+
+			if (MapUtil.isNotEmpty(canonicalURLMap)) {
+				canonicalURLEnabled = true;
+			}
+		}
+
+		boolean openGraphDescriptionEnabled = false;
+		Map<Locale, String> openGraphDescriptionMap = new HashMap<>();
+		Map<Locale, String> openGraphImageAltMap = new HashMap<>();
+		long openGraphImageFileEntryId = 0;
+		boolean openGraphTitleEnabled = false;
+		Map<Locale, String> openGraphTitleMap = new HashMap<>();
+
+		if ((pageSettings != null) &&
+			(pageSettings.getOpenGraphSettings() != null)) {
+
+			OpenGraphSettings openGraphSettings =
+				pageSettings.getOpenGraphSettings();
+
+			openGraphDescriptionMap = LocalizedMapUtil.getLocalizedMap(
+				openGraphSettings.getDescription_i18n());
+
+			if (MapUtil.isNotEmpty(openGraphDescriptionMap)) {
+				openGraphDescriptionEnabled = true;
+			}
+
+			openGraphImageAltMap = LocalizedMapUtil.getLocalizedMap(
+				openGraphSettings.getImageAlt_i18n());
+
+			ItemExternalReference itemExternalReference =
+				openGraphSettings.getImage();
+
+			if (itemExternalReference != null) {
+				openGraphImageFileEntryId = _getFileEntryId(
+					itemExternalReference, serviceContext);
+			}
+
+			openGraphTitleMap = LocalizedMapUtil.getLocalizedMap(
+				openGraphSettings.getTitle_i18n());
+
+			if (MapUtil.isNotEmpty(openGraphTitleMap)) {
+				openGraphTitleEnabled = true;
+			}
+		}
+
+		_layoutSEOEntryService.updateLayoutSEOEntry(
+			groupId, false, layoutId, canonicalURLEnabled, canonicalURLMap,
+			openGraphDescriptionEnabled, openGraphDescriptionMap,
+			openGraphImageAltMap, openGraphImageFileEntryId,
+			openGraphTitleEnabled, openGraphTitleMap, serviceContext);
+
+		CustomMetaTag[] customMetaTags = new CustomMetaTag[0];
+
+		if (pageSettings != null) {
+			customMetaTags = pageSettings.getCustomMetaTags();
+		}
+
+		_layoutSEOEntryService.updateCustomMetaTags(
+			groupId, false, layoutId,
+			transformToList(
+				customMetaTags,
+				customMetaTag -> new LayoutSEOEntryCustomMetaTagProperty(
+					LocalizedMapUtil.getLocalizedMap(
+						customMetaTag.getValue_i18n()),
+					customMetaTag.getKey())),
+			serviceContext);
 	}
 
 	private void _validatePageSpecificationExternalReferenceCode(
@@ -633,16 +971,22 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 		}
 	}
 
+	private static final Log _log = LogFactoryUtil.getLog(
+		SitePageResourceImpl.class);
+
 	private static final EntityModel _entityModel = new SitePageEntityModel();
 
 	@Reference
 	private CETManager _cetManager;
 
 	@Reference
+	private DLFileEntryService _dlFileEntryService;
+
+	@Reference
 	private DTOConverterRegistry _dtoConverterRegistry;
 
 	@Reference
-	private GroupLocalService _groupLocalService;
+	private InfoItemServiceRegistry _infoItemServiceRegistry;
 
 	@Reference
 	private LayoutLocalService _layoutLocalService;
@@ -650,6 +994,9 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 	@Reference
 	private LayoutPageTemplateEntryLocalService
 		_layoutPageTemplateEntryLocalService;
+
+	@Reference
+	private LayoutSEOEntryService _layoutSEOEntryService;
 
 	@Reference
 	private LayoutService _layoutService;

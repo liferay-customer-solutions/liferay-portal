@@ -6,6 +6,7 @@
 package com.liferay.portal.security.sso.openid.connect.web.internal.configuration.admin.display;
 
 import com.liferay.configuration.admin.display.ConfigurationFormRenderer;
+import com.liferay.expando.kernel.service.ExpandoColumnLocalService;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -50,10 +51,15 @@ public class OpenIdConnectProviderConfigurationFormRenderer
 		).put(
 			"customAuthorizationRequestParameters",
 			_getStringValues(
-				httpServletRequest, "customAuthorizationRequestParameters")
+				httpServletRequest, false,
+				"customAuthorizationRequestParameters")
+		).put(
+			"customClaims",
+			_getStringValues(httpServletRequest, true, "customClaims")
 		).put(
 			"customTokenRequestParameters",
-			_getStringValues(httpServletRequest, "customTokenRequestParameters")
+			_getStringValues(
+				httpServletRequest, false, "customTokenRequestParameters")
 		).put(
 			"discoveryEndpoint",
 			ParamUtil.getString(httpServletRequest, "discoveryEndpoint")
@@ -63,7 +69,8 @@ public class OpenIdConnectProviderConfigurationFormRenderer
 				httpServletRequest, "discoveryEndpointCacheInMillis")
 		).put(
 			"idTokenSigningAlgValues",
-			_getStringValues(httpServletRequest, "idTokenSigningAlgValues")
+			_getStringValues(
+				httpServletRequest, false, "idTokenSigningAlgValues")
 		).put(
 			"issuerURL", ParamUtil.getString(httpServletRequest, "issuerURL")
 		).put(
@@ -84,7 +91,8 @@ public class OpenIdConnectProviderConfigurationFormRenderer
 		).put(
 			"scopes", ParamUtil.getString(httpServletRequest, "scopes")
 		).put(
-			"subjectTypes", _getStringValues(httpServletRequest, "subjectTypes")
+			"subjectTypes",
+			_getStringValues(httpServletRequest, false, "subjectTypes")
 		).put(
 			"tokenConnectionTimeout",
 			ParamUtil.getInteger(httpServletRequest, "tokenConnectionTimeout")
@@ -112,8 +120,8 @@ public class OpenIdConnectProviderConfigurationFormRenderer
 				OpenIdConnectWebKeys.
 					OPEN_ID_CONNECT_PROVIDER_CONFIGURATION_DISPLAY_CONTEXT,
 				new OpenIdConnectProviderConfigurationDisplayContext(
-					_configurationAdmin,
-					httpServletRequest.getParameter("pid")));
+					_configurationAdmin, _expandoColumnLocalService,
+					httpServletRequest));
 
 			requestDispatcher.include(httpServletRequest, httpServletResponse);
 		}
@@ -124,8 +132,29 @@ public class OpenIdConnectProviderConfigurationFormRenderer
 		}
 	}
 
+	private String _getKeyValueParameterValue(
+		HttpServletRequest httpServletRequest, int index, String paramName) {
+
+		String key = ParamUtil.getString(
+			httpServletRequest, paramName + "Key-" + index);
+
+		if (key.isEmpty()) {
+			return StringPool.BLANK;
+		}
+
+		String value = ParamUtil.getString(
+			httpServletRequest, paramName + "Value-" + index);
+
+		if (value.isEmpty()) {
+			return StringPool.BLANK;
+		}
+
+		return key + StringPool.EQUAL + value;
+	}
+
 	private String[] _getStringValues(
-		HttpServletRequest httpServletRequest, String paramName) {
+		HttpServletRequest httpServletRequest, boolean keyValueParam,
+		String paramName) {
 
 		List<String> values = new ArrayList<>();
 
@@ -133,8 +162,16 @@ public class OpenIdConnectProviderConfigurationFormRenderer
 			httpServletRequest, paramName + "Indexes");
 
 		for (int index : indexes) {
-			String value = ParamUtil.getString(
-				httpServletRequest, paramName + StringPool.DASH + index);
+			String value = null;
+
+			if (keyValueParam) {
+				value = _getKeyValueParameterValue(
+					httpServletRequest, index, paramName);
+			}
+			else {
+				value = ParamUtil.getString(
+					httpServletRequest, paramName + StringPool.DASH + index);
+			}
 
 			if (value.isEmpty()) {
 				continue;
@@ -152,6 +189,9 @@ public class OpenIdConnectProviderConfigurationFormRenderer
 
 	@Reference
 	private ConfigurationAdmin _configurationAdmin;
+
+	@Reference
+	private ExpandoColumnLocalService _expandoColumnLocalService;
 
 	@Reference(
 		target = "(osgi.web.symbolicname=com.liferay.portal.security.sso.openid.connect.web)"

@@ -6,16 +6,24 @@
 package com.liferay.headless.admin.site.resource.v1_0.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.document.library.kernel.model.DLFileEntry;
+import com.liferay.document.library.kernel.model.DLFolder;
+import com.liferay.document.library.test.util.DLTestUtil;
 import com.liferay.headless.admin.site.client.custom.field.CustomField;
 import com.liferay.headless.admin.site.client.dto.v1_0.ContentPageSettings;
 import com.liferay.headless.admin.site.client.dto.v1_0.ContentPageSpecification;
+import com.liferay.headless.admin.site.client.dto.v1_0.CustomMetaTag;
 import com.liferay.headless.admin.site.client.dto.v1_0.FavIcon;
 import com.liferay.headless.admin.site.client.dto.v1_0.FriendlyUrlHistory;
 import com.liferay.headless.admin.site.client.dto.v1_0.ItemExternalReference;
+import com.liferay.headless.admin.site.client.dto.v1_0.NavigationSettings;
+import com.liferay.headless.admin.site.client.dto.v1_0.OpenGraphSettings;
 import com.liferay.headless.admin.site.client.dto.v1_0.PageSettings;
 import com.liferay.headless.admin.site.client.dto.v1_0.PageSpecification;
+import com.liferay.headless.admin.site.client.dto.v1_0.SEOSettings;
 import com.liferay.headless.admin.site.client.dto.v1_0.Scope;
 import com.liferay.headless.admin.site.client.dto.v1_0.SitePage;
+import com.liferay.headless.admin.site.client.dto.v1_0.SitemapSettings;
 import com.liferay.headless.admin.site.client.dto.v1_0.WidgetPageSettings;
 import com.liferay.headless.admin.site.client.dto.v1_0.WidgetPageSpecification;
 import com.liferay.headless.admin.site.client.pagination.Page;
@@ -38,12 +46,15 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.CustomizedPages;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutConstants;
 import com.liferay.portal.kernel.model.LayoutTypePortletConstants;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -742,22 +753,164 @@ public class SitePageResourceTest extends BaseSitePageResourceTestCase {
 	}
 
 	private PageSettings _getPageSettings(SitePage.Type type) throws Exception {
+		PageSettings pageSettings = null;
+
 		if (type == SitePage.Type.CONTENT_PAGE) {
-			return new ContentPageSettings() {
+			pageSettings = new ContentPageSettings() {
 				{
 					setType(Type.CONTENT_PAGE_SETTINGS);
 				}
 			};
 		}
+		else {
+			pageSettings = new WidgetPageSettings() {
+				{
+					setCustomizable(false);
+					setCustomizableSectionIds(new String[0]);
+					setLayoutTemplateId("1_column");
+					setType(Type.WIDGET_PAGE_SETTINGS);
+				}
+			};
+		}
 
-		return new WidgetPageSettings() {
-			{
-				setCustomizable(false);
-				setCustomizableSectionIds(new String[0]);
-				setLayoutTemplateId("1_column");
-				setType(Type.WIDGET_PAGE_SETTINGS);
-			}
-		};
+		pageSettings.setCustomMetaTags(
+			() -> new CustomMetaTag[] {
+				new CustomMetaTag() {
+					{
+						setKey(RandomTestUtil::randomString);
+						setValue_i18n(
+							() -> HashMapBuilder.put(
+								"en-US", RandomTestUtil.randomString()
+							).put(
+								"es-ES", RandomTestUtil.randomString()
+							).build());
+					}
+				},
+				new CustomMetaTag() {
+					{
+						setKey(RandomTestUtil::randomString);
+						setValue_i18n(
+							() -> HashMapBuilder.put(
+								"en-US", RandomTestUtil.randomString()
+							).put(
+								"es-ES", RandomTestUtil.randomString()
+							).build());
+					}
+				}
+			});
+		pageSettings.setNavigationSettings(
+			() -> new NavigationSettings() {
+				{
+					setTarget(RandomTestUtil::randomString);
+					setTargetType(
+						() -> RandomTestUtil.randomEnum(
+							NavigationSettings.TargetType.class));
+				}
+			});
+		pageSettings.setOpenGraphSettings(
+			() -> new OpenGraphSettings() {
+				{
+					setDescription_i18n(
+						() -> HashMapBuilder.put(
+							"en-US", RandomTestUtil.randomString()
+						).put(
+							"es-ES", RandomTestUtil.randomString()
+						).build());
+					setImage(
+						() -> new ItemExternalReference() {
+							{
+								setClassName(FileEntry.class::getName);
+								setExternalReferenceCode(
+									() -> {
+										Company company =
+											CompanyLocalServiceUtil.getCompany(
+												TestPropsValues.getCompanyId());
+
+										DLFolder dlFolder =
+											DLTestUtil.addDLFolder(
+												company.getGroupId());
+
+										DLFileEntry dlFileEntry =
+											DLTestUtil.addDLFileEntry(
+												dlFolder.getFolderId());
+
+										return dlFileEntry.
+											getExternalReferenceCode();
+									});
+								setScope(
+									() -> new Scope() {
+										{
+											setExternalReferenceCode(
+												() -> "L_GLOBAL");
+											setType(() -> Type.SITE);
+										}
+									});
+							}
+						});
+					setImageAlt_i18n(
+						() -> HashMapBuilder.put(
+							"en-US", RandomTestUtil.randomString()
+						).put(
+							"es-ES", RandomTestUtil.randomString()
+						).build());
+					setTitle_i18n(
+						() -> HashMapBuilder.put(
+							"en-US", RandomTestUtil.randomString()
+						).put(
+							"es-ES", RandomTestUtil.randomString()
+						).build());
+				}
+			});
+		pageSettings.setSeoSettings(
+			() -> new SEOSettings() {
+				{
+					setCustomCanonicalURL_i18n(
+						() -> HashMapBuilder.put(
+							"en-US", RandomTestUtil.randomString()
+						).put(
+							"es-ES", RandomTestUtil.randomString()
+						).build());
+					setDescription_i18n(
+						() -> HashMapBuilder.put(
+							"en-US", RandomTestUtil.randomString()
+						).put(
+							"es-ES", RandomTestUtil.randomString()
+						).build());
+					setHtmlTitle_i18n(
+						() -> HashMapBuilder.put(
+							"en-US", RandomTestUtil.randomString()
+						).put(
+							"es-ES", RandomTestUtil.randomString()
+						).build());
+					setRobots_i18n(
+						() -> HashMapBuilder.put(
+							"en-US", RandomTestUtil.randomString()
+						).put(
+							"es-ES", RandomTestUtil.randomString()
+						).build());
+					setSeoKeywords_i18n(
+						() -> HashMapBuilder.put(
+							"en-US", RandomTestUtil.randomString()
+						).put(
+							"es-ES", RandomTestUtil.randomString()
+						).build());
+					setSitemapSettings(
+						() -> new SitemapSettings() {
+							{
+								setChangeFrequency(
+									() -> RandomTestUtil.randomEnum(
+										SitemapSettings.ChangeFrequency.class));
+								setInclude(RandomTestUtil::randomBoolean);
+								setIncludeChildSitePages(
+									RandomTestUtil::randomBoolean);
+								setPagePriority(RandomTestUtil::randomDouble);
+							}
+						});
+				}
+			});
+		pageSettings.setQueryString(RandomTestUtil::randomString);
+
+		return pageSettings;
 	}
 
 	private SitePage _getRandomSitePage(
@@ -1342,7 +1495,43 @@ public class SitePageResourceTest extends BaseSitePageResourceTestCase {
 		widgetPageSettings.setCustomizable(true);
 		widgetPageSettings.setCustomizableSectionIds(
 			new String[] {"column-1", "column-3"});
+		widgetPageSettings.setCustomMetaTags(new CustomMetaTag[0]);
 		widgetPageSettings.setLayoutTemplateId("1_2_columns_i");
+		widgetPageSettings.setNavigationSettings(
+			new NavigationSettings() {
+				{
+					setTarget(() -> null);
+					setTargetType(TargetType.SPECIFIC_FRAME);
+				}
+			});
+		widgetPageSettings.setOpenGraphSettings(
+			new OpenGraphSettings() {
+				{
+					setDescription_i18n(new HashMap<>());
+					setImageAlt_i18n(new HashMap<>());
+					setTitle_i18n(new HashMap<>());
+				}
+			});
+		widgetPageSettings.setQueryString(() -> null);
+		widgetPageSettings.setSeoSettings(
+			new SEOSettings() {
+				{
+					setCustomCanonicalURL_i18n(new HashMap<>());
+					setDescription_i18n(new HashMap<>());
+					setHtmlTitle_i18n(new HashMap<>());
+					setRobots_i18n(new HashMap<>());
+					setSeoKeywords_i18n(new HashMap<>());
+					setSitemapSettings(
+						new SitemapSettings() {
+							{
+								setChangeFrequency(ChangeFrequency.DAILY);
+								setInclude(true);
+								setIncludeChildSitePages(true);
+								setPagePriority(0.0);
+							}
+						});
+				}
+			});
 
 		String sitePageExternalReferenceCode =
 			sitePage.getExternalReferenceCode();
@@ -1424,8 +1613,44 @@ public class SitePageResourceTest extends BaseSitePageResourceTestCase {
 		WidgetPageSettings widgetPageSettings =
 			(WidgetPageSettings)sitePage.getPageSettings();
 
+		widgetPageSettings.setCustomMetaTags(new CustomMetaTag[0]);
 		widgetPageSettings.setInheritChanges(false);
 		widgetPageSettings.setLayoutTemplateId("2_columns_ii");
+		widgetPageSettings.setNavigationSettings(
+			new NavigationSettings() {
+				{
+					setTarget(() -> null);
+					setTargetType(TargetType.SPECIFIC_FRAME);
+				}
+			});
+		widgetPageSettings.setOpenGraphSettings(
+			new OpenGraphSettings() {
+				{
+					setDescription_i18n(new HashMap<>());
+					setImageAlt_i18n(new HashMap<>());
+					setTitle_i18n(new HashMap<>());
+				}
+			});
+		widgetPageSettings.setQueryString(() -> null);
+		widgetPageSettings.setSeoSettings(
+			new SEOSettings() {
+				{
+					setCustomCanonicalURL_i18n(new HashMap<>());
+					setDescription_i18n(new HashMap<>());
+					setHtmlTitle_i18n(new HashMap<>());
+					setRobots_i18n(new HashMap<>());
+					setSeoKeywords_i18n(new HashMap<>());
+					setSitemapSettings(
+						new SitemapSettings() {
+							{
+								setChangeFrequency(ChangeFrequency.DAILY);
+								setInclude(true);
+								setIncludeChildSitePages(true);
+								setPagePriority(0.0);
+							}
+						});
+				}
+			});
 
 		_testPatchSiteSitePage(
 			sitePage,

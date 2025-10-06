@@ -44,6 +44,7 @@ import com.liferay.layout.display.page.LayoutDisplayPageObjectProvider;
 import com.liferay.layout.display.page.constants.LayoutDisplayPageWebKeys;
 import com.liferay.layout.page.template.model.LayoutPageTemplateStructure;
 import com.liferay.layout.page.template.service.LayoutPageTemplateStructureLocalService;
+import com.liferay.layout.taglib.constants.LayoutStructureRendererConstants;
 import com.liferay.layout.util.constants.LayoutDataItemTypeConstants;
 import com.liferay.layout.util.structure.FormStyledLayoutStructureItem;
 import com.liferay.layout.util.structure.LayoutStructure;
@@ -195,7 +196,7 @@ public class FragmentEntryInputTemplateNodeContextHelperImpl
 		boolean readOnly = false;
 
 		if (infoField != null) {
-			name = infoField.getName();
+			name = _getName(httpServletRequest, infoField);
 			readOnly = infoField.isReadOnly();
 			localizable = infoField.isLocalizable();
 		}
@@ -839,6 +840,29 @@ public class FragmentEntryInputTemplateNodeContextHelperImpl
 		return defaultInputLabel;
 	}
 
+	private String _getName(
+		HttpServletRequest httpServletRequest, InfoField<?> infoField) {
+
+		String parentExternalReferenceCode =
+			(String)httpServletRequest.getAttribute(
+				LayoutStructureRendererConstants.
+					LAYOUT_PARENT_ITEM_EXTERNAL_REFERENCE_CODE);
+		String relatedItemExternalReferenceCode =
+			(String)httpServletRequest.getAttribute(
+				LayoutStructureRendererConstants.
+					LAYOUT_RELATED_ITEM_EXTERNAL_REFERENCE_CODE);
+
+		if (Validator.isNotNull(parentExternalReferenceCode) &&
+			Validator.isNotNull(relatedItemExternalReferenceCode)) {
+
+			return StringBundler.concat(
+				infoField.getUniqueId(), "[$", parentExternalReferenceCode,
+				StringPool.DOLLAR, relatedItemExternalReferenceCode, "$]");
+		}
+
+		return infoField.getUniqueId();
+	}
+
 	private String _getPreviewURL(
 		HttpServletRequest httpServletRequest, Object value) {
 
@@ -915,9 +939,20 @@ public class FragmentEntryInputTemplateNodeContextHelperImpl
 			return defaultValue;
 		}
 
+		boolean checkInfoFormName = false;
 		LayoutDisplayPageObjectProvider<?> layoutDisplayPageObjectProvider =
 			(LayoutDisplayPageObjectProvider<?>)httpServletRequest.getAttribute(
-				LayoutDisplayPageWebKeys.LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER);
+				LayoutStructureRendererConstants.
+					LAYOUT_RELATED_ITEM_DISPLAY_PAGE_OBJECT_PROVIDER);
+
+		if (layoutDisplayPageObjectProvider == null) {
+			checkInfoFormName = true;
+			layoutDisplayPageObjectProvider =
+				(LayoutDisplayPageObjectProvider<?>)
+					httpServletRequest.getAttribute(
+						LayoutDisplayPageWebKeys.
+							LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER);
+		}
 
 		if (layoutDisplayPageObjectProvider == null) {
 			return defaultValue;
@@ -926,7 +961,7 @@ public class FragmentEntryInputTemplateNodeContextHelperImpl
 		String className = _infoSearchClassMapperRegistry.getClassName(
 			layoutDisplayPageObjectProvider.getClassName());
 
-		if (!Objects.equals(className, infoFormName)) {
+		if (checkInfoFormName && !Objects.equals(className, infoFormName)) {
 			return defaultValue;
 		}
 
@@ -950,6 +985,11 @@ public class FragmentEntryInputTemplateNodeContextHelperImpl
 
 		InfoFieldValue<?> infoFieldValue =
 			infoItemFieldValues.getInfoFieldValue(infoField.getUniqueId());
+
+		if (infoFieldValue == null) {
+			infoFieldValue = infoItemFieldValues.getInfoFieldValue(
+				infoField.getName());
+		}
 
 		if (infoFieldValue == null) {
 			return defaultValue;

@@ -1157,7 +1157,7 @@ test('Publish with asset publisher configuration', async ({
 		.getByLabel('Dynamic')
 		.click();
 
-	await page.getByLabel('close', {exact: true}).click();
+	await page.locator('.modal').getByLabel('Close', {exact: true}).click();
 
 	await page.reload();
 

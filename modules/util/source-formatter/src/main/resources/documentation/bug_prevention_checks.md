@@ -99,7 +99,8 @@ JavaCompanyScopedIdsCheck | .java | Finds cases where company scoped ids are use
 JavaComponentAnnotationsCheck | .java | Performs several checks on classes with `@Component` annotation. |
 [JavaConfigurationAdminCheck](check/java_configuration_admin_check.md#javaconfigurationadmincheck) | .java | Checks for correct use of `location == ?` when calling `org.osgi.service.cm.ConfigurationAdmin#createFactoryConfiguration`. |
 [JavaConfigurationCategoryCheck](check/java_configuration_category_check.md#javaconfigurationcategorycheck) | .java | Checks that the value of `category` in `@ExtendedObjectClassDefinition` matches the `categoryKey` of the corresponding class that implements `ConfigurationCategory`. |
-JavaFeatureFlagManagerUtilCheck | .java | Finds cases where `FeatureFlagManagerUtil.isEnabled` should be used. |
+JavaDefaultAdminScreenNameCheck | .java | Checks that we do not use `PropsKeys.DEFAULT_ADMIN_SCREEN_NAME` or `PropsValues.DEFAULT_ADMIN_SCREEN_NAME`. |
+JavaFeatureFlagManagerUtilCheck | .java | Finds cases where `FeatureFlagManagerUtil.isEnabled` should be used and incorrect use of it. |
 [JavaFinderCacheCheck](check/java_finder_cache_check.md#javafindercachecheck) | .java | Checks that the method `BasePersistenceImpl.fetchByPrimaryKey` is overridden, when using `FinderPath`. |
 JavaFinderImplCustomSQLCheck | .java | Checks that hardcoded SQL values in `*FinderImpl` classes match the SQL in the `.xml` file in the `custom-sql` directory. |
 JavaIgnoreAnnotationCheck | .java | Finds methods with `@Ignore` annotation in test classes. |
@@ -189,6 +190,7 @@ PrimitiveWrapperInstantiationCheck | .java, .jsp, .jspf, .jspx, .tag, .tpl, or .
 PrincipalExceptionCheck | .java, .jsp, .jspf, .jspx, .tag, .tpl, or .vm | Finds calls to `PrincipalException.class.getName()` (use `PrincipalException.getNestedClasses()` instead). |
 PropertiesArchivedModulesCheck | .eslintignore, .prettierignore, or .properties | Finds `test.batch.class.names.includes` property value pointing to archived modules in `test.properties`. |
 PropertiesBuildIncludeDirsCheck | .eslintignore, .prettierignore, or .properties | Verifies property value of `build.include.dirs` in `build.properties`. |
+PropertiesDefaultAdminScreenNameCheck | .eslintignore, .prettierignore, or .properties | Checks that we do not use `default.admin.screen.name`. |
 PropertiesFeatureFlagsCheck | .eslintignore, .prettierignore, or .properties | Generate feature flags in `portal.properties` file. |
 PropertiesImportedFilesContentCheck | .eslintignore, .prettierignore, or .properties | Performs several checks on `imported-files.properties` file. |
 [PropertiesLanguageKeysCheck](check/properties_language_keys_check.md#propertieslanguagekeyscheck) | .eslintignore, .prettierignore, or .properties | Checks that there is no HTML markup in language keys. |
@@ -225,20 +227,20 @@ URLInputStreamCheck | .java | Checks usages of `URL.openStream()`. |
 UnparameterizedClassCheck | .java, .jsp, .jspf, .jspx, .tag, .tpl, or .vm | Finds `Class` instantiation without generic type. |
 UnwrappedVariableInfoCheck | .java | Finds cases where the variable should be wrapped into an inner class in order to defer array elements initialization. |
 ValidatorIsNullCheck | .java, .jsp, .jspf, .jspx, .tag, .tpl, or .vm | Ensures that only variable of type `Long`, `Serializable` or `String` is passed to method `com.liferay.portal.kernel.util.Validator.isNull`. |
-XMLBuildFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on `build.xml`. |
-XMLCDATACheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on `CDATA` inside `xml`. |
-XMLCheckstyleFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on `checkstyle.xml` file. |
-XMLLookAndFeelCompatibilityVersionCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Finds missing attribute `version` in `compatibility` element in `*--look-and-feel.xml` file. |
-XMLPortletFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on `portlet.xml` file. |
-XMLPoshiFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on poshi files. |
-XMLProjectElementCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Checks the project name in `.pom` file. |
-XMLServiceAutoImportDefaultReferencesCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Checks that the `auto-import-default-references` in `service.xml` does not equal `false`. |
-[XMLServiceEntityNameCheck](check/xml_service_entity_name_check.md#xmlserviceentitynamecheck) | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Checks that the `entity name` in `service.xml` does not equal the `package name`. |
-XMLServiceFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on `service.xml` file. |
-[XMLServiceFinderNameCheck](check/xml_service_finder_name_check.md#xmlservicefindernamecheck) | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Checks that the `finder name` in `service.xml`. |
-XMLServiceReferenceCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Checks for unused references in `service.xml` file. |
-XMLSourcechecksFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on `sourcechecks.xml` file. |
-XMLSuppressionsFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on `source-formatter-suppressions.xml` file. |
-XMLTagAttributesCheck | .action, .function, .html, .jelly, .jrxml, .macro, .path, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on tag attributes. |
-XMLWebFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on `web.xml` file. |
+XMLBuildFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .qti, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on `build.xml`. |
+XMLCDATACheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .qti, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on `CDATA` inside `xml`. |
+XMLCheckstyleFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .qti, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on `checkstyle.xml` file. |
+XMLLookAndFeelCompatibilityVersionCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .qti, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Finds missing attribute `version` in `compatibility` element in `*--look-and-feel.xml` file. |
+XMLPortletFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .qti, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on `portlet.xml` file. |
+XMLPoshiFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .qti, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on poshi files. |
+XMLProjectElementCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .qti, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Checks the project name in `.pom` file. |
+XMLServiceAutoImportDefaultReferencesCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .qti, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Checks that the `auto-import-default-references` in `service.xml` does not equal `false`. |
+[XMLServiceEntityNameCheck](check/xml_service_entity_name_check.md#xmlserviceentitynamecheck) | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .qti, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Checks that the `entity name` in `service.xml` does not equal the `package name`. |
+XMLServiceFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .qti, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on `service.xml` file. |
+[XMLServiceFinderNameCheck](check/xml_service_finder_name_check.md#xmlservicefindernamecheck) | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .qti, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Checks that the `finder name` in `service.xml`. |
+XMLServiceReferenceCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .qti, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Checks for unused references in `service.xml` file. |
+XMLSourcechecksFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .qti, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on `sourcechecks.xml` file. |
+XMLSuppressionsFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .qti, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on `source-formatter-suppressions.xml` file. |
+XMLTagAttributesCheck | .action, .function, .html, .jelly, .jrxml, .macro, .path, .pom, .project, .properties, .qti, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on tag attributes. |
+XMLWebFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .qti, .svg, .testcase, .toggle, .tpl, .wsdl, .xml, or .xsd | Performs several checks on `web.xml` file. |
 YMLRESTConfigFileBreakingChangeCommitMessageCheck | .tpl, .yaml, or .yml | Checks that commit message should contain the schematized breaking changes. |

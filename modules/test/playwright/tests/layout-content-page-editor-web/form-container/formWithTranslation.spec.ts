@@ -58,18 +58,6 @@ const test = mergeTests(
 	structureBuilderPagesTest
 );
 
-let structureIds = [];
-
-test.beforeEach(() => {
-	structureIds = [];
-});
-
-test.afterEach(async ({structureBuilderPage}) => {
-	for (const id of structureIds) {
-		await structureBuilderPage.deleteStructure(Number(id));
-	}
-});
-
 test(
 	'Can translate text form fields',
 	{tag: '@LPD-37927'},
@@ -629,7 +617,7 @@ test(
 			trigger: input,
 		});
 
-		const valueInput = page.locator('[name="selectCountry"]');
+		const valueInput = page.locator('[name="ObjectField_selectCountry"]');
 
 		await expect(valueInput).toHaveValue('italy');
 
@@ -1050,7 +1038,6 @@ test(
 			name: 'Bananza',
 			page: structureBuilderPage,
 			publish: false,
-			structureIds,
 		});
 
 		// Add two fields of type select and configure one of them to select files from document library

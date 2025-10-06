@@ -87,6 +87,7 @@ JavaComponentAnnotationsCheck | [Bug Prevention](bug_prevention_checks.md#bug-pr
 JavaConstantsFileCheck | [Naming Conventions](naming_conventions_checks.md#naming-conventions-checks) | Checks if constants names follow naming conventions. |
 [JavaConstructorParametersCheck](check/java_constructor_parameters_check.md#javaconstructorparameterscheck) | [Styling](styling_checks.md#styling-checks) | Checks that the order of variable assignments matches the order of the parameters in the constructor signature. |
 JavaConstructorSuperCallCheck | [Styling](styling_checks.md#styling-checks) | Finds unnecessary call to no-argument constructor of the superclass. |
+JavaDefaultAdminScreenNameCheck | [Bug Prevention](bug_prevention_checks.md#bug-prevention-checks) | Checks that we do not use `PropsKeys.DEFAULT_ADMIN_SCREEN_NAME` or `PropsValues.DEFAULT_ADMIN_SCREEN_NAME`. |
 JavaDeprecatedJavadocCheck | [Javadoc](javadoc_checks.md#javadoc-checks) | Checks if the `@deprecated` javadoc is pointing to the correct version. |
 JavaDeserializationSecurityCheck | [Security](security_checks.md#security-checks) | Finds Java serialization vulnerabilities. |
 JavaDiamondOperatorCheck | [Miscellaneous](miscellaneous_checks.md#miscellaneous-checks) | Finds cases where Diamond Operator is not used. |
@@ -96,7 +97,7 @@ JavaEmptyLineAfterSuperCallCheck | [Miscellaneous](miscellaneous_checks.md#misce
 JavaEmptyLinesCheck | [Styling](styling_checks.md#styling-checks) | Finds missing and unnecessary empty lines. |
 JavaEntityFieldsMapOrderCheck | [Styling](styling_checks.md#styling-checks) | Sorts entity fields when calling `EntityFieldsMapFactory.create` and `EntityModel.toEntityFieldsMap`. |
 JavaExceptionCheck | [Naming Conventions](naming_conventions_checks.md#naming-conventions-checks) | Checks that variable names of exceptions in `catch` statements follow naming conventions. |
-JavaFeatureFlagManagerUtilCheck | [Bug Prevention](bug_prevention_checks.md#bug-prevention-checks) | Finds cases where `FeatureFlagManagerUtil.isEnabled` should be used. |
+JavaFeatureFlagManagerUtilCheck | [Bug Prevention](bug_prevention_checks.md#bug-prevention-checks) | Finds cases where `FeatureFlagManagerUtil.isEnabled` should be used and incorrect use of it. |
 JavaFeatureFlagsAndTestInfoAnnotationCheck | [Styling](styling_checks.md#styling-checks) | Sorts the values in `@FeatureFlags` and `@TestInfo` annotation. |
 JavaFinalVariableCheck | [Styling](styling_checks.md#styling-checks) | Finds cases of unneeded `final` modifiers for variables and parameters. |
 [JavaFinderCacheCheck](check/java_finder_cache_check.md#javafindercachecheck) | [Bug Prevention](bug_prevention_checks.md#bug-prevention-checks) | Checks that the method `BasePersistenceImpl.fetchByPrimaryKey` is overridden, when using `FinderPath`. |

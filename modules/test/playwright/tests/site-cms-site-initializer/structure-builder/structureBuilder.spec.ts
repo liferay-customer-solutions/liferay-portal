@@ -26,18 +26,6 @@ const test = mergeTests(
 	structureBuilderPagesTest
 );
 
-let structureIds = [];
-
-test.beforeEach(() => {
-	structureIds = [];
-});
-
-test.afterEach(async ({structureBuilderPage}) => {
-	for (const id of structureIds) {
-		await structureBuilderPage.deleteStructure(Number(id));
-	}
-});
-
 test(
 	'Structures can be saved and published',
 	{tag: '@LPD-36752'},
@@ -84,9 +72,7 @@ test(
 
 		// Save the structure
 
-		const {id} = await structureBuilderPage.saveStructure();
-
-		structureIds.push(id);
+		await structureBuilderPage.saveStructure();
 
 		await expect(page.locator('.alert-danger')).not.toBeVisible();
 
@@ -129,7 +115,6 @@ test(
 			label,
 			name: label,
 			page: structureBuilderPage,
-			structureIds,
 		});
 
 		// Add a field of each type
@@ -167,7 +152,6 @@ test(
 			label,
 			name: label,
 			page: structureBuilderPage,
-			structureIds,
 		});
 
 		// Add four fields
@@ -207,7 +191,6 @@ test(
 			label,
 			name: label,
 			page: structureBuilderPage,
-			structureIds,
 		});
 
 		// Add a text field
@@ -341,7 +324,6 @@ test(
 		await structureBuilderPage.createStructureFromData({
 			label: `StructureName${getRandomInt()}`,
 			page: structureBuilderPage,
-			structureIds,
 		});
 
 		// Type content and check initial fields
@@ -403,15 +385,16 @@ test(
 		await structureBuilderPage.createStructureFromData({
 			label: label1,
 			page: structureBuilderPage,
-			structureIds,
 		});
 
 		// Create main structure
 
-		const erc = await structureBuilderPage.createStructureFromData({
+		const erc = getRandomString();
+
+		await structureBuilderPage.createStructureFromData({
+			erc,
 			label: getRandomString(),
 			page: structureBuilderPage,
-			structureIds,
 		});
 
 		// Add a referenced structure
@@ -440,13 +423,11 @@ test(
 
 		// Add another field and check order is correct
 
-		await structureBuilderPage.addField('Long Text');
+		await structureBuilderPage.addField('Date');
 
 		await expect(page.locator('.treeview-link').nth(2)).toHaveText('Text');
 
-		await expect(page.locator('.treeview-link').nth(3)).toHaveText(
-			'Long Text'
-		);
+		await expect(page.locator('.treeview-link').nth(3)).toHaveText('Date');
 
 		await expect(page.locator('.treeview-link').nth(4)).toHaveText(label1);
 
@@ -462,9 +443,7 @@ test(
 
 		await expect(page.locator('.treeview-link').nth(2)).toHaveText('Text');
 
-		await expect(page.locator('.treeview-link').nth(3)).toHaveText(
-			'Long Text'
-		);
+		await expect(page.locator('.treeview-link').nth(3)).toHaveText('Date');
 
 		await expect(page.locator('.treeview-link').nth(4)).toHaveText(label1);
 

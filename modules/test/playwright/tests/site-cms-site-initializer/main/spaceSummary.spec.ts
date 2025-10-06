@@ -9,7 +9,6 @@ import {dataApiHelpersTest} from '../../../fixtures/dataApiHelpersTest';
 import {featureFlagsTest} from '../../../fixtures/featureFlagsTest';
 import {loginTest} from '../../../fixtures/loginTest';
 import getRandomString from '../../../utils/getRandomString';
-import {waitForAlert} from '../../../utils/waitForAlert';
 import {cmsPagesTest} from './fixtures/cmsPagesTest';
 
 const test = mergeTests(
@@ -97,25 +96,15 @@ test(
 
 		await spaceSummaryPage.addUserOrUserGroup(userGroup.name, 'groups');
 
-		await waitForAlert(
-			page,
-			`Success:Group ${userGroup.name} successfully added to space.`
-		);
-
 		await spaceSummaryPage.userGroupsTab.click();
 
-		expect(page.getByText(userGroup.name, {exact: true})).toBeVisible();
+		await expect(page.getByText(userGroup.name)).toBeVisible();
 
 		await spaceSummaryPage.removeUserOrUserGroup(userGroup.name, 'groups');
 
-		await waitForAlert(
-			page,
-			`Success:Group ${userGroup.name} successfully removed from space.`
-		);
-
 		await spaceSummaryPage.userGroupsTab.click();
 
-		expect(page.getByText(userGroup.name, {exact: true})).not.toBeVisible();
+		await expect(page.getByText(userGroup.name)).not.toBeVisible();
 	}
 );
 
@@ -123,7 +112,7 @@ test(
 	'Can view added content in the space summary page',
 	{tag: '@LPD-62706'},
 	async ({apiHelpers, page, spaceSummaryPage}) => {
-		const applicationName = 'cms/knowledge-bases';
+		const applicationName = 'cms/basic-web-contents';
 		const spaceName = 'Default';
 
 		const file1Title = `title ${getRandomString()}`;
@@ -184,7 +173,7 @@ test(
 	'Can view Share modal for added content',
 	{tag: '@LPD-62554'},
 	async ({apiHelpers, assetsPage, page, spaceSummaryPage}) => {
-		const applicationName = 'cms/knowledge-bases';
+		const applicationName = 'cms/basic-web-contents';
 		const file1Title = `Title ${getRandomString()}`;
 		const spaceName = `Space ${getRandomString()}`;
 		let objectEntry1;

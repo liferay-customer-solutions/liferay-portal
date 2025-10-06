@@ -130,6 +130,7 @@ import com.liferay.portal.kernel.test.util.UserGroupTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -137,6 +138,7 @@ import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.UnicodePropertiesBuilder;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.kernel.workflow.WorkflowDefinition;
 import com.liferay.portal.language.override.model.PLOEntry;
 import com.liferay.portal.language.override.service.PLOEntryLocalService;
 import com.liferay.portal.test.rule.FeatureFlag;
@@ -148,6 +150,7 @@ import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
 import com.liferay.portal.workflow.kaleo.model.KaleoDefinition;
 import com.liferay.portal.workflow.kaleo.service.KaleoDefinitionLocalService;
+import com.liferay.portal.workflow.manager.WorkflowDefinitionManager;
 import com.liferay.sharing.security.permission.SharingEntryAction;
 import com.liferay.sharing.service.SharingEntryLocalService;
 
@@ -773,6 +776,24 @@ public class ObjectDefinitionLocalServiceTest {
 
 		Assert.assertEquals(
 			WorkflowConstants.STATUS_DRAFT, kaleoDefinition.getStatus());
+
+		String content = kaleoDefinition.getContent();
+
+		WorkflowDefinition workflowDefinition =
+			_workflowDefinitionManager.saveWorkflowDefinition(
+				kaleoDefinition.getExternalReferenceCode(),
+				TestPropsValues.getCompanyId(), TestPropsValues.getUserId(),
+				kaleoDefinition.getTitle(), kaleoDefinition.getName(),
+				kaleoDefinition.getScope(), content.getBytes());
+
+		workflowDefinitionLink =
+			_workflowDefinitionLinkLocalService.getWorkflowDefinitionLink(
+				TestPropsValues.getCompanyId(), 0,
+				objectDefinition.getClassName(), 0, 0, true);
+
+		Assert.assertEquals(
+			workflowDefinition.getVersion(),
+			workflowDefinitionLink.getWorkflowDefinitionVersion());
 	}
 
 	@Test
@@ -2258,6 +2279,16 @@ public class ObjectDefinitionLocalServiceTest {
 			_classNameLocalService.fetchByClassNameId(
 				className.getClassNameId()));
 
+		_workflowDefinitionLinkLocalService.updateWorkflowDefinitionLink(
+			TestPropsValues.getUserId(), TestPropsValues.getCompanyId(), 0,
+			objectDefinition.getClassName(), 0, 0, "Single Approver", 1);
+
+		Assert.assertTrue(
+			ListUtil.isNotEmpty(
+				_workflowDefinitionLinkLocalService.getWorkflowDefinitionLinks(
+					TestPropsValues.getCompanyId(),
+					objectDefinition.getClassName())));
+
 		TreeTestUtil.unbind(
 			objectDefinition.getObjectDefinitionId(),
 			_objectRelationshipLocalService);
@@ -2319,6 +2350,14 @@ public class ObjectDefinitionLocalServiceTest {
 				ObjectDefinition.class.getName(),
 				ResourceConstants.SCOPE_INDIVIDUAL,
 				String.valueOf(objectDefinition.getObjectDefinitionId())));
+
+		// Workflow definition links
+
+		Assert.assertTrue(
+			ListUtil.isEmpty(
+				_workflowDefinitionLinkLocalService.getWorkflowDefinitionLinks(
+					TestPropsValues.getCompanyId(),
+					objectDefinition.getClassName())));
 
 		// Delete modifiable system object definition
 
@@ -4243,5 +4282,8 @@ public class ObjectDefinitionLocalServiceTest {
 	@Inject
 	private WorkflowDefinitionLinkLocalService
 		_workflowDefinitionLinkLocalService;
+
+	@Inject
+	private WorkflowDefinitionManager _workflowDefinitionManager;
 
 }

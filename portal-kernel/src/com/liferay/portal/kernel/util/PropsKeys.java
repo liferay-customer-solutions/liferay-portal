@@ -435,6 +435,9 @@ public interface PropsKeys {
 	public static final String CLUSTERABLE_ADVICE_CALL_MASTER_TIMEOUT =
 		"clusterable.advice.call.master.timeout";
 
+	public static final String CMS_BROKEN_LINKS_CHECKER_ENABLED =
+		"cms.broken.links.checker.enabled";
+
 	public static final String COMBO_ALLOWED_FILE_EXTENSIONS =
 		"combo.allowed.file.extensions";
 
@@ -1527,16 +1530,7 @@ public interface PropsKeys {
 
 	public static final String LOGOUT_EVENTS_PRE = "logout.events.pre";
 
-	public static final String MAIL_AUDIT_TRAIL = "mail.audit.trail";
-
-	public static final String MAIL_BATCH_SIZE = "mail.batch.size";
-
 	public static final String MAIL_MX_UPDATE = "mail.mx.update";
-
-	public static final String MAIL_SEND_BLACKLIST = "mail.send.blacklist";
-
-	public static final String MAIL_THROWS_EXCEPTION_ON_FAILURE =
-		"mail.throws.exception.on.failure";
 
 	public static final String MARKETPLACE_CLIENT_ID = "marketplace.client.id";
 
@@ -2010,8 +2004,6 @@ public interface PropsKeys {
 	public static final String PERMISSIONS_CHECK_GUEST_ENABLED =
 		"permissions.check.guest.enabled";
 
-	public static final String PERMISSIONS_CHECKER = "permissions.checker";
-
 	public static final String
 		PERMISSIONS_CUSTOM_ATTRIBUTE_READ_CHECK_BY_DEFAULT =
 			"permissions.custom.attribute.read.check.by.default";
@@ -2038,8 +2030,6 @@ public interface PropsKeys {
 
 	public static final String PHONE_NUMBER_FORMAT_USA_REGEXP =
 		"phone.number.format.usa.regexp";
-
-	public static final String POP_SERVER_SUBDOMAIN = "pop.server.subdomain";
 
 	public static final String PORTAL_IMPERSONATION_DEFAULT_URL =
 		"portal.impersonation.default.url";

@@ -174,22 +174,14 @@ public class EmailUtil {
 
 			StringBundler sb = new StringBundler(3);
 
-			String fileName = patcherBuild.getFileName();
+			PatcherConfiguration patcherConfiguration =
+				ConfigurationProviderUtil.getCompanyConfiguration(
+					PatcherConfiguration.class, patcherBuild.getCompanyId());
 
-			if (fileName.contains("/liferay-dxp-")) {
-				sb.append("https://releases-cdn.liferay.com/dxp/hotfix");
-			}
-			else {
-				PatcherConfiguration patcherConfiguration =
-					ConfigurationProviderUtil.getCompanyConfiguration(
-						PatcherConfiguration.class,
-						patcherBuild.getCompanyId());
-
-				sb.append(patcherConfiguration.patcherBuildDownloadURL());
-			}
+			sb.append(patcherConfiguration.patcherBuildDownloadURL());
 
 			sb.append(StringPool.SLASH);
-			sb.append(fileName);
+			sb.append(patcherBuild.getFileName());
 
 			return sb.toString();
 		}

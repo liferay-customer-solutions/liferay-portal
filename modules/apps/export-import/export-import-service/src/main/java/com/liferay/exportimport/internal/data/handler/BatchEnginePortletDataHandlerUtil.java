@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.Serializable;
 
@@ -39,7 +40,8 @@ public class BatchEnginePortletDataHandlerUtil {
 	public static Map<String, Serializable> buildExportParameters(
 		ExportImportVulcanBatchEngineTaskItemDelegate.ExportImportDescriptor
 			exportImportDescriptor,
-		PortletDataContext portletDataContext) {
+		PortletDataContext portletDataContext,
+		String siteExternalReferenceCode) {
 
 		return HashMapBuilder.<String, Serializable>put(
 			"batchNestedFields",
@@ -101,6 +103,15 @@ public class BatchEnginePortletDataHandlerUtil {
 		).put(
 			"itemModelName", exportImportDescriptor.getItemModelName()
 		).put(
+			"siteExternalReferenceCode",
+			() -> {
+				if (Validator.isNotNull(siteExternalReferenceCode)) {
+					return siteExternalReferenceCode;
+				}
+
+				return null;
+			}
+		).put(
 			"siteId",
 			() -> {
 				Map<String, String[]> map =
@@ -116,14 +127,15 @@ public class BatchEnginePortletDataHandlerUtil {
 				return portletDataContext.getScopeGroupId();
 			}
 		).putAll(
-			exportImportDescriptor.getParameters()
+			exportImportDescriptor.getParameters(portletDataContext)
 		).build();
 	}
 
 	public static Map<String, Serializable> buildImportParameters(
 		ExportImportVulcanBatchEngineTaskItemDelegate.ExportImportDescriptor
 			exportImportDescriptor,
-		PortletDataContext portletDataContext) {
+		PortletDataContext portletDataContext,
+		String siteExternalReferenceCode) {
 
 		return HashMapBuilder.<String, Serializable>put(
 			"batchRestrictFields",
@@ -158,7 +170,18 @@ public class BatchEnginePortletDataHandlerUtil {
 		).put(
 			"itemModelName", exportImportDescriptor.getItemModelName()
 		).put(
+			"siteExternalReferenceCode",
+			() -> {
+				if (Validator.isNotNull(siteExternalReferenceCode)) {
+					return siteExternalReferenceCode;
+				}
+
+				return null;
+			}
+		).put(
 			"siteId", portletDataContext.getScopeGroupId()
+		).putAll(
+			exportImportDescriptor.getParameters(portletDataContext)
 		).build();
 	}
 

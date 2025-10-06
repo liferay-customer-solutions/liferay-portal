@@ -104,8 +104,27 @@ export default function ({
 			openModal({
 				buttons: [
 					{
+						className: includeDeclineAllButton ? '' : 'd-none',
 						displayType: 'secondary',
-						label: Liferay.Language.get('confirm'),
+						label: Liferay.Language.get(
+							'use-necessary-cookies-only'
+						),
+						onClick() {
+							declineAllCookies(
+								optionalConsentCookieTypeNames,
+								requiredConsentCookieTypeNames
+							);
+
+							setUserConfigCookie();
+
+							setBannerVisibility(cookieBanner);
+
+							getOpener().Liferay.fire('closeModal');
+						},
+					},
+					{
+						displayType: 'secondary',
+						label: Liferay.Language.get('accept-selected'),
 						onClick() {
 							Object.entries(cookiePreferences).forEach(
 								([key, value]) => {
@@ -134,23 +153,6 @@ export default function ({
 						label: Liferay.Language.get('accept-all'),
 						onClick() {
 							acceptAllCookies(
-								optionalConsentCookieTypeNames,
-								requiredConsentCookieTypeNames
-							);
-
-							setUserConfigCookie();
-
-							setBannerVisibility(cookieBanner);
-
-							getOpener().Liferay.fire('closeModal');
-						},
-					},
-					{
-						className: includeDeclineAllButton ? '' : 'd-none',
-						displayType: 'secondary',
-						label: Liferay.Language.get('decline-all'),
-						onClick() {
-							declineAllCookies(
 								optionalConsentCookieTypeNames,
 								requiredConsentCookieTypeNames
 							);

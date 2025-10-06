@@ -5,6 +5,7 @@
 
 package com.liferay.exportimport.vulcan.batch.engine;
 
+import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.portal.vulcan.batch.engine.VulcanBatchEngineTaskItemDelegate;
 
 import java.io.Serializable;
@@ -36,13 +37,19 @@ public interface ExportImportVulcanBatchEngineTaskItemDelegate<T>
 			return null;
 		}
 
-		public default Map<String, Serializable> getParameters() {
+		public default Map<String, Serializable> getParameters(
+			PortletDataContext portletDataContext) {
+
 			return null;
 		}
 
 		public String getPortletId();
 
 		public Scope getScope();
+
+		public default boolean isActive(PortletDataContext portletDataContext) {
+			return true;
+		}
 
 	}
 

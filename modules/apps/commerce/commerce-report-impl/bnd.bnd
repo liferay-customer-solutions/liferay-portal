@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Commerce Report Implementation
 Bundle-SymbolicName: com.liferay.commerce.report.impl
-Bundle-Version: 1.0.30
+Bundle-Version: 1.0.31
 DynamicImport-Package: *
 Import-Package:\
 	!antlr.*,\
@@ -96,3 +96,4 @@ Import-Package:\
 	org.bouncycastle.*;resolution:=optional,\
 	\
 	*
+-fixupmessages "Classes found in the wrong directory"; restrict:=error; is:=ignore

@@ -18,10 +18,12 @@ import com.liferay.notification.internal.type.users.provider.UsersProvider;
 import com.liferay.notification.model.NotificationQueueEntry;
 import com.liferay.notification.model.NotificationRecipient;
 import com.liferay.notification.model.NotificationRecipientSetting;
+import com.liferay.notification.model.NotificationRecipientSettingModel;
 import com.liferay.notification.model.NotificationTemplate;
 import com.liferay.notification.type.BaseNotificationType;
 import com.liferay.notification.type.NotificationType;
 import com.liferay.object.service.ObjectEntryService;
+import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
@@ -134,7 +136,17 @@ public class UserNotificationType extends BaseNotificationType {
 		UsersProvider usersProvider = _usersProviders.get(
 			notificationTemplate.getRecipientType());
 
-		for (User user : usersProvider.provide(notificationContext)) {
+		NotificationRecipient notificationRecipient =
+			notificationTemplate.getNotificationRecipient();
+
+		for (User user :
+				usersProvider.provide(
+					notificationContext,
+					TransformUtil.unsafeTransform(
+						notificationRecipient.
+							getNotificationRecipientSettings(),
+						NotificationRecipientSettingModel::getValue))) {
+
 			boolean deliver = UserNotificationManagerUtil.isDeliver(
 				user.getUserId(), notificationContext.getPortletId(),
 				_classNameLocalService.getClassNameId(
@@ -197,16 +209,18 @@ public class UserNotificationType extends BaseNotificationType {
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
+		RoleUsersProvider roleUsersProvider = new RoleUsersProvider(
+			_permissionCheckerFactory, _roleLocalService,
+			_userGroupRoleLocalService, userLocalService);
+
 		_usersProviders.put(
-			NotificationRecipientConstants.TYPE_ROLE,
-			new RoleUsersProvider(
-				_permissionCheckerFactory, _roleLocalService,
-				_userGroupRoleLocalService, userLocalService));
+			NotificationRecipientConstants.TYPE_ROLE, roleUsersProvider);
 		_usersProviders.put(
 			NotificationRecipientConstants.TYPE_TERM,
 			new TermUsersProvider(
-				_permissionCheckerFactory, notificationTermEvaluatorTracker,
-				userLocalService));
+				notificationTermEvaluatorTracker, _permissionCheckerFactory,
+				_roleLocalService, roleUsersProvider, userLocalService));
+
 		_usersProviders.put(
 			NotificationRecipientConstants.TYPE_USER,
 			new DefaultUsersProvider(

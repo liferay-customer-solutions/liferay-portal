@@ -43,7 +43,7 @@ export class SitesAdminPage {
 		).toBeVisible();
 
 		if (closeModal) {
-			await this.page.getByLabel('close').click();
+			await this.page.locator('.modal').getByLabel('Close').click();
 
 			await expect(
 				this.page.getByRole('heading', {name: 'Provided by Liferay'})
