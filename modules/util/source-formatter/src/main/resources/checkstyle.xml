@@ -782,7 +782,8 @@
 		</module>
 		<module name="com.liferay.source.formatter.checkstyle.check.ResourceImplCheck">
 			<property name="category" value="Bug Prevention" />
-			<property name="description" value="Performs several checks on `*ResourceImpl` classes (except `Base*ResourceImpl` classes)." />
+			<property name="description" value="Performs several checks on `*ResourceImpl` classes." />
+			<message key="access.modifier.incorrect" value="Incorrect modifier of method &quot;{0}&quot;. All the &quot;doGet*&quot; methods in &quot;*ResourceImpl.java&quot; should be &quot;protected&quot;" />
 			<message key="method.parameter.annotation.invalid" value="Remove annotation &quot;{0}&quot; from method parameter &quot;{1}&quot;" />
 		</module>
 		<module name="com.liferay.source.formatter.checkstyle.check.ResourcePermissionCheck">
@@ -799,6 +800,11 @@
 			<property name="description" value="Checks usage of `*ResourcePermissionFactory` classes." />
 			<property name="enabled" value="false" />
 			<message key="deprecated.get.instance.usage" value="Do not use &quot;{0}&quot;. Use @Reference instead" />
+		</module>
+		<module name="com.liferay.source.formatter.checkstyle.check.ResourceTestInjectionCheck">
+			<property name="category" value="Bug Prevention" />
+			<property name="description" value="Checks that if any `*ResourceTest` class injects another resource that is not a `client`." />
+			<message key="resource.injection.incorrect" value="Incorrect injection for &quot;{0}&quot;. Do not inject another resource that is not a &quot;client&quot;" />
 		</module>
 		<module name="com.liferay.source.formatter.checkstyle.check.RESTDTOSetCallCheck">
 			<property name="category" value="Performance" />
