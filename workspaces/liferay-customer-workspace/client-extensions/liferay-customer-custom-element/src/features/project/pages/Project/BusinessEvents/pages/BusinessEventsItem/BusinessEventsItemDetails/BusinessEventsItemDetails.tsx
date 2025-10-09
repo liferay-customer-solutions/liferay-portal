@@ -24,9 +24,9 @@ import getKebabCase from '~/utils/getKebabCase';
 
 import AssociatedTicketsContainer from '../../../components/AssociatedTicketsContainer';
 import ManageEventModal from '../../../components/ManageEventModal';
-import useAccountsTickets from '../../../hooks/useAccountsTickets';
 import useGetBusinessEvent from '../../../hooks/useGetBusinessEvent';
 import useHasAllEventsPermissions from '../../../hooks/useHasAllEventsPermissions';
+import getAccountTickets from '../../../utils/getAccountTickets';
 
 const BusinessEventsItemDetails = () => {
 	const {accountKey, id} = useParams<{accountKey: string; id: string}>();
@@ -35,16 +35,38 @@ const BusinessEventsItemDetails = () => {
 		id || ''
 	);
 
-	const {client} = useAppPropertiesContext();
+	const {client, featureFlags} = useAppPropertiesContext();
 
+	const [tickets, setTickets] = useState<ITicket[]>([]);
+	const [associatedTickets, setAssociatedTickets] = useState<ITicket[]>([]);
+	const [loadingTickets, setLoadingTickets] = useState<boolean>(false);
 	const [modalType, setModalType] = useState('');
 	const {hasAllEventsPermissions} = useHasAllEventsPermissions();
 
-	const {loading: loadingTickets, tickets} = useAccountsTickets(
-		businessEvent,
+	useEffect(() => {
+		const fetchTickets = async () => {
+			setLoadingTickets(true);
+
+			const fetchedTickets = await getAccountTickets(
+				accountKey || '',
+				businessEvent,
+				featureFlags
+			);
+
+			setTickets(fetchedTickets);
+			setLoadingTickets(false);
+		};
+
+		if (associatedTickets.length && !tickets.length) {
+			fetchTickets();
+		}
+	}, [
+		associatedTickets,
+		featureFlags,
 		accountKey,
-		loading
-	);
+		businessEvent,
+		tickets.length,
+	]);
 
 	const location = useLocation();
 	const navigate = useNavigate();
@@ -108,6 +130,7 @@ const BusinessEventsItemDetails = () => {
 				businessEvent.associatedTickets!
 			);
 
+			setAssociatedTickets(associatedTickets);
 			setTicketOptions([
 				...(tickets?.filter((ticket) =>
 					associatedTickets.includes(ticket.ticketId)

@@ -23,12 +23,12 @@ import {isValidDate} from '~/utils/validations.form';
 import Layout from '../../../../../../../components/FormLayout';
 import AssociatedTicketsContainer from '../../components/AssociatedTicketsContainer';
 import useAccountsSyncBusinessEvents from '../../hooks/useAccountsSyncBusinessEvents';
-import useAccountsTickets from '../../hooks/useAccountsTickets';
 import useGetBusinessEventTypesList from '../../hooks/useGetBusinessEventTypesList';
 import useGetLiferayVersions from '../../hooks/useGetLiferayVersions';
 import useGetUTCTimeZonesList from '../../hooks/useGetUTCTimeZonesList';
 import useHasAllEventsPermissions from '../../hooks/useHasAllEventsPermissions';
 import {containsOption} from '../../utils/containsOption';
+import getAccountTickets from '../../utils/getAccountTickets';
 import {getFormattedGoLiveDateTime} from '../../utils/getFormattedGoLiveDate';
 import useIsSaasOnly from '../../utils/useIsSaasOnly';
 
@@ -58,6 +58,9 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 	const [{project, subscriptionGroups}] = useAppContext();
 
 	const [baseButtonDisabled, setBaseButtonDisabled] = useState<boolean>(true);
+
+	const [tickets, setTickets] = useState<ITicket[]>([]);
+	const [loadingTickets, setLoadingTickets] = useState<boolean>(false);
 
 	const {businessEventTypesList, loading: loadingBusinessEventTypesList} =
 		useGetBusinessEventTypesList();
@@ -90,10 +93,30 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 
 	const {isSaasOnly} = useIsSaasOnly(subscriptionGroups);
 
-	const {loading: loadingTickets, tickets} = useAccountsTickets(
-		undefined,
-		project?.accountKey || ''
-	);
+	useEffect(() => {
+		const fetchTickets = async () => {
+			setLoadingTickets(true);
+
+			const fetchedTickets = await getAccountTickets(
+				project?.accountKey || '',
+				businessEvent,
+				featureFlags
+			);
+
+			setTickets(fetchedTickets);
+			setLoadingTickets(false);
+		};
+
+		if (hasImpactingEvents === 'yes' && !tickets.length) {
+			fetchTickets();
+		}
+	}, [
+		hasImpactingEvents,
+		featureFlags,
+		project?.accountKey,
+		businessEvent,
+		tickets.length,
+	]);
 
 	const {loading: loadingUTCTimeZonesList, utcTimeZonesList} =
 		useGetUTCTimeZonesList();
@@ -221,7 +244,6 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 	const loading =
 		loadingBusinessEventTypesList ||
 		loadingLiferayVersions ||
-		loadingTickets ||
 		loadingUTCTimeZonesList;
 
 	useEffect(() => {
@@ -608,7 +630,9 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 
 								{hasImpactingEvents === 'yes' && (
 									<div className="mx-3 pb-3">
-										{ticketOptions.length ? (
+										{loadingTickets ? (
+											<ClayLoadingIndicator size="sm" />
+										) : ticketOptions.length ? (
 											<>
 												<label>
 													{i18n.translate(
