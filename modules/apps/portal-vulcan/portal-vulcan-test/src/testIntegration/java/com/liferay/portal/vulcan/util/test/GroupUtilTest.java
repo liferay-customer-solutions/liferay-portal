@@ -15,6 +15,7 @@ import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.UserGroup;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.UserGroupLocalService;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserGroupTestUtil;
@@ -114,6 +115,15 @@ public class GroupUtilTest {
 				_userGroupLocalService.deleteUserGroup(userGroup);
 			}
 		}
+	}
+
+	@Test
+	public void testGetGroupIdWithDifferentCompanyId() throws Exception {
+		Assert.assertNull(
+			GroupUtil.getGroupId(
+				RandomTestUtil.randomLong(),
+				String.valueOf(TestPropsValues.getGroupId()),
+				_groupLocalService));
 	}
 
 	@FeatureFlag("LPD-17564")

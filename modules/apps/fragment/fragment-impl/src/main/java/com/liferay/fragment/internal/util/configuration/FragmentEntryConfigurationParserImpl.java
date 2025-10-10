@@ -199,10 +199,23 @@ public class FragmentEntryConfigurationParserImpl
 					fragmentConfigurationField.getType(),
 					"collectionSelector")) {
 
+				ServiceContext serviceContext =
+					ServiceContextThreadLocal.getServiceContext();
+
+				if (serviceContext == null) {
+					return null;
+				}
+
+				ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
+
+				if (themeDisplay == null) {
+					return null;
+				}
+
 				Object contextListObject = _getInfoListObjectEntry(
-					configurationValuesJSONObject.getString(name),
-					segmentsEntryIds,
-					fragmentConfigurationField.getTypeOptionsJSONObject());
+					themeDisplay.getScopeGroupId(), segmentsEntryIds,
+					fragmentConfigurationField.getTypeOptionsJSONObject(),
+					configurationValuesJSONObject.getString(name));
 
 				if (contextListObject != null) {
 					contextObjects.put(
@@ -662,8 +675,8 @@ public class FragmentEntryConfigurationParserImpl
 	}
 
 	private Object _getInfoListObjectEntry(
-		String value, long[] segmentsEntryIds,
-		JSONObject typeOptionsJSONObject) {
+		long scopeGroupId, long[] segmentsEntryIds,
+		JSONObject typeOptionsJSONObject, String value) {
 
 		if (Validator.isNull(value)) {
 			return Collections.emptyList();
@@ -708,6 +721,7 @@ public class FragmentEntryConfigurationParserImpl
 				}
 			}
 
+			defaultLayoutListRetrieverContext.setScopeGroupId(scopeGroupId);
 			defaultLayoutListRetrieverContext.setSegmentsEntryIds(
 				segmentsEntryIds);
 
