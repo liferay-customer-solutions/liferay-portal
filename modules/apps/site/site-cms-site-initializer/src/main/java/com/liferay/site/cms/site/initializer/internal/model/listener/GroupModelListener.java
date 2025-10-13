@@ -125,14 +125,14 @@ public class GroupModelListener extends BaseModelListener<Group> {
 			return;
 		}
 
-		ObjectDefinition basicDocumentObjectDefinition =
+		ObjectDefinition cmsBasicDocumentObjectDefinition =
 			_objectDefinitionLocalService.
 				getObjectDefinitionByExternalReferenceCode(
-					"L_BASIC_DOCUMENT", group.getCompanyId());
-		ObjectDefinition basicWebContentObjectDefinition =
+					"L_CMS_BASIC_DOCUMENT", group.getCompanyId());
+		ObjectDefinition cmsBasicWebContentObjectDefinition =
 			_objectDefinitionLocalService.
 				getObjectDefinitionByExternalReferenceCode(
-					"L_BASIC_WEB_CONTENT", group.getCompanyId());
+					"L_CMS_BASIC_WEB_CONTENT", group.getCompanyId());
 
 		CMSDefaultPermissionUtil.addOrUpdateObjectEntry(
 			null, group.getCompanyId(), group.getCreatorUserId(),
@@ -143,7 +143,7 @@ public class GroupModelListener extends BaseModelListener<Group> {
 					RoleConstants.CMS_ADMINISTRATOR,
 					TransformUtil.transformToArray(
 						_resourceActionLocalService.getResourceActions(
-							basicWebContentObjectDefinition.getClassName()),
+							cmsBasicWebContentObjectDefinition.getClassName()),
 						resourceAction -> resourceAction.getActionId(),
 						String.class))
 			).put(
@@ -152,7 +152,7 @@ public class GroupModelListener extends BaseModelListener<Group> {
 					RoleConstants.CMS_ADMINISTRATOR,
 					TransformUtil.transformToArray(
 						_resourceActionLocalService.getResourceActions(
-							basicDocumentObjectDefinition.getClassName()),
+							cmsBasicDocumentObjectDefinition.getClassName()),
 						resourceAction -> resourceAction.getActionId(),
 						String.class))
 			).put(

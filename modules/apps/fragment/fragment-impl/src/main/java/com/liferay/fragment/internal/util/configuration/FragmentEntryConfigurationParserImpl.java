@@ -766,7 +766,9 @@ public class FragmentEntryConfigurationParserImpl
 
 		FragmentEntryMenuDisplayConfiguration
 			fragmentEntryMenuDisplayConfiguration =
-				new FragmentEntryMenuDisplayConfiguration(value);
+				new FragmentEntryMenuDisplayConfiguration(
+					serviceContext.getCompanyId(), value,
+					serviceContext.getScopeGroupId());
 
 		return NavItemUtil.getNavigationMenuContext(
 			1, "auto", serviceContext.getRequest(),
@@ -774,8 +776,7 @@ public class FragmentEntryConfigurationParserImpl
 			false, fragmentEntryMenuDisplayConfiguration.getRootItemId(),
 			fragmentEntryMenuDisplayConfiguration.getRootItemLevel(),
 			fragmentEntryMenuDisplayConfiguration.getRootItemType(),
-			fragmentEntryMenuDisplayConfiguration.getSiteNavigationMenuId(
-				serviceContext.getScopeGroupId()));
+			fragmentEntryMenuDisplayConfiguration.getSiteNavigationMenuId());
 	}
 
 	private Object _getURLValue(String value) {

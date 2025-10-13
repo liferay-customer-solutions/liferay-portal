@@ -233,46 +233,6 @@ components:
                 -   id
                 -   collectionViewportDefinition
             type: object
-        ColumnPageElementDefinition:
-            allOf:
-                -   $ref: "#/components/schemas/PageElementDefinition"
-                -   properties:
-                        columnViewports:
-                            # @review
-                            description:
-                                A list of column viewports of the column page element.
-                            items:
-                                $ref: "#/components/schemas/ColumnViewport"
-                            type: array
-                        size:
-                            # @review
-                            description:
-                                The page column's size.
-                            maximum: 12
-                            minimum: 1
-                            type: integer
-            # @review
-            description:
-                The page element definition of a Column.
-            type: object
-        ColumnViewport:
-            # @review
-            description:
-                A column in a viewport.
-            properties:
-                columnViewportDefinition:
-                    properties:
-                        size:
-                            maximum: 12
-                            minimum: 1
-                            type: integer
-                    type: object
-                id:
-                    type: string
-            required:
-                -   columnViewportDefinition
-                -   id
-            type: object
         ContainerPageElementDefinition:
             allOf:
                 -   $ref: "#/components/schemas/PageElementDefinition"
@@ -1643,146 +1603,10 @@ components:
                         Custom CSS that is applied to the fragment viewport.
                     type: string
                 fragmentViewportStyle:
+                    $ref: "#/components/schemas/FragmentViewportStyle"
                     # @review
                     description:
                         The fragment's viewport style.
-                    properties:
-                        backgroundColor:
-                            # @review
-                            description:
-                                The fragment viewport's background color.
-                            type: string
-                        borderColor:
-                            # @review
-                            description:
-                                The fragment viewport's border color.
-                            type: string
-                        borderRadius:
-                            # @review
-                            description:
-                                The fragment viewport's background radius.
-                            type: string
-                        borderWidth:
-                            # @review
-                            description:
-                                The fragment viewport's border width.
-                            type: string
-                        fontFamily:
-                            # @review
-                            description:
-                                The fragment viewport's font family.
-                            type: string
-                        fontSize:
-                            # @review
-                            description:
-                                The fragment viewport's font size.
-                            type: string
-                        fontWeight:
-                            # @review
-                            description:
-                                The fragment viewport's font weight.
-                            type: string
-                        height:
-                            # @review
-                            description:
-                                The fragment viewport's height.
-                            type: string
-                        hidden:
-                            # @review
-                            description:
-                                Specifies if the fragment's viewport is hidden to the user.
-                            type: boolean
-                        marginBottom:
-                            # @review
-                            description:
-                                The fragment viewport's margin bottom.
-                            type: string
-                        marginLeft:
-                            # @review
-                            description:
-                                The fragment viewport's margin left.
-                            type: string
-                        marginRight:
-                            # @review
-                            description:
-                                The fragment viewport's margin right.
-                            type: string
-                        marginTop:
-                            # @review
-                            description:
-                                The fragment viewport's margin top.
-                            type: string
-                        maxHeight:
-                            # @review
-                            description:
-                                The fragment viewport's max height.
-                            type: string
-                        maxWidth:
-                            # @review
-                            description:
-                                The fragment viewport's max width.
-                            type: string
-                        minHeight:
-                            # @review
-                            description:
-                                The fragment viewport's min height.
-                            type: string
-                        minWidth:
-                            # @review
-                            description:
-                                The fragment viewport's min width.
-                            type: string
-                        opacity:
-                            # @review
-                            description:
-                                The fragment viewport's opacity.
-                            type: string
-                        overflow:
-                            # @review
-                            description:
-                                The fragment viewport's overflow behavior.
-                            type: string
-                        paddingBottom:
-                            # @review
-                            description:
-                                The fragment viewport's padding bottom.
-                            type: string
-                        paddingLeft:
-                            # @review
-                            description:
-                                The fragment viewport's padding left.
-                            type: string
-                        paddingRight:
-                            # @review
-                            description:
-                                The fragment viewport's padding right.
-                            type: string
-                        paddingTop:
-                            # @review
-                            description:
-                                The fragment viewport's padding top.
-                            type: string
-                        shadow:
-                            # @review
-                            description:
-                                The fragment viewport's shadow effect.
-                            type: string
-                        textAlign:
-                            # @review
-                            description:
-                                The fragment viewport's text align.
-                            type: string
-                        textColor:
-                            # @review
-                            description:
-                                The fragment viewport's text color.
-                            type: string
-                        width:
-                            # @review
-                            description:
-                                The fragment viewport's width.
-                            type: string
-                    type: object
                 id:
                     # @review
                     description:
@@ -1790,6 +1614,147 @@ components:
                     type: string
             required:
                 -   id
+            type: object
+        FragmentViewportStyle:
+            # @review
+            description:
+                The fragment's viewport style.
+            properties:
+                backgroundColor:
+                    # @review
+                    description:
+                        The fragment viewport's background color.
+                    type: string
+                borderColor:
+                    # @review
+                    description:
+                        The fragment viewport's border color.
+                    type: string
+                borderRadius:
+                    # @review
+                    description:
+                        The fragment viewport's background radius.
+                    type: string
+                borderWidth:
+                    # @review
+                    description:
+                        The fragment viewport's border width.
+                    type: string
+                fontFamily:
+                    # @review
+                    description:
+                        The fragment viewport's font family.
+                    type: string
+                fontSize:
+                    # @review
+                    description:
+                        The fragment viewport's font size.
+                    type: string
+                fontWeight:
+                    # @review
+                    description:
+                        The fragment viewport's font weight.
+                    type: string
+                height:
+                    # @review
+                    description:
+                        The fragment viewport's height.
+                    type: string
+                hidden:
+                    # @review
+                    description:
+                        Specifies if the fragment's viewport is hidden to the user.
+                    type: boolean
+                marginBottom:
+                    # @review
+                    description:
+                        The fragment viewport's margin bottom.
+                    type: string
+                marginLeft:
+                    # @review
+                    description:
+                        The fragment viewport's margin left.
+                    type: string
+                marginRight:
+                    # @review
+                    description:
+                        The fragment viewport's margin right.
+                    type: string
+                marginTop:
+                    # @review
+                    description:
+                        The fragment viewport's margin top.
+                    type: string
+                maxHeight:
+                    # @review
+                    description:
+                        The fragment viewport's max height.
+                    type: string
+                maxWidth:
+                    # @review
+                    description:
+                        The fragment viewport's max width.
+                    type: string
+                minHeight:
+                    # @review
+                    description:
+                        The fragment viewport's min height.
+                    type: string
+                minWidth:
+                    # @review
+                    description:
+                        The fragment viewport's min width.
+                    type: string
+                opacity:
+                    # @review
+                    description:
+                        The fragment viewport's opacity.
+                    type: string
+                overflow:
+                    # @review
+                    description:
+                        The fragment viewport's overflow behavior.
+                    type: string
+                paddingBottom:
+                    # @review
+                    description:
+                        The fragment viewport's padding bottom.
+                    type: string
+                paddingLeft:
+                    # @review
+                    description:
+                        The fragment viewport's padding left.
+                    type: string
+                paddingRight:
+                    # @review
+                    description:
+                        The fragment viewport's padding right.
+                    type: string
+                paddingTop:
+                    # @review
+                    description:
+                        The fragment viewport's padding top.
+                    type: string
+                shadow:
+                    # @review
+                    description:
+                        The fragment viewport's shadow effect.
+                    type: string
+                textAlign:
+                    # @review
+                    description:
+                        The fragment viewport's text align.
+                    type: string
+                textColor:
+                    # @review
+                    description:
+                        The fragment viewport's text color.
+                    type: string
+                width:
+                    # @review
+                    description:
+                        The fragment viewport's width.
+                    type: string
             type: object
         FriendlyUrlHistory:
             # @review
@@ -1806,6 +1771,114 @@ components:
                     description:
                         The old localized relative URLs to the page's rendered content.
                     type: object
+            type: object
+        GridPageElementDefinition:
+            allOf:
+                -   $ref: "#/components/schemas/PageElementDefinition"
+                -   properties:
+                        cssClasses:
+                            # @review
+                            description:
+                                A list of CSS classes that are applied to the row page element.
+                            items:
+                                type: string
+                            type: array
+                        customCSS:
+                            # @review
+                            description:
+                                Custom CSS that is applied on the row page element.
+                            type: string
+                        fragmentStyle:
+                            $ref: "#/components/schemas/FragmentStyle"
+                            # @review
+                            description:
+                                The fragment style of the row page element.
+                        gridViewports:
+                            # @review
+                            description:
+                                A list of viewports configuration of the grid page element.
+                            items:
+                                $ref: "#/components/schemas/GridViewport"
+                            type: array
+                        gutters:
+                            # @review
+                            description:
+                                A flag that indicates whether the row page element has gutters.
+                            type: boolean
+                        indexed:
+                            # @review
+                            description:
+                                A flag that indicates whether the row page element is indexed or not.
+                            type: boolean
+                        modulesPerRow:
+                            # @review
+                            description:
+                                The row page element's modules per row.
+                            type: integer
+                        name:
+                            # @review
+                            description:
+                                The custom name of a row page element.
+                            type: string
+                        numberOfModules:
+                            # @review
+                            description:
+                                The row page element's number of modules.
+                            type: integer
+                        reverseOrder:
+                            # @review
+                            description:
+                                A flag that indicates whether the row page element has reverse order.
+                            type: boolean
+                        verticalAlignment:
+                            description:
+                                The vertical alignment property of the row page element.
+                            enum: [Bottom, Middle, Top]
+                            type: string
+            # @review
+            description:
+                The page element definition of a row.
+            type: object
+        GridViewport:
+            # @review
+            description:
+                A grid viewport.
+            properties:
+                customCSS:
+                    description:
+                        Custom CSS that is applied on the container viewport's page element.
+                    type: string
+                fragmentViewportStyle:
+                    $ref: "#/components/schemas/FragmentViewportStyle"
+                    # @review
+                    description:
+                        The fragment's viewport style.
+                gridViewportDefinition:
+                    # @review
+                    description:
+                        The definition of the grid viewport.
+                    properties:
+                        modulesPerRow:
+                            # @review
+                            description:
+                                The number of modules per grid.
+                            type: integer
+                        verticalAlignment:
+                            # @review
+                            description:
+                                The vertical alignment property of the grid viewport.
+                            enum: [Bottom, Middle, Top]
+                            type: string
+                    type: object
+                id:
+                    # @review
+                    description:
+                        The grid viewport's ID.
+                    enum: [LandscapeMobile, PortraitMobile, Tablet]
+                    type: string
+            required:
+                -   gridViewportDefinition
+                -   id
             type: object
         HtmlProperties:
             properties:
@@ -1940,6 +2013,45 @@ components:
                 showNotification:
                     type: boolean
             type: object
+        ModulePageElementDefinition:
+            allOf:
+                -   $ref: "#/components/schemas/PageElementDefinition"
+                -   properties:
+                        moduleViewports:
+                            description:
+                                A list of module viewports of the module page element.
+                            items:
+                                $ref: "#/components/schemas/ModuleViewport"
+                            type: array
+                        size:
+                            description:
+                                The module's size.
+                            maximum: 12
+                            minimum: 1
+                            type: integer
+            # @review
+            description:
+                The page element definition of a Column.
+            type: object
+        ModuleViewport:
+            # @review
+            description:
+                A module in a viewport.
+            properties:
+                id:
+                    enum: [LandscapeMobile, PortraitMobile, Tablet]
+                    type: string
+                moduleViewportDefinition:
+                    properties:
+                        size:
+                            maximum: 12
+                            minimum: 1
+                            type: integer
+                    type: object
+            required:
+                -   id
+                -   moduleViewportDefinition
+            type: object
         NavigationSettings:
             # @review
             description:
@@ -2056,7 +2168,6 @@ components:
                 mapping:
                     Collection: "#/components/schemas/CollectionPageElementDefinition"
                     CollectionItem: "#/components/schemas/CollectionItemPageElementDefinition"
-                    Column: "#/components/schemas/ColumnPageElementDefinition"
                     Container: "#/components/schemas/ContainerPageElementDefinition"
                     DropZone: "#/components/schemas/DropZonePageElementDefinition"
                     Form: "#/components/schemas/FormPageElementDefinition"
@@ -2065,20 +2176,20 @@ components:
                     Fragment: "#/components/schemas/FragmentInstancePageElementDefinition"
                     FragmentComposition: "#/components/schemas/FragmentCompositionInstancePageElementDefinition"
                     FragmentDropZone: "#/components/schemas/FragmentDropZonePageElementDefinition"
-                    Row: "#/components/schemas/RowPageElementDefinition"
+                    Grid: "#/components/schemas/GridPageElementDefinition"
+                    Module: "#/components/schemas/ModulePageElementDefinition"
                     Widget: "#/components/schemas/WidgetInstancePageElementDefinition"
                 propertyName: type
             properties:
                 type:
                     # @review
                     description:
-                        The page element definition's type (collection, collection item, column, container, drop zone,
-                        form, form step, form step container, fragment, fragment composition, fragment drop zone, row or
-                        widget).
+                        The page element definition's type (collection, collection item, container, drop zone, form,
+                        form step, form step container, fragment, fragment composition, fragment drop zone, grid, 
+                        module or widget).
                     enum:
                         -   Collection
                         -   CollectionItem
-                        -   Column
                         -   Container
                         -   DropZone
                         -   Form
@@ -2087,7 +2198,8 @@ components:
                         -   Fragment
                         -   FragmentComposition
                         -   FragmentDropZone
-                        -   Row
+                        -   Grid
+                        -   Module
                         -   Widget
                     type: string
             type: object
@@ -2499,122 +2611,6 @@ components:
                         -   ContentPageTemplateSettings
                         -   WidgetPageTemplateSettings
                     type: string
-            type: object
-        RowPageElementDefinition:
-            allOf:
-                -   $ref: "#/components/schemas/PageElementDefinition"
-                -   properties:
-                        cssClasses:
-                            # @review
-                            description:
-                                A list of CSS classes that are applied to the row page element.
-                            items:
-                                type: string
-                            type: array
-                        customCSS:
-                            # @review
-                            description:
-                                Custom CSS that is applied on the row page element.
-                            type: string
-                        customCSSViewports:
-                            # @review
-                            description:
-                                The custom CSS viewports of the row page element.
-                            items:
-                                $ref: "#/components/schemas/CustomCSSViewport"
-                            type: array
-                        fragmentStyle:
-                            $ref: "#/components/schemas/FragmentStyle"
-                            # @review
-                            description:
-                                The fragment style of the row page element.
-                        fragmentViewports:
-                            # @review
-                            description:
-                                A list of fragment viewports of a row page element.
-                            items:
-                                $ref: "#/components/schemas/FragmentViewport"
-                            type: array
-                        gutters:
-                            # @review
-                            description:
-                                A flag that indicates whether the row page element has gutters.
-                            type: boolean
-                        indexed:
-                            # @review
-                            description:
-                                A flag that indicates whether the row page element is indexed or not.
-                            type: boolean
-                        modulesPerRow:
-                            # @review
-                            description:
-                                The row page element's modules per row.
-                            type: integer
-                        name:
-                            # @review
-                            description:
-                                The custom name of a row page element.
-                            type: string
-                        numberOfColumns:
-                            # @review
-                            description:
-                                The row page element's number of columns.
-                            type: integer
-                        reverseOrder:
-                            # @review
-                            description:
-                                A flag that indicates whether the row page element has reverse order.
-                            type: boolean
-                        rowViewports:
-                            # @review
-                            description:
-                                A list of viewports of the row page element.
-                            items:
-                                $ref: "#/components/schemas/RowViewport"
-                            type: array
-                        verticalAlignment:
-                            # @review
-                            description:
-                                The vertical alignment property of the row page element.
-                            type: string
-            # @review
-            description:
-                The page element definition of a row.
-            type: object
-        RowViewport:
-            # @review
-            description:
-                A row viewport.
-            properties:
-                id:
-                    # @review
-                    description:
-                        The row viewport's ID.
-                    type: string
-                rowViewportDefinition:
-                    # @review
-                    description:
-                        The definition of the row viewport.
-                    properties:
-                        modulesPerRow:
-                            # @review
-                            description:
-                                The number of modules per row.
-                            type: integer
-                        reverseOrder:
-                            # @review
-                            description:
-                                A flag that indicates whether the row viewport has reverse order.
-                            type: boolean
-                        verticalAlignment:
-                            # @review
-                            description:
-                                The vertical alignment property of the row viewport.
-                            type: string
-                    type: object
-            required:
-                -   id
-                -   rowViewportDefinition
             type: object
         SEOSettings:
             # @review
@@ -3597,7 +3593,7 @@ components:
 info:
     description:
         "A Java client JAR is available for use with the group ID 'com.liferay', artifact ID
-        'com.liferay.headless.admin.site.client', and version '1.0.16'."
+        'com.liferay.headless.admin.site.client', and version '1.0.17'."
     license:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
