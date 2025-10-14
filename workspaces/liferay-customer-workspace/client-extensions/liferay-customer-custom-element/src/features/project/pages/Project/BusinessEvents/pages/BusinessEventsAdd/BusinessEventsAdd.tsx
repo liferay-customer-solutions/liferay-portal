@@ -58,6 +58,7 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 	const [{project, subscriptionGroups}] = useAppContext();
 
 	const [baseButtonDisabled, setBaseButtonDisabled] = useState<boolean>(true);
+	const [skipTicketFetch, setSkipTicketFetch] = useState(true);
 
 	const {businessEventTypesList, loading: loadingBusinessEventTypesList} =
 		useGetBusinessEventTypesList();
@@ -92,7 +93,8 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 
 	const {loading: loadingTickets, tickets} = useAccountsTickets(
 		undefined,
-		project?.accountKey || ''
+		project?.accountKey || '',
+		skipTicketFetch
 	);
 
 	const {loading: loadingUTCTimeZonesList, utcTimeZonesList} =
@@ -141,6 +143,13 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 
 	const handleRadioChange = (value: string) => {
 		setHasImpactingEvents(value);
+
+		if (value === 'yes') {
+			setSkipTicketFetch(false);
+		} else {
+			setSkipTicketFetch(true);
+			setSelectedTickets([]);
+		}
 	};
 
 	const handleRemove = useCallback((selectedTicket: ITicket) => {
@@ -221,7 +230,6 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 	const loading =
 		loadingBusinessEventTypesList ||
 		loadingLiferayVersions ||
-		loadingTickets ||
 		loadingUTCTimeZonesList;
 
 	useEffect(() => {
@@ -379,7 +387,6 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 	}, [featureFlags, tickets]);
 
 	return !loading ? (
-		tickets ? (
 			hasAllEventsPermissions ? (
 				<Layout
 					footerProps={{
@@ -608,7 +615,9 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 
 								{hasImpactingEvents === 'yes' && (
 									<div className="mx-3 pb-3">
-										{ticketOptions.length ? (
+										{loadingTickets ? (
+											<ClayLoadingIndicator size="sm" />
+										) : ticketOptions.length ? (
 											<>
 												<label>
 													{i18n.translate(
@@ -649,19 +658,6 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 				</p>
 			)
 		) : (
-			<p
-				dangerouslySetInnerHTML={{
-					__html: i18n.sub(
-						'we-apologize-for-the-inconvenience-but-we-ve-detected-a-system-error-with-this-project',
-						[
-							'<a href="https://liferay.atlassian.net/servicedesk/customer/portals">',
-							'</a>',
-						]
-					),
-				}}
-			/>
-		)
-	) : (
 		<div className="mx-auto">
 			<ClayLoadingIndicator size="sm" />
 		</div>
