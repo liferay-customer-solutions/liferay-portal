@@ -174,7 +174,6 @@ const AttachmentUploader = ({setUploadStateData, uploadStateData}: IProps) => {
 			});
 		}
 
-		setComment('');
 		setFile(undefined);
 		setHasPersonalData(false);
 	}, [
@@ -183,7 +182,6 @@ const AttachmentUploader = ({setUploadStateData, uploadStateData}: IProps) => {
 		deleteAttachment,
 		initiatedGCSSessionURL,
 		initiatedTicketAttachmentId,
-		setComment,
 		setFile,
 		setHasPersonalData,
 	]);
