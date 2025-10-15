@@ -19,7 +19,9 @@ const useAccountsTickets = (
 
 	const fetchTickets = useCallback(async () => {
 		if (skip || !externalReferenceCode) {
-			return;
+			setLoading(false);
+
+			return {loading, tickets};
 		}
 
 		try {
