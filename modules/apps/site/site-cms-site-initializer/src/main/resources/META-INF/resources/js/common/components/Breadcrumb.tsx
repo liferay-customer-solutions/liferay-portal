@@ -11,6 +11,8 @@ import {openModal, openToast} from 'frontend-js-components-web';
 import {navigate} from 'frontend-js-web';
 import React, {ComponentProps} from 'react';
 
+import DefaultPermissionModalContent from '../../main_view/default_permission/DefaultPermissionModalContent';
+import {DefaultPermissionModalContentProps} from '../../main_view/default_permission/DefaultPermissionTypes';
 import ApiHelper from '../services/ApiHelper';
 import {displayErrorToast} from '../utils/toastUtil';
 import SpaceSticker from './SpaceSticker';
@@ -18,11 +20,12 @@ import SpaceSticker from './SpaceSticker';
 export interface ActionDropdownItemProps {
 	confirmationMessage?: string;
 	confirmationTitle?: string;
+	defaultPermissionAdditionalProps?: DefaultPermissionModalContentProps;
 	href?: string;
 	redirect?: string;
 	size?: 'full-screen' | 'lg' | 'md' | 'sm';
 	successMessage?: string;
-	target?: 'asyncDelete' | 'link' | 'modal';
+	target?: 'asyncDelete' | 'defaultPermissionsModal' | 'link' | 'modal';
 }
 
 interface Props
@@ -46,6 +49,7 @@ export interface BreadcrumbItem {
 function ActionDropdownItem({
 	confirmationMessage,
 	confirmationTitle,
+	defaultPermissionAdditionalProps,
 	href = '',
 	label,
 	redirect,
@@ -82,6 +86,22 @@ function ActionDropdownItem({
 			else {
 				displayErrorToast(error);
 			}
+		}
+		else if (
+			target === 'defaultPermissionsModal' &&
+			defaultPermissionAdditionalProps
+		) {
+			openModal({
+				containerProps: {
+					className: '',
+				},
+				contentComponent: ({closeModal}: {closeModal: () => void}) =>
+					DefaultPermissionModalContent({
+						...defaultPermissionAdditionalProps,
+						closeModal,
+					}),
+				size: 'full-screen',
+			});
 		}
 		else {
 			navigate(href);
@@ -175,6 +195,7 @@ export default function Breadcrumb({
 								aria-label={Liferay.Language.get(
 									'more-actions'
 								)}
+								className="component-action"
 								displayType="unstyled"
 								size="sm"
 								symbol="ellipsis-v"
