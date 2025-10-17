@@ -454,6 +454,8 @@ public class CloudBucketUtil {
 	}
 
 	private static void _executeAWSCommands(String... commands) {
+		List<String> awsCommands = new ArrayList<>();
+
 		Retryable retryable = new Retryable(3, 30, true) {
 
 			@Override
@@ -472,16 +474,6 @@ public class CloudBucketUtil {
 
 					_firstExecution = false;
 
-					NotificationUtil.sendSlackNotification(
-						JenkinsResultsParserUtil.combine(
-							"Build URL: ", System.getenv("BUILD_URL"), "\n\n",
-							exception.getMessage()),
-						"ci-aws-notifications", ":aws:",
-						JenkinsResultsParserUtil.combine(
-							"Failed to run commands: ",
-							JenkinsResultsParserUtil.join(" ; ", awsCommands)),
-						"AWS CI Commands");
-
 					throw exception;
 				}
 
@@ -489,7 +481,7 @@ public class CloudBucketUtil {
 			}
 
 			private String[] _getAWSCommands(String[] commands) {
-				List<String> awsCommands = new ArrayList<>();
+				awsCommands.clear();
 
 				for (String command : commands) {
 					Matcher awsCommandMatcher = _awsCommandPattern.matcher(
@@ -546,7 +538,20 @@ public class CloudBucketUtil {
 
 		};
 
-		retryable.executeWithRetries();
+		try {
+			retryable.executeWithRetries();
+		}
+		catch (Exception exception) {
+			NotificationUtil.sendSlackNotification(
+				JenkinsResultsParserUtil.combine(
+					"Build URL: ", System.getenv("BUILD_URL"), "\n\n",
+					exception.getMessage()),
+				"ci-aws-notifications", ":aws:",
+				JenkinsResultsParserUtil.combine(
+					"Failed to run commands: ",
+					JenkinsResultsParserUtil.join(" ; ", awsCommands)),
+				"AWS CI Commands");
+		}
 	}
 
 	private static void _executeCommands(String... commands) {
@@ -749,6 +754,10 @@ public class CloudBucketUtil {
 			File destinationFile, String s3SourcePath)
 		throws IOException {
 
+		if (!_VALIDATE_CHECKSUM) {
+			return;
+		}
+
 		File destinationChecksumFile = new File(
 			destinationFile.getParentFile(),
 			destinationFile.getName() + _CHECKSUM_FILE_EXTENSION);
@@ -798,6 +807,8 @@ public class CloudBucketUtil {
 
 	private static final String _CHECKSUM_FILE_EXTENSION = ".sha512";
 
+	private static final boolean _VALIDATE_CHECKSUM;
+
 	private static final Pattern _awsCommandPattern = Pattern.compile(
 		"aws s3 (?<command>[^\\s]+)\\s+(?<options>.+)");
 	private static final Properties _buildProperties;
@@ -819,6 +830,10 @@ public class CloudBucketUtil {
 				}
 			}
 		};
+
+		_VALIDATE_CHECKSUM = Boolean.parseBoolean(
+			_buildProperties.getProperty(
+				"cloud.ci.s3.bucket.validate.checksum.enabled"));
 	}
 
 }
