@@ -43,7 +43,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -268,7 +267,8 @@ public class IndividualSegmentController extends BaseFaroController {
 			@QueryParam("contactsEntityType") int contactsEntityType,
 			@QueryParam("dataSourceId") String dataSourceId,
 			@QueryParam("query") String query,
-			@QueryParam("segmentType") String segmentType,
+			@DefaultValue(StringPool.BLANK) @QueryParam("segmentTypes")
+				FaroParam<List<String>> segmentTypesFaroParam,
 			@QueryParam("state") String state, @QueryParam("cur") int cur,
 			@QueryParam("delta") int delta,
 			@DefaultValue(StringPool.BLANK) @QueryParam("orderByFields")
@@ -277,31 +277,8 @@ public class IndividualSegmentController extends BaseFaroController {
 
 		return search(
 			groupId, channelId, contactsEntityId, contactsEntityType,
-			dataSourceId, query, segmentType, state, cur, delta,
-			orderByFieldsFaroParam.getValue());
-	}
-
-	@Path("/search")
-	@POST
-	@RolesAllowed(RoleConstants.SITE_MEMBER)
-	public FaroResultsDisplay searchByForm(
-			@PathParam("groupId") long groupId,
-			@FormParam("channelId") String channelId,
-			@FormParam("contactsEntityId") String contactsEntityId,
-			@FormParam("contactsEntityType") int contactsEntityType,
-			@FormParam("dataSourceId") String dataSourceId,
-			@FormParam("query") String query,
-			@FormParam("segmentType") String segmentType,
-			@FormParam("state") String state, @FormParam("cur") int cur,
-			@FormParam("delta") int delta,
-			@DefaultValue(StringPool.BLANK) @FormParam("orderByFields")
-				FaroParam<List<OrderByField>> orderByFieldsFaroParam)
-		throws Exception {
-
-		return search(
-			groupId, channelId, contactsEntityId, contactsEntityType,
-			dataSourceId, query, state, segmentType, cur, delta,
-			orderByFieldsFaroParam.getValue());
+			dataSourceId, query, segmentTypesFaroParam.getValue(), state, cur,
+			delta, orderByFieldsFaroParam.getValue());
 	}
 
 	@Path("/{id}")
@@ -346,7 +323,7 @@ public class IndividualSegmentController extends BaseFaroController {
 	protected FaroResultsDisplay<IndividualSegment> search(
 			long groupId, String channelId, String contactsEntityId,
 			int contactsEntityType, String dataSourceId, String query,
-			String segmentType, String state, int cur, int delta,
+			List<String> segmentTypes, String state, int cur, int delta,
 			List<OrderByField> orderByFields)
 		throws Exception {
 
@@ -358,7 +335,7 @@ public class IndividualSegmentController extends BaseFaroController {
 		if (Validator.isNull(contactsEntityId)) {
 			results = contactsEngineClient.getIndividualSegments(
 				faroProject, channelId, dataSourceId, query,
-				Collections.singletonList("name"), null, segmentType, state,
+				List.of("authorName", "name"), null, segmentTypes, state,
 				IndividualSegment.Status.ACTIVE.name(), cur, delta,
 				orderByFields);
 		}
