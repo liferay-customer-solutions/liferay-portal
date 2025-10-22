@@ -29,7 +29,7 @@ import shareAction from './actions/shareAction';
 import {triggerAssetBulkAction} from './actions/triggerAssetBulkAction';
 import AuthorRenderer from './cell_renderers/AuthorRenderer';
 import SimpleActionLinkRenderer from './cell_renderers/SimpleActionLinkRenderer';
-import SpaceRenderer from './cell_renderers/SpaceRenderer';
+import SpaceRendererWithCache from './cell_renderers/SpaceRendererWithCache';
 import TypeRenderer from './cell_renderers/TypeRenderer';
 import addOnClickToCreationMenuItems from './utils/addOnClickToCreationMenuItems';
 import transformViewsItemsProps from './utils/transformViewsItemProps';
@@ -55,7 +55,9 @@ export type AdditionalProps = {
 	fileMimeTypeIcons: Record<string, string>;
 	objectDefinitionCssClasses: Record<string, string>;
 	objectDefinitionIcons: Record<string, string>;
+	parentObjectEntryFolderExternalReferenceCode: string;
 	redirect: string;
+	rootObjectEntryFolderExternalReferenceCode: string;
 };
 
 export default function AssetsFDSPropsTransformer({
@@ -100,7 +102,11 @@ export default function AssetsFDSPropsTransformer({
 					type: 'internal',
 				} as IInternalRenderer,
 				{
-					component: SpaceRenderer,
+					component: ({itemData}) => (
+						<SpaceRendererWithCache
+							spaceId={itemData.embedded.scopeId}
+						/>
+					),
 					name: 'spaceTableCellRenderer',
 					type: 'internal',
 				} as IInternalRenderer,
@@ -220,6 +226,9 @@ export default function AssetsFDSPropsTransformer({
 								itemData.embedded.externalReferenceCode,
 							className: itemData.entryClassName,
 							closeModal,
+							section:
+								additionalProps.rootObjectEntryFolderExternalReferenceCode ||
+								additionalProps.parentObjectEntryFolderExternalReferenceCode,
 						}),
 					size: 'full-screen',
 				});
@@ -331,6 +340,9 @@ export default function AssetsFDSPropsTransformer({
 					className: OBJECT_ENTRY_FOLDER_CLASS_NAME,
 					defaultPermissionAdditionalProps:
 						additionalProps.defaultPermissionAdditionalProps || {},
+					section:
+						additionalProps.rootObjectEntryFolderExternalReferenceCode ||
+						additionalProps.parentObjectEntryFolderExternalReferenceCode,
 					selectedData,
 				});
 			}
@@ -380,6 +392,9 @@ export default function AssetsFDSPropsTransformer({
 					className: OBJECT_ENTRY_FOLDER_CLASS_NAME,
 					defaultPermissionAdditionalProps:
 						additionalProps.defaultPermissionAdditionalProps || {},
+					section:
+						additionalProps.rootObjectEntryFolderExternalReferenceCode ||
+						additionalProps.parentObjectEntryFolderExternalReferenceCode,
 					selectedData,
 				});
 			}

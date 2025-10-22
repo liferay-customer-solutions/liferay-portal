@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.test.rule.FeatureFlag;
+import com.liferay.portal.test.rule.FeatureFlags;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
@@ -63,6 +64,9 @@ import org.osgi.framework.FrameworkUtil;
 /**
  * @author Adolfo Pérez
  */
+@FeatureFlags(
+	featureFlags = {@FeatureFlag("LPD-17564"), @FeatureFlag("LPD-32050")}
+)
 @RunWith(Arquillian.class)
 public class GroupModelListenerTest {
 
@@ -78,7 +82,6 @@ public class GroupModelListenerTest {
 		_cmsGroup = _getGroup();
 	}
 
-	@FeatureFlag("LPD-17564")
 	@Test
 	public void testAddDepotEntry() throws Exception {
 		DepotEntry depotEntry = _addDepotEntry();
@@ -99,7 +102,6 @@ public class GroupModelListenerTest {
 		Assert.assertTrue(jsonObject.has("OBJECT_ENTRY_FOLDERS"));
 	}
 
-	@FeatureFlag("LPD-17564")
 	@Test
 	public void testDeleteDepotEntry() throws Exception {
 		DepotEntry depotEntry = _addDepotEntry();
@@ -121,7 +123,6 @@ public class GroupModelListenerTest {
 					PARENT_OBJECT_ENTRY_FOLDER_ID_DEFAULT));
 	}
 
-	@FeatureFlag("LPD-17564")
 	@Test
 	public void testUpdateDepotEntry() throws Exception {
 		Layout layout = _getRecycleBinLayout(_cmsGroup);

@@ -112,7 +112,13 @@ async function verifyPermissions({
 test(
 	'Space and folder contents inherit parent default permissions',
 	{tag: '@LPD-62475'},
-	async ({defaultPermissionsPage, folderPage, page, spaceSummaryPage}) => {
+	async ({
+		contentsPage,
+		defaultPermissionsPage,
+		folderPage,
+		page,
+		spaceSummaryPage,
+	}) => {
 		test.setTimeout(90000);
 
 		await page.goto(PORTLET_URLS.cmsAllSpaces);
@@ -161,9 +167,11 @@ test(
 				permissions,
 			});
 
-			await page.getByTestId('fdsCreationActionButton').click();
-			await page.getByRole('menuitem', {name: 'Basic Content'}).click();
-			await page.getByRole('button', {name: 'Publish'}).click();
+			await contentsPage.createContent('Basic Content');
+
+			await contentsPage.fillData([{label: 'Title', value: '1234'}]);
+
+			await contentsPage.saveContent();
 
 			await (await getTableRowByText(page, 'Basic Web Content'))
 				.getByRole('button', {name: 'Actions'})
@@ -542,8 +550,8 @@ test(
 			await clickMenuItem('Permissions', page, folderName);
 
 			let childPermissions = [
+				{action: 'ADD_ENTRY', checked: true, role: 'User'},
 				{action: 'UPDATE', checked: true, role: 'Power User'},
-				{action: 'VIEW', checked: true, role: 'User'},
 			];
 
 			await permissionsPage.checkPermissionsAndSave(childPermissions);
@@ -558,8 +566,8 @@ test(
 			await resetPermissions(page, folderName);
 
 			childPermissions = [
+				{action: 'ADD_ENTRY', checked: false, role: 'User'},
 				{action: 'UPDATE', checked: false, role: 'Power User'},
-				{action: 'VIEW', checked: false, role: 'User'},
 			];
 
 			await verifyPermissions({
@@ -568,6 +576,83 @@ test(
 				page,
 				permissions: childPermissions,
 			});
+		}
+		finally {
+			await page.goto(PORTLET_URLS.cmsAllSpaces);
+
+			await deleteSpace(page, spaceName);
+		}
+	}
+);
+
+test(
+	'Display only relevant permission tabs based on the section',
+	{tag: '@LPD-67530'},
+	async ({contentsPage, defaultPermissionsPage, filesPage, page}) => {
+		const spaceName = 'Space' + getRandomInt();
+
+		await page.goto(PORTLET_URLS.cmsAllSpaces);
+
+		await createSpace(page, spaceName);
+
+		try {
+			await contentsPage.goto();
+
+			const folderName1 = 'Folder' + getRandomInt();
+			const folderName2 = 'Folder' + getRandomInt();
+
+			await contentsPage.createFolder(folderName1, spaceName);
+			await contentsPage.createFolder(folderName2, spaceName);
+
+			await tickCheckBoxes(page, [folderName1, folderName2]);
+
+			await clickMenuItem('Default Permissions', page);
+
+			await expect(page.getByTestId('tab-L_CONTENTS')).toBeVisible();
+			await expect(page.getByTestId('tab-L_FILES')).not.toBeVisible();
+			await expect(
+				page.getByTestId('tab-OBJECT_ENTRY_FOLDERS')
+			).toBeVisible();
+
+			await defaultPermissionsPage.permissionsModalCancelButton.click();
+
+			await clickMenuItem('Default Permissions', page, folderName1);
+
+			await expect(page.getByTestId('tab-L_CONTENTS')).toBeVisible();
+			await expect(page.getByTestId('tab-L_FILES')).not.toBeVisible();
+			await expect(
+				page.getByTestId('tab-OBJECT_ENTRY_FOLDERS')
+			).toBeVisible();
+
+			await defaultPermissionsPage.permissionsModalCancelButton.click();
+
+			await filesPage.goto();
+
+			const folderName3 = 'Folder' + getRandomInt();
+			const folderName4 = 'Folder' + getRandomInt();
+
+			await filesPage.createFolder(folderName3, spaceName);
+			await filesPage.createFolder(folderName4, spaceName);
+
+			await tickCheckBoxes(page, [folderName3, folderName4]);
+
+			await clickMenuItem('Default Permissions', page);
+
+			await expect(page.getByTestId('tab-L_CONTENTS')).not.toBeVisible();
+			await expect(page.getByTestId('tab-L_FILES')).toBeVisible();
+			await expect(
+				page.getByTestId('tab-OBJECT_ENTRY_FOLDERS')
+			).toBeVisible();
+
+			await defaultPermissionsPage.permissionsModalCancelButton.click();
+
+			await clickMenuItem('Default Permissions', page, folderName3);
+
+			await expect(page.getByTestId('tab-L_CONTENTS')).not.toBeVisible();
+			await expect(page.getByTestId('tab-L_FILES')).toBeVisible();
+			await expect(
+				page.getByTestId('tab-OBJECT_ENTRY_FOLDERS')
+			).toBeVisible();
 		}
 		finally {
 			await page.goto(PORTLET_URLS.cmsAllSpaces);

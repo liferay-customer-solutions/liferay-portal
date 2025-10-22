@@ -12,6 +12,7 @@ import {sub} from 'frontend-js-web';
 import React, {useCallback, useEffect, useState} from 'react';
 
 import CMSDefaultPermissionService from '../../common/services/CMSDefaultPermissionService';
+import SpaceService from '../../common/services/SpaceService';
 import {triggerAssetBulkAction} from '../props_transformer/actions/triggerAssetBulkAction';
 import {
 	DEFAULT_PERMISSIONS,
@@ -31,11 +32,13 @@ export function permissionsBulkAction({
 	apiURL,
 	className,
 	defaultPermissionAdditionalProps,
+	section,
 	selectedData,
 }: {
 	apiURL?: string;
 	className: string;
 	defaultPermissionAdditionalProps: any;
+	section?: string;
 	selectedData: any;
 }) {
 	return openModal({
@@ -48,6 +51,7 @@ export function permissionsBulkAction({
 				apiURL,
 				className,
 				closeModal,
+				section,
 				selectedData,
 			}),
 		size: 'full-screen',
@@ -60,8 +64,9 @@ export default function BulkPermissionModalContent({
 	className,
 	closeModal,
 	roles,
+	section,
 	selectedData,
-}: BulkPermissionModalContentProps & {apiURL: string}) {
+}: BulkPermissionModalContentProps & {apiURL: string; section?: string}) {
 	const [currentValues, setCurrentValues] =
 		useState<AssetRoleSelectedActions>({});
 	const [loading, setLoading] = useState(false);
@@ -149,10 +154,9 @@ export default function BulkPermissionModalContent({
 							return;
 						}
 						else {
-							const space =
-								await CMSDefaultPermissionService.getSpace(
-									firstItem.embedded.scopeId
-								);
+							const space = await SpaceService.getSpace(
+								firstItem.embedded.scopeId
+							);
 
 							entryClassExternalReferenceCode =
 								space.externalReferenceCode;
@@ -242,7 +246,9 @@ export default function BulkPermissionModalContent({
 
 	return (
 		<>
-			<ClayModal.Header>
+			<ClayModal.Header
+				closeButtonAriaLabel={Liferay.Language.get('close')}
+			>
 				{sub(
 					Liferay.Language.get('edit-x'),
 					Liferay.Language.get('permissions')
@@ -267,6 +273,7 @@ export default function BulkPermissionModalContent({
 					)}
 					onChange={onChangeHandler}
 					roles={roles}
+					section={section}
 					types={tabs}
 					values={currentValues}
 				/>

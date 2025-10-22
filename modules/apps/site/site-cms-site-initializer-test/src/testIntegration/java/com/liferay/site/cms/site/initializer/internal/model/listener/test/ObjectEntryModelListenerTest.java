@@ -49,6 +49,7 @@ import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.test.rule.FeatureFlag;
+import com.liferay.portal.test.rule.FeatureFlags;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
@@ -76,6 +77,9 @@ import org.osgi.framework.FrameworkUtil;
 /**
  * @author Stefano Motta
  */
+@FeatureFlags(
+	featureFlags = {@FeatureFlag("LPD-17564"), @FeatureFlag("LPD-32050")}
+)
 @RunWith(Arquillian.class)
 public class ObjectEntryModelListenerTest {
 
@@ -129,7 +133,6 @@ public class ObjectEntryModelListenerTest {
 		}
 	}
 
-	@FeatureFlag("LPD-17564")
 	@Test
 	public void testAddObjectEntry() throws Exception {
 		DepotEntry depotEntry = _depotEntryLocalService.addDepotEntry(
@@ -207,7 +210,10 @@ public class ObjectEntryModelListenerTest {
 			objectDefinition.getObjectDefinitionId(),
 			objectEntryFolder2.getObjectEntryFolderId(), "en_US",
 			HashMapBuilder.<String, Serializable>put(
-				"text", RandomTestUtil.randomString()
+				"title_i18n",
+				HashMapBuilder.put(
+					"en_US", RandomTestUtil.randomString()
+				).build()
 			).build(),
 			serviceContext);
 
@@ -299,6 +305,11 @@ public class ObjectEntryModelListenerTest {
 			objectEntryFolder2.getObjectEntryFolderId(), "en_US",
 			HashMapBuilder.<String, Serializable>put(
 				"file", dlFileEntry.getFileEntryId()
+			).put(
+				"title_i18n",
+				HashMapBuilder.put(
+					"en_US", RandomTestUtil.randomString()
+				).build()
 			).build(),
 			serviceContext);
 
