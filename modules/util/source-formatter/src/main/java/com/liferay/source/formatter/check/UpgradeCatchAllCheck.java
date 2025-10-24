@@ -16,6 +16,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringParser;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.tools.java.parser.JavaParser;
 import com.liferay.source.formatter.check.util.JavaSourceUtil;
 import com.liferay.source.formatter.exception.UpgradeCatchAllException;
 import com.liferay.source.formatter.parser.JavaClass;
@@ -23,6 +24,8 @@ import com.liferay.source.formatter.parser.JavaClassParser;
 import com.liferay.source.formatter.parser.JavaMethod;
 import com.liferay.source.formatter.parser.JavaTerm;
 import com.liferay.source.formatter.parser.JavaVariable;
+
+import java.io.File;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -114,6 +117,20 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 		throws Exception {
 
 		if (_testMode && fileName.endsWith(".java")) {
+			UpgradeCatchAllJavaLongLinesCheck longLinesCheck =
+				new UpgradeCatchAllJavaLongLinesCheck();
+
+			longLinesCheck.doProcess(
+				fileName + "-before", absolutePath, content);
+
+			String parsedContent = JavaParser.parse(
+				new File(absolutePath), getMaxLineLength());
+
+			if (getLineCount(content) != getLineCount(parsedContent)) {
+				throw new UpgradeCatchAllException(
+					fileName + " missing 80 max line length rule");
+			}
+
 			UpgradeCatchAllJavaTermOrderCheck termOrderCheck =
 				new UpgradeCatchAllJavaTermOrderCheck();
 
@@ -176,6 +193,12 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 		_testMode = false;
 
 		return content;
+	}
+
+	protected int getLineCount(String content) {
+		String[] lines = content.split("\r\n|\r|\n");
+
+		return lines.length;
 	}
 
 	private static List<String> _getInterpolatedNewParameterNames(

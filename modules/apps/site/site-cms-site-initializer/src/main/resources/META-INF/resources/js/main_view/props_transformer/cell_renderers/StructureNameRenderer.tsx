@@ -8,7 +8,7 @@ import React from 'react';
 
 import SimpleActionLinkRenderer, {ActionItem} from './SimpleActionLinkRenderer';
 
-const StructureLabelRenderer = ({
+const StructureNameRenderer = ({
 	actions,
 	itemData,
 	options,
@@ -21,7 +21,7 @@ const StructureLabelRenderer = ({
 }) => {
 	if (itemData.system) {
 		return (
-			<>
+			<div className="table-list-title">
 				{value}
 
 				<ClayIcon
@@ -34,7 +34,7 @@ const StructureLabelRenderer = ({
 					)}
 					symbol="lock"
 				/>
-			</>
+			</div>
 		);
 	}
 
@@ -48,4 +48,4 @@ const StructureLabelRenderer = ({
 	);
 };
 
-export default StructureLabelRenderer;
+export default StructureNameRenderer;

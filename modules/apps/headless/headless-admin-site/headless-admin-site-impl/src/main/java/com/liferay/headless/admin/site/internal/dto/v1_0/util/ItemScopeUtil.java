@@ -6,14 +6,36 @@
 package com.liferay.headless.admin.site.internal.dto.v1_0.util;
 
 import com.liferay.headless.admin.site.dto.v1_0.Scope;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * @author Rubén Pulido
  */
 public class ItemScopeUtil {
+
+	public static Long getGroupId(
+		long companyId, Scope scope, long scopeGroupId) {
+
+		if ((scope == null) ||
+			Validator.isNull(scope.getExternalReferenceCode())) {
+
+			return scopeGroupId;
+		}
+
+		Group group = GroupLocalServiceUtil.fetchGroupByExternalReferenceCode(
+			scope.getExternalReferenceCode(), companyId);
+
+		if (group == null) {
+			return null;
+		}
+
+		return group.getGroupId();
+	}
 
 	public static Scope getItemScope(long itemScopeGroupId, long scopeGroupId)
 		throws Exception {
@@ -22,8 +44,49 @@ public class ItemScopeUtil {
 			return null;
 		}
 
-		Group group = GroupLocalServiceUtil.getGroup(itemScopeGroupId);
+		return _getScope(GroupLocalServiceUtil.getGroup(itemScopeGroupId));
+	}
 
+	public static Scope getItemScope(
+			long companyId, String itemGroupExternalReferenceCode,
+			long scopeGroupId)
+		throws PortalException {
+
+		if (Validator.isNull(itemGroupExternalReferenceCode)) {
+			return null;
+		}
+
+		Group group = GroupLocalServiceUtil.getGroupByExternalReferenceCode(
+			itemGroupExternalReferenceCode, companyId);
+
+		if (group.getGroupId() == scopeGroupId) {
+			return null;
+		}
+
+		return _getScope(group);
+	}
+
+	public static String getItemScopeExternalReferenceCode(
+			Scope itemScope, long scopeGroupId)
+		throws PortalException {
+
+		if (itemScope == null) {
+			return null;
+		}
+
+		Group group = GroupLocalServiceUtil.getGroup(scopeGroupId);
+
+		if (StringUtil.equals(
+				itemScope.getExternalReferenceCode(),
+				group.getExternalReferenceCode())) {
+
+			return null;
+		}
+
+		return itemScope.getExternalReferenceCode();
+	}
+
+	private static Scope _getScope(Group group) {
 		return new Scope() {
 			{
 				setExternalReferenceCode(group::getExternalReferenceCode);

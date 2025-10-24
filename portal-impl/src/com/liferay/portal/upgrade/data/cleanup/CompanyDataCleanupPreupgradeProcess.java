@@ -23,11 +23,13 @@ public class CompanyDataCleanupPreupgradeProcess
 				"companyId", "Company"));
 		upgrade(
 			new TableOrphanReferencesDataCleanupPreupgradeProcess(
-				"ownerType = " + PortletKeys.PREFS_OWNER_TYPE_COMPANY,
+				"[$SOURCE_TABLE_ALIAS$].ownerType = " +
+					PortletKeys.PREFS_OWNER_TYPE_COMPANY,
 				"ownerId", "PortalPreferences", "companyId", "Company"));
 		upgrade(
 			new TableOrphanReferencesDataCleanupPreupgradeProcess(
-				"ownerType = " + PortletKeys.PREFS_OWNER_TYPE_COMPANY,
+				"[$SOURCE_TABLE_ALIAS$].ownerType = " +
+					PortletKeys.PREFS_OWNER_TYPE_COMPANY,
 				"ownerId", "PortletPreferences", "companyId", "Company"));
 	}
 

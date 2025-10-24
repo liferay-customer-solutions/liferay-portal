@@ -5,9 +5,13 @@
 
 package com.liferay.asset.tags.internal.search.spi.model.index.contributor;
 
+import com.liferay.asset.kernel.model.AssetEntries_AssetTagsTable;
+import com.liferay.asset.kernel.model.AssetEntryTable;
 import com.liferay.asset.kernel.model.AssetTag;
+import com.liferay.asset.kernel.model.AssetTagTable;
 import com.liferay.asset.kernel.service.AssetTagLocalService;
-import com.liferay.petra.function.transform.TransformUtil;
+import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
+import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.GroupedModel;
@@ -16,6 +20,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.DocumentContributor;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.ReindexCacheThreadLocal;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -24,8 +29,11 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Localization;
 import com.liferay.portal.kernel.util.Portal;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -48,36 +56,35 @@ public class AssetTagDocumentContributor
 
 		String className = document.get(Field.ENTRY_CLASS_NAME);
 
-		long classNameId = portal.getClassNameId(className);
+		long classNameId = _portal.getClassNameId(className);
 
 		long classPK = GetterUtil.getLong(document.get(Field.ENTRY_CLASS_PK));
 
-		List<AssetTag> assetTags = assetTagLocalService.getTags(
+		List<Object[]> assetTagObjectsList = _lookupAssetTagObjectsList(
 			classNameId, classPK);
 
-		if (ListUtil.isEmpty(assetTags)) {
+		if (ListUtil.isEmpty(assetTagObjectsList)) {
 			return;
 		}
 
-		_contributeAssetTagIds(document, assetTags);
-		_contributeAssetTagNamesLocalized(document, assetTags, baseModel);
-		_contributeAssetTagNamesRaw(document, assetTags);
+		document.addKeyword(
+			Field.ASSET_TAG_IDS,
+			ListUtil.toLongArray(
+				assetTagObjectsList,
+				assetTagObjects -> (Long)assetTagObjects[0]));
+
+		List<String> assetTagNamesList = ListUtil.toList(
+			assetTagObjectsList, assetTagObjects -> (String)assetTagObjects[1]);
+
+		String[] assetTagNames = assetTagNamesList.toArray(new String[0]);
+
+		_contributeAssetTagNames(document, assetTagNames, baseModel);
+
+		document.addText(Field.ASSET_TAG_NAMES, assetTagNames);
 	}
 
-	@Reference
-	protected AssetTagLocalService assetTagLocalService;
-
-	@Reference
-	protected Portal portal;
-
-	private void _contributeAssetTagIds(
-		Document document, List<AssetTag> assetTags) {
-
-		document.addKeyword(Field.ASSET_TAG_IDS, _getTagIds(assetTags));
-	}
-
-	private void _contributeAssetTagNamesLocalized(
-		Document document, List<AssetTag> assetTags,
+	private void _contributeAssetTagNames(
+		Document document, String[] assetTagNames,
 		BaseModel<AssetTag> baseModel) {
 
 		Long groupId = _getGroupId(baseModel);
@@ -90,13 +97,7 @@ public class AssetTagDocumentContributor
 			_localization.getLocalizedName(
 				Field.ASSET_TAG_NAMES,
 				LocaleUtil.toLanguageId(_getSiteDefaultLocale(groupId))),
-			_getNames(assetTags));
-	}
-
-	private void _contributeAssetTagNamesRaw(
-		Document document, List<AssetTag> assetTags) {
-
-		document.addText(Field.ASSET_TAG_NAMES, _getNames(assetTags));
+			assetTagNames);
 	}
 
 	private Long _getGroupId(BaseModel<?> baseModel) {
@@ -121,26 +122,115 @@ public class AssetTagDocumentContributor
 		return user.getGroupId();
 	}
 
-	private String[] _getNames(List<AssetTag> assetTags) {
-		return TransformUtil.transformToArray(
-			assetTags, assetTag -> assetTag.getName(), String.class);
-	}
-
 	private Locale _getSiteDefaultLocale(long groupId) {
 		try {
-			return portal.getSiteDefaultLocale(groupId);
+			return _portal.getSiteDefaultLocale(groupId);
 		}
 		catch (PortalException portalException) {
 			throw new RuntimeException(portalException);
 		}
 	}
 
-	private Long[] _getTagIds(List<AssetTag> assetTags) {
-		return TransformUtil.transformToArray(
-			assetTags, assetTag -> assetTag.getTagId(), Long.class);
+	private List<Object[]> _lookupAssetTagObjectsList(
+		long classNameId, long classPK) {
+
+		Map<Long, Map<Long, List<Object[]>>> indexedAssetTagObjectsLists =
+			ReindexCacheThreadLocal.getReindexCache(
+				AssetTagDocumentContributor.class.getName(),
+				() -> {
+					int count = _assetTagLocalService.dslQueryCount(
+						DSLQueryFactoryUtil.count(
+						).from(
+							AssetTagTable.INSTANCE
+						),
+						false);
+
+					if (count > ReindexCacheThreadLocal.SIZE_LIMIT) {
+						return null;
+					}
+
+					Map<Long, Map<Long, List<Object[]>>>
+						localIndexedAssetTagObjectsLists = new HashMap<>();
+
+					if (count == 0) {
+						return localIndexedAssetTagObjectsLists;
+					}
+
+					DSLQuery dslQuery = DSLQueryFactoryUtil.select(
+						AssetEntryTable.INSTANCE.classNameId,
+						AssetEntryTable.INSTANCE.classPK,
+						AssetTagTable.INSTANCE.tagId,
+						AssetTagTable.INSTANCE.name
+					).from(
+						AssetTagTable.INSTANCE
+					).innerJoinON(
+						AssetEntries_AssetTagsTable.INSTANCE,
+						AssetTagTable.INSTANCE.tagId.eq(
+							AssetEntries_AssetTagsTable.INSTANCE.tagId)
+					).innerJoinON(
+						AssetEntryTable.INSTANCE,
+						AssetEntries_AssetTagsTable.INSTANCE.entryId.eq(
+							AssetEntryTable.INSTANCE.entryId)
+					);
+
+					for (Object[] values :
+							(List<Object[]>)_assetTagLocalService.dslQuery(
+								dslQuery, false)) {
+
+						Map<Long, List<Object[]>>
+							classNameIdAssetTagObjectsLists =
+								localIndexedAssetTagObjectsLists.
+									computeIfAbsent(
+										(Long)values[0],
+										key -> new HashMap<>());
+
+						List<Object[]> classPKAssetTagObjectsList =
+							classNameIdAssetTagObjectsLists.computeIfAbsent(
+								(Long)values[1], key -> new ArrayList<>());
+
+						classPKAssetTagObjectsList.add(
+							new Object[] {values[2], values[3]});
+					}
+
+					return localIndexedAssetTagObjectsLists;
+				});
+
+		if (indexedAssetTagObjectsLists == null) {
+			List<AssetTag> assetTags = _assetTagLocalService.getTags(
+				classNameId, classPK);
+
+			if (assetTags.isEmpty()) {
+				return null;
+			}
+
+			List<Object[]> assetTagObjectsList = new ArrayList<>(
+				assetTags.size());
+
+			for (AssetTag assetTag : assetTags) {
+				assetTagObjectsList.add(
+					new Object[] {assetTag.getTagId(), assetTag.getName()});
+			}
+
+			return assetTagObjectsList;
+		}
+
+		Map<Long, List<Object[]>> classNameIdAssetTagObjectsLists =
+			indexedAssetTagObjectsLists.get(classNameId);
+
+		if (classNameIdAssetTagObjectsLists == null) {
+			return null;
+		}
+
+		return classNameIdAssetTagObjectsLists.get(classPK);
 	}
 
 	@Reference
+	private AssetTagLocalService _assetTagLocalService;
+
+	@Reference
 	private Localization _localization;
+
+	@Reference
+	private Portal _portal;
 
 }
