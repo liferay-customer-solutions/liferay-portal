@@ -37,6 +37,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,6 +49,48 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class AccountsTicketsRestController extends BaseRestController {
+
+	@GetMapping("/accounts/{externalReferenceCode}/has-jira-account")
+	public ResponseEntity<String> checkAccountExists(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable("externalReferenceCode") String externalReferenceCode)
+		throws Exception {
+
+		try {
+			_businessEventPermission.check(
+				jwt, externalReferenceCode, ActionKeys.VIEW);
+
+			JSONObject accountJSONObject =
+				_jiraService.searchAccountByExternalKey(externalReferenceCode);
+
+			JSONArray valuesJSONArray = accountJSONObject.optJSONArray(
+				"values");
+
+			boolean hasJiraAccount = false;
+
+			if ((valuesJSONArray != null) && (valuesJSONArray.length() > 0)) {
+				hasJiraAccount = true;
+			}
+
+			JSONObject jsonObject = new JSONObject(
+			).put(
+				"hasJiraAccount", hasJiraAccount
+			);
+
+			return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
+		}
+		catch (Exception exception) {
+			_log.error(exception, exception);
+
+			JSONObject jsonObject = new JSONObject(
+			).put(
+				"error", exception.getMessage()
+			);
+
+			return new ResponseEntity<>(
+				jsonObject.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 	@RequestMapping(
 		method = RequestMethod.GET,

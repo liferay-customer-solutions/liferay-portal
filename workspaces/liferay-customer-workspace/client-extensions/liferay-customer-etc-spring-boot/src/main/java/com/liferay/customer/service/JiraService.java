@@ -448,6 +448,10 @@ public class JiraService extends BaseService {
 		return jsonObjects;
 	}
 
+	public JSONObject searchAccountByExternalKey(String externalKey) {
+		return _searchAccountByExternalKey(externalKey);
+	}
+
 	public void updateAccountObject(
 			String koroneikiAccountKey, String businessEvents)
 		throws Exception {
