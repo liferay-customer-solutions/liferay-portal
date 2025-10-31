@@ -27,6 +27,7 @@ import ManageEventModal from '../../../components/ManageEventModal';
 import useAccountsTickets from '../../../hooks/useAccountsTickets';
 import useGetBusinessEvent from '../../../hooks/useGetBusinessEvent';
 import useHasAllEventsPermissions from '../../../hooks/useHasAllEventsPermissions';
+import useHasJiraAccount from '../../../hooks/useHasJiraAccount';
 
 const BusinessEventsItemDetails = () => {
 	const {accountKey, id} = useParams<{accountKey: string; id: string}>();
@@ -47,6 +48,9 @@ const BusinessEventsItemDetails = () => {
 			!businessEvent?.associatedTickets ||
 			businessEvent?.associatedTickets === '[]'
 	);
+
+	const {hasAccount: hasJiraAccount, loading: loadingJiraAccountChecking} =
+		useHasJiraAccount(accountKey || '');
 
 	const location = useLocation();
 	const navigate = useNavigate();
@@ -135,7 +139,7 @@ const BusinessEventsItemDetails = () => {
 		}
 	}, [businessEvent, location.search, onOpenChange, tickets]);
 
-	if (loading) {
+	if (loading || loadingJiraAccountChecking) {
 		return (
 			<div className="mx-auto">
 				<ClayLoadingIndicator size="sm" />
@@ -329,18 +333,32 @@ const BusinessEventsItemDetails = () => {
 					)}
 
 					{!loadingTickets ? (
-						Boolean(ticketOptions.length) && (
-							<div className="event-detail-item mb-4">
-								<div className="event-detail-title font-weight-semi-bold mb-1 text-neutral-8">
-									{i18n.translate('associated-tickets')}
-								</div>
+						!hasJiraAccount ? (
+							<p
+								dangerouslySetInnerHTML={{
+									__html: i18n.sub(
+										'we-apologize-for-the-inconvenience-but-we-ve-detected-a-system-error-with-this-project',
+										[
+											'<a href="https://liferay.atlassian.net/servicedesk/customer/portals">',
+											'</a>',
+										]
+									),
+								}}
+							/>
+						) : (
+							Boolean(ticketOptions.length) && (
+								<div className="event-detail-item mb-4">
+									<div className="event-detail-title font-weight-semi-bold mb-1 text-neutral-8">
+										{i18n.translate('associated-tickets')}
+									</div>
 
-								<div className="w-50">
-									<AssociatedTicketsContainer
-										ticketOptions={ticketOptions}
-									/>
+									<div className="w-50">
+										<AssociatedTicketsContainer
+											ticketOptions={ticketOptions}
+										/>
+									</div>
 								</div>
-							</div>
+							)
 						)
 					) : (
 						<div className="w-25">
