@@ -56,7 +56,7 @@ public class BaseRestController
 		}
 
 		if (jiraSupportIssue.isClosed()) {
-			throw new JiraIssueClosedException();
+			//throw new JiraIssueClosedException();
 		}
 
 		String organizationId = jiraSupportIssue.getOrganizationId();
