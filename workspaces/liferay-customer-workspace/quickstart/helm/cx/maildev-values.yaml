@@ -1,0 +1,25 @@
+clientExtensionConfig:
+    kind: Deployment
+    mainDomain: maildev.localtest.me
+    mountInitConfig: false
+    setupMainDomainOnCoreDNS: true
+    virtualInstanceId: cp.dxp.localtest.me
+image:
+    pullPolicy: IfNotPresent
+    repository: maildev
+ingress:
+    enabled: true
+livenessProbe:
+    httpGet:
+        port: 1080
+readinessProbe:
+    httpGet:
+        port: 1080
+service:
+    enabled: true
+    port: 1080
+    ports:
+        -   name: smtp
+            port: 1025
+        -   name: http
+            port: 1080

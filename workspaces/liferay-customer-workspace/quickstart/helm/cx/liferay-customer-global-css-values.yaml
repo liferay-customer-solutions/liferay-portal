@@ -1,0 +1,13 @@
+clientExtensionConfig:
+    kind: Deployment
+    mainDomain: globalcss.localtest.me
+    mountInitConfig: true
+    setupMainDomainOnCoreDNS: true
+    virtualInstanceId: cp.dxp.localtest.me
+image:
+    repository: liferay-customer-global-css
+ingress:
+    enabled: true
+service:
+    enabled: true
+    port: 80

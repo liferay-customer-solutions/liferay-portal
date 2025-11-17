@@ -1,0 +1,13 @@
+ingress:
+    enabled: true
+    rules:
+        -   host: "*.dxp.localtest.me"
+            http:
+                paths:
+                    -   backend:
+                            service:
+                                name: liferay-default
+                                port:
+                                    name: http
+                        path: /
+                        pathType: ImplementationSpecific

@@ -1,0 +1,11 @@
+clientExtensionConfig:
+    kind: Job
+    mainDomain: "siteinitializer.localtest.me"
+    mountInitConfig: true
+    setupMainDomainOnCoreDNS: true
+    virtualInstanceId: "cp.dxp.localtest.me"
+env:
+    LIFERAY_BATCH_CURL_OPTIONS: "-v"
+    LIFERAY_BATCH_OAUTH_APP_ERC: liferay-customer-site-initializer-oahs
+image:
+    repository: liferay-customer-site-initializer

@@ -1,0 +1,84 @@
+configmap:
+    data:
+        com.liferay.portal.instances.internal.configuration.PortalInstancesConfiguration-cp.dxp.localtest.me.config: |
+            active=B"true"
+            maxUsers=I"0"
+            mx="localtest.me"
+            siteInitializerKey="blank-site-initializer"
+            virtualHostname="cp.dxp.localtest.me"
+            adminScreenName="test"
+            adminEmailAddress="test@localtest.me"
+            adminFirstName="test"
+            adminMiddleName="test"
+            adminLastName="test"
+            adminPassword="test"
+            addDefaultAdminUser=B"true"
+        com.liferay.portal.instances.internal.configuration.PortalInstancesConfiguration-dev.dxp.localtest.me.config: |
+            active=B"true"
+            maxUsers=I"0"
+            mx="localtest.me"
+            siteInitializerKey="blank-site-initializer"
+            virtualHostname="dev.dxp.localtest.me"
+            adminScreenName="test"
+            adminEmailAddress="test@localtest.me"
+            adminFirstName="test"
+            adminMiddleName="test"
+            adminLastName="test"
+            adminPassword="test"
+            addDefaultAdminUser=B"true"
+        com.liferay.portal.instances.internal.configuration.PortalInstancesConfiguration-lrn.dxp.localtest.me.config: |
+            active=B"true"
+            maxUsers=I"0"
+            mx="localtest.me"
+            siteInitializerKey="blank-site-initializer"
+            virtualHostname="lrn.dxp.localtest.me"
+            adminScreenName="test"
+            adminEmailAddress="test@localtest.me"
+            adminFirstName="test"
+            adminMiddleName="test"
+            adminLastName="test"
+            adminPassword="test"
+            addDefaultAdminUser=B"true"
+        com.liferay.portal.instances.internal.configuration.PortalInstancesConfiguration-mp.dxp.localtest.me.config: |
+            active=B"true"
+            maxUsers=I"0"
+            mx="localtest.me"
+            siteInitializerKey="blank-site-initializer"
+            virtualHostname="mp.dxp.localtest.me"
+            adminScreenName="test"
+            adminEmailAddress="test@localtest.me"
+            adminFirstName="test"
+            adminMiddleName="test"
+            adminLastName="test"
+            adminPassword="test"
+            addDefaultAdminUser=B"true"
+        com.liferay.portal.instances.internal.configuration.PortalInstancesConfiguration-www.dxp.localtest.me.config: |
+            active=B"true"
+            maxUsers=I"0"
+            mx="localtest.me"
+            siteInitializerKey="blank-site-initializer"
+            virtualHostname="www.dxp.localtest.me"
+            adminScreenName="test"
+            adminEmailAddress="test@localtest.me"
+            adminFirstName="test"
+            adminMiddleName="test"
+            adminLastName="test"
+            adminPassword="test"
+            addDefaultAdminUser=B"true"
+customVolumeMounts:
+    x-liferay-customer-instances:
+        -   mountPath: /opt/liferay/osgi/configs/com.liferay.portal.instances.internal.configuration.PortalInstancesConfiguration~cp.dxp.localtest.me.config
+            name: liferay-configmap
+            subPath: com.liferay.portal.instances.internal.configuration.PortalInstancesConfiguration-cp.dxp.localtest.me.config
+        -   mountPath: /opt/liferay/osgi/configs/com.liferay.portal.instances.internal.configuration.PortalInstancesConfiguration~dev.dxp.localtest.me.config
+            name: liferay-configmap
+            subPath: com.liferay.portal.instances.internal.configuration.PortalInstancesConfiguration-dev.dxp.localtest.me.config
+        -   mountPath: /opt/liferay/osgi/configs/com.liferay.portal.instances.internal.configuration.PortalInstancesConfiguration~lrn.dxp.localtest.me.config
+            name: liferay-configmap
+            subPath: com.liferay.portal.instances.internal.configuration.PortalInstancesConfiguration-lrn.dxp.localtest.me.config
+        -   mountPath: /opt/liferay/osgi/configs/com.liferay.portal.instances.internal.configuration.PortalInstancesConfiguration~mp.dxp.localtest.me.config
+            name: liferay-configmap
+            subPath: com.liferay.portal.instances.internal.configuration.PortalInstancesConfiguration-mp.dxp.localtest.me.config
+        -   mountPath: /opt/liferay/osgi/configs/com.liferay.portal.instances.internal.configuration.PortalInstancesConfiguration~www.dxp.localtest.me.config
+            name: liferay-configmap
+            subPath: com.liferay.portal.instances.internal.configuration.PortalInstancesConfiguration-www.dxp.localtest.me.config

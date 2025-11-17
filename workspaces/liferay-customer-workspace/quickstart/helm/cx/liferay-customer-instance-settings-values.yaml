@@ -1,0 +1,4 @@
+clientExtensionConfig:
+    mainDomain: "config.localtest.me"
+    setupMainDomainOnCoreDNS: true
+    virtualInstanceId: cp.dxp.localtest.me

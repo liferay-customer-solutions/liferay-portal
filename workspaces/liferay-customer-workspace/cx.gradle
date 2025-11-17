@@ -1,0 +1,79 @@
+import com.bmuschko.gradle.docker.tasks.image.DockerPushImage
+import com.bmuschko.gradle.docker.tasks.image.DockerTagImage
+
+subprojects {
+	afterEvaluate {
+    if (project.tasks.findByName('buildDockerImage')) {
+			buildDockerImage {
+				images.add("${project.name}:latest")
+			}
+
+			task tagDockerImage(type: DockerTagImage) {
+				imageId = "${project.name}"
+				tag = "latest"
+				repository = "localhost:5000/${project.name}"
+				dependsOn tasks["buildDockerImage"]
+			}
+
+			task pushDockerImage(type: DockerPushImage) {
+				images = ["localhost:5000/${project.name}:latest"]
+				dependsOn tasks["tagDockerImage"]
+			}
+
+			def generatedFileName = "cx-values.yaml"
+			def generatedFilePath = layout.buildDirectory.file("liferay-client-extension-build/${generatedFileName}").get().asFile
+
+			project.tasks.named('createClientExtensionConfig').configure {
+				doLast {
+					def jsonConfigFile = project.layout.buildDirectory.file("liferay-client-extension-build/${project.name}.client-extension-config.json").get().asFile
+
+					if (jsonConfigFile.exists()) {
+						def jsonContent = jsonConfigFile.text
+						def yamlOutputFile = rootProject.file("quickstart/helm/cx/${project.name}-config-values.yaml")
+
+						def indentedJsonContent = jsonContent.lines().collect { "    " + it }.join("\n")
+
+						yamlOutputFile.text = """
+configJsons:
+  - |
+${indentedJsonContent}
+"""
+					}
+				}
+			}
+
+			task helmDeploy(type: Exec) {
+				commandLine(
+					'helm',
+					'upgrade',
+					'--install',
+					'--namespace',
+					'liferay-system',
+					project.name + "-cx",
+					'-f',
+					project.layout.buildDirectory.file("./liferay-client-extension-build/cx-values.yaml").get(),
+					'--set',
+					"image.repository=registry:5000/${project.name}",
+					'--set',
+					"image.tag=latest}",
+					rootProject.file('../../../resources/charts/client-extension')
+				)
+				ignoreExitValue = true
+
+				dependsOn tasks["pushDockerImage"]
+			}
+
+			task helmUndeploy(type: Exec) {
+				commandLine(
+					'helm',
+					'uninstall',
+					'--namespace',
+					'liferay-system',
+					'--ignore-not-found',
+					project.name + "-cx",
+				)
+				ignoreExitValue = true
+			}
+		}
+	}
+}

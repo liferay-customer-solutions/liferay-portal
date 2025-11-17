@@ -1,0 +1,131 @@
+configmap:
+    data:
+        com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config: |
+            authenticationEnabled=B"false"
+            clusterName="liferay_cluster"
+            httpSSLEnabled=B"false"
+            indexNamePrefix="liferay-"
+            networkHostAddresses=["http://liferay-default-search:9200"]
+            operationMode="REMOTE"
+            password="search"
+            username="search"
+customVolumeMounts:
+    x-elasticsearch:
+        -   mountPath: /opt/liferay/osgi/configs/com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config
+            name: liferay-configmap
+            subPath: com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration.config
+dependencies:
+    search:
+        source: statefulset
+        statefulset:
+            env:
+                -   name: xpack.security.enabled
+                    value: "false"
+                -   name: xpack.security.transport.ssl.enabled
+                    value: "false"
+                -   name: xpack.security.http.ssl.enabled
+                    value: "false"
+                -   name: cluster.name
+                    value: liferay_cluster
+                -   name: discovery.type
+                    value: single-node
+                -   name: ES_JAVA_OPTS
+                    value: -Xms256m -Xmx256m
+                -   name: ELASTIC_PASSWORD
+                    value: search
+            image:
+                pullPolicy: IfNotPresent
+                repository: elasticsearch
+                tag: 8.17.0
+            initContainers:
+                -   command:
+                        -   sysctl
+                        -   -w
+                        -   vm.max_map_count=262144
+                    image: busybox:stable-uclibc
+                    name: increase-vm-max-map
+                    securityContext:
+                        privileged: true
+                -   command: ["sh", "-c", "ulimit -n 65536"]
+                    image: busybox:stable-uclibc
+                    name: increase-fd-ulimit
+                    securityContext:
+                        privileged: true
+                -   command:
+                        -   sh
+                        -   -c
+                        -   |
+                            if [ ! -d ./plugins/analysis-icu ];then
+                                bin/elasticsearch-plugin install --batch analysis-icu analysis-kuromoji analysis-smartcn analysis-stempel
+                            else
+                                echo "Plugins already installed!"
+                            fi
+                            if [ ! -e ./_config/log4j2.properties ];then
+                                cp -rv ./config/* ./_config
+                            fi
+                    image: elasticsearch:8.17.0
+                    imagePullPolicy: IfNotPresent
+                    name: install-plugins
+                    volumeMounts:
+                        -   mountPath: /usr/share/elasticsearch/_config
+                            name: liferay-search-pvc
+                            subPath: config
+                        -   mountPath: /usr/share/elasticsearch/plugins
+                            name: liferay-search-pvc
+                            subPath: plugins
+            livenessProbe:
+                tcpSocket:
+                    port: search
+            podSecurityContext:
+                fsGroup: 1000
+            ports:
+                -   containerPort: 9200
+                    name: search
+                    protocol: TCP
+            readinessProbe:
+                tcpSocket:
+                    port: search
+            replicaCount: 1
+            resources:
+                limits:
+                    cpu: 4000m
+                    memory: 2Gi
+                requests:
+                    cpu: 500m
+                    memory: 256Mi
+            service:
+                ports:
+                    -   name: search
+                        port: 9200
+                        protocol: TCP
+                        targetPort: search
+                type: ClusterIP
+            startupProbe:
+                failureThreshold: 30
+                tcpSocket:
+                    port: search
+            storage: 1Gi
+            updateStrategy:
+                type: RollingUpdate
+            volumeClaimTemplates:
+                -   metadata:
+                        name: liferay-search-pvc
+                    spec:
+                        accessModes:
+                            -   ReadWriteOnce
+                        resources:
+                            requests:
+                                storage: 1Gi
+            volumeMounts:
+                -   mountPath: /usr/share/elasticsearch/config
+                    name: liferay-search-pvc
+                    subPath: config
+                -   mountPath: /usr/share/elasticsearch/data
+                    name: liferay-search-pvc
+                    subPath: data
+                -   mountPath: /usr/share/elasticsearch/logs
+                    name: liferay-search-pvc
+                    subPath: logs
+                -   mountPath: /usr/share/elasticsearch/plugins
+                    name: liferay-search-pvc
+                    subPath: plugins

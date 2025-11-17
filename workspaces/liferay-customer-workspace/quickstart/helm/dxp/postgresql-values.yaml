@@ -1,0 +1,67 @@
+dependencies:
+    database:
+        portalProperties: |
+            jdbc.default.driverClassName=org.postgresql.Driver
+            jdbc.default.url=jdbc:postgresql://liferay-default-database:5432/lportal?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false
+            jdbc.default.username=database
+            jdbc.default.password=database
+        source: statefulset
+        statefulset:
+            env:
+                -   name: POSTGRES_DB
+                    value: lportal
+                -   name: POSTGRES_PASSWORD
+                    value: database
+                -   name: POSTGRES_USER
+                    value: database
+                -   name: PGUSER
+                    value: database
+                -   name: PGDATA
+                    value: /var/lib/postgresql/data/db
+            image:
+                pullPolicy: IfNotPresent
+                repository: postgres
+                tag: 16
+            livenessProbe:
+                exec:
+                    command: ["sh", "-c", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+            ports:
+                -   containerPort: 5432
+                    name: database
+                    protocol: TCP
+            readinessProbe:
+                exec:
+                    command: ["sh", "-c", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+            replicaCount: 1
+            resources:
+                limits:
+                    cpu: 2000m
+                    memory: 1Gi
+                requests:
+                    cpu: 500m
+                    memory: 256Mi
+            service:
+                ports:
+                    -   name: database
+                        port: 5432
+                        protocol: TCP
+                        targetPort: database
+                type: ClusterIP
+            startupProbe:
+                exec:
+                    command: ["sh", "-c", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+            storage: 1Gi
+            updateStrategy:
+                type: RollingUpdate
+            volumeClaimTemplates:
+                -   metadata:
+                        name: liferay-database-pvc
+                    spec:
+                        accessModes:
+                        -   ReadWriteOnce
+                        resources:
+                            requests:
+                                storage: 1Gi
+            volumeMounts:
+                -   mountPath: /var/lib/postgresql/data
+                    name: liferay-database-pvc

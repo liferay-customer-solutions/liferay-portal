@@ -1,0 +1,43 @@
+image:
+    tag: 2025.q3.7
+portalProperties: |
+    admin.default.group.names=Customer Portal
+    admin.email.user.added.enabled=true
+    admin.sync.default.associations=true
+    company.default.virtual.host.mail.domain=localtest.me
+    company.default.virtual.host.name=cp.dxp.localtest.me
+    company.default.web.id=cp.dxp.localtest.me
+    company.security.strangers.verify=false
+    company.security.strangers=false
+    company.security.update.password.required=false
+    feature.flag.COMMERCE-8087=true
+    feature.flag.LPSD-129412=true
+    feature.flag.LPSD-135430=true
+    feature.flag.LPSD-164563=true
+    feature.flag.LPSD-177027=true
+    feature.flag.LPSD-178642=true
+    include-and-override=portal-developer.properties
+    javascript.single.page.application.enabled=false
+    login.dialog.disabled=true
+    mail.send.blacklist=
+    mail.session.mail.smtp.auth=false
+    mail.session.mail.smtp.host=maildev.localtest.me
+    mail.session.mail.smtp.password=
+    mail.session.mail.smtp.port=1025
+    mail.session.mail.smtp.starttls.enable=false
+    mail.session.mail.smtp.user=
+    mail.session.mail=true
+    passwords.default.policy.change.required=true
+    session.timeout=600s
+    terms.of.use.required=false
+    users.reminder.queries.enabled=false
+    virtual.hosts.valid.hosts=*
+    web.server.protocol=http
+replicaCount: 1
+resources:
+    limits:
+        cpu: 8000m
+        memory: 12Gi
+    requests:
+        cpu: 4000m
+        memory: 8Gi

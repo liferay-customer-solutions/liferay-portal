@@ -1,0 +1,30 @@
+args:
+    -   "beta"
+    -   "emulators"
+    -   "pubsub"
+    -   "start"
+    -   "--host-port=0.0.0.0:8085"
+clientExtensionConfig:
+    kind: Deployment
+    mainDomain: pubsub.localtest.me
+    mountInitConfig: false
+    setupMainDomainOnCoreDNS: true
+    virtualInstanceId: cp.dxp.localtest.me
+command:
+    -   "gcloud"
+image:
+    pullPolicy: IfNotPresent
+    repository: pubsub
+ingress:
+    enabled: true
+livenessProbe:
+    httpGet: null
+    tcpSocket:
+        port: 8085
+readinessProbe:
+    httpGet: null
+    tcpSocket:
+        port: 8085
+service:
+    enabled: true
+    port: 8085

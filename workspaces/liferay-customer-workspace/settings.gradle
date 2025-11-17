@@ -19,3 +19,7 @@ buildscript {
 apply plugin: "com.liferay.workspace"
 
 include "poshi"
+
+gradle.rootProject {
+	apply from: "cx.gradle"
+}

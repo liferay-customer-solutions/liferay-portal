@@ -1,0 +1,52 @@
+clientExtensionConfig:
+    kind: Deployment
+    mainDomain: jsmsync.localtest.me
+    mountInitConfig: false
+    setupMainDomainOnCoreDNS: true
+    virtualInstanceId: cp.dxp.localtest.me
+env:
+    BACKEND_PORT: "3000"
+    FORGE_APP_IDS: PLEASE_PROVIDE_SECRET
+    GOOGLE_CREDENTIALS_CLIENT_EMAIL: PLEASE_PROVIDE_SECRET
+    GOOGLE_CREDENTIALS_CLIENT_ID: PLEASE_PROVIDE_SECRET
+    GOOGLE_CREDENTIALS_PRIVATE_KEY: PLEASE_PROVIDE_SECRET
+    GOOGLE_CREDENTIALS_PRIVATE_KEY_ID: PLEASE_PROVIDE_SECRET
+    GOOGLE_CREDENTIALS_PROJECT_ID: PLEASE_PROVIDE_SECRET
+    GOOGLE_CREDENTIALS_TYPE: service_account
+    GOOGLE_CREDENTIALS_UNIVERSE_DOMAIN: googleapis.com
+    JIRA_RATE_LIMIT_CONCURRENCY: "5"
+    JIRA_RATE_LIMIT_INITIAL_DELAY_MS: "1000"
+    JIRA_RATE_LIMIT_MAX_DELAY_MS: "10000"
+    JIRA_RATE_LIMIT_MAX_RETRIES: "3"
+    KORONEIKI_API_TOKEN: PLEASE_PROVIDE_SECRET
+    KORONEIKI_API_URL: PLEASE_PROVIDE_SECRET
+    LOG_LEVELS: error,warn,log,debug
+    NGROK_URL: PLEASE_PROVIDE_SECRET
+    OBJECT_SCHEMA_NAME: Koroneiki
+    PUBSUB_ALLOW_EXCESS_MESSAGES: "false"
+    PUBSUB_DISABLED: "false"
+    PUBSUB_MAX_BACKOFF_SECONDS: "600"
+    PUBSUB_MAX_BYTES: "104857600"
+    PUBSUB_MAX_EXTENSION_MINUTES: "60"
+    PUBSUB_MAX_MESSAGES: "10"
+    PUBSUB_MIN_BACKOFF_SECONDS: "10"
+    REFERENCE_TYPE: PLEASE_PROVIDE_SECRET
+    SUBSCRIPTION_PREFIX: dev
+    WEBTRIGGER_URL: PLEASE_PROVIDE_SECRET
+    WORKSPACE_ID: PLEASE_PROVIDE_SECRET
+image:
+    pullPolicy: IfNotPresent
+    repository: jsmsync
+ingress:
+    enabled: true
+livenessProbe:
+    httpGet: null
+    tcpSocket:
+        port: 3000
+readinessProbe:
+    httpGet: null
+    tcpSocket:
+        port: 3000
+service:
+    enabled: true
+    port: 3000

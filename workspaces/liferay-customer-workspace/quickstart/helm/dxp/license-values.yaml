@@ -1,0 +1,9 @@
+customEnv:
+    x-license:
+        -   name: LIFERAY_DISABLE_TRIAL_LICENSE
+            value: "true"
+customVolumeMounts:
+    x-license:
+        -   mountPath: /etc/liferay/mount/files/deploy/license.xml
+            name: liferay-configmap
+            subPath: license.xml

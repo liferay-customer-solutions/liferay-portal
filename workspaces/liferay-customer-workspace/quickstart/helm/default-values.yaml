@@ -1,0 +1,28 @@
+cx:
+    jsmsync:
+        enabled: false
+    liferay-customer-custom-element:
+        enabled: true
+    liferay-customer-etc-spring-boot:
+        enabled: true
+    liferay-customer-global-css:
+        enabled: true
+    liferay-customer-instance-settings:
+        enabled: true
+    maildev:
+        enabled: true
+    pubsub:
+        enabled: false
+dxp:
+    elasticsearch:
+        enabled: true
+    ingress:
+        enabled: true
+    license:
+        enabled: true
+    liferay:
+        enabled: true
+    mountlocal:
+        enabled: true
+    postgresql:
+        enabled: true

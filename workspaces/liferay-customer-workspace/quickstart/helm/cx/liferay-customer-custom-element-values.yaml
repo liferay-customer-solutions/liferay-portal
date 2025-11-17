@@ -1,0 +1,13 @@
+clientExtensionConfig:
+    kind: Deployment
+    mainDomain: customelement.localtest.me
+    mountInitConfig: true
+    setupMainDomainOnCoreDNS: true
+    virtualInstanceId: cp.dxp.localtest.me
+image:
+    repository: liferay-customer-custom-element
+ingress:
+    enabled: true
+service:
+    enabled: true
+    port: 80

@@ -1,0 +1,26 @@
+customInitContainers:
+    x-patching:
+        -   containerTemplate: |
+                - command:
+                  - bash
+                  - -c
+                  - |
+                    if [ -d /mnt/local/patching/ ]
+                    then
+                      cp -fv /mnt/local/patching/*.zip /opt/liferay/patching-tool/patches
+                    fi
+                  image: {{ printf "%s:%s" .image.repository (.image.tag | toString) }}
+                  imagePullPolicy: {{ .image.pullPolicy }}
+                  name: patching-init-container
+                  volumeMounts:
+                  - mountPath: /mnt/local
+                    name: mount-local
+customVolumeMounts:
+    x-mount-local:
+        -   mountPath: /mnt/local
+            name: mount-local
+customVolumes:
+    x-mount-local:
+        -   hostPath:
+                path: /mnt/local
+            name: mount-local
