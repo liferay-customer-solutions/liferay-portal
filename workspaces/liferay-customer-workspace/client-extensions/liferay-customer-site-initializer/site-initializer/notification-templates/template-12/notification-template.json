@@ -1,0 +1,7 @@
+{
+	"externalReferenceCode": "ANNOUNCEMENT",
+	"name": "Announcement",
+	"subject": {
+		"en_US": "New Announcement: [%ANNOUNCEMENT_TITLE%]"
+	}
+}

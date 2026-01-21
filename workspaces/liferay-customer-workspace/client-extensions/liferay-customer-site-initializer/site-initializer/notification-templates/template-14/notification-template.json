@@ -1,0 +1,7 @@
+{
+	"externalReferenceCode": "RELEASE",
+	"name": "Release",
+	"subject": {
+		"en_US": "New Release: [%RELEASE_TITLE%]"
+	}
+}

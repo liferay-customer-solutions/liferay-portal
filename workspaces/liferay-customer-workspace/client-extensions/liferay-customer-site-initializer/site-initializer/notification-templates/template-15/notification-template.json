@@ -1,0 +1,7 @@
+{
+	"externalReferenceCode": "SECURITY-VULNERABILITY",
+	"name": "Security Vulnerability",
+	"subject": {
+		"en_US": "New Security Vulnerability: [%VULNERABILITY_KEY%]"
+	}
+}
