@@ -1,0 +1,24 @@
+{
+	"description": "",
+	"editorType": "richText",
+	"externalReferenceCode": "SECURITY-VULNERABILITY",
+	"name": "Security Vulnerability",
+	"recipientType": "email",
+	"recipients": [
+		{
+			"bcc": "",
+			"cc": "",
+			"from": "no-reply@liferay.com",
+			"fromName": {
+				"en-US": "Liferay Customer Portal"
+			},
+			"to": {
+				"en-US": "[%RECIPIENT_EMAILS%]"
+			}
+		}
+	],
+	"subject": {
+		"en_US": "New Security Vulnerability: [%VULNERABILITY_KEY%]"
+	},
+	"type": "email"
+}
