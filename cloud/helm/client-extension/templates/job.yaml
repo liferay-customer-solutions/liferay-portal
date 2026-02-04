@@ -10,7 +10,7 @@ metadata:
         {{- include "liferay-client-extension.labels" . | nindent 8 }}
     name: {{ include "liferay-client-extension.fullname" . }}
 spec:
-    backoffLimit: 4
+    backoffLimit: {{ .Values.clientExtensionConfig.backoffLimit | default 4 }}
     template:
         metadata:
             {{- with .Values.podAnnotations }}
