@@ -24,10 +24,14 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -127,9 +131,11 @@ public class AccountsRestController extends BaseRestController {
 						"' and state eq 'Active'",
 					1, 1000, StringPool.BLANK);
 
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
+
 			JSONObject jsonObject =
 				_googleCloudFunctionService.fetchCustomerAccountUsage(
-					externalReferenceCode);
+					externalReferenceCode, dateFormat.format(new Date()));
 
 			AccountUsage accountUsage = new AccountUsage(
 				productPurchases, jsonObject);

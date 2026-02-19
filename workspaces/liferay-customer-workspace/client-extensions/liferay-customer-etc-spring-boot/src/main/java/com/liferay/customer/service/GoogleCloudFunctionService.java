@@ -40,7 +40,7 @@ import org.springframework.stereotype.Component;
 public class GoogleCloudFunctionService {
 
 	@Cacheable("accountUsage")
-	public JSONObject fetchCustomerAccountUsage(String accountKey)
+	public JSONObject fetchCustomerAccountUsage(String accountKey, String date)
 		throws Exception {
 
 		try (InputStream inputStream = new ByteArrayInputStream(
@@ -51,7 +51,7 @@ public class GoogleCloudFunctionService {
 				).setIdTokenProvider(
 					(IdTokenProvider)GoogleCredentials.fromStream(inputStream)
 				).setTargetAudience(
-					_gcfBaseUrl + _FUNCTION_CUSTOMER_USAGE_API_PATH
+					_gcfBaseUrl
 				).build();
 
 			HttpRequest httpRequest = new NetHttpTransport(
@@ -60,8 +60,8 @@ public class GoogleCloudFunctionService {
 			).buildGetRequest(
 				new GenericUrl(
 					StringBundler.concat(
-						_gcfBaseUrl, _FUNCTION_CUSTOMER_USAGE_API_PATH,
-						"/api/v1/customer/usage/accounts/", accountKey))
+						_gcfBaseUrl, "/api/v1/accounts/", accountKey,
+						"/usage/month/", date))
 			).setThrowExceptionOnExecuteError(
 				false
 			);
@@ -89,7 +89,7 @@ public class GoogleCloudFunctionService {
 					StringBundler.concat(
 						httpResponse.getStatusCode(), " ",
 						httpResponse.getStatusMessage(), " for account ",
-						accountKey));
+						accountKey + " and date " + date));
 			}
 			finally {
 				if (httpResponse != null) {
@@ -103,9 +103,6 @@ public class GoogleCloudFunctionService {
 	@Scheduled(cron = "0 0 * * * *")
 	public void scheduledCacheEviction() throws Exception {
 	}
-
-	private static final String _FUNCTION_CUSTOMER_USAGE_API_PATH =
-		"/customer_usage_api";
 
 	@Value("${liferay.customer.gcf.base.url}")
 	private String _gcfBaseUrl;

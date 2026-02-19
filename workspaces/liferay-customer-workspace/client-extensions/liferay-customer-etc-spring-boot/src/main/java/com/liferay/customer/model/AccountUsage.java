@@ -15,6 +15,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,118 +29,19 @@ public class AccountUsage {
 	public AccountUsage(
 		List<ProductPurchase> productPurchases, JSONObject usageJSONObject) {
 
-		int additionalCPUAndRAMMax = 0;
-		int additionalStorageCapacityDocumentLibraryMax = 0;
-		long anonymousPageViewsMax = 0;
-		Product liferaySaasPlanProduct = null;
-		long monthlyActiveLoggedInUsersMax = 0;
+		ProductPurchase usageProductPurchase = null;
 
 		for (ProductPurchase productPurchase : productPurchases) {
 			Product product = productPurchase.getProduct();
 
 			String name = product.getName();
 
-			if (name.equals(
-					ProductConstants.
-						NAME_ADDITIONAL_EXTENSION_CAPACITY_1GB_1VCPU)) {
-
-				if (productPurchase.getQuantity() > additionalCPUAndRAMMax) {
-					additionalCPUAndRAMMax = productPurchase.getQuantity();
-				}
-			}
-			else if (name.equals(
-						ProductConstants.NAME_ADDITIONAL_STORAGE_100GB) ||
-					 name.equals(
-						 ProductConstants.
-							 NAME_LIFERAY_SAAS_100GB_EXTRA_STORAGE_DOCUMENT_LIBRARY)) {
-
-				if ((productPurchase.getQuantity() * 100) >
-						additionalStorageCapacityDocumentLibraryMax) {
-
-					additionalStorageCapacityDocumentLibraryMax =
-						productPurchase.getQuantity() * 100;
-				}
-			}
-			else if (name.equals(
-						ProductConstants.NAME_LIFERAY_SAAS_BUSINESS_PLAN)) {
-
-				if (liferaySaasPlanProduct == null) {
-					liferaySaasPlanProduct = product;
-				}
-				else {
-					String liferaySaasPlanName =
-						liferaySaasPlanProduct.getName();
-
-					if (liferaySaasPlanName.equals(
-							ProductConstants.NAME_LIFERAY_SAAS_PRO_PLAN)) {
-
-						liferaySaasPlanProduct = product;
-					}
-				}
-			}
-			else if (name.equals(
-						ProductConstants.NAME_LIFERAY_SAAS_CUSTOM_APVS)) {
-
-				if (productPurchase.getQuantity() > anonymousPageViewsMax) {
-					anonymousPageViewsMax = productPurchase.getQuantity();
-				}
-			}
-			else if (name.equals(
-						ProductConstants.NAME_LIFERAY_SAAS_CUSTOM_MALUS)) {
-
-				if (productPurchase.getQuantity() >
-						monthlyActiveLoggedInUsersMax) {
-
-					monthlyActiveLoggedInUsersMax =
-						productPurchase.getQuantity();
-				}
-			}
-			else if (name.equals(
-						ProductConstants.NAME_LIFERAY_SAAS_ENTERPRISE_PLAN)) {
-
-				liferaySaasPlanProduct = product;
-			}
-			else if (name.startsWith(
-						ProductConstants.
-							NAME_LIFERAY_SAAS_ENTITLEMENTS_PREFIX) &&
-					 name.endsWith("APVs")) {
-
-				long curAnonymousPageViewsMax = _getAnonymousPageViewsMax(name);
-
-				if (curAnonymousPageViewsMax > anonymousPageViewsMax) {
-					anonymousPageViewsMax = curAnonymousPageViewsMax;
-				}
-			}
-			else if (name.startsWith(
-						ProductConstants.
-							NAME_LIFERAY_SAAS_ENTITLEMENTS_PREFIX) &&
-					 name.endsWith("MALUs")) {
-
-				long curMonthlyActiveLoggedInUsersMax =
-					_getMonthlyActiveLoggedInUsersMax(name);
-
-				if (curMonthlyActiveLoggedInUsersMax >
-						monthlyActiveLoggedInUsersMax) {
-
-					monthlyActiveLoggedInUsersMax =
-						curMonthlyActiveLoggedInUsersMax;
-				}
-			}
-			else if (name.equals(ProductConstants.NAME_LIFERAY_SAAS_PRO_PLAN)) {
-				if (liferaySaasPlanProduct == null) {
-					liferaySaasPlanProduct = product;
-				}
+			if (name.equals(ProductConstants.NAME_PRODUCTION_ENVIRONMENT)) {
+				usageProductPurchase = productPurchase;
 			}
 		}
 
-		_initLiferaySaasPlan(liferaySaasPlanProduct);
-
-		_anonymousPageViewsMax = anonymousPageViewsMax;
-		_clientExtensionsCapacityCPUMax += additionalCPUAndRAMMax;
-		_clientExtensionsCapacityRAMMax += additionalCPUAndRAMMax;
-		_monthlyActiveLoggedInUsersMax = monthlyActiveLoggedInUsersMax;
-		_storageCapacityDocumentLibraryMax +=
-			additionalStorageCapacityDocumentLibraryMax;
+		_initExperiencePlan(usageProductPurchase);
 
 		_initUsage(usageJSONObject);
 	}
@@ -148,36 +50,60 @@ public class AccountUsage {
 		JSONObject jsonObject = new JSONObject();
 
 		jsonObject.put(
-			"anonymousPageViews",
-			_getUsageJSONObject(_anonymousPageViewsUsed, _anonymousPageViewsMax)
-		).put(
-			"clientExtensionsCapacityCPU",
+			"clientExtensionsCPU",
 			_getUsageJSONObject(
-				_format(_clientExtensionsCapacityCPUUsed),
-				_clientExtensionsCapacityCPUMax)
+				_clientExtensionsCapacityCPUUsed, StringPool.BLANK,
+				_clientExtensionsCapacityCPUMax, StringPool.BLANK)
 		).put(
-			"clientExtensionsCapacityRAM",
+			"clientExtensionsRAM",
 			_getUsageJSONObject(
-				_format(_clientExtensionsCapacityRAMUsed),
-				_clientExtensionsCapacityRAMMax)
+				_clientExtensionsCapacityRAMUsed,
+				_usageUnits.get(_METRIC_CLIENT_EXTENSIONS_RAM),
+				_clientExtensionsCapacityRAMMax, _UNIT_GIB)
 		).put(
-			"monthlyActiveLoggedInUsers",
+			"databaseStorage",
 			_getUsageJSONObject(
-				_monthlyActiveLoggedInUsersUsed, _monthlyActiveLoggedInUsersMax)
+				_databaseCapacityUsed,
+				_usageUnits.get(_METRIC_DATABASE_STORAGE), _databaseCapacityMax,
+				_UNIT_TIB)
 		).put(
-			"sites", _getUsageJSONObject(_sitesUsed, _sitesMax)
-		).put(
-			"storageCapacityDocumentLibrary",
+			"documentLibraryAndBackupStorage",
 			_getUsageJSONObject(
-				_format(_storageCapacityDocumentLibraryUsed),
-				_storageCapacityDocumentLibraryMax)
+				_storageCapacityDocumentLibraryUsed,
+				_usageUnits.get(_METRIC_DOCUMENT_LIBRARY),
+				_storageCapacityDocumentLibraryMax, _UNIT_GIB)
+		).put(
+			"logStorage",
+			_getUsageJSONObject(
+				_monthlyActiveLoggedInUsersUsed,
+				_usageUnits.get(_METRIC_LOG_STORAGE),
+				_monthlyActiveLoggedInUsersMax, _UNIT_GIB)
+		).put(
+			"networkTraffic",
+			_getUsageJSONObject(
+				_networkingCapacityUsed,
+				_usageUnits.get(_METRIC_NETWORK_TRAFFIC),
+				_networkingCapacityMax, _networkingCapacityUsedUnit)
 		);
 
 		return jsonObject;
 	}
 
-	private float _format(BigDecimal bigDecimal) {
+	private float _format(BigDecimal bigDecimal, String metric) {
 		if (bigDecimal != null) {
+			String usageMetric = _UNIT_GIB;
+
+			BigDecimal divisorGB = new BigDecimal(1024L * 1024L * 1024L);
+
+			bigDecimal = bigDecimal.divide(divisorGB);
+
+			if (bigDecimal.compareTo(new BigDecimal("1024")) >= 0) {
+				bigDecimal = bigDecimal.divide(new BigDecimal(1024));
+				usageMetric = _UNIT_TIB;
+			}
+
+			_usageUnits.put(metric, usageMetric);
+
 			return bigDecimal.setScale(
 				2, RoundingMode.DOWN
 			).floatValue();
@@ -186,73 +112,97 @@ public class AccountUsage {
 		return BigDecimal.ZERO.floatValue();
 	}
 
-	private long _getAnonymousPageViewsMax(String name) {
-		String anonymousPageViewsMaxString = name.substring(
-			ProductConstants.NAME_LIFERAY_SAAS_ENTITLEMENTS_PREFIX.length());
+	private JSONObject _getUsageJSONObject(
+		float usedCount, String usedCountUnits, long maxCount,
+		String maxCountUnits) {
 
-		anonymousPageViewsMaxString = StringUtil.removeSubstrings(
-			anonymousPageViewsMaxString, StringPool.COMMA, " APVs");
+		float dividend = usedCount;
 
-		return GetterUtil.getLong(anonymousPageViewsMaxString);
-	}
+		if (!usedCountUnits.equals(maxCountUnits)) {
+			dividend = usedCount / 1024;
+		}
 
-	private long _getMonthlyActiveLoggedInUsersMax(String name) {
-		String monthlyActiveLoggedInUsersMaxString = name.substring(
-			ProductConstants.NAME_LIFERAY_SAAS_ENTITLEMENTS_PREFIX.length());
+		float percentage = (dividend / maxCount) * 100;
 
-		monthlyActiveLoggedInUsersMaxString = StringUtil.removeSubstrings(
-			monthlyActiveLoggedInUsersMaxString, StringPool.COMMA, " MALUs");
-
-		return GetterUtil.getLong(monthlyActiveLoggedInUsersMaxString);
-	}
-
-	private JSONObject _getUsageJSONObject(float usedCount, long maxCount) {
 		JSONObject jsonObject = new JSONObject();
 
 		jsonObject.put(
 			"maxCount", maxCount
 		).put(
+			"maxCountUnits", maxCountUnits
+		).put(
+			"percentage", percentage
+		).put(
 			"usedCount", usedCount
+		).put(
+			"usedCountUnits", usedCountUnits
 		);
 
 		return jsonObject;
 	}
 
-	private void _initLiferaySaasPlan(Product product) {
-		if (product == null) {
+	private void _initExperiencePlan(ProductPurchase productPurchase) {
+		if (productPurchase == null) {
 			return;
 		}
 
-		Map<String, String> properties = product.getProperties();
+		Map<String, String> productPurchaseProperties =
+			productPurchase.getProperties();
+
+		String machineType = StringUtil.toLowerCase(
+			GetterUtil.getString(productPurchaseProperties.get("machineType")));
+
+		Product product = productPurchase.getProduct();
+
+		Map<String, String> productProperties = product.getProperties();
 
 		_clientExtensionsCapacityCPUMax = GetterUtil.getInteger(
-			properties.get("vcpu"));
-
-		String clientExtensionsCapacityRAMMaxPropertyValue = properties.get(
-			"ram");
-
-		clientExtensionsCapacityRAMMaxPropertyValue =
-			StringUtil.removeSubstring(
-				clientExtensionsCapacityRAMMaxPropertyValue, " GB");
+			productProperties.get(machineType + "-extensions-vcpus"));
 
 		_clientExtensionsCapacityRAMMax = GetterUtil.getInteger(
-			clientExtensionsCapacityRAMMaxPropertyValue);
+			productProperties.get(machineType + "-extensions-ram"));
 
-		String sitesPropertyValue = properties.get("sites");
+		String databaseCapacityMaxPropertyValue = productProperties.get(
+			machineType + "-database");
 
-		if (sitesPropertyValue.equals("Unlimited")) {
-			_sitesMax = -1;
+		databaseCapacityMaxPropertyValue = StringUtil.removeSubstring(
+			databaseCapacityMaxPropertyValue, _UNIT_GIB);
+
+		_databaseCapacityMax = GetterUtil.getInteger(
+			databaseCapacityMaxPropertyValue);
+
+		String monthlyActiveLoggedInUsersMaxPropertyValue =
+			productProperties.get(machineType + "-logs");
+
+		monthlyActiveLoggedInUsersMaxPropertyValue = StringUtil.removeSubstring(
+			monthlyActiveLoggedInUsersMaxPropertyValue, _UNIT_GIB);
+
+		_monthlyActiveLoggedInUsersMax = GetterUtil.getInteger(
+			monthlyActiveLoggedInUsersMaxPropertyValue);
+
+		String networkingCapacityMaxPropertyValue = productProperties.get(
+			machineType + "-traffic-networking");
+
+		if (machineType.equals("high")) {
+			networkingCapacityMaxPropertyValue = StringUtil.removeSubstring(
+				networkingCapacityMaxPropertyValue, _UNIT_TIB);
+			_networkingCapacityUsedUnit = _UNIT_TIB;
 		}
 		else {
-			_sitesMax = GetterUtil.getInteger(sitesPropertyValue);
+			networkingCapacityMaxPropertyValue = StringUtil.removeSubstring(
+				networkingCapacityMaxPropertyValue, _UNIT_GIB);
+			_networkingCapacityUsedUnit = _UNIT_GIB;
 		}
 
-		String storageCapacityDocumentLibraryMaxPropertyValue = properties.get(
-			"document-library-size");
+		_networkingCapacityMax = GetterUtil.getInteger(
+			networkingCapacityMaxPropertyValue);
+
+		String storageCapacityDocumentLibraryMaxPropertyValue =
+			productProperties.get(machineType + "-storage");
 
 		storageCapacityDocumentLibraryMaxPropertyValue =
 			StringUtil.removeSubstring(
-				storageCapacityDocumentLibraryMaxPropertyValue, " GB");
+				storageCapacityDocumentLibraryMaxPropertyValue, _UNIT_TIB);
 
 		_storageCapacityDocumentLibraryMax = GetterUtil.getInteger(
 			storageCapacityDocumentLibraryMaxPropertyValue);
@@ -260,31 +210,63 @@ public class AccountUsage {
 
 	private void _initUsage(JSONObject jsonObject) {
 		if (jsonObject != null) {
-			_anonymousPageViewsUsed = jsonObject.optLong(
-				"totalAnonymousPageViewsCount");
-			_clientExtensionsCapacityCPUUsed = jsonObject.optBigDecimal(
-				"totalClientExtensionsCapacityCPUCount", BigDecimal.ZERO);
-			_clientExtensionsCapacityRAMUsed = jsonObject.optBigDecimal(
-				"totalClientExtensionsCapacityRAM", BigDecimal.ZERO);
-			_monthlyActiveLoggedInUsersUsed = jsonObject.optLong(
-				"totalMonthlyActiveLoggedInUsersCount");
-			_sitesUsed = jsonObject.optInt("totalSitesCount");
-			_storageCapacityDocumentLibraryUsed = jsonObject.optBigDecimal(
-				"totalStorageCapacityDocumentLibrary", BigDecimal.ZERO);
+			JSONObject usageJSONObject = jsonObject.getJSONObject("usage");
+
+			_clientExtensionsCapacityCPUUsed = usageJSONObject.optInt(
+				"clientExtensionsCPU", 0);
+			_clientExtensionsCapacityRAMUsed = _format(
+				usageJSONObject.optBigDecimal(
+					"clientExtensionsRAM", BigDecimal.ZERO),
+				_METRIC_CLIENT_EXTENSIONS_RAM);
+			_databaseCapacityUsed = _format(
+				usageJSONObject.optBigDecimal(
+					"databaseStorage", BigDecimal.ZERO),
+				_METRIC_DATABASE_STORAGE);
+			_monthlyActiveLoggedInUsersUsed = _format(
+				usageJSONObject.optBigDecimal("logStorage", BigDecimal.ZERO),
+				_METRIC_LOG_STORAGE);
+			_networkingCapacityUsed = _format(
+				usageJSONObject.optBigDecimal(
+					"networkTraffic", BigDecimal.ZERO),
+				_METRIC_NETWORK_TRAFFIC);
+			_storageCapacityDocumentLibraryUsed = _format(
+				usageJSONObject.optBigDecimal(
+					"documentLibraryAndBackupStorage", BigDecimal.ZERO),
+				_METRIC_DOCUMENT_LIBRARY);
 		}
 	}
 
-	private final long _anonymousPageViewsMax;
-	private long _anonymousPageViewsUsed;
+	private static final String _METRIC_CLIENT_EXTENSIONS_RAM =
+		"clientExtensionsRAMMetric";
+
+	private static final String _METRIC_DATABASE_STORAGE =
+		"databaseStorageMetric";
+
+	private static final String _METRIC_DOCUMENT_LIBRARY =
+		"documentLibraryAndBackupStorageMetric";
+
+	private static final String _METRIC_LOG_STORAGE = "logStorageMetric";
+
+	private static final String _METRIC_NETWORK_TRAFFIC =
+		"networkTrafficMetric";
+
+	private static final String _UNIT_GIB = "GiB";
+
+	private static final String _UNIT_TIB = "TiB";
+
 	private int _clientExtensionsCapacityCPUMax;
-	private BigDecimal _clientExtensionsCapacityCPUUsed;
+	private int _clientExtensionsCapacityCPUUsed;
 	private int _clientExtensionsCapacityRAMMax;
-	private BigDecimal _clientExtensionsCapacityRAMUsed;
-	private final long _monthlyActiveLoggedInUsersMax;
-	private long _monthlyActiveLoggedInUsersUsed;
-	private int _sitesMax;
-	private int _sitesUsed;
+	private float _clientExtensionsCapacityRAMUsed;
+	private int _databaseCapacityMax;
+	private float _databaseCapacityUsed;
+	private long _monthlyActiveLoggedInUsersMax;
+	private float _monthlyActiveLoggedInUsersUsed;
+	private int _networkingCapacityMax;
+	private float _networkingCapacityUsed;
+	private String _networkingCapacityUsedUnit;
 	private int _storageCapacityDocumentLibraryMax;
-	private BigDecimal _storageCapacityDocumentLibraryUsed;
+	private float _storageCapacityDocumentLibraryUsed;
+	private final Map<String, String> _usageUnits = new HashMap<>();
 
 }

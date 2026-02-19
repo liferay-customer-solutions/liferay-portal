@@ -38,4 +38,7 @@ public class ProductConstants {
 	public static final String NAME_LIFERAY_SAAS_PRO_PLAN =
 		"Liferay SaaS - Pro Plan";
 
+	public static final String NAME_PRODUCTION_ENVIRONMENT =
+		"Production Environment";
+
 }
