@@ -87,8 +87,14 @@ const ProjectUsage = () => {
 											<ProgressBarContent
 												displayUsage={displayUsage}
 												maxCount={chartData?.maxCount}
+												maxCountUnits={
+													chartData?.maxCountUnits
+												}
 												title={chartData?.title}
 												usedCount={chartData?.usedCount}
+												usedCountUnits={
+													chartData?.usedCountUnits
+												}
 											/>
 										</CardContainer>
 									)
@@ -110,16 +116,19 @@ const ProjectUsage = () => {
 										key={`${chartData.title}-${index}`}
 									>
 										<ChartContent
-											dataSizeUnits={
-												chartData.dataSizeUnits
-											}
 											displayUsage={displayUsage}
 											maxCount={chartData.maxCount}
 											maxCountText={
 												chartData.maxCountText
 											}
+											maxCountUnits={
+												chartData.maxCountUnits
+											}
 											title={chartData.title}
 											usedCount={chartData.usedCount}
+											usedCountUnits={
+												chartData.usedCountUnits
+											}
 										/>
 									</CardContainer>
 								)

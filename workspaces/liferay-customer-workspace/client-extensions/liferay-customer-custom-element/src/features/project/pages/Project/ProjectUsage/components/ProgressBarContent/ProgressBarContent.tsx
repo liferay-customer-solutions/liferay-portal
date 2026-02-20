@@ -13,15 +13,19 @@ import i18n from '~/utils/I18n';
 interface IProps {
 	displayUsage?: boolean;
 	maxCount?: number;
+	maxCountUnits?: string;
 	title: string;
 	usedCount?: number;
+	usedCountUnits?: string;
 }
 
 const ProgressBarContent: React.FC<IProps> = ({
 	displayUsage,
 	maxCount,
+	maxCountUnits = '',
 	title,
 	usedCount,
+	usedCountUnits = '',
 }) => {
 	const barPercentage = useMemo(() => {
 		if (displayUsage) {
@@ -50,7 +54,7 @@ const ProgressBarContent: React.FC<IProps> = ({
 					>
 						{displayUsage &&
 							(usedCount !== undefined && maxCount !== undefined
-								? usedCount.toLocaleString()
+								? usedCount.toLocaleString() + usedCountUnits
 								: '-')}
 					</h3>
 
@@ -60,7 +64,8 @@ const ProgressBarContent: React.FC<IProps> = ({
 								? i18n.translate('of-unlimited')
 								: `${i18n.translate('of')} ${
 										maxCount !== undefined
-											? maxCount.toLocaleString()
+											? maxCount.toLocaleString() +
+												maxCountUnits
 											: '-'
 									}`}
 						</span>
