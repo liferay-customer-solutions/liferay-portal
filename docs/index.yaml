@@ -1,0 +1,51 @@
+apiVersion: v1
+entries:
+  liferay-client-extension:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2026-02-26T13:27:55.080956147-08:00"
+    description: A Helm chart for running Client Extensions on Helm-based Liferay
+      instances
+    digest: 5ca38b81dadde7fd8067b561ca8bbd976a8dd6bfeffaf2e479900b5631b79049
+    icon: https://www-cdn.liferay.com/documents/d/guest/liferay-logo
+    name: liferay-client-extension
+    type: application
+    urls:
+    - liferay-client-extension-0.0.0.tgz
+    version: 0.0.0
+  - apiVersion: v2
+    appVersion: latest
+    created: "2026-02-26T13:27:55.0823799-08:00"
+    description: A Helm chart for running Client Extensions on Helm-based Liferay
+      instances
+    digest: 5ca38b81dadde7fd8067b561ca8bbd976a8dd6bfeffaf2e479900b5631b79049
+    icon: https://www-cdn.liferay.com/documents/d/guest/liferay-logo
+    name: liferay-client-extension
+    type: application
+    urls:
+    - liferay-client-extension.tgz
+    version: 0.0.0
+  liferay-default:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2026-02-26T13:27:55.083370641-08:00"
+    description: Liferay is an all-in-one DXP, LCAP, and Commerce platform.
+    digest: bc6bd9873dd2232ee298b95b6dda12627e24ccd2277934a78caa993d204b66ff
+    icon: https://www-cdn.liferay.com/documents/d/guest/liferay-logo
+    name: liferay-default
+    type: application
+    urls:
+    - liferay-default-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: latest
+    created: "2026-02-26T13:27:55.084397727-08:00"
+    description: Liferay is an all-in-one DXP, LCAP, and Commerce platform.
+    digest: bc6bd9873dd2232ee298b95b6dda12627e24ccd2277934a78caa993d204b66ff
+    icon: https://www-cdn.liferay.com/documents/d/guest/liferay-logo
+    name: liferay-default
+    type: application
+    urls:
+    - liferay-default.tgz
+    version: 0.2.0
+generated: "2026-02-26T13:27:55.080345354-08:00"
