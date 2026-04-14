@@ -10,6 +10,7 @@ import com.liferay.client.extension.util.spring.boot3.client.LiferayOAuth2Access
 import com.liferay.customer.constants.HeatTagConstants;
 import com.liferay.customer.constants.JiraIssueConstants;
 import com.liferay.customer.constants.ProductConstants;
+import com.liferay.customer.model.AccountSubscriptionGroup;
 import com.liferay.customer.model.ExperienceUsageStrategy;
 import com.liferay.customer.model.JiraSupportIssue;
 import com.liferay.customer.model.SaaSUsageStrategy;
@@ -207,6 +208,8 @@ public class AccountsRestController extends BaseRestController {
 
 			_updateAccount(jwt, koroneikiAccount);
 
+			_updateSubscriptions(koroneikiAccount);
+
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch (Exception exception) {
@@ -271,6 +274,38 @@ public class AccountsRestController extends BaseRestController {
 
 		accountResource.getAccountByExternalReferenceCode(
 			externalReferenceCode);
+	}
+
+	private void _deleteSubscriptionObjects(
+		String path, Set<String> externalReferenceCodes) {
+
+		if ((externalReferenceCodes == null) ||
+			externalReferenceCodes.isEmpty()) {
+
+			return;
+		}
+
+		JSONArray payloadJSONArray = new JSONArray();
+
+		for (String externalReferenceCode : externalReferenceCodes) {
+			payloadJSONArray.put(
+				new JSONObject(
+				).put(
+					"externalReferenceCode", externalReferenceCode
+				));
+		}
+
+		try {
+			delete(
+				_getAuthorization(), payloadJSONArray.toString(),
+				UriComponentsBuilder.fromPath(
+					path
+				).build(
+				).toUri());
+		}
+		catch (Exception exception) {
+			_log.error("Failed to execute delete for path: " + path, exception);
+		}
 	}
 
 	private UsageStrategy _fetchUsageStrategy(
@@ -479,6 +514,51 @@ public class AccountsRestController extends BaseRestController {
 		return new ResponseEntity<>(jsonArray.toString(), HttpStatus.OK);
 	}
 
+	private Set<String> _getSubscriptionObjectsERCs(
+			String path, String filterString, String sortString)
+		throws Exception {
+
+		Set<String> subscriptionObjectsERC = new HashSet<>();
+
+		int page = 1;
+
+		while (page > 0) {
+			JSONObject jsonObject = new JSONObject(
+				get(
+					_getAuthorization(),
+					UriComponentsBuilder.fromPath(
+						path
+					).queryParam(
+						"filter", filterString
+					).queryParam(
+						"page", page
+					).queryParam(
+						"pageSize", 500
+					).queryParam(
+						"sort", sortString
+					).build(
+					).toUri()));
+
+			JSONArray jsonArray = jsonObject.optJSONArray("items");
+
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject entryJSONObject = jsonArray.getJSONObject(i);
+
+				subscriptionObjectsERC.add(
+					entryJSONObject.getString("externalReferenceCode"));
+			}
+
+			if (jsonObject.getInt("lastPage") <= page) {
+				page = 0;
+			}
+			else {
+				page += 1;
+			}
+		}
+
+		return subscriptionObjectsERC;
+	}
+
 	private JSONObject _toJSONObject(JiraSupportIssue jiraSupportIssue) {
 		return new JSONObject(
 		).put(
@@ -644,6 +724,182 @@ public class AccountsRestController extends BaseRestController {
 		}
 	}
 
+	private void _updateSubscriptions(
+			com.liferay.osb.koroneiki.phloem.rest.client.dto.v1_0.Account
+				koroneikiAccount)
+		throws Exception {
+
+		String accountKey = koroneikiAccount.getKey();
+
+		if (_log.isInfoEnabled()) {
+			_log.info("Synchronizing subscriptions for account: " + accountKey);
+		}
+
+		Set<String> currentAccountSubscriptionGroupERCs =
+			_getSubscriptionObjectsERCs(
+				"/o/c/accountsubscriptiongroups",
+				StringBundler.concat("accountKey eq '", accountKey, "'"),
+				StringPool.BLANK);
+
+		Map<String, List<ProductPurchase>> productPurchaseGroupsMap =
+			new HashMap<>();
+
+		for (ProductPurchase productPurchase :
+				koroneikiAccount.getProductPurchases()) {
+
+			String status = productPurchase.getStatusAsString();
+
+			if (Validator.isNull(status) || status.equals("Cancelled")) {
+				continue;
+			}
+
+			Product product = productPurchase.getProduct();
+
+			if ((product == null) || (product.getProperties() == null)) {
+				continue;
+			}
+
+			String displayGroupName = product.getProperties(
+			).get(
+				"display-group-name"
+			);
+
+			if (Validator.isNull(displayGroupName) ||
+				displayGroupName.isEmpty()) {
+
+				continue;
+			}
+
+			productPurchaseGroupsMap.computeIfAbsent(
+				displayGroupName, k -> new ArrayList<>()
+			).add(
+				productPurchase
+			);
+		}
+
+		JSONArray accountSubscriptionGroupsPostJSONArray = new JSONArray();
+		List<JSONObject> accountSubscriptionGroupsPatchList = new ArrayList<>();
+		JSONArray accountSubscriptionsUpsertJSONArray = new JSONArray();
+
+		Set<String> processedAccountSubscriptionGroupERCs = new HashSet<>();
+		Set<String> processedAccountSubscriptionERCs = new HashSet<>();
+
+		for (Map.Entry<String, List<ProductPurchase>> entry :
+				productPurchaseGroupsMap.entrySet()) {
+
+			AccountSubscriptionGroup accountSubscriptionGroup =
+				new AccountSubscriptionGroup(
+					entry.getKey(), entry.getValue(), accountKey,
+					koroneikiAccount.getExternalLinks(), _manageUrlLiferayPaas);
+
+			JSONObject accountSubscriptionGroupJSONObject =
+				accountSubscriptionGroup.toJSONObject();
+
+			String externalReferenceCode =
+				accountSubscriptionGroupJSONObject.getString(
+					"externalReferenceCode");
+
+			processedAccountSubscriptionGroupERCs.add(externalReferenceCode);
+
+			JSONArray accountSubscriptionsJSONArray =
+				(JSONArray)accountSubscriptionGroupJSONObject.remove(
+					"accountSubscriptions");
+
+			for (int j = 0; j < accountSubscriptionsJSONArray.length(); j++) {
+				JSONObject accountSubscriptionJSONObject =
+					accountSubscriptionsJSONArray.getJSONObject(j);
+
+				processedAccountSubscriptionERCs.add(
+					accountSubscriptionJSONObject.getString(
+						"externalReferenceCode"));
+
+				accountSubscriptionsUpsertJSONArray.put(
+					accountSubscriptionJSONObject);
+			}
+
+			if (currentAccountSubscriptionGroupERCs.contains(
+					externalReferenceCode)) {
+
+				accountSubscriptionGroupsPatchList.add(
+					accountSubscriptionGroupJSONObject);
+			}
+			else {
+				accountSubscriptionGroupsPostJSONArray.put(
+					accountSubscriptionGroupJSONObject);
+			}
+		}
+
+		if (!accountSubscriptionGroupsPostJSONArray.isEmpty()) {
+			post(
+				_getAuthorization(),
+				accountSubscriptionGroupsPostJSONArray.toString(),
+				UriComponentsBuilder.fromUriString(
+					"/o/c/accountsubscriptiongroups/batch"
+				).build(
+				).toUri());
+		}
+
+		for (JSONObject accountSubscriptionGroupJSONObject :
+				accountSubscriptionGroupsPatchList) {
+
+			String externalReferenceCode =
+				accountSubscriptionGroupJSONObject.getString(
+					"externalReferenceCode");
+
+			try {
+				patch(
+					_getAuthorization(),
+					accountSubscriptionGroupJSONObject.toString(),
+					UriComponentsBuilder.fromPath(
+						"/o/c/accountsubscriptiongroups"
+					).pathSegment(
+						"by-external-reference-code", externalReferenceCode
+					).build(
+					).toUri());
+			}
+			catch (Exception exception) {
+				_log.error(
+					"Failed to patch existing account's subscription group: " +
+						externalReferenceCode,
+					exception);
+			}
+		}
+
+		if (!accountSubscriptionsUpsertJSONArray.isEmpty()) {
+			post(
+				_getAuthorization(),
+				accountSubscriptionsUpsertJSONArray.toString(),
+				UriComponentsBuilder.fromUriString(
+					"/o/c/accountsubscriptions/batch?createStrategy=UPSERT"
+				).build(
+				).toUri());
+		}
+
+		currentAccountSubscriptionGroupERCs.removeAll(
+			processedAccountSubscriptionGroupERCs);
+
+		_deleteSubscriptionObjects(
+			"/o/c/accountsubscriptiongroups/batch",
+			currentAccountSubscriptionGroupERCs);
+
+		Set<String> currentAccountSubscriptionERCs =
+			_getSubscriptionObjectsERCs(
+				"/o/c/accountsubscriptions",
+				StringBundler.concat("accountKey eq '", accountKey, "'"),
+				StringPool.BLANK);
+
+		currentAccountSubscriptionERCs.removeAll(
+			processedAccountSubscriptionERCs);
+
+		_deleteSubscriptionObjects(
+			"/o/c/accountsubscriptions/batch", currentAccountSubscriptionERCs);
+
+		if (_log.isInfoEnabled()) {
+			_log.info(
+				"Successfully synced subscriptions for account: " + accountKey);
+		}
+	}
+
 	private static final String _JSM_AUTOMATION_HEAT_TAG_SUFFIX = "_be";
 
 	private static final Log _log = LogFactory.getLog(
@@ -666,5 +922,8 @@ public class AccountsRestController extends BaseRestController {
 
 	@Autowired
 	private LiferayOAuth2AccessTokenManager _liferayOAuth2AccessTokenManager;
+
+	@Value("${liferay.customer.manage.url.liferay.paas}")
+	private String _manageUrlLiferayPaas;
 
 }

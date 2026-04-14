@@ -10,7 +10,8 @@ liferay-customer-etc-spring-boot-oahs:
         -   Liferay.Headless.Admin.User.everything
         -   Liferay.Headless.Delivery.everything
         -   Liferay.Notification.REST.everything
-        -   c_accountsubscription.everything.read
+        -   c_accountsubscription.everything
+        -   c_accountsubscriptiongroup.everything
         -   c_businessevent.everything
         -   c_businesseventversion.everything
         -   c_koroneikiaccount.everything.read
