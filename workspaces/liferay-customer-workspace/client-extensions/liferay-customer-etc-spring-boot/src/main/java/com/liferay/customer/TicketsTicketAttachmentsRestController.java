@@ -8,21 +8,20 @@ package com.liferay.customer;
 import com.liferay.customer.constants.RoleConstants;
 import com.liferay.customer.exception.JiraOrganizationNotFoundException;
 import com.liferay.customer.model.JiraSupportIssue;
+import com.liferay.customer.service.AccountService;
 import com.liferay.customer.service.JiraService;
+import com.liferay.customer.service.UserAccountService;
 import com.liferay.headless.admin.user.client.dto.v1_0.Account;
 import com.liferay.headless.admin.user.client.dto.v1_0.AccountBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.OrganizationBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.RoleBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
-import com.liferay.headless.admin.user.client.resource.v1_0.AccountResource;
-import com.liferay.headless.admin.user.client.resource.v1_0.UserAccountResource;
 import com.liferay.portal.kernel.util.ArrayUtil;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -106,14 +105,7 @@ public class TicketsTicketAttachmentsRestController extends BaseRestController {
 			Jwt jwt, String accountExternalReferenceCode)
 		throws Exception {
 
-		UserAccountResource userAccountResource = UserAccountResource.builder(
-		).header(
-			HttpHeaders.AUTHORIZATION, "Bearer " + jwt.getTokenValue()
-		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
-		).build();
-
-		UserAccount userAccount = userAccountResource.getMyUserAccount();
+		UserAccount userAccount = _userAccountService.getMyUserAccount(jwt);
 
 		if (userAccount == null) {
 			return false;
@@ -133,7 +125,7 @@ public class TicketsTicketAttachmentsRestController extends BaseRestController {
 
 				for (RoleBrief roleBrief : accountBrief.getRoleBriefs()) {
 					if (ArrayUtil.contains(
-							RoleConstants.SUPPORT_ACCOUNT_TICKET_ROLES,
+							RoleConstants.NAMES_SUPPORT_ACCOUNT_TICKET_ROLES,
 							roleBrief.getName())) {
 
 						return true;
@@ -142,15 +134,8 @@ public class TicketsTicketAttachmentsRestController extends BaseRestController {
 			}
 		}
 
-		AccountResource accountResource = AccountResource.builder(
-		).header(
-			HttpHeaders.AUTHORIZATION, "Bearer " + jwt.getTokenValue()
-		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
-		).build();
-
-		Account account = accountResource.getAccountByExternalReferenceCode(
-			accountExternalReferenceCode);
+		Account account = _accountService.getAccount(
+			jwt, accountExternalReferenceCode);
 
 		if ((account == null) || (account.getOrganizationIds() == null)) {
 			return false;
@@ -175,6 +160,12 @@ public class TicketsTicketAttachmentsRestController extends BaseRestController {
 		TicketsTicketAttachmentsRestController.class);
 
 	@Autowired
+	private AccountService _accountService;
+
+	@Autowired
 	private JiraService _jiraService;
+
+	@Autowired
+	private UserAccountService _userAccountService;
 
 }
