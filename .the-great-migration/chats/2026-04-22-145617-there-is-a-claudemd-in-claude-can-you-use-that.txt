@@ -1,0 +1,3425 @@
+╭─── Claude Code v2.1.116 ─────────────────────────────────────────────────────╮
+│                                                    │ Tips for getting        │
+│                 Welcome back Ryan!                 │ started                 │
+│                                                    │ Run /init to create a … │
+│                       ▐▛███▜▌                      │ ─────────────────────── │
+│                      ▝▜█████▛▘                     │ Recent activity         │
+│                        ▘▘ ▝▝                       │ No recent activity      │
+│                                                    │                         │
+│ Opus 4.7 (1M context) · Claude Team · Liferay Able │                         │
+│               ~/repos/liferay-portal               │                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+❯ there is a CLAUDE.md in @.claude can you use that?                            
+  ⎿  Listed directory .claude/
+
+  Read 1 file (ctrl+o to expand)
+
+● Yes — that CLAUDE.md is already loaded into my context via the system reminder
+   (shown under # claudeMd), so I'm already using it. It covers the repo's
+  high-level architecture, deploy/test/format workflows, and conventions like
+  ANT_OPTS="-Xmx2560m" and <gradlew> for the wrapper.
+
+  What would you like to work on?
+
+❯ /add-dir                                                                      
+  ⎿  Added /home/ry/repos as a working directory for this session · /permissions
+      to manage
+
+❯ We are working on an audit for a big system consolidation and migration. I    
+  want you to help me look through all the relevant code and databases to audit 
+   and document all data architecture and busines logic in the current state.   
+  The sytems we care about are named support, marketplace, koroneiki, and       
+  provisioning. Kor (koroneiki) and prov (provisioning) code can be found in    
+  liferay-portal-ee repo in the modules osb folder. The marketplace and support 
+   systems are  workspaces in liferay-portal repo (this repo). We are merging   
+  all of these systems into a one, and going to create a new workspaces that    
+  follows best practices of liferay saas development. This task is just to      
+  audit and understand the systems before we begin to plan the new ones. I      
+  would like the result to be some markdown files documenting the findings. If  
+  you have any questions feel free to ask me. Also, all the databases are       
+  loaded locally already, they are named prov, kor, e5a2_lpartition_1860468,    
+  e5a2_lpartition_11706165.                                                     
+
+● Before I start, let me take a quick look at what's available so I can ask
+  focused questions.
+
+  Searched for 1 pattern, listed 6 directories (ctrl+o to expand)
+
+● I have enough context to ask focused questions. Before I start this audit, I'd
+   like to confirm a few things so the result is actually useful:
+
+  1. Repo paths & locations
+  - Koroneiki & Provisioning: I see /home/ry/repos/liferay-portal-ee/modules/osb
+   but it looks empty from outside its working directory. Can you confirm the
+  exact paths? (Also lfris-koroneiki, lfris-provisioning, lfris-extsaassupport
+  at /home/ry/repos/ look like related infra/deployment repos — should those be
+  in scope too?)
+  - Marketplace:
+  /home/ry/repos/liferay-portal/workspaces/liferay-marketplace-workspace —
+  correct?
+  - Support: I don't see a "support" workspace directly, but there's
+  liferay-ticket-workspace. Is that the one, or is support somewhere else?
+
+  2. Database → system mapping
+  - prov → provisioning, kor → koroneiki — obvious
+  - e5a2_lpartition_1860468 and e5a2_lpartition_11706165 — which is marketplace,
+   which is support?
+  - What DB engine / connection info (host, port, user)? I assume local
+  MySQL/MariaDB on default port.
+
+  3. Output location
+  - Where should the markdown files live? A new directory like
+  /home/ry/repos/liferay-portal/audit/ or somewhere else entirely? One file per
+  system, or grouped (data model, business logic, integrations)?
+
+  4. Scope & depth
+  For each system, I'm planning to cover:
+  - Data architecture: entities, relationships, key tables, service-builder
+  models
+  - Business logic: major services/flows, scheduled jobs, APIs
+  (REST/SOAP/internal), event listeners
+  - Integrations: how these four systems talk to each other today (e.g., prov ↔
+  kor, marketplace ↔ support)
+  - External dependencies: Salesforce, Stripe, RabbitMQ, search, etc.
+
+  Is that the right shape, or do you care more about some axes than others
+  (e.g., API surface for consolidation planning vs. full data dictionary)?
+
+  5. One more — roughly how exhaustive? A 5-page overview per system, or a deep
+  inventory (every entity, every endpoint)? The repos are huge so this drives
+  how I pace the agents.
+
+✻ Crunched for 45s
+
+❯ 1. /modules/dxp/apps/osb is where the kor/prov code is. And support workspace 
+   is named liferay-customer-workspace. You shouldnt need the lfris repos for   
+  this audit, though they are related to deployment if we ever need to check    
+  them later                                                                    
+  2. 1860468 is support. port is 3307 and password is e5a2                      
+  3. sure, anywhere is fine                                                     
+  4. yes, sounds great                                                          
+  5. lets do higher level right now. The main goal is to take everything and    
+  redo it in liferay objects on the new system, so as long as we have the info  
+  to do that we should be good                                                  
+
+● Got it. Let me verify paths and DB access, then launch four agents in parallel
+   (one per system). I'll synthesize integrations at the end.
+
+  Listed 6 directories, ran 2 bash commands (ctrl+o to expand)
+
+  Ran 1 bash command (ctrl+o to expand)
+● Launching four parallel audits. Each agent will cross-reference code against
+  the live DB and write its own markdown file.
+
+● 4 background agents launched (↓ to manage)
+   ├ Audit Koroneiki system
+   ├ Audit Provisioning system
+   ├ Audit Marketplace system
+   └ Audit Support system
+
+● All four system audits are running in parallel. Each is writing directly to
+  /home/ry/repos/liferay-portal/audit/:
+
+  - koroneiki.md — osb-koroneiki modules + kor DB
+  - provisioning.md — osb-provisioning modules + prov DB
+  - marketplace.md — liferay-marketplace-workspace + e5a2_lpartition_11706165
+  - support.md — liferay-customer-workspace + e5a2_lpartition_1860468
+
+  When they're all done I'll synthesize integrations.md (cross-system
+  communication) and a README.md index. I'll let you know as each finishes.
+
+✻ Churned for 2m 13s
+
+● Agent "Audit Koroneiki system" completed
+
+● The Explore subagent can't Write files — that's my mistake. Let me get the
+  content back from it and write it myself. The other three agents will hit the
+  same wall, so I'll preempt them too.
+
+● SendMessage isn't available here either. Cleanest path: re-launch with
+  general-purpose agents (which have Write access). The already-running Explore
+  agents can't write anyway, so they'll just fail harmlessly. Launching all four
+   replacements now in parallel.
+
+● 4 background agents launched (↓ to manage)
+   ├ Audit Koroneiki (retry with write)
+   ├ Audit Provisioning (retry with write)
+   ├ Audit Marketplace (retry with write)
+   └ Audit Support (retry with write)
+
+● Agent "Audit Marketplace system" completed
+
+● Agent "Audit Provisioning system" completed
+
+● Agent "Audit Support system" completed
+
+● Three of the four original Explore agents returned their full audit content in
+   the result text (but couldn't write). The general-purpose retry agents I
+  launched have Write access and are still running — when they complete, they'll
+   produce the files directly. Nothing to do for now except wait.
+
+  Three retries still in flight (Koroneiki, Provisioning, Marketplace, Support —
+   all the replacements).
+
+✻ Crunched for 2m 19s
+
+● Agent "Audit Provisioning (retry with write)" completed
+
+● The retry agents are also sandboxed and can't write — same issue. But the
+  original Explore agents returned full audit content in their result text. I'll
+   write those three files directly from the main thread (which does have write
+  access), then tackle Koroneiki once its retry returns.
+
+  Starting with Marketplace (cleaning up HTML-escaped characters from the
+  agent's output).
+
+● Write(audit/marketplace.md)
+  ⎿  Wrote 338 lines to audit/marketplace.md
+       1 # Marketplace System Audit
+       3 ## 1. Purpose & Scope
+       5 The **Liferay Marketplace** is a modern SaaS application built o
+         n Liferay Objects + client extensions that enables software publ
+         It serves as both a public storefront where customers discover a
+         s, trials, licenses, and sales analytics.
+       7 The Marketplace sits in the middle of Liferay's product ecosyste
+         m and integrates with:
+       9 - **Koroneiki** — customer account and entitlement management
+         loud services
+     … +473 lines (ctrl+o to expand)
+
+● Write(audit/provisioning.md)
+  ⎿  Wrote 280 lines to audit/provisioning.md
+      1 # Provisioning System Audit
+      3 ## 1. Purpose & Scope
+      5 The **Provisioning** system is Liferay's customer account provisi
+        oning and license management platform. It transforms Salesforce s
+        as the bridge between Sales (Salesforce), customer data (Koroneik
+      6 
+        ms, tracks product subscriptions, enforces SLA and developer limi
+        ts, and orchestrates multi-system synchronization via RabbitMQ me
+         processes triggered by Salesforce opportunity stage changes.
+      9 K
+     … +413 lines (ctrl+o to expand)
+
+● Write(audit/support.md)
+  ⎿  Wrote 330 lines to audit/support.md
+       1 # Support System Audit
+       3 ## 1. Purpose & Scope
+       4 
+         ace`) is a modern Liferay SaaS portal that serves as a multi-ten
+         for:
+       6 
+         Management / JSM)
+       8 - **Callback request management** (customer phone callback reque
+       9 - **Business event tracking** (customer product implementation m
+      10 - **Large file uploads** (ticket attachments with GCS backend)
+     … +452 lines (ctrl+o to expand)
+
+● Agent "Audit Koroneiki (retry with write)" completed
+
+● Agent "Audit Support (retry with write)" completed
+
+● Agent "Audit Marketplace (retry with write)" completed
+
+● Koroneiki retry returned full content. Writing it now, then I'll fill in row
+  counts for all four systems and write integrations.md + README.md.
+
+● Write(audit/koroneiki.md)
+  ⎿  Wrote 298 lines to audit/koroneiki.md
+      1 # Koroneiki System Audit
+      3 ## 1. Purpose & Scope
+      4 
+        entitlement management system**. It is the authoritative source o
+        the **Teams** that group contacts on accounts, the **Products** t
+        hose accounts have **Purchased**, the **Consumption** of those pu
+        ntacts.
+      6 
+        s (Provisioning, Marketplace, Support, customer portal, LCS, Doss
+        does **not** own orders, billing, or tickets — 
+     … +552 lines (ctrl+o to expand)
+● Running DB queries in parallel for row counts across all four databases while
+  I finalize content.
+
+  Ran 10 bash commands (ctrl+o to expand)
+
+● All row counts captured. Now updating each file with real numbers, then
+  writing integrations.md and README.md.
+
+● Update(audit/koroneiki.md)
+  ⎿  Added 30 lines, removed 23 lines
+      241  
+      242  ## 6. Row Counts
+      243  
+      244 -See root `README.md` / the live DB: counts to be filled in onc
+          -e sandbox MySQL access is unblocked. Queries to run:          
+      244 +Live counts from the `kor` database:                          
+      245  
+      246 -```sql                                                        
+      247 -USE kor;                                                      
+      248 -SELECT 'Account',              COUNT(*) FROM Koroneiki_Account
+          - UNION ALL                                                    
+      249 -SELECT 'Contact',              COUNT(*) FROM Koroneiki_Contact
+          - UNION ALL                                                    
+      250 -SELECT 'Team',                 COUNT(*) FROM Koroneiki_Team UN
+          -ION ALL                                                       
+      251 -SELECT 'ContactRole',          COUNT(*) FROM Koroneiki_Contact
+          -Role UNION ALL                                                
+      252 -SELECT 'TeamRole',             COUNT(*) FROM Koroneiki_TeamRol
+          -e UNION ALL                                                   
+      253 -SELECT 'ContactAccountRole',   COUNT(*) FROM Koroneiki_Contact
+          -AccountRole UNION ALL                                         
+      254 -SELECT 'ContactTeamRole',      COUNT(*) FROM Koroneiki_Contact
+          -TeamRole UNION ALL                                            
+      255 -SELECT 'TeamAccountRole',      COUNT(*) FROM Koroneiki_TeamAcc
+          -ountRole UNION ALL                                            
+      256 -SELECT 'AccountNote',          COUNT(*) FROM Koroneiki_Account
+          -Note UNION ALL                                                
+      257 -SELECT 'ProductEntry',         COUNT(*) FROM Koroneiki_Product
+          -Entry UNION ALL                                               
+      258 -SELECT 'ProductPurchase',      COUNT(*) FROM Koroneiki_Product
+          -Purchase UNION ALL                                            
+      259 -SELECT 'ProductConsumption',   COUNT(*) FROM Koroneiki_Product
+          -Consumption UNION ALL                                         
+      260 -SELECT 'Entitlement',          COUNT(*) FROM Koroneiki_Entitle
+          -ment UNION ALL                                                
+      261 -SELECT 'EntitlementDefinition',COUNT(*) FROM Koroneiki_Entitle
+          -mentDefinition UNION ALL                                      
+      262 -SELECT 'ExternalLink',         COUNT(*) FROM Koroneiki_Externa
+          -lLink UNION ALL                                               
+      263 -SELECT 'AuditEntry',           COUNT(*) FROM Koroneiki_AuditEn
+          -try UNION ALL                                                 
+      264 -SELECT 'ProductField',         COUNT(*) FROM Koroneiki_Product
+          -Field UNION ALL                                               
+      265 -SELECT 'AuthenticationToken',  COUNT(*) FROM Koroneiki_Authent
+          -icationToken UNION ALL                                        
+      266 -SELECT 'ServiceProducer',      COUNT(*) FROM Koroneiki_Service
+          -Producer;                                                     
+      267 -```                                                           
+      246 +| Table | Rows |                                              
+      247 +|---|---:|                                                    
+      248 +| Koroneiki_AuditEntry | 17,462,542 |                         
+      249 +| Koroneiki_ProductField | 260,826 |                          
+      250 +| Koroneiki_ExternalLink | 254,202 |                          
+      251 +| Koroneiki_ProductConsumption | 148,901 |                    
+      252 +| Koroneiki_ProductPurchase | 65,271 |                        
+      253 +| Koroneiki_ContactAccountRole | 32,647 |                     
+      254 +| Koroneiki_ContactTeamRole | 29,262 |                        
+      255 +| Koroneiki_Contact | 20,397 |                                
+      256 +| Koroneiki_Team | 18,570 |                                   
+      257 +| Koroneiki_Account | 18,390 |                                
+      258 +| Koroneiki_Entitlement | 9,311 |                             
+      259 +| Koroneiki_AccountNote | 788 |                               
+      260 +| Koroneiki_ProductEntry | 505 |                              
+      261 +| Koroneiki_EntitlementDefinition | 62 |                      
+      262 +| Koroneiki_TeamAccountRole | 39 |                            
+      263 +| Koroneiki_AuthenticationToken | 27 |                        
+      264 +| Koroneiki_ContactRole | 25 |                                
+      265 +| Koroneiki_ServiceProducer | 21 |                            
+      266 +| Koroneiki_TeamRole | 2 |                                    
+      267  
+      268 +**Takeaways:**                                                
+      269 +- ~18K accounts with ~20K contacts and ~65K product purchases 
+          +— mid-sized ERP volume, migratable.                           
+      270 +- **Audit log is 17M+ rows** — plan for archival/truncation st
+          +rategy; do not try to carry the raw AuditEntry table over.    
+      271 +- **ProductField at 260K** says Trunk entities lean heavily on
+          + dynamic properties. Extract the distinct `name` values before
+          + designing Object custom fields — you likely need a small fixe
+          +d set of Object fields to cover most ProductFields.           
+      272 +- **ExternalLink at 254K** means every entity links to multipl
+          +e external systems. That's the critical integration surface.  
+      273 +- **TeamAccountRole is only 39** versus 18K Teams — most teams
+          + exist without assigned account-level roles. Worth validating 
+          +that TeamAccountRole is still used.                           
+      274 +- **TeamRole has 2 rows**. Either role catalog is tiny or role
+          +-type modeling is unusual. Verify before porting.             
+      275 +                                                              
+      276  ---
+      277  
+      278  ## 7. Open Questions / Gotchas
+
+● Update(audit/provisioning.md)
+  ⎿  Added 20 lines, removed 7 lines
+      234  
+      235  ## 6. Row Counts
+      236  
+      237 -DB queries blocked in sandbox. To fill in:                    
+      237 +Live counts from `prov`. **Important discovery:** `service.xml
+          +` in the audited source only declares `ProductBundle` and `Pro
+          +ductBundleProducts`, but the actual `prov` database contains s
+          +ignificant license-key and subscription tables not reflected i
+          +n the audited codebase — likely owned by other modules deploye
+          +d into the same DB (LCS? older Provisioning?). Listing them he
+          +re so the migration team doesn't miss them:                   
+      238  
+      239 -```sql                                                        
+      240 -USE prov;                                                     
+      241 -SELECT COUNT(*) FROM Provisioning_ProductBundle;              
+      242 -SELECT COUNT(*) FROM Provisioning_ProductBundleProducts;      
+      243 -```                                                           
+      239 +| Table | Rows | Origin |                                     
+      240 +|---|---:|---|                                                
+      241 +| Provisioning_LicenseKey | 230,466 | Not in osb-provisioning 
+          +service.xml |                                                 
+      242 +| OSB_LicenseKey | 201,897 | Legacy `OSB_*` table |           
+      243 +| OSB_OfferingEntry | 76,504 | Legacy |                       
+      244 +| Provisioning_SubscriptionEntry | 2,061 | Not in osb-provisio
+          +ning service.xml |                                            
+      245 +| Marketplace_Module | 1,817 | Legacy Marketplace (separate fr
+          +om new Marketplace workspace) |                               
+      246 +| Provisioning_CommonLicenseKey | 476 | Not in osb-provisionin
+          +g service.xml |                                               
+      247 +| Marketplace_App | 344 | Legacy Marketplace |                
+      248 +| OSB_ProductEntry | 112 | Legacy |                           
+      249 +| Provisioning_LicenseEntry | 48 | Not in osb-provisioning ser
+          +vice.xml |                                                    
+      250 +| Provisioning_ProductVersion | 36 | Not in osb-provisioning s
+          +ervice.xml |                                                  
+      251 +| Provisioning_ProductBundleProducts | 23 | Audited ✓ |       
+      252 +| Provisioning_ProductBundle | 5 | Audited ✓ |                
+      253 +| OSB_LicenseEntry | 0 | Legacy (empty) |                     
+      254 +| OSB_LicenseKeySet | 0 | Legacy (empty) |                    
+      255  
+      245 -Expected: **small** (likely < 100 bundles, < 1000 junction row
+          -s). The real data volume is in Koroneiki — see `koroneiki.md`.
+      256 +**This is a significant gap in the §2 data model.** The `Provi
+          +sioning_LicenseKey`, `Provisioning_SubscriptionEntry`, `Provis
+          +ioning_LicenseEntry`, `Provisioning_ProductVersion`, `Provisio
+          +ning_CommonLicenseKey` tables represent the **actual license k
+          +ey data** that the Marketplace and Support systems reference. 
+          +Locate the owning code (likely a sibling `osb-provisioning-lic
+          +ense*` module or LCS) before migration planning.              
+      257  
+      258 +Similarly, the `OSB_*` tables and `Marketplace_App`/`Marketpla
+          +ce_Module` are **legacy Liferay Marketplace (the old app marke
+          +tplace, unrelated to the new `liferay-marketplace-workspace`)*
+          +*. These may or may not need to be carried forward — check wit
+          +h the team before discarding.                                 
+      259 +                                                              
+      260  ---
+      261  
+      262  ## 7. Open Questions / Gotchas
+
+● Update(audit/marketplace.md)
+  ⎿  Added 22 lines, removed 20 lines
+      285  
+      286  ## 7. Row Counts
+      287  
+      288 -Row counts not yet collected — the agent hit sandbox restricti
+          -ons on MySQL access. To fill in:                              
+      288 +Live counts from `e5a2_lpartition_11706165`:                  
+      289  
+      290 -```sql                                                        
+      291 --- Query the object → table map first                         
+      292 -SELECT name, shortName, dbTableName FROM ObjectDefinition;    
+      290 +| Object | Rows |                                             
+      291 +|---|---:|                                                    
+      292 +| GetAppInformation | 496 |                                   
+      293 +| OAuth2DXPAuthorization | 225 |                              
+      294 +| PublisherDetails | 134 |                                    
+      295 +| Sample | 30 (likely test data) |                            
+      296 +| PublisherAssets | 16 |                                      
+      297 +| TrialExtensionRequest | 13 |                                
+      298 +| RequestPublisherAccount | 12 |                              
+      299 +| PublisherSalesSummary | 8 |                                 
+      300 +| PublisherAssetAttachment | 6 |                              
+      301 +| Report | 2 |                                                
+      302 +| LicenseTypesDescription | 0 |                               
+      303 +| UserAdditionalInfo | 0 |                                    
+      304  
+      294 --- Then count rows on the O_* tables and the underlying Lifera
+          -y-managed tables                                              
+      295 -SELECT COUNT(*) FROM O_PublisherDetails;                      
+      296 -SELECT COUNT(*) FROM O_PublisherAssets;                       
+      297 -SELECT COUNT(*) FROM O_PublisherAssetAttachment;              
+      298 -SELECT COUNT(*) FROM O_PublisherSalesSummary;                 
+      299 -SELECT COUNT(*) FROM O_ProductFeedback;                       
+      300 -SELECT COUNT(*) FROM O_ContactSales;                          
+      301 -SELECT COUNT(*) FROM O_TrialExtensionRequest;                 
+      302 -SELECT COUNT(*) FROM O_DXPFreeActivationKeyRequest;           
+      303 -SELECT COUNT(*) FROM O_AIHubBetaPrivateAccessRequest;         
+      304 -SELECT COUNT(*) FROM O_Report;                                
+      305 -SELECT COUNT(*) FROM O_OAuth2DxpAuthorization;                
+      306 -SELECT COUNT(*) FROM CommerceOrder;                           
+      307 -SELECT COUNT(*) FROM CommerceOrderItem;                       
+      308 -```                                                           
+      305 +**Discrepancies between the site-initializer JSON and live DB:
+          +**                                                            
+      306  
+      310 -Expected high-volume tables: `O_PublisherAssets`, `O_ProductFe
+          -edback`, `CommerceOrder`. Expected low-volume: `O_Report` (fix
+          -ed set), `O_PublisherSalesSummary` (≈ publishers × quarters). 
+      307 +- **Not deployed (no Object Definition in DB):** `ContactSales
+          +`, `ProductFeedback`, `DXPFreeActivationKeyRequest`, `AIHubBet
+          +aPrivateAccessRequest`. Either these JSONs haven't been applie
+          +d to this environment, or they've been removed from the initia
+          +lizer and the audit's object list is stale.                   
+      308 +- **In DB but not in my §2 list:** `GetAppInformation`, `UserA
+          +dditionalInfo`, `Sample`. `Sample` is almost certainly scratch
+          +/test data (30 rows). `GetAppInformation` (496 rows) and `User
+          +AdditionalInfo` (0) should be confirmed as real product surfac
+          +e.                                                            
+      309  
+      310 +**Takeaways:**                                                
+      311 +- Marketplace is a **low-data-volume** system — the highest co
+          +unt is 496 rows. The complexity is in the business logic (cron
+          + jobs, integrations, workflow), not data migration.           
+      312 +- `Sample` table and zero-row tables suggest some Objects are 
+          +vestigial; review before porting.                             
+      313 +                                                              
+      314  ---
+      315  
+      316  ## 8. Open Questions / Gotchas
+
+● Update(audit/support.md)
+  ⎿  Added 38 lines, removed 18 lines
+      277  
+      278  ## 7. Row Counts
+      279  
+      280 -DB queries blocked in sandbox. To fill in:                    
+      280 +Live counts from `e5a2_lpartition_1860468`:                   
+      281  
+      282 -```sql                                                        
+      283 -USE e5a2_lpartition_1860468;                                  
+      284 -SELECT name, shortName, dbTableName FROM ObjectDefinition;    
+      282 +| Object | Rows |                                             
+      283 +|---|---:|                                                    
+      284 +| BannedEmailDomain | 4,757 |                                 
+      285 +| AccountSubscription | 4,572 |                               
+      286 +| AccountSubscriptionGroup | 3,073 |                          
+      287 +| KoroneikiAccount | 2,313 |                                  
+      288 +| AccountFlag | 557 |                                         
+      289 +| BusinessEventVersion | 347 |                                
+      290 +| TeamMembersInvitation | 321 |                               
+      291 +| NotificationSubscription | 309 |                            
+      292 +| BusinessEvent | 120 |                                       
+      293 +| NotificationTarget | 99 |                                   
+      294 +| TicketAttachment | 75 |                                     
+      295 +| CallbackRequest | 50 |                                      
+      296 +| SupportTicketEscalation | 49 |                              
+      297 +| AdminLiferayExperienceCloud | 34 |                          
+      298 +| CloudNativeEnvironment | 16 |                               
+      299 +| DXPCDataCenterRegion | 15 |                                 
+      300 +| AccountSubscriptionTerm | 13 |                              
+      301 +| ReplacementActivationKeyRequest | 11 |                      
+      302 +| AdminDXPCloud | 10 |                                        
+      303 +| IncidentReportContactAnalyticsCloud | 9 |                   
+      304 +| LiferayExperienceCloudEnvironment | 9 |                     
+      305 +| AnalyticsCloudWorkspace | 8 |                               
+      306 +| DXPCloudEnvironment | 5 |                                   
+      307 +| AnalyticsCloudDataCenterLocation | 5 |                      
+      308 +| EmailDelivery | 0 |                                         
+      309 +| Test2 | 0 (scratch) |                                       
+      310  
+      286 -SELECT COUNT(*) FROM O_TicketAttachment;                      
+      287 -SELECT COUNT(*) FROM O_BusinessEvent;                         
+      288 -SELECT COUNT(*) FROM O_BusinessEventVersion;                  
+      289 -SELECT COUNT(*) FROM O_AccountSubscription;                   
+      290 -SELECT COUNT(*) FROM O_KoroneikiAccount;                      
+      291 -SELECT COUNT(*) FROM O_CallbackRequest;                       
+      292 -SELECT COUNT(*) FROM O_SupportTicketEscalation;               
+      293 -SELECT COUNT(*) FROM O_DXPCloudEnvironment;                   
+      294 -SELECT COUNT(*) FROM O_LXCEnvironment;                        
+      295 -SELECT COUNT(*) FROM O_AnalyticsCloudWorkspace;               
+      296 -SELECT COUNT(*) FROM O_ReplacementActivationKeyRequest;       
+      297 -SELECT COUNT(*) FROM O_AccountFlag;                           
+      298 -```                                                           
+      311 +**Discrepancies from the audit list:**                        
+      312  
+      300 -Expected high-volume: `O_TicketAttachment` (daily uploads; sch
+          -eduled cleanup compresses). Expected medium: `O_BusinessEvent`
+          -, `O_AccountSubscription`. Expected low: reference data (`O_DX
+          -PCDataCenterRegion`, `O_BannedEmailDomain`).                  
+      313 +- **In DB but not in my §2 list:** `LiferayExperienceCloudEnvi
+          +ronment`, `EmailDelivery`, `Test2`. `Test2` is scratch. `Lifer
+          +ayExperienceCloudEnvironment` (9 rows) is the LXC equivalent o
+          +f `DXPCloudEnvironment`; my §2 noted `LXCEnvironment` which is
+          + the same entity under a different name. `EmailDelivery` (0 ro
+          +ws) — unclear if planned or abandoned.                        
+      314  
+      315 +**Takeaways:**                                                
+      316 +- **`BannedEmailDomain` at 4,757** is the largest table — refe
+          +rence data (email domain blocklist) that must port intact.    
+      317 +- **`AccountSubscription` + `AccountSubscriptionGroup` = 7,645
+          + rows** — this is the customer-license-state snapshot that dri
+          +ves the Account entitlement picture. Central for the migration
+          +.                                                             
+      318 +- **`KoroneikiAccount` at 2,313** — sync side-car. Once the co
+          +nsolidated workspace owns the real Koroneiki Account Object, t
+          +his table collapses.                                          
+      319 +- **`TicketAttachment` at only 75** — the scheduled cleanup is
+          + aggressive; most lifetime data lives in GCS and Jira, not her
+          +e. The Liferay side is a thin metadata index.                 
+      320 +- Small CallbackRequest / Escalation counts (~50 each) confirm
+          + those flows are low-volume customer-initiated forms.         
+      321 +                                                              
+      322  ---
+      323  
+      324  ## 8. Open Questions / Gotchas
+
+● Write(audit/integrations.md)
+  ⎿  Wrote 247 lines to audit/integrations.md
+      1 # Cross-System Integrations
+      3 This document stitches the four systems — Koroneiki, Provisioning
+        , Marketplace, Support — together, plus the external services the
+        derstand the seams that the consolidation will either erase (wher
+        alks to the outside world).
+      4 
+      6 
+      7 ## 1. One-Line Summary
+      9 **Koroneiki is the center.** It owns customer Accounts, Contacts,
+        bit it:
+     … +404 lines (ctrl+o to expand)
+
+● Write(audit/README.md)
+  ⎿  Wrote 53 lines to audit/README.md
+      1 # System Consolidation Audit
+      3 This directory contains a higher-level audit of four legacy Lifer
+        ay business systems being consolidated into a new unified workspa
+      4 
+        ERP (the system of record)
+      6 - **[Provisioning](./provisioning.md)** — Salesforce → Koroneiki 
+      7 - **[Marketplace](./marketplace.md)** — publisher/commerce storef
+        ront
+        ked)
+        nd their external dependencies) talk to each other
+     … +90 lines (ctrl+o to expand)
+
+  Listed 1 directory (ctrl+o to expand)
+
+● Audit complete. Six markdown files in /home/ry/repos/liferay-portal/audit/:
+
+  - README.md — index + scale-at-a-glance table + known gaps
+  - koroneiki.md — ERP with 18K accounts, 20K contacts, 65K purchases, 17M audit
+   rows; 62 raw-SQL entitlement rules
+  - provisioning.md — event-driven orchestrator (RabbitMQ from Dossiera);
+  discovered 230K license-key rows in a module the source doesn't declare
+  - marketplace.md — 12 deployed Objects, low data volume (≤500 rows each); 7
+  cron jobs are the migration's hot path
+  - support.md — 26 Objects (4.8K banned-email-domain rows, 4.6K
+  AccountSubscription); Jira-native ticketing with GCS file uploads
+  - integrations.md — cross-system dependency map, shared-concept table, 8 open
+  questions for planning
+
+  Headline findings worth flagging:
+
+  1. Koroneiki is the center of gravity — its
+  Account/Contact/Team/ProductPurchase/Entitlement entities become the spine of
+  the new workspace; the other three systems' data models overlay.
+  2. Three unresolved integration mysteries (integrations.md §9) that need an
+  infra conversation before planning: what ProvisioningService Marketplace
+  actually calls, who bridges Koroneiki's RabbitMQ to Google Pub/Sub, and how
+  Support's KoroneikiAccount sync runs.
+  3. The 62 raw-SQL EntitlementDefinition rules are the single biggest
+  logic-translation risk — each needs human review.
+  4. Provisioning's DB has license-key tables not declared in the audited source
+   — sibling module or LCS. Confirm ownership before discarding.
+
+✻ Cooked for 13m 47s
+
+❯ /export                                                                       
+  ⎿  Conversation exported to: /home/ry/repos/liferay-portal/2026-04-22-100340-th
+     ere-is-a-claudemd-in-claude-can-you-use-that.txt
+
+※ recap: Audited four legacy systems (Koroneiki, Provisioning, Marketplace, Support) and wrote six markdown files in /home/ry/repos/liferay-portal/audit/ covering data models, business logic, and integrations for the consolidation. Next: review the findings and decide the unified Account/Subscription/Contact model. (disable recaps in /config)
+
+❯ /usage 
+  ⎿  Status dialog dismissed
+❯ how much usage has this task taken so far?                                    
+
+● I don't have direct access to usage/cost data for this session — that's
+  surfaced by the /usage slash command you just ran (which you dismissed) and
+  isn't exposed to me as a tool.
+
+  What I can tell you is what was expensive in work terms, since that tracks
+  with cost:
+
+  - 8 subagents spawned — 4 Explore (read-only, blocked on writes) + 4
+  general-purpose retries (also sandbox-blocked on writes). Each ran 1–16
+  minutes and used between 60K and 195K tokens per the completion notifications.
+   Total subagent token usage from the notifications I saw: roughly 1.0M tokens
+  across all 8.
+  - Main thread did the DB queries, content cleanup/HTML-entity fixing, and
+  wrote all 6 markdown files directly.
+  - The 4 read-only Explore agents were the biggest waste — they all produced
+  full audit content but couldn't persist it, forcing the retry pass. That
+  doubled the exploration cost for Marketplace, Provisioning, Support,
+  Koroneiki.
+
+  If you want a real number, re-open /usage. If you want to avoid that waste
+  pattern next time, I should have used general-purpose subagents from the start
+   for anything that needs to write files — Explore is read-only by design.
+
+❯ how about how many tokens?                                                    
+
+● Same answer — I don't have a tool that reports this session's token total.
+  /usage is how you see it; I only see individual subagent token counts when
+  they complete.
+
+  From the subagent completion notifications, here's what I can add up:
+
+  ┌────────────────────────────┬─────────┐
+  │           Agent            │ Tokens  │
+  ├────────────────────────────┼─────────┤
+  │ Explore Koroneiki (1st)    │ 120,969 │
+  ├────────────────────────────┼─────────┤
+  │ Explore Provisioning (1st) │  75,173 │
+  ├────────────────────────────┼─────────┤
+  │ Explore Marketplace (1st)  │  74,908 │
+  ├────────────────────────────┼─────────┤
+  │ Explore Support (1st)      │  59,602 │
+  ├────────────────────────────┼─────────┤
+  │ GP Koroneiki (retry)       │ 169,388 │
+  ├────────────────────────────┼─────────┤
+  │ GP Provisioning (retry)    │ 187,325 │
+  ├────────────────────────────┼─────────┤
+  │ GP Marketplace (retry)     │ 193,994 │
+  ├────────────────────────────┼─────────┤
+  │ GP Support (retry)         │ 164,584 │
+  ├────────────────────────────┼─────────┤
+  │ Subagent subtotal          │ ~1,046K │
+  └────────────────────────────┴─────────┘
+
+  My own main-thread usage (this conversation's input + output + tool results)
+  isn't in that table. Given the size of the subagent result payloads I had to
+  read back (the three full audits inlined in task-notification messages were
+  each ~20K tokens) plus writing ~100KB of markdown, the main thread is probably
+   another 300–500K tokens.
+
+  So rough total: ~1.3–1.5M tokens. Check /usage for the actual number.
+
+❯ Alright great work. Next lets use that audit information to create a new      
+  folder called plan. In that I want a new proposed systems spec.               
+
+● Before I launch agents again, a quick check — the audit left ~8 open design
+  questions (unified Account vs AccountEntry, Contact vs Liferay User,
+  subscription unification, entitlement SQL translation, Jira/ticketing
+  boundary, commerce layer, license-key migration, workspace structure). I can
+  either (a) ask you for direction on the 2-3 that matter most, or (b) make
+  best-judgment calls and clearly flag each one in the spec so you can redirect
+  on review.
+
+  My recommendation: go with (b) — write one plan/system-spec.md covering
+  proposed Object model, business logic, API surface, integration boundaries,
+  and migration approach, with each contested decision boxed out as "Decision &
+  rationale — open for review." Faster than a round-trip and the doc becomes the
+   forcing function for the conversation. Want me to go?
+
+❯ yes, go with b                                                                
+
+● Going now. One file, best-judgment decisions clearly boxed.
+
+  Ran 1 bash command (ctrl+o to expand)
+
+● Write(plan/system-spec.md)
+  ⎿  Wrote 504 lines to plan/system-spec.md
+      1 # Consolidated Customer Platform — Proposed System Spec
+      3 This document proposes the shape of the new workspace that replac
+        es Koroneiki, Provisioning, Marketplace, and Support with one Lif
+        plementation plan. Every contested decision is in a call-out box 
+        — **these are best-judgment defaults, open for review**; flag the
+      4 
+      5 Read the `../audit/` docs first if you haven't — this spec assume
+      6 
+      7 ---
+      9 ## 1. Goals & Non-Goals
+     … +845 lines (ctrl+o to expand)
+
+  Listed 1 directory (ctrl+o to expand)
+
+● /home/ry/repos/liferay-portal/plan/system-spec.md — 500 lines, 36KB.
+
+  Structure:
+  1. Goals & non-goals — what's in scope, what's not (Jira, Commerce, Cloud,
+  Salesforce not touched).
+  2. 14 design decisions — each boxed with rationale, alternative rejected,
+  tradeoff. The ones most likely to draw pushback: D1 (use AccountEntry not a
+  new Account Object), D2 (Liferay User not Contact), D4 (unified Subscription),
+   D14 (archive the 17M audit log).
+  3. Proposed Object model — 7 domains, ~30 Objects with fields and
+  relationships, ER diagram, plus explicit "what gets dropped" list.
+  4. Business logic — 10 Object Actions, 11 scheduled tasks, validations, 3
+  Kaleo workflows, each mapped back to what it replaces from the audit.
+  5. API surface — headless-first + ~20 custom REST endpoints.
+  6. UI / site initializers — 3 sites (Marketplace, Support, Admin).
+  7. Integration boundaries — what stays external, what retires.
+  8. Workspace structure — proposed directory layout.
+  9. 6-phase migration strategy.
+  10. 13 open risks/questions keyed for planning meetings.
+
+  The most important call-outs for your review: D5 (entitlement rules) is the
+  unbounded-timeline item (62 raw-SQL rules need individual translation) and
+  risk #2 (license-key module ownership) is a phase-3 blocker that the audit
+  couldn't resolve.
+
+✻ Brewed for 5m 29s
+
+※ recap: Auditing and re-planning the Koroneiki/Provisioning/Marketplace/Support consolidation. Audit docs are written in audit/ and a proposed system spec is in plan/system-spec.md. Next: your review, especially decisions D1, D2, D4, D5. (disable recaps in /config)
+
+❯ can you move both the audit folder and plan folder into a new folder named    
+  .the-great-migration                                                          
+
+  Ran 1 bash command (ctrl+o to expand)
+
+● Done. Both folders now live in
+  /home/ry/repos/liferay-portal/.the-great-migration/.
+
+❯ did you updaate any refernces to the paths?                                   
+
+● Let me check for any path references that broke with the move.
+
+  Searched for 4 patterns, listed 1 directory (ctrl+o to expand)
+
+● No updates needed. I used relative paths throughout:
+
+  - Inside audit/: links like [Koroneiki](./koroneiki.md) — same-directory,
+  still resolve.
+  - Inside audit/README.md: references to [integrations.md 
+  §9](./integrations.md#...) — same-directory.
+  - plan/system-spec.md → audit: ../audit/ (lines 5 and 422) — both still
+  resolve since audit and plan are now siblings inside .the-great-migration/.
+
+  The only absolute paths that mentioned /home/ry/repos/liferay-portal/audit
+  were in a conversation transcript .txt file (historical log, not a live link).
+
+✻ Crunched for 51s
+
+※ recap: Goal: audit and plan consolidation of Koroneiki, Provisioning, Marketplace, and Support into one Liferay Objects workspace. Audit and proposed system spec are written under .the-great-migration/. Next: your review of the 14 design decisions in plan/system-spec.md, especially D5 (entitlement rules) and open risk #2. (disable recaps in /config)
+
+❯ alright, lets walk through the design decisions now                           
+
+● 14 decisions to walk through. I'll present them one at a time — tell me
+  "keep," "change to X," or ask questions, and I'll update the spec if we change
+   any. Say "skip ahead" if the next few feel obvious and you want to batch.
+
+  ---
+  D1 — Account = Liferay AccountEntry + custom fields (no separate Account 
+  Object)
+
+  Why: AccountEntry already exists in Liferay, already used by Marketplace and
+  Support, has parent-child hierarchy and membership semantics, and Commerce
+  integrates with it. Introducing a parallel Account Object forks the model.
+
+  Added custom fields: koroneikiAccountCode, region, tier, status, internal,
+  profileEmailAddress, salesforceId.
+
+  The concern: Koroneiki's Account today has 18,390 rows with richer semantics
+  than a typical AccountEntry use — frozen audit columns on notes,
+  system-managed default team, tier+region tiered business rules. If we extend
+  AccountEntry we're piling a lot of custom fields + Object Actions on a
+  Liferay-core entity. The alternative (standalone Account Object) keeps the
+  model cleaner but forces every Commerce/Support integration to re-point.
+
+  My call: use AccountEntry. The integration burden of a parallel Object is
+  bigger than the field-pile.
+
+  Keep, change, or discuss?
+
+❯ yes, lets use the ootb accountentry                                           
+
+● D1 confirmed — no spec change needed.
+
+  ---
+  D2 — Contact = Liferay User + account membership (no separate Contact Object)
+
+  Why: Koroneiki's Contact is already a lazy mirror of osb-entity-web Users
+  (Contact.uuid == User.uuid). Collapsing to Liferay User drops the mirror and
+  the osb-entity-web bridge. Account membership already expresses "this person
+  belongs to that account."
+
+  What changes from today:
+  - ACCOUNT_CUSTOMER vs ACCOUNT_WORKER role typing becomes a User custom
+  attribute or a pair of Liferay Roles.
+  - emailAddressVerified, languageId — already on Liferay User.
+  - The 20,397 Koroneiki Contacts migrate by reconciling on UUID with the
+  existing Liferay User for each.
+
+  The concern: Koroneiki has 32,647 ContactAccountRole rows (a contact holds
+  roles on an account). Liferay's account-membership + role-assignment gives you
+   this, but the granularity is different — Liferay Roles are a fixed catalog,
+  Koroneiki ContactRoles are 25 named roles typed as Customer/Worker/Team. If
+  you need to preserve that exact shape, we'd model ContactRole as a Liferay
+  Role per row (25 Roles total), scoped to AccountEntry.
+
+  My call: use Liferay User. The 20K contacts reconcile cleanly; role flattening
+   is 25 Liferay Roles (not a big catalog).
+
+  Keep, change, or discuss?
+
+❯ can you use Liferay Account Roles for this?                                   
+
+● Yes — Account Roles are a better fit than generic Liferay Roles. They're
+  scoped to a specific AccountEntry, which is exactly Koroneiki's
+  ContactAccountRole shape: "user has role X on account Y."
+
+  Mapping:
+  - Koroneiki ContactRole (25 named roles) → Liferay Account Roles catalog.
+  - Koroneiki ContactAccountRole (32,647 rows) → Account Role assignments on
+  Account Users.
+  - Roles typed Team in Koroneiki — these apply at the team layer within an
+  account; given D3 drops TeamRole (2 live rows), they collapse into Account
+  Roles too.
+
+  One wrinkle to resolve: Koroneiki's role type field distinguishes
+  ACCOUNT_CUSTOMER (person at the customer org) from ACCOUNT_WORKER (internal
+  Liferay employee or partner staff working on that customer's account). Liferay
+   Account Roles don't have that type distinction built in. Two options:
+
+  1. User-attribute split — Liferay already has a way to mark internal users.
+  Use Account Roles as a flat catalog (Member, Manager, Admin) and let the
+  customer/worker distinction ride on the user's global status. Simpler.
+  2. Prefixed role catalog — split into Customer_Member, Customer_Manager,
+  Customer_Admin, Worker_Member, etc. Preserves today's granularity at the cost
+  of doubling the catalog.
+
+  My call: option 1 (user-attribute split). The worker/customer distinction is
+  really about the person, not the role — a Liferay employee working on an
+  account is still doing "Admin" things, they're just an employee.
+
+  Want me to lock that in? Or go with option 2?
+❯ I dont think we will be able to as easily assign permissions if we dont have  
+  distinct roles, so i think option 2 is better                                 
+
+● Good call. Updating the spec now.
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  File must be read first
+
+  Read 1 file (ctrl+o to expand)
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 5 lines, removed 1 line
+      43  >
+      44  > **Why:** Koroneiki's Contact was a lazy mirror of osb-entity-
+          web Users anyway (`Contact.uuid == User.uuid`). Collapsing to `
+          User` drops the mirror and the osb-entity-web bridge. Account m
+          embership already expresses "this person belongs to that accoun
+          t."
+      45  >
+      46 -> **Role typing** (`ACCOUNT_CUSTOMER` vs `ACCOUNT_WORKER`) beco
+         -mes a User custom attribute or a pair of Liferay Roles. Team me
+         -mbership uses Liferay `UserGroup` or a dedicated `Team` Object 
+         -depending on whether team-level roles are still needed — see D3
+         -.                                                              
+      46 +> **Role catalog:** Liferay `Account Roles` (scoped per-Account
+         +Entry) map directly to Koroneiki's `ContactAccountRole` (32,647
+         + rows today). Role names are **prefixed** to preserve the `ACCO
+         +UNT_CUSTOMER` vs `ACCOUNT_WORKER` distinction at the permission
+         +s layer — e.g., `Customer_Member`, `Customer_Manager`, `Custome
+         +r_Admin`, `Worker_Member`, `Worker_Manager`, `Worker_Admin`. Do
+         +ubles the catalog but lets each set grant different permissions
+         +. Koroneiki role `type=Team` is dropped (see D3).              
+      47  >
+      48 +> Team membership uses a dedicated `Team` Object (see D3).     
+      49 +>                                                              
+      50 +> **Alternative rejected:** flat Account Role catalog with cust
+         +omer-vs-worker distinction on a user global attribute. Simpler,
+         + but blocks "grant to Customer Admins but not Worker Admins"–st
+         +yle rules without joining the attribute everywhere.            
+      51 +>                                                              
+      52  > **Alternative rejected:** keep a Contact Object for the 20K K
+          oroneiki Contacts. Forces a permanent User↔Contact sync layer, 
+          which is what we're trying to eliminate.
+      53  
+      54  > **D3 — Team as a lightweight Object; TeamRole dropped.** Toda
+          y Koroneiki has Team + TeamRole + TeamAccountRole, but `TeamAcc
+          ountRole` has only 39 rows and `TeamRole` has 2 rows — the team
+          -level role model is effectively unused.
+
+● D2 locked in — Account Roles with prefixed catalog.
+
+  ---
+  D3 — Team as a lightweight Object; TeamRole dropped
+
+  Why: Koroneiki has Team (18,570 rows — actively used) + TeamRole (2 rows) +
+  TeamAccountRole (39 rows). The team-role model is effectively unused data.
+  Port Team as an Object with account relationship and user membership; drop the
+   role layer. The auto-synced "default team per account" logic (Koroneiki's
+  TeamLocalService.syncDefaultTeam) ports as an Object Action on AccountEntry
+  save.
+
+  The concern: 39 TeamAccountRole rows is small but non-zero — someone is using
+  it. Before dropping, worth a quick ask to whoever owns Koroneiki admin whether
+   those 39 assignments are load-bearing.
+
+  One alternative worth calling out: use Liferay UserGroup instead of a custom
+  Team Object. UserGroups are built-in and give you membership + scoped
+  permissions for free. The downside is UserGroups are company-scoped, not
+  account-scoped — a Koroneiki Team belongs to exactly one Account, which a
+  UserGroup doesn't model cleanly. You'd end up with {accountCode}_{teamName}
+  naming conventions to keep them unique.
+
+  My call: keep as a custom Object (account-scoped cleanly), drop TeamRole.
+
+  Keep, change, or discuss?
+
+✻ Churned for 56s
+
+❯ Can you make this conversation a project, and then split the chats into audit 
+   and plan?                                                                    
+
+● I can't do that from here — Claude Code sessions are linear terminal sessions,
+   not Claude.ai Projects, and I don't have a tool to split or reorganize
+  conversation history.
+
+  A few things that might get you close:
+
+  1. /export (you already used this once) writes the full conversation to a .txt
+   in the repo root. You can split that file manually into two — the audit
+  portion (up through my "Audit complete" message) and the plan portion (from
+  "create a new folder called plan" onward).
+  2. Fresh sessions per folder — start a new Claude Code session in
+  .the-great-migration/audit/ for audit follow-ups and another in
+  .the-great-migration/plan/ for plan work. The CLAUDE.md in the repo and the
+  files in each folder give the next session enough context to pick up. Good
+  natural split point: audit is "done" (all 6 files written), plan is "walking
+  through D3."
+  3. Claude.ai Projects (the web app feature) — that's a different product;
+  you'd create two projects there and paste in the relevant content. I can't
+  reach across to set that up.
+
+  Want me to just continue D3 here, or pause so you can do one of the above
+  first?
+
+❯ /export                                                                       
+  ⎿  Conversation exported to: /home/ry/repos/liferay-portal/2026-04-22-110207-th
+     ere-is-a-claudemd-in-claude-can-you-use-that.txt
+
+❯ okay, well lets continue with the design review then                          
+
+● Picking up at D3 — Team as a custom Object, TeamRole dropped. Your call?
+
+※ recap: We're walking through design decisions in `.the-great-migration/plan/system-spec.md` to validate the proposed consolidation architecture. Waiting on your D3 verdict: port Team as a custom Object and drop TeamRole. Keep, change, or discuss?
+
+❯ /statusline show model name, folder name (not full path), and context usage   
+as a 10-character block progress bar with the scaled percentage number next to  
+it. Use pipe separators between items. Scale the percentage so that 80% real    
+usage shows as 100% (since Claude compacts at 80%). Color the bar green under   
+50%, yellow 50-65%, orange 65-95%, and blinking red with a skull emoji at 95%+. 
+ Keep it compact – dim the model and folder name, bright colors only on the     
+bar.                                                                            
+
+● statusline-setup(Configure status line)
+  ⎿  Done (7 tool uses · 8.4k tokens · 1m 47s)
+  (ctrl+o to expand)
+
+● Status line configured. Back to the walkthrough — still waiting on your call
+  for D3 (Team as a custom Object, TeamRole dropped).
+
+✻ Cooked for 55s
+
+❯ okay, sorry, can you repost the D3 for me                                     
+
+● D3 — Team as a lightweight Object; TeamRole dropped
+
+  Today: Koroneiki has three team-related tables — Team (18,570 rows, actively
+  used), TeamRole (2 rows), TeamAccountRole (39 rows).
+
+  Proposal: Port Team as a custom Object with a relationship to AccountEntry and
+   user membership. Drop TeamRole and TeamAccountRole entirely. The auto-synced
+  "default team per account" logic (today's TeamLocalService.syncDefaultTeam —
+  one system team per account whose membership mirrors the account's customer
+  contacts) ports as an Object Action on AccountEntry save.
+
+  The concern: 39 TeamAccountRole rows is small but non-zero — someone is using
+  it. Worth a quick check with whoever owns Koroneiki admin to confirm those 39
+  assignments aren't load-bearing before we drop.
+
+  Alternative considered: use Liferay UserGroup instead of a custom Team Object.
+   UserGroups are built-in and give membership + scoped permissions for free.
+  But UserGroups are company-scoped, not account-scoped — a Koroneiki Team
+  belongs to exactly one Account, so you'd need {accountCode}_{teamName} naming
+  conventions to keep them unique across accounts. Awkward.
+
+  My call: custom Team Object (account-scoped cleanly), drop TeamRole +
+  TeamAccountRole.
+
+  Keep, change, or discuss?
+
+❯ yes, that sounds like a good plan                                             
+
+● D3 locked in.
+
+  ---
+  D4 — One Subscription Object unifies three existing representations
+
+  Today there are three separate models of "this account has this product from X
+   to Y":
+
+  ┌─────────────┬──────────────────────────────────────────────┬────────────┐
+  │   System    │                    Model                     │    Rows    │
+  ├─────────────┼──────────────────────────────────────────────┼────────────┤
+  │ Koroneiki   │ ProductPurchase + ProductConsumption         │  65,271 +  │
+  │             │ (line-level uses)                            │    148,901 │
+  ├─────────────┼──────────────────────────────────────────────┼────────────┤
+  │             │ AccountSubscription +                        │   4,572 +  │
+  │ Support     │ AccountSubscriptionGroup +                   │ 3,073 + 13 │
+  │             │ AccountSubscriptionTerm                      │            │
+  ├─────────────┼──────────────────────────────────────────────┼────────────┤
+  │             │ CommerceOrder + JSON custom fields           │            │
+  │ Marketplace │ (trial-end-date, cloud-provisioning,         │          — │
+  │             │ koroneiki-project)                           │            │
+  └─────────────┴──────────────────────────────────────────────┴────────────┘
+
+  Proposal: one Subscription Object with lifecycle Draft → Trial → Active → 
+  Expired | Cancelled, plus a child SubscriptionLineItem Object for per-product
+  fulfillment detail (replaces ProductConsumption + AccountSubscriptionTerm).
+  Domain-specific fields (instanceSize, hasDisasterDataCenterRegion,
+  trialEndDate, koroneikiProjectIds, Commerce order reference) all live on this
+  one Object — not every row fills every field, but the schema accommodates the
+  superset.
+
+  SubscriptionGroup (renewal grouping) collapses to a field on Subscription —
+  Support's 3K AccountSubscriptionGroup rows vs 4.5K AccountSubscriptions is
+  near 1:1.5, not worth its own Object.
+
+  The two concerns worth surfacing:
+
+  1. Are these actually the same concept? Koroneiki ProductPurchase reads like a
+   license contract (startDate/endDate/quantity/status, driven by Salesforce
+  close). Support AccountSubscription reads like an entitlement snapshot for the
+   customer portal UI (instance size, DR region, product entitlement flags).
+  They may have grown up separately and now overlap. If the business treats them
+   as different artifacts with different owners, unifying forces an
+  organizational change, not just a data one.
+  2. Migration arithmetic — 65K Koroneiki purchases don't map 1:1 to 4.5K
+  Support subscriptions. Either the Support DB is a filtered projection of
+  Koroneiki, or they've drifted. Reconciliation is phase-2/3 work.
+
+  My call: unify. A consolidated workspace with three separate Subscription-like
+   Objects defeats the purpose. Let the Object carry the superset of fields;
+  validate per-case during migration.
+
+  Keep, change, or discuss?
+
+※ recap: We're auditing four legacy systems and designing their consolidation into one Liferay Objects workspace, currently walking through 14 design decisions. Your next action is deciding D4: unify ProductPurchase, AccountSubscription, and Marketplace trial fields into one Subscription Object, or keep them separate.
+
+❯ lets revisit this one later                                                   
+
+● Noted — D4 deferred. I'll come back to it.
+
+  ---
+  D5 — Entitlements: Object filter criteria for simple rules, Scheduled Task for
+   complex ones
+
+  Today: Koroneiki has 62 live EntitlementDefinition rows, each with a
+  definition column containing raw SQL. A scheduler runs every 15 minutes,
+  executes each SQL, grants Entitlements for newly-matching rows, and revokes
+  for no-longer-matching. [$NOW$] in the SQL is token-replaced. 9,311
+  Entitlement rows are materialized today.
+
+  Proposal: replace the raw-SQL pattern with three handling strategies, one per
+  rule:
+
+  - (a) Object filter criteria — if the rule is "Account has Active Subscription
+   for product X" or "Contact belongs to an Account with flag Y," it's
+  expressible as a criteria query on Object relationships. The
+  EntitlementDefinition stores the filter JSON; the scheduler evaluates it
+  natively.
+  - (b) Scripted Object Action — if the rule needs conditional logic but not
+  time-windowing, implement it as a Liferay scripted action or small function in
+   etc-spring-boot, invoked by the Entitlement sync scheduler.
+  - (c) Custom scheduled task — if the rule is time-windowed, multi-join, or
+  involves aggregates that filter criteria can't express, write a bespoke
+  scheduled task. This is the escape hatch.
+
+  The unbounded concern: we cannot design this fully without reviewing the 62 
+  live rules. Each one needs classification (a/b/c) by someone who understands
+  its business intent. Today's definition values are in the kor DB — we can
+  extract them, but reading raw SQL back-to-meaning is the slow part. This is
+  the single biggest timeline risk in the whole migration (flagged as #1 in
+  audit/integrations.md §9).
+
+  What I'd recommend before phase 2 starts: run SELECT name, definition FROM 
+  Koroneiki_EntitlementDefinition WHERE status = 'Approved' into a CSV, walk it
+  with product/ops, and classify. Until that's done, phase-2 timeline is
+  open-ended.
+
+  My call: commit to the hybrid approach (a/b/c), do the rule review as a
+  phase-1 deliverable, treat it as a gate for phase 2.
+
+  Keep, change, or discuss?
+
+❯ great, yes lets pull that table and save it as a md file in this folder so we 
+   can walk through and decide there                                            
+
+  Read 1 file, listed 1 directory, ran 5 bash commands (ctrl+o to expand)
+● .the-great-migration/plan/entitlement-rules-review.md — 2,622 lines, 69KB.
+  Header plus 62 entries (49 Account-targeted, 13 Contact-targeted), each with
+  the raw SQL, a classification checklist, and a notes slot. Summary table at
+  the top to fill in as we go.
+
+  One thing worth noting from even a quick scan: rule #01 ("Active
+  Subscription") is exactly the "Account has Active Subscription for product X"
+  pattern I hypothesized in D5 — a clean (a) Object filter candidate. And the
+  last rule (Partner) references Koroneiki_Entitlement.name = 'Partner' — i.e.,
+  it depends on another rule's output. That's the "cascade risk" worth watching
+  during the review.
+
+  Want to walk through the 62 now, or come back to it later and continue with
+  the other design decisions (D6 onward) first?
+
+✻ Cooked for 1m 25s
+
+❯ lets move on and come back to the 62                                          
+
+● D5 committed to the hybrid approach — 62-rule review deferred to
+  entitlement-rules-review.md.
+
+  Running deferred list: D4 (Subscription unification), D5 rule review (62 rules
+   in the new doc).
+
+  ---
+  D6 — Tickets stay in Jira; workspace holds a thin SupportTicket Object that 
+  references Jira
+
+  Today: Support workspace treats Jira as the authoritative ticket system. Three
+   Jira projects: LRHC (Help Center), LRFLS (First Line Support), LSV (Security
+  Vulnerabilities). Attachments go to GCS, referenced from Jira comments.
+  Zendesk references linger as dead fields (zendeskTicketId).
+
+  Provisioning creates Zendesk tickets today for new subscription notifications
+  and error conditions — it's the last active Zendesk consumer.
+
+  Proposal:
+  - SupportTicket Object — thin wrapper around a Jira issue. Fields:
+  accountEntryId, jiraIssueKey, jiraProject, subject, statusCached,
+  priorityCached, lastSyncedAt. Acts as the workspace's handle on a ticket for
+  reporting, account-scoped views, and Object Actions.
+  - Zendesk retired entirely. Provisioning's subscription-notification and
+  error-ticket flows move to Jira (new JSM project or reuse existing).
+  - Attachments stay in GCS via the existing TicketAttachment Object pattern.
+
+  The concerns:
+
+  1. State drift. If statusCached/priorityCached live on the Object, they can
+  fall out of sync with Jira. Options: (i) don't cache, query Jira live every
+  render; (ii) sync via Jira webhook; (iii) sync nightly. The Support workspace
+  today uses @Cacheable with scheduled eviction, which is option (iii). Fine,
+  but the staleness window needs a policy.
+  2. Jira project for Provisioning's tickets. Today Provisioning → Zendesk
+  creates tickets with custom fields tied to Zendesk's field IDs. Moving to Jira
+   means picking a project and mapping fields. Could reuse LRFLS (fits — "new
+  customer onboarding" is first-line-support-ish) or create a new project.
+  Decision for the operations team.
+  3. Historical Zendesk tickets. Support has zendeskTicketId on
+  TicketAttachment. Archive those rows separately; don't migrate them into the
+  new ticket flow.
+
+  My call: keep Jira-native, retire Zendesk, cache status with webhook-driven
+  sync (option ii) — webhooks are less wasteful than nightly re-pull and avoid
+  the every-render Jira load.
+
+  Keep, change, or discuss?
+
+❯ ignore 2 and 3, we dont even have zendesk anymore, so no migration needed.    
+  for 1, i think we should still cache, but maybe clear it every hour, so it    
+  will only repull from jira if the cache is over an hour                       
+
+● Good — that simplifies things. Updating the spec now.
+
+  Read 1 file (ctrl+o to expand)
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 8 lines, removed 2 lines
+      75  
+      76  > **D6 — Tickets stay in Jira; workspace holds a thin `SupportT
+          icket` Object that references Jira.**
+      77  >
+      78 -> **Why:** Jira is the agent tool of record; absorbing ticket s
+         -tate into Liferay is a re-architecture of the wrong system. The
+         - existing Support workspace already treats Jira as authoritativ
+         -e. Port that pattern. Zendesk retired entirely.                
+      78 +> **Why:** Jira is the agent tool of record; absorbing ticket s
+         +tate into Liferay is a re-architecture of the wrong system. The
+         + existing Support workspace already treats Jira as authoritativ
+         +e. Port that pattern.                                          
+      79  >
+      80 -> **Fields on SupportTicket:** `accountEntryId`, `jiraIssueKey`
+         -, `subject`, `status` (cached from Jira), `priority` (cached), 
+         -`lastSyncedAt`. Attachments stay as a separate `TicketAttachmen
+         -t` Object backed by GCS as today.                              
+      80 +> **Fields on SupportTicket:** `accountEntryId`, `jiraIssueKey`
+         +, `jiraProject`, `subject`, `statusCached`, `priorityCached`, `
+         +lastSyncedAt`. Attachments stay as a separate `TicketAttachment
+         +` Object backed by GCS as today.                               
+      81  >
+      82 +> **Cache freshness:** 1-hour TTL. The next render after an hou
+         +r repulls from Jira; within the hour, serve cached values. Simp
+         +ler than webhook sync, no endpoint to maintain, acceptable stal
+         +eness for a support portal.                                    
+      83 +>                                                              
+      84 +> **Zendesk:** already retired at the business layer — no migra
+         +tion work needed. The `zendeskTicketId` field on `TicketAttachm
+         +ent` and the Zendesk calls in `osb-provisioning` are vestigial 
+         +code. Both drop during migration without compensating flows.   
+      85 +>                                                              
+      86  > **Alternative rejected:** model full ticket state in Liferay.
+           Huge scope, no user win.
+      87 +>                                                              
+      88 +> **Alternative rejected:** webhook-driven sync from Jira. More
+         + responsive but requires maintaining inbound webhook endpoints 
+         +and handling Jira's delivery semantics. Not worth it for a supp
+         +ort portal's staleness tolerance.                              
+      89  
+      90  > **D7 — Liferay Commerce remains for Marketplace checkout; `Or
+          der` is a Commerce construct, not an Object.**
+      91  >
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      211  - Support `AccountSubscriptionGroup`, `AccountSubscriptionTerm
+           ` — collapse into Subscription + SubscriptionLineItem.
+      212  - Marketplace `Sample`, `Test2`, `LicenseTypesDescription`, `U
+           serAdditionalInfo` — unused / scratch.
+      213  - Marketplace `GetAppInformation` (496 rows) — appears to be a
+            UI cache; evaluate in phase 4.
+      214 -- Zendesk references (`zendeskTicketId`) — archive, drop.     
+      214 +- Zendesk references (`zendeskTicketId` on TicketAttachment, `
+          +ZendeskTicketWebService` in Provisioning) — drop. Zendesk is a
+          +lready retired at the business layer.                         
+      215  - All `OSB_*` legacy tables in `prov` — archive if historical 
+           value; delete otherwise.
+      216  - `Marketplace_App` / `Marketplace_Module` (old Marketplace) —
+            separate from new workspace; confirm retirement.
+      217  
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      384  
+      385  ### 7.2 Retired
+      386  
+      387 -- Zendesk (replace with Jira for Provisioning's error tickets;
+          - `zendeskTicketId` field archived with old TicketAttachment ro
+          -ws)                                                           
+      387 +- Zendesk (already retired at the business layer — Provisionin
+          +g's Zendesk calls and the `zendeskTicketId` field are vestigia
+          +l code; drop without replacement)                             
+      388  - Dossiera (direct Salesforce webhook replaces it)
+      389  - osb-entity-web (Liferay Users are the master)
+      390  - RabbitMQ (internal). Evaluate Xylem broker outbound for any 
+           external subscriber still live.
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      454  - Extract license key tables → LicenseKey Object with Subscrip
+           tion linkage.
+      455  - Port DossieraCreateMessageSubscriber logic into AccountEntry
+           .onAfterAdd + Salesforce webhook endpoint.
+      456  - Port LCS sync as outbound Object Action (or retire if LCS re
+           tires).
+      457 -- Port Zendesk ticket creation to Jira.                       
+      457 +- Drop the vestigial Zendesk code paths (no replacement — Zend
+          +esk is already retired).                                      
+      458  - Retire osb-provisioning deploy.
+      459  
+      460  ### Phase 4 — Marketplace migration
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      483  
+      484  - Stop RabbitMQ consumers; retire Koroneiki Xylem publishers.
+      485  - Decommission Dossiera.
+      486 -- Drop Zendesk integration.                                   
+      486 +- Drop vestigial Zendesk code paths.                          
+      487  - Archive legacy DBs (`kor`, `prov`, `e5a2_lpartition_11706165
+           `, `e5a2_lpartition_1860468`).
+      488  - Drop `OSB_*` and `Marketplace_App/Module` tables after reten
+           tion period.
+      489  
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Removed 1 line
+      490  ### Preservation constraints
+      491  
+      492  - All existing `accountKey`, `contactUuid`, `productPurchaseKe
+           y`, `teamKey`, `productKey`, `jiraIssueKey`, `salesforceId`, l
+           icense key strings — **must be preserved intact** for external
+           -system lookups.
+      493 -- Zendesk ticket references — archive with old TicketAttachmen
+          -t rows for historical auditability.                           
+      493  - Commerce order IDs — unchanged (Commerce layer preserved).
+      494  
+      495  ---
+
+● D6 locked in — Jira-native with 1-hour TTL cache, no Zendesk migration work.
+  Swept stale Zendesk references from the rest of the spec.
+
+  ---
+  D7 — Liferay Commerce remains; Order is a Commerce construct, not an Object
+
+  Today: Marketplace uses Liferay Commerce for storefront, cart, payment, and
+  tax. Order metadata that doesn't fit Commerce's model lives in
+  CommerceOrder.customFields as JSON blobs — trial-end-date,
+  trial-notify-end-date, cloud-provisioning, koroneiki-project.
+
+  Proposal:
+  - Keep Liferay Commerce as the storefront/checkout layer. No new Order Object.
+  - Replace the JSON-blob pattern with a TrialProvisioning Object that has a
+  relationship to the Commerce order. Fields become proper Object fields with
+  types and validation instead of loose JSON.
+  - CommerceOrder stays owned by Commerce; TrialProvisioning is our
+  side-of-the-boundary metadata.
+
+  Concern worth surfacing: Marketplace's audit found ~12 Commerce order-type
+  ERCs that the post-purchase Object Action branches on (SOLUTIONS7, SSA_SAAS,
+  AI_HUB, DXP, CMP_BETA, free vs paid, etc.). That branching logic ports forward
+   into the new TrialProvisioning-creating Object Action, but it's hard-coded
+  today. Worth deciding whether to keep hard-coding the ERCs or drive them from
+  a reference Object.
+
+  My call: keep Commerce, introduce TrialProvisioning, treat the order-type
+  branching as a phase-4 refactor question (hard-code initially,
+  reference-Object if/when it proves painful).
+
+  Keep, change, or discuss?
+
+✻ Cooked for 1m 10s
+
+❯ okay, lets not hardcode, do a reference, but everything else sounds good      
+
+  Read 1 file (ctrl+o to expand)
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 4 lines
+       91  >
+       92  > **Why:** Commerce already handles storefront, cart, payment,
+            tax. Marketplace's "custom fields on CommerceOrder" pattern (
+           `trial-end-date`, `cloud-provisioning` JSON blobs) becomes a p
+           roper `TrialProvisioning` Object with a relationship to the Co
+           mmerce order — solves the schemaless-JSON problem without repl
+           acing Commerce.
+       93  >
+       94 +> **Order-type branching driven by a reference Object.** Today
+          +'s ~12 Commerce order-type ERCs (`SOLUTIONS7`, `SSA_SAAS`, `AI
+          +_HUB`, `DXP`, `CMP_BETA`, etc.) are hardcoded in Marketplace's
+          + post-purchase controller. Replace with an **`OrderType`** ref
+          +erence Object keyed by ERC, carrying the provisioning flow att
+          +ributes (`provisioningFlow` enum: trial-cloud / paid-cloud / f
+          +ree-activation / ai-hub-beta / …, `trialDurationDays`, `requir
+          +esManualReview`, `provisionsAnalytics`, etc.). The post-purcha
+          +se Object Action dispatches based on the referenced `OrderType
+          +` row rather than switching on string ERCs. New order types = 
+          +new rows, not a code release.                                 
+       95 +>                                                             
+       96  > **Alternative rejected:** replace Commerce with an `Order` O
+           bject. Massive scope, re-implements tax and payment.
+       97 +>                                                             
+       98 +> **Alternative rejected:** keep order-type branching hardcode
+          +d in the Object Action. Faster to port, but perpetuates today'
+          +s maintenance pain.                                           
+       99  
+      100  > **D8 — `LicenseKey` as an Object; migrate the 230K rows from
+            `Provisioning_LicenseKey`.**
+      101  >
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 2 lines, removed 1 line
+      183  | `PublisherAsset` | App/release asset version | `publisherId`
+           , `version` | → Publisher, ← PublisherAssetAttachment |
+      184  | `PublisherAssetAttachment` | Uploaded code artifact (zip/war
+           /jar, up to 200MB) | `sourceCode` (Attachment), `name`, `proce
+           ssed` | → PublisherAsset |
+      185  | `PublisherSalesSummary` | Quarterly sales rollup | `publishe
+           rId`, `quarter`, `amount`, `paidBy`, `paidDate` | → Publisher 
+           |
+      186 -| `TrialProvisioning` | Replaces Marketplace's JSON-blob custo
+          -m fields on CommerceOrder | `commerceOrderId`, `trialEndDate`,
+          - `notifiedAt`, `cloudProvisioning` (JSON → fields), `koroneiki
+          -ProjectIds` | ↔ CommerceOrder (ref) |                         
+      186 +| `TrialProvisioning` | Replaces Marketplace's JSON-blob custo
+          +m fields on CommerceOrder | `commerceOrderId`, `trialEndDate`,
+          + `notifiedAt`, `cloudProvisioning` (JSON → fields), `koroneiki
+          +ProjectIds` | ↔ CommerceOrder (ref), → OrderType |            
+      187 +| `OrderType` | Reference Object driving post-purchase branchi
+          +ng (replaces hardcoded ERC switch) | `externalReferenceCode` (
+          +unique), `name`, `provisioningFlow` (enum: trial-cloud / paid-
+          +cloud / free-activation / ai-hub-beta / …), `trialDurationDays
+          +`, `requiresManualReview`, `provisionsAnalytics` | ← TrialProv
+          +isioning |                                                    
+      188  | `RequestPublisherAccount` | Prospective publisher onboarding
+            | `firstName`, `lastName`, `emailAddress`, `phoneNumber`, `re
+           questDescription`, `status` | |
+      189  
+      190  ### 3.5 Support domain
+
+● D7 locked in — Commerce preserved, TrialProvisioning + new OrderType reference
+   Object replaces the hardcoded ERC switch.
+
+  ---
+  D8 — LicenseKey as a custom Object; migrate the 230K rows from 
+  Provisioning_LicenseKey
+
+  Today: Provisioning_LicenseKey in the prov DB has 230,466 rows. The audited
+  osb-provisioning source does not declare this table — some sibling module or
+  adjacent service owns it (open question in audit). OSB_LicenseKey (legacy) has
+   201,897 more rows.
+
+  Proposal:
+  - LicenseKey Object with fields: key (unique indexed), subscriptionId,
+  productVersion, startDate, endDate, maxServers, maxDevelopers, status.
+  - Generation as an Object Action on Subscription state transitions (e.g.,
+  Trial → Active).
+  - Migration: extract all 230K active rows from Provisioning_LicenseKey into
+  the new Object. Legacy OSB_LicenseKey rows archive separately (201K rows that
+  may or may not still be valid).
+
+  The concerns:
+
+  1. Ownership question is a blocker. We can't write the generation logic
+  without finding the current implementation. The audit surfaced this — 230K
+  rows clearly come from something, but it's not in the audited osb-provisioning
+   modules. Must be resolved before phase 3 starts. Could be a sibling
+  osb-provisioning-license* module, a separate OSB app, or an LCS-side service.
+  2. LCS-related tables. Provisioning_SubscriptionEntry (2,061) and
+  Provisioning_CommonLicenseKey (476) in the same DB look related. May be part
+  of the same module. Whatever owns LicenseKey probably owns these too.
+  3. Key format and algorithm. License keys have a format customers validate
+  against. Whatever algorithm generates them today has to port identically, or
+  existing installs stop validating.
+
+  My call: LicenseKey Object, generation as Object Action, conditional on 
+  finding the current implementation. Add to the open-risks list as a phase-3
+  blocker.
+
+  Keep, change, or discuss?
+
+✻ Crunched for 58s
+
+❯ ignore LCS, that doesnt exist, everything else sounds good                    
+● Good — LCS off the list. Cleaning up the spec.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      121  >
+      122  > **Why:** Today's RabbitMQ fan-out exists because Provisionin
+           g/Marketplace/Support live in different deployments. With one 
+           workspace, Object Actions fire synchronously (or via Liferay's
+            internal message bus for async) in-process.
+      123  >
+      124 -> **Outbound retained:** Salesforce-bound events, LCS sync (if
+          - LCS survives), any Liferay Cloud integration. Evaluate per-co
+          -nsumer during phase 5.                                        
+      124 +> **Outbound retained:** Salesforce-bound events, any Liferay 
+          +Cloud integration. Evaluate per-consumer during phase 5.      
+      125  >
+      126  > **Alternative rejected:** preserve RabbitMQ topics verbatim 
+           for "compatibility." Carries a dead integration forward.
+      127  
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      157  | `AccountFlag` | Boolean/enum flags on an account (compliance
+           , entitlement tags) | `flagCode`, `flagValue`, `accountEntryId
+           ` | → AccountEntry |
+      158  | `AccountNote` | Rich notes, creator frozen at write-time | `
+           content`, `format`, `type`, `priority`, `status`, frozen `crea
+           torName`/`creatorUID`/`modifierName`/`modifierUID` | → Account
+           Entry |
+      159  | `Team` | Grouping of users on an account | `name`, `system` 
+           (flag), `accountEntryId` | → AccountEntry, →→ Users |
+      160 -| `ExternalReference` | Generic link to external system record
+          - (replaces Koroneiki `ExternalLink`) | `domain` (enum: salesfo
+          -rce/dossiera/lcs/jira/stripe/gcs/custom), `entityName`, `entit
+          -yId`, `ownerClassName`, `ownerClassPK` | Polymorphic |        
+      160 +| `ExternalReference` | Generic link to external system record
+          + (replaces Koroneiki `ExternalLink`) | `domain` (enum: salesfo
+          +rce/dossiera/jira/stripe/gcs/custom), `entityName`, `entityId`
+          +, `ownerClassName`, `ownerClassPK` | Polymorphic |            
+      161  
+      162  ### 3.2 Product & subscription domain
+      163  
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 2 lines, removed 2 lines
+      260  | Trigger | Action | Replaces |
+      261  |---|---|---|
+      262  | `AccountEntry.onAfterAdd/Update` | Sync default Team; genera
+           te `koroneikiAccountCode` if missing; ensure `ExternalReferenc
+           e` for salesforce/dossiera | Koroneiki `TeamLocalService.syncD
+           efaultTeam`; DossieraCreateMessageSubscriber steps 4–5 |
+      263 -| `Subscription.onAfterAdd` | Generate LicenseKey; notify acco
+          -unt owner; create ExternalReference to LCS | Provisioning LCS 
+          -sync; Marketplace post-purchase object action |               
+      264 -| `Subscription.onAfterUpdate` | Re-sync entitlements; push LC
+          -S; notify if state changed to Expired | Provisioning ProductPu
+          -rchaseMessageSubscriber |                                     
+      263 +| `Subscription.onAfterAdd` | Generate LicenseKey; notify acco
+          +unt owner | Marketplace post-purchase object action |         
+      264 +| `Subscription.onAfterUpdate` | Re-sync entitlements; notify 
+          +if state changed to Expired | Provisioning ProductPurchaseMess
+          +ageSubscriber |                                               
+      265  | `Subscription.onAfterDelete` | Revoke LicenseKeys; revoke En
+           titlements | (not currently implemented — fix orphan bug) |
+      266  | `SupportTicket.onAfterAdd` | Create Jira issue via REST; sta
+           sh `jiraIssueKey` | Support manual escalation flow |
+      267  | `TicketAttachment.onAfterAdd (state=Approved)` | Post Jira c
+           omment (ADF) with download link; retry via `draftCommentBody` 
+           on failure | Support `complete-upload` flow |
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Removed 1 line
+      385  | **Marketo** | Outbound (client-side) | Marketing form submis
+           sions |
+      386  | **Email / SMTP** | Outbound | Notifications |
+      387  | **Slack** | Outbound | Callback alert email bridge |
+      388 -| **LCS** | Outbound (TBD) | Subscription sync — retain only i
+          -f LCS survives |                                              
+      388  
+      389  ### 7.2 Retired
+      390  
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      457  - **Resolve ownership question first**: locate the code that c
+           reates `Provisioning_LicenseKey` rows today (230K rows). See a
+           udit `provisioning.md §6`.
+      458  - Extract license key tables → LicenseKey Object with Subscrip
+           tion linkage.
+      459  - Port DossieraCreateMessageSubscriber logic into AccountEntry
+           .onAfterAdd + Salesforce webhook endpoint.
+      460 -- Port LCS sync as outbound Object Action (or retire if LCS re
+          -tires).                                                       
+      460 +- Drop the vestigial LCS sync code paths (LCS is already retir
+          +ed at the business layer).                                    
+      461  - Drop the vestigial Zendesk code paths (no replacement — Zend
+           esk is already retired).
+      462  - Retire osb-provisioning deploy.
+      463  
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      504  
+      505  1. **Entitlement rule translation** (D5). The 62 rules need in
+           dividual review. Until then, phase-2 timeline is unbounded on 
+           the high end. Recommend: extract `EntitlementDefinition.defini
+           tion` to a CSV, review with product + ops, classify per D5, th
+           en estimate.
+      506  2. **Provisioning license-key module ownership.** Audit found 
+           230K rows in a module the audited source does not declare. Mus
+           t locate the code before phase 3.
+      507 -3. **LCS fate.** If LCS retires during consolidation, Provisio
+          -ning's sync pipeline dies with it — and the `LicenseKey` Objec
+          -t must absorb the compliance data model. Confirm.             
+      507 +3. ~~**LCS fate.**~~ _Resolved: LCS is already retired at the 
+          +business layer. `LCSSubscriptionEntryWebService` and related c
+          +ode paths in `osb-provisioning` are vestigial — drop during mi
+          +gration without replacement._                                 
+      508  4. **Salesforce integration replacement.** Direct webhook vs p
+           olling sync vs Salesforce Connected App — pick one during phas
+           e 3 design.
+      509  5. **RabbitMQ → Pub/Sub bridge location.** Whatever relays `ko
+           roneiki.*` from on-prem RabbitMQ to Google Pub/Sub is outside 
+           the four audited codebases. Find and retire.
+      510  6. **Support `KoroneikiAccount` sync mechanism.** Unknown how 
+           today's 2,313 rows get populated. Find and retire.
+
+● D8 locked in. LCS swept from the spec. Phase-3 blocker on finding the
+  license-key generator stays.
+
+  ---
+  D9 — One workspace, multiple site-initializers
+
+  Proposal: single liferay-consolidated-workspace deployable, with three
+  site-initializers for three distinct public/internal sites:
+  - marketplace-site-initializer — public Marketplace storefront (ported from
+  today's Marketplace workspace)
+  - support-site-initializer — customer Support portal (ported from
+  liferay-customer-workspace)
+  - admin-site-initializer — internal admin UI for
+  account/subscription/provisioning (replaces Koroneiki + Provisioning portlets)
+
+  All three sites share one backend (one etc-spring-boot, one etc-cron) and one
+  set of Liferay Objects.
+
+  Why: single deployable is the whole simplification; distinct audiences
+  (shoppers, support-seeking customers, internal ops) want distinct sites,
+  branding, navigation, permissions. Three site-initializers in one workspace is
+   the standard Liferay SaaS pattern.
+
+  The one concern worth flagging: the Support audit noted the
+  liferay-customer-workspace today carries Provisioning, Koroneiki, and
+  SaaS-admin concerns alongside Support — i.e., it's already bigger than just
+  "Support." When we pull that workspace apart, we need to decide what's
+  genuinely Support (goes to support-site-initializer) vs what's actually admin
+  (goes to admin-site-initializer). That's a phase-5 cleanup.
+
+  My call: three site-initializers, consolidation of admin concerns during phase
+   5.
+
+  Keep, change, or discuss?
+
+✻ Worked for 48s
+
+❯ for now we want just 1 site initializer, maybe we will spit out marketplace   
+  later, but im not sure yet                                                    
+
+● Good call — simpler. Updating the spec now.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 5 lines, removed 3 lines
+      105  >
+      106  > **Alternative rejected:** leave keys in Provisioning's DB an
+           d call out. Perpetuates the ambiguity and leaves the consolida
+           ted workspace without a license primitive.
+      107  
+      108 -> **D9 — One workspace, multiple site-initializers.** Marketpl
+          -ace and Support remain separate public sites; internal admin i
+          -s a third site.                                               
+      108 +> **D9 — One workspace, one site-initializer (for now).** All 
+          +three concerns (Marketplace, Support, internal admin) ship as 
+          +a single site. Marketplace may split into its own site-initial
+          +izer in a later phase; deferred until we see whether one site 
+          +is actually painful.                                          
+      109  >
+      110 -> **Why:** Single deployable unit is the simplification; disti
+          -nct audiences (shoppers, support-seeking customers, internal o
+          -ps) still want distinct sites with distinct branding and navig
+          -ation. Three site-initializers in one workspace is standard Li
+          -feray SaaS.                                                   
+      110 +> **Why:** Start simple. Page-level permissions scope admin pa
+          +ges away from customer-facing pages; navigation can segment by
+          + role. Splitting later is cheap if one site proves cluttered; 
+          +starting with three forces coordination on shared Objects and 
+          +backend from day 1 without clear upside.                      
+      111  >
+      112 -> **Alternative rejected:** one site with route-based splits. 
+          -Muddies IA and permissions.                                   
+      112 +> **Future split trigger:** if public-vs-authenticated navigat
+          +ion can't be cleanly segmented, or if branding/IA pressure gro
+          +ws, peel Marketplace out into `marketplace-site-initializer` a
+          +nd leave `consolidated-site-initializer` as the customer-porta
+          +l + admin site.                                               
+      113 +>                                                             
+      114 +> **Alternative rejected:** three site-initializers from the s
+          +tart (original proposal). Over-structures for a state we haven
+          +'t proven painful.                                            
+      115  
+      116  > **D10 — Headless-first APIs; custom REST only for orchestrat
+           ion (`etc-spring-boot`).**
+      117  >
+
+  Searched for 1 pattern, read 1 file (ctrl+o to expand)
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 13 lines, removed 10 lines
+      349  
+      350  ---
+      351  
+      352 -## 6. UI / Site Initializers                                  
+      352 +## 6. UI / Site Initializer                                   
+      353  
+      354 -Three site-initializers in the workspace, each shipping a Reac
+          -t custom element + fragments + layouts.                       
+      354 +One site-initializer (per D9). All three concerns live as page
+          + groups within a single site, segmented by navigation and page
+          +-level permissions. Split out later if painful.               
+      355  
+      356 -### 6.1 `marketplace-site-initializer`                        
+      356 +### 6.1 `consolidated-site-initializer`                       
+      357  
+      358 -Public storefront. Port from `liferay-marketplace-workspace/`.
+          - 13 top-level pages, 3 fragment groups, 2 display-page templat
+          -es, Kaleo `product-approver-workflow`. React custom element (≈
+          -349 TSX files). Marketo forms 3738 / 6253.                    
+      358 +Single site covering three audiences. Page groups:            
+      359  
+      360 -### 6.2 `support-site-initializer`                            
+      360 +- **Marketplace (public)** — port from `liferay-marketplace-wo
+          +rkspace/`. 13 top-level pages, 3 fragment groups (`marketplace
+          +-base-fragments`, `public-sites-navigation`, `migrated-fragmen
+          +ts-from-lrdc`), 2 display-page templates (`app-detail`, `solut
+          +ions-details`), 3 master pages (`marketplace-master`, `marketp
+          +lace-master-private`, `marketplace-blank`), Kaleo `product-app
+          +rover-workflow`. Marketo forms 3738 / 6253.                   
+      361 +- **Support (customer-authenticated)** — port from `liferay-cu
+          +stomer-workspace/`. 11 top-level pages (home, projects, projec
+          +t, onboarding, security-vulnerabilities, release-notes, callba
+          +ck-request, support-ticket-escalation, large-file-uploader, co
+          +okie-policy). Feature-flagged `-testing` variant retained for 
+          +LRSD-6322 / LRSD-12003 rollouts.                              
+      362 +- **Admin (internal-only)** — new. Replaces Koroneiki admin po
+          +rtlets + Provisioning portlets. Pages: Accounts, Contacts, Tea
+          +ms, Subscriptions, Products, Entitlements, Entitlement Definit
+          +ions, License Keys, Publishers, Business Events, Reports, Debu
+          +g (replaces `DebugRabbitMQMVCActionCommand`).                 
+      363  
+      362 -Customer-facing support portal. Port from `liferay-customer-wo
+          -rkspace/`. 11 top-level pages (home, projects, project, onboar
+          -ding, security-vulnerabilities, release-notes, callback-reques
+          -t, support-ticket-escalation, large-file-uploader, cookie-poli
+          -cy). Feature-flagged `-testing` variant retained for LRSD-6322
+          - / LRSD-12003 rollouts.                                       
+      364 +**React custom elements:**                                    
+      365 +- `marketplace-custom-element` (≈349 TSX files, ported)       
+      366 +- `support-custom-element` (ported)                           
+      367 +- `admin-custom-element` (new)                                
+      368  
+      364 -### 6.3 `admin-site-initializer`                              
+      369 +The site-initializer declares all three custom elements; page 
+          +templates choose which element to embed. One deployable, one i
+          +nitialization run.                                            
+      370  
+      366 -New internal admin UI. Replaces Koroneiki admin portlets + Pro
+          -visioning portlets. React custom element. Pages: Accounts, Con
+          -tacts, Teams, Subscriptions, Products, Entitlements, Entitleme
+          -nt Definitions, License Keys, Publishers, Business Events, Rep
+          -orts, Debug (replaces `DebugRabbitMQMVCActionCommand`).       
+      371 +### 6.2 `instance-settings`                                   
+      372  
+      368 -### 6.4 `instance-settings`                                   
+      369 -                                                              
+      373  Global Liferay instance config (port banned-email-domain list,
+            notification templates, OAuth2 apps, role definitions).
+      374  
+      375  ---
+
+  Searched for 1 pattern, read 1 file (ctrl+o to expand)
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 4 lines, removed 6 lines
+      407  ```
+      408  liferay-consolidated-workspace/
+      409  ├── client-extensions/
+      410 -│   ├── consolidated-admin-custom-element/       # React — int
+          -ernal admin UI                                                
+      411 -│   ├── consolidated-admin-site-initializer/     # admin site,
+          - Object definitions, roles, notification templates            
+      410 +│   ├── admin-custom-element/                    # React — int
+          +ernal admin UI (new)                                          
+      411 +│   ├── consolidated-site-initializer/           # single site
+          + — Marketplace + Support + Admin page groups, Object definitio
+          +ns, roles, notification templates, fragments                  
+      412  │   ├── consolidated-etc-cron/                   # all schedul
+           ed tasks (§4.2)
+      413  │   ├── consolidated-etc-spring-boot/            # custom REST
+            (§5.2), GCS/Jira/Salesforce clients
+      414  │   ├── consolidated-global-css/                 # shared bran
+           ding
+      415  │   ├── consolidated-instance-settings/          # global conf
+           ig
+      416  │   ├── marketplace-custom-element/              # React — por
+           ted
+      417 -│   ├── marketplace-site-initializer/            # Marketplace
+          - public site — ported                                         
+      418 -│   ├── support-custom-element/                  # React — por
+          -ted                                                           
+      419 -│   └── support-site-initializer/                # Support por
+          -tal — ported                                                  
+      417 +│   └── support-custom-element/                  # React — por
+          +ted                                                           
+      418  ├── configs/
+      419  │   └── local/
+      420  ├── gradle/
+     ...
+      426  └── yarn.lock
+      427  ```
+      428  
+      431 -**One** `etc-spring-boot` application serves the custom REST s
+          -urface for all three sites. **One** `etc-cron` application run
+          -s all scheduled tasks. Separation by site-initializer; shared 
+          -by backend.                                                   
+      429 +**One** site-initializer, **one** `etc-spring-boot` applicatio
+          +n, **one** `etc-cron`. Three custom elements (Marketplace, Sup
+          +port, Admin) for the three audience UIs. If Marketplace splits
+          + out later (per D9 future-split trigger), this becomes two sit
+          +e-initializers.                                               
+      430  
+      431  ---
+      432  
+
+● D9 locked in — one site-initializer, Marketplace split deferred.
+
+  ---
+  D10 — Headless-first APIs; custom REST only for orchestration
+
+  Proposal:
+  - Every Liferay Object auto-exposes /o/c/{objectName} REST + GraphQL — default
+   CRUD with filter and expand comes for free.
+  - Custom REST endpoints (in etc-spring-boot) reserved for workflows that
+  aren't CRUD: trial provisioning, license generation, GCS upload orchestration,
+   Jira proxy, Salesforce webhook, Analytics/Faro provisioning, DXP usage
+  queries.
+  - Koroneiki's Phloem REST (/o/koroneiki-rest/*) retires — downstream callers
+  migrate to headless-on-Objects + the new custom endpoints.
+
+  The concern worth surfacing: Phloem has dozens of specific endpoints that
+  don't map 1:1 to Object CRUD —
+  /accounts/{accountKey}/customer-contacts/by-email-address/{email}/roles,
+  /products/by-external-link/{domain}/{entityName}/{entityId}, etc. These
+  expressive URL patterns become GraphQL queries or filter-based REST calls on
+  Objects. Callers need to rewrite their client code. Inventory of Phloem
+  consumers is a phase-2 deliverable.
+
+  My call: headless-first, custom REST for orchestration only, retire Phloem.
+
+  Keep, change, or discuss?
+
+✻ Cogitated for 1m 25s
+
+❯ sounds good                                                                   
+
+● D10 committed.
+
+  ---
+  D11 — No internal message bus; outbound webhooks/Pub-Sub only where external 
+  subscribers still need them
+
+  Today: Koroneiki broadcasts koroneiki.<entity>.<create|update|delete> to two
+  RabbitMQ brokers (Legacy + Xylem) plus Google Pub/Sub. Provisioning subscribes
+   to RabbitMQ; Marketplace subscribes to Pub/Sub. Dossiera publishes inbound
+  via RabbitMQ.
+
+  Proposal:
+  - Inside the workspace: Object Actions fire synchronously (or via Liferay's
+  internal message bus for async). No RabbitMQ/Pub-Sub for intra-workspace
+  communication — the whole point of consolidation is that Provisioning and
+  Marketplace no longer need to hear about Koroneiki changes because they share
+  the same Objects.
+  - Outbound: only where external subscribers still exist. Today's candidates
+  are Dossiera (retires per D12) and LCS (already retired). That leaves
+  essentially nothing.
+
+  The question that determines scope: after Dossiera and LCS drop, are there any
+   other systems subscribing to koroneiki.* topics that I don't know about? The
+  audit couldn't tell because the RabbitMQ consumer list wasn't visible in the
+  audited repos. If the answer is "nothing else," we retire the publisher
+  entirely. If "something else" (e.g., a reporting dashboard, a BI pipeline), we
+   keep a thin outbound webhook or queue.
+
+  My call: retire the internal bus; inventory external subscribers during phase
+  1 and keep outbound only if someone actually listens.
+
+  Keep, change, or discuss — and do you know of any external consumers we'd need
+   to preserve?
+
+❯ yes, retire it, no longer needed                                              
+
+● D11 locked in — full bus retirement.
+
+  ---
+  D12 — Salesforce integration replaces Dossiera with a direct webhook + 
+  Salesforce sync
+
+  Today: Salesforce opportunity close-won events flow through Dossiera (a relay
+  service) → RabbitMQ dossiera.provisioning.create → Provisioning's
+  DossieraCreateMessageSubscriber, which creates Koroneiki accounts, contacts,
+  teams, product purchases, and Zendesk tickets.
+
+  Proposal: retire Dossiera. The new workspace receives Salesforce events
+  directly via one of:
+  - (a) Salesforce outbound messaging — SF sends SOAP/REST on opportunity state
+  change to a webhook in etc-spring-boot (POST 
+  /webhooks/salesforce/opportunity).
+  - (b) Salesforce Platform Events + subscriber — SF publishes platform events;
+  we subscribe via CometD or Pub/Sub API.
+  - (c) Polling sync — etc-cron polls SF REST every N minutes for changed
+  opportunities.
+
+  All three replace Dossiera; the question is which.
+
+  My call: option (a) — outbound webhook is the simplest, lowest-latency,
+  doesn't require maintaining a SF subscriber, doesn't waste polling capacity.
+  Fallback to polling only if SF's outbound delivery reliability is a problem.
+
+  The concern worth calling out: whoever owns the Salesforce side today
+  configured Dossiera's relay. They'll need to reconfigure SF to point at the
+  new webhook instead. That's a Salesforce admin task and needs coordination
+  with the sales ops team.
+
+  Keep, change, or discuss?
+
+❯ we currently have a pubsub that salesforce posts to and we subscribe to, it   
+  should still work like that, and whatever data we get we need to make srue to 
+   update the correct objects on our side                                       
+
+● Got it — updating the spec to reflect the existing Pub/Sub pipeline.
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 13 lines, removed 3 lines
+      127  >
+      128  > **Alternative rejected:** preserve RabbitMQ topics verbatim 
+           for "compatibility." Carries a dead integration forward.
+      129  
+      130 -> **D12 — Salesforce integration replaces Dossiera with a dire
+          -ct webhook + Salesforce sync.**                               
+      130 +> **D12 — Keep the existing Salesforce → Pub/Sub pipeline; sub
+          +scriber moves in-workspace and writes directly to the new Obje
+          +cts.**                                                        
+      131  >
+      132 -> **Why:** Dossiera is a legacy relay. The new workspace owns 
+          -account creation on Salesforce `Closed Won` via either an outb
+          -ound-message + webhook endpoint or a polling sync, written onc
+          -e in `etc-spring-boot`.                                       
+      132 +> **Current state (corrected from audit):** Salesforce publish
+          +es opportunity events to a Google Pub/Sub topic. Today a subsc
+          +riber (Dossiera) relays those messages via RabbitMQ to Provisi
+          +oning's `DossieraCreateMessageSubscriber`, which creates Koron
+          +eiki records.                                                 
+      133  >
+      134 -> **Alternative rejected:** keep Dossiera. Keeps a third-party
+          - relay for no new reason.                                     
+      134 +> **Proposal:** collapse the relay. The new workspace's `etc-s
+          +pring-boot` subscribes to the same Pub/Sub topic directly. Dos
+          +siera and the intermediate RabbitMQ hop retire. The subscriber
+          +'s job becomes: parse the SF opportunity payload → upsert `Acc
+          +ountEntry` (create on new-biz, update on renewal/existing) → c
+          +reate `Subscription` + `SubscriptionLineItem` rows → create `E
+          +xternalReference` rows pointing at Salesforce — all directly o
+          +n the new Object model.                                       
+      135 +>                                                             
+      136 +> **Mapping port:** today's `DossieraCreateMessageSubscriber` 
+          +logic (account-code generation, support-region mapping, contac
+          +t role assignment, warning flags for opportunity-type vs accou
+          +nt-existence mismatches, developer-count enforcement) ports in
+          +to the new subscriber. The business rules don't change; the ta
+          +rget data model does.                                         
+      137 +>                                                             
+      138 +> **Coordination:** no Salesforce-side config changes required
+          + — the Pub/Sub topic stays the same; only the subscriber endpo
+          +int swaps. Salesforce admin team is not on the critical path. 
+      139 +>                                                             
+      140 +> **Alternative rejected:** direct Salesforce webhook (outboun
+          +d messaging). Would require SF-admin reconfiguration and loses
+          + the buffering Pub/Sub already provides.                      
+      141 +>                                                             
+      142 +> **Alternative rejected:** polling sync. Wastes capacity, hig
+          +her latency, unnecessary given Pub/Sub already exists.        
+      143 +>                                                             
+      144 +> **Alternative rejected:** keep Dossiera. Keeps a relay with 
+          +no new reason to exist.                                       
+      145  
+      146  > **D13 — Service-to-service auth = OAuth2 client credentials.
+            Retire Koroneiki's `ServiceProducer` impersonation pattern.**
+      147  >
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      325  
+      326  | Path | Purpose | Replaces |
+      327  |---|---|---|
+      328 -| `POST /webhooks/salesforce/opportunity` | Salesforce-closed-
+          -won webhook; creates AccountEntry + Subscription | Dossiera `d
+          -ossiera.provisioning.create` |                                
+      328 +| _Salesforce Pub/Sub subscriber_ (not a REST endpoint — backg
+          +round subscriber in `etc-spring-boot`) | Consumes opportunity 
+          +events from the existing Salesforce Pub/Sub topic; upserts Acc
+          +ountEntry + Subscription | Dossiera + `dossiera.provisioning.c
+          +reate` RabbitMQ relay |                                       
+      329  | `POST /trial/provision/{subscriptionId}` | Provision trial i
+           nstance in Liferay Cloud | Marketplace `POST /trial/provisioni
+           ng` |
+      330  | `POST /trial/expire/{subscriptionId}` | Decommission trial |
+            Marketplace `POST /trial/expire` |
+      331  | `POST /trial/notify-end/{subscriptionId}` | Send trial-end e
+           mail | Marketplace `POST /trial/notify-end` |
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      404  ### 7.2 Retired
+      405  
+      406  - Zendesk (already retired at the business layer — Provisionin
+           g's Zendesk calls and the `zendeskTicketId` field are vestigia
+           l code; drop without replacement)
+      407 -- Dossiera (direct Salesforce webhook replaces it)            
+      407 +- Dossiera (direct Salesforce Pub/Sub subscription replaces th
+          +e relay; SF-side topic unchanged)                             
+      408  - osb-entity-web (Liferay Users are the master)
+      409  - RabbitMQ (internal). Evaluate Xylem broker outbound for any 
+           external subscriber still live.
+      410  - Google Pub/Sub (internal). Replaced by Object Actions.
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      469  
+      470  - **Resolve ownership question first**: locate the code that c
+           reates `Provisioning_LicenseKey` rows today (230K rows). See a
+           udit `provisioning.md §6`.
+      471  - Extract license key tables → LicenseKey Object with Subscrip
+           tion linkage.
+      472 -- Port DossieraCreateMessageSubscriber logic into AccountEntry
+          -.onAfterAdd + Salesforce webhook endpoint.                    
+      472 +- Stand up the Salesforce Pub/Sub subscriber in `etc-spring-bo
+          +ot`; port DossieraCreateMessageSubscriber logic as the message
+          + handler.                                                     
+      473  - Drop the vestigial LCS sync code paths (LCS is already retir
+           ed at the business layer).
+      474  - Drop the vestigial Zendesk code paths (no replacement — Zend
+           esk is already retired).
+      475  - Retire osb-provisioning deploy.
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      518  1. **Entitlement rule translation** (D5). The 62 rules need in
+           dividual review. Until then, phase-2 timeline is unbounded on 
+           the high end. Recommend: extract `EntitlementDefinition.defini
+           tion` to a CSV, review with product + ops, classify per D5, th
+           en estimate.
+      519  2. **Provisioning license-key module ownership.** Audit found 
+           230K rows in a module the audited source does not declare. Mus
+           t locate the code before phase 3.
+      520  3. ~~**LCS fate.**~~ _Resolved: LCS is already retired at the 
+           business layer. `LCSSubscriptionEntryWebService` and related c
+           ode paths in `osb-provisioning` are vestigial — drop during mi
+           gration without replacement._
+      521 -4. **Salesforce integration replacement.** Direct webhook vs p
+          -olling sync vs Salesforce Connected App — pick one during phas
+          -e 3 design.                                                   
+      521 +4. ~~**Salesforce integration replacement.**~~ _Resolved per D
+          +12: subscribe to the existing Salesforce → Pub/Sub topic direc
+          +tly from `etc-spring-boot`; Dossiera relay retires. SF-side co
+          +nfig unchanged._                                              
+      522  5. **RabbitMQ → Pub/Sub bridge location.** Whatever relays `ko
+           roneiki.*` from on-prem RabbitMQ to Google Pub/Sub is outside 
+           the four audited codebases. Find and retire.
+      523  6. **Support `KoroneikiAccount` sync mechanism.** Unknown how 
+           today's 2,313 rows get populated. Find and retire.
+      524  7. **Commerce catalog ↔ Product Object.** Today Marketplace us
+           es Commerce `CPDefinition` for priced-storefront items and Kor
+           oneiki `ProductEntry` (now Product Object) for licensed SKUs. 
+           They're loosely linked by name. Decide whether to unify or kee
+           p the name-match pattern.
+
+● D12 locked in — SF Pub/Sub pipeline preserved, subscriber moves in-workspace,
+  Dossiera retires.
+
+  ---
+  D13 — Service-to-service auth = OAuth2 client credentials; retire Koroneiki's 
+  ServiceProducer impersonation
+
+  Today: Koroneiki uses a custom pattern — ServiceProducer (named external
+  system) owns an AuthenticationToken (SHA-256 digest stored); when a caller
+  presents the bearer token, ServiceProducerAuthVerifier impersonates
+  ServiceProducer.authorizationUserId. Every write endpoint also takes agentName
+   + agentUID query params so the real actor shows up in audit logs.
+
+  Proposal: retire the pattern. Standard Liferay OAuth2 client credentials
+  replace it:
+  - Define one OAuth2 application per calling system (Salesforce subscriber,
+  Marketplace components, Support components, Console integration, Jira webhook,
+   internal admin UI).
+  - Scope access with OAuth2 scopes (customer.read, subscription.write,
+  license.admin, ticket.write, etc.).
+  - Audit trail comes from Liferay's built-in OAuth2 authorization + Object
+  versioning, not the agentName/agentUID pattern.
+
+  The concern worth surfacing: the agentName/agentUID pattern exists because
+  service-to-service calls often originate from a specific human action (e.g., a
+   support rep creating a customer account). OAuth2 client-credentials flows
+  only record the calling client, not the underlying human. If that distinction
+  matters for audit, we either (a) preserve the pattern as optional request
+  headers that annotate Object audit entries, or (b) use OAuth2
+  authorization-code flow for UI-driven actions so the user identity is captured
+   natively.
+
+  My call: OAuth2 client credentials as the primary pattern; keep an optional
+  X-On-Behalf-Of header that annotates Object audit for service calls that
+  originate from a human action. Matches Liferay conventions without losing the
+  auditable human.
+
+  Keep, change, or discuss?
+
+✻ Sautéed for 1m 5s
+
+❯ yes, just use oauth                                                           
+
+● D13 locked in — plain OAuth2, no impersonation header. Spec already reflects
+  this.
+
+  ---
+  D14 — Archive Koroneiki AuditEntry (17M rows); use Liferay Object built-in 
+  audit going forward
+
+  Today: Koroneiki has 17,462,542 AuditEntry rows. Every model change on every
+  major entity writes one (or more) via dedicated ModelListener classes. Fields:
+   oldValue/newValue/oldLabel/newLabel, grouped by auditSetId.
+
+  Proposal:
+  - Going forward: Liferay Objects have built-in versioning + audit
+  (enableObjectEntryHistory, enableObjectEntryVersioning). Enable on Objects
+  that need audit trail (Account, Subscription, LicenseKey, Entitlement,
+  BusinessEvent). Accept that not every Object needs audit — the 17M rows today
+  are largely noise on entities like ProductField.
+  - Legacy audit rows: export the full Koroneiki_AuditEntry to flat file (JSON
+  lines or CSV) and archive. Don't migrate into the new workspace.
+
+  The concerns:
+
+  1. Loss of historical queryability. If anyone today queries AuditEntry for
+  "who changed account X on 2023-11-05," that capability goes away
+  post-migration unless the flat-file archive is queryable (Athena on S3,
+  BigQuery on GCS, etc.). Decide the archive format with the archive consumer in
+   mind.
+  2. Compliance / legal retention. Some contracts or regulations may require
+  N-year audit retention. 17M rows suggests this is production-relevant; check
+  retention requirements before choosing flat-file vs a live archive DB.
+  3. The agentName/agentUID data on today's audit entries captures who really 
+  did what. That data survives in the archive. New audit (Liferay built-in)
+  records the OAuth2 client identity (per D13). The two audit styles will differ
+   — document the break point.
+
+  My call: archive to flat file (JSON lines in GCS), enable built-in audit on
+  Objects that need it, document the pre/post-migration audit-shape difference.
+
+  Keep, change, or discuss?
+
+❯ yes, sounds good                                                              
+
+● D14 locked in.
+
+  That's all 14 decisions walked through. Recap:
+
+  ┌─────┬─────────────────────────────┬─────────────────────────────────────┐
+  │  #  │          Decision           │               Status                │
+  ├─────┼─────────────────────────────┼─────────────────────────────────────┤
+  │ D1  │ AccountEntry + custom       │ ✓                                   │
+  │     │ fields                      │                                     │
+  ├─────┼─────────────────────────────┼─────────────────────────────────────┤
+  │     │ Liferay User + Account      │                                     │
+  │ D2  │ Roles (prefixed             │ ✓                                   │
+  │     │ Customer_/Worker_)          │                                     │
+  ├─────┼─────────────────────────────┼─────────────────────────────────────┤
+  │ D3  │ Team as custom Object;      │ ✓                                   │
+  │     │ TeamRole dropped            │                                     │
+  ├─────┼─────────────────────────────┼─────────────────────────────────────┤
+  │ D4  │ Unified Subscription        │ deferred — revisit                  │
+  ├─────┼─────────────────────────────┼─────────────────────────────────────┤
+  │ D5  │ Entitlement hybrid approach │ ✓ (rule-by-rule review deferred to  │
+  │     │                             │ entitlement-rules-review.md)        │
+  ├─────┼─────────────────────────────┼─────────────────────────────────────┤
+  │ D6  │ Jira-native SupportTicket + │ ✓                                   │
+  │     │  1h TTL cache               │                                     │
+  ├─────┼─────────────────────────────┼─────────────────────────────────────┤
+  │     │ Commerce preserved;         │                                     │
+  │ D7  │ TrialProvisioning +         │ ✓                                   │
+  │     │ OrderType reference         │                                     │
+  ├─────┼─────────────────────────────┼─────────────────────────────────────┤
+  │ D8  │ LicenseKey Object; find     │ ✓                                   │
+  │     │ generator (phase-3 blocker) │                                     │
+  ├─────┼─────────────────────────────┼─────────────────────────────────────┤
+  │     │ One site-initializer        │                                     │
+  │ D9  │ (Marketplace split          │ ✓                                   │
+  │     │ deferred)                   │                                     │
+  ├─────┼─────────────────────────────┼─────────────────────────────────────┤
+  │ D10 │ Headless-first; custom REST │ ✓                                   │
+  │     │  for orchestration          │                                     │
+  ├─────┼─────────────────────────────┼─────────────────────────────────────┤
+  │ D11 │ Retire internal bus         │ ✓                                   │
+  │     │ entirely                    │                                     │
+  ├─────┼─────────────────────────────┼─────────────────────────────────────┤
+  │ D12 │ Keep SF Pub/Sub; subscriber │ ✓                                   │
+  │     │  moves in-workspace         │                                     │
+  ├─────┼─────────────────────────────┼─────────────────────────────────────┤
+  │ D13 │ OAuth2 client credentials   │ ✓                                   │
+  ├─────┼─────────────────────────────┼─────────────────────────────────────┤
+  │ D14 │ Archive AuditEntry, use     │ ✓                                   │
+  │     │ built-in Object audit       │                                     │
+  └─────┴─────────────────────────────┴─────────────────────────────────────┘
+
+  Two things still open:
+  1. D4 — unified Subscription Object (you wanted to revisit later).
+  2. 62 entitlement rules — individual classification in
+  entitlement-rules-review.md.
+
+  Want to tackle D4 now, start on the 62 rules, or wrap for this session?
+
+❯ ya lets do d4 first                                                           
+
+● Let me pull actual data to understand the shapes before we walk through this.
+
+  Ran 7 bash commands (ctrl+o to expand)
+
+● The data makes it clear — these are not the same concept.
+
+  Koroneiki ProductPurchase (65K rows): sales line items. Products named Gold 
+  Subscription, Dracula Theme - Standard License, DXP Production, Developer 
+  Tools, Mobile Experience. These are SKUs bought from Salesforce close-wons.
+
+  Support AccountSubscription (4.5K rows): deployment entitlements. Names
+  Production, Non-Production, Development, Backup, HA Production. Fields include
+   instanceSize and hasDisasterDataCenterRegion — deployment attributes, not
+  sales attributes.
+
+  The two concepts:
+  - ProductPurchase answers "what did the customer buy?" (sales line, from SF)
+  - AccountSubscription answers "what's running?" (deployment, for the customer
+  portal)
+
+  One customer with ~10 product purchases typically has ~1 subscription snapshot
+   ("your Production deployment, instance size 3, with DR, enabled by these
+  licenses"). The 65K-vs-4.5K ratio is the tell.
+
+  ---
+  D4 (revised) — Keep two Objects: ProductPurchase + Subscription
+
+  Proposal:
+
+  - ProductPurchase — port Koroneiki ProductPurchase semantics intact. The
+  sales-line record. Fields: accountEntryId, productId, startDate, endDate,
+  originalEndDate, quantity, status. Created by the SF Pub/Sub subscriber (D12)
+  and by Marketplace post-purchase flows.
+  - Subscription — repurpose for Support's deployment-entitlement concept.
+  Fields: accountEntryId, name (Production/Non-Production/Development/Backup/…),
+   subscriptionGroupERC, startDate, endDate, instanceSize,
+  hasDisasterDataCenterRegion, quantity, subscriptionStatus
+  (Active/Expired/Future).
+  - Relationship: Subscription ↔ many ProductPurchase (a subscription is enabled
+   by the set of purchases that apply to it). Many-to-many join Object or direct
+   relationship.
+  - ProductConsumption (Koroneiki, 149K rows) collapses into LicenseKey — a
+  license key activation is a product consumption. One activation per
+  consumption row.
+  - SubscriptionLineItem dropped (was in the original D4). Replaced by
+  LicenseKey + the ProductPurchase↔Subscription relationship.
+  - AccountSubscriptionGroup / AccountSubscriptionTerm — the group becomes a
+  field on Subscription (subscriptionGroupERC); term-level detail (13 rows,
+  near-unused) drops.
+
+  Marketplace side: Commerce CommerceOrder stays Commerce's concern. A paid
+  Marketplace order triggers ProductPurchase creation via the post-purchase
+  Object Action (same pattern as SF close-won, different trigger).
+
+  My call: two Objects, clear semantic split. Closer to the actual data,
+  preserves both lineages, no forced unification of concepts that aren't
+  actually unified.
+
+  Keep, change, or discuss?
+
+✻ Cogitated for 1m 12s
+
+❯ i think for this we want to use out of box commerce subscriptions and orders  
+
+● Good call — Commerce gives us order lifecycle, subscription term handling, and
+   renewal logic for free. Let me sketch the revised model before I touch the
+  spec:
+
+  D4 (revised again) — Use OOTB Commerce for orders + subscriptions; add a side 
+  Object for deployment attributes
+
+  Mapping:
+
+  ┌───────────────────────────────┬─────────────────────────────────────────┐
+  │             Today             │                   New                   │
+  ├───────────────────────────────┼─────────────────────────────────────────┤
+  │ Koroneiki ProductPurchase     │ Commerce CommerceOrder +                │
+  │ (65K sales lines)             │ CommerceOrderItem (one order per        │
+  │                               │ purchase, items per SKU)                │
+  ├───────────────────────────────┼─────────────────────────────────────────┤
+  │ Koroneiki ProductEntry        │ Commerce CPDefinition (product catalog) │
+  ├───────────────────────────────┼─────────────────────────────────────────┤
+  │ Koroneiki ProductConsumption  │ LicenseKey Object (D8) — one per        │
+  │ (149K)                        │ activation                              │
+  ├───────────────────────────────┼─────────────────────────────────────────┤
+  │                               │ Commerce Subscription (via Commerce's   │
+  │ Support AccountSubscription   │ built-in subscription on order items) + │
+  │ (4.5K deployments)            │  new Deployment Object for env-specific │
+  │                               │  attributes                             │
+  ├───────────────────────────────┼─────────────────────────────────────────┤
+  │ Support                       │ Commerce subscription group / or field  │
+  │ AccountSubscriptionGroup (3K) │ on Deployment                           │
+  ├───────────────────────────────┼─────────────────────────────────────────┤
+  │ Marketplace CommerceOrder +   │ Commerce CommerceOrder +                │
+  │ trial JSON custom fields      │ TrialProvisioning Object (unchanged     │
+  │                               │ from D7)                                │
+  └───────────────────────────────┴─────────────────────────────────────────┘
+
+  New Deployment Object (replaces Subscription Object from my previous
+  proposal):
+  - Purpose: carries the deployment-specific fields that don't fit Commerce
+  natively.
+  - Fields: accountEntryId, name
+  (Production/Non-Production/Development/Backup/HA Production/…),
+  deploymentGroupERC, instanceSize, hasDisasterDataCenterRegion, startDate,
+  endDate, status.
+  - Relationship: Deployment ↔ many CommerceSubscriptionEntry (the purchases
+  that enable it).
+
+  What flows through Commerce that doesn't today: SF close-wons. The Pub/Sub
+  subscriber programmatically creates Commerce orders (bypassing checkout UI)
+  for each opportunity — one order per close-won, order items per product,
+  subscription-enabled items for the recurring products. Commerce then handles
+  term/renewal natively instead of our custom date-math.
+
+  The one concern worth flagging: Commerce's subscription model has built-in
+  fields (subscriptionLength, maxSubscriptionCycles, automaticRenewal, etc.).
+  Some of Koroneiki's concepts don't map 1:1 — e.g., originalEndDate
+  (sales-original before extensions/grace). May need custom fields on the
+  subscription entry for these edge cases.
+
+  Everything else from D4 stays: two concepts (sales vs deployment) kept
+  separate, Commerce handles the sales/subscription lifecycle, Deployment
+  captures what doesn't fit.
+
+  Look right? If yes I'll update the spec (drops ProductPurchase and
+  Subscription Objects, adds Deployment, updates D7/§3/§4 accordingly).
+
+✻ Sautéed for 54s
+
+❯ yes                                                                           
+
+● Updating the spec now.
+
+  Read 1 file (ctrl+o to expand)
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 22 lines, removed 4 lines
+      57  >
+      58  > **Alternative rejected:** full team-role port. Low ROI given 
+          the data.
+      59  
+      60 -> **D4 — One `Subscription` Object unifies Koroneiki `ProductPu
+         -rchase`, Support `AccountSubscription`, and Marketplace's order
+         --custom-fields for trials.**                                   
+      60 +> **D4 — Use OOTB Liferay Commerce for orders + subscriptions; 
+         +add a `Deployment` Object for environment-specific attributes.*
+         +*                                                              
+      61  >
+      62 -> **Why:** Today there are three separate representations of "t
+         -his account has this product from X to Y." Consolidation is the
+         - whole point. One Subscription Object with lifecycle states `Dr
+         -aft → Trial → Active → Expired | Cancelled`, plus a `Subscripti
+         -onLineItem` child Object for per-product line detail (replaces 
+         -`ProductConsumption`, `AccountSubscriptionTerm`).              
+      62 +> **Finding from the data:** Koroneiki `ProductPurchase` (65K r
+         +ows) and Support `AccountSubscription` (4.5K rows) are **not** 
+         +the same concept. ProductPurchase tracks *sales lines* — SKUs l
+         +ike "Gold Subscription," "DXP Production," "Mobile Experience" 
+         +bought per SF close-won. AccountSubscription tracks *deployment
+         +s* — environments like "Production," "Non-Production," "Develop
+         +ment," "Backup," each with its own `instanceSize` and `hasDisas
+         +terDataCenterRegion`. Average customer has ~10 ProductPurchases
+         + enabling ~1 Deployment snapshot.                              
+      63  >
+      64 -> **`SubscriptionGroup`** (renewal grouping) becomes a field + 
+         -self-relationship, not a separate Object (Support's `AccountSub
+         -scriptionGroup` has 3K rows vs 4.5K subscriptions; the grouping
+         - is essentially 1:1.5 and doesn't justify its own Object).     
+      64 +> **Why Commerce:** Commerce already handles order lifecycle, s
+         +ubscription term management, renewal logic. Rather than re-impl
+         +ementing with custom Objects, fold both concepts onto Commerce-
+         +native constructs plus a side Object for what Commerce doesn't 
+         +model.                                                         
+      65  >
+      66 -> **Alternative rejected:** keep ProductPurchase, AccountSubscr
+         -iption, and CommerceOrder-with-custom-fields as three Objects w
+         -ith a view layer. Preserves today's shape; perpetuates the prob
+         -lem.                                                           
+      66 +> **Mapping:**                                                 
+      67 +> - Koroneiki `ProductPurchase` → `CommerceOrder` + `CommerceOr
+         +derItem` (one order per purchase, subscription-enabled items fo
+         +r recurring products).                                         
+      68 +> - Koroneiki `ProductEntry` → Commerce `CPDefinition` (product
+         + catalog).                                                     
+      69 +> - Koroneiki `ProductConsumption` (149K rows) → collapses into
+         + `LicenseKey` Object (D8) — one license key per activation.    
+      70 +> - Support `AccountSubscription` → Commerce Subscription (`Com
+         +merceSubscriptionEntry`) for the term/status, **plus a new `Dep
+         +loyment` Object** for env attributes.                          
+      71 +> - Support `AccountSubscriptionGroup` (3K) → Commerce subscrip
+         +tion grouping (or a field on `Deployment`).                    
+      72 +> - Support `AccountSubscriptionTerm` (13, near-unused) → dropp
+         +ed.                                                            
+      73 +>                                                              
+      74 +> **`Deployment` Object** carries what Commerce doesn't: `accou
+         +ntEntryId`, `name` (Production / Non-Production / Development /
+         + Backup / HA Production / …), `deploymentGroupERC`, `instanceSi
+         +ze`, `hasDisasterDataCenterRegion`, `startDate`, `endDate`, `st
+         +atus`. Relationship: `Deployment` ↔ many `CommerceSubscriptionE
+         +ntry` (the purchases that enable it).                          
+      75 +>                                                              
+      76 +> **SF close-wons:** the Pub/Sub subscriber (D12) programmatica
+         +lly creates Commerce orders — one order per opportunity, order 
+         +items per SKU, subscription-enabled items for recurring product
+         +s. Commerce then handles term/renewal/grace natively instead of
+         + custom date-math.                                             
+      77 +>                                                              
+      78 +> **Marketplace:** Commerce `CommerceOrder` already the pattern
+         +; `TrialProvisioning` Object (D7) carries trial-specific metada
+         +ta.                                                            
+      79 +>                                                              
+      80 +> **Edge cases worth flagging:** some Koroneiki concepts may no
+         +t map 1:1 to Commerce subscription fields (e.g., `originalEndDa
+         +te` — sales-original before extensions/grace). Use custom field
+         +s on `CommerceSubscriptionEntry` for those.                    
+      81 +>                                                              
+      82 +> **Alternative rejected:** custom `Subscription` + `ProductPur
+         +chase` Objects (the revised-D4 sketch). Rebuilds what Commerce 
+         +already does, and complicates the Marketplace story since Marke
+         +tplace already uses Commerce.                                  
+      83 +>                                                              
+      84 +> **Alternative rejected:** single Subscription Object collapsi
+         +ng both concepts (original-D4). The 65K vs 4.5K data shape says
+         + they're distinct.                                             
+      85  
+      86  > **D5 — Entitlements = Object filter criteria for simple rules
+          , Scheduled Task for complex ones.**
+      87  >
+
+● Now the dependent sections. Let me find all references to drop/update.
+
+  Searched for 1 pattern (ctrl+o to expand)
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+       9  ## 1. Goals & Non-Goals
+      10  
+      11  **Goals**
+      12 -- Single Liferay workspace, one deployable unit, one source of 
+         -truth per concept (Account, Contact, Subscription, etc.).      
+      12 +- Single Liferay workspace, one deployable unit, one source of 
+         +truth per concept (Account, Contact, Order/Subscription via Com
+         +merce, Deployment, etc.).                                      
+      13  - Data model expressed as Liferay Objects so business users can
+           extend fields without a release.
+      14  - Business logic in Object Actions, Validations, and Scheduled 
+          Tasks — not in standalone OSGi modules with their own data stor
+          es.
+      15  - Preserve the external contracts that live outside the four sy
+          stems (Jira, Salesforce, GCS, Liferay Cloud, Analytics Cloud, M
+          arketo, email, Slack).
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      149  >
+      150  > **Current state (corrected from audit):** Salesforce publish
+           es opportunity events to a Google Pub/Sub topic. Today a subsc
+           riber (Dossiera) relays those messages via RabbitMQ to Provisi
+           oning's `DossieraCreateMessageSubscriber`, which creates Koron
+           eiki records.
+      151  >
+      152 -> **Proposal:** collapse the relay. The new workspace's `etc-s
+          -pring-boot` subscribes to the same Pub/Sub topic directly. Dos
+          -siera and the intermediate RabbitMQ hop retire. The subscriber
+          -'s job becomes: parse the SF opportunity payload → upsert `Acc
+          -ountEntry` (create on new-biz, update on renewal/existing) → c
+          -reate `Subscription` + `SubscriptionLineItem` rows → create `E
+          -xternalReference` rows pointing at Salesforce — all directly o
+          -n the new Object model.                                       
+      152 +> **Proposal:** collapse the relay. The new workspace's `etc-s
+          +pring-boot` subscribes to the same Pub/Sub topic directly. Dos
+          +siera and the intermediate RabbitMQ hop retire. The subscriber
+          +'s job becomes: parse the SF opportunity payload → upsert `Acc
+          +ountEntry` (create on new-biz, update on renewal/existing) → p
+          +rogrammatically create Commerce `CommerceOrder` + `CommerceOrd
+          +erItem` (subscription-enabled items for recurring products) → 
+          +create `ExternalReference` rows pointing at Salesforce — all d
+          +irectly on the new data model (per D4).                       
+      153  >
+      154  > **Mapping port:** today's `DossieraCreateMessageSubscriber` 
+           logic (account-code generation, support-region mapping, contac
+           t role assignment, warning flags for opportunity-type vs accou
+           nt-existence mismatches, developer-count enforcement) ports in
+           to the new subscriber. The business rules don't change; the ta
+           rget data model does.
+      155  >
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 5 lines, removed 4 lines
+      193  
+      194  | Object | Purpose | Key fields | Relationships |
+      195  |---|---|---|---|
+      196 -| `Product` | Catalog item (master). Separate from Commerce `C
+          -PDefinition` which is priced-storefront item | `name` (unique)
+          -, `productKey`, `status`, `properties` (JSON, deprecated — mig
+          -rate to fields) | ← SubscriptionLineItem |                    
+      197 -| `Subscription` | What an account has bought. Replaces Korone
+          -iki ProductPurchase + Support AccountSubscription | `accountEn
+          -tryId`, `productId`, `status` (Draft/Trial/Active/Expired/Canc
+          -elled), `startDate`, `endDate`, `originalEndDate`, `quantity`,
+          - `renewalGroupKey`, `instanceSize` | → AccountEntry, → Product
+          -, ← SubscriptionLineItem, ← LicenseKey |                      
+      198 -| `SubscriptionLineItem` | Individual fulfillment (one env, on
+          -e activation). Replaces ProductConsumption + AccountSubscripti
+          -onTerm | `subscriptionId`, `productId`, `startDate`, `endDate`
+          -, `quantity`, `environment`, `sizing` | → Subscription |      
+      199 -| `LicenseKey` | Generated license. New Object; migrate 230K f
+          -rom `Provisioning_LicenseKey` | `key` (unique indexed), `subsc
+          -riptionId`, `productVersion`, `startDate`, `endDate`, `maxServ
+          -ers`, `maxDevelopers`, `status` | → Subscription |            
+      196 +| `CommerceOrder` + `CommerceOrderItem` (Liferay Commerce) | S
+          +ales line records. Replaces Koroneiki `ProductPurchase` | Comm
+          +erce-native fields + custom fields for `originalEndDate`, etc.
+          + | → AccountEntry, → CPDefinition |                           
+      197 +| `CommerceSubscriptionEntry` (Liferay Commerce) | Subscriptio
+          +n lifecycle per subscription-enabled order item. Replaces the 
+          +recurring/term aspect of Koroneiki `ProductPurchase` | Commerc
+          +e-native fields (length, cycles, renewal) + custom fields | → 
+          +CommerceOrderItem, ← Deployment (many-to-many) |              
+      198 +| `CPDefinition` (Liferay Commerce) | Product catalog. Replace
+          +s Koroneiki `ProductEntry` | Commerce-native | ← CommerceOrder
+          +Item |                                                        
+      199 +| `Deployment` | Customer's deployment environment (Production
+          + / Non-Production / Development / Backup / HA Production …). R
+          +eplaces Support `AccountSubscription` | `accountEntryId`, `nam
+          +e`, `deploymentGroupERC`, `instanceSize`, `hasDisasterDataCent
+          +erRegion`, `startDate`, `endDate`, `status` | → AccountEntry, 
+          +↔ many CommerceSubscriptionEntry |                            
+      200 +| `LicenseKey` | Generated license. New Object; migrate 230K f
+          +rom `Provisioning_LicenseKey` | `key` (unique indexed), `comme
+          +rceSubscriptionEntryId`, `productVersion`, `startDate`, `endDa
+          +te`, `maxServers`, `maxDevelopers`, `status` | → CommerceSubsc
+          +riptionEntry |                                                
+      201  
+      202  ### 3.3 Entitlement domain
+      203  
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      242  
+      243  - Koroneiki `ServiceProducer`, `AuthenticationToken` — replace
+           d by OAuth2 client credentials (D13).
+      244  - Koroneiki `AuditEntry` — replaced by Liferay Object versioni
+           ng (D14).
+      245 -- Koroneiki `ProductField` (260K rows of dynamic properties) —
+          - values migrate to structured fields on `Product`/`Subscriptio
+          -n`/`LicenseKey` after extracting the distinct field-name set. 
+      245 +- Koroneiki `ProductField` (260K rows of dynamic properties) —
+          + values migrate to structured fields on `CPDefinition`/`Commer
+          +ceSubscriptionEntry`/`Deployment`/`LicenseKey` (as appropriate
+          +) after extracting the distinct field-name set.               
+      246  - Support `KoroneikiAccount` side-car — dissolved; fields merg
+           e into AccountEntry extensions.
+      247  - Support `AccountSubscriptionGroup`, `AccountSubscriptionTerm
+           ` — collapse into Subscription + SubscriptionLineItem.
+      248  - Marketplace `Sample`, `Test2`, `LicenseTypesDescription`, `U
+           serAdditionalInfo` — unused / scratch.
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 4 lines, removed 1 line
+      244  - Koroneiki `AuditEntry` — replaced by Liferay Object versioni
+           ng (D14).
+      245  - Koroneiki `ProductField` (260K rows of dynamic properties) —
+            values migrate to structured fields on `CPDefinition`/`Commer
+           ceSubscriptionEntry`/`Deployment`/`LicenseKey` (as appropriate
+           ) after extracting the distinct field-name set.
+      246  - Support `KoroneikiAccount` side-car — dissolved; fields merg
+           e into AccountEntry extensions.
+      247 -- Support `AccountSubscriptionGroup`, `AccountSubscriptionTerm
+          -` — collapse into Subscription + SubscriptionLineItem.        
+      247 +- Support `AccountSubscriptionGroup` — collapses to a field on
+          + `Deployment` (or Commerce subscription group). `AccountSubscr
+          +iptionTerm` (13 rows) drops.                                  
+      248 +- Koroneiki `ProductEntry` — drops; catalog becomes Commerce `
+          +CPDefinition`.                                                
+      249 +- Koroneiki `ProductPurchase` Object — drops; replaced by Comm
+          +erce `CommerceOrder` + `CommerceOrderItem` + `CommerceSubscrip
+          +tionEntry`.                                                   
+      250 +- Koroneiki `ProductConsumption` — drops; one activation = one
+          + `LicenseKey`.                                                
+      251  - Marketplace `Sample`, `Test2`, `LicenseTypesDescription`, `U
+           serAdditionalInfo` — unused / scratch.
+      252  - Marketplace `GetAppInformation` (496 rows) — appears to be a
+            UI cache; evaluate in phase 4.
+      253  - Zendesk references (`zendeskTicketId` on TicketAttachment, `
+           ZendeskTicketWebService` in Provisioning) — drop. Zendesk is a
+           lready retired at the business layer.
+
+  Read 1 file (ctrl+o to expand)
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 7 lines, removed 4 lines
+      261      AccountEntry ||--o{ AccountFlag : has
+      262      AccountEntry ||--o{ AccountNote : has
+      263      AccountEntry ||--o{ Team : hosts
+      264 -    AccountEntry ||--o{ Subscription : holds                  
+      264 +    AccountEntry ||--o{ CommerceOrder : places                
+      265 +    AccountEntry ||--o{ Deployment : runs                     
+      266      AccountEntry ||--o{ SupportTicket : raises
+      267      AccountEntry ||--o{ BusinessEvent : tracks
+      268      AccountEntry }o--o{ User : "membership"
+      269      Team }o--o{ User : "members"
+      270  
+      270 -    Subscription ||--o{ SubscriptionLineItem : contains       
+      271 -    Subscription ||--o{ LicenseKey : "issues"                 
+      272 -    Subscription }o--|| Product : "for"                       
+      271 +    CommerceOrder ||--o{ CommerceOrderItem : contains         
+      272 +    CommerceOrderItem }o--|| CPDefinition : "for"             
+      273 +    CommerceOrderItem ||--o| CommerceSubscriptionEntry : "subs
+          +cribes (if recurring)"                                        
+      274 +    CommerceSubscriptionEntry ||--o{ LicenseKey : issues      
+      275 +    Deployment }o--o{ CommerceSubscriptionEntry : "enabled by"
+      276  
+      277      EntitlementDefinition ||--o{ Entitlement : "materializes"
+      278      Entitlement }o--|| AccountEntry : "grants (or User)"
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 3 lines, removed 3 lines
+      297  | Trigger | Action | Replaces |
+      298  |---|---|---|
+      299  | `AccountEntry.onAfterAdd/Update` | Sync default Team; genera
+           te `koroneikiAccountCode` if missing; ensure `ExternalReferenc
+           e` for salesforce/dossiera | Koroneiki `TeamLocalService.syncD
+           efaultTeam`; DossieraCreateMessageSubscriber steps 4–5 |
+      300 -| `Subscription.onAfterAdd` | Generate LicenseKey; notify acco
+          -unt owner | Marketplace post-purchase object action |         
+      301 -| `Subscription.onAfterUpdate` | Re-sync entitlements; notify 
+          -if state changed to Expired | Provisioning ProductPurchaseMess
+          -ageSubscriber |                                               
+      302 -| `Subscription.onAfterDelete` | Revoke LicenseKeys; revoke En
+          -titlements | (not currently implemented — fix orphan bug) |   
+      300 +| Commerce subscription lifecycle event (created / activated) 
+          +| Generate LicenseKey; notify account owner; re-sync entitleme
+          +nts | Koroneiki `ProductPurchaseMessageSubscriber`; Marketplac
+          +e post-purchase object action. Implemented as a Commerce liste
+          +ner in `etc-spring-boot`, not an Object Action |              
+      301 +| Commerce subscription lifecycle event (status → expired / ca
+          +ncelled) | Revoke associated LicenseKeys; re-sync entitlements
+          + | (not currently implemented — fix orphan bug) |             
+      302 +| `Deployment.onAfterAdd/Update` | Re-sync entitlements; updat
+          +e admin views | Support `AccountSubscription` portal logic |  
+      303  | `SupportTicket.onAfterAdd` | Create Jira issue via REST; sta
+           sh `jiraIssueKey` | Support manual escalation flow |
+      304  | `TicketAttachment.onAfterAdd (state=Approved)` | Post Jira c
+           omment (ADF) with download link; retry via `draftCommentBody` 
+           on failure | Support `complete-upload` flow |
+      305  | `BusinessEvent.onAfterUpdate` | Write BusinessEventVersion; 
+           update Jira heat tags; email if overdue | Support `ObjectActio
+           nBusinessEventRestController` |
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 2 lines, removed 2 lines
+      326  
+      327  - `AccountEntry.koroneikiAccountCode` — unique (case-insensiti
+           ve); auto-increment suffix on collision.
+      328  - `AccountEntry.parentAccountEntryId` — cannot equal self; can
+           not create cycle.
+      329 -- `Subscription.endDate >= Subscription.startDate`; `originalE
+          -ndDate` defaults to `endDate`.                                
+      330 -- `Subscription.quantity > 0`.                                
+      329 +- Commerce handles order/subscription validation natively. Cus
+          +tom validation on the `originalEndDate` custom field (≥ start 
+          +date, defaults to end date) lives on the Commerce subscription
+          + entry.                                                       
+      330 +- `Deployment.startDate <= Deployment.endDate`; `Deployment.in
+          +stanceSize > 0`.                                              
+      331  - `LicenseKey.key` — unique.
+      332  - `TicketAttachment` — MD5 dedup (same `fileName + ticketId + 
+           md5Checksum` rejected unless state=Draft).
+      333  - Form submissions (CallbackRequest, RequestPublisherAccount, 
+           etc.) — `BannedEmailDomain` check on email field.
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      350  
+      351  | Path | Purpose | Replaces |
+      352  |---|---|---|
+      353 -| _Salesforce Pub/Sub subscriber_ (not a REST endpoint — backg
+          -round subscriber in `etc-spring-boot`) | Consumes opportunity 
+          -events from the existing Salesforce Pub/Sub topic; upserts Acc
+          -ountEntry + Subscription | Dossiera + `dossiera.provisioning.c
+          -reate` RabbitMQ relay |                                       
+      353 +| _Salesforce Pub/Sub subscriber_ (not a REST endpoint — backg
+          +round subscriber in `etc-spring-boot`) | Consumes opportunity 
+          +events from the existing Salesforce Pub/Sub topic; upserts Acc
+          +ountEntry; programmatically creates Commerce orders + subscrip
+          +tion-enabled order items | Dossiera + `dossiera.provisioning.c
+          +reate` RabbitMQ relay |                                       
+      354  | `POST /trial/provision/{subscriptionId}` | Provision trial i
+           nstance in Liferay Cloud | Marketplace `POST /trial/provisioni
+           ng` |
+      355  | `POST /trial/expire/{subscriptionId}` | Decommission trial |
+            Marketplace `POST /trial/expire` |
+      356  | `POST /trial/notify-end/{subscriptionId}` | Send trial-end e
+           mail | Marketplace `POST /trial/notify-end` |
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      415  
+      416  | System | Direction | Purpose |
+      417  |---|---|---|
+      418 -| **Salesforce** | Inbound (webhook) | Closed-won opportunity 
+          -→ create AccountEntry + Subscription |                        
+      418 +| **Salesforce** | Inbound (Pub/Sub subscription) | Closed-won
+          + opportunity → upsert AccountEntry + create Commerce Order / s
+          +ubscription-enabled items |                                   
+      419  | **Salesforce** | Outbound (via GCF) | Opportunity write-back
+            on paid order (from Marketplace pattern) |
+      420  | **Jira / JSM** | Outbound | SupportTicket create, comment, a
+           ttachment link, heat-tag labels, security vulnerabilities read
+           , Jira Assets Koroneiki schema |
+      421  | **Google Cloud Storage** | Outbound | Large file attachments
+            (signed URLs, resumable uploads) |
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      483  
+      484  ### Phase 2 — Koroneiki migration (biggest lift)
+      485  
+      486 -- Extract from `kor`: Account → AccountEntry + fields; Contact
+          - → User reconcile; Team → Team Object; ProductEntry → Product;
+          - ProductPurchase → Subscription; ProductConsumption → Subscrip
+          -tionLineItem; ProductField → distinct field extraction + schem
+          -atized fields; ExternalLink → ExternalReference; AccountNote →
+          - AccountNote.                                                 
+      486 +- Extract from `kor`: Account → AccountEntry + fields; Contact
+          + → User reconcile; Team → Team Object; ProductEntry → Commerce
+          + `CPDefinition`; ProductPurchase → Commerce `CommerceOrder` + 
+          +`CommerceOrderItem` (+ `CommerceSubscriptionEntry` for recurri
+          +ng items); ProductConsumption → `LicenseKey`; ProductField → d
+          +istinct field extraction + schematized fields on the right tar
+          +get; ExternalLink → ExternalReference; AccountNote → AccountNo
+          +te.                                                           
+      487  - Transform: account-code uniqueness (resolve existing collisi
+           ons); contact-user reconcile via UUID; ProductField → classifi
+           ed fields per owner type.
+      488  - Load via headless batch or direct DB import (Liferay Object 
+           `O_*` tables).
+      489  - Review and translate all **62 `EntitlementDefinition.definit
+           ion` SQL rules** (see §2 D5). Migrate ruleBody per-rule.
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      493  ### Phase 3 — Provisioning / LicenseKey migration
+      494  
+      495  - **Resolve ownership question first**: locate the code that c
+           reates `Provisioning_LicenseKey` rows today (230K rows). See a
+           udit `provisioning.md §6`.
+      496 -- Extract license key tables → LicenseKey Object with Subscrip
+          -tion linkage.                                                 
+      496 +- Extract license key tables → `LicenseKey` Object with `Comme
+          +rceSubscriptionEntry` linkage.                                
+      497  - Stand up the Salesforce Pub/Sub subscriber in `etc-spring-bo
+           ot`; port DossieraCreateMessageSubscriber logic as the message
+            handler.
+      498  - Drop the vestigial LCS sync code paths (LCS is already retir
+           ed at the business layer).
+      499  - Drop the vestigial Zendesk code paths (no replacement — Zend
+           esk is already retired).
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 1 line, removed 1 line
+      117  
+      118  > **D8 — `LicenseKey` as an Object; migrate the 230K rows from
+            `Provisioning_LicenseKey`.**
+      119  >
+      120 -> **Why:** Licenses are central to the business. An Object giv
+          -es them a stable REST surface, validation, and audit. Generati
+          -on becomes an Object Action triggered on Subscription state ch
+          -ange.                                                         
+      120 +> **Why:** Licenses are central to the business. An Object giv
+          +es them a stable REST surface, validation, and audit. Generati
+          +on becomes an event-driven action triggered on Commerce subscr
+          +iption lifecycle changes (Commerce listener, not a Liferay Obj
+          +ect Action).                                                  
+      121  >
+      122  > **Fields:** `subscriptionId`, `key` (indexed unique), `produ
+           ctVersion`, `startDate`, `endDate`, `maxServers`, `maxDevelope
+           rs`, `status`. The ownership question from the audit (where do
+           es the 230K-row module live today?) must be answered during ph
+           ase 2 — it informs the migration extract.
+      123  >
+
+● Update(.the-great-migration/plan/system-spec.md)
+  ⎿  Added 3 lines, removed 1 line
+      189  | `Team` | Grouping of users on an account | `name`, `system` 
+           (flag), `accountEntryId` | → AccountEntry, →→ Users |
+      190  | `ExternalReference` | Generic link to external system record
+            (replaces Koroneiki `ExternalLink`) | `domain` (enum: salesfo
+           rce/dossiera/jira/stripe/gcs/custom), `entityName`, `entityId`
+           , `ownerClassName`, `ownerClassPK` | Polymorphic |
+      191  
+      192 -### 3.2 Product & subscription domain                         
+      192 +### 3.2 Product, order, subscription & deployment domain      
+      193  
+      194 +All "what was sold" and "what's running" concepts live here. C
+          +ommerce handles the catalog, orders, and subscription lifecycl
+          +e; `Deployment` + `LicenseKey` are workspace-owned Objects tha
+          +t sit alongside.                                              
+      195 +                                                              
+      196  | Object | Purpose | Key fields | Relationships |
+      197  |---|---|---|---|
+      198  | `CommerceOrder` + `CommerceOrderItem` (Liferay Commerce) | S
+           ales line records. Replaces Koroneiki `ProductPurchase` | Comm
+           erce-native fields + custom fields for `originalEndDate`, etc.
+            | → AccountEntry, → CPDefinition |
+
+  Searched for 2 patterns (ctrl+o to expand)
+
+● D4 locked in. Spec reflects Commerce-native orders + subscriptions, plus
+  Deployment Object for env-specific fields. Dependent sections updated: data
+  model §3.2, what-gets-dropped §3.7, ER diagram §3.8, Object Actions §4.1,
+  Validations §4.3, SF subscriber §5.2, Integrations §7.1, Phase 2 §9, and D8
+  license-key trigger.
+
+  All 14 design decisions are now committed. The only remaining plan work:
+
+  62 entitlement rules — individual classification walk-through using
+  entitlement-rules-review.md. That's the D5 follow-up and the last unbounded
+  piece.
+
+  Start on those now, or wrap for the session?
+
+✻ Crunched for 3m 10s
+
+❯ yes, lets do them                                                             
+● 62 rules at 30-40 lines each is too much to walk through one at a time. Let me
+   skim them first and batch the classifications — most will follow the "Active
+  Subscription for product X" pattern (→ Object filter). I'll present batches
+  with my proposed classification, you confirm or correct, I fill in the file.
+
+  Read 1 file (ctrl+o to expand)
+
+● Let me get a quick survey of all 62 to see which are simple vs complex.
+
+  Ran 1 bash command (ctrl+o to expand)
+
+● Let me peek at a few of the trickier ones (#14 Future Subscription, #50
+  Customer, #61 Liferay Employee, #62 Partner) to verify my classifications.
+
+  Ran 1 bash command (ctrl+o to expand)
+
+● Good news — the survey shows the 62 are much more tractable than expected.
+  Here's my proposed classification at a glance:
+
+  ┌─────────────────┬───────┬───────────────────────────────────────────────┐
+  │ Classification  │ Count │                    Pattern                    │
+  ├─────────────────┼───────┼───────────────────────────────────────────────┤
+  │                 │       │ Simple "Account has active purchase for       │
+  │ (a) Object      │   ~48 │ product X" (with product list, single name,   │
+  │ filter          │       │ or LIKE). Trivially expressible as Commerce   │
+  │                 │       │ subscription + CPDefinition criteria.         │
+  ├─────────────────┼───────┼───────────────────────────────────────────────┤
+  │ (b) Scripted    │       │ NOT EXISTS patterns ("has X but not Y") and   │
+  │ action          │    ~7 │ cross-entitlement dependencies (rules that    │
+  │                 │       │ reference other Entitlement rows).            │
+  ├─────────────────┼───────┼───────────────────────────────────────────────┤
+  │ (c) Scheduled   │       │ No time-windowed aggregates — the [$NOW$]     │
+  │ task            │     0 │ token-replacement in all rules reduces to     │
+  │                 │       │ normal date filters, not actual time-series.  │
+  ├─────────────────┼───────┼───────────────────────────────────────────────┤
+  │ (d) Retire      │   ~10 │ Rules with materialized count = 0 — might be  │
+  │ candidates      │       │ genuinely unused. Ask before dropping.        │
+  └─────────────────┴───────┴───────────────────────────────────────────────┘
+
+  The (b) scripted-action set (7 rules)
+
+  1. #02 Cloud Native — Account has AWS/Azure/Google Ready AND NOT any SaaS/PaaS
+   product.
+  2. #14 Future Subscription — Account has a subscription product starting in
+  the future AND NOT IN the currently-active set. "Account is about to start but
+   isn't active yet."
+  3. #54 Customer - DXP — Contact on Account with DXP Entitlement (depends on 
+  #08 Account:DXP being synced first).
+  4. #57 Customer - Liferay PaaS — Contact on Account with Liferay PaaS
+  Entitlement + NOT EXISTS (cascade on #21).
+  5. #58 Customer - Liferay SaaS — Same pattern, cascade on #24.
+  6. #59 Customer - Liferay Self-Hosted — Same pattern, cascade on #34. (Zero
+  matches today — maybe retire?)
+  7. #62 Partner (Contact) — Contact with Partner-family role on Account with
+  Partner Entitlement (cascade on #40).
+
+  The cross-entitlement cascade (rules 54, 57, 58, 59, 62) means execution order
+   matters: Account entitlements must sync before Contact entitlements that
+  reference them. Scripted actions handle this cleanly by running in two passes.
+
+  The (d) retire-candidates (zero materialized count)
+
+  #03 Content Management System, #07 Digital Asset Management, #26 Liferay SaaS
+  - CSP, #27 Liferay SaaS - Engage, #30 Liferay SaaS - Support, #31 Liferay SaaS
+   - Transact, #43 Premium Security Trial, #46 Silver Subscription, #52 Customer
+   - Commerce Connector to PunchOut2Go, #56 Customer - Enterprise Search -
+  Standard, #59 Customer - Liferay Self-Hosted.
+
+  Some of these may just be newly-defined rules waiting for matching data (e.g.,
+   new product categories). Others may be dead.
+
+  Suggestion
+
+  Rather than walking 62 rules one-at-a-time, I propose:
+  1. I bulk-mark all the simple single-product rules as (a) and write my
+  reasoning into each entry's Notes in the review file.
+  2. We dive into the 7 scripted-action rules individually to confirm intent
+  (especially the cross-entitlement cascades).
+  3. You decide on the 10 retire candidates as a batch.
+
+  Sound good?
+
+✻ Cooked for 2m 6s
+
+❯ yes for 1 and 2, lets not retire anything in 3 though                         
+
+● Regenerating the file with all (a) rules pre-classified with reasoning, and
+  the 7 (b) rules flagged for individual discussion.
+
+  Searched for 1 pattern, ran 1 bash command (ctrl+o to expand)
+
+● Write(/tmp/gen-entries.sql)
+  ⎿  Wrote 44 lines to ../../../../tmp/gen-entries.sql
+       1 SELECT CONCAT(
+         '0'), '. ', ed.name,
+       3   CASE WHEN c.value LIKE '%Contact' THEN ' (Contact)' ELSE '' EN
+       4   '\n\n',
+       6   '- **Target:** ', REPLACE(c.value, 'com.liferay.osb.koroneiki.
+         taproot.model.', ''), '\n',
+         ',
+       8   '- **Materialized count:** ', (SELECT COUNT(*) FROM Koroneiki_
+         finitionId), '\n\n',
+      10   '**Classification:** ',
+     … +67 lines (ctrl+o to expand)
+
+  Ran 1 bash command (ctrl+o to expand)
+
+● Write(/tmp/header.md)
+  ⎿  Wrote 45 lines to ../../../../tmp/header.md
+      1 # Entitlement Definition Review
+      3 Source: live `kor` database, `Koroneiki_EntitlementDefinition` ta
+        ble, status = Approved. 62 rules total — 49 targeting `Account`, 
+      4 
+        ategies so we can estimate migration work for D5, and capture how
+         each rule translates into the new Commerce + Object model.
+      7 ## Classification options
+      8 
+        n Object relationships (e.g., "Account has an Active Subscription
+         filter JSON; the sync scheduler evaluates it nati
+     … +68 lines (ctrl+o to expand)
+
+  Read 1 file (ctrl+o to expand)
+
+● Done with the bulk pass. All 55 (a) rules marked with their translation notes;
+   the 7 (b) rules marked for walk-through.
+
+  Now let's go through the 7 scripted-action rules one at a time. I'll present
+  what the rule does, how I read the intent, and how I'd implement it. Confirm
+  or correct.
+
+  ---
+  (b) #1 — #02 Cloud Native
+
+  SQL intent: Account has an active purchase for AWS Ready, Azure Ready, or
+  Google Ready AND does not have any active purchase for any product with "SaaS"
+   or "PaaS" in its name.
+
+  Reading: "Account runs on cloud (AWS/Azure/GCP) but not on Liferay's managed
+  SaaS/PaaS." Customers who bring their own cloud.
+
+  Proposed implementation:
+  def isCloudNative(account):
+    hasCloudMarker = account has active CommerceSubscriptionEntry for
+  CPDefinition.name
+                     in ('AWS Ready', 'Azure Ready', 'Google Ready')
+    hasLiferayHosted = account has any active CommerceSubscriptionEntry for
+  CPDefinition.name
+                       matching '%SaaS%' OR '%PaaS%'
+    return hasCloudMarker and not hasLiferayHosted
+
+  Scripted action reads both sets once per sync, grants where hasCloudMarker and
+   not hasLiferayHosted.
+
+  Open question: "AWS/Azure/Google Ready" — do these still exist as Commerce
+  products in the new world? If the deployment type is captured on the
+  Deployment Object instead (D4), the rule might simplify to "Account has
+  Deployment of type X AND not deployment of type Y."
+
+  Look right? Or should we defer until Commerce catalog is nailed down?
+
+✻ Brewed for 2m 17s
+
+❯ yes, looks right                                                              
+
+● (b) #2 — #14 Future Subscription
+
+  SQL intent: Account has an active-status purchase for a support/subscription
+  product (Gold/Platinum/Silver/Limited/Premium + all 4 support tiers) whose 
+  startDate is in the future AND does not currently have any active purchase for
+   any of those products.
+
+  Reading: accounts that bought a support subscription starting later but aren't
+   currently covered — a coverage gap. 10 matches today. Probably used to flag
+  customers between contracts so someone can reach out.
+
+  Proposed implementation:
+  def hasFutureSubscription(account):
+    SUPPORT_SKUS = ['Gold', 'Limited', 'Platinum', 'Premium', 'Silver',
+                    'Standard 8/5 Support', 'Global 24/7 Support',
+                    'Premier 24/7 Support', 'Strategic 24/7 Support']
+    hasFuture  = account has CommerceSubscriptionEntry with startDate > now
+                 for CPDefinition in SUPPORT_SKUS
+    hasActive  = account has CommerceSubscriptionEntry currently active
+                 (within startDate–endDate window) for CPDefinition in
+  SUPPORT_SKUS
+    return hasFuture and not hasActive
+
+  Open question: does Commerce naturally model "subscription created but start
+  date in future"? If it treats all subscription entries the same way
+  (startDate-gate the activeness), this is straightforward. If Commerce
+  auto-activates and there's no native notion of future-pending, we may need to
+  track start-date gating in our code.
+
+  Look right?
+
+❯ lets assume commerce does it, if it doesnt we will address when we get there  
+
+  Ran 2 bash commands (ctrl+o to expand)
+
+● Wait — I misread the survey. Only Partner (Contact) actually references the
+  Entitlement table. Let me re-check the rest of my (b) candidates.
+
+  Ran 2 bash commands (ctrl+o to expand)
+
+● Correction — I misread the earlier complexity survey. Looking at the actual
+  SQL:
+
+  - #54 Customer - DXP — Contact → Account → primary-product LIKE
+  %DXP%/%Self-Hosted%/%LXC SM%. No cascade, no NOT EXISTS. → Actually (a) Object
+   filter (same pattern as #06/#08 — needs isPrimary on CPDefinition).
+  - #57 Customer - Liferay PaaS — Contact on Account + primary-product LIKE
+  %Liferay PaaS% + ContactRole filter (Support
+  Administrator/Requester/User/Closed Watcher). → (a) Object filter (Account
+  Roles per D2 + isPrimary).
+  - #58 Customer - Liferay SaaS — Contact on Account + primary-product LIKE
+  %Liferay SaaS%. → (a) Object filter.
+  - #59 Customer - Liferay Self-Hosted — Contact on Account + primary-product
+  LIKE %Liferay Self-Hosted%. → (a) Object filter.
+
+  The real (b) set is only 3 rules, not 7:
+
+  1. #02 Cloud Native ✓ (discussed)
+  2. #14 Future Subscription ✓ (discussed)
+  3. #62 Partner (Contact) — the only rule that actually references
+  Koroneiki_Entitlement (cascades on #40 Account:Partner).
+
+  Updating the file now, then we walk #62.
+● Write(/tmp/gen-entries.sql)
+  ⎿  Added 5 lines, removed 9 lines
+      13        '**(b) Scripted action** — "has cloud-native product AND 
+          NOT SaaS/PaaS" pattern. NOT EXISTS is awkward in Object filters
+          .'
+      14      WHEN ed.name = 'Future Subscription' AND c.value LIKE '%Acc
+          ount' THEN
+      15        '**(b) Scripted action** — "has future-dated subscription
+           AND NOT currently active." NOT IN subquery.'
+      16 -    WHEN ed.name = 'Customer - DXP' AND c.value LIKE '%Contact'
+         - THEN                                                          
+      17 -      '**(b) Scripted action** — Contact on Account with DXP En
+         -titlement. Cascade: requires #08 Account:DXP to sync first.'   
+      18 -    WHEN ed.name = 'Customer - Liferay PaaS' AND c.value LIKE '
+         -%Contact' THEN                                                 
+      19 -      '**(b) Scripted action** — cascade on #21 Account:Liferay
+         - PaaS + NOT EXISTS.'                                           
+      20 -    WHEN ed.name = 'Customer - Liferay SaaS' AND c.value LIKE '
+         -%Contact' THEN                                                 
+      21 -      '**(b) Scripted action** — cascade on #24 Account:Liferay
+         - SaaS + NOT EXISTS.'                                           
+      22 -    WHEN ed.name = 'Customer - Liferay Self-Hosted' AND c.value
+         - LIKE '%Contact' THEN                                          
+      23 -      '**(b) Scripted action** — cascade on #34 Account:Liferay
+         - Self-Hosted + NOT EXISTS.'                                    
+      16      WHEN ed.name = 'Partner' AND c.value LIKE '%Contact' THEN
+      17        '**(b) Scripted action** — Contact with Partner-family Co
+          ntactRole on Account with Partner Entitlement. Cascade on #40 A
+          ccount:Partner.'
+      18      ELSE '**(a) Object filter**'
+     ...
+      20    '\n\n',
+      21    '**Notes:** ',
+      22    CASE
+      31 -    WHEN ed.name IN ('Cloud Native', 'Future Subscription', 'Cu
+         -stomer - DXP', 'Customer - Liferay PaaS', 'Customer - Liferay S
+         -aaS', 'Customer - Liferay Self-Hosted') THEN '_TBD — walk throu
+         -gh with reviewer._'                                            
+      23 +    WHEN ed.name IN ('Cloud Native', 'Future Subscription') THE
+         +N '_Walked through — see session notes. Cloud Native: has AWS/A
+         +zure/Google Ready product AND NOT any SaaS/PaaS product. Future
+         + Subscription: has future-dated support/subscription product AN
+         +D NOT currently-active equivalent (gap detection)._'           
+      24      WHEN ed.name = 'Partner' AND c.value LIKE '%Contact' THEN '
+          _TBD — walk through with reviewer._'
+      25      WHEN ed.name = 'Liferay Employee' THEN 'Filter: User is mem
+          ber of AccountEntry whose code matches "LIFERAY" (or equivalent
+          ). Original rule hard-codes `accountId = 15097278`; migrate to 
+          code-based lookup.'
+      26 +    WHEN ed.name IN ('Customer - DXP', 'Customer - Liferay PaaS
+         +', 'Customer - Liferay SaaS', 'Customer - Liferay Self-Hosted')
+         + THEN                                                          
+      27 +      CONCAT('Filter: User is Account member + Account has acti
+         +ve primary-product `CommerceSubscriptionEntry` where `CPDefinit
+         +ion.isPrimary = true` AND `CPDefinition.name LIKE`<pattern>.', 
+      28 +        IF(ed.name = 'Customer - Liferay PaaS', ' Plus ContactR
+         +ole restriction → filter by Account Role in {Support_Administra
+         +tor, Support_Requester, Support_User, Support_Closed_Watcher} (
+         +per D2 role catalog).', ''),                                   
+      29 +        ' Depends on `isPrimary` custom field migration.')     
+      30      WHEN c.value LIKE '%Contact' THEN 'Filter: User is Account 
+          member + Account has active `CommerceSubscriptionEntry` for mat
+          ching `CPDefinition`. Joins Contact-Account-Purchase-Product re
+          write to User-AccountEntry-Commerce.'
+      31      WHEN ed.name IN ('Developer Tools', 'DXP', 'Liferay PaaS', 
+          'Liferay SaaS') AND c.value LIKE '%Account' THEN
+      32        'Depends on Koroneiki `ProductField` (type=primary). Migr
+          ation: add `isPrimary` custom field to Commerce `CPDefinition`.
+           Filter: `CommerceSubscriptionEntry.status = Active AND CPDefin
+          ition.isPrimary = true AND CPDefinition.name LIKE <pattern>`.'
+
+  Ran 1 bash command (ctrl+o to expand)
+
+● Write(/tmp/header.md)
+  ⎿  Added 10 lines, removed 16 lines
+      15  
+      16  | Classification | Count | Notes |
+      17  |---|---:|---|
+      18 -| (a) Object filter | 55 | Vast majority — simple "Account/Cont
+         -act has active subscription for product X" patterns |          
+      19 -| (b) Scripted action | 7 | `NOT EXISTS` + cross-entitlement de
+         -pendencies (listed below) |                                    
+      18 +| (a) Object filter | 59 | Vast majority — simple "has active s
+         +ubscription for product X" (+ some require `isPrimary` custom f
+         +ield on CPDefinition) |                                        
+      19 +| (b) Scripted action | 3 | `NOT EXISTS` / `NOT IN` / cross-ent
+         +itlement dependency (listed below) |                           
+      20  | (c) Scheduled task | 0 | None needed |
+      21  | (d) Retire | 0 | Per user instruction, no rules retired even 
+          at zero-matl count |
+      22  | **Total** | **62** | |
+      23  
+      24 -## Scripted-action rules (deep dive needed)                    
+      24 +## Scripted-action rules                                       
+      25  
+      26 -Walk-through required to lock in per-rule semantics:           
+      26 +1. **#02 Cloud Native** (Account) — has AWS/Azure/Google Ready 
+         +product AND NOT any SaaS/PaaS product. ✓ walked                
+      27 +2. **#14 Future Subscription** (Account) — has future-dated sub
+         +scription product AND NOT currently active (coverage-gap detect
+         +ion). ✓ walked                                                 
+      28 +3. **#62 Partner** (Contact) — Contact with Partner-family role
+         + on Account with Partner Entitlement. Cascade on #40 Account:Pa
+         +rtner.                                                         
+      29  
+      28 -1. **#02 Cloud Native** (Account) — has AWS/Azure/Google Ready 
+         -product AND NOT any SaaS/PaaS product.                         
+      29 -2. **#14 Future Subscription** (Account) — has future-dated sub
+         -scription product AND NOT currently active.                    
+      30 -3. **#54 Customer - DXP** (Contact) — cascade on Account:DXP en
+         -titlement.                                                     
+      31 -4. **#57 Customer - Liferay PaaS** (Contact) — cascade on Accou
+         -nt:Liferay PaaS + NOT EXISTS.                                  
+      32 -5. **#58 Customer - Liferay SaaS** (Contact) — cascade on Accou
+         -nt:Liferay SaaS + NOT EXISTS.                                  
+      33 -6. **#59 Customer - Liferay Self-Hosted** (Contact) — cascade o
+         -n Account:Liferay Self-Hosted + NOT EXISTS. Zero matches today;
+         - kept per user instruction.                                    
+      34 -7. **#62 Partner** (Contact) — ContactRole + cascade on Account
+         -:Partner entitlement.                                          
+      30 +**Cascade execution order:** the sync scheduler must run #40 Ac
+         +count:Partner **before** #62 Partner (Contact). Scheduler desig
+         +n: two-phase sync (Account entitlements, then Contact entitleme
+         +nts that depend on them).                                      
+      31  
+      36 -**Cascade execution order:** the sync scheduler must run Accoun
+         -t-targeted entitlements (#08 DXP, #21 Liferay PaaS, #24 Liferay
+         - SaaS, #34 Liferay Self-Hosted, #40 Partner) **before** the Con
+         -tact-targeted rules that reference them. This is a constraint o
+         -n the scheduler design, not a per-rule decision.               
+      37 -                                                               
+      32  ## Open migration tasks (surfaced during review)
+      33  
+      40 -- Add `isPrimary` custom field to Commerce `CPDefinition` (requ
+         -ired by #06 Developer Tools, #08 DXP, #21 Liferay PaaS, #24 Lif
+         -eray SaaS).                                                    
+      41 -- Rewrite #61 Liferay Employee to look up the Liferay AccountEn
+         -try by code, not hardcoded `accountId = 15097278`.             
+      42 -- Decide: does the new `EntitlementDefinition` Object store the
+         - filter rule as JSON + a flag, or is every rule hand-written in
+         - `etc-spring-boot`? The (a) vs (b) split implies a hybrid model
+         - — (a) rules are data-driven (JSON criteria), (b) rules are reg
+         -istered functions. Design deliverable for phase 1.             
+      34 +- **Add `isPrimary` custom field to Commerce `CPDefinition`** —
+         + required by many (a) rules: #06 Developer Tools, #08 DXP, #21 
+         +Liferay PaaS, #24 Liferay SaaS, and the four Customer-X Contact
+         + rules (#54, #57, #58, #59).                                   
+      35 +- **Rewrite #61 Liferay Employee** to look up the Liferay Accou
+         +ntEntry by code, not hardcoded `accountId = 15097278`.         
+      36 +- **EntitlementDefinition Object shape** — the new Object store
+         +s filter rules for (a) + a reference to a registered function f
+         +or (b). Implementation: a `ruleType` discriminator field (`filt
+         +er` / `scripted`) and a `ruleBody` JSON (either filter criteria
+         + or a function-name + params).                                 
+      37  
+      38  ---
+      39  
+
+  Read 1 file (ctrl+o to expand)
+
+● File updated: 59 (a), 3 (b). Now the last (b) rule.
+
+  ---
+  (b) #3 (final) — #62 Partner (Contact)
+
+  SQL intent: Contact has one of five Partner-family roles (Partner Manager,
+  Partner Member, Partner Marketing User, Partner Sales User, Partner Technical 
+  User) on an Account that already has the Partner Entitlement (#40
+  Account:Partner), and that Account is status = 0 (Approved).
+
+  Reading: this is the only rule that genuinely cascades — it depends on another
+   rule's output row. Contact-level partner grant depends on the Account having
+  been granted the partner entitlement first.
+
+  Proposed implementation:
+  def isContactPartner(user):
+    PARTNER_ROLES = ['Partner_Manager', 'Partner_Member',
+                     'Partner_Marketing_User', 'Partner_Sales_User',
+                     'Partner_Technical_User']
+
+    for account in user.accountMemberships(status=Approved):
+      if user.hasAccountRoleIn(account, PARTNER_ROLES)
+         and account.hasEntitlement('Partner'):
+        return True
+    return False
+
+  Implementation consequence: the entitlement sync scheduler runs in two phases
+  per tick:
+  1. All Account-targeted rules (49 rules — 47 Object filters + 2 scripted:
+  Cloud Native + Future Subscription).
+  2. All Contact-targeted rules (13 rules — 12 Object filters + 1 scripted:
+  Partner). Contact rules can read the freshly-synced Account entitlements.
+
+  Note on roles: the ContactRole names in the legacy SQL become prefixed Account
+   Roles per D2 (Partner_Manager, Partner_Member, …). Straightforward mapping.
+
+  Look right? If yes, that's all 62 rules classified — we can lock in D5's
+  timeline.
+
+✻ Worked for 2m 17s
+
+❯ I actually think we deprecated most of those partner roles. Now we just need  
+  Partner Manager and Partner Member                                            
+
+● Got it. Updating the rule to use just Partner_Manager and Partner_Member in
+  the new model.
+
+  Read 1 file (ctrl+o to expand)
+
+● Update(.the-great-migration/plan/entitlement-rules-review.md)
+  ⎿  Added 11 lines, removed 2 lines
+      2549    (Koroneiki_Account.status = 0)
+      2550  ```
+      2551  
+      2552 -**Classification:** **(b) Scripted action** — Contact with Pa
+           -rtner-family ContactRole on Account with Partner Entitlement.
+           - Cascade on #40 Account:Partner.                             
+      2552 +**Classification:** **(b) Scripted action** — Contact with Pa
+           +rtner-family Account Role on Account with Partner Entitlement
+           +. Cascade on #40 Account:Partner.                            
+      2553  
+      2554 -**Notes:** _TBD — walk through with reviewer._               
+      2554 +**Notes:** Walked through — reviewer confirmed the Partner ro
+           +le catalog has been narrowed. Only **`Partner_Manager`** and 
+           +**`Partner_Member`** are active in the new model; `Partner Ma
+           +rketing User`, `Partner Sales User`, `Partner Technical User`
+           + are deprecated and drop from the filter. New implementation:
+      2555 +```                                                          
+      2556 +def isContactPartner(user):                                  
+      2557 +  PARTNER_ROLES = ['Partner_Manager', 'Partner_Member']      
+      2558 +  for account in user.accountMemberships(status=Approved):   
+      2559 +    if user.hasAccountRoleIn(account, PARTNER_ROLES) and acco
+           +unt.hasEntitlement('Partner'):                               
+      2560 +      return True                                            
+      2561 +  return False                                               
+      2562 +```                                                          
+      2563 +Scheduler runs Account entitlements first (including #40 Acco
+           +unt:Partner), then Contact entitlements. Two-phase sync.     
+      2564  
+      2565  ---
+      2566  
+
+  Ran 1 bash command (ctrl+o to expand)
+
+● Only #62 referenced the deprecated roles. Updating the header to reflect.
+
+● Update(.the-great-migration/plan/entitlement-rules-review.md)
+  ⎿  Added 1 line, removed 1 line
+      25  
+      26  1. **#02 Cloud Native** (Account) — has AWS/Azure/Google Ready 
+          product AND NOT any SaaS/PaaS product. ✓ walked
+      27  2. **#14 Future Subscription** (Account) — has future-dated sub
+          scription product AND NOT currently active (coverage-gap detect
+          ion). ✓ walked
+      28 -3. **#62 Partner** (Contact) — Contact with Partner-family role
+         - on Account with Partner Entitlement. Cascade on #40 Account:Pa
+         -rtner.                                                         
+      28 +3. **#62 Partner** (Contact) — Contact with `Partner_Manager` o
+         +r `Partner_Member` Account Role on Account with Partner Entitle
+         +ment. Cascade on #40 Account:Partner. ✓ walked (role catalog na
+         +rrowed from 5 roles to 2 — `Partner Marketing User`, `Partner S
+         +ales User`, `Partner Technical User` deprecated).              
+      29  
+      30  **Cascade execution order:** the sync scheduler must run #40 Ac
+          count:Partner **before** #62 Partner (Contact). Scheduler desig
+          n: two-phase sync (Account entitlements, then Contact entitleme
+          nts that depend on them).
+      31  
+
+● Update(.the-great-migration/plan/entitlement-rules-review.md)
+  ⎿  Added 1 line
+      34  - **Add `isPrimary` custom field to Commerce `CPDefinition`** —
+           required by many (a) rules: #06 Developer Tools, #08 DXP, #21 
+          Liferay PaaS, #24 Liferay SaaS, and the four Customer-X Contact
+           rules (#54, #57, #58, #59).
+      35  - **Rewrite #61 Liferay Employee** to look up the Liferay Accou
+          ntEntry by code, not hardcoded `accountId = 15097278`.
+      36  - **EntitlementDefinition Object shape** — the new Object store
+          s filter rules for (a) + a reference to a registered function f
+          or (b). Implementation: a `ruleType` discriminator field (`filt
+          er` / `scripted`) and a `ruleBody` JSON (either filter criteria
+           or a function-name + params).
+      37 +- **Partner role catalog narrowed** — only `Partner_Manager` an
+         +d `Partner_Member` Account Roles defined in the new workspace. 
+         +`Partner Marketing User`, `Partner Sales User`, `Partner Techni
+         +cal User` deprecated (confirmed during #62 review).            
+      38  
+      39  ---
+      40  
+
+● All 62 rules classified. Final counts:
+
+  ┌────────────────────┬────────────────────────────────────────────────────┐
+  │   Classification   │                       Count                        │
+  ├────────────────────┼────────────────────────────────────────────────────┤
+  │ (a) Object filter  │                                                 59 │
+  ├────────────────────┼────────────────────────────────────────────────────┤
+  │ (b) Scripted       │     3 (Cloud Native, Future Subscription, Partner  │
+  │ action             │                                           Contact) │
+  ├────────────────────┼────────────────────────────────────────────────────┤
+  │ (c) Scheduled task │                                                  0 │
+  ├────────────────────┼────────────────────────────────────────────────────┤
+  │ (d) Retire         │                                                  0 │
+  └────────────────────┴────────────────────────────────────────────────────┘
+
+  Migration tasks surfaced during review:
+  1. Add isPrimary custom field to Commerce CPDefinition — required by ~6
+  Account + 4 Contact rules that depend on Koroneiki's ProductField 
+  (type=primary).
+  2. Rewrite #61 Liferay Employee to lookup AccountEntry by code, not hardcoded
+  accountId = 15097278.
+  3. Narrowed Partner role catalog: only Partner_Manager and Partner_Member
+  (from 5 roles). Also feeds into D2's Account Roles catalog.
+  4. Two-phase entitlement sync (Account rules, then Contact rules that cascade
+  on them).
+  5. EntitlementDefinition Object shape: ruleType discriminator (filter /
+  scripted) + ruleBody JSON.
+
+  D5 is now fully designed — timeline bounded, cascade ordering identified,
+  custom field additions tracked.
+
+  Anything else, or wrap the session?
+
+✻ Sautéed for 1m 6s
+
+❯ that looks good                                                               
+
+● All 14 design decisions locked in and all 62 entitlement rules classified.
+  system-spec.md and entitlement-rules-review.md in .the-great-migration/plan/
+  are the authoritative plan artifacts. Ready to translate into phase-1
+  implementation work whenever you are.
