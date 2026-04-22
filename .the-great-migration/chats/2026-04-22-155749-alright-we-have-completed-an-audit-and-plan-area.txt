@@ -1,0 +1,935 @@
+╭─── Claude Code v2.1.116 ─────────────────────────────────────────────────────╮
+│                                                    │ Tips for getting        │
+│                 Welcome back Ryan!                 │ started                 │
+│                                                    │ Run /init to create a … │
+│                       ▐▛███▜▌                      │ ─────────────────────── │
+│                      ▝▜█████▛▘                     │ Recent activity         │
+│                        ▘▘ ▝▝                       │ No recent activity      │
+│                                                    │                         │
+│ Opus 4.7 (1M context) · Claude Team · Liferay Able │                         │
+│               ~/repos/liferay-portal               │                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+❯ Alright, we have completed an audit and plan aready found in                  
+  @.the-great-migration/ next i want to move forward in designing and           
+  implementing                                                                  
+  ⎿  Listed directory .the-great-migration/
+
+  Read 2 files, listed 2 directories (ctrl+o to expand)
+
+● I've re-read the audit README, system-spec.md, and confirmed there's no
+  liferay-consolidated-workspace/ scaffold yet. Phase 1 (workspace shell +
+  Object definitions) is the natural starting point, and it's the biggest
+  concrete deliverable before any data moves.
+
+  A few things to pin down before I start creating files, since "design and
+  implement" spans a lot of ground here:
+
+  1. Scope of this session — are we aiming at all of Phase 1 (empty workspace +
+  every Object in §3.1–3.6 + Account Roles + OAuth2 apps + empty
+  site-initializer skeleton), or narrower — e.g., just the workspace skeleton +
+  customer-domain Objects (§3.1) as a vertical slice to prove the shape? The
+  full Phase 1 is probably 30+ Object definitions plus config; a vertical slice
+  is a day's work and lets you course-correct before the other domains commit to
+   a pattern.
+  2. Location + naming — workspaces/liferay-consolidated-workspace/ matching the
+   neighbors, yes? And is "consolidated" the name we want long-term, or is there
+   a product name already chosen (Koroneiki's replacement usually gets a fresh
+  codename)?
+  3. Design depth before code — the spec is high-level. Before I write Object
+  JSON, do you want me to first produce per-domain design docs (field types,
+  picklist values, relationship cardinality, validation expressions — one level
+  deeper than §3) so they're reviewable? Or go straight to the site-initializer
+  JSON/YAML definitions and iterate on those?
+
+  My recommendation: start with a vertical slice of the customer domain (§3.1) —
+   scaffold liferay-consolidated-workspace/, define AccountEntry extensions +
+  AccountFlag + AccountNote + Team + ExternalReference as real site-initializer
+  Object definitions, and stop there for review. That proves the workspace
+  shape, the naming conventions, and the Object-JSON style before committing 30+
+   definitions to a pattern you might want to change. The tradeoff is it's not
+  "implementing Phase 1" end-to-end — it's the first quarter of it — but
+  iterating on 5 Objects is cheaper than iterating on 30.
+
+  Which of those three questions would you like to answer, and do you want to go
+   with the vertical-slice start?
+
+✻ Worked for 46s
+
+❯ alright, lets do this, i want a new folder in @.the-great-migration/ named    
+  arch and there we can do detailed design plans. Lets have this session be     
+  mainly for that folder. as for workspace name, for now lets use               
+  liferay-hub-workspace. and yes for 3, i would like this arch folder to be the 
+   source of truth that then gets implemented later                             
+  ⎿  Listed directory .the-great-migration/
+
+● Let me look at the existing marketplace and customer workspaces to understand
+  the conventions I should mirror, then lay out the arch/ folder structure.
+
+  Searched for 1 pattern, read 1 file, listed 4 directories (ctrl+o to expand)
+
+● I have the conventions I need (Liferay Object JSON format,
+  liferay-{workspace}-* prefix pattern for client extensions, per-object ERC
+  like C_ACCNT_FLAG). Creating the arch/ folder now with an index, a
+  workspace-shell doc, and the customer domain as the pattern-setter. I'll pause
+   after these four files for review before replicating the pattern across the
+  other domains.
+
+● Write(.the-great-migration/arch/README.md)
+  ⎿  Wrote 48 lines to .the-great-migration/arch/README.md
+       1 # Architecture — Detailed Design
+       3 Source-of-truth for the `liferay-hub-workspace` implementation. 
+         Each document narrows a decision from [`../plan/system-spec.md`]
+         (../plan/system-spec.md) to the level an engineer can build from
+       4 
+       5 Target workspace location: `workspaces/liferay-hub-workspace/`.
+       7 ## Reading order
+       8 
+       9 1. [`workspace.md`](./workspace.md) — shell layout, build, namin
+      10 2. [`objects/`](./objects/) — Object definitions by domain
+     … +58 lines (ctrl+o to expand)
+
+● Write(.the-great-migration/arch/workspace.md)
+  ⎿  Wrote 113 lines to .the-great-migration/arch/workspace.md
+       1 # Workspace Shell
+       2 
+       3 Target: `workspaces/liferay-hub-workspace/`.
+       5 Modeled after `liferay-customer-workspace/` and `liferay-marketp
+         lace-workspace/`, which are the two sources being absorbed. All 
+         client-extension directories use the `liferay-hub-*` prefix.
+       6 
+       7 ## Directory layout
+       9 ```
+      10 workspaces/liferay-hub-workspace/
+     … +159 lines (ctrl+o to expand)
+
+● Write(.the-great-migration/arch/objects/README.md)
+  ⎿  Wrote 163 lines to .the-great-migration/arch/objects/README.md
+       1 # Objects — Conventions & Index
+       3 Per-domain Object specifications live in this folder. This docum
+         ent captures the conventions applied to every Object and the fla
+       4 
+       5 ## Per-Object spec shape
+       7 Every Object entry in a domain doc follows this structure:
+       8 
+         h legacy concept(s) it replaces (cite the audit file).
+      10 2. **Header metadata** — ERC, name, plural label, scope, account
+         oryKey, portlet-enabled.
+     … +224 lines (ctrl+o to expand)
+
+  Searched for 1 pattern, read 1 file (ctrl+o to expand)
+
+● Now writing the customer domain doc — the pattern-setter for the other domain
+  docs.
+
+● Write(.the-great-migration/arch/objects/customer.md)
+  ⎿  Wrote 407 lines to .the-great-migration/arch/objects/customer.md
+      1 # Objects — Customer Domain
+      3 Implements system-spec §3.1 and decisions D1, D2, D3. Covers the 
+        xtended), `AccountFlag`, `AccountNote`, `Team`, `ExternalReferenc
+      4 
+        nventions and [`./README.md`](./README.md) for per-Object spec sh
+        ape and field-type rules.
+      7 ## Design summary
+      9 Per **D1** there is no new `Account` Object — we extend Liferay `
+        ` Object — Liferay `User` + account membership is authoritative. 
+        countRole` are dropped.
+     … +585 lines (ctrl+o to expand)
+
+● Four files landed. Structure is in place and customer domain is the
+  pattern-setter.
+
+  Created
+  - arch/README.md — index, reading order, conventions, status table
+  - arch/workspace.md — liferay-hub-workspace/ layout, ERC/naming conventions,
+  friendly-URL registry strategy
+  - arch/objects/README.md — per-Object spec shape (9-section template),
+  field-type rules, relationship conventions, role baseline, full Object index
+  across all six domains
+  - arch/objects/customer.md — §3.1 fully detailed: AccountEntry extensions (9
+  custom fields with source mapping from the dissolving KoroneikiAccount
+  side-car), AccountFlag, AccountNote, Team, ExternalReference — each with
+  header, fields, picklists, relationships, validations, permissions, Object
+  Actions, migration source. Plus a picklist summary and 4 open questions.
+
+  Pattern established per Object — 9-section template from objects/README.md:
+  Purpose → Header metadata → Fields table → Picklists → Relationships →
+  Validations → Permissions → Object Actions (forward-ref) → Migration source.
+
+  Before I replicate to the other ~10 docs, a few things to check:
+
+  1. Depth of customer.md — is this the right level, or do you want it tighter
+  (cut the prose around the side-car dissolution, drop the example JSON block)
+  or looser (full JSON sketch per Object, not just the AccountEntry extension)?
+  2. Open-questions placement — I put them per-doc. Alternative: roll up to a
+  top-level arch/open-questions.md. Which do you prefer?
+  3. ERC prefix choice — HUB_{CUS|COM|ENT|MKT|SUP|REF}_{slug}. Matches the
+  liferay-hub-* workspace name. Fine, or do you want flat HUB_ with no domain
+  prefix?
+  4. Next doc order — my default: objects/commerce-and-deployment.md next (it's
+  the hardest because of the Commerce-native vs workspace-native split and D4 is
+   the most consequential decision), then entitlement → support → marketplace →
+  reference → then business-logic / api / integrations / ui / migration. OK, or
+  reorder?
+
+  Let me know what to adjust and which to start next.
+
+✻ Brewed for 7m 20s
+
+※ recap: Goal: build out .the-great-migration/arch/ as the detailed source-of-truth design for the new liferay-hub-workspace. Done so far: README, workspace.md, objects/README.md, and objects/customer.md as the pattern-setter. Next: your call on depth and which domain doc to write next. (disable recaps in /config)
+
+❯ okay, it looks good, you can generate the rest                                
+
+● Let me set up task tracking before running through the remaining docs.
+● Now pulling the source material I'll need from the remaining audit docs in
+  parallel.
+
+  Searched for 4 patterns, read 2 files (ctrl+o to expand)
+
+● Write(.the-great-migration/arch/objects/commerce-and-deployment.md)
+  ⎿  Wrote 252 lines to
+     .the-great-migration/arch/objects/commerce-and-deployment.md
+      1 # Objects — Commerce & Deployment Domain
+      3 Implements system-spec §3.2 and decisions D4, D8. Covers what was
+         sold (Commerce-native), what is running (`Deployment`), and what
+         authorizes it (`LicenseKey`).
+      5 Read alongside [`./README.md`](./README.md) for spec shape and [`
+        ../workspace.md`](../workspace.md) for naming.
+      7 ## Design summary
+      8 
+      9 Per **D4** the catalog, order, and subscription-lifecycle concept
+         two new Objects in this domain:
+     … +375 lines (ctrl+o to expand)
+
+● Write(.the-great-migration/arch/objects/entitlement.md)
+  ⎿  Wrote 259 lines to .the-great-migration/arch/objects/entitlement.md
+      1 # Objects — Entitlement Domain
+      3 Implements system-spec §3.3 and decision **D5**. Two Objects: `En
+        ). Rule content is JSON — filter criteria for simple rules, scrip
+        ted-function references for complex ones.
+      5 Read alongside [`../../plan/entitlement-rules-review.md`](../../p
+        and their classifications (59 filters, 3 scripted actions, 0 sche
+      6 
+      7 ## Design summary
+      9 Koroneiki stores entitlement rules as raw SQL WHERE clauses execu
+         engineer with DB access can add a rule withou
+     … +369 lines (ctrl+o to expand)
+● Write(.the-great-migration/arch/objects/marketplace.md)
+  ⎿  Wrote 434 lines to .the-great-migration/arch/objects/marketplace.md
+       1 # Objects — Marketplace Domain
+       3 Implements system-spec §3.4 and decision **D7**. Covers publishe
+         nboarding (RequestPublisherAccount), and the post-purchase trial
+       4 
+         D7). Order-type branching is driven by the `OrderType` reference
+          Object instead of hardcoded ERC switches.
+       7 ## Design summary
+       9 - `Publisher`, `PublisherAsset`, `PublisherAssetAttachment`, `Pu
+         workspace` with merging (`PublisherDetails` from Koroneiki folds
+      10 - `TrialProvisioning` — replaces the
+     … +576 lines (ctrl+o to expand)
+
+● Write(.the-great-migration/arch/objects/support.md)
+  ⎿  Wrote 400 lines to .the-great-migration/arch/objects/support.md
+      1 # Objects — Support Domain
+      3 Implements system-spec §3.5 and decision **D6**. Tickets stay in 
+        a family of self-service request forms and the implementation-mil
+        estone tracker (`BusinessEvent`).
+      5 Read alongside [`../integrations/jira.md`](../integrations/jira.m
+        ations/gcs.md) for the attachment upload flow.
+      7 ## Design summary
+      8 
+        cket` caches the fields the UI renders (subject, status, priority
+         Jira. Heat-tag/label sync stays outboun
+     … +510 lines (ctrl+o to expand)
+
+● Write(.the-great-migration/arch/objects/reference.md)
+  ⎿  Wrote 205 lines to .the-great-migration/arch/objects/reference.md
+      1 # Objects — Reference & Admin Domain
+      3 Implements system-spec §3.6. Small, low-churn reference Objects t
+        he rest of the workspace references by FK or picklist. Values cha
+      4 
+      6 
+      7 - **`Region`** — geographic support regions. Replaces Provisionin
+      8 - **`DataCenter`** — DXP and Analytics Cloud data centers. Merges
+         the two separate customer-workspace Objects (`DXPCDataCenterRegi
+        iscriminator.
+        emails.
+     … +246 lines (ctrl+o to expand)
+
+● Write(.the-great-migration/arch/business-logic.md)
+  ⎿  Wrote 219 lines to .the-great-migration/arch/business-logic.md
+      1 # Business Logic
+      3 Implements system-spec §4. Consolidates Object Actions, Scheduled
+         Tasks, Validations, Workflows, and the Role + Permission catalog
+        runs when" list the rest of the workspace takes as given.
+      4 
+      6 
+      7 ## 1. Object Actions
+      9 Object Actions fire synchronously on Liferay Object lifecycle eve
+        nts. Most run in-process; a few long-running actions (trial provi
+        -etc-spring-boot` via internal REST.
+     … +393 lines (ctrl+o to expand)
+
+● Write(.the-great-migration/arch/api.md)
+  ⎿  Wrote 237 lines to .the-great-migration/arch/api.md
+      1 # API Surface
+      2 
+      4 
+      5 1. **Headless** — auto-generated per-Object REST + GraphQL. Cover
+        s 90% of read and simple write paths.
+        ion workflows that aren't CRUD.
+      7 3. **Webhooks / async subscribers** — inbound Pub/Sub subscriber,
+         Jira webhook.
+      9 All auth via OAuth2. No ServiceProducer impersonation (retired pe
+        r D13).
+     … +331 lines (ctrl+o to expand)
+
+● Write(.the-great-migration/arch/integrations/README.md)
+  ⎿  Wrote 52 lines to .the-great-migration/arch/integrations/README.md
+       1 # Integrations
+       3 External-system contracts. Each integration owns a single doc de
+         scribing the direction of data flow, auth, message/payload shape
+       4 
+       5 All inbound data paths land in `liferay-hub-etc-spring-boot`. Al
+         ng-boot`. Credentials live in `liferay-hub-instance-settings` se
+         crets.
+       7 ## Index
+       8 
+      10 |---|---|---|
+     … +78 lines (ctrl+o to expand)
+
+● Write(.the-great-migration/arch/integrations/salesforce-pubsub.md)
+  ⎿  Wrote 197 lines to
+     .the-great-migration/arch/integrations/salesforce-pubsub.md
+      1 # Salesforce Pub/Sub Subscriber
+      2 
+      3 Implements system-spec **D12**. Replaces the Dossiera relay; Sale
+        sforce publishes opportunity events to a Google Pub/Sub topic and
+         the workspace subscribes directly.
+      5 ## Overview
+      6 
+      7 **Direction:** inbound — Salesforce → workspace.
+      8 
+      9 **Transport:** Google Pub/Sub pull subscription.
+     … +263 lines (ctrl+o to expand)
+
+● Write(.the-great-migration/arch/integrations/jira.md)
+  ⎿  Wrote 206 lines to .the-great-migration/arch/integrations/jira.md
+       1 # Jira / JSM Integration
+       3 Implements system-spec **D6**. Jira is the authoritative ticket 
+         store. The workspace holds cached render fields and pushes outbo
+         und writes (issue create, comments, labels, Assets).
+       5 ## Overview
+       6 
+       8 
+       9 - Outbound: issue create, comment post, attachment link, label s
+         ync, Assets write-back.
+         tTicket.cached*` without waiting for the 1h TTL).
+     … +243 lines (ctrl+o to expand)
+
+● Write(.the-great-migration/arch/integrations/gcs.md)
+  ⎿  Wrote 145 lines to .the-great-migration/arch/integrations/gcs.md
+      1 # Google Cloud Storage
+      2 
+      3 Large-file attachment backend for `TicketAttachment` and `Publish
+        erAssetAttachment`.
+      4 
+      6 
+      7 **Direction:** bidirectional.
+      8 - Outbound: create signed upload URLs, signed download URLs, obje
+        ct deletes.
+      9 - Inbound: none (no GCS webhooks consumed).
+     … +192 lines (ctrl+o to expand)
+
+● Write(.the-great-migration/arch/integrations/liferay-cloud.md)
+  ⎿  Wrote 160 lines to
+     .the-great-migration/arch/integrations/liferay-cloud.md
+      1 # Liferay Cloud (LXC / DXP Cloud / Console / Provisioning Hub)
+      2 
+      3 Portal-instance lifecycle for trials and paid cloud subscriptions
+      4 
+      5 ## Overview
+      6 
+      7 **Direction:** bidirectional.
+      8 - Outbound: provision, deprovision, status, deploy-app operations
+      9 - Inbound: lifecycle callbacks (instance-ready, instance-failed, 
+        usage-reported).
+     … +204 lines (ctrl+o to expand)
+● Write(.the-great-migration/arch/integrations/analytics-cloud.md)
+  ⎿  Wrote 111 lines to
+     .the-great-migration/arch/integrations/analytics-cloud.md
+       1 # Analytics Cloud (Faro)
+       2 
+       3 Workspace-provisioning for Liferay Analytics Cloud customers.
+       4 
+       5 ## Overview
+       7 **Direction:** outbound.
+       8 
+       9 - Provision Faro workspace for new Analytics Cloud subscriptions
+         .
+      10 - Deprovision on cancellation.
+     … +136 lines (ctrl+o to expand)
+
+● Write(.the-great-migration/arch/integrations/commerce.md)
+  ⎿  Wrote 96 lines to .the-great-migration/arch/integrations/commerce.md
+      1 # Liferay Commerce (internal event bus)
+      2 
+      3 Not an HTTP integration — Commerce is in the same JVM. The worksp
+        register with the Commerce event bus.
+      4 
+      5 Per **D4** Commerce owns order + subscription lifecycle. The work
+        space reacts.
+      6 
+      8 
+      9 **Direction:** inbound (from Commerce to workspace).
+     … +137 lines (ctrl+o to expand)
+
+● Write(.the-great-migration/arch/integrations/marketo.md)
+  ⎿  Wrote 43 lines to .the-great-migration/arch/integrations/marketo.md
+      1 # Marketo (client-side forms)
+      2 
+      3 Marketing form submissions from Marketplace pages. Client-side on
+        ly — no workspace server involvement.
+      4 
+      6 
+      7 **Direction:** outbound (browser → Marketo).
+      8 
+      9 **Scope:** Marketing capture forms on Marketplace pages: contact-
+        sales, product-feedback, trial-request.
+     … +49 lines (ctrl+o to expand)
+
+● Write(.the-great-migration/arch/ui.md)
+  ⎿  Wrote 267 lines to .the-great-migration/arch/ui.md
+      1 # UI — Site Initializer & Custom Elements
+      3 Implements system-spec §6. One site-initializer (`liferay-hub-sit
+        e-initializer`) containing three page groups: Marketplace (public
+        t custom elements back the dynamic pages.
+      4 
+      6 
+      7 Per system-spec D9, start with one site. Future-split trigger: if
+        feray-hub-marketplace-site-initializer`. Defer until pain surface
+        s.
+      9 ## Site-initializer structure
+     … +328 lines (ctrl+o to expand)
+
+● Write(.the-great-migration/arch/migration.md)
+  ⎿  Wrote 363 lines to .the-great-migration/arch/migration.md
+      1 # Migration Sequencing
+      3 Implements system-spec §9. Phase-by-phase sequencing, cut-over ga
+        edures. This doc is the runbook; individual domain docs hold the 
+        per-Object transforms.
+      5 ## Principles
+      7 1. **Legacy runs in parallel until cut-over.** Nothing gets decom
+      8 2. **Preserve external keys byte-identical.** `accountKey`, `cont
+        actUuid`, `productPurchaseKey`, `teamKey`, `productKey`, `jiraIss
+        ternal callers continue to resolve.
+         the new API must be able t
+     … +501 lines (ctrl+o to expand)
+
+● Update(.the-great-migration/arch/README.md)
+  ⎿  Added 17 lines, removed 10 lines
+      36  | `workspace.md` | draft |
+      37  | `objects/README.md` | draft |
+      38  | `objects/customer.md` | draft |
+      39 -| `objects/commerce-and-deployment.md` | not started |         
+      40 -| `objects/entitlement.md` | not started |                     
+      41 -| `objects/marketplace.md` | not started |                     
+      42 -| `objects/support.md` | not started |                         
+      43 -| `objects/reference.md` | not started |                       
+      44 -| `business-logic.md` | not started |                          
+      45 -| `api.md` | not started |                                     
+      46 -| `integrations/` | not started |                              
+      47 -| `ui.md` | not started |                                      
+      48 -| `migration.md` | not started |                               
+      39 +| `objects/commerce-and-deployment.md` | draft |               
+      40 +| `objects/entitlement.md` | draft |                           
+      41 +| `objects/marketplace.md` | draft |                           
+      42 +| `objects/support.md` | draft |                               
+      43 +| `objects/reference.md` | draft |                             
+      44 +| `business-logic.md` | draft |                                
+      45 +| `api.md` | draft |                                           
+      46 +| `integrations/README.md` | draft |                           
+      47 +| `integrations/salesforce-pubsub.md` | draft |                
+      48 +| `integrations/jira.md` | draft |                             
+      49 +| `integrations/gcs.md` | draft |                              
+      50 +| `integrations/liferay-cloud.md` | draft |                    
+      51 +| `integrations/analytics-cloud.md` | draft |                  
+      52 +| `integrations/commerce.md` | draft |                         
+      53 +| `integrations/marketo.md` | draft |                          
+      54 +| `ui.md` | draft |                                            
+      55 +| `migration.md` | draft |                                     
+
+  Listed 1 directory (ctrl+o to expand)
+
+● All 20 documents landed. Arch folder structure:
+
+  arch/
+  ├── README.md                        index + status
+  ├── workspace.md                     workspace shell + conventions
+  ├── business-logic.md                object actions, scheduled tasks,
+  validations, workflows, role matrix
+  ├── api.md                           headless conventions + custom REST +
+  OAuth2
+  ├── ui.md                            site-initializer + custom elements +
+  nav/permissions
+  ├── migration.md                     6-phase runbook + cut-over gates
+  ├── objects/
+  │   ├── README.md                    spec template + field-type rules + Object
+   index
+  │   ├── customer.md                  §3.1 (pattern-setter)
+  │   ├── commerce-and-deployment.md   §3.2 (Commerce extensions + Deployment +
+  LicenseKey)
+  │   ├── entitlement.md               §3.3 (rule JSON schema + cascade)
+  │   ├── marketplace.md               §3.4
+  │   ├── support.md                   §3.5
+  │   └── reference.md                 §3.6 (Region / DataCenter /
+  BannedEmailDomain)
+  └── integrations/
+      ├── README.md                    index + auth summary
+      ├── salesforce-pubsub.md         D12 subscriber
+      ├── jira.md                      D6 (bidirectional)
+      ├── gcs.md                       attachments (tickets + publisher assets)
+      ├── liferay-cloud.md             LXC / Hub / Console
+      ├── analytics-cloud.md           Faro
+      ├── commerce.md                  internal event-bus listeners
+      └── marketo.md                   client-side forms
+
+  4,384 lines total. Every Object specified to field-type + constraint +
+  validation + Object Action + migration-source level. Every integration
+  specified to payload + auth + failure-handling + metrics level. Every phase
+  specified to extract-script + gate + rollback level.
+
+  Open questions and system-spec risks propagated throughout — each doc's final
+  section flags what still needs resolution. The three unresolved system-spec
+  risks (#2 Provisioning license ownership, #5 RabbitMQ↔Pub/Sub bridge, #6
+  KoroneikiAccount sync) are gate-blockers called out in migration.md per phase.
+
+  Ready for review. When you want to start implementing, migration.md §Phase 1
+  is the direct entry point.
+
+✻ Brewed for 21m 46s
+
+※ recap: Designing the consolidated liferay-hub-workspace in .the-great-migration/arch/ as source-of-truth docs before implementation; all 20 planned docs (objects, business-logic, api, integrations, ui, migration) are drafted. Next: your review, then start Phase 1 implementation. (disable recaps in /config)
+
+❯ in the @.the-great-migration/arch/ui.md there should only be one custom       
+  element, i dont want them split                                               
+  ⎿  Read .the-great-migration/arch/ui.md (268 lines)
+
+● Consolidating into a single custom element. Let me also check for references
+  to the three elements elsewhere.
+
+  Searched for 2 patterns (ctrl+o to expand)
+
+● Update(.the-great-migration/arch/ui.md)
+  ⎿  Added 2 lines, removed 2 lines
+      1 -# UI — Site Initializer & Custom Elements                       
+      1 +# UI — Site Initializer & Custom Element                        
+      2  
+      3 -Implements system-spec §6. One site-initializer (`liferay-hub-si
+        -te-initializer`) containing three page groups: Marketplace (publ
+        -ic), Support (customer-authenticated), Admin (internal). Three R
+        -eact custom elements back the dynamic pages.                    
+      3 +Implements system-spec §6. One site-initializer (`liferay-hub-si
+        +te-initializer`) containing three page groups: Marketplace (publ
+        +ic), Support (customer-authenticated), Admin (internal). One Rea
+        +ct custom element (`liferay-hub-custom-element`) backs every dyn
+        +amic page.                                                      
+      4  
+      5  ## Design summary (D9)
+      6  
+
+● Update(.the-great-migration/arch/ui.md)
+  ⎿  Added 25 lines, removed 20 lines
+      106  
+      107  ---
+      108  
+      109 -## Custom elements                                            
+      109 +## Custom element                                             
+      110  
+      111 -Three React + TypeScript custom elements shipped as client ext
+          -ensions. Each element is embedded by page templates within its
+          - page group.                                                  
+      111 +One React + TypeScript custom element, `liferay-hub-custom-ele
+          +ment`, shipped as a single client extension and embedded by ev
+          +ery dynamic page across all three page groups. Routing inside 
+          +the element (React Router) selects the feature to render from 
+          +the URL path; the site-initializer embeds the element on each 
+          +page with a route-prefix configuration so the element knows wh
+          +ich feature to mount.                                         
+      112  
+      113 -### `liferay-hub-marketplace-custom-element`                  
+      113 +### Feature areas                                             
+      114  
+      115 -Ported from `liferay-marketplace-workspace`. ~349 TSX files. R
+          -eact Router inside the element handles in-element navigation. 
+          -Major features:                                               
+      115 +Feature modules inside the element, organized as top-level fol
+          +ders under `src/features/`. Each module owns its own routes, c
+          +omponents, and API clients. Shared UI primitives live in `src/
+          +shared/`.                                                     
+      116 +                                                              
+      117 +**Marketplace features** — ported from `liferay-marketplace-wo
+          +rkspace`. ~349 TSX files.                                     
+      118  - App catalog + search
+      119  - App detail + purchase flow (embeds Commerce)
+      120  - Publisher dashboard (asset upload, sales summary)
+      121  - Trial-request flow
+      122  - Feedback modals
+      123  
+      122 -Talks to workspace via:                                       
+      123 -- Headless REST (`/o/c/*`)                                    
+      124 -- Custom REST under `hub-marketplace-storefront` OAuth2 app id
+          -entity                                                        
+      125 -- Marketo forms (client-side — see `./integrations/marketo.md`
+          -)                                                             
+      126 -                                                              
+      127 -### `liferay-hub-support-custom-element`                      
+      128 -                                                              
+      129 -Ported from `liferay-customer-workspace`. Major features:     
+      124 +**Support features** — ported from `liferay-customer-workspace
+          +`.                                                            
+      125  - Deployment list + detail
+      126  - Ticket create + view (live-fetches from Jira via `/jira/issu
+           e/{key}`)
+      127  - Attachment upload (GCS resumable upload flow)
+     ...
+      129  - Security-vulnerabilities browser
+      130  - Release-notes browser
+      131  
+      137 -Talks to workspace via `hub-support-portal` OAuth2 app.       
+      138 -                                                              
+      139 -### `liferay-hub-admin-custom-element`                        
+      140 -                                                              
+      141 -New. Intended to be functional over beautiful — Liferay Clay c
+          -omponents, minimal custom styling.                            
+      142 -                                                              
+      143 -Major features:                                               
+      132 +**Admin features** — new. Functional over beautiful; Liferay C
+          +lay components, minimal custom styling.                       
+      133  - Account browser with hierarchical tree
+      134  - Entitlement-definition editor with rule-JSON validator UI
+      135  - Scheduled-task dashboard (status, next-run, manual-trigger)
+     ...
+      137  - `ExternalReference` audit browser
+      138  - Debug panel
+      139  
+      151 -Talks to workspace via `hub-admin-portal` OAuth2 app (full sco
+          -pe set).                                                      
+      140 +### API auth                                                  
+      141  
+      142 +The element runs under a single user-agent OAuth2 flow that pi
+          +ggybacks on the Liferay session. At request time, the workspac
+          +e enforces scope based on the caller's role — an admin user's 
+          +session-token carries every scope; a customer session carries 
+          +only the customer-scoped ones. Feature modules that require el
+          +evated scope (admin, license.admin) render access-denied state
+          +s when the session lacks them.                                
+      143 +                                                              
+      144 +The three OAuth2 apps documented in [`./api.md §4.2`](./api.md
+          +) (`hub-marketplace-storefront`, `hub-support-portal`, `hub-ad
+          +min-portal`) consolidate into a single **`hub-custom-element`*
+          +* application whose scope union is the aggregate — runtime sco
+          +pe is narrowed per-user by role. This is a simplification from
+          + the three-element model; revisit if the single-app scope boun
+          +dary proves too wide for audit.                               
+      145 +                                                              
+      146 +### Routing                                                   
+      147 +                                                              
+      148 +- `/` and `/apps/*`, `/solutions/*`, `/publishers/*` → Marketp
+          +lace features                                                 
+      149 +- `/home`, `/tickets/*`, `/projects/*`, `/business-events/*`, 
+          +etc. → Support features                                       
+      150 +- `/admin/*` → Admin features                                 
+      151 +                                                              
+      152 +Feature modules are loaded lazily per top-level route so the i
+          +nitial bundle only pulls the needed code path.                
+      153 +                                                              
+      154 +### Bundle strategy                                           
+      155 +                                                              
+      156 +Total codebase ~400+ TSX files. Without code-splitting the ini
+          +tial payload is large. Each feature module is a lazy chunk (`R
+          +eact.lazy` + `Suspense`); the entry bundle loads only routing 
+          ++ shared primitives + auth. First-paint cost matches today's s
+          +ingle-element workspaces.                                     
+      157 +                                                              
+      158  ---
+      159  
+      160  ## Navigation
+● Update(.the-great-migration/arch/ui.md)
+  ⎿  Added 1 line, removed 1 line
+      245  
+      246  ### Admin
+      247  
+      248 -- New content. No port source. Built as part of `liferay-hub-a
+          -dmin-custom-element` development.                             
+      248 +- New content. No port source. Built as the Admin feature modu
+          +le of `liferay-hub-custom-element`.                           
+      249  
+      250  ---
+      251  
+
+● Update(.the-great-migration/arch/ui.md)
+  ⎿  Added 1 line, removed 1 line
+      268  
+      269  1. **Marketplace-shared auth.** Authenticated Marketplace visi
+           tors have Customer Portal access — single auth session. Confir
+           m session-cookie + SSO behavior with the existing Liferay auth
+            infrastructure during phase 4.
+      270  2. **Admin IA.** The admin page list above is exhaustive but m
+           ay be too deep for UX. Phase 1 builds skeletal admin pages; re
+           finement in phase 5.
+      271 -3. **Custom-element bundle size.** Ported Marketplace element 
+          -is ~349 TSX files → large bundle. Consider code-splitting per 
+          -route to keep initial-load fast.                              
+      271 +3. **Single OAuth2 app vs separate per audience.** The consoli
+          +dation into one `hub-custom-element` OAuth2 application widens
+          + the credential's scope surface. Revisit if audit pressure req
+          +uires tighter scoping — splitting back into three apps is mech
+          +anical once session-token minting can pick the right app per r
+          +ole.                                                          
+      272  4. **Feature flags.** Today's `-testing` variant pages (LRSD-6
+           322 / LRSD-12003) live as separate page copies. Consider migra
+           ting to a true feature-flag mechanism (GrowthBook or similar) 
+           post-launch.
+
+● Now the cross-references in other arch docs.
+
+● Update(.the-great-migration/arch/workspace.md)
+  ⎿  Added 2 lines, removed 4 lines
+       9  ```
+      10  workspaces/liferay-hub-workspace/
+      11  ├── client-extensions/
+      12 -│   ├── liferay-hub-admin-custom-element/           # React — i
+         -nternal admin UI (new). Replaces Koroneiki + Provisioning portl
+         -ets.                                                           
+      12 +│   ├── liferay-hub-custom-element/                 # React — s
+         +ingle element for Marketplace + Support + Admin (ported + new f
+         +eatures; see ui.md).                                           
+      13  │   ├── liferay-hub-etc-cron/                       # All sched
+          uled tasks. See business-logic.md §Scheduled Tasks.
+      14  │   ├── liferay-hub-etc-spring-boot/                # Custom RE
+          ST + Salesforce Pub/Sub subscriber + integration clients. See a
+          pi.md, integrations/.
+      15  │   ├── liferay-hub-global-css/                     # Shared br
+          anding tokens.
+      16  │   ├── liferay-hub-instance-settings/              # Global Li
+          feray instance config: OAuth2 apps, notification templates, Ban
+          nedEmailDomain seed.
+      17 -│   ├── liferay-hub-marketplace-custom-element/     # React — M
+         -arketplace storefront (ported from liferay-marketplace-workspac
+         -e).                                                            
+      18 -│   ├── liferay-hub-site-initializer/               # Single si
+         -te. Page groups: Marketplace + Support + Admin. All Object defi
+         -nitions, roles, fragments, DDM templates.                      
+      19 -│   └── liferay-hub-support-custom-element/         # React — S
+         -upport portal (ported from liferay-customer-workspace).        
+      17 +│   └── liferay-hub-site-initializer/               # Single si
+         +te. Page groups: Marketplace + Support + Admin. All Object defi
+         +nitions, roles, fragments, DDM templates.                      
+      18  ├── configs/local/                                  # Local dev
+           configs.
+      19  ├── gradle/
+      20  ├── gradlew, gradlew.bat, settings.gradle, gradle.properties
+
+● Update(.the-great-migration/arch/workspace.md)
+  ⎿  Error editing file
+
+  Read 1 file (ctrl+o to expand)
+
+● Update(.the-great-migration/arch/workspace.md)
+  ⎿  Added 1 line, removed 1 line
+      69  
+      70  ### Client-extension component IDs
+      71  
+      72 -Match the directory name: `liferay-hub-admin-custom-element`, `
+         -liferay-hub-marketplace-custom-element`, etc. These are the IDs
+         - site-initializer page definitions reference when embedding the
+         - element.                                                      
+      72 +Match the directory name: `liferay-hub-custom-element`, `lifera
+         +y-hub-global-css`, `liferay-hub-site-initializer`, etc. These a
+         +re the IDs site-initializer page definitions reference when emb
+         +edding the element.                                            
+      73  
+      74  ## Scope
+      75  
+
+● Update(.the-great-migration/arch/migration.md)
+  ⎿  Added 1 line, removed 1 line
+      173  | `product-approver-workflow` | `site-initializer/workflow-def
+           initions/` |
+      174  | 7 cron jobs | `liferay-hub-etc-cron` (per `./business-logic.
+           md §Scheduled Tasks`) |
+      175  | 10 Spring Boot controllers | `liferay-hub-etc-spring-boot` (
+           per `./api.md`) |
+      176 -| React custom element | `liferay-hub-marketplace-custom-eleme
+          -nt` |                                                         
+      176 +| React custom element | Marketplace features inside `liferay-
+          +hub-custom-element` |                                         
+      177  | Site content (fragments, pages, layouts, masters, DDM templa
+           tes) | Marketplace page group of `liferay-hub-site-initializer
+           ` |
+      178  
+      179  ### Commerce custom-field blob extraction
+
+● Update(.the-great-migration/arch/migration.md)
+  ⎿  Added 1 line, removed 1 line
+      213  | Customer Objects (26 → ~18 after D4 consolidation) | `object
+           s/support.md` + `objects/customer.md` |
+      214  | 5 scheduled tasks | `liferay-hub-etc-cron` |
+      215  | Spring Boot controllers (Jira, GCS, ticket attachments) | `l
+           iferay-hub-etc-spring-boot` |
+      216 -| React custom element | `liferay-hub-support-custom-element` 
+          -|                                                             
+      216 +| React custom element | Support features inside `liferay-hub-
+          +custom-element` |                                             
+      217  | Site content | Support page group of `liferay-hub-site-initi
+           alizer` |
+      218  
+      219  ### KoroneikiAccount side-car dissolution
+
+● Update(.the-great-migration/arch/business-logic.md)
+  ⎿  Added 1 line, removed 1 line
+      190  ### 5.3 Role assignment
+      191  
+      192  - **Customer roles** — assigned per AccountEntry membership. `
+           Customer_Admin` assignments flow from the Salesforce contact r
+           ecord (D12 subscriber reads the SF contact role and maps to `C
+           ustomer_Admin` / `Customer_Manager` / `Customer_Member`). Cust
+           omer users may also be added via the customer-portal invitatio
+           n flow.
+      193 -- **Worker roles** — assigned by Admin UI (`admin-custom-eleme
+          -nt` → Accounts → Assignments). `LiferayStaffUserGroupSync` aut
+          -o-grants `Worker_Member` on **all** accounts to `@liferay.com`
+          - users. Higher worker roles are manual.                       
+      193 +- **Worker roles** — assigned by Admin UI (`liferay-hub-custom
+          +-element` → Admin → Accounts → Assignments). `LiferayStaffUser
+          +GroupSync` auto-grants `Worker_Member` on **all** accounts to 
+          +`@liferay.com` users. Higher worker roles are manual.         
+      194  - **Partner roles** — assigned when `AccountFlag.flagCode=PART
+           NER_CURRENT` transitions to active; the partner's designated c
+           ontact user gets `Partner_Manager`. Driven by Object Action on
+            AccountFlag.
+      195  
+      196  ### 5.4 Entitlements vs roles
+
+  Read 1 file (ctrl+o to expand)
+
+● Update(.the-great-migration/arch/api.md)
+  ⎿  Added 1 line, removed 3 lines
+      183  |---|---|---|
+      184  | `hub-salesforce-subscriber` | `customer.write`, `subscriptio
+           n.write` | The D12 Pub/Sub subscriber identity (runs in-proces
+           s, still holds a scoped client) |
+      185  | `hub-jira-webhook` | `ticket.write` | Jira webhook POSTs |
+      186 -| `hub-marketplace-storefront` | `publisher.read`, `subscripti
+          -on.read`, `subscription.write` | Marketplace custom element (u
+          -ser-agent flow, delegates to user session) |                  
+      187 -| `hub-support-portal` | `customer.read`, `ticket.read`, `tick
+          -et.write`, `subscription.read` | Support custom element |     
+      188 -| `hub-admin-portal` | All scopes | Admin custom element |    
+      186 +| `hub-custom-element` | All scopes (narrowed per-user by role
+          + at request time) | `liferay-hub-custom-element` — user-agent 
+          +OAuth2 flow. Effective scope per request is the intersection o
+          +f the app's scope set with the caller's role grants. |        
+      187  | `hub-license-generator` | `license.admin` | Internal license
+           -gen service (same process, separate identity for audit) |
+      188  | `hub-liferay-cloud-callback` | `subscription.write`, `licens
+           e.admin` | Liferay Cloud callbacks for trial lifecycle |
+      189  
+
+● Update(.the-great-migration/arch/api.md)
+  ⎿  Added 1 line, removed 1 line
+      187  | `hub-license-generator` | `license.admin` | Internal license
+           -gen service (same process, separate identity for audit) |
+      188  | `hub-liferay-cloud-callback` | `subscription.write`, `licens
+           e.admin` | Liferay Cloud callbacks for trial lifecycle |
+      189  
+      190 -Applications are **separate identities** for audit clarity — t
+          -he OAuth2 authorization log tells us which system did what. A 
+          -single compromised credential has a narrow blast radius.      
+      190 +Service-to-service applications (subscriber, webhook, license-
+          +generator, Liferay Cloud callback) are **separate identities**
+          + for audit clarity — the OAuth2 authorization log tells us whi
+          +ch system did what, and a compromised credential has a narrow 
+          +blast radius. The browser-facing `hub-custom-element` is a sin
+          +gle identity by necessity (one React bundle per user session);
+          + per-request scope narrowing by role is the substitute for sep
+          +arate audiences. Revisit if audit pressure requires tighter sp
+          +lits.                                                         
+      191  
+      192  ### 4.3 Token lifetime
+      193  
+
+● Now verifying no stale references remain.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Update(.the-great-migration/arch/api.md)
+  ⎿  Added 1 line, removed 1 line
+      216  | Support `AccountsRestController.scheduledHeatTagUpdate` | Ph
+           loem + Jira Assets | Headless + Jira |
+      217  | LCS, osb-entity-web | Phloem REST | N/A — both retiring |
+      218  | Any Salesforce GCF | Phloem REST | Direct workspace REST (ne
+           w OAuth2 app) |
+      219 -| Customer-portal UI | Phloem | Headless via `hub-support-port
+          -al` app |                                                     
+      219 +| Customer-portal UI | Phloem | Headless via `hub-custom-eleme
+          +nt` app (Support features) |                                  
+      220  
+      221  ---
+      222  
+
+● Update(.the-great-migration/arch/ui.md)
+  ⎿  Added 1 line, removed 1 line
+      141  
+      142  The element runs under a single user-agent OAuth2 flow that pi
+           ggybacks on the Liferay session. At request time, the workspac
+           e enforces scope based on the caller's role — an admin user's 
+           session-token carries every scope; a customer session carries 
+           only the customer-scoped ones. Feature modules that require el
+           evated scope (admin, license.admin) render access-denied state
+           s when the session lacks them.
+      143  
+      144 -The three OAuth2 apps documented in [`./api.md §4.2`](./api.md
+          -) (`hub-marketplace-storefront`, `hub-support-portal`, `hub-ad
+          -min-portal`) consolidate into a single **`hub-custom-element`*
+          -* application whose scope union is the aggregate — runtime sco
+          -pe is narrowed per-user by role. This is a simplification from
+          - the three-element model; revisit if the single-app scope boun
+          -dary proves too wide for audit.                               
+      144 +A single OAuth2 application — **`hub-custom-element`** — backs
+          + the element. Its scope set is the union of everything the UI 
+          +might call; runtime scope is narrowed per-user by role. Separa
+          +te per-audience apps were considered and rejected because one 
+          +React bundle carries all three audiences; see [`./api.md §4.2`
+          +](./api.md) for the full app registry and the audit-boundary r
+          +ationale.                                                     
+      145  
+      146  ### Routing
+      147  
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Clean — only the intentional "three page groups, one custom element" reference
+   remains.
+
+  Summary of changes:
+  - ui.md — rewrote "Custom elements" section (three → one
+  liferay-hub-custom-element with feature modules under src/features/ for
+  Marketplace / Support / Admin, lazy-loaded per top-level route); updated "API
+  auth" subsection; updated Admin migration-from section; updated open
+  questions.
+  - workspace.md — collapsed three custom-element directories into
+  liferay-hub-custom-element/; updated the component-ID naming example.
+  - business-logic.md — updated the worker-role UI reference.
+  - migration.md — updated the two phase tables to say "features inside
+  liferay-hub-custom-element".
+  - api.md — collapsed hub-marketplace-storefront / hub-support-portal /
+  hub-admin-portal OAuth2 apps into a single hub-custom-element app with
+  per-user scope narrowing; updated the caller re-pointing row; reframed the
+  "separate identities" note to distinguish service-to-service apps from the
+  browser-facing one.
+
+✻ Cooked for 3m 1s
+
+※ recap: Building the `arch/` folder as source-of-truth design docs for the `liferay-hub-workspace` consolidation; all 20 docs are drafted and the custom-element consolidation edit just finished. Next: your review of the drafts, then Phase 1 implementation. (disable recaps in /config)
