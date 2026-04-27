@@ -61,7 +61,7 @@ const columns = [
 ];
 
 const BusinessEvents = () => {
-	const [{project, subscriptionGroups}] = useAppContext();
+	const [{subscriptionGroups}] = useAppContext();
 
 	const accountKey = useAccountKey();
 
