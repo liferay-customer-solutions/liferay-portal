@@ -64,18 +64,28 @@ extract_all_scope_aliases() {
 	python3 -c '
 import sys, re
 html = sys.stdin.read()
+# Each scope is rendered as one <li class="list-group-item ..."> block containing
+# an <input name="..._scopeAliases" value="<alias>"> and a <label> with a
+# human-readable description. Keep only the unified ".everything" aliases whose
+# label combines BOTH phrases (e.g. "create/update/delete data on your behalf +
+# read data on your behalf"). This selects the combined scope and skips the
+# narrower ".write"-only and ".read"-only variants that would otherwise be
+# redundant.
+REQUIRED = ("create/update/delete data on your behalf", "read data on your behalf")
 seen = set()
-# Match both attribute orderings (name before value, value before name)
-patterns = [
-	r"name=\"[^\"]*scopeAliases[^\"]*\"[^>]*value=\"([^\"]+)\"",
-	r"value=\"([^\"]+)\"[^>]*name=\"[^\"]*scopeAliases[^\"]*\"",
-]
-for pat in patterns:
-	for m in re.finditer(pat, html):
-		alias = m.group(1)
-		if alias not in seen:
-			seen.add(alias)
-			print(alias)
+for entry in re.split(r"<li\s+class=\"list-group-item[^\"]*\"", html)[1:]:
+	val = re.search(r"name=\"[^\"]*_scopeAliases\"[^>]*value=\"([^\"]+)\"", entry) or \
+		re.search(r"value=\"([^\"]+)\"[^>]*name=\"[^\"]*_scopeAliases\"", entry)
+	if not val:
+		continue
+	alias = val.group(1)
+	label_m = re.search(r"<label\b[^>]*>(.*?)</label>", entry, re.DOTALL)
+	if not label_m:
+		continue
+	label_text = " ".join(re.sub(r"<[^>]+>", " ", label_m.group(1)).split())
+	if all(phrase in label_text for phrase in REQUIRED) and alias not in seen:
+		seen.add(alias)
+		print(alias)
 '
 }
 
@@ -202,6 +212,7 @@ Omitting `scope=` gives you every granted alias in the JWT and HTTP 400 from Tom
 - **Two POSTs are required** to install a predictable client secret. The first POST (with `oAuth2ApplicationId=0`) creates the app but regenerates `clientSecret` regardless of what's submitted — Headless Server is a confidential client profile and `UpdateOAuth2ApplicationMVCActionCommand` always rolls the secret on first save. The second POST, keyed by the new `oAuth2ApplicationId`, installs the predictable value.
 - **`scopeAliases` is a repeated field**, not comma-separated. One `--data-urlencode` per alias. The server splits each value on spaces, so space-separated alias groups (as scraped from the checkbox values) work fine.
 - **Scope discovery requires `navigation=assign_scopes`** in the render URL. Without it, `edit_application.jsp` defaults to the credentials view and renders no scope checkboxes.
+- **Scope filter is by description text, not alias name.** The script splits the page into `<li class="list-group-item ...">` blocks and only keeps aliases whose `<label>` contains **both** "create/update/delete data on your behalf" and "read data on your behalf". This selects the unified `.everything` scope for each resource and skips the narrower `.write`-only and `.read`-only variants (which would be redundant), plus analytics reads, personal profile reads, document downloads, and unlabeled entries (e.g. `COMMERCE_DEFAULT`).
 - **`p_auth` rotates per session.** Harvest it once after login (against the OAuth2 admin page so it's bound to the authenticated session) and reuse for every subsequent POST.
 - **Locating the new app's id requires row-scoping** because the list page contains `oAuth2ApplicationId=N` URLs for every app. The Python helper scopes to the `<tr>` containing `APP_CLIENT_ID`.
 - **First-run password reset / TOS** — on a freshly bootstrapped portal this gate is bypassed, but if a future Liferay version reintroduces it the script exits with "Login failed — no ID cookie in jar". Drive `chrome-devtools` for that one login, then re-run this script.
