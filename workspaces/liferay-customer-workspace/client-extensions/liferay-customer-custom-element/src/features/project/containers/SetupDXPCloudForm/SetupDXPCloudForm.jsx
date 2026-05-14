@@ -23,7 +23,6 @@ import {
 	updateLiferayContact,
 	updateRaysourceContact,
 } from '~/features/project/utils/getHighPriorityContacts';
-import useHasPaaSExperience from '~/hooks/useHasPaaSExperience';
 import SearchBuilder from '~/lib/SearchBuilder';
 import NotificationQueueService from '~/services/actions/notificationAction';
 import {patchAccountSubscriptionGroups} from '~/services/liferay/graphql/account-subscription-groups/queries/patchAccountSubscriptionGroups';
@@ -76,18 +75,10 @@ const SetupDXPCloudPage = ({
 	});
 	const {provisioningServerAPI} = useAppPropertiesContext();
 
-	const hasPaaSExperience = useHasPaaSExperience(project?.accountKey);
-
-	const [addHighPriorityContact, setAddHighPriorityContact] = useState({
-		cloudNative: [],
-		criticalIncident: [],
-	});
-	const [removeHighPriorityContact, setRemoveHighPriorityContact] = useState({
-		cloudNative: [],
-		criticalIncident: [],
-	});
-	const [isCriticalIncidentEmpty, setIsCriticalIncidentEmpty] =
-		useState(false);
+	const [addHighPriorityContact, setAddHighPriorityContact] = useState([]);
+	const [removeHighPriorityContact, setRemoveHighPriorityContact] = useState([]);
+	
+	const [isMultiSelectEmpty, setIsMultiSelectEmpty] = useState(false);
 
 	const [step, setStep] = useState(1);
 
@@ -97,20 +88,6 @@ const SetupDXPCloudPage = ({
 
 	const handleNextStep = () => {
 		setStep(step + 1);
-	};
-
-	const handleHighPriorityContacts = (
-		contactList,
-		highPriorityCategory,
-		handleSetState
-	) => {
-		handleSetState((previousContacts) => {
-			const updatedContacts = {...previousContacts};
-
-			updatedContacts[highPriorityCategory] = contactList;
-
-			return updatedContacts;
-		});
 	};
 
 	useEffect(() => {
@@ -315,28 +292,20 @@ const SetupDXPCloudPage = ({
 		};
 
 		if (!alreadySubmitted && dxp) {
-			const combinedAddHighPriorityContacts = Object.values(
-				addHighPriorityContact
-			).flatMap((array) => array);
-
-			const combinedRemoveHighPriorityContacts = Object.values(
-				removeHighPriorityContact
-			).flatMap((array) => array);
-
 			try {
 				const oAuthToken = await getOrRequestToken();
 
 				try {
 					await updateRaysourceContact(
 						addContactRoleRaysource,
-						combinedAddHighPriorityContacts,
+						addHighPriorityContact,
 						oAuthToken,
 						project,
 						provisioningServerAPI
 					);
 
 					await updateLiferayContact(
-						combinedAddHighPriorityContacts,
+						addHighPriorityContact,
 						addContactRoleLiferay,
 						project,
 						client
@@ -345,7 +314,7 @@ const SetupDXPCloudPage = ({
 				catch (error) {
 					if (error.cause === STATUS_CODE.conflict) {
 						await updateLiferayContact(
-							combinedAddHighPriorityContacts,
+							addHighPriorityContact,
 							addContactRoleLiferay,
 							project,
 							client
@@ -358,14 +327,14 @@ const SetupDXPCloudPage = ({
 
 				await updateRaysourceContact(
 					removeContactRoleRaysource,
-					combinedRemoveHighPriorityContacts,
+					removeHighPriorityContact,
 					oAuthToken,
 					project,
 					provisioningServerAPI
 				);
 
 				await updateLiferayContact(
-					combinedRemoveHighPriorityContacts,
+					removeHighPriorityContact,
 					removeContactRoleLiferay,
 					project,
 					client
@@ -391,8 +360,8 @@ const SetupDXPCloudPage = ({
 		}
 	};
 
-	const updateCriticalIncidentEmpty = (error) => {
-		setIsCriticalIncidentEmpty(error);
+	const updateMultiSelectEmpty = (error) => {
+		setIsMultiSelectEmpty(error);
 	};
 
 	return (
@@ -415,7 +384,7 @@ const SetupDXPCloudPage = ({
 						disabled={
 							step === 1
 								? baseButtonDisabled
-								: isCriticalIncidentEmpty ||
+								: isMultiSelectEmpty ||
 									isLoadingSubmitButton
 						}
 						displayType="primary"
@@ -565,48 +534,13 @@ const SetupDXPCloudPage = ({
 			{step === 2 && (
 				<div>
 					<SetupHighPriorityContactForm
-						addContactList={(contactList) =>
-							handleHighPriorityContacts(
-								contactList,
-								'criticalIncident',
-								setAddHighPriorityContact
-							)
-						}
-						disableSubmit={updateCriticalIncidentEmpty}
+						addContactList={setAddHighPriorityContact}
+						disableSubmit={updateMultiSelectEmpty}
 						filter={
 							HIGH_PRIORITY_CONTACT_CATEGORIES.criticalIncident
 						}
-						removedContactList={(contactList) =>
-							handleHighPriorityContacts(
-								contactList,
-								'criticalIncident',
-								setRemoveHighPriorityContact
-							)
-						}
+						removedContactList={setRemoveHighPriorityContact}
 					/>
-
-					{hasPaaSExperience && (
-						<SetupHighPriorityContactForm
-							addContactList={(contactList) =>
-								handleHighPriorityContacts(
-									contactList,
-									'cloudNative',
-									setAddHighPriorityContact
-								)
-							}
-							disableSubmit={() => {}}
-							filter={
-								HIGH_PRIORITY_CONTACT_CATEGORIES.cloudNative
-							}
-							removedContactList={(contactList) =>
-								handleHighPriorityContacts(
-									contactList,
-									'cloudNative',
-									setRemoveHighPriorityContact
-								)
-							}
-						/>
-					)}
 				</div>
 			)}
 		</Layout>
