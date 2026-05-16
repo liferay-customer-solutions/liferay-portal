@@ -1,0 +1,50 @@
+<div class="liferay-one-home-hero-banner">
+	<img alt="" class="hero-banner-shape" src="[resources:hero_banner_shape.png]" />
+
+	<div class="hero-banner-inner">
+		<div class="hero-banner-text">
+			<h1 class="hero-banner-headline">
+				<span class="hero-banner-headline-top" data-lfr-editable-id="headlineTop" data-lfr-editable-type="text">
+					One Portal.
+				</span>
+				<span class="hero-banner-headline-bottom" data-lfr-editable-id="headlineBottom" data-lfr-editable-type="text">
+					Every Liferay Service
+				</span>
+			</h1>
+
+			<p class="hero-banner-copy" data-lfr-editable-id="supportingCopy" data-lfr-editable-type="text">
+				Marketplace, Support, Subscriptions and Account unified into one experience. Browse the catalogue freely or manage your Account.
+			</p>
+
+			<div class="hero-banner-cta-row">
+				<a class="hero-banner-cta hero-banner-cta-primary" href="${configuration.marketplaceUrl}">
+					<span data-lfr-editable-id="browseMarketplaceLabel" data-lfr-editable-type="text">
+						Browse Marketplace
+					</span>
+
+					<svg aria-hidden="true" class="hero-banner-cta-icon" fill="none" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+						<path d="M4 10h12m0 0l-5-5m5 5l-5 5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+					</svg>
+				</a>
+
+				[#if themeDisplay.isSignedIn()]
+					<a class="hero-banner-cta hero-banner-cta-secondary" href="${configuration.myAccountUrl}">
+						<span data-lfr-editable-id="viewAccountLabel" data-lfr-editable-type="text">
+							View Account
+						</span>
+					</a>
+				[#else]
+					<a class="hero-banner-cta hero-banner-cta-secondary" href="${configuration.signInUrl}">
+						<span data-lfr-editable-id="signInLabel" data-lfr-editable-type="text">
+							Sign In
+						</span>
+					</a>
+				[/#if]
+			</div>
+		</div>
+
+		<div class="hero-banner-illustration">
+			<img alt="" class="hero-banner-illustration-image" src="[resources:hero_banner_image.svg]" />
+		</div>
+	</div>
+</div>

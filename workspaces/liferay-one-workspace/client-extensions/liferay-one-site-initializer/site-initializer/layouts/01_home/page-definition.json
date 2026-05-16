@@ -1,5 +1,144 @@
 {
 	"pageElement": {
+		"id": "5a1d1f0e-1a2a-4c1f-9f5b-1b9e4d2b0a01",
+		"pageElements": [
+			{
+				"definition": {
+					"fragment": {
+						"key": "liferay-one-home-hero-banner",
+						"siteKey": "One"
+					},
+					"fragmentConfig": {
+						"marketplaceUrl": {
+							"en_US": {
+								"href": "/marketplace"
+							},
+							"es_ES": {
+								"href": "/marketplace"
+							},
+							"ja_JP": {
+								"href": "/marketplace"
+							},
+							"pt_BR": {
+								"href": "/marketplace"
+							}
+						},
+						"myAccountUrl": {
+							"en_US": {
+								"href": "/my-account"
+							},
+							"es_ES": {
+								"href": "/my-account"
+							},
+							"ja_JP": {
+								"href": "/my-account"
+							},
+							"pt_BR": {
+								"href": "/my-account"
+							}
+						},
+						"signInUrl": {
+							"en_US": {
+								"href": "/c/portal/login"
+							},
+							"es_ES": {
+								"href": "/c/portal/login"
+							},
+							"ja_JP": {
+								"href": "/c/portal/login"
+							},
+							"pt_BR": {
+								"href": "/c/portal/login"
+							}
+						}
+					},
+					"fragmentFields": [
+						{
+							"id": "headlineTop",
+							"value": {
+								"text": {
+									"value_i18n": {
+										"en_US": "One Portal.",
+										"es_ES": "Un Portal.",
+										"ja_JP": "ひとつのポータル。",
+										"pt_BR": "Um Portal."
+									}
+								}
+							}
+						},
+						{
+							"id": "headlineBottom",
+							"value": {
+								"text": {
+									"value_i18n": {
+										"en_US": "Every Liferay Service",
+										"es_ES": "Todos los servicios de Liferay",
+										"ja_JP": "すべてのLiferayサービス",
+										"pt_BR": "Todos os serviços Liferay"
+									}
+								}
+							}
+						},
+						{
+							"id": "supportingCopy",
+							"value": {
+								"text": {
+									"value_i18n": {
+										"en_US": "Marketplace, Support, Subscriptions and Account unified into one experience. Browse the catalogue freely or manage your Account.",
+										"es_ES": "Marketplace, Soporte, Suscripciones y Cuenta unificados en una sola experiencia. Explora el catálogo libremente o gestiona tu Cuenta.",
+										"ja_JP": "Marketplace、サポート、サブスクリプション、アカウントをひとつの体験に統合。カタログを自由に閲覧、またはアカウントを管理できます。",
+										"pt_BR": "Marketplace, Suporte, Assinaturas e Conta unificados em uma única experiência. Explore o catálogo livremente ou gerencie sua Conta."
+									}
+								}
+							}
+						},
+						{
+							"id": "browseMarketplaceLabel",
+							"value": {
+								"text": {
+									"value_i18n": {
+										"en_US": "Browse Marketplace",
+										"es_ES": "Explorar Marketplace",
+										"ja_JP": "Marketplaceを見る",
+										"pt_BR": "Explorar Marketplace"
+									}
+								}
+							}
+						},
+						{
+							"id": "viewAccountLabel",
+							"value": {
+								"text": {
+									"value_i18n": {
+										"en_US": "View Account",
+										"es_ES": "Ver mi cuenta",
+										"ja_JP": "アカウントを表示",
+										"pt_BR": "Ver minha conta"
+									}
+								}
+							}
+						},
+						{
+							"id": "signInLabel",
+							"value": {
+								"text": {
+									"value_i18n": {
+										"en_US": "Sign In",
+										"es_ES": "Iniciar sesión",
+										"ja_JP": "サインイン",
+										"pt_BR": "Entrar"
+									}
+								}
+							}
+						}
+					],
+					"indexed": true
+				},
+				"id": "8c2e9b3a-44d6-4f0e-9b21-3d6c1f8a2e10",
+				"type": "Fragment"
+			}
+		],
 		"type": "Root"
-	}
+	},
+	"version": 1.1
 }

@@ -1,0 +1,26 @@
+{
+	"fieldSets": [
+		{
+			"fields": [
+				{
+					"label": "Marketplace URL",
+					"localizable": true,
+					"name": "marketplaceUrl",
+					"type": "url"
+				},
+				{
+					"label": "My Account URL",
+					"localizable": true,
+					"name": "myAccountUrl",
+					"type": "url"
+				},
+				{
+					"label": "Sign In URL",
+					"localizable": true,
+					"name": "signInUrl",
+					"type": "url"
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,159 @@
+.liferay-one-home-hero-banner {
+	background: #fff;
+	overflow: hidden;
+	padding: 48px 24px;
+	position: relative;
+}
+
+.liferay-one-home-hero-banner .hero-banner-shape {
+	display: block;
+	height: 100%;
+	pointer-events: none;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: auto;
+	z-index: 0;
+}
+
+.liferay-one-home-hero-banner .hero-banner-inner {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+	margin: 0 auto;
+	max-width: 1440px;
+	position: relative;
+	z-index: 1;
+}
+
+.liferay-one-home-hero-banner .hero-banner-text {
+	width: 100%;
+}
+
+.liferay-one-home-hero-banner .hero-banner-headline {
+	color: #111827;
+	display: flex;
+	flex-direction: column;
+	font-size: 2.25rem;
+	font-weight: 700;
+	line-height: 1.15;
+	margin: 0 0 24px;
+}
+
+.liferay-one-home-hero-banner .hero-banner-headline-top {
+	color: #111827;
+}
+
+.liferay-one-home-hero-banner .hero-banner-headline-bottom {
+	color: #4F46E5;
+}
+
+.liferay-one-home-hero-banner .hero-banner-copy {
+	color: #4B5563;
+	font-size: 1rem;
+	line-height: 1.5;
+	margin: 0 0 32px;
+	max-width: 560px;
+}
+
+.liferay-one-home-hero-banner .hero-banner-cta-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.liferay-one-home-hero-banner .hero-banner-cta {
+	align-items: center;
+	border-radius: 8px;
+	display: inline-flex;
+	font-size: 1rem;
+	font-weight: 600;
+	gap: 8px;
+	padding: 12px 24px;
+	text-decoration: none;
+	transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.liferay-one-home-hero-banner .hero-banner-cta-primary {
+	background: #4F46E5;
+	border: 1px solid #4F46E5;
+	color: #fff;
+}
+
+.liferay-one-home-hero-banner .hero-banner-cta-primary:hover,
+.liferay-one-home-hero-banner .hero-banner-cta-primary:focus {
+	background: #4338CA;
+	border-color: #4338CA;
+	color: #fff;
+	text-decoration: none;
+}
+
+.liferay-one-home-hero-banner .hero-banner-cta-secondary {
+	background: transparent;
+	border: 1px solid #4F46E5;
+	color: #4F46E5;
+}
+
+.liferay-one-home-hero-banner .hero-banner-cta-secondary:hover,
+.liferay-one-home-hero-banner .hero-banner-cta-secondary:focus {
+	background: rgba(79, 70, 229, 0.06);
+	border-color: #4338CA;
+	color: #4338CA;
+	text-decoration: none;
+}
+
+.liferay-one-home-hero-banner .hero-banner-cta-icon {
+	flex-shrink: 0;
+}
+
+.liferay-one-home-hero-banner .hero-banner-illustration {
+	align-self: stretch;
+	min-height: 280px;
+	width: 100%;
+}
+
+.liferay-one-home-hero-banner .hero-banner-illustration-image {
+	display: block;
+	height: 100%;
+	margin: 0 auto;
+	max-width: 100%;
+	object-fit: contain;
+	object-position: center;
+	width: 100%;
+}
+
+@media (min-width: 768px) {
+	.liferay-one-home-hero-banner {
+		padding: 64px 32px;
+	}
+
+	.liferay-one-home-hero-banner .hero-banner-inner {
+		flex-direction: row;
+		gap: 48px;
+	}
+
+	.liferay-one-home-hero-banner .hero-banner-text {
+		flex: 1 1 50%;
+		min-width: 0;
+	}
+
+	.liferay-one-home-hero-banner .hero-banner-illustration {
+		flex: 1 1 50%;
+		min-width: 0;
+	}
+
+	.liferay-one-home-hero-banner .hero-banner-headline {
+		font-size: 3rem;
+	}
+
+	.liferay-one-home-hero-banner .hero-banner-copy {
+		font-size: 1.125rem;
+	}
+}
+
+@media (min-width: 1200px) {
+	.liferay-one-home-hero-banner .hero-banner-headline {
+		font-size: 3.5rem;
+	}
+}
