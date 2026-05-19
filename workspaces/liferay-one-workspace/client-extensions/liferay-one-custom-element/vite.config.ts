@@ -4,12 +4,14 @@
  */
 
 import react from '@vitejs/plugin-react';
+import path from 'path';
 import {defineConfig} from 'vite';
 
-export default defineConfig({
+export default defineConfig(({command}) => ({
 	build: {
 		outDir: 'build/vite',
 		rollupOptions: {
+			external: ['@liferay/oauth2-provider-web/client'],
 			output: {
 				assetFileNames: 'assets/[name].[hash][extname]',
 				chunkFileNames: '[name].[hash].js',
@@ -25,8 +27,23 @@ export default defineConfig({
 			return `/o/liferay-one-custom-element/${filename}`;
 		},
 	},
+	optimizeDeps: {
+		exclude: ['@liferay/oauth2-provider-web/client'],
+	},
 	plugins: [react()],
+	resolve: {
+		alias: {
+			...(command === 'serve'
+				? {
+						'@liferay/oauth2-provider-web/client': path.resolve(
+							__dirname,
+							'./dev-stubs/oauth2-stub.ts'
+						),
+					}
+				: {}),
+		},
+	},
 	server: {
 		origin: 'http://localhost:5173',
 	},
-});
+}));

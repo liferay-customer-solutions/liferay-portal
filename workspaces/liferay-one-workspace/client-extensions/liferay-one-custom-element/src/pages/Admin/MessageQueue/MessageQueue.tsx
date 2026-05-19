@@ -3,19 +3,14 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import ClayButton from '@clayui/button';
+import ClayForm, {ClayInput} from '@clayui/form';
+import ClayIcon from '@clayui/icon';
+import ClayTable from '@clayui/table';
+import * as OAuth2 from '@liferay/oauth2-provider-web/client';
 import {FormEvent, useEffect, useState} from 'react';
 
-declare global {
-	interface Window {
-		Liferay?: {
-			OAuth2Client: {
-				FromUserAgentApplication(name: string): {
-					fetch(path: string, init?: RequestInit): Promise<Response>;
-				};
-			};
-		};
-	}
-}
+import Page from '../../../components/Page';
 
 type RoutingKey = {
 	routingKey: string;
@@ -29,10 +24,6 @@ type SubmitState =
 	| {message: string; status: 'error'};
 
 const OAUTH_APP = 'liferay-one-etc-spring-boot-oaua';
-
-function getClient() {
-	return window.Liferay?.OAuth2Client.FromUserAgentApplication(OAUTH_APP);
-}
 
 export default function MessageQueue() {
 	const [routingKeys, setRoutingKeys] = useState<RoutingKey[]>([]);
@@ -48,15 +39,11 @@ export default function MessageQueue() {
 	});
 
 	useEffect(() => {
-		const client = getClient();
-
-		if (!client) {
-			return;
-		}
-
-		client
-			.fetch('/admin/debug-message-queue/routing-keys')
-			.then((r) => r.json())
+		OAuth2.FromUserAgentApplication(OAUTH_APP)
+			.then((client) =>
+				client.fetch('/admin/debug-message-queue/routing-keys')
+			)
+			.then((response) => response.json())
 			.then(setRoutingKeys)
 			.catch((error) =>
 				console.error('Failed to load routing keys', error)
@@ -69,11 +56,7 @@ export default function MessageQueue() {
 		setSubmitState({status: 'loading'});
 
 		try {
-			const client = getClient();
-
-			if (!client) {
-				throw new Error('OAuth2 client unavailable');
-			}
+			const client = await OAuth2.FromUserAgentApplication(OAUTH_APP);
 
 			const response = await client.fetch('/admin/debug-message-queue', {
 				body: JSON.stringify(form),
@@ -101,210 +84,137 @@ export default function MessageQueue() {
 	}
 
 	return (
-		<div style={{maxWidth: '720px', padding: '2rem'}}>
-			<h2>Message Queue</h2>
+		<Page
+			description="Send a test message to a Pub/Sub topic to replay or debug distributed-messaging flows without waiting for an upstream producer."
+			title="Message Queue"
+		>
+			<div className="border p-4 rounded-lg" style={{maxWidth: '720px'}}>
+				{!!routingKeys.length && (
+					<details className="mb-4">
+						<summary className="font-weight-bold">
+							Valid routing keys
+						</summary>
 
-			<p>
-				Send a test message to a Pub/Sub topic to replay or debug
-				distributed-messaging flows without waiting for an upstream
-				producer.
-			</p>
+						<ClayTable className="mt-2">
+							<ClayTable.Head>
+								<ClayTable.Row>
+									<ClayTable.Cell headingTitle>
+										Routing Key
+									</ClayTable.Cell>
 
-			{!!routingKeys.length && (
-				<details style={{marginBottom: '1.5rem'}}>
-					<summary style={{cursor: 'pointer', fontWeight: 'bold'}}>
-						Valid routing keys
-					</summary>
+									<ClayTable.Cell headingTitle>
+										Pub/Sub Topic
+									</ClayTable.Cell>
+								</ClayTable.Row>
+							</ClayTable.Head>
 
-					<table
-						style={{
-							borderCollapse: 'collapse',
-							marginTop: '0.5rem',
-							width: '100%',
-						}}
+							<ClayTable.Body>
+								{routingKeys.map(({routingKey, topic}) => (
+									<ClayTable.Row key={routingKey}>
+										<ClayTable.Cell>
+											<code>{routingKey}</code>
+										</ClayTable.Cell>
+
+										<ClayTable.Cell>{topic}</ClayTable.Cell>
+									</ClayTable.Row>
+								))}
+							</ClayTable.Body>
+						</ClayTable>
+					</details>
+				)}
+
+				<ClayForm onSubmit={handleSubmit}>
+					<ClayForm.Group>
+						<label htmlFor="routingKey">Routing Key</label>
+
+						<ClayInput
+							id="routingKey"
+							onChange={(event) =>
+								setForm((prev) => ({
+									...prev,
+									routingKey: event.target.value,
+								}))
+							}
+							required
+							type="text"
+							value={form.routingKey}
+						/>
+					</ClayForm.Group>
+
+					<ClayForm.Group>
+						<label htmlFor="message">Message</label>
+
+						<ClayForm.Text>
+							Newlines are stripped before publishing to preserve
+							legacy semantics.
+						</ClayForm.Text>
+
+						<ClayInput
+							component="textarea"
+							id="message"
+							onChange={(event) =>
+								setForm((prev) => ({
+									...prev,
+									message: event.target.value,
+								}))
+							}
+							style={{minHeight: '9rem'}}
+							value={form.message}
+						/>
+					</ClayForm.Group>
+
+					<ClayForm.Group>
+						<label htmlFor="properties">Properties</label>
+
+						<ClayForm.Text>
+							One <code>key=value</code> per line. Insertion order
+							is preserved.
+						</ClayForm.Text>
+
+						<ClayInput
+							component="textarea"
+							id="properties"
+							onChange={(event) =>
+								setForm((prev) => ({
+									...prev,
+									properties: event.target.value,
+								}))
+							}
+							placeholder={'key1=value1\nkey2=value2'}
+							style={{minHeight: '6rem'}}
+							value={form.properties}
+						/>
+					</ClayForm.Group>
+
+					<ClayButton
+						disabled={submitState.status === 'loading'}
+						type="submit"
 					>
-						<thead>
-							<tr>
-								<th
-									style={{
-										borderBottom: '1px solid #ccc',
-										padding: '0.4rem 0.8rem',
-										textAlign: 'left',
-									}}
-								>
-									Routing Key
-								</th>
+						{submitState.status === 'loading'
+							? 'Sending…'
+							: 'Submit'}
+					</ClayButton>
+				</ClayForm>
 
-								<th
-									style={{
-										borderBottom: '1px solid #ccc',
-										padding: '0.4rem 0.8rem',
-										textAlign: 'left',
-									}}
-								>
-									Pub/Sub Topic
-								</th>
-							</tr>
-						</thead>
+				{submitState.status === 'success' && (
+					<div className="alert alert-success mb-0 mt-3" role="alert">
+						<span className="alert-indicator">
+							<ClayIcon symbol="check-circle-full" />
+						</span>
+						Message published successfully.
+					</div>
+				)}
 
-						<tbody>
-							{routingKeys.map(({routingKey, topic}) => (
-								<tr key={routingKey}>
-									<td
-										style={{
-											padding: '0.4rem 0.8rem',
-										}}
-									>
-										<code>{routingKey}</code>
-									</td>
+				{submitState.status === 'error' && (
+					<div className="alert alert-danger mb-0 mt-3" role="alert">
+						<span className="alert-indicator">
+							<ClayIcon symbol="exclamation-full" />
+						</span>
 
-									<td
-										style={{
-											padding: '0.4rem 0.8rem',
-										}}
-									>
-										{topic}
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
-				</details>
-			)}
-
-			<form onSubmit={handleSubmit}>
-				<div style={{marginBottom: '1rem'}}>
-					<label
-						htmlFor="routingKey"
-						style={{display: 'block', fontWeight: 'bold'}}
-					>
-						Routing Key
-					</label>
-
-					<input
-						id="routingKey"
-						onChange={(event) =>
-							setForm((prev) => ({
-								...prev,
-								routingKey: event.target.value,
-							}))
-						}
-						required
-						style={{
-							boxSizing: 'border-box',
-							padding: '0.4rem',
-							width: '100%',
-						}}
-						type="text"
-						value={form.routingKey}
-					/>
-				</div>
-
-				<div style={{marginBottom: '1rem'}}>
-					<label
-						htmlFor="message"
-						style={{display: 'block', fontWeight: 'bold'}}
-					>
-						Message
-					</label>
-
-					<small style={{color: '#666'}}>
-						Newlines are stripped before publishing to preserve
-						legacy semantics.
-					</small>
-
-					<textarea
-						id="message"
-						onChange={(event) =>
-							setForm((prev) => ({
-								...prev,
-								message: event.target.value,
-							}))
-						}
-						rows={6}
-						style={{
-							boxSizing: 'border-box',
-							display: 'block',
-							padding: '0.4rem',
-							width: '100%',
-						}}
-						value={form.message}
-					/>
-				</div>
-
-				<div style={{marginBottom: '1rem'}}>
-					<label
-						htmlFor="properties"
-						style={{display: 'block', fontWeight: 'bold'}}
-					>
-						Properties
-					</label>
-
-					<small style={{color: '#666'}}>
-						One <code>key=value</code> per line. Insertion order is
-						preserved.
-					</small>
-
-					<textarea
-						id="properties"
-						onChange={(event) =>
-							setForm((prev) => ({
-								...prev,
-								properties: event.target.value,
-							}))
-						}
-						placeholder={'key1=value1\nkey2=value2'}
-						rows={4}
-						style={{
-							boxSizing: 'border-box',
-							display: 'block',
-							padding: '0.4rem',
-							width: '100%',
-						}}
-						value={form.properties}
-					/>
-				</div>
-
-				<button
-					disabled={submitState.status === 'loading'}
-					style={{padding: '0.5rem 1.5rem'}}
-					type="submit"
-				>
-					{submitState.status === 'loading' ? 'Sending…' : 'Submit'}
-				</button>
-			</form>
-
-			{submitState.status === 'success' && (
-				<div
-					role="alert"
-					style={{
-						backgroundColor: '#e6f4ea',
-						border: '1px solid #34a853',
-						borderRadius: '4px',
-						color: '#137333',
-						marginTop: '1rem',
-						padding: '0.75rem 1rem',
-					}}
-				>
-					Message published successfully.
-				</div>
-			)}
-
-			{submitState.status === 'error' && (
-				<div
-					role="alert"
-					style={{
-						backgroundColor: '#fce8e6',
-						border: '1px solid #ea4335',
-						borderRadius: '4px',
-						color: '#c5221f',
-						marginTop: '1rem',
-						padding: '0.75rem 1rem',
-					}}
-				>
-					Error: {submitState.message}
-				</div>
-			)}
-		</div>
+						{submitState.message}
+					</div>
+				)}
+			</div>
+		</Page>
 	);
 }
