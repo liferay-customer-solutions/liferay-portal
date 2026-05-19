@@ -3,23 +3,20 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-package com.liferay.osb.provisioning.license.exporter.internal;
+package com.liferay.one.license;
 
-import com.liferay.osb.provisioning.license.exporter.LicenseKeyExporter;
-import com.liferay.osb.provisioning.license.generator.KeyGenerator;
-import com.liferay.osb.provisioning.license.helper.constants.LicenseType;
-import com.liferay.osb.provisioning.license.helper.constants.ProductVersion;
+import com.liferay.petra.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.petra.string.CharPool;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.petra.xml.DocUtil;
-import com.liferay.portal.kernel.io.Base64OutputStream;
-import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
+import com.liferay.portal.ee.license.shared.KeyGenerator;
+import com.liferay.portal.ee.license.shared.LicenseType;
+import com.liferay.portal.ee.license.shared.ProductVersion;
 import com.liferay.portal.kernel.util.Base64;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
-import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
@@ -40,14 +37,13 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.TimeZone;
 
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Amos Fong
  */
-@Component(immediate = true, service = LicenseKeyExporter.class)
-public class LicenseKeyExporterImpl implements LicenseKeyExporter {
+@Component
+public class LicenseKeyExporter {
 
 	public String aggregateXMLs(String[] xmls) throws Exception {
 		Document document = SAXReaderUtil.createDocument();
@@ -121,13 +117,11 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 			Date startDate, Date expirationDate)
 		throws IOException {
 
-		UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
-			new UnsyncByteArrayOutputStream();
-		ObjectOutputStream objectOutputStream = null;
+		try (UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
+				new UnsyncByteArrayOutputStream();
 
-		try {
-			objectOutputStream = new ObjectOutputStream(
-				new Base64OutputStream(unsyncByteArrayOutputStream));
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+				unsyncByteArrayOutputStream)) {
 
 			objectOutputStream.writeInt(4);
 			objectOutputStream.writeUTF(GetterUtil.getString(accountName));
@@ -183,16 +177,7 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 
 			objectOutputStream.flush();
 
-			return new String(unsyncByteArrayOutputStream.toByteArray());
-		}
-		finally {
-			if (objectOutputStream != null) {
-				objectOutputStream.close();
-			}
-
-			if (unsyncByteArrayOutputStream != null) {
-				unsyncByteArrayOutputStream.close();
-			}
+			return Base64.encode(unsyncByteArrayOutputStream.toByteArray());
 		}
 	}
 
@@ -264,9 +249,9 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 		properties.put("ipAddresses", StringUtil.merge(allIpAddresses));
 		properties.put("macAddresses", StringUtil.merge(allMacAddresses));
 
-		String key = _keyGenerator.generate(properties);
+		String key = KeyGenerator.generate(properties);
 
-		DocUtil.add(rootElement, "key", key);
+		_addElement(rootElement, "key", key);
 
 		return document.formattedString();
 	}
@@ -309,7 +294,7 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 		String[] hostNames = StringUtil.split(properties.get("hostNames"));
 
 		for (String hostName : hostNames) {
-			DocUtil.add(hostNamesElement, "host-name", hostName);
+			_addElement(hostNamesElement, "host-name", hostName);
 		}
 
 		Element ipAddressesElement = element.addElement("ip-addresses");
@@ -317,7 +302,7 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 		String[] ipAddresses = StringUtil.split(properties.get("ipAddresses"));
 
 		for (String ipAddress : ipAddresses) {
-			DocUtil.add(ipAddressesElement, "ip-address", ipAddress);
+			_addElement(ipAddressesElement, "ip-address", ipAddress);
 		}
 
 		Element macAddressesElement = element.addElement("mac-addresses");
@@ -326,7 +311,7 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 			properties.get("macAddresses"));
 
 		for (String macAddress : macAddresses) {
-			DocUtil.add(macAddressesElement, "mac-address", macAddress);
+			_addElement(macAddressesElement, "mac-address", macAddress);
 		}
 
 		String[] serverIds = StringUtil.split(properties.get("serverIds"));
@@ -335,7 +320,7 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 			Element serverIdElement = element.addElement("server-ids");
 
 			for (String serverId : serverIds) {
-				DocUtil.add(serverIdElement, "server-id", serverId);
+				_addElement(serverIdElement, "server-id", serverId);
 			}
 		}
 	}
@@ -359,18 +344,18 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 		String licenseEntryType = properties.get("type");
 		String licenseVersion = properties.get("version");
 
-		DocUtil.add(
+		_addElement(
 			rootElement, "account-name", properties.get("accountEntryName"));
-		DocUtil.add(rootElement, "owner", properties.get("owner"));
-		DocUtil.add(rootElement, "description", properties.get("description"));
-		DocUtil.add(
+		_addElement(rootElement, "owner", properties.get("owner"));
+		_addElement(rootElement, "description", properties.get("description"));
+		_addElement(
 			rootElement, "product-name", properties.get("productEntryName"));
-		DocUtil.add(
+		_addElement(
 			rootElement, "product-version", properties.get("productVersion"));
-		DocUtil.add(
+		_addElement(
 			rootElement, "license-name", properties.get("licenseEntryName"));
-		DocUtil.add(rootElement, "license-type", licenseEntryType);
-		DocUtil.add(rootElement, "license-version", licenseVersion);
+		_addElement(rootElement, "license-type", licenseEntryType);
+		_addElement(rootElement, "license-version", licenseVersion);
 
 		DateFormat longDateFormatDateTime = DateFormat.getDateTimeInstance(
 			DateFormat.FULL, DateFormat.FULL, LocaleUtil.US);
@@ -380,28 +365,28 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 		Date startDate = new Date(
 			GetterUtil.getLong(properties.get("startDate")));
 
-		DocUtil.add(
+		_addElement(
 			rootElement, "start-date",
 			longDateFormatDateTime.format(startDate));
 
 		Date expirationDate = new Date(
 			GetterUtil.getLong(properties.get("expirationDate")));
 
-		DocUtil.add(
+		_addElement(
 			rootElement, "expiration-date",
 			longDateFormatDateTime.format(expirationDate));
 
 		if (licenseEntryType.equals(LicenseType.CLUSTER) ||
 			licenseEntryType.equals(LicenseType.DEVELOPER_CLUSTER)) {
 
-			DocUtil.add(
+			_addElement(
 				rootElement, "max-servers", properties.get("maxServers"));
 		}
 
 		if (licenseEntryType.equals(LicenseType.DEVELOPER) ||
 			licenseEntryType.equals(LicenseType.DEVELOPER_CLUSTER)) {
 
-			DocUtil.add(
+			_addElement(
 				rootElement, "max-http-sessions",
 				properties.get("maxHttpSessions"));
 		}
@@ -412,11 +397,11 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 			String[] serverIds = StringUtil.split(properties.get("serverIds"));
 
 			for (String serverId : serverIds) {
-				DocUtil.add(serverIdElement, "server-id", serverId);
+				_addElement(serverIdElement, "server-id", serverId);
 			}
 		}
 
-		DocUtil.add(rootElement, "key", key);
+		_addElement(rootElement, "key", key);
 
 		return document;
 	}
@@ -434,31 +419,31 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 		long licenseVersion = GetterUtil.getLong(properties.get("version"));
 
 		if (Validator.isNull(productId)) {
-			DocUtil.add(
+			_addElement(
 				rootElement, "account-name",
 				properties.get("accountEntryName"));
 		}
 
-		DocUtil.add(rootElement, "owner", properties.get("owner"));
-		DocUtil.add(rootElement, "description", properties.get("description"));
-		DocUtil.add(
+		_addElement(rootElement, "owner", properties.get("owner"));
+		_addElement(rootElement, "description", properties.get("description"));
+		_addElement(
 			rootElement, "product-name", properties.get("productEntryName"));
 
 		if (Validator.isNotNull(productId)) {
-			DocUtil.add(rootElement, "product-id", productId);
+			_addElement(rootElement, "product-id", productId);
 		}
 
-		DocUtil.add(
+		_addElement(
 			rootElement, "product-version", properties.get("productVersion"));
 
 		if (Validator.isNull(productId)) {
-			DocUtil.add(
+			_addElement(
 				rootElement, "license-name",
 				properties.get("licenseEntryName"));
 		}
 
-		DocUtil.add(rootElement, "license-type", licenseEntryType);
-		DocUtil.add(
+		_addElement(rootElement, "license-type", licenseEntryType);
+		_addElement(
 			rootElement, "license-version", String.valueOf(licenseVersion));
 
 		DateFormat longDateFormatDateTime = DateFormat.getDateTimeInstance(
@@ -469,21 +454,21 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 		Date startDate = new Date(
 			GetterUtil.getLong(properties.get("startDate")));
 
-		DocUtil.add(
+		_addElement(
 			rootElement, "start-date",
 			longDateFormatDateTime.format(startDate));
 
 		Date expirationDate = new Date(
 			GetterUtil.getLong(properties.get("expirationDate")));
 
-		DocUtil.add(
+		_addElement(
 			rootElement, "expiration-date",
 			longDateFormatDateTime.format(expirationDate));
 
 		if (licenseEntryType.equals(LicenseType.FREE) ||
 			licenseEntryType.equals(LicenseType.VIRTUAL_CLUSTER)) {
 
-			DocUtil.add(
+			_addElement(
 				rootElement, "max-cluster-nodes",
 				properties.get("max-cluster-nodes"));
 		}
@@ -493,14 +478,14 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 			 (licenseEntryType.equals(LicenseType.LIMITED) ||
 			  licenseEntryType.equals(LicenseType.PRODUCTION)))) {
 
-			DocUtil.add(
+			_addElement(
 				rootElement, "max-servers", properties.get("maxServers"));
 		}
 
 		if (licenseEntryType.equals(LicenseType.DEVELOPER) ||
 			licenseEntryType.equals(LicenseType.DEVELOPER_CLUSTER)) {
 
-			DocUtil.add(
+			_addElement(
 				rootElement, "max-http-sessions",
 				properties.get("maxHttpSessions"));
 		}
@@ -511,7 +496,7 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 			String[] domains = StringUtil.split(properties.get("domains"));
 
 			for (String domain : domains) {
-				DocUtil.add(domainsElement, "domain", domain);
+				_addElement(domainsElement, "domain", domain);
 			}
 		}
 
@@ -519,7 +504,7 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 			String maxConcurrentUsers = properties.get("maxConcurrentUsers");
 
 			if (Validator.isNotNull(maxConcurrentUsers)) {
-				DocUtil.add(
+				_addElement(
 					rootElement, "max-concurrent-users",
 					properties.get("maxConcurrentUsers"));
 			}
@@ -527,7 +512,7 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 			String maxUsers = properties.get("maxUsers");
 
 			if (Validator.isNotNull(maxUsers)) {
-				DocUtil.add(
+				_addElement(
 					rootElement, "max-users", properties.get("maxUsers"));
 			}
 		}
@@ -535,7 +520,7 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 		String instanceSize = properties.get("instanceSize");
 
 		if (Validator.isNotNull(instanceSize)) {
-			DocUtil.add(rootElement, "instance-size", instanceSize);
+			_addElement(rootElement, "instance-size", instanceSize);
 		}
 
 		if (!aggregate) {
@@ -547,10 +532,18 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 				exportServerToXML(rootElement, properties);
 			}
 
-			DocUtil.add(rootElement, "key", key);
+			_addElement(rootElement, "key", key);
 		}
 
 		return document;
+	}
+
+	private void _addElement(Element parentElement, String name, String value) {
+		Element childElement = parentElement.addElement(name);
+
+		if (value != null) {
+			childElement.addText(value);
+		}
 	}
 
 	private Map<String, String> _getProperties(
@@ -563,7 +556,7 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 		String serverIds, Date startDate, Date expirationDate,
 		Date createDate) {
 
-		Map<String, String> properties = _keyGenerator.getProperties(
+		Map<String, String> properties = KeyGenerator.getProperties(
 			accountName, licenseEntryName, licenseType, licenseVersion,
 			productName, productId, productVersion, owner, maxClusterNodes,
 			maxServers, maxHttpSessions, maxConcurrentUsers, maxUsers, sizing,
@@ -588,8 +581,5 @@ public class LicenseKeyExporterImpl implements LicenseKeyExporter {
 
 		return properties;
 	}
-
-	@Reference
-	private KeyGenerator _keyGenerator;
 
 }
