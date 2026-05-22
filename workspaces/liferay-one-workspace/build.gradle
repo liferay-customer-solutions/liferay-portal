@@ -1,0 +1,17 @@
+// Keep client extensions out of the baked Docker image so they deploy after
+// Liferay is healthy (see scripts/deploy_client_extensions.sh). When a client
+// extension is present at startup it activates during early boot; the site
+// initializer in particular runs before the default site's layouts exist,
+// which makes ServicePreAction build a ThemeDisplay with a null layout and
+// getCanonicalURL throws an NPE, so the site is never created. Gating
+// dockerDeploy on a container id skips it at image build time while still
+// letting the post-health deploy push it to the running container.
+subprojects {
+	tasks.matching {
+		it.name == "dockerDeploy"
+	}.configureEach {
+		onlyIf {
+			System.getProperty("deploy.docker.container.id") != null
+		}
+	}
+}
