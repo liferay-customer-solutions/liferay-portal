@@ -24,7 +24,7 @@ const PageRenderer: React.FC<PageRendererProps> = ({
 	isLoading,
 }) => {
 	if (isLoading) {
-		return <Loading className="mt-4" />;
+		return <Loading className="mt-3" />;
 	}
 
 	if (error) {

@@ -158,17 +158,19 @@ const AdministratorMostPurchasedSection: React.FC = () => {
 
 	return (
 		<>
-			<Page
-				pageRendererProps={{
-					className: 'border py-2 rounded-lg mb-8 mt-8',
-				}}
-				title={i18n.translate('most-purchased-apps')}
-			>
-				<AdministratorMostPurchasedListView
-					items={products.apps}
-					showAppType
-				/>
-			</Page>
+			<div style={{marginBottom: '3.5rem', marginTop: '3.5rem'}}>
+				<Page
+					pageRendererProps={{
+						className: 'border py-2 rounded-lg',
+					}}
+					title={i18n.translate('most-purchased-apps')}
+				>
+					<AdministratorMostPurchasedListView
+						items={products.apps}
+						showAppType
+					/>
+				</Page>
+			</div>
 
 			<Page
 				pageRendererProps={{className: 'border py-2 rounded-lg'}}

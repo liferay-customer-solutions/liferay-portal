@@ -72,7 +72,10 @@ const AdministratorMostPurchasedListView: React.FC<
 						src={thumbnail}
 					/>
 
-					<span className="font-weight-semi-bold ml-3 text-nowrap">
+					<span
+						className="font-weight-semi-bold text-nowrap"
+						style={{marginLeft: '0.75rem'}}
+					>
 						{productName}
 					</span>
 				</div>

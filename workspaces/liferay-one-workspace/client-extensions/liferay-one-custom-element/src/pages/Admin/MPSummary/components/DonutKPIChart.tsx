@@ -52,9 +52,14 @@ const DonutKPIChart: React.FC<DonutKPIChartProps> = ({
 	];
 
 	return (
-		<div className="border d-inline-flex flex-column justify-content-between marketplace-donut-chart p-5">
+		<div className="border d-inline-flex flex-column justify-content-between marketplace-donut-chart p-4">
 			<div className="align-items-start d-flex flex-row justify-content-between">
-				<span className="font-weight-bold mr-3 text-wrap">{title}</span>
+				<span
+					className="font-weight-bold text-wrap"
+					style={{marginRight: '0.75rem'}}
+				>
+					{title}
+				</span>
 
 				{onClick && (
 					<span className="align-items-center d-flex justify-content-center">
@@ -77,7 +82,10 @@ const DonutKPIChart: React.FC<DonutKPIChartProps> = ({
 				)}
 			</div>
 
-			<div className="align-items-center d-flex flex-row justify-content-between mt-3">
+			<div
+				className="align-items-center d-flex flex-row justify-content-between"
+				style={{marginTop: '0.75rem'}}
+			>
 				<div className="donut-chart-container">
 					<ResponsiveContainer>
 						<PieChart tabIndex={-1}>
@@ -117,7 +125,10 @@ const DonutKPIChart: React.FC<DonutKPIChartProps> = ({
 				</div>
 
 				<div className="chart-legend d-flex flex-column">
-					<div className="d-flex flex-column mb-3">
+					<div
+						className="d-flex flex-column"
+						style={{marginBottom: '0.75rem'}}
+					>
 						<span className="font-weight-bold text-small">
 							{i18n.translate('annual-target')}
 						</span>
@@ -153,7 +164,10 @@ const DonutKPIChart: React.FC<DonutKPIChartProps> = ({
 							</span>
 
 							<div className="align-items-center d-flex flex-row">
-								<div className="font-weight-bold mr-3 text-title">
+								<div
+									className="font-weight-bold text-title"
+									style={{marginRight: '0.75rem'}}
+								>
 									{`${monthlyIncreaseValueIsGrowing ? '+' : '-'}${monthlyIncreaseValue}`}
 								</div>
 

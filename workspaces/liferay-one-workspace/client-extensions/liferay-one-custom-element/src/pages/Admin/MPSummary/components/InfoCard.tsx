@@ -28,7 +28,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
 }) => (
 	<div
 		className={classNames(
-			'border d-flex flex-column info-card justify-content-between p-4',
+			'border d-flex flex-column info-card justify-content-between p-3',
 			{
 				limited,
 			},

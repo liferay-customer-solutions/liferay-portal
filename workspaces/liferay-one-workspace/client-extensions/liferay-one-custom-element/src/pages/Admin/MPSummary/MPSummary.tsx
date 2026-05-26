@@ -75,7 +75,7 @@ export default function MPSummary() {
 			title={i18n.translate('administrator-dashboard')}
 		>
 			<div className="d-flex flex-column">
-				<div className="d-flex flex-wrap mb-4" style={{gap: '20px'}}>
+				<div className="d-flex flex-wrap mb-3" style={{gap: '20px'}}>
 					<ErrorBoundary>
 						{kpis.map((chart, index) => (
 							<DonutKPIChart {...chart} key={index} />
@@ -83,68 +83,75 @@ export default function MPSummary() {
 					</ErrorBoundary>
 				</div>
 
-				<div className="d-flex flex-wrap info-container mb-8">
+				<div
+					className="d-flex flex-wrap info-container"
+					style={{marginBottom: '3.5rem'}}
+				>
 					{infoCards.map((infoCard, index) => (
 						<InfoCard {...infoCard} key={index} />
 					))}
 				</div>
 
-				<Page
-					pageRendererProps={{
-						className: 'border py-2 rounded-lg mb-8',
-					}}
-					rightButton={
-						marketplaceUserAccount?.isAdmin && (
+				<div style={{marginBottom: '3.5rem'}}>
+					<Page
+						pageRendererProps={{
+							className: 'border py-2 rounded-lg',
+						}}
+						rightButton={
+							marketplaceUserAccount?.isAdmin && (
+								<Link
+									className="font-weight-bold"
+									to="/admin/mp-orders"
+								>
+									{i18n.translate('view-all')}
+									<ClayIcon symbol="order-arrow-right" />
+								</Link>
+							)
+						}
+						title={i18n.translate('recent-orders')}
+					>
+						<AdministratorOrdersListView
+							listViewProps={{
+								id: 'summary-orders',
+								initialContext: {pageSize: 5},
+								paginationOptions: {displayType: false},
+							}}
+							managementToolbarProps={{
+								visible: false,
+							}}
+						/>
+					</Page>
+				</div>
+
+				<div style={{marginBottom: '3.5rem'}}>
+					<Page
+						pageRendererProps={{
+							className: 'border py-2 rounded-lg',
+						}}
+						rightButton={
 							<Link
 								className="font-weight-bold"
-								to="/admin/mp-orders"
+								to="/admin/mp-apps"
 							>
 								{i18n.translate('view-all')}
 								<ClayIcon symbol="order-arrow-right" />
 							</Link>
-						)
-					}
-					title={i18n.translate('recent-orders')}
-				>
-					<AdministratorOrdersListView
-						listViewProps={{
-							id: 'summary-orders',
-							initialContext: {pageSize: 5},
-							paginationOptions: {displayType: false},
-						}}
-						managementToolbarProps={{
-							visible: false,
-						}}
-					/>
-				</Page>
-
-				<Page
-					pageRendererProps={{
-						className: 'border py-2 rounded-lg mb-8',
-					}}
-					rightButton={
-						<Link
-							className="font-weight-bold"
-							to="/admin/mp-apps"
-						>
-							{i18n.translate('view-all')}
-							<ClayIcon symbol="order-arrow-right" />
-						</Link>
-					}
-					title={i18n.translate('published-apps')}
-				>
-					<AdministratorAppsListView
-						isSortable
-						listViewProps={{
-							id: 'summary-apps',
-							initialContext: {pageSize: 5},
-							paginationOptions: {displayType: false},
-						}}
-						managementToolbarProps={{
-							visible: false,
-						}}
-					/>
-				</Page>
+						}
+						title={i18n.translate('published-apps')}
+					>
+						<AdministratorAppsListView
+							isSortable
+							listViewProps={{
+								id: 'summary-apps',
+								initialContext: {pageSize: 5},
+								paginationOptions: {displayType: false},
+							}}
+							managementToolbarProps={{
+								visible: false,
+							}}
+						/>
+					</Page>
+				</div>
 
 				<AdministratorMostPurchasedSection />
 			</div>

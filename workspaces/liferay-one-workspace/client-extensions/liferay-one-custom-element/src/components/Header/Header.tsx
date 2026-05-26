@@ -14,7 +14,7 @@ type HeaderProps = {
 
 export function Header({description, icon, title}: HeaderProps) {
 	return (
-		<div className="d-flex flex-column mb-4">
+		<div className="d-flex flex-column mb-3">
 			<span>{icon}</span>
 			<Text size={9} weight="semi-bold">
 				{title}

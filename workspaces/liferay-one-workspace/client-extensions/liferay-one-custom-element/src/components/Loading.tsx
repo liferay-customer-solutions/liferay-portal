@@ -30,8 +30,8 @@ const FullScreen: React.FC<FullScreenProps> = ({children}) => (
 	<div className="loading-overlay">
 		<div className="loading-container">
 			<div className="loading-text">
-				<Loading className="mb-6" />
-				<span className="mt-4">{children}</span>
+				<Loading style={{marginBottom: '2rem'}} />
+				<span className="mt-3">{children}</span>
 			</div>
 		</div>
 	</div>
