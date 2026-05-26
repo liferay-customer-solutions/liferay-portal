@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import Button from '@clayui/button';
+import Icon from '@clayui/icon';
 import ClayLabel from '@clayui/label';
 import {Status} from '@clayui/modal/lib/types';
 import {ClayTooltipProvider} from '@clayui/tooltip';
@@ -18,6 +20,8 @@ import {
 	paymentWorkflowDisplayType,
 } from '../../../../enums/Order';
 import i18n from '../../../../i18n';
+import {FilterSchemaOption} from '../../../../schema/filters';
+import oneOAuth2 from '../../../../services/oauth/One';
 import {safeJSONParse} from '../../../../utils/util';
 
 type AdministratorOrdersListViewProps = {
@@ -44,7 +48,33 @@ export function AdministratorOrdersListView({
 		<ListView<Order>
 			emptyStateProps={{title: i18n.translate('no-orders-yet')}}
 			id="administrator-orders"
-			managementToolbarProps={managementToolbarProps}
+			managementToolbarProps={{
+				actionButton: (
+					filter: {
+						[key: string]: string;
+					},
+					filterSchema?: FilterSchemaOption
+				) => {
+					return (
+						<Button
+							className="align-items-center d-flex h-100 justify-content-center ml-3 mr-4"
+							displayType="unstyled"
+							onClick={() =>
+								oneOAuth2.downloadOrderReport(
+									filter,
+									filterSchema
+								)
+							}
+						>
+							<Icon className="mr-2" symbol="download" />
+							<b>{i18n.translate('export')}</b>
+						</Button>
+					);
+				},
+
+				filterSchema: 'administratorOrders',
+				...managementToolbarProps,
+			}}
 			resource={`/o/headless-commerce-admin-order/v1.0/orders?${new URLSearchParams(
 				{
 					nestedFields: 'account,orderItems',
@@ -52,6 +82,12 @@ export function AdministratorOrdersListView({
 				}
 			)}`}
 			tableProps={{
+				actions: [
+					{
+						name: i18n.translate('order-details'),
+						onClick: () => {},
+					},
+				],
 				columns: [
 					{
 						id: 'id',

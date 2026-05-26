@@ -476,6 +476,7 @@ export default {
 	'mark-as-paid': 'Mark as Paid',
 	'marked-as-paid': 'Marked as paid.',
 	'marketplace-licensor-eula': 'Marketplace Licensor EULA',
+	'marketplace-orders': 'Marketplace Orders',
 	'maximum-number-of-uploads-reached': 'Maximum Number of Uploads Reached',
 	'modified-date': 'Modified Date',
 	'modular-components-built-with-html-css-and-javascript-offer-extensible-and-reusable-elements-or-collections-of-elements-for-constructing-content-pages-and-templates':
