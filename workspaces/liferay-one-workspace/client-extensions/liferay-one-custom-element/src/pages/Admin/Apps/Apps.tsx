@@ -3,10 +3,71 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {useProperties} from '../../../context/PropertiesContext';
+import {useSearchParams} from 'react-router-dom';
+
+import Page from '../../../components/Page';
+import i18n from '../../../i18n';
+import InfoCard from '../MPSummary/components/InfoCard';
+import useAppsMetrics from '../MPSummary/hooks/useAppsMetrics';
+import {percentage} from '../MPSummary/util';
+import AdministratorAppsListView from './components/AdministratorAppsListView';
 
 export default function Apps() {
-	const {accountId} = useProperties();
+	const [searchParams] = useSearchParams();
 
-	return <div>{accountId}</div>;
+	const {
+		approved = 0,
+		approvedBeforeLastWeek = 0,
+		approvedLastWeek = 0,
+		inReview = 0,
+		inReviewBeforeLastWeek = 0,
+		inReviewLastWeek = 0,
+		products = 0,
+	} = useAppsMetrics('week');
+
+	return (
+		<>
+			<div
+				className="d-flex flex-wrap info-container"
+				style={{marginBottom: '1rem'}}
+			>
+				<InfoCard
+					className="mr-3"
+					growth={percentage(
+						products,
+						inReviewLastWeek - inReviewBeforeLastWeek
+					)}
+					growthContext={`+${inReviewLastWeek - inReviewBeforeLastWeek} this week`}
+					symbol="squares-clock"
+					title={i18n.translate('app-awaiting-review')}
+					value={inReview}
+				/>
+
+				<InfoCard
+					growth={percentage(
+						products,
+						approvedLastWeek - approvedBeforeLastWeek
+					)}
+					growthContext={`+${approvedLastWeek - approvedBeforeLastWeek} this week`}
+					symbol="squares"
+					title={i18n.translate('recently-published')}
+					value={approved}
+				/>
+			</div>
+
+			<Page
+				pageRendererProps={{className: 'border py-2 rounded-lg'}}
+				title={i18n.translate('apps')}
+			>
+				<AdministratorAppsListView
+					filter={searchParams.get('filter') as string}
+					isSortable
+					managementToolbarProps={{
+						searchVisible: true,
+						visible: true,
+					}}
+				/>
+			</Page>
+		</>
+	);
 }

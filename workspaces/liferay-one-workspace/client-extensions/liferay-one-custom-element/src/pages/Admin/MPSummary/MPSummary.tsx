@@ -12,7 +12,7 @@ import Page from '../../../components/Page';
 import {useOneContext} from '../../../context/OneContext';
 import i18n from '../../../i18n';
 import {formatCurrency} from '../../../utils/currencies';
-import AdministratorAppsListView from './components/AdministratorAppsListView';
+import AdministratorAppsListView from '../Apps/components/AdministratorAppsListView';
 import DonutKPIChart from './components/DonutKPIChart';
 import InfoCard from './components/InfoCard';
 import {AdministratorOrdersListView} from '../Orders/components/AdministratorOrdersListView';
