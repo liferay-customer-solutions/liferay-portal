@@ -9,6 +9,8 @@ import AppLayout from '../../components/AppLayout';
 import {buildNavItems} from '../../utils/routes';
 import {adminRoutes} from './adminRoutes';
 
+import './admin.scss';
+
 export default function AdminLayout() {
 	const adminNav = useMemo(() => buildNavItems(adminRoutes), []);
 
