@@ -6,15 +6,16 @@
 import react from '@vitejs/plugin-react';
 import {defineConfig} from 'vite';
 
-export default defineConfig({
+export default defineConfig(({command}) => ({
+	base: command === 'build' ? '/o/liferay-one-custom-element/' : '/',
 	build: {
-		assetsDir: 'static',
-		outDir: 'build',
+		assetsDir: '.',
+		outDir: 'build/static',
 		rollupOptions: {
 			output: {
-				assetFileNames: 'static/[name].[hash][extname]',
-				chunkFileNames: 'static/[name].[hash].js',
-				entryFileNames: 'static/[name].[hash].js',
+				assetFileNames: '[name].[hash][extname]',
+				chunkFileNames: '[name].[hash].js',
+				entryFileNames: '[name].[hash].js',
 				manualChunks: {
 					vendor: ['react', 'react-dom', 'react-router-dom'],
 				},
@@ -25,4 +26,4 @@ export default defineConfig({
 	server: {
 		origin: 'http://localhost:5173',
 	},
-});
+}));
