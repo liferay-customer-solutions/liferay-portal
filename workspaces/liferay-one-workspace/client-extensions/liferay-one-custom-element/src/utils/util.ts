@@ -19,6 +19,20 @@ export function safeJSONParse<T = any>(
 	}
 }
 
+export function getValueFromDeliverySpecifications(
+	specifications: DeliveryProductSpecification[],
+	valueKey: string
+) {
+	let value = '';
+	specifications?.forEach((specification) => {
+		if (specification?.specificationKey === valueKey) {
+			value = specification?.value;
+		}
+	});
+
+	return value;
+}
+
 export function waitTimeout(timer: number) {
 	return new Promise((resolve) => setTimeout(() => resolve(null), timer));
 }
