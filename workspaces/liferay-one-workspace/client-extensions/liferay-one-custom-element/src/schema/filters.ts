@@ -7,6 +7,7 @@ import {Params} from 'react-router-dom';
 
 import SearchBuilder, {Operators} from '../core/SearchBuilder';
 import {MarketplaceCategory} from '../enums/Categories';
+import {OrderWorkflowStatusCode} from '../enums/Order';
 import {ProductType, ProductWorkflowStatusCode} from '../enums/Product';
 import i18n from '../i18n';
 
@@ -230,6 +231,64 @@ export const filterSchema: FilterSchemas = {
 			}),
 		],
 		name: 'administratorApps',
+	},
+	administratorOrders: {
+		fields: [
+			overrides(baseFilters.type, {
+				label: i18n.translate('app-type'),
+				name: 'orderTypeExternalReferenceCode',
+				resource:
+					'o/headless-commerce-admin-order/v1.0/order-types?pageSize=-1&sort=name:asc',
+				transformData: ({items = []}) =>
+					items.map(
+						({
+							externalReferenceCode,
+							name,
+						}: {
+							externalReferenceCode: string;
+							name: {[locale: string]: string};
+						}) => ({
+							label: name?.en_US ?? externalReferenceCode,
+							value: externalReferenceCode,
+						})
+					),
+				type: 'checkbox',
+			}),
+			overrides(baseFilters.status, {
+				label: i18n.translate('order-status'),
+				name: 'orderStatus',
+				options: [
+					{
+						label: i18n.translate('canceled'),
+						value: `${OrderWorkflowStatusCode.CANCELLED}`,
+					},
+					{
+						label: i18n.translate('completed'),
+						value: `${OrderWorkflowStatusCode.COMPLETED}`,
+					},
+					{
+						label: i18n.translate('in-progress'),
+						value: `${OrderWorkflowStatusCode.IN_PROGRESS}`,
+					},
+					{
+						label: i18n.translate('on-hold'),
+						value: `${OrderWorkflowStatusCode.ON_HOLD}`,
+					},
+					{
+						label: i18n.translate('pending'),
+						value: `${OrderWorkflowStatusCode.PENDING}`,
+					},
+					{
+						label: i18n.translate('processing'),
+						value: `${OrderWorkflowStatusCode.PROCESSING}`,
+					},
+				],
+				removeQuoteMark: true,
+				type: 'multiselect',
+			}),
+			baseFilters.dateCreated,
+		],
+		name: 'administratorOrders',
 	},
 	administratorSolutions: {
 		fields: [
