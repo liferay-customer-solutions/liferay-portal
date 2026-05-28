@@ -6,7 +6,11 @@
 import {Params} from 'react-router-dom';
 
 import SearchBuilder, {Operators} from '../core/SearchBuilder';
+import {MarketplaceCategory} from '../enums/Categories';
+import {ProductType, ProductWorkflowStatusCode} from '../enums/Product';
 import i18n from '../i18n';
+
+const LIFERAY_VERSION_PICKLIST = 'LIFERAY-VERSIONS';
 
 type AutoCompleteProps = {
 	label?: string;
@@ -108,6 +112,125 @@ export const overrides = (
 	...newObject,
 });
 
-export const filterSchema: FilterSchemas = {};
+export const filterSchema: FilterSchemas = {
+	administratorApps: {
+		fields: [
+			overrides(baseFilters.type, {
+				label: i18n.translate('app-type'),
+				name: 'specificationValues|appType',
+				operator: 'lambda',
+				options: [
+					{
+						label: i18n.translate('client-extension'),
+						value: ProductType.CLIENT_EXTENSION,
+					},
+					{
+						label: i18n.translate('cloud-app'),
+						value: ProductType.CLOUD,
+					},
+					{
+						label: i18n.translate('composite-app'),
+						value: ProductType.COMPOSITE_APP,
+					},
+					{
+						label: i18n.translate('dxp-app'),
+						value: ProductType.DXP,
+					},
+					{
+						label: i18n.translate('low-code-configuration'),
+						value: ProductType.LOW_CODE_CONFIGURATION,
+					},
+					{
+						label: i18n.translate('other'),
+						value: ProductType.OTHER,
+					},
+				],
+				type: 'checkbox',
+			}),
+			overrides(baseFilters.categories, {
+				options: [
+					{
+						label: i18n.translate('batch'),
+						value: `${MarketplaceCategory.BATCH}`,
+					},
+					{
+						label: i18n.translate('checkout'),
+						value: `${MarketplaceCategory.CHECKOUT}`,
+					},
+					{
+						label: i18n.translate('fragment'),
+						value: `${MarketplaceCategory.FRAGMENTS}`,
+					},
+					{
+						label: i18n.translate('object-action'),
+						value: `${MarketplaceCategory.OBJECT_ACTION}`,
+					},
+					{
+						label: i18n.translate('other'),
+						value: `${MarketplaceCategory.OTHER}`,
+					},
+					{
+						label: i18n.translate('payment-method'),
+						value: `${MarketplaceCategory.PAYMENT_METHODS}`,
+					},
+					{
+						label: i18n.translate('prompt'),
+						value: `${MarketplaceCategory.PROMPT}`,
+					},
+					{
+						label: i18n.translate('site-initializer'),
+						value: `${MarketplaceCategory.SITE_INITIALIZER}`,
+					},
+					{
+						label: i18n.translate('theme'),
+						value: `${MarketplaceCategory.THEME}`,
+					},
+					{
+						label: i18n.translate('workflow-action'),
+						value: `${MarketplaceCategory.WORKFLOW_ACTION}`,
+					},
+				],
+				type: 'select',
+			}),
+			baseFilters.dateCreated,
+			overrides(baseFilters.version, {
+				label: i18n.translate('liferay-version'),
+				name: 'specificationValues|liferayVersion',
+				operator: 'lambda',
+				resource: `o/headless-admin-list-type/v1.0/list-type-definitions/by-external-reference-code/${LIFERAY_VERSION_PICKLIST}`,
+				transformData: (item) =>
+					item.listTypeEntries.map((entry: any) => ({
+						label: entry.name,
+						value: entry.name,
+					})),
+				type: 'multiselect',
+			}),
+			overrides(baseFilters.dateCreated, {
+				label: i18n.translate('modified-date'),
+				name: 'modifiedDate',
+			}),
+			overrides(baseFilters.status, {
+				name: 'statusCode',
+				options: [
+					{
+						label: i18n.translate('approved'),
+						value: `${ProductWorkflowStatusCode.APPROVED}`,
+					},
+					{
+						label: i18n.translate('draft'),
+						value: `${ProductWorkflowStatusCode.DRAFT}`,
+					},
+					{
+						label: i18n.translate('pending'),
+						value: `${ProductWorkflowStatusCode.PENDING}`,
+					},
+				],
+				removeQuoteMark: true,
+				type: 'select',
+			}),
+		],
+		name: 'administratorApps',
+	},
+};
 
 export type FilterSchemaOption = keyof typeof filterSchema;
