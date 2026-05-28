@@ -3,10 +3,41 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {useProperties} from '../../../context/PropertiesContext';
+import ClayButton from '@clayui/button';
+import {useModal} from '@clayui/modal';
+
+import Page from '../../../components/Page';
+import i18n from '../../../i18n';
+import TrialListView from '../SSADashboard/components/TrialListView/TrialListView';
+import useSSAActions from '../SSADashboard/hooks/useSSAActions';
 
 export default function Environments() {
-	const {accountId} = useProperties();
+	const actions = useSSAActions();
+	const createTrialFormModal = useModal();
 
-	return <div>{accountId}</div>;
+	return (
+		<Page
+			description={i18n.translate('manage-your-teams-trial')}
+			pageRendererProps={{className: 'border py-2'}}
+			rightButton={
+				<ClayButton
+					onClick={() => createTrialFormModal.onOpenChange(true)}
+				>
+					{i18n.translate('add-new-trial')}
+				</ClayButton>
+			}
+			title="SaaS Demos"
+		>
+			<TrialListView
+				actions={actions}
+				createTrialFormModal={createTrialFormModal}
+				isSortable
+				managementToolbarProps={{
+					searchVisible: true,
+					visible: true,
+				}}
+				parentPath="/saas-trials"
+			/>
+		</Page>
+	);
 }
