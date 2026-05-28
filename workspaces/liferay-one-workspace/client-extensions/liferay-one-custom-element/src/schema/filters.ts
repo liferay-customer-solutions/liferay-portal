@@ -6,6 +6,7 @@
 import {Params} from 'react-router-dom';
 
 import SearchBuilder, {Operators} from '../core/SearchBuilder';
+import {ProductWorkflowStatusCode} from '../enums/Product';
 import i18n from '../i18n';
 
 type AutoCompleteProps = {
@@ -110,6 +111,36 @@ export function overrides(
 	};
 }
 
-export const filterSchema: FilterSchemas = {};
+export const filterSchema: FilterSchemas = {
+	administratorSolutions: {
+		fields: [
+			baseFilters.dateCreated,
+			overrides(baseFilters.dateCreated, {
+				label: i18n.translate('modified-date'),
+				name: 'modifiedDate',
+			}),
+			overrides(baseFilters.status, {
+				name: 'statusCode',
+				options: [
+					{
+						label: i18n.translate('approved'),
+						value: `${ProductWorkflowStatusCode.APPROVED}`,
+					},
+					{
+						label: i18n.translate('draft'),
+						value: `${ProductWorkflowStatusCode.DRAFT}`,
+					},
+					{
+						label: i18n.translate('pending'),
+						value: `${ProductWorkflowStatusCode.PENDING}`,
+					},
+				],
+				removeQuoteMark: true,
+				type: 'multiselect',
+			}),
+		],
+		name: 'administratorSolutions',
+	},
+};
 
 export type FilterSchemaOption = keyof typeof filterSchema;
