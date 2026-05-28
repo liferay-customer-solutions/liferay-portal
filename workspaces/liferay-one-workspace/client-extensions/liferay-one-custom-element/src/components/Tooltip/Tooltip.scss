@@ -1,0 +1,40 @@
+.tooltip {
+	&-base {
+		align-items: center;
+		background-color: #e6ebf5;
+		border-radius: 0.25rem;
+		display: flex;
+		height: 28px;
+		justify-content: center;
+
+		&-auto {
+			font-weight: 600;
+			padding-left: 8px;
+			padding-right: 8px;
+			width: auto;
+		}
+
+		&-container {
+			width: 28px;
+		}
+	}
+
+	&-container {
+		align-items: center;
+		display: flex;
+		justify-content: center;
+	}
+
+	&-optional-text {
+		color: #2e5aac;
+		font-size: 0.688rem;
+		margin-right: 0.125rem;
+	}
+
+	&-icon {
+		height: 12px;
+		width: 12px;
+		filter: invert(34%) sepia(14%) saturate(4340%) hue-rotate(190deg)
+			brightness(88%) contrast(91%);
+	}
+}
