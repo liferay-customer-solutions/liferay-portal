@@ -231,6 +231,35 @@ export const filterSchema: FilterSchemas = {
 		],
 		name: 'administratorApps',
 	},
+	administratorSolutions: {
+		fields: [
+			baseFilters.dateCreated,
+			overrides(baseFilters.dateCreated, {
+				label: i18n.translate('modified-date'),
+				name: 'modifiedDate',
+			}),
+			overrides(baseFilters.status, {
+				name: 'statusCode',
+				options: [
+					{
+						label: i18n.translate('approved'),
+						value: `${ProductWorkflowStatusCode.APPROVED}`,
+					},
+					{
+						label: i18n.translate('draft'),
+						value: `${ProductWorkflowStatusCode.DRAFT}`,
+					},
+					{
+						label: i18n.translate('pending'),
+						value: `${ProductWorkflowStatusCode.PENDING}`,
+					},
+				],
+				removeQuoteMark: true,
+				type: 'multiselect',
+			}),
+		],
+		name: 'administratorSolutions',
+	},
 };
 
 export type FilterSchemaOption = keyof typeof filterSchema;
