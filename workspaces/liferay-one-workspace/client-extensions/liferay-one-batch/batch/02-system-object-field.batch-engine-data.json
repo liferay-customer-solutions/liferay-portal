@@ -40,6 +40,18 @@
 		{
 			"externalReferenceCode": "L_COMMERCE_ORDER_ITEM",
 			"name": "CommerceOrderItem",
+			"objectActions": [
+				{
+					"active": true,
+					"description": "Triggers Spring Boot CX to generate Entitlements per the matching EntitlementDefinitions on the order item's product.",
+					"externalReferenceCode": "OA_COMMERCE_ORDER_ITEM_ENTITLEMENT_GEN",
+					"name": "GenerateEntitlements",
+					"objectActionExecutorKey": "function#liferay-one-etc-spring-boot-object-action-entitlement-generation",
+					"objectActionTriggerKey": "onAfterAdd",
+					"parameters": {
+					}
+				}
+			],
 			"objectFields": [
 				{
 					"DBType": "String",
