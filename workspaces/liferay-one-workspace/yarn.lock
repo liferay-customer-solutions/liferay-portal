@@ -801,6 +801,11 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.11.tgz#a269e055e40e2f45873bae9d1a2fdccbd314ea3f"
   integrity sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg==
 
+"@hookform/resolvers@^3.1.1":
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-3.10.0.tgz#7bfd18113daca4e57e27e1205b7d5a2d371aa59a"
+  integrity sha512-79Dv+3mDF7i+2ajj7SkypSKHhl1cbln1OGavqrsF7p6mbUv11xpqpacPsGDCTRvCSjEEIez2ef1NveSVL3b0Ag==
+
 "@humanwhocodes/config-array@^0.5.0":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.5.0.tgz#1407967d4c6eecd7388f83acf1eaf4d0c6e58ef9"
@@ -3103,6 +3108,11 @@ react-dom@^18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.2"
 
+react-hook-form@^7.45.0:
+  version "7.76.1"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.76.1.tgz#0ef905eae5c17e32b6edc2ac628921917e87aafa"
+  integrity sha512-rYM7tPiWlu3nZchkR/ex7piyzui2vFPyaLnXnI/RnblB/L4qfMmyses8llJVtF1NpE9WBBsJlGtcSZzPCXW1qQ==
+
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
@@ -3827,3 +3837,8 @@ yaml@^1.10.0:
   version "1.10.3"
   resolved "https://registry.yarnpkg.com/yaml/-/yaml-1.10.3.tgz#76e407ed95c42684fb8e14641e5de62fe65bbcb3"
   integrity sha512-vIYeF1u3CjlhAFekPPAk2h/Kv4T3mAkMox5OymRiJQB0spDP10LHvt+K7G9Ny6NuuMAb25/6n1qyUjAcGNf/AA==
+
+zod@^3.21.4:
+  version "3.25.76"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.76.tgz#26841c3f6fd22a6a2760e7ccb719179768471e34"
+  integrity sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==
