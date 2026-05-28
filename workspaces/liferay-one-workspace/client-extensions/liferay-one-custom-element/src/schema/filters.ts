@@ -6,6 +6,7 @@
 import {Params} from 'react-router-dom';
 
 import SearchBuilder, {Operators} from '../core/SearchBuilder';
+import {AccountType} from '../enums/Account';
 import {MarketplaceCategory} from '../enums/Categories';
 import {OrderWorkflowStatusCode} from '../enums/Order';
 import {ProductType, ProductWorkflowStatusCode} from '../enums/Product';
@@ -291,6 +292,24 @@ export const filterSchema: FilterSchemas = {
 			baseFilters.dateCreated,
 		],
 		name: 'administratorOrders',
+	},
+	administratorPublishers: {
+		fields: [
+			overrides(baseFilters.type, {
+				label: i18n.translate('account-type'),
+				name: 'customFields/AccountType',
+				options: [
+					AccountType.MARKETPLACE_DEVELOPER,
+					AccountType.STRATEGIC_PARTNER,
+					AccountType.TECHNOLOGY_PARTNER,
+				],
+				type: 'multiselect',
+			}),
+			overrides(baseFilters.dateCreated, {
+				name: 'dateCreated',
+			}),
+		],
+		name: 'administratorPublishers',
 	},
 	administratorSolutions: {
 		fields: [
