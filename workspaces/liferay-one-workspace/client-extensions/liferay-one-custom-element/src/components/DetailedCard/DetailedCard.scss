@@ -1,0 +1,33 @@
+.detailed-card {
+	&-container {
+		border: 1px solid #e2e2e4;
+		border-radius: 0.625rem;
+		padding: 2.125rem 1.5rem;
+
+		&-larger {
+			width: 700px !important;
+		}
+	}
+
+	&-header {
+		align-items: center;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+
+		&-clay-icon {
+			height: 20px;
+			width: 20px;
+		}
+
+		&-icon-container {
+			align-items: center;
+			background: #e2e2e4;
+			border-radius: 50%;
+			display: flex;
+			height: 40px;
+			justify-content: center;
+			width: 40px;
+		}
+	}
+}
