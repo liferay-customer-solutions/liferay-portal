@@ -1,0 +1,13 @@
+.input-form-base {
+	width: 42.5rem;
+}
+
+.custom-input {
+	background-color: #fff;
+	border: 1px solid #b1b2b9;
+	border-radius: 8px;
+
+	&::placeholder {
+		opacity: 40%;
+	}
+}
