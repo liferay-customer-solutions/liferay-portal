@@ -3,31 +3,60 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-export const baseAttributes = ['account-id', 'user-id'] as const;
+export const baseAttributes = [
+	'accountExternalReferenceCode',
+	'accountId',
+	'analyticsCloudURL',
+	'cloudConsoleURL',
+	'contactSupportURL',
+	'endUserLicenseAgreement',
+	'eulaBaseURL',
+	'featureFlags',
+	'featurePreview',
+	'lastYearProjectsUsingMarketplaceAppsCount',
+	'marketoFormIdDefault',
+	'marketoFormIdLiferayProduct',
+	'productId',
+	'publisherLicenseAgreement',
+	'ssaProjectPrefix',
+	'trialAccountCheck',
+	'trialSSAHostPrefix',
+	'useSiteTaxonomyVocabularyQuery',
+] as const;
 
-const KPI_DEFAULTS = {
-	kpiConnectorQuartelyRelease: '100',
-	kpiLowCodePublishedApps: '100',
-	kpiPartnershipIntegration: '100',
-	kpiProjectUsingMarketplaceApps: '100',
-	kpiQuartelyReleaseApps: '100',
-} as const;
+const baseKPIAttributes = [
+	'kpiConnectorQuartelyRelease',
+	'kpiLowCodePublishedApps',
+	'kpiPartnershipIntegration',
+	'kpiProjectUsingMarketplaceApps',
+	'kpiQuartelyReleaseApps',
+] as const;
 
-const LAST_YEAR_PROJECTS_USING_MARKETPLACE_APPS_COUNT_DEFAULT = '0';
+function getAttribute<T extends readonly string[]>(
+	element: HTMLElement,
+	attrs: T
+): Record<T[number], string> {
+	return Object.fromEntries(
+		attrs.map((key) => [key, element.getAttribute(key) ?? ''])
+	) as Record<T[number], string>;
+}
 
-export type Properties = {
-	accountId: string | null;
-	kpi: typeof KPI_DEFAULTS;
-	lastYearProjectsUsingMarketplaceAppsCount: string;
-	userId: string | null;
-};
+function parseArray(element: string | null) {
+	return (element ?? '')
+		.split(',')
+		.map((item) => item.trim())
+		.filter(Boolean);
+}
 
-export function getAttributes(element: HTMLElement): Properties {
+export function getAttributes(element: HTMLElement) {
 	return {
-		accountId: element.getAttribute('account-id'),
-		kpi: KPI_DEFAULTS,
-		lastYearProjectsUsingMarketplaceAppsCount:
-			LAST_YEAR_PROJECTS_USING_MARKETPLACE_APPS_COUNT_DEFAULT,
-		userId: element.getAttribute('user-id'),
+		...getAttribute(element, baseAttributes),
+		featureFlags: parseArray(element.getAttribute('featureFlags')),
+		featurePreview: parseArray(element.getAttribute('featurePreview')),
+		kpi: getAttribute(element, baseKPIAttributes),
+		useSiteTaxonomyVocabularyQuery:
+			element.getAttribute('useSiteTaxonomyVocabularyQuery') === 'true',
 	};
 }
+
+export type Properties = ReturnType<typeof getAttributes>;
