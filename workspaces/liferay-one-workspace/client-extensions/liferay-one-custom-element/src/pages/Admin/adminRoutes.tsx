@@ -20,7 +20,9 @@ const MessageQueue = lazy(() => import('./MessageQueue/MessageQueue'));
 const MPFinanceOrders = lazy(() => import('./MPFinanceOrders/MPFinanceOrders'));
 const MPSummary = lazy(() => import('./MPSummary/MPSummary'));
 const MySsaSaasDemo = lazy(() => import('./MySsaSaasDemo/MySsaSaasDemo'));
+const OrderDetails = lazy(() => import('./MPFinanceOrders/OrderDetails'));
 const Orders = lazy(() => import('./Orders/Orders'));
+const PaymentDetails = lazy(() => import('./Payments/PaymentDetails'));
 const Payments = lazy(() => import('./Payments/Payments'));
 const PublisherRequests = lazy(
 	() => import('./PublisherRequests/PublisherRequests')
@@ -58,9 +60,17 @@ export const adminRoutes: AppRoute[] = [
 		path: 'mp-finance-orders',
 	},
 	{
+		element: <OrderDetails />,
+		path: 'mp-finance-orders/:orderId',
+	},
+	{
 		element: <Payments />,
 		nav: {icon: 'order-form', label: 'Marketplace Payments'},
 		path: 'mp-payments',
+	},
+	{
+		element: <PaymentDetails />,
+		path: 'mp-payments/:entryId',
 	},
 	{
 		element: <Publishers />,
