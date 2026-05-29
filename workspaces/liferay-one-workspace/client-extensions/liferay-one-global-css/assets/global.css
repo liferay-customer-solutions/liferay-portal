@@ -3,6 +3,88 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+/* ──  App type badge ── */
+
+.app-type-badge {
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+	display: inline-block;
+	font-size: 11px;
+	font-weight: 600;
+	height: 20px;
+	padding: 0 8px;
+	position: absolute;
+	right: 32px;
+	top: -6px;
+}
+
+/* ──  App type variants ── */
+
+.app-type-badge.batch {
+	--badge-color: #ffb46e;
+	background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);
+	color: color-mix(in srgb, var(--badge-color) 70%, black 50%);
+}
+
+.app-type-badge.checkout {
+	--badge-color: #9be169;
+	background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);
+	color: color-mix(in srgb, var(--badge-color) 70%, black 50%);
+}
+
+.app-type-badge.fragments {
+	--badge-color: #ff5f5f;
+	background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);
+	color: color-mix(in srgb, var(--badge-color) 70%, black 50%);
+}
+
+.app-type-badge.object-definition {
+	--badge-color: #5fc8ff;
+	background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);
+	color: color-mix(in srgb, var(--badge-color) 70%, black 50%);
+}
+
+.app-type-badge.payment-methods {
+	--badge-color: #4b9bff;
+	background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);
+	color: color-mix(in srgb, var(--badge-color) 70%, black 50%);
+}
+
+.app-type-badge.site-initializer {
+	--badge-color: #50d2a0;
+	background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);
+	color: color-mix(in srgb, var(--badge-color) 70%, black 50%);
+}
+
+.app-type-badge.theme {
+	--badge-color: #af78ff;
+	background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);
+	color: color-mix(in srgb, var(--badge-color) 70%, black 50%);
+}
+
+.app-type-badge.workflow-action {
+	--badge-color: #7785ff;
+	background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);
+	color: color-mix(in srgb, var(--badge-color) 70%, black 50%);
+}
+
+.beta-badge-label {
+	align-items: center;
+	background-color: #d1ecfa;
+	border-radius: 4px;
+	color: #166e9e;
+	display: flex;
+	font-size: 13px;
+	font-weight: 600;
+	justify-content: center;
+	line-height: 16px;
+	padding: 4px 8px;
+	text-align: center;
+	vertical-align: middle;
+}
+
 /* ── Card Grid ── */
 
 .card-grid {
@@ -853,4 +935,8 @@
 
 .lo-side-nav__list > li > .lo-side-nav__item-link {
 	padding-left: 1rem;
+}
+
+.lo-section-subtitle {
+	color: #82828c;
 }
