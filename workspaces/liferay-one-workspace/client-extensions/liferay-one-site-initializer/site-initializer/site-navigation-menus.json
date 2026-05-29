@@ -3,24 +3,94 @@
 		"externalReferenceCode": "LO_PRIMARY_NAV",
 		"menuItems": [
 			{
-				"friendlyURL": "/my-account",
-				"name": "My Account",
-				"privateLayout": true,
-				"type": "layout"
+				"friendlyURL": "/home",
+				"name_i18n": {
+					"en_US": "My Account"
+				},
+				"type": "layout",
+				"useCustomName": true
 			},
 			{
+				"externalReferenceCode": "LO_NAV_MARKETPLACE",
+				"menuItems": [
+					{
+						"externalReferenceCode": "LO_NAV_MARKETPLACE_LANDING_PAGE",
+						"menuItems": [
+							{
+								"externalReferenceCode": "LO_NAV_MARKETPLACE_OVERVIEW",
+								"friendlyURL": "/marketplace",
+								"name_i18n": {
+									"en_US": "Marketplace Overview"
+								},
+								"type": "layout",
+								"useCustomName": true
+							}
+						],
+						"name_i18n": {
+							"en_US": "Landing Page"
+						},
+						"title": "Landing Page",
+						"type": "node"
+					},
+					{
+						"externalReferenceCode": "LO_NAV_MARKETPLACE_CATALOGS",
+						"menuItems": [
+							{
+								"externalReferenceCode": "LO_NAV_MARKETPLACE_PRODUCTS_CATALOG",
+								"friendlyURL": "/marketplace/products",
+								"name_i18n": {
+									"en_US": "Products Catalog"
+								},
+								"type": "layout",
+								"useCustomName": true
+							},
+							{
+								"externalReferenceCode": "LO_NAV_MARKETPLACE_APPLICATIONS_CATALOG",
+								"friendlyURL": "/marketplace/applications",
+								"name_i18n": {
+									"en_US": "Applications Catalog"
+								},
+								"type": "layout",
+								"useCustomName": true
+							},
+							{
+								"externalReferenceCode": "LO_NAV_MARKETPLACE_SOLUTIONS_CATALOG",
+								"friendlyURL": "/marketplace/solutions",
+								"name_i18n": {
+									"en_US": "Solutions Catalog"
+								},
+								"type": "layout",
+								"useCustomName": true
+							}
+						],
+						"name_i18n": {
+							"en_US": "Catalogs"
+						},
+						"title": "Catalogs",
+						"type": "node"
+					}
+				],
+				"name_i18n": {
+					"en_US": "Marketplace"
+				},
+				"title": "Marketplace",
+				"type": "node"
+			},
+			{
+				"externalReferenceCode": "LO_NAV_SUPPORT",
 				"friendlyURL": "/support",
-				"name": "Support",
+				"name_i18n": {
+					"en_US": "Support"
+				},
 				"type": "layout"
 			},
 			{
-				"friendlyURL": "/marketplace",
-				"name": "Marketplace",
-				"type": "layout"
-			},
-			{
+				"externalReferenceCode": "LO_NAV_ADMIN",
 				"friendlyURL": "/admin",
 				"name": "Admin",
+				"name_i18n": {
+					"en_US": "Admin"
+				},
 				"type": "layout"
 			}
 		],
@@ -29,75 +99,5 @@
 			"en_US": "Primary Navigation"
 		},
 		"title": "Primary Navigation"
-	},
-	{
-		"externalReferenceCode": "LO_MARKETPLACE_NAV",
-		"menuItems": [
-			{
-				"friendlyURL": "/marketplace/applications",
-				"name": "Applications",
-				"type": "layout"
-			},
-			{
-				"friendlyURL": "/marketplace/products",
-				"name": "Products",
-				"type": "layout"
-			},
-			{
-				"friendlyURL": "/marketplace/publishers",
-				"name": "Publishers",
-				"type": "layout"
-			},
-			{
-				"friendlyURL": "/marketplace/solutions",
-				"name": "Solutions",
-				"type": "layout"
-			}
-		],
-		"name": "Marketplace Navigation",
-		"name_i18n": {
-			"en_US": "Marketplace Navigation"
-		},
-		"title": "Marketplace Navigation"
-	},
-	{
-		"externalReferenceCode": "LO_ADMIN_NAV",
-		"menuItems": [
-			{
-				"friendlyURL": "/admin",
-				"name": "Admin",
-				"type": "layout"
-			}
-		],
-		"name": "Admin Navigation",
-		"name_i18n": {
-			"en_US": "Admin Navigation"
-		},
-		"title": "Admin Navigation"
-	},
-	{
-		"externalReferenceCode": "LO_SUPPORT_NAV",
-		"menuItems": [
-			{
-				"friendlyURL": "/support/getting-started",
-				"name": "Getting Started",
-				"type": "layout"
-			},
-			{
-				"friendlyURL": "/support/customer-portal-help",
-				"name": "Customer Portal Help",
-				"type": "layout"
-			},
-			{
-				"friendlyURL": "/support/announcements",
-				"name": "Announcements",
-				"type": "layout"
-			}
-		],
-		"name": "Support Navigation",
-		"name_i18n": {
-			"en_US": "Support Navigation"
-		},
-		"title": "Support Navigation"
 	}
 ]

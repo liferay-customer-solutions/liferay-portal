@@ -3,12 +3,51 @@
 		"pageElements": [
 			{
 				"definition": {
-					"fragmentSettings": {
-						"unallowedFragments": [
-						]
+					"fragment": {
+						"key": "public-sites-navigation",
+						"siteKey": "[$GROUP_KEY$]"
+					},
+					"fragmentConfig": {
+						"darkNav": false,
+						"navigationDDMTemplateKey": "NAVIGATION_PRIMARY",
+						"showAccountMenu": true,
+						"showLanguageMenu": true,
+						"showSearch": true,
+						"showSiteName": true,
+						"siteNavigationMenuId": 0
+					},
+					"indexed": true
+				},
+				"type": "Fragment"
+			},
+			{
+				"definition": {
+					"indexed": true,
+					"layout": {
 					}
 				},
-				"type": "DropZone"
+				"pageElements": [
+					{
+						"definition": {
+							"fragmentSettings": {
+								"unallowedFragments": [
+								]
+							}
+						},
+						"type": "DropZone"
+					}
+				],
+				"type": "Section"
+			},
+			{
+				"definition": {
+					"fragment": {
+						"key": "footer",
+						"siteKey": "[$GROUP_KEY$]"
+					},
+					"indexed": true
+				},
+				"type": "Fragment"
 			}
 		],
 		"type": "Root"
@@ -24,6 +63,12 @@
 		"styleBook": {
 			"key": "liferay-one",
 			"name": "Liferay One"
+		},
+		"themeSettings": {
+			"lfr-theme:regular:show-footer": "false",
+			"lfr-theme:regular:show-header": "false",
+			"lfr-theme:regular:show-header-search": "false",
+			"lfr-theme:regular:wrap-widget-page-content": "false"
 		}
 	}
 }

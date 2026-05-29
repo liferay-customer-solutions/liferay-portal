@@ -1,0 +1,50 @@
+[
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_LANDING_PAGE#]",
+		"columnName": "Submenu Column Span",
+		"data": "3"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_CATALOGS#]",
+		"columnName": "Submenu Column Span",
+		"data": "9"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_LANDING_PAGE#]",
+		"columnName": "Submenu Child Columns",
+		"data": "1"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_CATALOGS#]",
+		"columnName": "Submenu Child Columns",
+		"data": "3"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_OVERVIEW#]",
+		"columnName": "Menu Item Type",
+		"data": "Image"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_PRODUCTS_CATALOG#]",
+		"columnName": "Menu Item Type",
+		"data": "Image"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_APPLICATIONS_CATALOG#]",
+		"columnName": "Menu Item Type",
+		"data": "Image"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_SOLUTIONS_CATALOG#]",
+		"columnName": "Menu Item Type",
+		"data": "Image"
+	}
+]
