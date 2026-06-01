@@ -1007,22 +1007,23 @@ nav.public-sites-navigation .nav-items-wrapper .adt-nav-item .adt-submenu {
 	display: block;
 	left: 0;
 	list-style: none;
-	margin: 0.5rem 0 0;
+	margin: 0;
 	max-height: 80vh;
 	max-width: none;
 	min-height: auto;
 	opacity: 0;
 	overflow: auto;
 	padding: 1rem 1.5rem 4.5rem;
-	position: absolute;
+	position: fixed;
 	right: 0;
-	top: 100% !important;
+	top: 8rem;
 	transform: translateY(-100px);
 	transition:
 		transform 0.3s cubic-bezier(0.23, 1, 0.32, 1),
 		opacity 0.1s linear,
 		visibility 0.3s linear;
 	visibility: hidden;
+	width: 100%;
 	z-index: -1 !important;
 }
 
@@ -1754,8 +1755,8 @@ nav.public-sites-navigation .language-selector-container .dropdown-menu {
 nav.public-sites-navigation
 	.language-selector-container
 	.language-dropdown-list {
-	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 	border-radius: 10px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper {
