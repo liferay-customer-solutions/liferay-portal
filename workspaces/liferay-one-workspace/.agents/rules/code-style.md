@@ -23,6 +23,7 @@ Do not write log statements like AI-generated code. Specifically:
 - Product/object names in log strings: no hyphens — write `"business event"` not `"business-event"`, `"business events"` not `"business-events"`
 
 Example of what Brian corrected:
+
 ```java
 // Wrong — AI slop
 _log.info(StringBundler.concat("POST business-event update: id=", id, ", body=", json));
