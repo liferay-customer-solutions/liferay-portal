@@ -13,6 +13,13 @@ function main {
 
 	cd ..
 
+	# Clean stale build output before the hotfix and license are extracted
+	# into the build directory and before the image is staged. The site
+	# initializer is deployed after Liferay is healthy (see
+	# deploy_client_extensions.sh), so this keeps a previously staged copy
+	# from being baked into the image and activated during early boot.
+	./gradlew clean
+
 	bash scripts/extract_hotfix.sh
 	bash scripts/extract_license.sh
 
