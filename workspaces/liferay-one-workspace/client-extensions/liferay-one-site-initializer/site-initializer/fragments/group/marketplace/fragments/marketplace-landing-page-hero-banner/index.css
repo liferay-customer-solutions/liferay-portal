@@ -6,66 +6,10 @@
 	position: relative;
 }
 
-.marketplace-hero-banner .marketplace-hero-banner-image {
-	height: 100%;
-	pointer-events: none;
-	position: absolute;
-	right: 0;
-	top: 0;
-	width: auto;
-	z-index: 0;
-}
-
-.marketplace-hero-banner .marketplace-hero-banner-content {
-	display: flex;
-	flex-direction: column;
-	gap: 24px;
-	max-width: 1280px;
-	position: relative;
-	z-index: 1;
-}
-
-.marketplace-hero-banner .marketplace-hero-banner-breadcrumb {
-	align-items: center;
-	color: #6c6c75;
-	display: flex;
-	font-size: 13px;
-	gap: 8px;
-	line-height: 16px;
-}
-
-.marketplace-hero-banner .marketplace-hero-banner-breadcrumb a {
-	color: #6c6c75;
-	text-decoration: none;
-}
-
-.marketplace-hero-banner .marketplace-hero-banner-breadcrumb a:hover {
-	text-decoration: underline;
-}
-
-.marketplace-hero-banner .marketplace-hero-banner-breadcrumb-current {
-	font-weight: 600;
-}
-
-.marketplace-hero-banner .marketplace-hero-banner-title {
-	color: #282934;
-	font-size: 49px;
-	font-weight: 700;
-	line-height: 56px;
-	margin: 0;
-}
-
 .marketplace-hero-banner .marketplace-categories {
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
-}
-
-.marketplace-hero-banner .marketplace-categories-title {
-	color: #282934;
-	font-size: 16px;
-	font-weight: 600;
-	line-height: 24px;
 }
 
 .marketplace-hero-banner .marketplace-categories-list {
@@ -73,6 +17,13 @@
 	flex-wrap: wrap;
 	gap: 16px;
 	max-width: 788px;
+}
+
+.marketplace-hero-banner .marketplace-categories-title {
+	color: #282934;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 24px;
 }
 
 .marketplace-hero-banner .marketplace-category-button {
@@ -116,4 +67,53 @@
 	font-size: 18px;
 	font-weight: 600;
 	line-height: 24px;
+}
+
+.marketplace-hero-banner .marketplace-hero-banner-breadcrumb {
+	align-items: center;
+	color: #6c6c75;
+	display: flex;
+	font-size: 13px;
+	gap: 8px;
+	line-height: 16px;
+}
+
+.marketplace-hero-banner .marketplace-hero-banner-breadcrumb a {
+	color: #6c6c75;
+	text-decoration: none;
+}
+
+.marketplace-hero-banner .marketplace-hero-banner-breadcrumb a:hover {
+	text-decoration: underline;
+}
+
+.marketplace-hero-banner .marketplace-hero-banner-breadcrumb-current {
+	font-weight: 600;
+}
+
+.marketplace-hero-banner .marketplace-hero-banner-content {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	max-width: 1280px;
+	position: relative;
+	z-index: 1;
+}
+
+.marketplace-hero-banner .marketplace-hero-banner-image {
+	height: 100%;
+	pointer-events: none;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: auto;
+	z-index: 0;
+}
+
+.marketplace-hero-banner .marketplace-hero-banner-title {
+	color: #282934;
+	font-size: 49px;
+	font-weight: 700;
+	line-height: 56px;
+	margin: 0;
 }

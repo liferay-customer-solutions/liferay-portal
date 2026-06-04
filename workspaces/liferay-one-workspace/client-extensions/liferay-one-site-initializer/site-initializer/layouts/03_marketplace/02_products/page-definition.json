@@ -28,14 +28,15 @@
 									{
 										"definition": {
 											"fragment": {
-												"key": "marketplace-products-catalog-hero-banner",
+												"key": "marketplace-catalog-hero-banner",
 												"siteKey": "[$GROUP_KEY$]"
 											},
 											"fragmentConfig": {
+												"backgroundImage": "products"
 											},
 											"fragmentFields": [
 												{
-													"id": "title",
+													"id": "breadcrumb",
 													"value": {
 														"text": {
 															"value_i18n": {
@@ -49,7 +50,17 @@
 													"value": {
 														"text": {
 															"value_i18n": {
-																"en_US": "Expand Liferay's portfolio through apps from our partner and developer ecosystems to enhance your digital transformation"
+																"en_US": "Expand Liferay's portfolio through apps from our partner and developer ecosystems to enhance your digital transformation."
+															}
+														}
+													}
+												},
+												{
+													"id": "title",
+													"value": {
+														"text": {
+															"value_i18n": {
+																"en_US": "Products Catalog"
 															}
 														}
 													}
