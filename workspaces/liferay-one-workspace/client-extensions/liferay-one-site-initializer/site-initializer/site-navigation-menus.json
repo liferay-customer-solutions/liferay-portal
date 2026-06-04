@@ -3,10 +3,154 @@
 		"externalReferenceCode": "LO_PRIMARY_NAV",
 		"menuItems": [
 			{
-				"friendlyURL": "/my-account",
-				"name": "My Account",
-				"privateLayout": true,
-				"type": "layout"
+				"externalReferenceCode": "LO_NAV_MY_ACCOUNT",
+				"menuItems": [
+					{
+						"externalReferenceCode": "LO_NAV_MY_ACCOUNT_PROJECT_AND_ORDERS",
+						"menuItems": [
+							{
+								"externalReferenceCode": "LO_NAV_MY_ACCOUNT_PROJECT",
+								"name_i18n": {
+									"en_US": "Project"
+								},
+								"type": "url",
+								"url": "/web/one/my-account/#/projects",
+								"useNewTab": "false"
+							},
+							{
+								"externalReferenceCode": "LO_NAV_MY_ACCOUNT_ORDERS",
+								"name_i18n": {
+									"en_US": "Orders"
+								},
+								"type": "url",
+								"url": "/web/one/my-account/#/orders",
+								"useNewTab": "false"
+							}
+						],
+						"name_i18n": {
+							"en_US": "Project and Orders"
+						},
+						"title": "Project and Orders",
+						"type": "node"
+					},
+					{
+						"externalReferenceCode": "LO_NAV_MY_ACCOUNT_ACCOUNT_MANAGEMENT",
+						"menuItems": [
+							{
+								"externalReferenceCode": "LO_NAV_MY_ACCOUNT_ACCOUNT_DETAILS",
+								"name_i18n": {
+									"en_US": "Account Details"
+								},
+								"type": "url",
+								"url": "/web/one/my-account/#/account-details",
+								"useNewTab": "false"
+							},
+							{
+								"externalReferenceCode": "LO_NAV_MY_ACCOUNT_ACCOUNT_MEMBERS",
+								"name_i18n": {
+									"en_US": "Account Members"
+								},
+								"type": "url",
+								"url": "/web/one/my-account/#/team-members",
+								"useNewTab": "false"
+							},
+							{
+								"externalReferenceCode": "LO_NAV_MY_ACCOUNT_PUBLISHED_APPS",
+								"name_i18n": {
+									"en_US": "Published Apps"
+								},
+								"type": "url",
+								"url": "/web/one/marketplace/publisher-dashboard",
+								"useNewTab": "false"
+							},
+							{
+								"externalReferenceCode": "LO_NAV_MY_ACCOUNT_PUBLISHED_SOLUTIONS",
+								"name_i18n": {
+									"en_US": "Published Solutions"
+								},
+								"type": "url",
+								"url": "/web/one/marketplace/publisher-dashboard/#/solutions",
+								"useNewTab": "false"
+							}
+						],
+						"name_i18n": {
+							"en_US": "Account Management"
+						},
+						"title": "Account Management",
+						"type": "node"
+					}
+				],
+				"name_i18n": {
+					"en_US": "My Account"
+				},
+				"title": "My Account",
+				"type": "node"
+			},
+			{
+				"externalReferenceCode": "LO_NAV_MARKETPLACE",
+				"menuItems": [
+					{
+						"externalReferenceCode": "LO_NAV_MARKETPLACE_LANDING_PAGE",
+						"menuItems": [
+							{
+								"externalReferenceCode": "LO_NAV_MARKETPLACE_OVERVIEW",
+								"friendlyURL": "/marketplace",
+								"name_i18n": {
+									"en_US": "Marketplace Overview"
+								},
+								"type": "layout",
+								"useCustomName": true
+							}
+						],
+						"name_i18n": {
+							"en_US": "Landing Page"
+						},
+						"title": "Landing Page",
+						"type": "node"
+					},
+					{
+						"externalReferenceCode": "LO_NAV_MARKETPLACE_CATALOGS",
+						"menuItems": [
+							{
+								"externalReferenceCode": "LO_NAV_MARKETPLACE_PRODUCTS_CATALOG",
+								"friendlyURL": "/marketplace/products",
+								"name_i18n": {
+									"en_US": "Products Catalog"
+								},
+								"type": "layout",
+								"useCustomName": true
+							},
+							{
+								"externalReferenceCode": "LO_NAV_MARKETPLACE_APPLICATIONS_CATALOG",
+								"friendlyURL": "/marketplace/applications",
+								"name_i18n": {
+									"en_US": "Applications Catalog"
+								},
+								"type": "layout",
+								"useCustomName": true
+							},
+							{
+								"externalReferenceCode": "LO_NAV_MARKETPLACE_SOLUTIONS_CATALOG",
+								"friendlyURL": "/marketplace/solutions",
+								"name_i18n": {
+									"en_US": "Solutions Catalog"
+								},
+								"type": "layout",
+								"useCustomName": true
+							}
+						],
+						"name_i18n": {
+							"en_US": "Catalogs"
+						},
+						"title": "Catalogs",
+						"type": "node"
+					}
+				],
+				"name_i18n": {
+					"en_US": "Marketplace"
+				},
+				"title": "Marketplace",
+				"type": "node"
 			},
 			{
 				"externalReferenceCode": "LO_NAV_SUPPORT",
@@ -181,13 +325,12 @@
 				"type": "node"
 			},
 			{
-				"friendlyURL": "/marketplace",
-				"name": "Marketplace",
-				"type": "layout"
-			},
-			{
+				"externalReferenceCode": "LO_NAV_ADMIN",
 				"friendlyURL": "/admin",
 				"name": "Admin",
+				"name_i18n": {
+					"en_US": "Admin"
+				},
 				"type": "layout"
 			}
 		],
@@ -196,50 +339,5 @@
 			"en_US": "Primary Navigation"
 		},
 		"title": "Primary Navigation"
-	},
-	{
-		"externalReferenceCode": "LO_MARKETPLACE_NAV",
-		"menuItems": [
-			{
-				"friendlyURL": "/marketplace/applications",
-				"name": "Applications",
-				"type": "layout"
-			},
-			{
-				"friendlyURL": "/marketplace/products",
-				"name": "Products",
-				"type": "layout"
-			},
-			{
-				"friendlyURL": "/marketplace/publishers",
-				"name": "Publishers",
-				"type": "layout"
-			},
-			{
-				"friendlyURL": "/marketplace/solutions",
-				"name": "Solutions",
-				"type": "layout"
-			}
-		],
-		"name": "Marketplace Navigation",
-		"name_i18n": {
-			"en_US": "Marketplace Navigation"
-		},
-		"title": "Marketplace Navigation"
-	},
-	{
-		"externalReferenceCode": "LO_ADMIN_NAV",
-		"menuItems": [
-			{
-				"friendlyURL": "/admin",
-				"name": "Admin",
-				"type": "layout"
-			}
-		],
-		"name": "Admin Navigation",
-		"name_i18n": {
-			"en_US": "Admin Navigation"
-		},
-		"title": "Admin Navigation"
 	}
 ]
