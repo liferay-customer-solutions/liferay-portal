@@ -11,33 +11,6 @@
 	},
 	"items": [
 		{
-			"externalReferenceCode": "L_COMMERCE_ORDER",
-			"name": "CommerceOrder",
-			"objectFields": [
-				{
-					"DBType": "String",
-					"businessType": "Text",
-					"externalReferenceCode": "L_COMMERCE_ORDER_LDP_WORKSPACE_NAME",
-					"indexed": true,
-					"indexedAsKeyword": true,
-					"indexedLanguageId": "",
-					"label": {
-						"en_US": "LDP Workspace Name"
-					},
-					"name": "ldpWorkspaceName",
-					"objectFieldSettings": [
-					],
-					"required": false,
-					"state": false,
-					"system": false,
-					"type": "String"
-				}
-			],
-			"objectRelationships": [
-			],
-			"system": true
-		},
-		{
 			"externalReferenceCode": "L_COMMERCE_ORDER_ITEM",
 			"name": "CommerceOrderItem",
 			"objectFields": [
