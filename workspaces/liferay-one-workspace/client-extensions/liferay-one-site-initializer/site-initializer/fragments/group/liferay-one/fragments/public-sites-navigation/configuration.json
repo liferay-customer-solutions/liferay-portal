@@ -21,14 +21,6 @@
 				{
 					"dataType": "string",
 					"defaultValue": true,
-					"description": "Show CTA",
-					"label": "Show CTA",
-					"name": "showCta",
-					"type": "checkbox"
-				},
-				{
-					"dataType": "string",
-					"defaultValue": true,
 					"description": "Show Language Menu",
 					"label": "Show Language Menu",
 					"name": "showLanguageMenu",
