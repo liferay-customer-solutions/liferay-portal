@@ -20,25 +20,23 @@ const UsageMetrics = lazy(() => import('./BillingUsage/UsageMetrics'));
 const OrderHistory = lazy(() => import('./Orders/OrderHistory'));
 const Orders = lazy(() => import('./Orders/Orders'));
 const AccountVerification = lazy(
-	() => import('./Subscriptions/AccountVerification')
+	() => import('./Projects/AccountVerification')
 );
-const ActivationKeys = lazy(() => import('./Subscriptions/ActivationKeys'));
-const EulaManagement = lazy(() => import('./Subscriptions/EulaManagement'));
+const ActivationKeys = lazy(() => import('./Projects/ActivationKeys'));
+const EulaManagement = lazy(() => import('./Projects/EulaManagement'));
+const ProjectDetails = lazy(() => import('./Projects/ProjectDetails'));
+const Projects = lazy(() => import('./Projects/Projects'));
 const PublisherOnboarding = lazy(
-	() => import('./Subscriptions/PublisherOnboarding')
+	() => import('./Projects/PublisherOnboarding')
 );
-const Purchases = lazy(() => import('./Subscriptions/Purchases'));
-const SubscriptionDetails = lazy(
-	() => import('./Subscriptions/SubscriptionDetails')
-);
-const Subscriptions = lazy(() => import('./Subscriptions/Subscriptions'));
+const Purchases = lazy(() => import('./Projects/Purchases'));
 const TeamMembers = lazy(() => import('./TeamMembers'));
 
-const subscriptionRoutes: AppRoute[] = [
-	{element: <Subscriptions />, index: true},
+const projectRoutes: AppRoute[] = [
+	{element: <Projects />, index: true},
 	{
 		children: [
-			{element: <SubscriptionDetails />, index: true},
+			{element: <ProjectDetails />, index: true},
 			{element: <ActivationKeys />, path: 'activation-keys'},
 			{element: <EulaManagement />, path: 'eula-management'},
 			{element: <Purchases />, path: 'purchases-licenses'},
@@ -98,11 +96,11 @@ const billingRoutes: AppRoute[] = [
 ];
 
 export const myAccountRoutes: AppRoute[] = [
-	{element: <Navigate replace to="subscriptions" />, index: true},
+	{element: <Navigate replace to="projects" />, index: true},
 	{
-		children: subscriptionRoutes,
-		nav: {label: 'Subscriptions'},
-		path: 'subscriptions',
+		children: projectRoutes,
+		nav: {label: 'Projects'},
+		path: 'projects',
 	},
 	{children: orderRoutes, nav: {label: 'Orders'}, path: 'orders'},
 	{

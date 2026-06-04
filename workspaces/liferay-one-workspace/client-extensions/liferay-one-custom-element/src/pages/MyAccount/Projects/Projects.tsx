@@ -5,7 +5,7 @@
 
 import {useProperties} from '../../../context/PropertiesContext';
 
-export default function SubscriptionDetails() {
+export default function Projects() {
 	const {accountId} = useProperties();
 
 	return <div>{accountId}</div>;
