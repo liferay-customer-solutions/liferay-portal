@@ -46,6 +46,17 @@
 		},
 		{
 			"deletionType": "cascade",
+			"externalReferenceCode": "R_ACCOUNT_ENTRY_TO_PROJECT",
+			"label": {
+				"en_US": "Account Entry to Project"
+			},
+			"name": "accountEntryToProject",
+			"objectDefinitionExternalReferenceCode1": "L_ACCOUNT",
+			"objectDefinitionExternalReferenceCode2": "C_PROJECT",
+			"type": "oneToMany"
+		},
+		{
+			"deletionType": "cascade",
 			"externalReferenceCode": "R_ACCOUNT_ENTRY_TO_PROPERTY",
 			"label": {
 				"en_US": "Account Entry to Property"

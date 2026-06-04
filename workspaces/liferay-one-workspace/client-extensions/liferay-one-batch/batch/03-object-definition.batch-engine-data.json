@@ -2866,6 +2866,82 @@
 		},
 		{
 			"active": true,
+			"className": "com.liferay.object.model.ObjectDefinition#C_PROJECT",
+			"enableCategorization": false,
+			"enableComments": false,
+			"enableObjectEntryHistory": false,
+			"externalReferenceCode": "C_PROJECT",
+			"label": {
+				"en_US": "Project"
+			},
+			"name": "Project",
+			"objectFields": [
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_PROJECT_NAME",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Name"
+					},
+					"name": "name",
+					"objectFieldSettings": [
+					],
+					"required": true,
+					"state": false,
+					"system": false,
+					"type": "String"
+				}
+			],
+			"objectFolderExternalReferenceCode": "C_LIFERAY_ONE_FOLDER",
+			"objectRelationships": [
+			],
+			"objectValidationRules": [
+			],
+			"objectViews": [
+				{
+					"defaultObjectView": true,
+					"name": {
+						"en_US": "Default View"
+					},
+					"objectDefinitionExternalReferenceCode": "C_PROJECT",
+					"objectViewColumns": [
+						{
+							"label": {
+								"en_US": "ERC"
+							},
+							"objectFieldName": "externalReferenceCode",
+							"priority": 0
+						},
+						{
+							"label": {
+								"en_US": "Name"
+							},
+							"objectFieldName": "name",
+							"priority": 1
+						}
+					]
+				}
+			],
+			"panelCategoryKey": "applications_menu.applications.content",
+			"pluralLabel": {
+				"en_US": "Projects"
+			},
+			"portlet": true,
+			"restContextPath": "/o/c/projects",
+			"scope": "company",
+			"status": {
+				"code": 0,
+				"label": "approved",
+				"label_i18n": "Approved"
+			},
+			"system": false,
+			"titleObjectFieldName": "name"
+		},
+		{
+			"active": true,
 			"className": "com.liferay.object.model.ObjectDefinition#C_PROPERTY",
 			"enableCategorization": false,
 			"enableComments": false,
@@ -2989,6 +3065,66 @@
 			"objectRelationships": [
 			],
 			"objectValidationRules": [
+			],
+			"objectViews": [
+				{
+					"defaultObjectView": true,
+					"name": {
+						"en_US": "Default View"
+					},
+					"objectDefinitionExternalReferenceCode": "C_PROPERTY",
+					"objectViewColumns": [
+						{
+							"label": {
+								"en_US": "ERC"
+							},
+							"objectFieldName": "externalReferenceCode",
+							"priority": 0
+						},
+						{
+							"label": {
+								"en_US": "Class Name ID"
+							},
+							"objectFieldName": "classNameId",
+							"priority": 1
+						},
+						{
+							"label": {
+								"en_US": "Class Name"
+							},
+							"objectFieldName": "className",
+							"priority": 2
+						},
+						{
+							"label": {
+								"en_US": "Class PK"
+							},
+							"objectFieldName": "classPK",
+							"priority": 3
+						},
+						{
+							"label": {
+								"en_US": "Name"
+							},
+							"objectFieldName": "name",
+							"priority": 4
+						},
+						{
+							"label": {
+								"en_US": "Value"
+							},
+							"objectFieldName": "value",
+							"priority": 5
+						},
+						{
+							"label": {
+								"en_US": "Metadata JSON"
+							},
+							"objectFieldName": "metadataJson",
+							"priority": 6
+						}
+					]
+				}
 			],
 			"panelCategoryKey": "applications_menu.applications.content",
 			"pluralLabel": {
