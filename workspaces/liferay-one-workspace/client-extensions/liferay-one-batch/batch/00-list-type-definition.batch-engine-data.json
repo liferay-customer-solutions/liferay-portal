@@ -159,6 +159,27 @@
 			"name": "Account Tier"
 		},
 		{
+			"externalReferenceCode": "LT_CONTRACT_TYPE",
+			"listTypeEntries": [
+				{
+					"externalReferenceCode": "LT_CONTRACT_TYPE_AMENDMENT",
+					"key": "amendment",
+					"name": "Amendment"
+				},
+				{
+					"externalReferenceCode": "LT_CONTRACT_TYPE_INITIAL",
+					"key": "initial",
+					"name": "Initial"
+				},
+				{
+					"externalReferenceCode": "LT_CONTRACT_TYPE_RENEWAL",
+					"key": "renewal",
+					"name": "Renewal"
+				}
+			],
+			"name": "Contract Type"
+		},
+		{
 			"externalReferenceCode": "LT_ENTITLEMENT_RULE_TYPE",
 			"listTypeEntries": [
 				{

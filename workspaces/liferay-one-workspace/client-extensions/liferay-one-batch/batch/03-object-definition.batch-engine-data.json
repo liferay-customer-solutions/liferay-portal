@@ -676,6 +676,25 @@
 			"name": "Contract",
 			"objectFields": [
 				{
+					"DBType": "Boolean",
+					"businessType": "Boolean",
+					"defaultValue": "false",
+					"externalReferenceCode": "C_CONTRACT_ACTIVE_CONTRACT",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Active Contract"
+					},
+					"name": "activeContract",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Boolean"
+				},
+				{
 					"DBType": "Integer",
 					"businessType": "Integer",
 					"externalReferenceCode": "C_CONTRACT_CONTRACT_BILLING_CADENCE",
@@ -710,6 +729,25 @@
 					"state": false,
 					"system": false,
 					"type": "Integer"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Picklist",
+					"externalReferenceCode": "C_CONTRACT_CONTRACT_TYPE",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Contract Type"
+					},
+					"listTypeDefinitionExternalReferenceCode": "LT_CONTRACT_TYPE",
+					"name": "contractType",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
 				},
 				{
 					"DBType": "String",
@@ -750,6 +788,24 @@
 					"state": false,
 					"system": false,
 					"type": "Date"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_CONTRACT_NAME",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Name"
+					},
+					"name": "name",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
 				},
 				{
 					"DBType": "Integer",
