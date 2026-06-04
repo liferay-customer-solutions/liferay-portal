@@ -1,5 +1,6 @@
 {
 	"dependencies": {
+		"@clayui/autocomplete": "^3.159.0",
 		"@clayui/button": "^3.159.0",
 		"@clayui/core": "^3.159.0",
 		"@clayui/date-picker": "^3.159.0",
@@ -11,6 +12,7 @@
 		"@clayui/loading-indicator": "^3.159.0",
 		"@clayui/management-toolbar": "^3.159.0",
 		"@clayui/modal": "^3.159.0",
+		"@clayui/multi-select": "^3.159.0",
 		"@clayui/pagination-bar": "^3.159.0",
 		"@clayui/table": "^3.159.0",
 		"@clayui/tooltip": "^3.159.0",
