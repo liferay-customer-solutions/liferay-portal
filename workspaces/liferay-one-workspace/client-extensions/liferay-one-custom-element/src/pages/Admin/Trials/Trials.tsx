@@ -23,7 +23,7 @@ const getAvailabilityResourceLabel = (availability: Availability) => {
 };
 
 export default function Trials() {
-	const {availability, isLoading, orderTableData, totalCount} =
+	const {availability, isLoading, mutate, orderTableData, totalCount} =
 		useTrialMetrics('week');
 
 	return (
@@ -124,7 +124,10 @@ export default function Trials() {
 				</div>
 
 				<div className="border d-flex flex-column justify-content-center p-6 rounded-lg">
-					<TrialTable items={orderTableData?.items || []} />
+					<TrialTable
+						items={orderTableData?.items || []}
+						revalidate={mutate}
+					/>
 				</div>
 			</div>
 		</Page>
