@@ -314,5 +314,267 @@
 		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_SUPPORT_TOOLS#]",
 		"columnName": "Menu Item Type",
 		"data": "Image"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_LANDING_PAGE#]",
+		"columnName": "Submenu Child Columns",
+		"data": "1"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_LANDING_PAGE#]",
+		"columnName": "Submenu Column Span",
+		"data": "3"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_CATALOGS#]",
+		"columnName": "Submenu Child Columns",
+		"data": "3"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_CATALOGS#]",
+		"columnName": "Submenu Column Span",
+		"data": "9"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_PROJECT_AND_ORDERS#]",
+		"columnName": "Submenu Child Columns",
+		"data": "1"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_PROJECT_AND_ORDERS#]",
+		"columnName": "Submenu Column Span",
+		"data": "6"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_ACCOUNT_MANAGEMENT#]",
+		"columnName": "Submenu Child Columns",
+		"data": "1"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_ACCOUNT_MANAGEMENT#]",
+		"columnName": "Submenu Column Span",
+		"data": "6"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_OVERVIEW#]",
+		"columnName": "Menu Item Description",
+		"data": {
+			"en_US": "Browse Liferay’s World",
+			"es_ES": "Browse Liferay’s World",
+			"ja_JP": "Browse Liferay’s World",
+			"pt_BR": "Browse Liferay’s World"
+		}
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_OVERVIEW#]",
+		"columnName": "Menu Item Image URL",
+		"data": {
+			"en_US": "/documents/d/one/marketplace_overview_icon-svg",
+			"es_ES": "/documents/d/one/marketplace_overview_icon-svg",
+			"ja_JP": "/documents/d/one/marketplace_overview_icon-svg",
+			"pt_BR": "/documents/d/one/marketplace_overview_icon-svg"
+		}
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_OVERVIEW#]",
+		"columnName": "Menu Item Type",
+		"data": "Image"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_PRODUCTS_CATALOG#]",
+		"columnName": "Menu Item Description",
+		"data": {
+			"en_US": "Discover the essential foundational tools Liferay offers",
+			"es_ES": "Discover the essential foundational tools Liferay offers",
+			"ja_JP": "Discover the essential foundational tools Liferay offers",
+			"pt_BR": "Discover the essential foundational tools Liferay offers"
+		}
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_PRODUCTS_CATALOG#]",
+		"columnName": "Menu Item Image URL",
+		"data": {
+			"en_US": "/documents/d/one/catalogs_icon-svg",
+			"es_ES": "/documents/d/one/catalogs_icon-svg",
+			"ja_JP": "/documents/d/one/catalogs_icon-svg",
+			"pt_BR": "/documents/d/one/catalogs_icon-svg"
+		}
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_PRODUCTS_CATALOG#]",
+		"columnName": "Menu Item Type",
+		"data": "Image"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_APPLICATIONS_CATALOG#]",
+		"columnName": "Menu Item Description",
+		"data": {
+			"en_US": "DXP Apps, Client extensions, Fragments, Composite Apps and many more",
+			"es_ES": "DXP Apps, Client extensions, Fragments, Composite Apps and many more",
+			"ja_JP": "DXP Apps, Client extensions, Fragments, Composite Apps and many more",
+			"pt_BR": "DXP Apps, Client extensions, Fragments, Composite Apps and many more"
+		}
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_APPLICATIONS_CATALOG#]",
+		"columnName": "Menu Item Image URL",
+		"data": {
+			"en_US": "/documents/d/one/catalogs_icon-svg",
+			"es_ES": "/documents/d/one/catalogs_icon-svg",
+			"ja_JP": "/documents/d/one/catalogs_icon-svg",
+			"pt_BR": "/documents/d/one/catalogs_icon-svg"
+		}
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_APPLICATIONS_CATALOG#]",
+		"columnName": "Menu Item Type",
+		"data": "Image"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_SOLUTIONS_CATALOG#]",
+		"columnName": "Menu Item Description",
+		"data": {
+			"en_US": "Dicover Business solutions from our partner ecosystem",
+			"es_ES": "Dicover Business solutions from our partner ecosystem",
+			"ja_JP": "Dicover Business solutions from our partner ecosystem",
+			"pt_BR": "Dicover Business solutions from our partner ecosystem"
+		}
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_SOLUTIONS_CATALOG#]",
+		"columnName": "Menu Item Image URL",
+		"data": {
+			"en_US": "/documents/d/one/catalogs_icon-svg",
+			"es_ES": "/documents/d/one/catalogs_icon-svg",
+			"ja_JP": "/documents/d/one/catalogs_icon-svg",
+			"pt_BR": "/documents/d/one/catalogs_icon-svg"
+		}
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MARKETPLACE_SOLUTIONS_CATALOG#]",
+		"columnName": "Menu Item Type",
+		"data": "Image"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_PROJECT#]",
+		"columnName": "Menu Item Image URL",
+		"data": {
+			"en_US": "/documents/d/one/marketplace_overview_icon-svg",
+			"es_ES": "/documents/d/one/marketplace_overview_icon-svg",
+			"ja_JP": "/documents/d/one/marketplace_overview_icon-svg",
+			"pt_BR": "/documents/d/one/marketplace_overview_icon-svg"
+		}
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_PROJECT#]",
+		"columnName": "Menu Item Type",
+		"data": "Image"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_ORDERS#]",
+		"columnName": "Menu Item Image URL",
+		"data": {
+			"en_US": "/documents/d/one/orders-svg",
+			"es_ES": "/documents/d/one/orders-svg",
+			"ja_JP": "/documents/d/one/orders-svg",
+			"pt_BR": "/documents/d/one/orders-svg"
+		}
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_ORDERS#]",
+		"columnName": "Menu Item Type",
+		"data": "Image"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_ACCOUNT_DETAILS#]",
+		"columnName": "Menu Item Image URL",
+		"data": {
+			"en_US": "/documents/d/one/account_details-svg",
+			"es_ES": "/documents/d/one/account_details-svg",
+			"ja_JP": "/documents/d/one/account_details-svg",
+			"pt_BR": "/documents/d/one/account_details-svg"
+		}
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_ACCOUNT_DETAILS#]",
+		"columnName": "Menu Item Type",
+		"data": "Image"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_ACCOUNT_MEMBERS#]",
+		"columnName": "Menu Item Image URL",
+		"data": {
+			"en_US": "/documents/d/one/account_members-svg",
+			"es_ES": "/documents/d/one/account_members-svg",
+			"ja_JP": "/documents/d/one/account_members-svg",
+			"pt_BR": "/documents/d/one/account_members-svg"
+		}
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_ACCOUNT_MEMBERS#]",
+		"columnName": "Menu Item Type",
+		"data": "Image"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_PUBLISHED_APPS#]",
+		"columnName": "Menu Item Image URL",
+		"data": {
+			"en_US": "/documents/d/one/publisher_dashboard-svg",
+			"es_ES": "/documents/d/one/publisher_dashboard-svg",
+			"ja_JP": "/documents/d/one/publisher_dashboard-svg",
+			"pt_BR": "/documents/d/one/publisher_dashboard-svg"
+		}
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_PUBLISHED_APPS#]",
+		"columnName": "Menu Item Type",
+		"data": "Image"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_PUBLISHED_SOLUTIONS#]",
+		"columnName": "Menu Item Image URL",
+		"data": {
+			"en_US": "/documents/d/one/publisher_dashboard-svg",
+			"es_ES": "/documents/d/one/publisher_dashboard-svg",
+			"ja_JP": "/documents/d/one/publisher_dashboard-svg",
+			"pt_BR": "/documents/d/one/publisher_dashboard-svg"
+		}
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_PUBLISHED_SOLUTIONS#]",
+		"columnName": "Menu Item Type",
+		"data": "Image"
 	}
 ]

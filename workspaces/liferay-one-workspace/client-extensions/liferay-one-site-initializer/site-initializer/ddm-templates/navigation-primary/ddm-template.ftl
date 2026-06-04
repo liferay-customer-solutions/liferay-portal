@@ -1,7 +1,32 @@
-<ul class="adt-navigation">
+<#assign
+	canBypassMyAccount = false
+	hasMarketplacePublisherRole = false
+/>
+
+<#attempt>
+	<#if themeDisplay.isSignedIn()>
+		<#list themeDisplay.getUser().getRoles() as userRole>
+			<#if userRole.getName() == "Administrator" || userRole.getName() == "Liferay Staff">
+				<#assign canBypassMyAccount = true />
+			</#if>
+
+			<#if userRole.getName() == "Marketplace Publisher">
+				<#assign hasMarketplacePublisherRole = true />
+			</#if>
+		</#list>
+	</#if>
+<#recover>
+	<#assign
+		canBypassMyAccount = false
+		hasMarketplacePublisherRole = false
+	/>
+</#attempt>
+
+<ul class="adt-navigation" data-account-bypass="${canBypassMyAccount?c}">
 	<#if entries?has_content>
 		<#list entries as navPrimaryItem>
-			<#if (navPrimaryItem.getChildren()?size > 0)>
+			<#if navPrimaryItem.getName() == "My Account" && !themeDisplay.isSignedIn()>
+			<#elseif (navPrimaryItem.getChildren()?size > 0)>
 				<div class="adt-nav-item dropdown dropdown-action w-100">
 					<button
 						aria-expanded="true"
@@ -43,11 +68,11 @@
 					<#assign
 						secondaryCustomFields = navSecondaryItem.getExpandoAttributes()!{}
 
-						backgroundColor = secondaryCustomFields["Submenu Background"]!?first!""
-						childColumns = secondaryCustomFields["Submenu Child Columns"]!?first!""
-						columnSpan = secondaryCustomFields["Submenu Column Span"]!?first!""
-						imageURL = getLocalizedExpandoValue(secondaryCustomFields["Menu Item Image URL"]!{})!""
-						menuItemType = secondaryCustomFields["Menu Item Type"]!?first!""
+						backgroundColor = (secondaryCustomFields["Submenu Background"]?first)!""
+						childColumns = (secondaryCustomFields["Submenu Child Columns"]?first)!""
+						columnSpan = (secondaryCustomFields["Submenu Column Span"]?first)!""
+						imageURL = getLocalizedExpandoValue((secondaryCustomFields["Menu Item Image URL"])!{})!""
+						menuItemType = (secondaryCustomFields["Menu Item Type"]?first)!""
 					/>
 
 					<#if childColumns?has_content>
@@ -68,16 +93,17 @@
 
 						<#list navSecondaryItem.getChildren() as navTertiaryItem>
 							<#assign
-								tertiaryCustomFields = navTertiaryItem.getExpandoAttributes()
+								tertiaryCustomFields = navTertiaryItem.getExpandoAttributes()!{}
 
-								descriptionText = getLocalizedExpandoValue(tertiaryCustomFields["Menu Item Description"]!{})!""
-								imageURL = getLocalizedExpandoValue(tertiaryCustomFields["Menu Item Image URL"]!{})!""
-								menuItemType = tertiaryCustomFields["Menu Item Type"]!?first!""
-								preheaderText = getLocalizedExpandoValue(tertiaryCustomFields["Menu Item Preheader"]!{})!""
+								descriptionText = getLocalizedExpandoValue((tertiaryCustomFields["Menu Item Description"])!{})!""
+								imageURL = getLocalizedExpandoValue((tertiaryCustomFields["Menu Item Image URL"])!{})!""
+								menuItemType = (tertiaryCustomFields["Menu Item Type"]?first)!""
+								preheaderText = getLocalizedExpandoValue((tertiaryCustomFields["Menu Item Preheader"])!{})!""
 							/>
 
+							<#if !((navTertiaryItem.getName() == "Published Apps" || navTertiaryItem.getName() == "Published Solutions") && !hasMarketplacePublisherRole)>
 							<li class="adt-submenu-item-content ${menuItemType?lower_case}-type grid-column-span-${childColumns}">
-								<a class="adt-submenu-item-link" href="${navTertiaryItem.getURL()}" tabindex="4" "${navTertiaryItem.getTarget()}">
+								<a class="adt-submenu-item-link" href="${navTertiaryItem.getURL()}" tabindex="4">
 									<#if stringUtil.equals(menuItemType, "Image") && imageURL?has_content>
 										<img class="adt-submenu-item-image" loading="lazy" src="${imageURL}" />
 									</#if>
@@ -89,7 +115,7 @@
 											</div>
 										</#if>
 
-										<div class="adt-submenu-item-title h5">
+										<div class="adt-submenu-item-title h5" data-nav-name="${navTertiaryItem.getName()}">
 											${navTertiaryItem.getName()}
 										</div>
 
@@ -101,6 +127,7 @@
 									</div>
 								</a>
 							</li>
+							</#if>
 						</#list>
 					</ul>
 				</#list>

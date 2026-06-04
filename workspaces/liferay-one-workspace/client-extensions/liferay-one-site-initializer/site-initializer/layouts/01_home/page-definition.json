@@ -1448,6 +1448,236 @@
 					}
 				],
 				"type": "Section"
+			},
+			{
+				"definition": {
+					"fragmentStyle": {
+						"marginBottom": "5rem"
+					},
+					"indexed": true,
+					"layout": {
+						"widthType": "Fixed"
+					},
+					"name": "Liferay Products"
+				},
+				"pageElements": [
+					{
+						"definition": {
+							"indexed": true,
+							"layout": {
+								"contentDisplay": "FlexRow",
+								"justify": "SpaceBetween"
+							}
+						},
+						"pageElements": [
+							{
+								"definition": {
+									"fragment": {
+										"key": "BASIC_COMPONENT-heading"
+									},
+									"fragmentConfig": {
+										"headingLevel": "h2"
+									},
+									"fragmentFields": [
+										{
+											"id": "element-text",
+											"value": {
+												"text": {
+													"value_i18n": {
+														"en_US": "Liferay Products"
+													}
+												}
+											}
+										}
+									],
+									"fragmentStyle": {
+										"marginBottom": "1"
+									},
+									"indexed": true
+								},
+								"type": "Fragment"
+							},
+							{
+								"definition": {
+									"cssClasses": [
+										"font-weight-bold"
+									],
+									"fragment": {
+										"key": "BASIC_COMPONENT-button"
+									},
+									"fragmentConfig": {
+										"buttonSize": "nm",
+										"buttonType": "link",
+										"type": "link"
+									},
+									"fragmentFields": [
+										{
+											"id": "link",
+											"value": {
+												"fragmentLink": {
+													"value": {
+														"href": {
+															"value": "/marketplace/products"
+														}
+													}
+												},
+												"text": {
+													"value_i18n": {
+														"en_US": "View All →"
+													}
+												}
+											}
+										}
+									],
+									"indexed": true
+								},
+								"type": "Fragment"
+							}
+						],
+						"type": "Section"
+					},
+					{
+						"definition": {
+							"cssClasses": [
+								"lo-section-subtitle"
+							],
+							"fragment": {
+								"key": "BASIC_COMPONENT-paragraph"
+							},
+							"fragmentFields": [
+								{
+									"id": "element-text",
+									"value": {
+										"text": {
+											"value_i18n": {
+												"en_US": "Our most powerful tools to build and grow your productivity."
+											}
+										}
+									}
+								}
+							],
+							"fragmentStyle": {
+								"textColor": "#82828C"
+							},
+							"indexed": true
+						},
+						"type": "Fragment"
+					},
+					{
+						"definition": {
+							"fragmentStyle": {
+								"hidden": true
+							},
+							"widgetInstance": {
+								"widgetConfig": {
+									"allowEmptySearches": "true",
+									"basicFacetSelection": "false",
+									"federatedSearchKey": ""
+								},
+								"widgetName": "com_liferay_portal_search_web_search_options_portlet_SearchOptionsPortlet"
+							}
+						},
+						"type": "Widget"
+					},
+					{
+						"definition": {
+							"fragmentStyle": {
+								"hidden": true
+							},
+							"widgetInstance": {
+								"widgetConfig": {
+									"boost": "",
+									"customHeading": "",
+									"disabled": "false",
+									"displayStyle": "default",
+									"displayStyleGroupId": "[$GROUP_ID$]",
+									"displayStyleGroupKey": "[$GROUP_ID$]",
+									"federatedSearchKey": "",
+									"filterField": "assetCategoryIds",
+									"filterQueryType": "match",
+									"filterValue": "[$TAXONOMY_CATEGORY_ID:/site-initializer/taxonomy-vocabularies/company/marketplace-product-type/product.json$]",
+									"immutable": "true",
+									"invisible": "true",
+									"occur": "must",
+									"parameterName": "",
+									"parentQueryName": "",
+									"queryName": ""
+								},
+								"widgetName": "com_liferay_portal_search_web_internal_custom_filter_portlet_CustomFilterPortlet"
+							}
+						},
+						"type": "Widget"
+					},
+					{
+						"definition": {
+							"fragmentStyle": {
+								"hidden": true
+							},
+							"widgetInstance": {
+								"widgetConfig": {
+									"displayStyle": "default",
+									"displayStyleGroupId": "[$GROUP_ID$]",
+									"displayStyleGroupKey": "[$GROUP_ID$]",
+									"fields": "[{\"field\": \"createDate-\", \"label\": \"created\"}]"
+								},
+								"widgetName": "com_liferay_portal_search_web_internal_sort_portlet_SortPortlet"
+							}
+						},
+						"type": "Widget"
+					},
+					{
+						"definition": {
+							"widgetInstance": {
+								"widgetConfig": {
+									"cpContentListRendererKey": "list-default",
+									"diagram--cpTypeListEntryRendererKey": "list-entry-diagram",
+									"displayStyle": "ddmTemplate_LO_PRODUCTS_SEARCH_RESULTS",
+									"displayStyleGroupId": "[$GROUP_ID$]",
+									"displayStyleGroupKey": "[$GROUP_ID$]",
+									"grouped--cpTypeListEntryRendererKey": "list-entry-default",
+									"paginate": "false",
+									"paginationDelta": "3",
+									"selectionStyle": "adt",
+									"simple--cpTypeListEntryRendererKey": "list-entry-default",
+									"virtual--cpTypeListEntryRendererKey": "list-entry-default"
+								},
+								"widgetName": "com_liferay_commerce_product_content_search_web_internal_portlet_CPSearchResultsPortlet"
+							}
+						},
+						"type": "Widget"
+					}
+				],
+				"type": "Section"
+			},
+			{
+				"definition": {
+					"indexed": true,
+					"layout": {
+						"widthType": "Fixed"
+					},
+					"name": "What's New on Marketplace"
+				},
+				"pageElements": [
+					{
+						"definition": {
+							"fragment": {
+								"key": "home-apps-display",
+								"siteKey": "[$GROUP_KEY$]"
+							},
+							"fragmentConfig": {
+								"cardSize": "large",
+								"hideRatingInfo": true,
+								"pageSize": "4",
+								"sectionDescription": "Fragments and client extensions to foster your productivity",
+								"sectionTitle": "What's New on Marketplace",
+								"specificationFilterValue": ""
+							},
+							"indexed": true
+						},
+						"type": "Fragment"
+					}
+				],
+				"type": "Section"
 			}
 		],
 		"type": "Root"
