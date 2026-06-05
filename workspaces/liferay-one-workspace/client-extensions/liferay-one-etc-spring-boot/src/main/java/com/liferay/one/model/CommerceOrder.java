@@ -10,16 +10,13 @@ import org.json.JSONObject;
 /**
  * @author Felipe Veloso
  */
-public class CommerceOrder {
+public class CommerceOrder extends LiferayObject {
 
 	public CommerceOrder(JSONObject jsonObject) {
+		super(jsonObject);
+
 		_commerceOrderId = jsonObject.getLong("id");
-
-		JSONObject customFieldsJSONObject = jsonObject.optJSONObject(
-			"customFields");
-
-		_contractId = (customFieldsJSONObject == null) ? 0 :
-			customFieldsJSONObject.optLong("contractId");
+		_contractId = getCustomFieldLong("contractId");
 	}
 
 	public long getCommerceOrderId() {
