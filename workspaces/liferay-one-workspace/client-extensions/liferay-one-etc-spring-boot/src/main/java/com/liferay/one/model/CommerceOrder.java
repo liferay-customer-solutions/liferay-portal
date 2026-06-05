@@ -14,7 +14,12 @@ public class CommerceOrder {
 
 	public CommerceOrder(JSONObject jsonObject) {
 		_commerceOrderId = jsonObject.getLong("id");
-		_contractId = jsonObject.optLong("r_contractToOrder_c_contractId");
+
+		JSONObject customFieldsJSONObject = jsonObject.optJSONObject(
+			"customFields");
+
+		_contractId = (customFieldsJSONObject == null) ? 0 :
+			customFieldsJSONObject.optLong("contractId");
 	}
 
 	public long getCommerceOrderId() {
