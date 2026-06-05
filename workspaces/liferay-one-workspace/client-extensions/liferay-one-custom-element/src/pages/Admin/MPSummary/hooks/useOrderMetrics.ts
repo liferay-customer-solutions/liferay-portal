@@ -10,31 +10,18 @@ import SearchBuilder from '../../../../core/SearchBuilder';
 import {OrderWorkflowStatusCode} from '../../../../enums/Order';
 import GraphQL from '../../../../services/rest/HeadlessGraphQL';
 import {getLastDayOfMonth} from '../../../../utils/date';
+import {METRIC_PARAMETER, MetricPeriod} from '../util';
 
-export const METRIC_PARAMETER = {
-	month: 30,
-	q1: 1,
-	q2: 2,
-	q3: 3,
-	q4: 4,
-	week: 7,
-};
+const useOrderMetrics = (param: MetricPeriod) => {
+	return useSWR(['metrics/order', param], async () => {
+		const currentTime = new Date();
 
-type FilterType = 'month' | 'q1' | 'q2' | 'q3' | 'q4' | 'week';
-
-const currentTime = new Date();
-
-const useOrderMetrics = (param: FilterType) => {
-	return useSWR('metrics/order', async () => {
 		const beforeLastPeriod = addDays(
 			currentTime,
-			-METRIC_PARAMETER[param as keyof typeof METRIC_PARAMETER] * 2
+			-METRIC_PARAMETER[param] * 2
 		);
 
-		const lastPeriod = addDays(
-			currentTime,
-			-METRIC_PARAMETER[param as keyof typeof METRIC_PARAMETER]
-		);
+		const lastPeriod = addDays(currentTime, -METRIC_PARAMETER[param]);
 
 		beforeLastPeriod.setHours(0, 0, 0);
 		lastPeriod.setHours(23, 59, 59);
