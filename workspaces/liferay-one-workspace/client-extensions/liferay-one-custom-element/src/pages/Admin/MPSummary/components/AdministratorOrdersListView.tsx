@@ -188,7 +188,9 @@ export function AdministratorOrdersListView({
 											)
 											.join('\n')}
 									>
-										{projects.length ? 'Yes' : 'No'}
+										{projects.length
+											? i18n.translate('yes')
+											: i18n.translate('no')}
 									</div>
 								</Wrapper>
 							);

@@ -23,7 +23,7 @@ type DonutKPIChartProps = {
 	lastYearLabel?: string;
 	monthlyIncreasePct?: number;
 	monthlyIncreaseValue?: number;
-	monthlyIncreaseValueIsGrowing?: number;
+	monthlyIncreaseValueIsGrowing?: boolean;
 	onClick?: null | (() => void);
 	title: string;
 };
@@ -100,9 +100,7 @@ const DonutKPIChart: React.FC<DonutKPIChartProps> = ({
 								startAngle={90}
 							>
 								{data.map((_: any, index: number) => (
-									<Cell fill={colors[index]} key={index}>
-										{index}
-									</Cell>
+									<Cell fill={colors[index]} key={index} />
 								))}
 							</Pie>
 
@@ -152,7 +150,7 @@ const DonutKPIChart: React.FC<DonutKPIChartProps> = ({
 							<span className="text-muted text-small">
 								{lastYearLabel
 									? `${lastYearLabel}: ${lastYearCount} / ${annualTargetTotal || 0}`
-									: `Last year: ${lastYearCount} / ${annualTargetTotal || 0}`}
+									: `${i18n.translate('last-year')}: ${lastYearCount} / ${annualTargetTotal || 0}`}
 							</span>
 						)}
 					</div>
@@ -178,12 +176,12 @@ const DonutKPIChart: React.FC<DonutKPIChartProps> = ({
 											: 'danger'
 									}
 								>
-									<span className="d-flex lign-items-center">
+									<span className="align-items-center d-flex">
 										<ClayIcon
 											symbol={
 												monthlyIncreaseValueIsGrowing
 													? 'order-arrow-up'
-													: 'order-arrow-donw'
+													: 'order-arrow-down'
 											}
 										/>
 										<span className="ml-1">{`${monthlyIncreasePct} % `}</span>
