@@ -20,28 +20,18 @@ import org.json.JSONObject;
 /**
  * @author Felipe Veloso
  */
-public class CommerceOrderItem {
+public class CommerceOrderItem extends LiferayObject {
 
 	public CommerceOrderItem(JSONObject jsonObject) {
+		super(jsonObject);
+
 		_cProductId = jsonObject.optLong("productId");
 		_commerceOrderItemId = jsonObject.getLong("id");
-		_endDate = _getCustomValueJSONObject(
-			jsonObject, "endDate"
-		).optString(
-			"data", null
-		);
+		_endDate = getCustomFieldString("endDate");
 		_orderId = jsonObject.optLong("orderId");
 		_productOptions = _getProductOptions(jsonObject);
-		_sizing = _getCustomValueJSONObject(
-			jsonObject, "sizing"
-		).optDoubleObject(
-			"data", null
-		);
-		_startDate = _getCustomValueJSONObject(
-			jsonObject, "startDate"
-		).optString(
-			"data", null
-		);
+		_sizing = getCustomFieldInteger("sizing");
+		_startDate = getCustomFieldString("startDate");
 	}
 
 	public long getCommerceOrderItemId() {
@@ -64,43 +54,12 @@ public class CommerceOrderItem {
 		return _productOptions;
 	}
 
-	public Double getSizing() {
+	public int getSizing() {
 		return _sizing;
 	}
 
 	public String getStartDate() {
 		return _startDate;
-	}
-
-	private JSONObject _getCustomValueJSONObject(
-		JSONObject jsonObject, String name) {
-
-		JSONArray customFieldsJSONArray = jsonObject.optJSONArray(
-			"customFields");
-
-		if (customFieldsJSONArray == null) {
-			return new JSONObject();
-		}
-
-		for (int i = 0; i < customFieldsJSONArray.length(); i++) {
-			JSONObject customFieldJSONObject =
-				customFieldsJSONArray.getJSONObject(i);
-
-			if (!name.equals(customFieldJSONObject.optString("name"))) {
-				continue;
-			}
-
-			JSONObject customValueJSONObject =
-				customFieldJSONObject.optJSONObject("customValue");
-
-			if (customValueJSONObject == null) {
-				return new JSONObject();
-			}
-
-			return customValueJSONObject;
-		}
-
-		return new JSONObject();
 	}
 
 	private String _getOptionValue(JSONObject optionJSONObject) {
@@ -155,7 +114,7 @@ public class CommerceOrderItem {
 	private final String _endDate;
 	private final long _orderId;
 	private final Map<String, String> _productOptions;
-	private final Double _sizing;
+	private final int _sizing;
 	private final String _startDate;
 
 }
