@@ -5,6 +5,15 @@
 
 package com.liferay.one.model;
 
+import com.liferay.portal.kernel.util.Validator;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -13,7 +22,7 @@ import org.json.JSONObject;
 public class EntitlementDefinition {
 
 	public EntitlementDefinition(JSONObject jsonObject) {
-		_active = jsonObject.optBoolean("entitlementDefinitionActive");
+		_active = jsonObject.optBoolean("active");
 		_cProductId = jsonObject.optLong(
 			"r_commerceProductToEntitlementDefinition_CProductId");
 		_defaultQuantity = jsonObject.optDoubleObject("defaultQuantity", null);
@@ -21,8 +30,8 @@ public class EntitlementDefinition {
 		_entitlementDefinitionId = jsonObject.getLong("id");
 		_externalReferenceCode = jsonObject.optString("externalReferenceCode");
 		_grantType = jsonObject.optString("grantType");
-		_machineType = jsonObject.optString("machineType", null);
 		_name = jsonObject.optString("name");
+		_productOptions = _getProductOptions(jsonObject);
 		_unit = jsonObject.optString("unit");
 		_usageDefinitionId = jsonObject.optLong("usageDefinitionId");
 	}
@@ -51,12 +60,12 @@ public class EntitlementDefinition {
 		return _grantType;
 	}
 
-	public String getMachineType() {
-		return _machineType;
-	}
-
 	public String getName() {
 		return _name;
+	}
+
+	public Map<String, String> getProductOptions() {
+		return _productOptions;
 	}
 
 	public String getUnit() {
@@ -71,6 +80,34 @@ public class EntitlementDefinition {
 		return _active;
 	}
 
+	private Map<String, String> _getProductOptions(JSONObject jsonObject) {
+		Map<String, String> productOptions = new HashMap<>();
+
+		String productOptionsJSON = jsonObject.optString("productOptions");
+
+		if (Validator.isNull(productOptionsJSON)) {
+			return productOptions;
+		}
+
+		try {
+			JSONObject productOptionsJSONObject = new JSONObject(
+				productOptionsJSON);
+
+			for (String key : productOptionsJSONObject.keySet()) {
+				productOptions.put(
+					key, productOptionsJSONObject.optString(key));
+			}
+		}
+		catch (JSONException jsonException) {
+			_log.error(jsonException, jsonException);
+		}
+
+		return productOptions;
+	}
+
+	private static final Log _log = LogFactory.getLog(
+		EntitlementDefinition.class);
+
 	private final boolean _active;
 	private final long _cProductId;
 	private final Double _defaultQuantity;
@@ -78,8 +115,8 @@ public class EntitlementDefinition {
 	private final long _entitlementDefinitionId;
 	private final String _externalReferenceCode;
 	private final String _grantType;
-	private final String _machineType;
 	private final String _name;
+	private final Map<String, String> _productOptions;
 	private final String _unit;
 	private final long _usageDefinitionId;
 

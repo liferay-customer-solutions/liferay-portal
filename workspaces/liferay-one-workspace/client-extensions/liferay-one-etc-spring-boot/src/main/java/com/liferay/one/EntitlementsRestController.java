@@ -21,17 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class EntitlementsRestController extends BaseRestController {
 
-	@PostMapping("/regenerate")
-	public void postEntitlementsRegenerate(
-			@RequestParam(required = false) Long commerceOrderItemId)
+	@PostMapping("/generate")
+	public void postEntitlementsGenerate(@RequestParam long commerceOrderItemId)
 		throws Exception {
 
-		if (commerceOrderItemId != null) {
-			_entitlementService.generateEntitlements(commerceOrderItemId);
-		}
-		else {
-			_entitlementService.regenerateEntitlements();
-		}
+		_entitlementService.generateEntitlements(commerceOrderItemId);
 	}
 
 	@Autowired

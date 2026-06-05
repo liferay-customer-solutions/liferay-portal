@@ -5,8 +5,6 @@
 
 package com.liferay.one.service;
 
-import com.liferay.client.extension.util.spring.boot3.client.LiferayOAuth2AccessTokenManager;
-import com.liferay.client.extension.util.spring.boot3.service.BaseService;
 import com.liferay.headless.admin.user.client.dto.v1_0.Account;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
 import com.liferay.headless.admin.user.client.problem.Problem;
@@ -25,17 +23,12 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.time.Year;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +44,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @author Amos Fong
  */
 @Component
-public class SubscriptionEntryService extends BaseService {
+public class SubscriptionEntryService extends OneBaseService {
 
 	public SubscriptionEntry addSubscriptionEntry(
 			String className, long classPK, long userId)
@@ -74,7 +67,7 @@ public class SubscriptionEntryService extends BaseService {
 		);
 
 		String response = post(
-			_getAuthorization(), subscriptionEntryJSONObject.toString(),
+			getAuthorization(), subscriptionEntryJSONObject.toString(),
 			UriComponentsBuilder.fromPath(
 				"/o/c/subscriptionentries"
 			).build(
@@ -126,41 +119,8 @@ public class SubscriptionEntryService extends BaseService {
 	public List<SubscriptionEntry> getSubscriptionEntries(String filterString)
 		throws Exception {
 
-		UriComponentsBuilder uriComponentsBuilder =
-			UriComponentsBuilder.fromPath("/o/c/subscriptionentries");
-
-		if (filterString != null) {
-			uriComponentsBuilder.queryParam("filter", filterString);
-		}
-
-		String response = get(
-			_getAuthorization(),
-			uriComponentsBuilder.build(
-			).toUri());
-
-		List<SubscriptionEntry> subscriptionEntries = new ArrayList<>();
-
-		if (Validator.isNull(response)) {
-			return subscriptionEntries;
-		}
-
-		try {
-			JSONObject jsonObject = new JSONObject(response);
-
-			JSONArray jsonArray = jsonObject.getJSONArray("items");
-
-			for (int i = 0; i < jsonArray.length(); i++) {
-				subscriptionEntries.add(
-					new SubscriptionEntry(jsonArray.getJSONObject(i)));
-			}
-
-			return subscriptionEntries;
-		}
-		catch (Exception exception) {
-			_log.error("Unable to parse JSON: " + response, exception);
-
-			return subscriptionEntries;
-		}
+		return getAllItems(
+			"/o/c/subscriptionentries", filterString, SubscriptionEntry::new);
 	}
 
 	@Scheduled(cron = "0 0 0 * * *")
@@ -174,7 +134,7 @@ public class SubscriptionEntryService extends BaseService {
 		throws Exception {
 
 		delete(
-			_getAuthorization(), "",
+			getAuthorization(), "",
 			UriComponentsBuilder.fromPath(
 				"/o/c/subscriptionentries/" + subscriptionEntryId
 			).build(
@@ -186,9 +146,7 @@ public class SubscriptionEntryService extends BaseService {
 		).endpoint(
 			lxcDXPMainDomain, lxcDXPServerProtocol
 		).header(
-			HttpHeaders.AUTHORIZATION,
-			_liferayOAuth2AccessTokenManager.getAuthorization(
-				"liferay-one-etc-spring-boot-oahs")
+			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();
 
 		try {
@@ -206,11 +164,6 @@ public class SubscriptionEntryService extends BaseService {
 
 			throw problemException;
 		}
-	}
-
-	private String _getAuthorization() {
-		return _liferayOAuth2AccessTokenManager.getAuthorization(
-			"liferay-one-etc-spring-boot-oaua");
 	}
 
 	private String _getExpirationMessage(
@@ -257,9 +210,7 @@ public class SubscriptionEntryService extends BaseService {
 		).endpoint(
 			lxcDXPMainDomain, lxcDXPServerProtocol
 		).header(
-			HttpHeaders.AUTHORIZATION,
-			_liferayOAuth2AccessTokenManager.getAuthorization(
-				"liferay-one-etc-spring-boot-oahs")
+			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();
 
 		return userAccountResource.getUserAccount(userId);
@@ -371,17 +322,11 @@ public class SubscriptionEntryService extends BaseService {
 
 	private static final String _DEFAULT_LANGUAGE_ID = "en_US";
 
-	private static final Log _log = LogFactory.getLog(
-		SubscriptionEntryService.class);
-
 	private static final Set<String> _supportedLanguageIds = SetUtil.fromArray(
 		"en_US", "es_ES", "ja_JP", "pt_BR");
 
 	@Autowired
 	private LicenseKeyService _licenseKeyService;
-
-	@Autowired
-	private LiferayOAuth2AccessTokenManager _liferayOAuth2AccessTokenManager;
 
 	@Autowired
 	private MessageSource _messageSource;
