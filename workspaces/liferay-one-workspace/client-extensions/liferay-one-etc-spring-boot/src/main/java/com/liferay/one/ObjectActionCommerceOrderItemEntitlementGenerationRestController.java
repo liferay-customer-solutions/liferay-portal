@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author Felipe Veloso
  */
-@RequestMapping("/object/action/entitlement/generation")
+@RequestMapping("/object/action/commerce/order/item/entitlement/generation")
 @RestController
-public class ObjectActionEntitlementGenerationRestController
+public class ObjectActionCommerceOrderItemEntitlementGenerationRestController
 	extends BaseRestController {
 
 	@PostMapping

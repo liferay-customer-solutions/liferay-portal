@@ -5,8 +5,6 @@
 
 package com.liferay.one.service;
 
-import com.liferay.client.extension.util.spring.boot3.client.LiferayOAuth2AccessTokenManager;
-import com.liferay.client.extension.util.spring.boot3.service.BaseService;
 import com.liferay.notification.rest.client.dto.v1_0.NotificationTemplate;
 import com.liferay.notification.rest.client.resource.v1_0.NotificationTemplateResource;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -15,7 +13,6 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +20,7 @@ import org.springframework.stereotype.Component;
  * @author Amos Fong
  */
 @Component
-public class NotificationTemplateService extends BaseService {
+public class NotificationTemplateService extends OneBaseService {
 
 	public JSONObject getAndProcessTemplateJSONObject(
 			String externalReferenceCode, String languageId,
@@ -35,7 +32,7 @@ public class NotificationTemplateService extends BaseService {
 			).endpoint(
 				lxcDXPMainDomain, lxcDXPServerProtocol
 			).header(
-				HttpHeaders.AUTHORIZATION, _getAuthorization()
+				HttpHeaders.AUTHORIZATION, getAuthorization()
 			).build();
 
 		NotificationTemplate notificationTemplate =
@@ -64,11 +61,6 @@ public class NotificationTemplateService extends BaseService {
 		);
 	}
 
-	private String _getAuthorization() {
-		return _liferayOAuth2AccessTokenManager.getAuthorization(
-			"liferay-one-etc-spring-boot-oahs");
-	}
-
 	private String _getLocalizedValue(
 		Map<String, String> valueMap, String languageId) {
 
@@ -82,8 +74,5 @@ public class NotificationTemplateService extends BaseService {
 	}
 
 	private static final String _DEFAULT_LANGUAGE_ID = "en_US";
-
-	@Autowired
-	private LiferayOAuth2AccessTokenManager _liferayOAuth2AccessTokenManager;
 
 }
