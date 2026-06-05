@@ -13,7 +13,7 @@ import org.json.JSONObject;
 public class EntitlementDefinition {
 
 	public EntitlementDefinition(JSONObject jsonObject) {
-		_active = jsonObject.optBoolean("entitlementDefinitionActive");
+		_active = jsonObject.optBoolean("active");
 		_cProductId = jsonObject.optLong(
 			"r_commerceProductToEntitlementDefinition_CProductId");
 		_defaultQuantity = jsonObject.optDoubleObject("defaultQuantity", null);

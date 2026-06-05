@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class EntitlementsRestController extends BaseRestController {
 
-	@PostMapping("/recompute")
-	public void postEntitlementsRecompute(
+	@PostMapping("/regenerate")
+	public void postEntitlementsRegenerate(
 			@RequestParam(required = false) Long commerceOrderItemId)
 		throws Exception {
 
@@ -30,7 +30,7 @@ public class EntitlementsRestController extends BaseRestController {
 			_entitlementService.generateEntitlements(commerceOrderItemId);
 		}
 		else {
-			_entitlementService.recomputeEntitlements();
+			_entitlementService.regenerateEntitlements();
 		}
 	}
 

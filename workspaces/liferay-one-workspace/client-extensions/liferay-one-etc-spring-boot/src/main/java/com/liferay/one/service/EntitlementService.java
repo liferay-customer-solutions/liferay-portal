@@ -216,7 +216,7 @@ public class EntitlementService extends BaseService {
 		}
 	}
 
-	public void recomputeEntitlements() throws Exception {
+	public void regenerateEntitlements() throws Exception {
 		int page = 1;
 
 		while (true) {
@@ -274,7 +274,7 @@ public class EntitlementService extends BaseService {
 
 		sb.append("(r_commerceProductToEntitlementDefinition_CProductId eq '");
 		sb.append(commerceOrderItem.getCProductId());
-		sb.append("') and (entitlementDefinitionActive eq true)");
+		sb.append("') and (active eq true)");
 
 		String machineType = commerceOrderItem.getMachineType();
 

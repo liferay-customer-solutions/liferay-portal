@@ -198,7 +198,7 @@ public class EntitlementServiceTest {
 		).contains(
 			"(r_commerceProductToEntitlementDefinition_CProductId eq '100')"
 		).contains(
-			"(entitlementDefinitionActive eq true)"
+			"(active eq true)"
 		).contains(
 			"(machineType eq 'Standard') or (machineType eq null)"
 		);
@@ -365,7 +365,12 @@ public class EntitlementServiceTest {
 		);
 
 		if (contractId > 0) {
-			jsonObject.put("r_contractToOrder_c_contractId", contractId);
+			jsonObject.put(
+				"customFields",
+				new JSONObject(
+				).put(
+					"contractId", contractId
+				));
 		}
 
 		return new CommerceOrder(jsonObject);
@@ -435,9 +440,9 @@ public class EntitlementServiceTest {
 
 		JSONObject jsonObject = new JSONObject(
 		).put(
-			"defaultQuantity", defaultQuantity
+			"active", true
 		).put(
-			"entitlementDefinitionActive", true
+			"defaultQuantity", defaultQuantity
 		).put(
 			"grantType", grantType
 		).put(

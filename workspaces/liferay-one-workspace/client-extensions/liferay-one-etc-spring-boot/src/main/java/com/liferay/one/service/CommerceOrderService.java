@@ -33,6 +33,8 @@ public class CommerceOrderService extends BaseService {
 			UriComponentsBuilder.fromPath(
 				"/o/headless-commerce-admin-order/v1.0/orders/" +
 					commerceOrderId
+			).queryParam(
+				"nestedFields", "customFields"
 			).build(
 			).toUri());
 

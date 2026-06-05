@@ -188,17 +188,6 @@
 			"type": "oneToMany"
 		},
 		{
-			"deletionType": "disassociate",
-			"externalReferenceCode": "R_CONTRACT_TO_ORDER",
-			"label": {
-				"en_US": "Contract to Commerce Order"
-			},
-			"name": "contractToOrder",
-			"objectDefinitionExternalReferenceCode1": "C_CONTRACT",
-			"objectDefinitionExternalReferenceCode2": "L_COMMERCE_ORDER",
-			"type": "oneToMany"
-		},
-		{
 			"deletionType": "cascade",
 			"externalReferenceCode": "R_ENTITLEMENT_DEFINITION_TO_ENTITLEMENT",
 			"label": {

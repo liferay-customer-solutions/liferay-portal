@@ -189,11 +189,11 @@ public class EntitlementGenerationIntegrationTest {
 				"/o/c/entitlementdefinitions",
 				new JSONObject(
 				).put(
+					"active", true
+				).put(
 					"defaultQuantity", 10.0 + i
 				).put(
 					"displayName", definitionNames[i]
-				).put(
-					"entitlementDefinitionActive", true
 				).put(
 					"externalReferenceCode",
 					StringBundler.concat("IT_EDEF_", _RUN_ID, "_", i)
@@ -219,7 +219,11 @@ public class EntitlementGenerationIntegrationTest {
 			).put(
 				"currencyCode", "USD"
 			).put(
-				"r_contractToOrder_c_contractId", _contractId
+				"customFields",
+				new JSONObject(
+				).put(
+					"contractId", _contractId
+				)
 			));
 
 		_commerceOrderId = orderJSONObject.getLong("id");
