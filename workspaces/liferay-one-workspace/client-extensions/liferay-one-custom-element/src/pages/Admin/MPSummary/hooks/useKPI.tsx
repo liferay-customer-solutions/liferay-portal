@@ -10,9 +10,13 @@ import useSWR from 'swr';
 import {useOneContext} from '../../../../context/OneContext';
 import SearchBuilder from '../../../../core/SearchBuilder';
 import {AccountType} from '../../../../enums/Account';
-import {ProductType, ProductWorkflowStatusCode} from '../../../../enums/Product';
+import {
+	ProductType,
+	ProductWorkflowStatusCode,
+} from '../../../../enums/Product';
 import useListTypeDefinition from '../../../../hooks/useListTypeDefinition';
 import useModalContext from '../../../../hooks/useModalContext';
+import i18n from '../../../../i18n';
 import HeadlessCommerceAdminCatalog from '../../../../services/rest/HeadlessCommerceAdminCatalog';
 import GraphQL from '../../../../services/rest/HeadlessGraphQL';
 import {safeJSONParse} from '../../../../utils/util';
@@ -274,11 +278,15 @@ const useKPI = () => {
 											}
 										/>
 									),
-									header: 'New Projects Using Marketplace Apps',
+									header: i18n.translate(
+										'new-projects-using-marketplace-apps'
+									),
 									size: 'lg',
 								})
 						: null,
-					title: 'New Projects Using Marketplace Apps',
+					title: i18n.translate(
+						'new-projects-using-marketplace-apps'
+					),
 				},
 				{
 					onClick: () =>
@@ -293,7 +301,9 @@ const useKPI = () => {
 					externalPage: true,
 					lastYearCount: lastYearPartnershipIntegration.totalCount,
 					lastYearLabel,
-					title: 'Technology Partnership With Integrations',
+					title: i18n.translate(
+						'technology-partnership-with-integrations'
+					),
 				},
 				{
 					onClick: () =>
@@ -328,7 +338,7 @@ const useKPI = () => {
 									)}
 								</ol>
 							),
-							header: `Publisher With Apps Supporting Quarterly Release (${supportingQuartelyRelease.totalCount})`,
+							header: `${i18n.translate('publisher-with-apps-supporting-quarterly-release')} (${supportingQuartelyRelease.totalCount})`,
 						}),
 					...getAnnualTargetValues(
 						kpiQuartelyReleaseApps,
@@ -337,7 +347,9 @@ const useKPI = () => {
 					colors: ['#4B9BFF', '#B1D4FF'],
 					lastYearCount: lastYearSupportingQuartelyReleaseCount,
 					lastYearLabel,
-					title: 'Publisher With Apps Supporting Quarterly Release',
+					title: i18n.translate(
+						'publisher-with-apps-supporting-quarterly-release'
+					),
 				},
 				{
 					...getAnnualTargetValues(
@@ -353,7 +365,9 @@ const useKPI = () => {
 						navigate(
 							`/admin/mp-apps?filter=${liferayQuarterlyVersionsAndConnectors}&filterSchema=administratorApps`
 						),
-					title: 'Apps & Connectors Supporting Quarterly Release',
+					title: i18n.translate(
+						'apps-and-connectors-supporting-quarterly-release'
+					),
 				},
 				{
 					...getAnnualTargetValues(
@@ -369,7 +383,7 @@ const useKPI = () => {
 						navigate(
 							`/admin/mp-apps?filter={"specificationValues|appType":"${ProductType.LOW_CODE_CONFIGURATION}"}&filterSchema=administratorApps`
 						),
-					title: 'Low Code Configurations Published',
+					title: i18n.translate('low-code-configurations-published'),
 				},
 			],
 			projectsKPI,

@@ -62,7 +62,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
 					})}
 				>
 					<ClayIcon
-						className="mr-21"
+						className="mr-1"
 						symbol={
 							growth > 0 ? 'order-arrow-up' : 'order-arrow-down'
 						}
