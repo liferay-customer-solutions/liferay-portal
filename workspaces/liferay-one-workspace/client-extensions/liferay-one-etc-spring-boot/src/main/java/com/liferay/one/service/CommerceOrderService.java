@@ -27,6 +27,8 @@ public class CommerceOrderService extends OneBaseService {
 			UriComponentsBuilder.fromPath(
 				"/o/headless-commerce-admin-order/v1.0/orders/" +
 					commerceOrderId
+			).queryParam(
+				"nestedFields", "customFields"
 			).build(
 			).toUri());
 
