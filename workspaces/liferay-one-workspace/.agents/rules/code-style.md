@@ -17,8 +17,6 @@ When Brian sees items out of order, he comments `"sort"` and bounces the PR back
 
 Do not write log statements like AI-generated code. Specifically:
 
-- **Never** use `StringBundler.concat()` inside a `_log.info()` call — this is the "AI slop" pattern Brian rejects
-- Log method: use plain string concatenation with `+` for log calls, not `StringBundler`
 - Error messages: use `"Unable to <verb>"` not `"Error <verb>ing"` or `"Error: <noun>"`
 - Product/object names in log strings: no hyphens — write `"business event"` not `"business-event"`, `"business events"` not `"business-events"`
 
@@ -26,12 +24,10 @@ Example of what Brian corrected:
 
 ```java
 // Wrong — AI slop
-_log.info(StringBundler.concat("POST business-event update: id=", id, ", body=", json));
 _log.info("GET business-events for " + externalReferenceCode);
 _log.error("Error updating business event " + id);
 
 // Correct
-_log.info("POST business event update: id=" + id + ", body=" + json);
 _log.info("GET business events for " + externalReferenceCode);
 _log.error("Unable to update business event " + id);
 ```
