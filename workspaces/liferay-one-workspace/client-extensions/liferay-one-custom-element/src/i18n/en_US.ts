@@ -96,6 +96,8 @@ export default {
 	'approve-request': 'Approve Request',
 	'approved': 'Approved',
 	'apps': 'Apps',
+	'apps-and-connectors-supporting-quarterly-release':
+		'Apps & Connectors Supporting Quarterly Release',
 	'apps-sold': 'Apps Sold',
 	'are-you-sure-you-want-to-expire-this-trial-this-action-implies-the-permanent-end-of-the-test-environment':
 		'Are you sure you want to expire this trial? This action implies the permanent end of the test environment.',
@@ -299,6 +301,7 @@ export default {
 	'environments': 'Environments',
 	'error': 'Error',
 	'error-details': 'Error Details',
+	'exact-match': 'Exact Match',
 	'excluding-vat': 'Excluding VAT',
 	'exit': 'Exit',
 	'exit-from-providing-app-build': 'Exit from providing app build',
@@ -417,6 +420,7 @@ export default {
 	'last-name': 'Last Name',
 	'last-orders': 'Last Orders',
 	'last-update': 'Last Update',
+	'last-year': 'Last Year',
 	'learn-more': 'Learn More',
 	'learn-more-about-app-resource-requirements':
 		'Learn more about App Resource Requirements',
@@ -452,6 +456,7 @@ export default {
 	'login-as-a-user-that-has-access-to-a-project-or-contact-your-project-administrator-to-add-you-to-a-project.':
 		'Login as a user that has access to a project or contact your project administrator to add you to a project.',
 	'low-code-configuration': 'Low-Code Configuration',
+	'low-code-configurations-published': 'Low Code Configurations Published',
 	'mac-addresses': 'Mac Addresses',
 	'main': 'Main',
 	'manage': 'Manage',
@@ -495,6 +500,7 @@ export default {
 	'move-to-top': 'Move to Top',
 	'move-up': 'Move Up',
 	'mp-commission': 'MP Commission',
+	'multiple-projects': 'Multiple Projects',
 	'my-apps': 'My Apps',
 	'my-products': 'My Products',
 	'my-saas-demos': 'My SaaS Demos',
@@ -509,6 +515,8 @@ export default {
 	'new-address': 'New Address',
 	'new-app': 'New App',
 	'new-potential-expiration-date': 'New Potential Expiration Date',
+	'new-projects-using-marketplace-apps':
+		'New Projects Using Marketplace Apps',
 	'new-trial': 'New Trial',
 	'no': 'No',
 	'no-apps-yet': 'No Apps Yet',
@@ -628,6 +636,8 @@ export default {
 	'publisher-type': 'Publisher Type',
 	'publisher-website': 'Publisher Website',
 	'publisher-website-url': 'Publisher Website URL',
+	'publisher-with-apps-supporting-quarterly-release':
+		'Publisher With Apps Supporting Quarterly Release',
 	'publishers': 'Publishers',
 	'purchase-and-install-new-apps-and-they-will-show-up-here':
 		'Purchase and install new apps and they will show up here.',
@@ -764,6 +774,8 @@ export default {
 	'tax-id': 'Tax ID',
 	'tax-vat-id': 'Tax/VAT ID',
 	'tax-vat-number': 'Tax/VAT Number',
+	'technology-partnership-with-integrations':
+		'Technology Partnership With Integrations',
 	'terms-of-service': 'Terms of Service',
 	'terms-privacy-returns-or-contact-support-all-costs-are-in-us-dollars':
 		'Terms, privacy, returns, or contact support. All costs are in US Dollars',

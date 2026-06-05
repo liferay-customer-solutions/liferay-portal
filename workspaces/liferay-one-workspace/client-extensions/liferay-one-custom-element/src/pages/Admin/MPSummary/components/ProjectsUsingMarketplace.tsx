@@ -6,6 +6,7 @@
 import Label from '@clayui/label';
 
 import {orderTypeLabel} from '../../../../enums/Order';
+import i18n from '../../../../i18n';
 
 type ProjectOrder = {
 	creatorEmailAddress: string;
@@ -42,7 +43,9 @@ function ProjectUsingMarketplace({index, order}: ProjectUsingMarketplaceProps) {
 			<summary>
 				<span>
 					<Label displayType={exactMatch ? 'success' : 'warning'}>
-						{exactMatch ? 'Exact Match' : 'Multiple projects'}
+						{exactMatch
+							? i18n.translate('exact-match')
+							: i18n.translate('multiple-projects')}
 					</Label>{' '}
 					Order #{order.id}
 				</span>{' '}
@@ -56,11 +59,13 @@ function ProjectUsingMarketplace({index, order}: ProjectUsingMarketplaceProps) {
 				</span>
 			</summary>
 
-			<p>Created by: {order.creatorEmailAddress}</p>
+			<p>
+				{i18n.translate('created-by')}: {order.creatorEmailAddress}
+			</p>
 
 			{!exactMatch && (
 				<p>
-					Projects:{' '}
+					{i18n.translate('projects')}:{' '}
 					{order.projects.map((customerProject, index) => (
 						<Label key={index}>{customerProject.name}</Label>
 					))}

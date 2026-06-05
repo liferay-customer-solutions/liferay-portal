@@ -1,5 +1,5 @@
 assemble:
-    -   from: build/static
+    -   from: build/vite
         into: static
 liferay-one-custom-element:
     friendlyURLMapping: liferay-one-custom-element
