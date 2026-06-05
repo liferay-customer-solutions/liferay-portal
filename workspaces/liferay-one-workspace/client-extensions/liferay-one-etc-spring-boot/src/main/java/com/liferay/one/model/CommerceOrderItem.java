@@ -5,7 +5,16 @@
 
 package com.liferay.one.model;
 
+import com.liferay.portal.kernel.util.Validator;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -21,12 +30,8 @@ public class CommerceOrderItem {
 		).optString(
 			"data", null
 		);
-		_machineType = _getCustomValueJSONObject(
-			jsonObject, "machineType"
-		).optString(
-			"data", null
-		);
 		_orderId = jsonObject.optLong("orderId");
+		_productOptions = _getProductOptions(jsonObject);
 		_sizing = _getCustomValueJSONObject(
 			jsonObject, "sizing"
 		).optDoubleObject(
@@ -51,12 +56,12 @@ public class CommerceOrderItem {
 		return _endDate;
 	}
 
-	public String getMachineType() {
-		return _machineType;
-	}
-
 	public long getOrderId() {
 		return _orderId;
+	}
+
+	public Map<String, String> getProductOptions() {
+		return _productOptions;
 	}
 
 	public Double getSizing() {
@@ -98,11 +103,58 @@ public class CommerceOrderItem {
 		return new JSONObject();
 	}
 
+	private String _getOptionValue(JSONObject optionJSONObject) {
+		JSONArray valueJSONArray = optionJSONObject.optJSONArray("value");
+
+		if (valueJSONArray != null) {
+			if (valueJSONArray.isEmpty()) {
+				return null;
+			}
+
+			return valueJSONArray.getString(0);
+		}
+
+		return optionJSONObject.optString("value", null);
+	}
+
+	private Map<String, String> _getProductOptions(JSONObject jsonObject) {
+		Map<String, String> productOptions = new HashMap<>();
+
+		String optionsJSON = jsonObject.optString("options");
+
+		if (Validator.isNull(optionsJSON)) {
+			return productOptions;
+		}
+
+		try {
+			JSONArray optionsJSONArray = new JSONArray(optionsJSON);
+
+			for (int i = 0; i < optionsJSONArray.length(); i++) {
+				JSONObject optionJSONObject = optionsJSONArray.getJSONObject(i);
+
+				String value = _getOptionValue(optionJSONObject);
+
+				if (value == null) {
+					continue;
+				}
+
+				productOptions.put(optionJSONObject.optString("key"), value);
+			}
+		}
+		catch (JSONException jsonException) {
+			_log.error(jsonException, jsonException);
+		}
+
+		return productOptions;
+	}
+
+	private static final Log _log = LogFactory.getLog(CommerceOrderItem.class);
+
 	private final long _commerceOrderItemId;
 	private final long _cProductId;
 	private final String _endDate;
-	private final String _machineType;
 	private final long _orderId;
+	private final Map<String, String> _productOptions;
 	private final Double _sizing;
 	private final String _startDate;
 

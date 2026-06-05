@@ -5,22 +5,18 @@
 
 package com.liferay.one.service;
 
-import com.liferay.client.extension.util.spring.boot3.client.LiferayOAuth2AccessTokenManager;
-import com.liferay.client.extension.util.spring.boot3.service.BaseService;
+import com.liferay.one.exception.DuplicateEntitlementException;
 import com.liferay.one.model.CommerceOrder;
 import com.liferay.one.model.CommerceOrderItem;
 import com.liferay.one.model.Entitlement;
 import com.liferay.one.model.EntitlementDefinition;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.kernel.util.Validator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +27,24 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @author Felipe Veloso
  */
 @Component
-public class EntitlementService extends BaseService {
+public class EntitlementService extends OneBaseService {
 
 	public Entitlement addEntitlement(
 			long commerceOrderItemId, long contractId,
 			long entitlementDefinitionId, String endDate, String grantType,
 			Double maxQuantity, String name, Double quantity, String startDate)
 		throws Exception {
+
+		Entitlement entitlement = fetchEntitlement(
+			commerceOrderItemId, entitlementDefinitionId);
+
+		if (entitlement != null) {
+			throw new DuplicateEntitlementException(
+				StringBundler.concat(
+					"Duplicate entitlement with order item ",
+					commerceOrderItemId, " and entitlement definition ",
+					entitlementDefinitionId));
+		}
 
 		JSONObject entitlementJSONObject = new JSONObject(
 		).put(
@@ -66,11 +73,18 @@ public class EntitlementService extends BaseService {
 		}
 
 		String response = post(
-			_getAuthorization(), entitlementJSONObject.toString(),
+			getAuthorization(), entitlementJSONObject.toString(),
 			UriComponentsBuilder.fromPath(
 				"/o/c/entitlements"
 			).build(
 			).toUri());
+
+		if (_log.isInfoEnabled()) {
+			_log.info(
+				StringBundler.concat(
+					"Added entitlement for order item ", commerceOrderItemId,
+					" from entitlement definition ", entitlementDefinitionId));
+		}
 
 		return new Entitlement(new JSONObject(response));
 	}
@@ -93,68 +107,6 @@ public class EntitlementService extends BaseService {
 		return entitlements.get(0);
 	}
 
-	public void generateEntitlements(CommerceOrderItem commerceOrderItem)
-		throws Exception {
-
-		long commerceOrderItemId = commerceOrderItem.getCommerceOrderItemId();
-
-		List<EntitlementDefinition> entitlementDefinitions =
-			_entitlementDefinitionService.getEntitlementDefinitions(
-				_getEntitlementDefinitionFilterString(commerceOrderItem));
-
-		long contractId = _getContractId(commerceOrderItem);
-
-		for (EntitlementDefinition entitlementDefinition :
-				entitlementDefinitions) {
-
-			long entitlementDefinitionId =
-				entitlementDefinition.getEntitlementDefinitionId();
-
-			try {
-				Entitlement existingEntitlement = fetchEntitlement(
-					commerceOrderItemId, entitlementDefinitionId);
-
-				if (existingEntitlement != null) {
-					if (_log.isInfoEnabled()) {
-						_log.info(
-							StringBundler.concat(
-								_LOG_PREFIX,
-								" Skipped entitlement for order item ",
-								commerceOrderItemId, " entitlement definition ",
-								entitlementDefinitionId, " (exists)"));
-					}
-
-					continue;
-				}
-
-				addEntitlement(
-					commerceOrderItemId, contractId, entitlementDefinitionId,
-					commerceOrderItem.getEndDate(),
-					entitlementDefinition.getGrantType(), null,
-					entitlementDefinition.getName(),
-					_getQuantity(commerceOrderItem, entitlementDefinition),
-					commerceOrderItem.getStartDate());
-
-				if (_log.isInfoEnabled()) {
-					_log.info(
-						StringBundler.concat(
-							_LOG_PREFIX, " Created entitlement for order item ",
-							commerceOrderItemId, " entitlement definition ",
-							entitlementDefinitionId));
-				}
-			}
-			catch (Exception exception) {
-				_log.error(
-					StringBundler.concat(
-						_LOG_PREFIX,
-						" Unable to create entitlement for order item ",
-						commerceOrderItemId, " entitlement definition ",
-						entitlementDefinitionId),
-					exception);
-			}
-		}
-	}
-
 	public void generateEntitlements(long commerceOrderItemId)
 		throws Exception {
 
@@ -164,94 +116,49 @@ public class EntitlementService extends BaseService {
 
 		if (commerceOrderItem == null) {
 			_log.error(
-				_LOG_PREFIX + " Unable to find commerce order item " +
-					commerceOrderItemId);
+				"Unable to find commerce order item " + commerceOrderItemId);
 
 			return;
 		}
 
-		generateEntitlements(commerceOrderItem);
+		List<EntitlementDefinition> entitlementDefinitions =
+			_entitlementDefinitionService.getEntitlementDefinitions(
+				StringBundler.concat(
+					"(r_commerceProductToEntitlementDefinition_CProductId eq '",
+					commerceOrderItem.getCProductId(),
+					"') and (active eq true)"),
+				commerceOrderItem.getProductOptions());
+
+		long contractId = _getContractId(commerceOrderItem);
+
+		for (EntitlementDefinition entitlementDefinition :
+				entitlementDefinitions) {
+
+			try {
+				addEntitlement(
+					commerceOrderItemId, contractId,
+					entitlementDefinition.getEntitlementDefinitionId(),
+					commerceOrderItem.getEndDate(),
+					entitlementDefinition.getGrantType(), null,
+					entitlementDefinition.getName(),
+					entitlementDefinition.getDefaultQuantity(),
+					commerceOrderItem.getStartDate());
+			}
+			catch (Exception exception) {
+				_log.error(
+					StringBundler.concat(
+						"Unable to create entitlement for order item ",
+						commerceOrderItemId, " and entitlement definition ",
+						entitlementDefinition.getEntitlementDefinitionId()),
+					exception);
+			}
+		}
 	}
 
 	public List<Entitlement> getEntitlements(String filterString)
 		throws Exception {
 
-		UriComponentsBuilder uriComponentsBuilder =
-			UriComponentsBuilder.fromPath(
-				"/o/c/entitlements"
-			).queryParam(
-				"pageSize", "500"
-			);
-
-		if (filterString != null) {
-			uriComponentsBuilder.queryParam("filter", filterString);
-		}
-
-		String response = get(
-			_getAuthorization(),
-			uriComponentsBuilder.build(
-			).toUri());
-
-		List<Entitlement> entitlements = new ArrayList<>();
-
-		if (Validator.isNull(response)) {
-			return entitlements;
-		}
-
-		try {
-			JSONObject jsonObject = new JSONObject(response);
-
-			JSONArray jsonArray = jsonObject.getJSONArray("items");
-
-			for (int i = 0; i < jsonArray.length(); i++) {
-				entitlements.add(new Entitlement(jsonArray.getJSONObject(i)));
-			}
-
-			return entitlements;
-		}
-		catch (Exception exception) {
-			_log.error("Unable to parse JSON: " + response, exception);
-
-			return entitlements;
-		}
-	}
-
-	public void regenerateEntitlements() throws Exception {
-		int page = 1;
-
-		while (true) {
-			List<CommerceOrderItem> commerceOrderItems =
-				_commerceOrderItemService.getCommerceOrderItems(
-					page, _PAGE_SIZE);
-
-			if (commerceOrderItems.isEmpty()) {
-				break;
-			}
-
-			for (CommerceOrderItem commerceOrderItem : commerceOrderItems) {
-				try {
-					generateEntitlements(commerceOrderItem);
-				}
-				catch (Exception exception) {
-					_log.error(
-						_LOG_PREFIX +
-							" Unable to generate entitlements for order item " +
-								commerceOrderItem.getCommerceOrderItemId(),
-						exception);
-				}
-			}
-
-			if (commerceOrderItems.size() < _PAGE_SIZE) {
-				break;
-			}
-
-			page++;
-		}
-	}
-
-	private String _getAuthorization() {
-		return _liferayOAuth2AccessTokenManager.getAuthorization(
-			"liferay-one-etc-spring-boot-oahs");
+		return getAllItems("/o/c/entitlements", filterString, Entitlement::new);
 	}
 
 	private long _getContractId(CommerceOrderItem commerceOrderItem)
@@ -267,45 +174,6 @@ public class EntitlementService extends BaseService {
 		return commerceOrder.getContractId();
 	}
 
-	private String _getEntitlementDefinitionFilterString(
-		CommerceOrderItem commerceOrderItem) {
-
-		StringBundler sb = new StringBundler(6);
-
-		sb.append("(r_commerceProductToEntitlementDefinition_CProductId eq '");
-		sb.append(commerceOrderItem.getCProductId());
-		sb.append("') and (entitlementDefinitionActive eq true)");
-
-		String machineType = commerceOrderItem.getMachineType();
-
-		if (Validator.isNotNull(machineType)) {
-			sb.append(" and ((machineType eq '");
-			sb.append(machineType);
-			sb.append("') or (machineType eq null))");
-		}
-
-		return sb.toString();
-	}
-
-	private Double _getQuantity(
-		CommerceOrderItem commerceOrderItem,
-		EntitlementDefinition entitlementDefinition) {
-
-		String name = entitlementDefinition.getName();
-
-		if (name.equals(_SIZING) && (commerceOrderItem.getSizing() != null)) {
-			return commerceOrderItem.getSizing();
-		}
-
-		return entitlementDefinition.getDefaultQuantity();
-	}
-
-	private static final String _LOG_PREFIX = "[ONE-LIFERAY-ENTITLEMENT-GEN]";
-
-	private static final int _PAGE_SIZE = 500;
-
-	private static final String _SIZING = "sizing";
-
 	private static final Log _log = LogFactory.getLog(EntitlementService.class);
 
 	@Autowired
@@ -316,8 +184,5 @@ public class EntitlementService extends BaseService {
 
 	@Autowired
 	private EntitlementDefinitionService _entitlementDefinitionService;
-
-	@Autowired
-	private LiferayOAuth2AccessTokenManager _liferayOAuth2AccessTokenManager;
 
 }
