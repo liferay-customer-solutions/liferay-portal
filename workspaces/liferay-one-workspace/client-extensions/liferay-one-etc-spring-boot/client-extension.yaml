@@ -6,6 +6,9 @@ liferay-one-etc-spring-boot-oahs:
     name: Liferay One Etc Spring Boot OAuth Application Headless Server
     scopes:
         -   Liferay.Headless.Admin.User.everything.read
+        -   Liferay.Headless.Commerce.Admin.Order.everything.read
+        -   c_entitlement.everything
+        -   c_entitlementdefinition.everything.read
     type: oAuthApplicationHeadlessServer
 liferay-one-etc-spring-boot-oaua:
     .serviceAddress: localhost:58081
@@ -13,6 +16,11 @@ liferay-one-etc-spring-boot-oaua:
     name: Liferay One Etc Spring Boot OAuth Application User Agent
     scopes: []
     type: oAuthApplicationUserAgent
+liferay-one-etc-spring-boot-object-action-entitlement-generation:
+    name: Liferay One Etc Spring Boot Object Action Entitlement Generation
+    oAuth2ApplicationExternalReferenceCode: liferay-one-etc-spring-boot-oaua
+    resourcePath: /object/action/entitlement/generation
+    type: objectAction
 liferay-one-etc-spring-boot-object-action-user-delete:
     name: Liferay One Etc Spring Boot Object Action User Delete
     oAuth2ApplicationExternalReferenceCode: liferay-one-etc-spring-boot-oaua
