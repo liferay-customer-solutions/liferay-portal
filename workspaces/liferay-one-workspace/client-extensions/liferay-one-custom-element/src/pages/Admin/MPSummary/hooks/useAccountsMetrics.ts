@@ -8,33 +8,20 @@ import useSWR from 'swr';
 
 import SearchBuilder from '../../../../core/SearchBuilder';
 import HeadlessAdminUser from '../../../../services/rest/HeadlessAdminUser';
+import {METRIC_PARAMETER, MetricPeriod} from '../util';
 
-type UseOrderMetricsProps = 'month' | 'q1' | 'q2' | 'q3' | 'q4' | 'week';
-
-export const METRIC_PARAMETER = {
-	month: 30,
-	q1: 1,
-	q2: 2,
-	q3: 3,
-	q4: 4,
-	week: 7,
-};
-
-const useAccountsMetrics = (param: UseOrderMetricsProps) => {
+const useAccountsMetrics = (param: MetricPeriod) => {
 	const getAccountsMetrics = async () => {
 		const currentTime = new Date();
 
 		const beforeLastPeriod = addDays(
 			currentTime,
-			-METRIC_PARAMETER[param as keyof typeof METRIC_PARAMETER] * 2
+			-METRIC_PARAMETER[param] * 2
 		);
 
-		const lastPeriod = addDays(
-			currentTime,
-			-METRIC_PARAMETER[param as keyof typeof METRIC_PARAMETER]
-		);
+		const lastPeriod = addDays(currentTime, -METRIC_PARAMETER[param]);
 
-		beforeLastPeriod.setHours(0, 0, 0);
+		beforeLastPeriod.setHours(0, 0, 0, 0);
 		lastPeriod.setHours(23, 59, 59);
 
 		const requestsParams = [
@@ -69,18 +56,24 @@ const useAccountsMetrics = (param: UseOrderMetricsProps) => {
 
 		const newAccounts = response[1].totalCount - response[2].totalCount;
 
+		let growth = Number(
+			((newAccounts / response[1].totalCount) * 100).toFixed(2)
+		);
+
+		if (!Number.isFinite(growth)) {
+			growth = 0;
+		}
+
 		return {
 			beforeLastPeriod: response[2].totalCount,
-			growth: Number(
-				((newAccounts / response[1].totalCount) * 100).toFixed(2)
-			),
+			growth,
 			lastPeriod: response[1].totalCount,
 			param,
 			totalCount: response[0].totalCount,
 		};
 	};
 
-	return useSWR('metrics/accounts', getAccountsMetrics);
+	return useSWR(['metrics/accounts', param], getAccountsMetrics);
 };
 
 export default useAccountsMetrics;

@@ -8,17 +8,21 @@ import {defineConfig} from 'vite';
 
 export default defineConfig({
 	build: {
-		assetsDir: 'static',
-		outDir: 'build',
+		outDir: 'build/vite',
 		rollupOptions: {
 			output: {
-				assetFileNames: 'static/[name].[hash][extname]',
-				chunkFileNames: 'static/[name].[hash].js',
-				entryFileNames: 'static/[name].[hash].js',
+				assetFileNames: 'assets/[name].[hash][extname]',
+				chunkFileNames: '[name].[hash].js',
+				entryFileNames: '[name].[hash].js',
 				manualChunks: {
 					vendor: ['react', 'react-dom', 'react-router-dom'],
 				},
 			},
+		},
+	},
+	experimental: {
+		renderBuiltUrl(filename: string) {
+			return `/o/liferay-one-custom-element/${filename}`;
 		},
 	},
 	plugins: [react()],
