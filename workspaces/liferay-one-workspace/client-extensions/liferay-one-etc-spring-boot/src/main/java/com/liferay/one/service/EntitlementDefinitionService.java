@@ -5,84 +5,60 @@
 
 package com.liferay.one.service;
 
-import com.liferay.client.extension.util.spring.boot3.client.LiferayOAuth2AccessTokenManager;
-import com.liferay.client.extension.util.spring.boot3.service.BaseService;
 import com.liferay.one.model.EntitlementDefinition;
-import com.liferay.portal.kernel.util.Validator;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * @author Felipe Veloso
  */
 @Component
-public class EntitlementDefinitionService extends BaseService {
+public class EntitlementDefinitionService extends OneBaseService {
 
 	public List<EntitlementDefinition> getEntitlementDefinitions(
-			String filterString)
+			String filterString, Map<String, String> productOptions)
 		throws Exception {
 
-		UriComponentsBuilder uriComponentsBuilder =
-			UriComponentsBuilder.fromPath(
-				"/o/c/entitlementdefinitions"
-			).queryParam(
-				"pageSize", "500"
-			);
+		List<EntitlementDefinition> entitlementDefinitions = getAllItems(
+			"/o/c/entitlementdefinitions", filterString,
+			EntitlementDefinition::new);
 
-		if (filterString != null) {
-			uriComponentsBuilder.queryParam("filter", filterString);
-		}
+		Iterator<EntitlementDefinition> iterator =
+			entitlementDefinitions.iterator();
 
-		String response = get(
-			_getAuthorization(),
-			uriComponentsBuilder.build(
-			).toUri());
+		while (iterator.hasNext()) {
+			EntitlementDefinition entitlementDefinition = iterator.next();
 
-		List<EntitlementDefinition> entitlementDefinitions = new ArrayList<>();
+			if (!_matches(
+					entitlementDefinition.getProductOptions(),
+					productOptions)) {
 
-		if (Validator.isNull(response)) {
-			return entitlementDefinitions;
-		}
-
-		try {
-			JSONObject jsonObject = new JSONObject(response);
-
-			JSONArray jsonArray = jsonObject.getJSONArray("items");
-
-			for (int i = 0; i < jsonArray.length(); i++) {
-				entitlementDefinitions.add(
-					new EntitlementDefinition(jsonArray.getJSONObject(i)));
+				iterator.remove();
 			}
-
-			return entitlementDefinitions;
 		}
-		catch (Exception exception) {
-			_log.error("Unable to parse JSON: " + response, exception);
 
-			return entitlementDefinitions;
-		}
+		return entitlementDefinitions;
 	}
 
-	private String _getAuthorization() {
-		return _liferayOAuth2AccessTokenManager.getAuthorization(
-			"liferay-one-etc-spring-boot-oahs");
+	private boolean _matches(
+		Map<String, String> entitlementDefinitionProductOptions,
+		Map<String, String> productOptions) {
+
+		for (Map.Entry<String, String> entry :
+				entitlementDefinitionProductOptions.entrySet()) {
+
+			String value = entry.getValue();
+
+			if (!value.equals(productOptions.get(entry.getKey()))) {
+				return false;
+			}
+		}
+
+		return true;
 	}
-
-	private static final Log _log = LogFactory.getLog(
-		EntitlementDefinitionService.class);
-
-	@Autowired
-	private LiferayOAuth2AccessTokenManager _liferayOAuth2AccessTokenManager;
 
 }

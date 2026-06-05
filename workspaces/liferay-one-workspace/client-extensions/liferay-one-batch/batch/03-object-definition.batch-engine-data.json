@@ -1673,24 +1673,6 @@
 				{
 					"DBType": "String",
 					"businessType": "Text",
-					"externalReferenceCode": "C_ENTITLEMENT_DEFINITION_MACHINE_TYPE",
-					"indexed": true,
-					"indexedAsKeyword": true,
-					"indexedLanguageId": "",
-					"label": {
-						"en_US": "Machine Type"
-					},
-					"name": "machineType",
-					"objectFieldSettings": [
-					],
-					"required": false,
-					"state": false,
-					"system": false,
-					"type": "String"
-				},
-				{
-					"DBType": "String",
-					"businessType": "Text",
 					"externalReferenceCode": "C_ENTITLEMENT_DEFINITION_NAME",
 					"indexed": true,
 					"indexedAsKeyword": true,
@@ -1705,6 +1687,24 @@
 					"state": false,
 					"system": false,
 					"type": "String"
+				},
+				{
+					"DBType": "Clob",
+					"businessType": "LongText",
+					"externalReferenceCode": "C_ENTITLEMENT_DEFINITION_PRODUCT_OPTIONS",
+					"indexed": false,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Product Options"
+					},
+					"name": "productOptions",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Clob"
 				},
 				{
 					"DBType": "String",
