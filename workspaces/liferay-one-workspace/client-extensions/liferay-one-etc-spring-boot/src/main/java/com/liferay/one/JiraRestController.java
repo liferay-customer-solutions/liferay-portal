@@ -198,6 +198,40 @@ public class JiraRestController extends BaseRestController {
 		}
 	}
 
+	@GetMapping("/field-options/{fieldName}")
+	public ResponseEntity<String> getFieldOptions(
+			@PathVariable("fieldName") String fieldName)
+		throws Exception {
+
+		try {
+			JSONArray jsonArray = _jiraService.getFieldOptions(fieldName);
+
+			return new ResponseEntity<>(jsonArray.toString(), HttpStatus.OK);
+		}
+		catch (Exception exception) {
+			_log.error(exception, exception);
+
+			return new ResponseEntity<>(
+				exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/product-versions")
+	public ResponseEntity<String> getProductVersions() throws Exception {
+		try {
+			JSONArray jsonArray = _jiraService.getAssetObjects(
+				_OBJECT_SCHEMA_BUSINESS_EVENTS, _OBJECT_TYPE_PRODUCT_VERSION);
+
+			return new ResponseEntity<>(jsonArray.toString(), HttpStatus.OK);
+		}
+		catch (Exception exception) {
+			_log.error(exception, exception);
+
+			return new ResponseEntity<>(
+				exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@PostMapping("/accounts/{externalReferenceCode}/business-events")
 	public ResponseEntity<String> postAccountsBusinessEvents(
 			@AuthenticationPrincipal Jwt jwt,
@@ -295,6 +329,12 @@ public class JiraRestController extends BaseRestController {
 			throw new PrincipalException();
 		}
 	}
+
+	private static final String _OBJECT_SCHEMA_BUSINESS_EVENTS =
+		"Business Events";
+
+	private static final String _OBJECT_TYPE_PRODUCT_VERSION =
+		"Product Version";
 
 	private static final Log _log = LogFactory.getLog(JiraRestController.class);
 

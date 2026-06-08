@@ -16,7 +16,8 @@ liferay-one-etc-spring-boot-oaua:
     .serviceAddress: localhost:58081
     .serviceScheme: http
     name: Liferay One Etc Spring Boot OAuth Application User Agent
-    scopes: []
+    scopes:
+        -   Liferay.Headless.Admin.User.everything.read
     type: oAuthApplicationUserAgent
 liferay-one-etc-spring-boot-object-action-commerce-order-item-entitlement-generation:
     name: Liferay One Etc Spring Boot Object Action Commerce Order Item Entitlement Generation

@@ -30,8 +30,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -61,6 +64,36 @@ public class JiraService extends BaseService {
 		JSONObject accountJSONObject = valuesJSONArray.getJSONObject(0);
 
 		return accountJSONObject.getString("objectKey");
+	}
+
+	@Cacheable("assetObjects")
+	public JSONArray getAssetObjects(
+			String objectSchemaName, String objectTypeName)
+		throws Exception {
+
+		JSONArray jsonArray = new JSONArray();
+
+		String aql = StringBundler.concat(
+			"objectSchema = \"", objectSchemaName, "\" AND objectType = \"",
+			objectTypeName, "\"");
+
+		JSONArray assetsObjectsJSONArray = _searchAssetsObjectsJSONArray(
+			_jiraWorkspaceId, aql);
+
+		for (int i = 0; i < assetsObjectsJSONArray.length(); i++) {
+			JSONObject assetObjectJSONObject =
+				assetsObjectsJSONArray.getJSONObject(i);
+
+			jsonArray.put(
+				new JSONObject(
+				).put(
+					"key", assetObjectJSONObject.getString("id")
+				).put(
+					"name", assetObjectJSONObject.getString("name")
+				));
+		}
+
+		return jsonArray;
 	}
 
 	public BusinessEvent getBusinessEvent(String id) throws Exception {
@@ -136,6 +169,44 @@ public class JiraService extends BaseService {
 		return businessEventVersions;
 	}
 
+	@Cacheable("assetObjectFieldOptions")
+	public JSONArray getFieldOptions(String fieldName) throws Exception {
+		JSONArray objectTypeAttributesJSONArray =
+			_getObjectTypeAttributesJSONArray(
+				_jiraWorkspaceId, _jiraBusinessEventAssetObjectTypeId);
+
+		JSONArray fieldOptionsJSONArray = new JSONArray();
+
+		for (int i = 0; i < objectTypeAttributesJSONArray.length(); i++) {
+			JSONObject objectTypeAttributeJSONObject =
+				objectTypeAttributesJSONArray.getJSONObject(i);
+
+			if (!fieldName.equals(
+					objectTypeAttributeJSONObject.optString("name"))) {
+
+				continue;
+			}
+
+			String options = objectTypeAttributeJSONObject.optString("options");
+
+			if (Validator.isNotNull(options)) {
+				for (String option : options.split(",")) {
+					fieldOptionsJSONArray.put(
+						new JSONObject(
+						).put(
+							"key", option
+						).put(
+							"name", option
+						));
+				}
+			}
+
+			break;
+		}
+
+		return fieldOptionsJSONArray;
+	}
+
 	public List<JiraSupportIssue> getJSMJiraSupportIssues(
 			String externalReferenceCode, String[] issueKeys)
 		throws Exception {
@@ -164,6 +235,13 @@ public class JiraService extends BaseService {
 
 		return search(
 			sb.toString(), new String[] {"key", "labels", "status", "summary"});
+	}
+
+	@CacheEvict(
+		allEntries = true, value = {"assetObjectFieldOptions", "assetObjects"}
+	)
+	@Scheduled(cron = "0 0 0 * * *")
+	public void scheduledAssetObjectsCacheEviction() throws Exception {
 	}
 
 	public List<JiraSupportIssue> search(String jql, String[] returnFields)
@@ -296,6 +374,22 @@ public class JiraService extends BaseService {
 			_jiraAPIEmailAddress + StringPool.COLON + _jiraAPIToken;
 
 		return "Basic " + encoder.encodeToString(credentials.getBytes());
+	}
+
+	private JSONArray _getObjectTypeAttributesJSONArray(
+			String workspaceId, String objectTypeId)
+		throws Exception {
+
+		return new JSONArray(
+			get(
+				_getAuthorization(),
+				UriComponentsBuilder.fromUriString(
+					StringBundler.concat(
+						_JIRA_CLOUD_API_URL, "/jsm/assets/workspace/",
+						workspaceId, "/v1/objecttype/", objectTypeId,
+						"/attributes")
+				).build(
+				).toUri()));
 	}
 
 	private void _injectBusinessEventAttributeNames(
