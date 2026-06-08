@@ -15,12 +15,14 @@ export default {
 	'access-required': 'Access required.',
 	'account': 'Account',
 	'account-details': 'Account Details',
+	'account-members': 'Account Members',
 	'account-name': 'Account Name',
 	'account-selected': 'Account Selected',
 	'account-selection': 'Account Selection',
 	'account-type': 'Account Type',
 	'accounts': 'Accounts',
 	'actions': 'Actions',
+	'activation': 'Activation',
 	'activation-key': 'Activation Key',
 	'activation-key-creation': 'Activation Key Creation',
 	'activation-key-server-details': 'Activation Key Server Details',
@@ -68,6 +70,7 @@ export default {
 		'An App Build is your compiled or non-compiled code submitted on behalf of your account to the Marketplace. Once submitted, it will be reviewed and tested by our Marketplace administrators for approval in the Marketplace.',
 	'an-unexpected-error-occurred': 'An unexpected error occurred.',
 	'and': 'and',
+	'annual': 'Annual',
 	'annual-target': 'Annual Target',
 	'app': 'App',
 	'app-awaiting-review': 'App Awaiting Review',
@@ -90,6 +93,8 @@ export default {
 	'app-usage-terms-url': 'App Usage Terms URL',
 	'app-version': 'App Version',
 	'app-x-submitted': 'App <b>{0}</b> submitted.',
+	'application': 'Application',
+	'applications': 'Applications',
 	'apply': 'Apply',
 	'apply-to-your-use-of-this-service-the-name-on-your-liferay-account-will-be-used-in-this-liferay-marketplace-publisher-profile-it-may-appear-where-you-contribute-and-can-be-changed-at-any-time':
 		'apply to your use of this service. The name on your Liferay account will be used in this Liferay Marketplace Publisher Profile. It may appear where you contribute and can be changed at any time.',
@@ -114,6 +119,7 @@ export default {
 	'back-to-my-apps': 'Back to My Apps',
 	'back-to-my-products': 'Back to My Products',
 	'back-to-my-solutions': 'Back to My Solutions',
+	'back-to-project': 'Back to Project',
 	'back-to-solutions': 'Back to Solutions',
 	'back-to-the-list': 'Back to the list',
 	'batch': 'Batch',
@@ -122,6 +128,7 @@ export default {
 	'beta-product-feedback-form': 'Beta Product Feedback Form',
 	'billing-address': 'Billing Address',
 	'billing-email': 'Billing Email',
+	'breadcrumb': 'Breadcrumb',
 	'browse-catalog': 'Browse Catalog',
 	'build': 'Build',
 	'bundle-name': 'Bundle Name',
@@ -307,6 +314,7 @@ export default {
 	'environments': 'Environments',
 	'error': 'Error',
 	'error-details': 'Error Details',
+	'eula': 'EULA',
 	'exact-match': 'Exact Match',
 	'excluding-vat': 'Excluding VAT',
 	'exit': 'Exit',
@@ -366,8 +374,10 @@ export default {
 	'go-to-trial': 'Go to Trial',
 	'got-it': 'Got it',
 	'header': 'Header',
+	'help-and-support': 'Help & Support',
 	'hold-tight-we-re-preparing-your-environment-so-you-can-start-using-your-liferay-data-platform-this-will-only-take-a-moment':
 		'Hold tight. We’re preparing your environment so you can start using your Liferay Data Platform. This will only take a moment!',
+	'home': 'Home',
 	'host-name': 'Host Name',
 	'how-easy-to-use-is-the-product': 'How easy to use is the product?',
 	'how-satisfied-are-you-with-the-product':
@@ -412,6 +422,9 @@ export default {
 	'instance-size': 'Instance Size',
 	'insufficient-resource-requirements': 'Insufficient Resource Requirements',
 	'intl-code': 'Intl. Code',
+	'invite-manage-roles-designate-incident-contacts':
+		'Invite, manage roles, designate incident contacts.',
+	'invoices': 'Invoices',
 	'ip-addresses': 'IP Addresses',
 	'job-title': 'Job Title',
 	'join-an-existing-business-account-e-g-your-company-and-gain-full-access':
@@ -472,6 +485,8 @@ export default {
 	'manage-all-your-app-purchases-and-subscriptions-in-one-place-read-other-users-reviews-get-notifications-when-updates-are-available-and-get-the-most-out-of-our-apps-catalog':
 		'Manage all your app purchases and subscriptions in one place, read other users’ reviews, get notifications when updates are available, and get the most out of our Apps catalog.',
 	'manage-all-your-apps-in-one-place': 'Manage All Your Apps in One Place',
+	'manage-all-your-orders-across-different-platform':
+		'Manage all your orders across different platform',
 	'manage-and-publish-apps-on-the-marketplace':
 		'Manage and publish apps on the Marketplace',
 	'manage-app': 'Manage App',
@@ -479,11 +494,17 @@ export default {
 	'manage-members-and-access-for-ssa-accounts':
 		'Manage members and access for SSA accounts.',
 	'manage-roles': 'Manage Roles',
+	'manage-the-applications-within-your-project':
+		'Manage the applications within your project',
+	'manage-the-products-within-your-project':
+		'Manage the products within your project',
 	'manage-the-roles-associated-with-this-user-roles-determine-what-features-permissions-and-areas-of-the-platform-the-user-can-access-so-updating-them-allows-you-to-control-their-level-of-access-and-responsibilities':
 		'Manage the roles associated with this user. Roles determine what features, permissions, and areas of the platform the user can access, so updating them allows you to control their level of access and responsibilities.',
 	'manage-trial': 'Manage Trial',
 	'manage-user-roles': 'Manage User Roles',
 	'manage-users': 'Manage Users',
+	'manage-your-account-and-organization-details':
+		'Manage your account and organization details.',
 	'manage-your-current-trials': 'Manage your current trials',
 	'manage-your-products-purchased-from-the-marketplace':
 		'Manage your products purchased from the Marketplace.',
@@ -510,6 +531,7 @@ export default {
 	'move-up': 'Move Up',
 	'mp-commission': 'MP Commission',
 	'multiple-projects': 'Multiple Projects',
+	'my-account': 'My Account',
 	'my-apps': 'My Apps',
 	'my-products': 'My Products',
 	'my-saas-demos': 'My SaaS Demos',
@@ -561,12 +583,14 @@ export default {
 	'oops-something-went-wrong': 'Oops! Something went wrong.',
 	'order-date': 'Order Date',
 	'order-details': 'Order Details',
+	'order-form': 'Order Form',
 	'order-id': 'Order ID',
 	'order-info': 'Order Info',
 	'order-marked-as-paid': 'Order marked as paid.',
 	'order-received': 'Order Received',
 	'order-status': 'Order Status',
 	'orders': 'Orders',
+	'orders-list': 'Orders List',
 	'other': 'Other',
 	'overall-experience': 'Overall Experience',
 	'package': 'Package',
@@ -619,6 +643,7 @@ export default {
 	'project-id': 'Project ID',
 	'project-selected': 'Project Selected',
 	'project-selection': 'Project Selection',
+	'project-term': 'Project Term',
 	'projects': 'Projects',
 	'projects-and-resources': 'Projects and Resources',
 	'prompt': 'Prompt',
@@ -719,6 +744,7 @@ export default {
 	'select-category': 'Select Category',
 	'select-compatible-versions': 'Select Compatible Versions',
 	'select-licensing-terms': 'Select Licensing Terms',
+	'select-project': 'Select Project',
 	'select-purpose': 'Select Purpose',
 	'select-tags': 'Select Tags',
 	'select-the-offering-of-liferay-your-app-is-compatible-with-the-compatibility-selections-will-determine-on-what-platforms-your-app-is-tested':
@@ -786,6 +812,7 @@ export default {
 	'tax-vat-number': 'Tax/VAT Number',
 	'technology-partnership-with-integrations':
 		'Technology Partnership With Integrations',
+	'term': 'Term',
 	'terms-of-service': 'Terms of Service',
 	'terms-privacy-returns-or-contact-support-all-costs-are-in-us-dollars':
 		'Terms, privacy, returns, or contact support. All costs are in US Dollars',

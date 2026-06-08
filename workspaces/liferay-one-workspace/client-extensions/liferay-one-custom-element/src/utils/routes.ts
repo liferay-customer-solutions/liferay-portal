@@ -54,9 +54,13 @@ export function buildNavItems(routes: AppRoute[], prefix = ''): NavItem[] {
 		const children = route.children
 			? buildNavItems(route.children, fullPath)
 			: undefined;
+		const hasSubRoutes = route.children?.some(
+			(child) => child.path && child.path !== '*'
+		);
 
 		items.push({
 			children: children?.length ? children : undefined,
+			end: hasSubRoutes ? false : undefined,
 			icon: route.nav.icon,
 			label: route.nav.label,
 			path: fullPath,
