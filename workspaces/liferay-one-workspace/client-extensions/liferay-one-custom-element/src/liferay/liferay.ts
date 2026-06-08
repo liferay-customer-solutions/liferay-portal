@@ -26,6 +26,21 @@ export type IOAuth2Client = {
 	) => IOAuth2ClientAgentApplication;
 };
 
+type ILiferayCookie = {
+	TYPES: {
+		FUNCTIONAL: string;
+		NECESSARY: string;
+	};
+	get: (key: string) => string | null;
+	remove: (key: string) => void;
+	set: (
+		key: string,
+		type: string,
+		value: string,
+		options?: {expires?: Date; secure?: boolean}
+	) => void;
+};
+
 type ILiferay = {
 	CommerceContext: {
 		account?: {
@@ -61,6 +76,7 @@ type ILiferay = {
 		isSignedIn: () => boolean;
 	};
 	Util: {
+		Cookie?: ILiferayCookie;
 		LocalStorage: LiferayStorage;
 		SessionStorage: LiferayStorage;
 		fetch: typeof fetch;
