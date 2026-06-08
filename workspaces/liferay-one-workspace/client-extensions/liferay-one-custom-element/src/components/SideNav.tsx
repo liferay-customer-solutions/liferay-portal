@@ -4,19 +4,29 @@
  */
 
 import ClayIcon from '@clayui/icon';
+import {ReactNode} from 'react';
 import {NavLink} from 'react-router-dom';
 
+import applicationsIconUrl from '../assets/icons/applications.svg';
+import productsIconUrl from '../assets/icons/products.svg';
 import unionIconUrl from '../assets/icons/union.svg';
 
 export type NavItem = {
 	children?: NavItem[];
+	end?: boolean;
 	icon?: string;
 	label: string;
 	path: string;
 };
 
 const ACTIVE_BG = '#E6EDFB';
-const CUSTOM_ICONS = ['union'] as const;
+
+const CUSTOM_ICON_SPRITEMAPS: Record<string, string> = {
+	applications: applicationsIconUrl,
+	products: productsIconUrl,
+	union: unionIconUrl,
+};
+
 const SIDEBAR_BG = '#F7F7F8';
 const TEXT_ACTIVE = '#004AD7';
 const TEXT_INACTIVE = '#282934';
@@ -30,14 +40,13 @@ type SideNavItemProps = {
 function SideNavItem({depth, item}: SideNavItemProps) {
 	const hasChildren = Boolean(item.children && item.children.length);
 	const icon = item.icon;
-	const isCustomIcon =
-		!!icon && CUSTOM_ICONS.includes(icon as (typeof CUSTOM_ICONS)[number]);
+	const customSpritemap = icon ? CUSTOM_ICON_SPRITEMAPS[icon] : undefined;
 
 	return (
 		<li>
 			<NavLink
 				className="align-items-center d-flex text-decoration-none w-100"
-				end={!hasChildren}
+				end={item.end ?? !hasChildren}
 				style={({isActive}) => ({
 					backgroundColor: isActive ? ACTIVE_BG : 'transparent',
 					borderRadius: '0.375rem',
@@ -54,12 +63,10 @@ function SideNavItem({depth, item}: SideNavItemProps) {
 					<>
 						{icon && (
 							<ClayIcon
-								spritemap={
-									isCustomIcon ? unionIconUrl : undefined
-								}
+								spritemap={customSpritemap}
 								style={{
 									flexShrink: 0,
-									opacity: isActive ? 0.8 : 0.5,
+									opacity: isActive ? 1 : 0.5,
 								}}
 								symbol={icon}
 							/>
@@ -88,39 +95,56 @@ function SideNavItem({depth, item}: SideNavItemProps) {
 }
 
 type SideNavProps = {
+	header?: ReactNode;
 	items: NavItem[];
 	title?: string;
 };
 
-export default function SideNav({items, title}: SideNavProps) {
+export default function SideNav({header, items, title}: SideNavProps) {
 	return (
 		<nav
-			className="align-self-start d-flex flex-column flex-shrink-0 overflow-auto"
-			style={{
-				backgroundColor: SIDEBAR_BG,
-				borderRadius: '0.625rem',
-				padding: '0.5rem',
-				width: '18rem',
-			}}
+			className="align-self-start d-flex flex-column flex-shrink-0"
+			style={{gap: '0.75rem', width: '18rem'}}
 		>
-			{title && (
+			{header && (
 				<div
-					className="font-weight-bold pb-2 px-3 text-uppercase"
 					style={{
-						color: TEXT_SECTION,
-						fontSize: '0.625rem',
-						letterSpacing: '0.1em',
+						backgroundColor: SIDEBAR_BG,
+						borderRadius: '0.625rem',
+						padding: '0.75rem',
 					}}
 				>
-					{title}
+					{header}
 				</div>
 			)}
 
-			<ul className="d-flex flex-column flex-fill gap-2 list-unstyled m-0">
-				{items.map((item) => (
-					<SideNavItem depth={0} item={item} key={item.path} />
-				))}
-			</ul>
+			<div
+				className="d-flex flex-column overflow-auto"
+				style={{
+					backgroundColor: SIDEBAR_BG,
+					borderRadius: '0.625rem',
+					padding: '0.5rem',
+				}}
+			>
+				{title && (
+					<div
+						className="font-weight-bold pb-2 px-3 text-uppercase"
+						style={{
+							color: TEXT_SECTION,
+							fontSize: '0.625rem',
+							letterSpacing: '0.1em',
+						}}
+					>
+						{title}
+					</div>
+				)}
+
+				<ul className="d-flex flex-column flex-fill gap-2 list-unstyled m-0">
+					{items.map((item) => (
+						<SideNavItem depth={0} item={item} key={item.path} />
+					))}
+				</ul>
+			</div>
 		</nav>
 	);
 }
