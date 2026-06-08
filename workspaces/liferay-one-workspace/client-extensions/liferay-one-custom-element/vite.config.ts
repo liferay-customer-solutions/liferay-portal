@@ -10,6 +10,7 @@ export default defineConfig({
 	build: {
 		outDir: 'build/vite',
 		rollupOptions: {
+			external: ['@liferay/oauth2-provider-web/client'],
 			output: {
 				assetFileNames: 'assets/[name].[hash][extname]',
 				chunkFileNames: '[name].[hash].js',
@@ -24,6 +25,9 @@ export default defineConfig({
 		renderBuiltUrl(filename: string) {
 			return `/o/liferay-one-custom-element/${filename}`;
 		},
+	},
+	optimizeDeps: {
+		exclude: ['@liferay/oauth2-provider-web/client'],
 	},
 	plugins: [react()],
 	server: {

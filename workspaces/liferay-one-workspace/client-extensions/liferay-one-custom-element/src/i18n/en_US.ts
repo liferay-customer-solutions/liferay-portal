@@ -6,6 +6,7 @@
 import {Liferay} from '../liferay/liferay';
 
 export default {
+	'1-ticket': '1 Ticket',
 	'a-license-key-for-the-entered-domain-already-exists':
 		'A license key for the entered domain already exists.',
 	'a-request-will-be-sent-to-deactivate-the-selected-activation-key-from-now-on-it-will-be-hidden-and-no-longer-visible':
@@ -29,6 +30,8 @@ export default {
 	'activation-keys': 'Activation Keys',
 	'activation-status': 'Activation Status',
 	'active': 'Active',
+	'activity-history': 'Activity History',
+	'actual-event-date': 'Actual Event Date',
 	'add-currency': 'Add Currency',
 	'add-developer-licenses': 'Add Developer Licenses',
 	'add-new-trial': 'Add New Trial',
@@ -105,16 +108,19 @@ export default {
 	'apps-and-connectors-supporting-quarterly-release':
 		'Apps & Connectors Supporting Quarterly Release',
 	'apps-sold': 'Apps Sold',
+	'are-there-any-support-tickets-impacting-this-event': 'Are there any support tickets impacting this event?',
 	'are-you-sure-you-want-to-delete-this-common-license-key':
 		'Are you sure you want to delete this common license key?',
 	'are-you-sure-you-want-to-expire-this-trial-this-action-implies-the-permanent-end-of-the-test-environment':
 		'Are you sure you want to expire this trial? This action implies the permanent end of the test environment.',
 	'area': 'Area',
 	'areas': 'Areas',
+	'associated-tickets': 'Associated Tickets',
 	'at-least-one-role-must-be-provided': 'At least one role must be provided.',
 	'available': 'Available',
 	'back': 'Back',
 	'back-to-apps': 'Back to Apps',
+	'back-to-business-events': 'Back to Business Events',
 	'back-to-last-transaction': 'Back to Last Transaction',
 	'back-to-my-apps': 'Back to My Apps',
 	'back-to-my-products': 'Back to My Products',
@@ -137,19 +143,29 @@ export default {
 	'business-account': 'Business Account',
 	'business-address': 'Business Address',
 	'business-email-address': 'Business Email Address',
+	'business-event-actual-event-date-recorded-successfully': 'Business event actual event date recorded successfully.',
+	'business-event-canceled-successfully': 'Business event canceled successfully.',
+	'business-event-created-successfully': 'Business event created successfully.',
+	'business-events': 'Business Events',
 	'by-requesting-a-publisher-account-you-agree-to-the':
 		'By requesting a Publisher account, you agree to the',
 	'cancel': 'Cancel',
+	'cancel-business-event': 'Cancel Business Event',
+	'cancel-event': 'Cancel Event',
 	'canceled': 'Canceled',
+	'cannot-edit-canceled-or-completed-events': 'Cannot edit canceled or completed events.',
 	'cash': 'Cash',
 	'categories': 'Categories',
 	'category': 'Category',
+	'change': 'Change',
+	'change-planned-event-date': 'Change Planned Event Date',
 	'checkout': 'Checkout',
 	'choose-an-option': 'Choose an Option',
 	'choose-currency': 'Choose Currency',
 	'choose-the-marketplace-category-that-most-accurately-describes-what-your-solution-does-users-looking-for-specific-types-of-solutions-will-often-browse-categories-by-searching-for-a-specific-category-name-on-the-main-marketplace-home-page-having-your-solution-listed-under-the-appropriate-category-will-help-them-find-it':
 		'Choose the Marketplace category that most accurately describes what your solution does. Users looking for specific types of solutions will often browse categories by searching for a specific category name on the main Marketplace home page. Having your solution listed under the appropriate category will help them find it.',
 	'clear': 'Clear',
+	'clear-all-filters': 'Clear All Filters',
 	'click-on-browse-catalog-to-start': "Click on 'Browse Catalog' to start.",
 	'client-extension': 'Client Extension',
 	'client-extensions': 'Client Extensions',
@@ -163,6 +179,7 @@ export default {
 	'cloud-provisioning': 'Cloud Provisioning',
 	'cloud-upload': 'Cloud Upload',
 	'columns': 'Columns',
+	'comment': 'Comment',
 	'comments': 'Comments',
 	'commerce': 'Commerce',
 	'company-name': 'Company Name',
@@ -212,6 +229,8 @@ export default {
 		'Create a DXP App to be delivered as a download.',
 	'create-a-new-marketplace-acccount-or-join-an-already-existing-one':
 		'Create a new Marketplace acccount or join an already existing one',
+	'create-business-event': 'Create Business Event',
+	'create-event': 'Create Event',
 	'create-license-key': 'Create License Key',
 	'create-new-licenses-and-they-will-show-up-here':
 		'Create new licenses and they will show up here.',
@@ -219,6 +238,7 @@ export default {
 	'created-at': 'Created At',
 	'created-by': 'Created By',
 	'currency-code': 'Currency Code',
+	'current-version': 'Current Version',
 	'customer-account': 'Customer Account',
 	'customer-dashboard': 'Customer Dashboard',
 	'customer-project': 'Customer Project',
@@ -229,6 +249,7 @@ export default {
 		'Customize Storefront Solution Details',
 	'dashboard': 'Dashboard',
 	'data-center-location': 'Data Center Location',
+	'date': 'Date',
 	'date-created': 'Date Created',
 	'deactivate': 'Deactivate',
 	'deactivated': 'Deactivated',
@@ -278,6 +299,7 @@ export default {
 	'each': 'each',
 	'edit': 'Edit',
 	'edit-details': 'Edit Details',
+	'edit-event': 'Edit Event',
 	'elasticsearch': 'Elasticsearch',
 	'email': 'Email',
 	'email-address': 'Email Address',
@@ -306,6 +328,7 @@ export default {
 	'enter-your-solution-details-this-information-will-be-used-for-submission-presentation-customer-support-and-search-capabilities':
 		'Enter your solution details. This information will be used for submission, presentation, customer support, and search capabilities.',
 	'enter-your-vat-id': 'Enter your VAT ID',
+	'entering-an-actual-event-date-will-close-this-business-event-no-further-edits-will-be-possible': 'Entering an actual event date will close this business event. No further edits will be possible.',
 	'entity-type': 'Entity Type',
 	'environment': 'Environment',
 	'environment-details': 'Environment Details',
@@ -315,6 +338,11 @@ export default {
 	'error': 'Error',
 	'error-details': 'Error Details',
 	'eula': 'EULA',
+	'event-description': 'Event Description',
+	'event-details': 'Event Details',
+	'event-name': 'Event Name',
+	'event-status': 'Event Status',
+	'event-type': 'Event Type',
 	'exact-match': 'Exact Match',
 	'excluding-vat': 'Excluding VAT',
 	'exit': 'Exit',
@@ -341,6 +369,7 @@ export default {
 	'failure': 'Failure',
 	'file-not-available-for-download': 'File not available for download.',
 	'filter': 'Filter',
+	'filters': 'Filters',
 	'finance-dashboard': 'Finance Dashboard',
 	'first-name': 'First Name',
 	'for-businesses-with-a-vat-tax-number-this-account-type-support-multiple-users':
@@ -361,6 +390,7 @@ export default {
 	'get-started': 'Get Started',
 	'github-username': 'Github Username',
 	'go-back-to-marketplace': 'Go Back to Marketplace',
+	'go-live': 'Go Live',
 	'go-to-analytics-cloud': 'Go to Analytics Cloud',
 	'go-to-app-provisioning': 'Go to App Provisioning',
 	'go-to-cloud-console': 'Go to Cloud Console',
@@ -481,6 +511,7 @@ export default {
 	'low-code-configurations-published': 'Low Code Configurations Published',
 	'mac-addresses': 'Mac Addresses',
 	'main': 'Main',
+	'make-sure-the-project-link-is-correct-and-that-you-have-access-to-this-project': 'Make sure the project link is correct and that you have access to this project.',
 	'manage': 'Manage',
 	'manage-all-your-app-purchases-and-subscriptions-in-one-place-read-other-users-reviews-get-notifications-when-updates-are-available-and-get-the-most-out-of-our-apps-catalog':
 		'Manage all your app purchases and subscriptions in one place, read other users’ reviews, get notifications when updates are available, and get the most out of our Apps catalog.',
@@ -501,6 +532,7 @@ export default {
 	'manage-the-roles-associated-with-this-user-roles-determine-what-features-permissions-and-areas-of-the-platform-the-user-can-access-so-updating-them-allows-you-to-control-their-level-of-access-and-responsibilities':
 		'Manage the roles associated with this user. Roles determine what features, permissions, and areas of the platform the user can access, so updating them allows you to control their level of access and responsibilities.',
 	'manage-trial': 'Manage Trial',
+	'manage-user-options': 'Manage User Options',
 	'manage-user-roles': 'Manage User Roles',
 	'manage-users': 'Manage Users',
 	'manage-your-account-and-organization-details':
@@ -514,6 +546,8 @@ export default {
 	'marketplace-licensor-eula': 'Marketplace Licensor EULA',
 	'marketplace-orders': 'Marketplace Orders',
 	'maximum-number-of-uploads-reached': 'Maximum Number of Uploads Reached',
+	'migration': 'Migration',
+	'mm-dd-yyyy': 'MM-DD-YYYY',
 	'modified-date': 'Modified Date',
 	'modular-components-built-with-html-css-and-javascript-offer-extensible-and-reusable-elements-or-collections-of-elements-for-constructing-content-pages-and-templates':
 		'Modular components, built with HTML, CSS, and JavaScript, offer extensible and reusable elements or collections of elements for constructing content pages and templates.',
@@ -549,9 +583,13 @@ export default {
 	'new-projects-using-marketplace-apps':
 		'New Projects Using Marketplace Apps',
 	'new-trial': 'New Trial',
+	'new-version': 'New Version',
 	'no': 'No',
 	'no-apps-yet': 'No Apps Yet',
+	'no-business-events-were-found': 'No business events were found.',
 	'no-cloud-projects-available': 'No Cloud Projects Available',
+	'no-data-found': 'No data found.',
+	'no-history-of-activity-was-found': 'No history of activity was found.',
 	'no-licenses-yet': 'No Licenses Yet',
 	'no-orders-yet': 'No Orders Yet',
 	'no-projects-available-for-x': 'No projects available for {0}',
@@ -572,6 +610,7 @@ export default {
 	'of-target': 'of target',
 	'offline-payments-using-the-invoice': 'Offline payments using the invoice',
 	'on-hold': 'On Hold',
+	'once-canceled-no-further-edits-can-be-made-to-this-event': 'Once canceled, no further edits can be made to this event.',
 	'only-gif-jpg-jpeg-png-are-allowed-max-file-size-is-5mb':
 		'Only GIF, JPG, JPEG, and PNG are allowed. Max file size is 5MB.',
 	'only-jar-war-files-are-allowed-max-file-size-is-500mb':
@@ -581,6 +620,7 @@ export default {
 	'only-zip-files-are-allowed-max-file-size-is-500mb':
 		'Only ZIP files are allowed. Max file size is 500MB.',
 	'oops-something-went-wrong': 'Oops! Something went wrong.',
+	'open': 'Open',
 	'order-date': 'Order Date',
 	'order-details': 'Order Details',
 	'order-form': 'Order Form',
@@ -592,7 +632,9 @@ export default {
 	'orders': 'Orders',
 	'orders-list': 'Orders List',
 	'other': 'Other',
+	'other-event': 'Other Event',
 	'overall-experience': 'Overall Experience',
+	'overdue': 'Overdue',
 	'package': 'Package',
 	'paid': 'Paid',
 	'paid-by': 'Paid By',
@@ -612,6 +654,7 @@ export default {
 	'personal-information-purpose': 'Personal Information & Purpose',
 	'phone': 'Phone',
 	'phone-number': 'Phone Number',
+	'planned-event-date': 'Planned Event Date',
 	'please-be-aware-that-since-you-are-adding-a-new-version-of-the-app-the-only-section-visible-is-the-build':
 		'Please be aware that since you are adding a new version of the app, the only section visible is the "Build".',
 	'please-be-sure-to-specify-liferay-compatibility-through-the-appropriate-properties-or-xml-files-in-your-plugin':
@@ -622,14 +665,19 @@ export default {
 	'please-fill-in-a-valid-phone-number':
 		'Please fill in a valid phone number.',
 	'please-fill-in-a-valid-url': 'Please fill in a valid URL.',
+	'please-insert-a-valid-date': 'Please insert a valid date.',
+	'please-let-us-know-if-you-have-any-feedback-on-the-support-you-received-during-this-time': 'Please let us know if you have any feedback on the support you received during this time.',
+	'please-let-us-know-the-reason-you-are-canceling-this-event': 'Please let us know the reason you are canceling this event.',
 	'please-note-that-since-there-is-no-cloud-project-associated-with-your-instance-you-will-not-be-able-to-install-cloud-apps':
 		'Please note that since there is no cloud project associated with your instance, you will not be able to install Cloud Apps.',
 	'please-review-before-submitting-once-sent-you-will-not-be-able-to-edit-any-information-until-this-submission-is-completely-reviewed-by-liferay':
 		'Please review before submitting. Once sent, you will not be able to edit any information until this submission is fully reviewed by Liferay.',
 	'please-review-the-order-summary-below-and-flag-the-checkbox-to-complete-your-purchase':
 		'Please review the order summary below and flag the checkbox to complete your purchase',
+	'please-select-an-actual-event-date-that-has-already-occurred-or-is-today': 'Please select an actual event date that has already occurred or is today.',
 	'please-select-the-account-you-wish-to-link-to-your-liferay-dxp-below':
 		'Please select the account you wish to link to your Liferay DXP below.',
+	'please-select-the-tickets-that-are-impacting-this-event': 'Please select the tickets that are impacting this event.',
 	'price': 'Price',
 	'pricing': 'Pricing',
 	'privacy-policy': 'Privacy Policy',
@@ -691,10 +739,12 @@ export default {
 	'ram-in-gbs': 'RAM in GBs',
 	'rate-from-1-poor-to-5-excellent': 'Rate from 1 (poor) to 5 (excellent)',
 	'reason': 'Reason',
+	'reason-for-change': 'Reason for Change',
 	'recent-orders': 'Recent Orders',
 	'recent-published-apps': 'Recent Published Apps',
 	'recent-trials': 'Recent Trials',
 	'recently-published': 'Recently Published',
+	'record-actual-event-date': 'Record Actual Event Date',
 	'reject-request': 'Reject Request',
 	'remove': 'Remove',
 	'remove-all-roles': 'Remove all roles',
@@ -726,11 +776,14 @@ export default {
 	'save': 'Save',
 	'save-as-a-draft-exit': 'Save as a Draft & Exit',
 	'save-as-draft': 'Save as Draft',
+	'save-changes': 'Save Changes',
 	'save-this-address-for-future-orders':
 		'Save this address for future orders',
 	'scroll-to-bottom': 'Scroll to Bottom',
 	'scroll-to-top': 'Scroll to Top',
 	'search': 'Search',
+	'search-event-name': 'Search Event Name',
+	'search-for-support-tickets': 'Search for Support Tickets',
 	'section-that-shows-the-latest-sales-made':
 		'Section that shows the latest sales made.',
 	'section-that-shows-the-payments': 'Section that shows the payments.',
@@ -749,6 +802,7 @@ export default {
 	'select-tags': 'Select Tags',
 	'select-the-offering-of-liferay-your-app-is-compatible-with-the-compatibility-selections-will-determine-on-what-platforms-your-app-is-tested':
 		'Select the offering of Liferay your app is compatible with. The compatibility selections will determine on what platforms your app is tested.',
+	'select-the-option': 'Select the Option',
 	'select-the-versions-of-liferay-that-your-app-is-compatible-with':
 		'Select the versions of Liferay that your app is compatible with.',
 	'selected-project': 'Selected Project',
@@ -829,6 +883,7 @@ export default {
 		'The app submission is compatible with Liferay SaaS and ',
 	'the-app-submission-is-integrates-with-liferay-dxp-version-7-4-or-later':
 		'The app submission is integrates with Liferay DXP version 7.4 or later.',
+	'the-changes-were-saved-successfully': 'The changes were saved successfully.',
 	'the-cloud-app-is-client-extension-based-and-compatible-with-liferay-saas-it-fully-supports-and-deploys-on-extension-environments':
 		'The cloud app is client extension based and compatible with Liferay SaaS. It fully supports and deploys on extension environments.',
 	'the-cloud-app-is-client-extension-based-and-is-compatible-with-a-customer’s-self-hosted-environment':
@@ -853,6 +908,7 @@ export default {
 	'the-selected-project-does-not-meet-the-necessary-resource-requirements-for-this-app-please-contact-sales-to-request-additional-resources':
 		'The selected project does not meet the necessary resource requirements for this app. Please contact Sales to request additional resources.',
 	'theme': 'Theme',
+	'there-are-currently-no-open-tickets-under-this-project': 'There are currently no open tickets under this project.',
 	'there-was-an-unexpected-error-while-attempting-to-deactivate-the-key-please-try-again-in-a-few-moments':
 		'There was an unexpected error while attempting to deactivate the key. Please try again in a few moments.',
 	'this-action-cannot-be-undone': 'This action cannot be undone.',
@@ -873,6 +929,10 @@ export default {
 		'This product is no longer available.',
 	'this-submission-is-currently-under-review-by-liferay-once-the-process-is-complete-it-will-be-published-on-the-marketplace-in-the-meantime-no-information-or-data-from-this-app-submission-can-be-updated':
 		'This submission is currently under review by Liferay. Once the process is complete, it will be published on the Marketplace. In the meantime, no information or data from this app submission can be updated.',
+	'this-table-allows-you-to-create-manage-and-track-your-business-events-please-note-that-business-events-closed-for-more-than-a-year-will-not-be-displayed-here': 'This table allows you to create, manage, and track your business events. Please note that business events closed for more than a year will not be displayed here.',
+	'tickets-impacting-this-event': 'Tickets Impacting This Event',
+	'time': 'Time',
+	'time-zone': 'Time Zone',
 	'times-already-extended': 'Times Already Extended',
 	'timezone': 'Timezone',
 	'title': 'Title',
@@ -915,6 +975,7 @@ export default {
 	'unlock-exclusive-benefits-with-a-business-account':
 		'Unlock exclusive benefits with a Business Account!',
 	'unpaid': 'Unpaid',
+	'upgrade': 'Upgrade',
 	'upload': 'Upload',
 	'upload-at-least-one-image-or-add-a-video-url':
 		'Upload at least one image, or add a video URL',
@@ -930,6 +991,7 @@ export default {
 		'Use any local ZIP files to upload. Max file size is 500MB',
 	'use-one-of-the-following-methods-to-provide-your-app-builds':
 		'Use one of the following methods to provide your app builds.',
+	'user': 'User',
 	'user-account': 'User Account',
 	'user-doesnt-exist': 'User doesn’t exist',
 	'user-email': 'User Email',
@@ -954,12 +1016,14 @@ export default {
 	'view-request': 'View Request',
 	'view-the-documentation': 'View the documentation',
 	'visit': 'Visit',
+	'we-apologize-for-the-inconvenience-but-we-ve-detected-a-system-error-with-this-project': "We apologize for the inconvenience, but we've detected a system error with this project.",
 	'we-are-happy-to-have-you-interested-in-the-liferay-marketplace-at-the-moment-we-are-working-on-enhancing-the-experience-for-our-customers-in-the-marketplace-and-access-is-invite-only-if-you-are-an-existing-liferay-customer-please-keep-an-eye-out-for-an-announcement-related-to-the-new-marketplace-in-the-coming-months':
 		'We are happy to have you interested in the Liferay Marketplace. At the moment, we are working on enhancing the experience for our customers in the Marketplace and access is invite only. If you are an existing Liferay customer, please keep an eye out for an announcement related to the new Marketplace in the coming months!',
 	'we-are-happy-to-have-you-interested-in-the-liferay-marketplace-at-the-moment-we-are-working-on-enhancing-the-experience-for-our-publishers-in-the-marketplace-if-you-are-an-existing-liferay-developer-or-partner-you-can-choose-to-join-our-pilot-group-of-publishers-to-submit-apps-to-the-marketplace-continue-to-request-a-publisher-account':
 		'We are happy to have you interested in the Liferay Marketplace. At the moment, we are working on enhancing the experience for our publishers in the Marketplace.  If you are an existing Liferay developer or partner, you can choose to join our pilot group of publishers to submit apps to the Marketplace.  Continue to request a publisher account.',
 	'we-couldnt-set-up-your-environment-please-contact-support':
 		'We couldn’t set up your environment. Please contact support.',
+	'we-understand-that-plans-change-please-let-us-know-why-the-planned-event-date-for-this-event-is-being-updated': 'We understand that plans change. Please let us know why the planned event date for this event is being updated.',
 	'website': 'Website',
 	'what-features-would-you-like-in-the-final-release':
 		'What features would you like in the final release?',
@@ -975,10 +1039,13 @@ export default {
 	'x-available-for-you': `{0} available for <b>${Liferay.ThemeDisplay.getUserEmailAddress()}</b> (you)`,
 	'x-is-required': '{0} is required',
 	'x-items': '{0} Items',
+	'x-result-for-x': '{0} Result for "{1}"',
 	'x-results-for': '{0} Results for',
+	'x-results-for-x': '{0} Results for "{1}"',
 	'x-saved-as-a-draft-successfully':
 		'<b>{0}</b> saved as a <b>draft</b> successfully',
 	'x-selected': 'X Selected',
+	'x-tickets': '{0} Tickets',
 	'x-will-be-deleted-and-this-action-cant-be-undone-are-you-sure-you-want-to-delete-it':
 		'{0} will be deleted and this action can’t be undone. Are you sure you want to delete it?',
 	'yes': 'Yes',
@@ -1006,6 +1073,7 @@ export default {
 		"You'll be redirected to PayPal to complete your purchase securely. After your payment you are able to activate the license on customer dashboard right away",
 	'you-will-receive-an-invoice-via-email-with-all-the-details-needed-to-complete-your-payment-after-you-complete-the-payment-you-can-activate-your-license-from-the-customer-dashboard':
 		'You will receive an invoice via email with all the details needed to complete your payment. After you complete the payment, you can activate your license from the customer dashboard.',
+	'your-current-liferay-version': 'Your Current Liferay Version',
 	'your-free-activation-key-has-been-generated':
 		'Your free activation key has been generated!',
 	'your-request-completed-successfully':
