@@ -15,6 +15,7 @@
 		"@clayui/multi-select": "^3.159.0",
 		"@clayui/pagination-bar": "^3.159.0",
 		"@clayui/table": "^3.159.0",
+		"@clayui/tabs": "^3.159.0",
 		"@clayui/tooltip": "^3.159.0",
 		"@hookform/resolvers": "^3.1.1",
 		"classnames": "^2.3.2",
