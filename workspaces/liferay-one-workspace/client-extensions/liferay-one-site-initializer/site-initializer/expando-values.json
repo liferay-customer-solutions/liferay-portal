@@ -576,5 +576,35 @@
 		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_PUBLISHED_SOLUTIONS#]",
 		"columnName": "Menu Item Type",
 		"data": "Image"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_SITES_COMMUNITY#]",
+		"columnName": "Menu Item Icon",
+		"data": "community"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_SITES_CUSTOMER_PORTAL#]",
+		"columnName": "Menu Item Icon",
+		"data": "customer-portal"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_SITES_LIFERAY_COM#]",
+		"columnName": "Menu Item Icon",
+		"data": "liferay"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_SITES_LIFERAY_LEARN#]",
+		"columnName": "Menu Item Icon",
+		"data": "liferay-learn"
+	},
+	{
+		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
+		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_SITES_PARTNER_PORTAL#]",
+		"columnName": "Menu Item Icon",
+		"data": "partner-portal"
 	}
 ]
