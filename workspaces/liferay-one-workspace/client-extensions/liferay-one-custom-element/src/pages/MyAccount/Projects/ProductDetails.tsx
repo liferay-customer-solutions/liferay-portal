@@ -1,0 +1,18 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+import ProjectDetailTabs, {DetailTab} from './ProjectDetailTabs';
+
+const tabs: DetailTab[] = [
+	{content: null, key: 'details', label: 'details'},
+	{content: null, key: 'activation', label: 'activation'},
+	{content: null, key: 'download', label: 'download'},
+	{content: null, key: 'orders', label: 'orders'},
+	{content: null, key: 'invoices', label: 'invoices'},
+];
+
+export default function ProductDetails() {
+	return <ProjectDetailTabs tabs={tabs} />;
+}
