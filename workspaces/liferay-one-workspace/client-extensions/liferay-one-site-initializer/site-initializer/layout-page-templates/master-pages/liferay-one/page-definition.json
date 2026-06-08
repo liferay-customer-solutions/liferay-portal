@@ -4,17 +4,16 @@
 			{
 				"definition": {
 					"fragment": {
-						"key": "public-sites-navigation",
+						"key": "header",
 						"siteKey": "[$GROUP_KEY$]"
 					},
 					"fragmentConfig": {
-						"darkNav": false,
-						"navigationDDMTemplateKey": "NAVIGATION_PRIMARY",
+						"primaryNavigationDDMTemplateKey": "NAVIGATION_PRIMARY",
 						"showAccountMenu": true,
 						"showLanguageMenu": true,
 						"showSearch": true,
 						"showSiteName": true,
-						"siteNavigationMenuId": 0
+						"sitesNavigationDDMTemplateKey": "NAVIGATION_SITES"
 					},
 					"fragmentFields": [
 						{
@@ -58,6 +57,9 @@
 					"fragment": {
 						"key": "footer",
 						"siteKey": "[$GROUP_KEY$]"
+					},
+					"fragmentConfig": {
+						"footerNavigationDDMTemplateKey": "NAVIGATION_FOOTER"
 					},
 					"indexed": true
 				},

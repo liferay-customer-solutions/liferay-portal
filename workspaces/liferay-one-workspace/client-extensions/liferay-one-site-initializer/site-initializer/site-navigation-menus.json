@@ -1,5 +1,199 @@
 [
 	{
+		"externalReferenceCode": "LO_FOOTER_NAV",
+		"menuItems": [
+			{
+				"externalReferenceCode": "LO_NAV_FOOTER_MY_ACCOUNT",
+				"menuItems": [
+					{
+						"externalReferenceCode": "LO_NAV_FOOTER_MY_ACCOUNT_PROJECT",
+						"name_i18n": {
+							"en_US": "Project"
+						},
+						"type": "url",
+						"url": "/web/one/my-account/#/projects",
+						"useNewTab": false
+					},
+					{
+						"externalReferenceCode": "LO_NAV_FOOTER_MY_ACCOUNT_ORDERS",
+						"name_i18n": {
+							"en_US": "Orders"
+						},
+						"type": "url",
+						"url": "/web/one/my-account/#/orders",
+						"useNewTab": false
+					},
+					{
+						"externalReferenceCode": "LO_NAV_FOOTER_MY_ACCOUNT_ACCOUNT_DETAILS",
+						"name_i18n": {
+							"en_US": "Account Details"
+						},
+						"type": "url",
+						"url": "/web/one/my-account/#/account-details",
+						"useNewTab": false
+					},
+					{
+						"externalReferenceCode": "LO_NAV_FOOTER_MY_ACCOUNT_ACCOUNT_MEMBERS",
+						"name_i18n": {
+							"en_US": "Account Members"
+						},
+						"type": "url",
+						"url": "/web/one/my-account/#/team-members",
+						"useNewTab": false
+					}
+				],
+				"name_i18n": {
+					"en_US": "My Account"
+				},
+				"title": "My Account",
+				"type": "node"
+			},
+			{
+				"externalReferenceCode": "LO_NAV_FOOTER_SUPPORT",
+				"menuItems": [
+					{
+						"externalReferenceCode": "LO_NAV_FOOTER_SUPPORT_TOOLS",
+						"name_i18n": {
+							"en_US": "Support Tools"
+						},
+						"type": "url",
+						"url": "https://liferay.atlassian.net/servicedesk/customer/portals",
+						"useNewTab": true
+					},
+					{
+						"externalReferenceCode": "LO_NAV_FOOTER_SUPPORT_BUSINESS_EVENTS",
+						"name_i18n": {
+							"en_US": "Business Events"
+						},
+						"type": "url",
+						"url": "/support/business-events",
+						"useNewTab": false
+					},
+					{
+						"externalReferenceCode": "LO_NAV_FOOTER_SUPPORT_CUSTOMER_PORTAL_HELP",
+						"name_i18n": {
+							"en_US": "Customer Portal Help"
+						},
+						"type": "url",
+						"url": "/support/customer-portal-help",
+						"useNewTab": false
+					},
+					{
+						"externalReferenceCode": "LO_NAV_FOOTER_SUPPORT_LIFERAY_LEARN",
+						"name_i18n": {
+							"en_US": "Liferay Learn"
+						},
+						"type": "url",
+						"url": "https://learn.liferay.com/",
+						"useNewTab": true
+					},
+					{
+						"externalReferenceCode": "LO_NAV_FOOTER_SUPPORT_POLICIES",
+						"name_i18n": {
+							"en_US": "Support Policies"
+						},
+						"type": "url",
+						"url": "/support/support-policies",
+						"useNewTab": false
+					}
+				],
+				"name_i18n": {
+					"en_US": "Support"
+				},
+				"title": "Support",
+				"type": "node"
+			},
+			{
+				"externalReferenceCode": "LO_NAV_FOOTER_MARKETPLACE",
+				"menuItems": [
+					{
+						"externalReferenceCode": "LO_NAV_FOOTER_MARKETPLACE_OVERVIEW",
+						"name_i18n": {
+							"en_US": "Marketplace Overview"
+						},
+						"type": "url",
+						"url": "/marketplace",
+						"useNewTab": false
+					},
+					{
+						"externalReferenceCode": "LO_NAV_FOOTER_MARKETPLACE_PRODUCTS_CATALOG",
+						"name_i18n": {
+							"en_US": "Products Catalog"
+						},
+						"type": "url",
+						"url": "/marketplace/products",
+						"useNewTab": false
+					},
+					{
+						"externalReferenceCode": "LO_NAV_FOOTER_MARKETPLACE_APPLICATIONS_CATALOG",
+						"name_i18n": {
+							"en_US": "Applications Catalog"
+						},
+						"type": "url",
+						"url": "/marketplace/applications",
+						"useNewTab": false
+					},
+					{
+						"externalReferenceCode": "LO_NAV_FOOTER_MARKETPLACE_SOLUTIONS_CATALOG",
+						"name_i18n": {
+							"en_US": "Solutions Catalog"
+						},
+						"type": "url",
+						"url": "/marketplace/solutions",
+						"useNewTab": false
+					},
+					{
+						"externalReferenceCode": "LO_NAV_FOOTER_MARKETPLACE_BECOME_A_PUBLISHER",
+						"name_i18n": {
+							"en_US": "Become a Publisher"
+						},
+						"type": "url",
+						"url": "/marketplace/publishers",
+						"useNewTab": false
+					}
+				],
+				"name_i18n": {
+					"en_US": "Marketplace"
+				},
+				"title": "Marketplace",
+				"type": "node"
+			},
+			{
+				"externalReferenceCode": "LO_NAV_FOOTER_EXPAND_CONNECT",
+				"menuItems": [
+					{
+						"externalReferenceCode": "LO_NAV_FOOTER_EXPAND_CONNECT_COMMUNITY",
+						"name_i18n": {
+							"en_US": "Community"
+						},
+						"type": "url",
+						"url": "https://liferay.dev/",
+						"useNewTab": true
+					},
+					{
+						"externalReferenceCode": "LO_NAV_FOOTER_EXPAND_CONNECT_CONTACT_US",
+						"name_i18n": {
+							"en_US": "Contact Us"
+						},
+						"type": "url",
+						"url": "/contact-us",
+						"useNewTab": false
+					}
+				],
+				"name_i18n": {
+					"en_US": "Expand & Connect"
+				},
+				"title": "Expand & Connect",
+				"type": "node"
+			}
+		],
+		"name": "Footer Navigation",
+		"name_i18n": {
+			"en_US": "Footer Navigation"
+		},
+		"title": "Footer Navigation"
+	},
+	{
 		"externalReferenceCode": "LO_PRIMARY_NAV",
 		"menuItems": [
 			{
@@ -94,12 +288,12 @@
 						"menuItems": [
 							{
 								"externalReferenceCode": "LO_NAV_MARKETPLACE_OVERVIEW",
-								"friendlyURL": "/marketplace",
 								"name_i18n": {
 									"en_US": "Marketplace Overview"
 								},
-								"type": "layout",
-								"useCustomName": true
+								"type": "url",
+								"url": "/marketplace",
+								"useNewTab": false
 							}
 						],
 						"name_i18n": {
@@ -113,30 +307,30 @@
 						"menuItems": [
 							{
 								"externalReferenceCode": "LO_NAV_MARKETPLACE_PRODUCTS_CATALOG",
-								"friendlyURL": "/marketplace/products",
 								"name_i18n": {
 									"en_US": "Products Catalog"
 								},
-								"type": "layout",
-								"useCustomName": true
+								"type": "url",
+								"url": "/marketplace/products",
+								"useNewTab": false
 							},
 							{
 								"externalReferenceCode": "LO_NAV_MARKETPLACE_APPLICATIONS_CATALOG",
-								"friendlyURL": "/marketplace/applications",
 								"name_i18n": {
 									"en_US": "Applications Catalog"
 								},
-								"type": "layout",
-								"useCustomName": true
+								"type": "url",
+								"url": "/marketplace/applications",
+								"useNewTab": false
 							},
 							{
 								"externalReferenceCode": "LO_NAV_MARKETPLACE_SOLUTIONS_CATALOG",
-								"friendlyURL": "/marketplace/solutions",
 								"name_i18n": {
 									"en_US": "Solutions Catalog"
 								},
-								"type": "layout",
-								"useCustomName": true
+								"type": "url",
+								"url": "/marketplace/solutions",
+								"useNewTab": false
 							}
 						],
 						"name_i18n": {
@@ -326,12 +520,13 @@
 			},
 			{
 				"externalReferenceCode": "LO_NAV_ADMIN",
-				"friendlyURL": "/admin",
 				"name": "Admin",
 				"name_i18n": {
 					"en_US": "Admin"
 				},
-				"type": "layout"
+				"type": "url",
+				"url": "/admin",
+				"useNewTab": false
 			}
 		],
 		"name": "Primary Navigation",
@@ -339,5 +534,60 @@
 			"en_US": "Primary Navigation"
 		},
 		"title": "Primary Navigation"
+	},
+	{
+		"externalReferenceCode": "LO_SITES_NAV",
+		"menuItems": [
+			{
+				"externalReferenceCode": "LO_NAV_SITES_LIFERAY_COM",
+				"name_i18n": {
+					"en_US": "Liferay.com"
+				},
+				"type": "url",
+				"url": "https://www.liferay.com",
+				"useNewTab": true
+			},
+			{
+				"externalReferenceCode": "LO_NAV_SITES_CUSTOMER_PORTAL",
+				"name_i18n": {
+					"en_US": "Customer Portal"
+				},
+				"type": "url",
+				"url": "http://support.liferay.com/",
+				"useNewTab": true
+			},
+			{
+				"externalReferenceCode": "LO_NAV_SITES_PARTNER_PORTAL",
+				"name_i18n": {
+					"en_US": "Partner Portal"
+				},
+				"type": "url",
+				"url": "https://partner.liferay.com/",
+				"useNewTab": true
+			},
+			{
+				"externalReferenceCode": "LO_NAV_SITES_COMMUNITY",
+				"name_i18n": {
+					"en_US": "Community"
+				},
+				"type": "url",
+				"url": "https://liferay.dev/",
+				"useNewTab": true
+			},
+			{
+				"externalReferenceCode": "LO_NAV_SITES_LIFERAY_LEARN",
+				"name_i18n": {
+					"en_US": "Liferay Learn"
+				},
+				"type": "url",
+				"url": "https://learn.liferay.com/",
+				"useNewTab": true
+			}
+		],
+		"name": "Sites Navigation",
+		"name_i18n": {
+			"en_US": "Sites Navigation"
+		},
+		"title": "Sites Navigation"
 	}
 ]
