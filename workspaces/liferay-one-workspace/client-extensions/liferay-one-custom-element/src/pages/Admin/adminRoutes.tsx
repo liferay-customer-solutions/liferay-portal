@@ -29,6 +29,7 @@ const PublisherRequests = lazy(
 );
 const Publishers = lazy(() => import('./Publishers/Publishers'));
 const Solutions = lazy(() => import('./Solutions/Solutions'));
+const TrialDetails = lazy(() => import('./SSADashboard/pages/TrialDetails'));
 const Trials = lazy(() => import('./Trials/Trials'));
 
 export const adminRoutes: AppRoute[] = [
@@ -101,6 +102,10 @@ export const adminRoutes: AppRoute[] = [
 		element: <ManageSsaSaasUsers />,
 		nav: {icon: 'users', label: 'Manage SSA SaaS Users'},
 		path: 'manage-ssa-saas-users',
+	},
+	{
+		element: <TrialDetails />,
+		path: 'details/:orderId',
 	},
 	{
 		element: <MessageQueue />,
