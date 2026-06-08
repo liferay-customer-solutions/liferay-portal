@@ -20,6 +20,7 @@ export default {
 	'account-selection': 'Account Selection',
 	'account-type': 'Account Type',
 	'accounts': 'Accounts',
+	'actions': 'Actions',
 	'activation-key': 'Activation Key',
 	'activation-key-creation': 'Activation Key Creation',
 	'activation-key-server-details': 'Activation Key Server Details',
@@ -99,6 +100,8 @@ export default {
 	'apps-and-connectors-supporting-quarterly-release':
 		'Apps & Connectors Supporting Quarterly Release',
 	'apps-sold': 'Apps Sold',
+	'are-you-sure-you-want-to-delete-this-common-license-key':
+		'Are you sure you want to delete this common license key?',
 	'are-you-sure-you-want-to-expire-this-trial-this-action-implies-the-permanent-end-of-the-test-environment':
 		'Are you sure you want to expire this trial? This action implies the permanent end of the test environment.',
 	'area': 'Area',
@@ -154,6 +157,7 @@ export default {
 	'cloud-upload': 'Cloud Upload',
 	'columns': 'Columns',
 	'comments': 'Comments',
+	'commerce': 'Commerce',
 	'company-name': 'Company Name',
 	'company-profile': 'Company Profile',
 	'compatible-offering': 'Compatible Offering',
@@ -267,8 +271,10 @@ export default {
 	'each': 'each',
 	'edit': 'Edit',
 	'edit-details': 'Edit Details',
+	'elasticsearch': 'Elasticsearch',
 	'email': 'Email',
 	'email-address': 'Email Address',
+	'end-date': 'End Date',
 	'end-user-license-agreement': 'End User License Agreement',
 	'enter-administration-email-address': 'Enter administration email address',
 	'enter-app-description': 'Enter app description',
@@ -427,6 +433,9 @@ export default {
 	'learn-more-about-becoming-a-liferay-customer':
 		'Learn more about becoming a Liferay Customer',
 	'license': 'License',
+	'license-key-deleted-successfully': 'License key deleted successfully.',
+	'license-key-uploads': 'License Key Uploads',
+	'license-keys-uploaded-successfully': 'License keys uploaded successfully.',
 	'license-price': 'License Price',
 	'license-prices': 'License Prices',
 	'license-selection': 'License Selection',
@@ -602,6 +611,7 @@ export default {
 	'privacy-policy': 'Privacy Policy',
 	'processing': 'Processing',
 	'product': 'Product',
+	'product-environment': 'Product Environment',
 	'product-unavailable': 'Product Unavailable',
 	'products': 'Products',
 	'profile': 'Profile',
@@ -802,6 +812,7 @@ export default {
 		'The DXP app is module-based and is compatible with 7.4 builds of Liferay DXP.',
 	'the-dxp-app-is-module-based-and-is-compatible-with-7-4-builds-of-liferay-dxp-self-managed-liferay-cloud-formerly-dxp-cloud':
 		'The DXP app is module-based and is compatible with 7.4 builds of Liferay Self-Managed.',
+	'the-file-has-already-been-uploaded': 'The file has already been uploaded.',
 	'the-installation-process-is-ongoing-and-may-take-some-time-navigating-to-other-sections-will-not-cancel-the-process':
 		'The installation process is ongoing and may take some time... Navigating to other sections will not cancel the process.',
 	'the-installation-process-is-underway-and-should-be-completed-shortly':
@@ -877,11 +888,13 @@ export default {
 	'unlock-exclusive-benefits-with-a-business-account':
 		'Unlock exclusive benefits with a Business Account!',
 	'unpaid': 'Unpaid',
+	'upload': 'Upload',
 	'upload-at-least-one-image-or-add-a-video-url':
 		'Upload at least one image, or add a video URL',
 	'upload-image': 'Upload image',
 	'upload-liferay-plugin-packages': 'Upload Liferay Plugin Packages',
 	'upload-zip-files': 'Upload ZIP Files',
+	'uploading': 'Uploading…',
 	'use-any-build-from-any-available-liferay-experience-cloud-account-requires-lxc-account':
 		'Use any build from any available Liferay SaaS account (requires Liferay SaaS account) ',
 	'use-any-build-from-your-computer-connecting-with-a-github-provider':
