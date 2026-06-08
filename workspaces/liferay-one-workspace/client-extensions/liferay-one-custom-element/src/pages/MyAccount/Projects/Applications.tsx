@@ -6,13 +6,13 @@
 import Page from '../../../components/Page';
 import i18n from '../../../i18n';
 
-export default function Orders() {
+export default function Applications() {
 	return (
 		<Page
 			description={i18n.translate(
-				'manage-all-your-orders-across-different-platform'
+				'manage-the-applications-within-your-project'
 			)}
-			title={i18n.translate('orders-list')}
+			title={i18n.translate('applications')}
 		>
 			<></>
 		</Page>

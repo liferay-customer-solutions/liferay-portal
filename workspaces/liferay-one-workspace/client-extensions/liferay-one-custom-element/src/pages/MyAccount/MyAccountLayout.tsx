@@ -6,11 +6,24 @@
 import {useMemo} from 'react';
 
 import AppLayout from '../../components/AppLayout';
+import Breadcrumb from '../../components/Breadcrumb';
 import {buildNavItems} from '../../utils/routes';
-import {myAccountRoutes} from './myAccountRoutes';
+import ProjectHeader from './Projects/ProjectHeader';
+import ProjectSelector from './Projects/ProjectSelector';
+import {projectDetailRoutes} from './myAccountRoutes';
 
 export default function MyAccountLayout() {
-	const myAccountNav = useMemo(() => buildNavItems(myAccountRoutes), []);
+	const navItems = useMemo(
+		() => buildNavItems(projectDetailRoutes, '/project'),
+		[]
+	);
 
-	return <AppLayout navItems={myAccountNav} title="My Account" />;
+	return (
+		<AppLayout
+			breadcrumb={<Breadcrumb />}
+			contentHeader={<ProjectHeader />}
+			header={<ProjectSelector />}
+			navItems={navItems}
+		/>
+	);
 }

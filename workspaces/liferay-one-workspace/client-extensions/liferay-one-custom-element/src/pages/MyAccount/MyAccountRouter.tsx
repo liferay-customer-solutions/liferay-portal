@@ -3,17 +3,31 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {HashRouter, useRoutes} from 'react-router-dom';
+import {HashRouter, Navigate, useRoutes} from 'react-router-dom';
 
+import ContentLayout from '../../components/ContentLayout';
+import {ProjectProvider} from '../../context/ProjectContext';
 import {toRouteObjects} from '../../utils/routes';
+import MyAccountIndex from './MyAccountIndex';
 import MyAccountLayout from './MyAccountLayout';
-import {myAccountRoutes} from './myAccountRoutes';
+import {accountRoutes, projectDetailRoutes} from './myAccountRoutes';
 
 function MyAccountRoutes() {
 	return useRoutes([
 		{
-			children: toRouteObjects(myAccountRoutes),
-			element: <MyAccountLayout />,
+			children: [
+				{element: <MyAccountIndex />, index: true},
+				{
+					children: toRouteObjects(projectDetailRoutes),
+					element: <MyAccountLayout />,
+					path: 'project',
+				},
+				{
+					children: toRouteObjects(accountRoutes),
+					element: <ContentLayout />,
+				},
+				{element: <Navigate replace to="/" />, path: '*'},
+			],
 			path: '/',
 		},
 	]);
@@ -22,7 +36,9 @@ function MyAccountRoutes() {
 export default function MyAccountRouter() {
 	return (
 		<HashRouter>
-			<MyAccountRoutes />
+			<ProjectProvider>
+				<MyAccountRoutes />
+			</ProjectProvider>
 		</HashRouter>
 	);
 }
