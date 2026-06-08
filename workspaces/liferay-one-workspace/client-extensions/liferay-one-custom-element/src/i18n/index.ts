@@ -5,9 +5,15 @@
 
 import {Liferay} from '../liferay/liferay';
 import en_US from './en_US';
+import es_ES from './es_ES';
+import ja_JP from './ja_JP';
+import pt_BR from './pt_BR';
 
 export const languages = {
 	en_US,
+	es_ES,
+	ja_JP,
+	pt_BR,
 };
 
 export type Word = keyof typeof en_US;

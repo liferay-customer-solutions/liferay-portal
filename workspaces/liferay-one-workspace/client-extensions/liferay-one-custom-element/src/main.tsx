@@ -22,6 +22,7 @@ type RouterComponent = React.ComponentType;
 const routers: Record<string, React.LazyExoticComponent<RouterComponent>> = {
 	'admin': React.lazy(() => import('./pages/Admin/AdminRouter')),
 	'my-account': React.lazy(() => import('./pages/MyAccount/MyAccountRouter')),
+	'support': React.lazy(() => import('./pages/Support/SupportRouter')),
 };
 
 class WebComponent extends HTMLElement {

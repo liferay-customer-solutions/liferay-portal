@@ -8,6 +8,15 @@ declare module '*.svg' {
 	export default content;
 }
 
+declare module '@liferay/oauth2-provider-web/client' {
+	export function FromUserAgentApplication(
+		userAgentApplicationId: string
+	): Promise<{
+		_getOrRequestToken: () => Promise<string>;
+		fetch: (url: string, options?: RequestInit) => Promise<Response>;
+	}>;
+}
+
 declare module 'warning';
 
 type ActionMap<M extends {[index: string]: any}> = {
@@ -38,6 +47,11 @@ type ContactSales = {
 	comments?: string | undefined;
 	email: string;
 	name: string;
+};
+
+type ITimeInput = {
+	hours: string;
+	minutes: string;
 };
 
 type ListTypeDefinition = {
