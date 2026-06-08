@@ -1,0 +1,32 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2026 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+export function getFormattedTime(
+	date: string | undefined,
+	timeZone?: string
+): string {
+	if (!date) {
+		return '';
+	}
+
+	try {
+		const parsedDate = new Date(date);
+
+		const options: Intl.DateTimeFormatOptions = {
+			hour: '2-digit',
+			minute: '2-digit',
+			timeZoneName: 'short',
+		};
+
+		if (timeZone) {
+			options.timeZone = timeZone;
+		}
+
+		return parsedDate.toLocaleString('en-US', options);
+	}
+	catch (error) {
+		return 'Invalid Date';
+	}
+}
