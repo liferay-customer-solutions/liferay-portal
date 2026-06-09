@@ -1,0 +1,23 @@
+{
+	"fieldSets": [
+		{
+			"fields": [
+				{
+					"dataType": "string",
+					"defaultValue": "/web/one/home",
+					"label": "Home Link",
+					"name": "homeLink",
+					"type": "text"
+				},
+				{
+					"dataType": "string",
+					"defaultValue": "/web/one/support/customer-portal-help",
+					"label": "Parent Link",
+					"name": "parentLink",
+					"type": "text"
+				}
+			],
+			"label": "Breadcrumb"
+		}
+	]
+}

@@ -589,5 +589,78 @@
 			"en_US": "Sites Navigation"
 		},
 		"title": "Sites Navigation"
+	},
+	{
+		"externalReferenceCode": "LO_SUPPORT_NAV",
+		"menuItems": [
+			{
+				"externalReferenceCode": "LO_SUPPORT_NAV_GETTING_STARTED",
+				"name_i18n": {
+					"en_US": "Getting Started",
+					"es_ES": "Primeros Pasos",
+					"ja_JP": "はじめに",
+					"pt_BR": "Primeiros Passos"
+				},
+				"type": "url",
+				"url": "/support/getting-started",
+				"useNewTab": false
+			},
+			{
+				"externalReferenceCode": "LO_SUPPORT_NAV_USING_CUSTOMER_PORTAL",
+				"name_i18n": {
+					"en_US": "Using Customer Portal",
+					"es_ES": "Uso del Portal del Cliente",
+					"ja_JP": "カスタマーポータルの使い方",
+					"pt_BR": "Usando o Portal do Cliente"
+				},
+				"type": "url",
+				"url": "/support/customer-portal-help",
+				"useNewTab": false
+			},
+			{
+				"externalReferenceCode": "LO_SUPPORT_NAV_ACTIVATION",
+				"name_i18n": {
+					"en_US": "Activation",
+					"es_ES": "Activación",
+					"ja_JP": "アクティベーション",
+					"pt_BR": "Ativação"
+				},
+				"type": "url",
+				"url": "#",
+				"useNewTab": false
+			},
+			{
+				"externalReferenceCode": "LO_SUPPORT_NAV_ADMINISTRATION",
+				"name_i18n": {
+					"en_US": "Administration",
+					"es_ES": "Administración",
+					"ja_JP": "管理",
+					"pt_BR": "Administração"
+				},
+				"type": "url",
+				"url": "#",
+				"useNewTab": false
+			},
+			{
+				"externalReferenceCode": "LO_SUPPORT_NAV_TEAM_MEMBERS",
+				"name_i18n": {
+					"en_US": "Team Members",
+					"es_ES": "Miembros del Equipo",
+					"ja_JP": "チームメンバー",
+					"pt_BR": "Membros da Equipe"
+				},
+				"type": "url",
+				"url": "/web/one/my-account/#/team-members",
+				"useNewTab": false
+			}
+		],
+		"name": "Support Navigation",
+		"name_i18n": {
+			"en_US": "Support Navigation",
+			"es_ES": "Navegación de Soporte",
+			"ja_JP": "サポートナビゲーション",
+			"pt_BR": "Navegação de Suporte"
+		},
+		"title": "Support Navigation"
 	}
 ]
