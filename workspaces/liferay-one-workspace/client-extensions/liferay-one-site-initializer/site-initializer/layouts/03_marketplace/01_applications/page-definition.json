@@ -28,19 +28,30 @@
 									{
 										"definition": {
 											"fragment": {
-												"key": "marketplace-catalog-hero-banner",
+												"key": "hero-banner",
 												"siteKey": "[$GROUP_KEY$]"
 											},
 											"fragmentConfig": {
-												"backgroundImage": "applications"
+												"homeLink": "/web/one/home",
+												"parentLink": "/web/one/marketplace"
 											},
 											"fragmentFields": [
 												{
-													"id": "breadcrumb",
+													"id": "breadcrumb-current",
 													"value": {
 														"text": {
 															"value_i18n": {
 																"en_US": "Applications Catalog"
+															}
+														}
+													}
+												},
+												{
+													"id": "breadcrumb-parent",
+													"value": {
+														"text": {
+															"value_i18n": {
+																"en_US": "Marketplace"
 															}
 														}
 													}
@@ -66,6 +77,19 @@
 													}
 												}
 											],
+											"fragmentStyle": {
+												"backgroundFragmentImage": {
+													"url": {
+														"mapping": {
+															"fieldKey": "FileEntry_previewImage",
+															"itemReference": {
+																"className": "com.liferay.portal.kernel.repository.model.FileEntry",
+																"classPK": "[#DOCUMENT_FILE_ENTRY_ID:/site-initializer/documents/group/hero_banner_gradient_bubbles.png#]"
+															}
+														}
+													}
+												}
+											},
 											"indexed": true
 										},
 										"type": "Fragment"
@@ -81,6 +105,7 @@
 			},
 			{
 				"definition": {
+					"cssClass": "container-fluid container-fluid-max-xl",
 					"indexed": true,
 					"layout": {
 						"widthType": "Fluid"

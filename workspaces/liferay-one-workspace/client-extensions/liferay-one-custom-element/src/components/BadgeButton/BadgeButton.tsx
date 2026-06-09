@@ -14,11 +14,7 @@ interface IProps {
 const BadgeButton = ({filterName, filterValue, onClick}: IProps) => (
 	<div>
 		<div className="align-items-center badge badge-light badge-pill bg-white border border-secondary pl-2 text-neutral-8 text-paragraph-sm">
-			<p className="font-weight-semi-bold mx-1 my-0">
-				{filterName}
-
-				:
-			</p>
+			<p className="font-weight-semi-bold mx-1 my-0">{filterName}:</p>
 
 			<p className="font-weight-normal m-0 pr-1"> {filterValue}</p>
 

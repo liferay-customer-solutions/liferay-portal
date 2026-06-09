@@ -6,6 +6,7 @@
 		"pageElements": [
 			{
 				"definition": {
+					"cssClass": "container-fluid container-fluid-max-xl",
 					"fragmentStyle": {
 						"paddingTop": "3"
 					},
@@ -19,37 +20,15 @@
 						"definition": {
 							"gutters": true,
 							"indexed": true,
-							"modulesPerRow": 2,
-							"numberOfColumns": 2,
+							"modulesPerRow": 1,
+							"numberOfColumns": 1,
 							"reverseOrder": false,
 							"verticalAlignment": "top"
 						},
 						"pageElements": [
 							{
 								"definition": {
-									"size": 3
-								},
-								"pageElements": [
-									{
-										"definition": {
-											"widgetInstance": {
-												"widgetConfig": {
-													"displayStyle": "ddmTemplate_LO_SIDE_NAV",
-													"siteNavigationMenuExternalReferenceCode": "LO_SUPPORT_NAV",
-													"siteNavigationMenuName": "Support Navigation",
-													"siteNavigationMenuType": "-1"
-												},
-												"widgetName": "com_liferay_site_navigation_menu_web_portlet_SiteNavigationMenuPortlet"
-											}
-										},
-										"type": "Widget"
-									}
-								],
-								"type": "Column"
-							},
-							{
-								"definition": {
-									"size": 9
+									"size": 12
 								},
 								"pageElements": [
 									{

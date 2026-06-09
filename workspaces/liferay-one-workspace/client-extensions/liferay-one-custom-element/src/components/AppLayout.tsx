@@ -24,7 +24,7 @@ export default function AppLayout({
 	title,
 }: AppLayoutProps) {
 	return (
-		<div className="p-3">
+		<div style={{paddingBottom: '1.5rem', paddingTop: '1.5rem'}}>
 			{breadcrumb}
 
 			<div className="d-flex" style={{gap: '1rem'}}>

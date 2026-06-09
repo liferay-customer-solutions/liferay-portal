@@ -28,14 +28,28 @@
 									{
 										"definition": {
 											"fragment": {
-												"key": "marketplace-landing-page-hero-banner",
+												"key": "hero-banner",
 												"siteKey": "[$GROUP_KEY$]"
 											},
 											"fragmentConfig": {
+												"homeLink": "/web/one/home",
+												"parentLink": "/web/one/marketplace",
+												"showBreadcrumbParent": false,
+												"showSubtitle": false
 											},
 											"fragmentFields": [
 												{
-													"id": "main-content",
+													"id": "breadcrumb-current",
+													"value": {
+														"text": {
+															"value_i18n": {
+																"en_US": "Marketplace"
+															}
+														}
+													}
+												},
+												{
+													"id": "title",
 													"value": {
 														"text": {
 															"value_i18n": {
@@ -45,8 +59,43 @@
 													}
 												}
 											],
+											"fragmentStyle": {
+												"backgroundFragmentImage": {
+													"url": {
+														"mapping": {
+															"fieldKey": "FileEntry_previewImage",
+															"itemReference": {
+																"className": "com.liferay.portal.kernel.repository.model.FileEntry",
+																"classPK": "[#DOCUMENT_FILE_ENTRY_ID:/site-initializer/documents/group/hero_banner_gradient_bubbles.png#]"
+															}
+														}
+													}
+												}
+											},
 											"indexed": true
 										},
+										"pageElements": [
+											{
+												"definition": {
+													"fragmentDropZoneId": "0"
+												},
+												"pageElements": [
+													{
+														"definition": {
+															"fragment": {
+																"key": "marketplace-category-nav",
+																"siteKey": "[$GROUP_KEY$]"
+															},
+															"fragmentConfig": {
+															},
+															"indexed": true
+														},
+														"type": "Fragment"
+													}
+												],
+												"type": "FragmentDropZone"
+											}
+										],
 										"type": "Fragment"
 									}
 								],

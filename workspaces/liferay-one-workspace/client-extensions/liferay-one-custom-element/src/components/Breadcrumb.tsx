@@ -92,7 +92,11 @@ export default function Breadcrumb() {
 
 							{!isLast && (
 								<ClayIcon
-									style={{color: SEPARATOR_COLOR}}
+									style={{
+										color: SEPARATOR_COLOR,
+										fontSize: '0.5em',
+										marginTop: '0',
+									}}
 									symbol="angle-right"
 								/>
 							)}

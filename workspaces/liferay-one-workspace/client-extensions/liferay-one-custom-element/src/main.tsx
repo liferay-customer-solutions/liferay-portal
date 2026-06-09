@@ -20,6 +20,9 @@ import {baseAttributes, getAttributes} from './utils/attributes';
 type RouterComponent = React.ComponentType;
 
 const routers: Record<string, React.LazyExoticComponent<RouterComponent>> = {
+	'account-selector': React.lazy(
+		() => import('./pages/AccountSelector/AccountSelectorRouter')
+	),
 	'admin': React.lazy(() => import('./pages/Admin/AdminRouter')),
 	'my-account': React.lazy(() => import('./pages/MyAccount/MyAccountRouter')),
 	'support': React.lazy(() => import('./pages/Support/SupportRouter')),

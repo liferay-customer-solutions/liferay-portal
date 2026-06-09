@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-/* ──  App type badge ── */
+/* ---------- App type badge ---------- */
 
 .app-type-badge {
 	border-bottom-left-radius: 10px;
@@ -12,7 +12,7 @@
 	border-top-right-radius: 2px;
 	display: inline-block;
 	font-size: 11px;
-	font-weight: 600;
+	font-weight: var(--font-weight-semi-bold);
 	height: 20px;
 	padding: 0 8px;
 	position: absolute;
@@ -20,64 +20,60 @@
 	top: 1px;
 }
 
-/* ──  App type variants ── */
+/* ---------- App type variants ---------- */
+
+.app-type-badge.batch,
+.app-type-badge.checkout,
+.app-type-badge.fragments,
+.app-type-badge.object-definition,
+.app-type-badge.payment-methods,
+.app-type-badge.site-initializer,
+.app-type-badge.theme,
+.app-type-badge.workflow-action {
+	background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);
+	color: color-mix(in srgb, var(--badge-color) 70%, black 50%);
+}
 
 .app-type-badge.batch {
 	--badge-color: #ffb46e;
-	background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);
-	color: color-mix(in srgb, var(--badge-color) 70%, black 50%);
 }
 
 .app-type-badge.checkout {
 	--badge-color: #9be169;
-	background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);
-	color: color-mix(in srgb, var(--badge-color) 70%, black 50%);
 }
 
 .app-type-badge.fragments {
 	--badge-color: #ff5f5f;
-	background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);
-	color: color-mix(in srgb, var(--badge-color) 70%, black 50%);
 }
 
 .app-type-badge.object-definition {
 	--badge-color: #5fc8ff;
-	background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);
-	color: color-mix(in srgb, var(--badge-color) 70%, black 50%);
 }
 
 .app-type-badge.payment-methods {
 	--badge-color: #4b9bff;
-	background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);
-	color: color-mix(in srgb, var(--badge-color) 70%, black 50%);
 }
 
 .app-type-badge.site-initializer {
 	--badge-color: #50d2a0;
-	background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);
-	color: color-mix(in srgb, var(--badge-color) 70%, black 50%);
 }
 
 .app-type-badge.theme {
 	--badge-color: #af78ff;
-	background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);
-	color: color-mix(in srgb, var(--badge-color) 70%, black 50%);
 }
 
 .app-type-badge.workflow-action {
 	--badge-color: #7785ff;
-	background-color: color-mix(in srgb, var(--badge-color) 70%, white 60%);
-	color: color-mix(in srgb, var(--badge-color) 70%, black 50%);
 }
 
 .beta-badge-label {
 	align-items: center;
-	background-color: #d1ecfa;
+	background-color: var(--color-accent-1-lighten);
 	border-radius: 4px;
 	color: #166e9e;
 	display: flex;
 	font-size: 13px;
-	font-weight: 600;
+	font-weight: var(--font-weight-semi-bold);
 	justify-content: center;
 	line-height: 16px;
 	padding: 4px 8px;
@@ -85,7 +81,7 @@
 	vertical-align: middle;
 }
 
-/* ── Card Grid ── */
+/* ---------- Card grid ---------- */
 
 .card-grid {
 	.cards-container {
@@ -106,7 +102,7 @@
 	}
 }
 
-/* ── Card ── */
+/* ---------- Card ---------- */
 
 .card-body {
 	gap: var(--spacer-2);
@@ -177,7 +173,7 @@
 
 .card-price {
 	font-size: 0.875rem;
-	font-weight: 600;
+	font-weight: var(--font-weight-semi-bold);
 }
 
 .card-price-free {
@@ -192,16 +188,38 @@
 
 .card-title {
 	font-size: 1rem;
-	font-weight: 600;
+	font-weight: var(--font-weight-semi-bold);
 	margin-bottom: 0;
 }
 
 .card:hover {
-	border-color: var(--primary-l2);
+	border-color: var(--color-action-primary-hover);
 	box-shadow: var(--elevation-fluffy-2) rgba(60, 60, 60, 0.08);
 }
 
-/* ── Marketplace Facets ── */
+/* ---------- One card ---------- */
+
+/* Shared card surface for the home page (feature cards and announcement cards). */
+
+.one-card {
+	background-color: var(--white);
+	border: 1px solid var(--color-neutral-2);
+	border-radius: 10px;
+	box-sizing: border-box;
+	transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.one-card:hover {
+	background: linear-gradient(
+		172deg,
+		rgba(251, 252, 254, 1) 80%,
+		rgba(212, 222, 255, 0.5) 100%
+	);
+	border-color: var(--color-action-primary-hover);
+	box-shadow: 0 6px 12px 0 rgba(60, 60, 60, 0.06);
+}
+
+/* ---------- Marketplace facets ---------- */
 
 .card-bullet-icon {
 	background-color: var(--primary-l3);
@@ -242,7 +260,7 @@
 	display: none;
 }
 
-/* ── Marketplace Detail Body ── */
+/* ---------- Marketplace detail body ---------- */
 
 .marketplace-description-content {
 	font-size: 1.125rem;
@@ -251,10 +269,10 @@
 
 .marketplace-section-title {
 	font-size: 1.5rem;
-	font-weight: 600;
+	font-weight: var(--font-weight-semi-bold);
 }
 
-/* ── Marketplace App Categories ── */
+/* ---------- Marketplace app categories ---------- */
 
 .app-category {
 	flex: 1;
@@ -272,14 +290,14 @@
 .app-container .app-category {
 	background-color: var(--primary-l3);
 	color: var(--primary-d2);
-	font-weight: 600;
+	font-weight: var(--font-weight-semi-bold);
 	height: 1.25rem;
 	padding: 0.1875rem var(--spacer-2);
 }
 
 .app-container .app-product-type {
 	font-size: 0.6875rem;
-	font-weight: 600;
+	font-weight: var(--font-weight-semi-bold);
 	height: 1.25rem;
 	min-width: 0;
 	overflow: hidden;
@@ -316,7 +334,7 @@
 	}
 }
 
-/* ── Marketplace App Image Gallery ── */
+/* ---------- Marketplace app image gallery ---------- */
 
 .carousel-container img {
 	cursor: pointer;
@@ -460,7 +478,7 @@
 
 .thumbnail.selected,
 .thumbnail:hover {
-	border-color: var(--primary-l2);
+	border-color: var(--color-action-primary-hover);
 	opacity: 1;
 }
 
@@ -510,18 +528,18 @@
 
 .view-full-gallery .title {
 	font-size: 1rem;
-	font-weight: 600;
+	font-weight: var(--font-weight-semi-bold);
 	line-height: 1;
 	margin-bottom: 4px;
 }
 
 .view-full-gallery:hover {
 	background-color: var(--light);
-	border: 2px solid var(--primary-l2);
+	border: 2px solid var(--color-action-primary-hover);
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* ── Marketplace App Sidebar ── */
+/* ---------- Marketplace app sidebar ---------- */
 
 .modal-icon-background {
 	background-color: var(--neutral-5);
@@ -581,7 +599,7 @@
 	mask-type: alpha;
 }
 
-/* ── Primary Navigation ── */
+/* ---------- Primary navigation ---------- */
 .liferay-one-nav .lfr-nav-item.nav-item {
 	border-radius: 8px;
 	margin-right: var(--spacer-2);
@@ -596,19 +614,19 @@
 	.lfr-nav-item.nav-item.dropdown:has(.child-menu.dropdown-menu .active.selected)
 	.nav-link {
 	color: var(--color-action-primary-hover) !important;
-	font-weight: 600;
+	font-weight: var(--font-weight-semi-bold);
 }
 
 .liferay-one-nav .lfr-nav-item.nav-item.selected.active .nav-link {
 	border-bottom: var(--color-action-primary-active) solid 3px !important;
 	color: var(--color-action-primary-hover) !important;
-	font-weight: 600;
+	font-weight: var(--font-weight-semi-bold);
 }
 
 .liferay-one-nav .lfr-nav-item.nav-item.selected.active .nav-link:hover {
 	background-color: var(--color-neutral-0) !important;
 	border-bottom: var(--color-action-primary-active) solid 3px !important;
-	font-weight: 600;
+	font-weight: var(--font-weight-semi-bold);
 }
 
 .liferay-one-nav .lfr-nav-item.nav-item:hover {
@@ -616,13 +634,36 @@
 	font-weight: none !important;
 }
 
-/* ── Dropdowns ── */
+/* ---------- Dropdowns ---------- */
 .liferay-one-nav .child-menu.dropdown-menu {
 	border-radius: 8px !important;
 	padding: 0 !important;
 }
 
-/* ── Liferay One chrome layout ── */
+/* Entity selector (account/project) dropdown */
+.entity-selector-menu.dropdown-menu {
+	border-radius: 0.625rem;
+	padding: 0.5rem;
+}
+
+.entity-selector-menu .dropdown-item {
+	border-radius: 0.375rem;
+	padding: 0.625rem 0.75rem;
+}
+
+.entity-selector-menu .dropdown-section {
+  padding: 0 0 var(--spacer-2) 0;
+}
+
+.entity-selector-menu .dropdown-item.active,
+.entity-selector-menu .dropdown-item:active,
+.entity-selector-menu .dropdown-item:focus,
+.entity-selector-menu .dropdown-item:hover {
+	background-color: var(--color-action-primary-active-lighten);
+	color: inherit;
+}
+
+/* ---------- Liferay one chrome layout ---------- */
 .liferay-one-nav {
 	position: relative;
 }
@@ -632,7 +673,7 @@
 	padding-right: var(--spacer-3);
 }
 
-/* ── Utility Bar (top nav row) ── */
+/* Utility Bar (top nav row) */
 .liferay-one-nav-utility .account-selection-dropdown .account-name {
 	font-size: 13px;
 }
@@ -663,7 +704,7 @@
 
 .liferay-one-nav-utility .language-selector-container .language-selector-text {
 	font-size: 13px;
-	font-weight: 600;
+	font-weight: var(--font-weight-semi-bold);
 }
 
 .liferay-one-nav-utility .one-caret-icon svg {
@@ -700,7 +741,7 @@
 	width: 1px;
 }
 
-/* ── Footer ── */
+/* ---------- Footer ---------- */
 .account-selector-compact .account-name,
 .account-selector-compact .dropdown-arrow {
 	display: none !important;
@@ -745,7 +786,8 @@
 }
 
 .liferay-one-footer .social-icons {
-	max-width: 220px;
+	gap: 1rem;
+	margin-top: 1.5rem;
 }
 
 .liferay-one-footer .social-icons li img {
@@ -759,7 +801,7 @@
 
 .liferay-one-footer h3 {
 	color: var(--color-brand-primary-darken-4);
-	font-weight: 600;
+	font-weight: var(--font-weight-semi-bold);
 	margin-bottom: var(--spacer-3);
 }
 
@@ -769,7 +811,7 @@
 	color: var(--color-neutral-7);
 	cursor: pointer;
 	display: inline-flex;
-	font-weight: 600;
+	font-weight: var(--font-weight-semi-bold);
 	padding: 6px 12px;
 	text-decoration: none;
 }
@@ -800,7 +842,7 @@
 	color: var(--color-neutral-7);
 	cursor: pointer;
 	display: inline-flex;
-	font-weight: 600;
+	font-weight: var(--font-weight-semi-bold);
 	gap: 6px;
 	padding: 6px 12px;
 	text-decoration: none;
@@ -815,7 +857,7 @@
 	color: var(--color-action-primary-hover);
 }
 
-/* ── Language Selector ── */
+/* ---------- Language selector ---------- */
 .language-selector-container .dropdown-menu-content.dropdown-menu {
 	border-radius: 10px;
 	box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.1);
@@ -916,27 +958,34 @@
 	margin-bottom: 0 !important;
 }
 
-/* ── Side Nav ── */
-.lo-side-nav__list .lo-side-nav__list .lo-side-nav__list .lo-side-nav__list .lo-side-nav__list > li > .lo-side-nav__item-link {
-	padding-left: 5rem;
-}
-
-.lo-side-nav__list .lo-side-nav__list .lo-side-nav__list .lo-side-nav__list > li > .lo-side-nav__item-link {
-	padding-left: 4rem;
-}
-
-.lo-side-nav__list .lo-side-nav__list .lo-side-nav__list > li > .lo-side-nav__item-link {
-	padding-left: 3rem;
-}
-
-.lo-side-nav__list .lo-side-nav__list > li > .lo-side-nav__item-link {
-	padding-left: 2rem;
-}
-
-.lo-side-nav__list > li > .lo-side-nav__item-link {
-	padding-left: 1rem;
-}
-
 .lo-section-subtitle {
-	color: #82828c;
+	color: var(--color-neutral-6);
+}
+
+/* ---------- Content column ---------- */
+
+/* The header, page sections, and footer all share a centered content column whose width and gutters come from the --content-max-width and --content-gutter style book tokens, so changing either token keeps everything aligned. max-width is the column plus both gutters so that, with border-box, the content stays a true --content-max-width wide and the gutters sit outside it. The selector is scoped under body so it outranks Clay's own .container-fluid-max-xl rule (which is driven by --container-max-xl) regardless of stylesheet load order. */
+
+body .container-fluid-max-xl {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: calc(
+		var(--content-max-width, 1280px) + 2 * var(--content-gutter, 1.5rem)
+	);
+	padding-left: var(--content-gutter, 1.5rem);
+	padding-right: var(--content-gutter, 1.5rem);
+}
+
+/* ---------- Keep the header content within the column so the search box never collides with the navigation. ---------- */
+
+body nav.public-sites-navigation .liferay-logo {
+	flex-shrink: 0;
+}
+
+body nav.public-sites-navigation .liferay-logo .logo-text {
+	white-space: nowrap;
+}
+
+body nav.public-sites-navigation .liferay-one-search {
+	width: 12rem;
 }

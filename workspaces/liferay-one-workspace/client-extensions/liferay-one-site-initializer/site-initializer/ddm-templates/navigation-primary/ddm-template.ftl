@@ -44,12 +44,28 @@
 	<#assign navigationMenu = {} />
 </#attempt>
 
+<#assign activeSectionName = "" />
+
+<#attempt>
+	<#assign topLayout = themeDisplay.getLayout() />
+
+	<#list themeDisplay.getLayout().getAncestors() as ancestorLayout>
+		<#assign topLayout = ancestorLayout />
+	</#list>
+
+	<#assign activeSectionName = topLayout.getName(locale) />
+<#recover>
+	<#assign activeSectionName = "" />
+</#attempt>
+
 <ul class="adt-navigation" data-account-bypass="${canBypassMyAccount?c}">
 	<#if (navigationMenu.navigationMenuItems)??>
 		<#list navigationMenu.navigationMenuItems as navPrimaryItem>
+			<#assign isActiveSection = activeSectionName?has_content && (navPrimaryItem.name == activeSectionName) />
+
 			<#if (navPrimaryItem.name == "My Account") && !themeDisplay.isSignedIn()>
 			<#elseif (((navPrimaryItem.navigationMenuItems)![])?size > 0)>
-				<div class="adt-nav-item dropdown dropdown-action w-100">
+				<div class="adt-nav-item dropdown dropdown-action w-100<#if isActiveSection> selected</#if>">
 					<button
 						aria-expanded="true"
 						class="adt-nav-text align-items-center d-flex menu-info"
@@ -68,7 +84,7 @@
 					<@render_navigation_dropdown navPrimaryItem />
 				</div>
 			<#else>
-				<a class="adt-nav-item w-100" href="${(navPrimaryItem.typeSettings.url)!""}"<#if ((navPrimaryItem.typeSettings.useNewTab)!"") == "true"> target="_blank"</#if>>
+				<a class="adt-nav-item w-100<#if isActiveSection> selected</#if>" href="${(navPrimaryItem.typeSettings.url)!""}"<#if ((navPrimaryItem.typeSettings.useNewTab)!"") == "true"> target="_blank"</#if>>
 					<div class="adt-nav-text d-flex pr-3" tabindex="4">
 						<span class="adt-nav-title text-truncate">
 							${navPrimaryItem.name}
@@ -84,7 +100,7 @@
 	navPrimaryItem
 >
 	<div class="adt-submenu dropdown-menu main-menu-dropdown position-absolute pt-2">
-		<div class="adt-submenu-outer-wrapper">
+		<div class="adt-submenu-outer-wrapper container-fluid-max-xl">
 			<div class="adt-submenu-inner-wrapper">
 				<#list (navPrimaryItem.navigationMenuItems)![] as navSecondaryItem>
 					<#assign

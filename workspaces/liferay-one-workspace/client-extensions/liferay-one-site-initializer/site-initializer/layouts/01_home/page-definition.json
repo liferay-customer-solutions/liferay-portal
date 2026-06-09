@@ -33,9 +33,10 @@
 				"pageElements": [
 					{
 						"definition": {
+							"cssClass": "container-fluid container-fluid-max-xl",
 							"indexed": true,
 							"layout": {
-								"widthType": "Fixed"
+								"widthType": "Fluid"
 							}
 						},
 						"pageElements": [
@@ -222,87 +223,131 @@
 															{
 																"definition": {
 																	"fragment": {
-																		"key": "conditional-button",
+																		"key": "conditional-wrapper",
 																		"siteKey": "[$GROUP_KEY$]"
 																	},
 																	"fragmentConfig": {
-																		"buttonSize": "nm",
-																		"buttonType": "outline-primary",
-																		"showForSignedInUsers": false,
-																		"showForSignedOutUsers": true
+																		"displayMode": "outOfRoleOnly",
+																		"roles": "User"
 																	},
-																	"fragmentFields": [
-																		{
-																			"id": "link",
-																			"value": {
-																				"fragmentLink": {
-																					"value": {
-																						"href": {
-																							"value_i18n": {
-																								"en_US": "/c/portal/login",
-																								"es_ES": "/c/portal/login",
-																								"ja_JP": "/c/portal/login",
-																								"pt_BR": "/c/portal/login"
-																							}
-																						}
-																					}
-																				},
-																				"text": {
-																					"value_i18n": {
-																						"en_US": "Sign In",
-																						"es_ES": "Iniciar sesión",
-																						"ja_JP": "サインイン",
-																						"pt_BR": "Entrar"
-																					}
-																				}
-																			}
-																		}
-																	],
 																	"indexed": true
 																},
+																"pageElements": [
+																	{
+																		"definition": {
+																			"fragmentDropZoneId": "3"
+																		},
+																		"pageElements": [
+																			{
+																				"definition": {
+																					"fragment": {
+																						"key": "BASIC_COMPONENT-button"
+																					},
+																					"fragmentConfig": {
+																						"buttonSize": "nm",
+																						"buttonType": "outline-primary",
+																						"type": "link"
+																					},
+																					"fragmentFields": [
+																						{
+																							"id": "link",
+																							"value": {
+																								"fragmentLink": {
+																									"value": {
+																										"href": {
+																											"value_i18n": {
+																												"en_US": "/c/portal/login",
+																												"es_ES": "/c/portal/login",
+																												"ja_JP": "/c/portal/login",
+																												"pt_BR": "/c/portal/login"
+																											}
+																										}
+																									}
+																								},
+																								"text": {
+																									"value_i18n": {
+																										"en_US": "Sign In",
+																										"es_ES": "Iniciar sesión",
+																										"ja_JP": "サインイン",
+																										"pt_BR": "Entrar"
+																									}
+																								}
+																							}
+																						}
+																					],
+																					"indexed": true
+																				},
+																				"type": "Fragment"
+																			}
+																		],
+																		"type": "FragmentDropZone"
+																	}
+																],
 																"type": "Fragment"
 															},
 															{
 																"definition": {
 																	"fragment": {
-																		"key": "conditional-button",
+																		"key": "conditional-wrapper",
 																		"siteKey": "[$GROUP_KEY$]"
 																	},
 																	"fragmentConfig": {
-																		"buttonSize": "nm",
-																		"buttonType": "outline-primary",
-																		"showForSignedInUsers": true,
-																		"showForSignedOutUsers": false
+																		"displayMode": "inRoleOnly",
+																		"roles": "User"
 																	},
-																	"fragmentFields": [
-																		{
-																			"id": "link",
-																			"value": {
-																				"fragmentLink": {
-																					"value": {
-																						"href": {
-																							"value_i18n": {
-																								"en_US": "/my-account",
-																								"es_ES": "/my-account",
-																								"ja_JP": "/my-account",
-																								"pt_BR": "/my-account"
-																							}
-																						}
-																					}
-																				},
-																				"text": {
-																					"value_i18n": {
-																						"en_US": "View Account",
-																						"es_ES": "Ver mi cuenta",
-																						"ja_JP": "アカウントを表示",
-																						"pt_BR": "Ver minha conta"
-																					}
-																				}
-																			}
-																		}
-																	],
 																	"indexed": true
 																},
+																"pageElements": [
+																	{
+																		"definition": {
+																			"fragmentDropZoneId": "2"
+																		},
+																		"pageElements": [
+																			{
+																				"definition": {
+																					"fragment": {
+																						"key": "BASIC_COMPONENT-button"
+																					},
+																					"fragmentConfig": {
+																						"buttonSize": "nm",
+																						"buttonType": "outline-primary",
+																						"type": "link"
+																					},
+																					"fragmentFields": [
+																						{
+																							"id": "link",
+																							"value": {
+																								"fragmentLink": {
+																									"value": {
+																										"href": {
+																											"value_i18n": {
+																												"en_US": "/my-account",
+																												"es_ES": "/my-account",
+																												"ja_JP": "/my-account",
+																												"pt_BR": "/my-account"
+																											}
+																										}
+																									}
+																								},
+																								"text": {
+																									"value_i18n": {
+																										"en_US": "View Account",
+																										"es_ES": "Ver mi cuenta",
+																										"ja_JP": "アカウントを表示",
+																										"pt_BR": "Ver minha conta"
+																									}
+																								}
+																							}
+																						}
+																					],
+																					"indexed": true
+																				},
+																				"type": "Fragment"
+																			}
+																		],
+																		"type": "FragmentDropZone"
+																	}
+																],
 																"type": "Fragment"
 															}
 														],
@@ -384,10 +429,11 @@
 			},
 			{
 				"definition": {
+					"cssClass": "container-fluid container-fluid-max-xl",
 					"indexed": true,
 					"layout": {
 						"paddingTop": 4,
-						"widthType": "Fixed"
+						"widthType": "Fluid"
 					},
 					"name": "Service Cards"
 				},
@@ -1077,9 +1123,10 @@
 				"pageElements": [
 					{
 						"definition": {
+							"cssClass": "container-fluid container-fluid-max-xl",
 							"indexed": true,
 							"layout": {
-								"widthType": "Fixed"
+								"widthType": "Fluid"
 							}
 						},
 						"pageElements": [
@@ -1250,7 +1297,9 @@
 										"pageElements": [
 											{
 												"definition": {
-													"customCSS": ".[$FRAGMENT_CLASS$]:hover {\n\toutline: 2px solid var(--color-action-primary-hover);\n\toutline-offset: 2px;\n}",
+													"cssClasses": [
+														"one-card"
+													],
 													"fragmentLink": {
 														"href": {
 															"mapping": {
@@ -1262,8 +1311,6 @@
 														}
 													},
 													"fragmentStyle": {
-														"backgroundColor": "colorBrandPrimaryLighten6",
-														"borderRadius": "borderRadiusLg",
 														"marginBottom": "3",
 														"marginLeft": "1",
 														"marginRight": "1",
@@ -1451,12 +1498,13 @@
 			},
 			{
 				"definition": {
+					"cssClass": "container-fluid container-fluid-max-xl",
 					"fragmentStyle": {
 						"marginBottom": "5rem"
 					},
 					"indexed": true,
 					"layout": {
-						"widthType": "Fixed"
+						"widthType": "Fluid"
 					},
 					"name": "Liferay Products"
 				},
@@ -1595,7 +1643,7 @@
 									"federatedSearchKey": "",
 									"filterField": "assetCategoryIds",
 									"filterQueryType": "match",
-									"filterValue": "[$TAXONOMY_CATEGORY_ID:/site-initializer/taxonomy-vocabularies/company/marketplace-product-type/product.json$]",
+									"filterValue": "[$TAXONOMY_CATEGORY_ID:/site-initializer/taxonomy-vocabularies/company/marketplace-product-type/liferay-product.json$]",
 									"immutable": "true",
 									"invisible": "true",
 									"occur": "must",
@@ -1651,9 +1699,10 @@
 			},
 			{
 				"definition": {
+					"cssClass": "container-fluid container-fluid-max-xl",
 					"indexed": true,
 					"layout": {
-						"widthType": "Fixed"
+						"widthType": "Fluid"
 					},
 					"name": "What's New on Marketplace"
 				},

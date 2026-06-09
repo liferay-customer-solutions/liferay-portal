@@ -1,6 +1,4 @@
 <div class="lo-hero-banner">
-	<img alt="" class="lo-hero-banner-image" src="[resources:hero_banner_gradient_bubbles.png]" />
-
 	<div class="container">
 		<div class="lo-hero-banner-content">
 			<nav aria-label="Breadcrumb" class="lo-hero-banner-breadcrumb">
@@ -8,23 +6,28 @@
 
 				[@clay["icon"] symbol="angle-right-small" /]
 
-				<a class="lo-hero-banner-breadcrumb-parent" data-lfr-editable-id="breadcrumb-parent" data-lfr-editable-type="text" href="${configuration.parentLink}">Support</a>
+				[#if configuration.showBreadcrumbParent]
+					<a class="lo-hero-banner-breadcrumb-parent" data-lfr-editable-id="breadcrumb-parent" data-lfr-editable-type="text" href="${configuration.parentLink}">Parent</a>
 
-				[@clay["icon"] symbol="angle-right-small" /]
+					[@clay["icon"] symbol="angle-right-small" /]
+				[/#if]
 
-				<span class="lo-hero-banner-breadcrumb-current" data-lfr-editable-id="breadcrumb-current" data-lfr-editable-type="text">Customer Portal Help</span>
+				<span class="lo-hero-banner-breadcrumb-current" data-lfr-editable-id="breadcrumb-current" data-lfr-editable-type="text">Current Page</span>
 			</nav>
 
 			<div class="lo-hero-banner-text">
 				<h1 class="lo-hero-banner-title" data-lfr-editable-id="title" data-lfr-editable-type="text">
-					Customer Portal Help
+					Page Title
 				</h1>
 
-				<p class="lo-hero-banner-subtitle" data-lfr-editable-id="subtitle" data-lfr-editable-type="text">
-					Expand Liferay's portfolio through apps from our partner and developer ecosystems to enhance your
-					digital transformation.
-				</p>
+				[#if configuration.showSubtitle]
+					<p class="lo-hero-banner-subtitle" data-lfr-editable-id="subtitle" data-lfr-editable-type="text">
+						Page subtitle goes here.
+					</p>
+				[/#if]
 			</div>
+
+			<lfr-drop-zone data-lfr-drop-zone-id="0" data-lfr-priority="0"></lfr-drop-zone>
 		</div>
 	</div>
 </div>

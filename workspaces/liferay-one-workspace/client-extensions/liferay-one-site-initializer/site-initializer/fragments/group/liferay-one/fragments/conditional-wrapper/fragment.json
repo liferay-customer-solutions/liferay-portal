@@ -2,8 +2,8 @@
 	"configurationPath": "configuration.json",
 	"cssPath": "index.css",
 	"htmlPath": "index.html",
-	"icon": "code",
+	"icon": "password-policies",
 	"jsPath": "index.js",
-	"name": "Conditional Button",
+	"name": "Conditional Wrapper",
 	"type": "component"
 }
