@@ -7,11 +7,11 @@ import {ClayInput} from '@clayui/form';
 import {Observer} from '@clayui/modal/lib/types';
 import {useState} from 'react';
 
+import Badge from '../../../../../../components/Badge/Badge';
 import {translate} from '../../../../../../i18n';
 import {Liferay} from '../../../../../../liferay/liferay';
 import {updateBusinessEvent} from '../../../services/jira/Jira';
 import {IBusinessEvent} from '../../../types';
-import Badge from '../../../../../../components/Badge/Badge';
 import BusinessEventsModal from '../../BusinessEventsModal/BusinessEventsModal';
 
 interface IProps {

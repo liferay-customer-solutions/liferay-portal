@@ -8,8 +8,8 @@ import {ClayCheckbox} from '@clayui/form';
 import React, {useEffect} from 'react';
 
 import {translate} from '../../../../../i18n';
-import {IFilterOption} from '../../../Filter';
 import getKebabCase from '../../../../../utils/getKebabCase';
+import {IFilterOption} from '../../../Filter';
 
 interface IProps {
 	filter: IFilterOption;
@@ -87,9 +87,7 @@ const FilterContent: React.FC<IProps> = ({
 							(item) => item.key === value.key
 						)}
 						key={`${filter.key}-${value.key}`}
-						label={translate(
-							getKebabCase(value.key) as any
-						)}
+						label={translate(getKebabCase(value.key) as any)}
 						onChange={(event) =>
 							handleCheckboxChange(value, event.target.checked)
 						}

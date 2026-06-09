@@ -17,7 +17,7 @@ const BadgeButton = ({filterName, filterValue, onClick}: IProps) => (
 			<p className="font-weight-semi-bold mx-1 my-0">
 				{filterName}
 
-				{':'}
+				:
 			</p>
 
 			<p className="font-weight-normal m-0 pr-1"> {filterValue}</p>
