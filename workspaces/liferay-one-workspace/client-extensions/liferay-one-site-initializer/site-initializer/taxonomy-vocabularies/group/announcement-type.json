@@ -1,0 +1,17 @@
+{
+	"availableLanguages": [
+		"en-US",
+		"es-ES",
+		"ja-JP",
+		"pt-BR"
+	],
+	"externalReferenceCode": "T_AT",
+	"name": "Announcement Type",
+	"name_i18n": {
+		"en_US": "Announcement Type",
+		"es_ES": "Tipo de anuncio",
+		"ja_JP": "アナウンスメントの種類",
+		"pt_BR": "Tipo de aviso"
+	},
+	"viewableBy": "Anyone"
+}
