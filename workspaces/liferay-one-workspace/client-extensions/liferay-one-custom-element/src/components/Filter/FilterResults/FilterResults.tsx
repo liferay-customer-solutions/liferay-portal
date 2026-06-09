@@ -4,10 +4,10 @@
  */
 
 import {sub, translate} from '../../../i18n';
-import {IFilterOption} from '../Filter';
 import getKebabCase from '../../../utils/getKebabCase';
 import BadgeButton from '../../BadgeButton/BadgeButton';
 import Button from '../../Button/Button';
+import {IFilterOption} from '../Filter';
 
 export interface IProps {
 	onChange: (selectedFilters: IFilterOption[]) => void;
@@ -69,9 +69,7 @@ const FilterResults = ({
 									filterValue={option.values
 										.map((value) =>
 											translate(
-												getKebabCase(
-													value.key
-												) as any
+												getKebabCase(value.key) as any
 											)
 										)
 										.join(', ')}

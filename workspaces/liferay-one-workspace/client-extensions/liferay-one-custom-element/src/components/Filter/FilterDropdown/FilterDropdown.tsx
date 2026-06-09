@@ -7,9 +7,9 @@ import ClayDropDown from '@clayui/drop-down';
 import classNames from 'classnames';
 import {JSXElementConstructor, memo, useState} from 'react';
 
-import type {AlignPoints} from '@clayui/shared';
-
 import FilterNavigation from './components/FilterNavigation/FilterNavigation';
+
+import type {AlignPoints} from '@clayui/shared';
 
 interface IProps {
 	alignmentPosition?: number | undefined;

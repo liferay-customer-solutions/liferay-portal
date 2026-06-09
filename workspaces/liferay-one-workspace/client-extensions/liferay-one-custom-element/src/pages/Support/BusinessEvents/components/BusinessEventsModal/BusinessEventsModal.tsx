@@ -7,8 +7,8 @@ import ClayModal from '@clayui/modal';
 import {Observer} from '@clayui/modal/lib/types';
 import classNames from 'classnames';
 
-import {translate} from '../../../../../i18n';
 import Button from '../../../../../components/Button/Button';
+import {translate} from '../../../../../i18n';
 
 interface IBusinessEventsModalProps {
 	baseButtonDisabled?: boolean;

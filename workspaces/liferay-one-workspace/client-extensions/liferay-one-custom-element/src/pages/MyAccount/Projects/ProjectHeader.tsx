@@ -76,7 +76,10 @@ export default function ProjectHeader() {
 			</Section>
 
 			<Section label={i18n.translate('agreements')}>
-				<span className="align-items-center d-flex" style={{gap: '0.5rem'}}>
+				<span
+					className="align-items-center d-flex"
+					style={{gap: '0.5rem'}}
+				>
 					<a
 						className="text-decoration-none"
 						href="#"

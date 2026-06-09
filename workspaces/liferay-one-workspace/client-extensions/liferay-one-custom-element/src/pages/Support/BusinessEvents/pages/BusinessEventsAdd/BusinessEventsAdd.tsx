@@ -9,17 +9,17 @@ import {FieldArray, Formik} from 'formik';
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 
-import {translate} from '../../../../../i18n';
-import {Liferay} from '../../../../../liferay/liferay';
-import {IBusinessEvent, ITicket} from '../../types';
-import {IOption} from '../../components/Select/Select';
-import AssociatedTicketsContainer from '../../components/AssociatedTicketsContainer/AssociatedTicketsContainer';
 import Button from '../../../../../components/Button/Button';
 import DatePicker from '../../../../../components/DatePicker/DatePicker';
 import FormLayout from '../../../../../components/FormLayout/FormLayout';
+import TimePicker from '../../../../../components/TimePicker/TimePicker';
+import {translate} from '../../../../../i18n';
+import {Liferay} from '../../../../../liferay/liferay';
+import {isValidDate} from '../../../../../utils/validations.form';
+import AssociatedTicketsContainer from '../../components/AssociatedTicketsContainer/AssociatedTicketsContainer';
 import Input from '../../components/Input/Input';
 import Select from '../../components/Select/Select';
-import TimePicker from '../../../../../components/TimePicker/TimePicker';
+import {IOption} from '../../components/Select/Select';
 import useAccountsTickets from '../../hooks/useAccountsTickets';
 import useCanViewTickets from '../../hooks/useCanViewTickets';
 import useGetBusinessEventTypesList from '../../hooks/useGetBusinessEventTypesList';
@@ -27,11 +27,11 @@ import useGetLiferayVersions from '../../hooks/useGetLiferayVersions';
 import useGetUTCTimeZonesList from '../../hooks/useGetUTCTimeZonesList';
 import useHasAllEventsPermissions from '../../hooks/useHasAllEventsPermissions';
 import {createBusinessEvent} from '../../services/jira/Jira';
+import {IBusinessEvent, ITicket} from '../../types';
 import {containsOption} from '../../utils/containsOption';
 import {getFormattedEventDateTime} from '../../utils/getFormattedEventDate';
 import getInitialEvent from '../../utils/getInitialEvent';
 import useIsSaasOnly from '../../utils/useIsSaasOnly';
-import {isValidDate} from '../../../../../utils/validations.form';
 
 interface IProps {
 	businessEvent: IBusinessEvent;
@@ -97,10 +97,8 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 		hasImpactingEvents === 'no'
 	);
 
-	const {
-		canViewTickets,
-		loading: loadingJiraAccountChecking,
-	} = useCanViewTickets(accountKey || '');
+	const {canViewTickets, loading: loadingJiraAccountChecking} =
+		useCanViewTickets(accountKey || '');
 
 	const {loading: loadingUTCTimeZonesList, utcTimeZonesList} =
 		useGetUTCTimeZonesList();
@@ -339,9 +337,7 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 							<Button
 								displayType="secondary"
 								onClick={() => {
-									navigate(
-										`/${accountKey}/business-events`
-									);
+									navigate(`/${accountKey}/business-events`);
 								}}
 							>
 								{translate('cancel')}
@@ -442,9 +438,7 @@ const BusinessEventsAddPage: React.FC<IProps> = ({
 									<Input
 										badgeClassName="mt-1 mx-3"
 										component="textarea"
-										label={translate(
-											'event-description'
-										)}
+										label={translate('event-description')}
 										name="businessEvent.description"
 										placeholder={translate(
 											'event-description'

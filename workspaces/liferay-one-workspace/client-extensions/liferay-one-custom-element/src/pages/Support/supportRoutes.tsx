@@ -8,12 +8,8 @@ import {Navigate} from 'react-router-dom';
 
 import {AppRoute} from '../../utils/routes';
 
-const BaseRedirect = lazy(
-	() => import('./BusinessEvents/BaseRedirect')
-);
-const BusinessEvents = lazy(
-	() => import('./BusinessEvents/BusinessEvents')
-);
+const BaseRedirect = lazy(() => import('./BusinessEvents/BaseRedirect'));
+const BusinessEvents = lazy(() => import('./BusinessEvents/BusinessEvents'));
 const BusinessEventsAdd = lazy(
 	() => import('./BusinessEvents/pages/BusinessEventsAdd/BusinessEventsAdd')
 );

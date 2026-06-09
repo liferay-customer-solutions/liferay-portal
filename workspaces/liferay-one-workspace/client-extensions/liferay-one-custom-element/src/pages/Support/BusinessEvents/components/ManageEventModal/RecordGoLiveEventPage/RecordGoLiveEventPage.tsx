@@ -8,19 +8,19 @@ import {Observer} from '@clayui/modal/lib/types';
 import classNames from 'classnames';
 import {useEffect, useMemo, useState} from 'react';
 
+import Badge from '../../../../../../components/Badge/Badge';
+import DatePicker from '../../../../../../components/DatePicker/DatePicker';
+import TimePicker from '../../../../../../components/TimePicker/TimePicker';
 import {translate} from '../../../../../../i18n';
 import {Liferay} from '../../../../../../liferay/liferay';
+import {isValidDate} from '../../../../../../utils/validations.form';
+import useGetUTCTimeZonesList from '../../../hooks/useGetUTCTimeZonesList';
 import {updateBusinessEvent} from '../../../services/jira/Jira';
 import {IBusinessEvent} from '../../../types';
 import {getFormattedEventDateTime} from '../../../utils/getFormattedEventDate';
-import {IOption} from '../../Select/Select';
-import {isValidDate} from '../../../../../../utils/validations.form';
-import Badge from '../../../../../../components/Badge/Badge';
 import BusinessEventsModal from '../../BusinessEventsModal/BusinessEventsModal';
 import Select from '../../Select/Select';
-import DatePicker from '../../../../../../components/DatePicker/DatePicker';
-import TimePicker from '../../../../../../components/TimePicker/TimePicker';
-import useGetUTCTimeZonesList from '../../../hooks/useGetUTCTimeZonesList';
+import {IOption} from '../../Select/Select';
 
 interface IProps {
 	accountExternalReferenceCode: string;

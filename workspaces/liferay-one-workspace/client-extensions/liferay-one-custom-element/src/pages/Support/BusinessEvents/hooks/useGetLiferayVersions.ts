@@ -5,8 +5,8 @@
 
 import {useEffect, useState} from 'react';
 
-import {getProductVersions} from '../services/jira/Jira';
 import {IOption} from '../components/Select/Select';
+import {getProductVersions} from '../services/jira/Jira';
 import sortLiferayVersions from '../utils/sortLiferayVersions';
 
 export default function useGetLiferayVersions(): {
