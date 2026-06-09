@@ -74,6 +74,8 @@ class CommonLicenseKeyOAuth2 extends OneSpringBootOAuth2 {
 	}
 }
 
-const commonLicenseKeyOAuth2 = new CommonLicenseKeyOAuth2('/common-license-keys');
+const commonLicenseKeyOAuth2 = new CommonLicenseKeyOAuth2(
+	'/common-license-keys'
+);
 
 export default commonLicenseKeyOAuth2;

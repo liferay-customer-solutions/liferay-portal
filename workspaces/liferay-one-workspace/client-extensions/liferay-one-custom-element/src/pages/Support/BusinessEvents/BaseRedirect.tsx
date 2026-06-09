@@ -26,10 +26,9 @@ const BaseRedirect = () => {
 		const lastViewedERC = getLastViewedProjectCookie(userId);
 
 		if (lastViewedERC) {
-			navigate(
-				`/${decodeURIComponent(lastViewedERC)}/business-events`,
-				{replace: true}
-			);
+			navigate(`/${decodeURIComponent(lastViewedERC)}/business-events`, {
+				replace: true,
+			});
 
 			return;
 		}

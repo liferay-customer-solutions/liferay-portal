@@ -9,8 +9,8 @@ import {Link} from 'react-router-dom';
 import {translate} from '../../../i18n';
 
 import './TableHeader.css';
-import {IFilterOption} from '../../Filter/Filter';
 import Filter from '../../Filter/Filter';
+import {IFilterOption} from '../../Filter/Filter';
 import FilterResults from '../../Filter/FilterResults/FilterResults';
 import SearchBar from '../../SearchBar/SearchBar';
 

@@ -44,9 +44,7 @@ export function resolveProjectId(id?: string): string {
 		return id;
 	}
 
-	return (
-		localStorage.getItem(LAST_PROJECT_STORAGE_KEY) ?? DEFAULT_PROJECT_ID
-	);
+	return localStorage.getItem(LAST_PROJECT_STORAGE_KEY) ?? DEFAULT_PROJECT_ID;
 }
 
 export function getProject(id: string): Project | undefined {

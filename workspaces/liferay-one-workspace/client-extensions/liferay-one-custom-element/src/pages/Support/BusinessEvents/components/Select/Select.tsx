@@ -8,11 +8,11 @@ import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 import {useField} from 'formik';
 
+import Badge from '../../../../../components/Badge/Badge';
 import {
 	required as requiredValidation,
 	validate,
 } from '../../../../../utils/validations.form';
-import Badge from '../../../../../components/Badge/Badge';
 
 import './Select.css';
 

@@ -11,10 +11,11 @@ import NavigationBar from '@clayui/navigation-bar';
 import {useCallback, useEffect, useState} from 'react';
 import {Link, useLocation, useNavigate, useParams} from 'react-router-dom';
 
+import ButtonDropDown from '../../../../../../components/ButtonDropDown/ButtonDropDown';
 import {translate} from '../../../../../../i18n';
 import {Liferay} from '../../../../../../liferay/liferay';
+import getKebabCase from '../../../../../../utils/getKebabCase';
 import AssociatedTicketsContainer from '../../../components/AssociatedTicketsContainer/AssociatedTicketsContainer';
-import ButtonDropDown from '../../../../../../components/ButtonDropDown/ButtonDropDown';
 import ManageEventModal from '../../../components/ManageEventModal/ManageEventModal';
 import useAccountsTickets from '../../../hooks/useAccountsTickets';
 import useCanViewTickets from '../../../hooks/useCanViewTickets';
@@ -23,7 +24,6 @@ import useHasAllEventsPermissions from '../../../hooks/useHasAllEventsPermission
 import {ITicket} from '../../../types';
 import {getFormattedDate} from '../../../utils/getFormattedDate';
 import {getFormattedTime} from '../../../utils/getFormattedTime';
-import getKebabCase from '../../../../../../utils/getKebabCase';
 import parseAssociatedTickets from '../../../utils/parseAssociatedTickets';
 
 const BusinessEventsItemDetails = () => {

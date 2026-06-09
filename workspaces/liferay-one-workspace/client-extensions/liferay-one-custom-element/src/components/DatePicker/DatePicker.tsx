@@ -11,7 +11,10 @@ import classNames from 'classnames';
 import {useField} from 'formik';
 
 import {getIconSpriteMap} from '../../liferay/constants';
-import {required as requiredValidation, validate} from '../../utils/validations.form';
+import {
+	required as requiredValidation,
+	validate,
+} from '../../utils/validations.form';
 import Badge from '../Badge/Badge';
 
 import './DatePicker.css';
