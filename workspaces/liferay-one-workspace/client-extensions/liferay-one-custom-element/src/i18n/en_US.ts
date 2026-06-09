@@ -511,6 +511,7 @@ export default {
 	'liferay-version': 'Liferay Version',
 	'limit-reached': 'Limit Reached',
 	'list-with-latest-published-apps': 'List with latest published apps',
+	'loading': 'Loading…',
 	'login-as-a-user-that-has-access-to-a-project-or-contact-your-project-administrator-to-add-you-to-a-project.':
 		'Login as a user that has access to a project or contact your project administrator to add you to a project.',
 	'low-code-configuration': 'Low-Code Configuration',
@@ -803,6 +804,7 @@ export default {
 	'select-a-local-file-to-upload': 'Select a Local File to Upload',
 	'select-a-server-to-store-your-data-this-could-have-implications-to-your-organizations-policy-on-user-data-storage':
 		"Select a server to store your data. This could have implications to your organization's policy on user data storage.",
+	'select-account': 'Select Account',
 	'select-an-option': 'Select an Option',
 	'select-areas': 'Select Areas',
 	'select-categories': 'Select Categories',

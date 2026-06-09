@@ -6,6 +6,7 @@
 		"pageElements": [
 			{
 				"definition": {
+					"cssClass": "container-fluid container-fluid-max-xl",
 					"indexed": true,
 					"layout": {
 						"widthType": "Fluid"
@@ -37,22 +38,8 @@
 											},
 											"fragmentFields": [
 												{
-													"id": "breadcrumb-parent",
-													"value": {
-														"fragmentLink": {
-														},
-														"text": {
-															"value_i18n": {
-																"en_US": "Support"
-															}
-														}
-													}
-												},
-												{
 													"id": "breadcrumb-current",
 													"value": {
-														"fragmentLink": {
-														},
 														"text": {
 															"value_i18n": {
 																"en_US": "Customer Portal Help"
@@ -61,10 +48,18 @@
 													}
 												},
 												{
+													"id": "breadcrumb-parent",
+													"value": {
+														"text": {
+															"value_i18n": {
+																"en_US": "Support"
+															}
+														}
+													}
+												},
+												{
 													"id": "subtitle",
 													"value": {
-														"fragmentLink": {
-														},
 														"text": {
 															"value_i18n": {
 																"en_US": "Expand Liferay's portfolio through apps from our partner and developer ecosystems to enhance your digital transformation."
@@ -75,8 +70,6 @@
 												{
 													"id": "title",
 													"value": {
-														"fragmentLink": {
-														},
 														"text": {
 															"value_i18n": {
 																"en_US": "Customer Portal Help"
@@ -85,6 +78,19 @@
 													}
 												}
 											],
+											"fragmentStyle": {
+												"backgroundFragmentImage": {
+													"url": {
+														"mapping": {
+															"fieldKey": "FileEntry_previewImage",
+															"itemReference": {
+																"className": "com.liferay.portal.kernel.repository.model.FileEntry",
+																"classPK": "[#DOCUMENT_FILE_ENTRY_ID:/site-initializer/documents/group/hero_banner_gradient_bubbles.png#]"
+															}
+														}
+													}
+												}
+											},
 											"indexed": true
 										},
 										"type": "Fragment"
@@ -100,11 +106,12 @@
 			},
 			{
 				"definition": {
+					"cssClass": "container-fluid container-fluid-max-xl",
 					"indexed": true,
 					"layout": {
 						"paddingBottom": 4,
 						"paddingTop": 4,
-						"widthType": "Fixed"
+						"widthType": "Fluid"
 					},
 					"name": "Help Topics"
 				},

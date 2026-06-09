@@ -31,6 +31,27 @@
 					],
 					"indexed": true
 				},
+				"pageElements": [
+					{
+						"definition": {
+							"fragmentDropZoneId": "0"
+						},
+						"pageElements": [
+							{
+								"definition": {
+									"widgetInstance": {
+										"widgetConfig": {
+											"properties": "route=account-selector"
+										},
+										"widgetName": "[$CLIENT_EXTENSION_ENTRY_ERC:LXC:liferay-one-custom-element$]"
+									}
+								},
+								"type": "Widget"
+							}
+						],
+						"type": "FragmentDropZone"
+					}
+				],
 				"type": "Fragment"
 			},
 			{
