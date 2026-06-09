@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {ClayInput, ClayRadio} from '@clayui/form';
 import {Nav, useModal} from '@clayui/core';
+import {ClayInput, ClayRadio} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import NavigationBar from '@clayui/navigation-bar';
@@ -12,16 +12,17 @@ import {FieldArray, Formik} from 'formik';
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 
-import {translate} from '../../../../../../i18n';
-import {Liferay} from '../../../../../../liferay/liferay';
-import {IBusinessEvent, ITicket} from '../../../types';
-import {IOption} from '../../../components/Select/Select';
-import AssociatedTicketsContainer from '../../../components/AssociatedTicketsContainer/AssociatedTicketsContainer';
 import Button from '../../../../../../components/Button/Button';
 import DatePicker from '../../../../../../components/DatePicker/DatePicker';
+import TimePicker from '../../../../../../components/TimePicker/TimePicker';
+import {translate} from '../../../../../../i18n';
+import {Liferay} from '../../../../../../liferay/liferay';
+import getKebabCase from '../../../../../../utils/getKebabCase';
+import {isValidDate} from '../../../../../../utils/validations.form';
+import AssociatedTicketsContainer from '../../../components/AssociatedTicketsContainer/AssociatedTicketsContainer';
 import Input from '../../../components/Input/Input';
 import Select from '../../../components/Select/Select';
-import TimePicker from '../../../../../../components/TimePicker/TimePicker';
+import {IOption} from '../../../components/Select/Select';
 import useAccountsTickets from '../../../hooks/useAccountsTickets';
 import useCanViewTickets from '../../../hooks/useCanViewTickets';
 import useGetBusinessEvent from '../../../hooks/useGetBusinessEvent';
@@ -30,15 +31,14 @@ import useGetLiferayVersions from '../../../hooks/useGetLiferayVersions';
 import useGetUTCTimeZonesList from '../../../hooks/useGetUTCTimeZonesList';
 import useHasAllEventsPermissions from '../../../hooks/useHasAllEventsPermissions';
 import {updateBusinessEvent} from '../../../services/jira/Jira';
+import {IBusinessEvent, ITicket} from '../../../types';
 import {containsOption} from '../../../utils/containsOption';
 import {
 	getFormattedEventDateTime,
 	normalizeEventDateTime,
 } from '../../../utils/getFormattedEventDate';
-import getKebabCase from '../../../../../../utils/getKebabCase';
 import parseAssociatedTickets from '../../../utils/parseAssociatedTickets';
 import useIsSaasOnly from '../../../utils/useIsSaasOnly';
-import {isValidDate} from '../../../../../../utils/validations.form';
 import BusinessEventsConfirmationPage from './components/BusinessEventsConfirmationPage/BusinessEventsConfirmationPage';
 
 interface IProps {
@@ -127,10 +127,8 @@ const BusinessEventsItemEditPage: React.FC<IProps> = ({
 		onClose: () => setIsModalOpen(false),
 	});
 
-	const {
-		canViewTickets,
-		loading: loadingJiraAccountChecking,
-	} = useCanViewTickets(accountKey || '');
+	const {canViewTickets, loading: loadingJiraAccountChecking} =
+		useCanViewTickets(accountKey || '');
 
 	const {loading: loadingLiferayVersions, productVersions} =
 		useGetLiferayVersions();
@@ -223,9 +221,7 @@ const BusinessEventsItemEditPage: React.FC<IProps> = ({
 				formattedBusinessEvent
 			);
 
-			navigate(
-				`/${accountKey}/business-events/${businessEvent.id}`
-			);
+			navigate(`/${accountKey}/business-events/${businessEvent.id}`);
 
 			Liferay.Util.openToast({
 				message: translate('the-changes-were-saved-successfully'),
@@ -426,9 +422,7 @@ const BusinessEventsItemEditPage: React.FC<IProps> = ({
 				<div className="be-edit-page">
 					<div className="be-breadcrumbs font-weight-semi-bold mb-4">
 						<span className="mx-2">
-							<Link
-								to={`/${accountKey}/business-events/`}
-							>
+							<Link to={`/${accountKey}/business-events/`}>
 								<ClayIcon
 									className="mr-1"
 									symbol="order-arrow-left"
@@ -603,9 +597,7 @@ const BusinessEventsItemEditPage: React.FC<IProps> = ({
 												badgeClassName="mx-3"
 												className="mx-3"
 												groupStyle="pb-1"
-												label={translate(
-													'new-version'
-												)}
+												label={translate('new-version')}
 												name="businessEvent.newLiferayVersion.key"
 												onChange={(value: string) =>
 													handleOptionChange(
@@ -707,9 +699,7 @@ const BusinessEventsItemEditPage: React.FC<IProps> = ({
 											<ClayInput.GroupItem className="m-0">
 												<TimePicker
 													groupStyle="pb-1"
-													label={translate(
-														'time'
-													)}
+													label={translate('time')}
 													name="businessEvent.plannedEventTime"
 													onChange={(value) =>
 														setFieldValue(

@@ -45,7 +45,9 @@ function getUploadErrorMessage(error: unknown): string {
 	}
 
 	return (
-		info?.title ?? info?.detail ?? i18n.translate('an-unexpected-error-occurred')
+		info?.title ??
+		info?.detail ??
+		i18n.translate('an-unexpected-error-occurred')
 	);
 }
 
@@ -260,7 +262,10 @@ function LicenseKeyUploadsPanel({productGroup}: LicenseKeyUploadsPanelProps) {
 					</ClayButton>
 				}
 				last={
-					<ClayButton displayType="danger" onClick={handleConfirmDelete}>
+					<ClayButton
+						displayType="danger"
+						onClick={handleConfirmDelete}
+					>
 						{i18n.translate('delete')}
 					</ClayButton>
 				}

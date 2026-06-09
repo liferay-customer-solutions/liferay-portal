@@ -5,8 +5,8 @@
 
 import {useEffect, useState} from 'react';
 
-import {getFieldOptions} from '../services/jira/Jira';
 import {IOption} from '../components/Select/Select';
+import {getFieldOptions} from '../services/jira/Jira';
 import {JSM_FIELDS} from '../utils/constants/jsmObjectTypes';
 
 export default function useGetBusinessEventTypesList(): {
