@@ -31,7 +31,7 @@ export function DetailedCard({
 	return (
 		<div className={className}>
 			<div className="detailed-card-container">
-				<div className="detailed-card-header">
+				<div className="align-items-center d-flex detailed-card-header flex-row justify-content-between">
 					<h2>{cardTitle}</h2>
 
 					{headerActions && (
@@ -40,7 +40,7 @@ export function DetailedCard({
 						</div>
 					)}
 
-					<div className="detailed-card-header-icon-container">
+					<div className="align-items-center d-flex detailed-card-header-icon-container justify-content-center">
 						{clayIcon ? (
 							<ClayIcon
 								className="detailed-card-header-clay-icon"

@@ -1,8 +1,8 @@
 .tooltip {
 	&-base {
 		align-items: center;
-		background-color: #e6ebf5;
-		border-radius: 0.25rem;
+		background-color: var(--color-state-info-lighten-2);
+		border-radius: var(--border-radius-sm, 0.25rem);
 		display: flex;
 		height: 28px;
 		justify-content: center;
@@ -19,15 +19,9 @@
 		}
 	}
 
-	&-container {
-		align-items: center;
-		display: flex;
-		justify-content: center;
-	}
-
 	&-optional-text {
-		color: #2e5aac;
-		font-size: 0.688rem;
+		color: var(--color-state-info);
+		font-size: var(--text-paragraph-xs-font-size, 11px);
 		margin-right: 0.125rem;
 	}
 

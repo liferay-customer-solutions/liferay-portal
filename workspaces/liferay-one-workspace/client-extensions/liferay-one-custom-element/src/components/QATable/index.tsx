@@ -33,7 +33,7 @@ const QATable: React.FC<QATableProps> = ({
 	items,
 	orientation = Orientation.HORIZONTAL,
 }) => (
-	<table className="qa-table">
+	<table className="qa-table w-100">
 		<tbody
 			className={classNames({
 				'd-flex flex-wrap': columns > 1,

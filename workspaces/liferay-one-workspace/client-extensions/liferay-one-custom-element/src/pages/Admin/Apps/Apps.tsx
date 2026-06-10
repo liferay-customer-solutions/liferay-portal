@@ -29,7 +29,7 @@ export default function Apps() {
 		<>
 			<div
 				className="d-flex flex-wrap info-container"
-				style={{marginBottom: '1rem'}}
+				style={{marginBottom: 'var(--spacer-3)'}}
 			>
 				<InfoCard
 					className="mr-3"

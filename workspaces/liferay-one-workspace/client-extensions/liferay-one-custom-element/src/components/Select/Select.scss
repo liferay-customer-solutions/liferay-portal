@@ -1,15 +1,15 @@
 .custom-select.disabled {
-	background-color: #f7f7f8 !important;
-	color: #282934;
+	background-color: var(--color-neutral-1) !important;
+	color: var(--color-neutral-10);
 	opacity: 0.7;
 }
 
 .selection {
 	&-first-option {
-		color: #c9c9cf !important;
+		color: var(--color-neutral-3) !important;
 	}
 }
 
 .select-empty-value {
-	color: #6b6c7e;
+	color: var(--color-neutral-7);
 }

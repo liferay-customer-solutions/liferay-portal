@@ -1,5 +1,5 @@
 .app-details-page-table-icon {
-	border-radius: 4px;
+	border-radius: var(--border-radius-sm, 4px);
 	max-height: 36px;
 	object-fit: contain;
 	width: 36px;
@@ -8,7 +8,7 @@
 .tr-table {
 	td,
 	th {
-		padding-bottom: 0.5rem;
-		padding-top: 0.5rem;
+		padding-bottom: var(--spacer-2);
+		padding-top: var(--spacer-2);
 	}
 }

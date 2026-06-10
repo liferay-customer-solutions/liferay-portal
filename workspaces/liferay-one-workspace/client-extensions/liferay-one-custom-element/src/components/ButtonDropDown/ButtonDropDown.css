@@ -1,6 +1,6 @@
 .cp-common-drop-down-item {
 	&:hover {
-		background-color: var(--color-action-primary-hover-lighten);
+		background-color: var(--color-action-primary-hover-10);
 		color: var(--color-action-primary-hover) !important;
 
 		& svg {

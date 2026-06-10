@@ -1,12 +1,12 @@
 .one-conditional-wrapper-edit {
-	border: 1px dashed rgba(0, 83, 240, 0.3);
+	border: 1px dashed color-mix(in srgb, var(--color-action-primary-hover) 30%, transparent);
 	border-radius: 6px;
 	padding: 4px;
 	position: relative;
 }
 
 .one-conditional-wrapper-edit::before {
-	background: rgba(0, 83, 240, 0.08);
+	background: color-mix(in srgb, var(--color-action-primary-hover) 8%, transparent);
 	border-radius: 4px;
 	color: var(--color-action-primary-hover);
 	content: attr(data-edit-label);

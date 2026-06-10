@@ -1,7 +1,7 @@
-<div class="lo-hero-banner">
-	<div class="container">
-		<div class="lo-hero-banner-content">
-			<nav aria-label="Breadcrumb" class="lo-hero-banner-breadcrumb">
+<div class="lo-hero-banner overflow-hidden position-relative">
+	<div class="container-fluid-max-xl">
+		<div class="d-flex flex-column lo-hero-banner-content position-relative">
+			<nav aria-label="Breadcrumb" class="align-items-center d-flex lo-hero-banner-breadcrumb">
 				<a href="${configuration.homeLink}">Home</a>
 
 				[@clay["icon"] symbol="angle-right-small" /]
@@ -12,16 +12,16 @@
 					[@clay["icon"] symbol="angle-right-small" /]
 				[/#if]
 
-				<span class="lo-hero-banner-breadcrumb-current" data-lfr-editable-id="breadcrumb-current" data-lfr-editable-type="text">Current Page</span>
+				<span class="font-weight-semi-bold lo-hero-banner-breadcrumb-current" data-lfr-editable-id="breadcrumb-current" data-lfr-editable-type="text">Current Page</span>
 			</nav>
 
-			<div class="lo-hero-banner-text">
-				<h1 class="lo-hero-banner-title" data-lfr-editable-id="title" data-lfr-editable-type="text">
+			<div class="d-flex flex-column lo-hero-banner-text">
+				<h1 class="font-weight-bold lo-hero-banner-title m-0" data-lfr-editable-id="title" data-lfr-editable-type="text">
 					Page Title
 				</h1>
 
 				[#if configuration.showSubtitle]
-					<p class="lo-hero-banner-subtitle" data-lfr-editable-id="subtitle" data-lfr-editable-type="text">
+					<p class="font-weight-normal lo-hero-banner-subtitle m-0" data-lfr-editable-id="subtitle" data-lfr-editable-type="text">
 						Page subtitle goes here.
 					</p>
 				[/#if]

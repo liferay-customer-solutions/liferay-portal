@@ -170,7 +170,7 @@ nav.public-sites-navigation .language-selector-container .language-selector {
 }
 
 nav.public-sites-navigation .language-selector-container .dropdown-menu {
-	box-shadow: var(--elevation-fluffy-1) rgba(19, 20, 31, 0.12);
+	box-shadow: var(--elevation-fluffy-1) color-mix(in srgb, var(--color-neutral-10) 12%, transparent);
 	padding: 0;
 }
 
@@ -354,7 +354,7 @@ nav.public-sites-navigation
 	.language-dropdown-list
 	.language-nav-item
 	.language-entry-long-text:hover {
-	color: var(--black);
+	color: var(--color-action-primary-hover);
 	text-decoration: none;
 }
 
@@ -599,7 +599,7 @@ nav.public-sites-navigation
 nav.public-sites-navigation .liferay-sites-dropdown {
 	background: var(--white);
 	border-radius: 10px;
-	box-shadow: var(--elevation-fluffy-1) rgba(19, 20, 31, 0.12);
+	box-shadow: var(--elevation-fluffy-1) color-mix(in srgb, var(--color-neutral-10) 12%, transparent);
 	margin-top: 2.75rem;
 	max-height: 600px;
 	position: absolute;
@@ -987,7 +987,7 @@ nav.public-sites-navigation .nav-items-wrapper .adt-nav-item .adt-submenu {
 	background-clip: padding-box;
 	background-color: var(--white);
 	border-top: 1px solid var(--color-neutral-2);
-	box-shadow: var(--elevation-fluffy-1) rgba(19, 20, 31, 0.22);
+	box-shadow: var(--elevation-fluffy-1) color-mix(in srgb, var(--color-neutral-10) 22%, transparent);
 	display: block;
 	left: 0;
 	list-style: none;
@@ -1544,7 +1544,7 @@ nav.public-sites-navigation .nav-items-wrapper .adt-nav-item .adt-submenu {
 }
 
 .search-wrapper .suggestions .suggested-text {
-	color: #fff;
+	color: var(--color-neutral-0);
 	display: none;
 	font-size: var(--text-small-caps-font-size);
 	letter-spacing: 0.05em;
@@ -1746,7 +1746,7 @@ nav.public-sites-navigation
 	.language-selector-container
 	.language-dropdown-list {
 	border-radius: 10px;
-	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 5px 15px color-mix(in srgb, var(--color-neutral-10) 10%, transparent);
 }
 
 nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper {
@@ -1772,12 +1772,12 @@ nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper .menu-ite
 nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper .menu-item:hover,
 nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper .menu-item:active,
 nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper .menu-item:focus {
-	background: #0053f012;
+	background: var(--color-action-primary-hover);
 	color: var(--color-brand-primary);
 }
 
 nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper .menu-item .menu-item-text {
-	color: #272833;
+	color: var(--color-neutral-10);
 	font-size: 16px;
 	font-weight: var(--font-weight-semi-bold);
 }
@@ -1792,17 +1792,17 @@ nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper .menu-ite
 }
 
 nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper .menu-item-icon-customer-portal {
-	background: var(--accent-accent-3, #e55e75);
+	background: var(--accent-accent-3, var(--color-accent-3));
 	border-radius: 4px;
 }
 
 nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper .menu-item-icon-partner-portal {
-	background: var(--status-info-lighten-2, #42bfc2);
+	background: var(--status-info-lighten-2, var(--color-accent-2));
 	border-radius: 4px;
 }
 
 nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper .menu-item-icon-community {
-	background: #503690;
+	background: var(--color-accent-5);
 	border-radius: 4px;
 }
 
@@ -1874,7 +1874,7 @@ nav.public-sites-navigation .account-selection-dropdown .dropdown-arrow svg {
 nav.public-sites-navigation .account-selection-dropdown .dropdown-menu-container {
 	background: var(--color-neutral-0);
 	border-radius: 10px;
-	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 5px 15px color-mix(in srgb, var(--color-neutral-10) 10%, transparent);
 	min-width: 280px;
 	opacity: 0;
 	pointer-events: none;

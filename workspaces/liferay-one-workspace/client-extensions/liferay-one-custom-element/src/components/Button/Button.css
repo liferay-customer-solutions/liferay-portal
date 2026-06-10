@@ -1,8 +1,8 @@
 .btn-sm {
-	line-height: 16px;
+	line-height: var(--text-small-caps-line-height, 16px);
 
 	.inline-item {
-		font-size: 10px;
+		font-size: var(--text-paragraph-xs-font-size, 11px);
 
 		.lexicon-icon {
 			margin-top: -3px;

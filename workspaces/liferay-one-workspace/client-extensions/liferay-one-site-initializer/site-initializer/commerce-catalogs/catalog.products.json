@@ -6,9 +6,42 @@
 				"title": "Liferay Product"
 			}
 		],
+		"description": "Bring generative AI to your digital experiences with prebuilt assistants, search, and content tools.",
+		"displayAvailability": true,
+		"displayStockQuantity": true,
 		"externalReferenceCode": "LO_PRODUCT_AIHUB",
+		"images": [
+			"sample-marketplace-app.png"
+		],
 		"name": "Liferay AI Hub",
-		"sku": "LO_PRODUCT_AIHUB"
+		"options": [
+			{
+				"key": "base-license-usage-type",
+				"values": [
+					"standard"
+				]
+			}
+		],
+		"price": 0,
+		"sku": "LO_PRODUCT_AIHUB",
+		"specificationOptions": [
+			{
+				"key": "developer-name",
+				"value": "Liferay"
+			},
+			{
+				"key": "our-selection",
+				"value": "true"
+			},
+			{
+				"key": "price-model",
+				"value": "Bundled"
+			},
+			{
+				"key": "publisher-name",
+				"value": "Liferay"
+			}
+		]
 	},
 	{
 		"categories": [
@@ -17,9 +50,38 @@
 				"title": "Liferay Product"
 			}
 		],
+		"description": "Understand visitor behavior with dashboards, segments, and conversion insights across every channel.",
+		"displayAvailability": true,
+		"displayStockQuantity": true,
 		"externalReferenceCode": "LO_PRODUCT_ANALYTICS_CLOUD",
+		"images": [
+			"sample-marketplace-app.png"
+		],
 		"name": "Liferay Analytics Cloud",
-		"sku": "LO_PRODUCT_ANALYTICS_CLOUD"
+		"options": [
+			{
+				"key": "base-license-usage-type",
+				"values": [
+					"standard"
+				]
+			}
+		],
+		"price": 0,
+		"sku": "LO_PRODUCT_ANALYTICS_CLOUD",
+		"specificationOptions": [
+			{
+				"key": "developer-name",
+				"value": "Liferay"
+			},
+			{
+				"key": "price-model",
+				"value": "Paid"
+			},
+			{
+				"key": "publisher-name",
+				"value": "Liferay"
+			}
+		]
 	},
 	{
 		"categories": [
@@ -28,9 +90,38 @@
 				"title": "Liferay Product"
 			}
 		],
+		"description": "Unify customer accounts, profiles, and engagement data in a single management platform.",
+		"displayAvailability": true,
+		"displayStockQuantity": true,
 		"externalReferenceCode": "LO_PRODUCT_CMP",
+		"images": [
+			"sample-marketplace-app.png"
+		],
 		"name": "Liferay Customer Management Platform",
-		"sku": "LO_PRODUCT_CMP"
+		"options": [
+			{
+				"key": "base-license-usage-type",
+				"values": [
+					"standard"
+				]
+			}
+		],
+		"price": 0,
+		"sku": "LO_PRODUCT_CMP",
+		"specificationOptions": [
+			{
+				"key": "developer-name",
+				"value": "Liferay"
+			},
+			{
+				"key": "price-model",
+				"value": "Paid"
+			},
+			{
+				"key": "publisher-name",
+				"value": "Liferay"
+			}
+		]
 	},
 	{
 		"categories": [
@@ -39,9 +130,42 @@
 				"title": "Liferay Product"
 			}
 		],
+		"description": "Run B2B and B2C storefronts with catalogs, carts, pricing, and order management out of the box.",
+		"displayAvailability": true,
+		"displayStockQuantity": true,
 		"externalReferenceCode": "LO_PRODUCT_COMMERCE",
+		"images": [
+			"sample-marketplace-app.png"
+		],
 		"name": "Liferay Commerce",
-		"sku": "LO_PRODUCT_COMMERCE"
+		"options": [
+			{
+				"key": "base-license-usage-type",
+				"values": [
+					"standard"
+				]
+			}
+		],
+		"price": 0,
+		"sku": "LO_PRODUCT_COMMERCE",
+		"specificationOptions": [
+			{
+				"key": "developer-name",
+				"value": "Liferay"
+			},
+			{
+				"key": "our-selection",
+				"value": "true"
+			},
+			{
+				"key": "price-model",
+				"value": "Bundled"
+			},
+			{
+				"key": "publisher-name",
+				"value": "Liferay"
+			}
+		]
 	},
 	{
 		"categories": [
@@ -50,9 +174,38 @@
 				"title": "Liferay Product"
 			}
 		],
+		"description": "The digital experience platform for building portals, websites, and intranets at enterprise scale.",
+		"displayAvailability": true,
+		"displayStockQuantity": true,
 		"externalReferenceCode": "LO_PRODUCT_DXP",
+		"images": [
+			"sample-marketplace-app.png"
+		],
 		"name": "Liferay DXP",
-		"sku": "LO_PRODUCT_DXP"
+		"options": [
+			{
+				"key": "base-license-usage-type",
+				"values": [
+					"standard"
+				]
+			}
+		],
+		"price": 0,
+		"sku": "LO_PRODUCT_DXP",
+		"specificationOptions": [
+			{
+				"key": "developer-name",
+				"value": "Liferay"
+			},
+			{
+				"key": "price-model",
+				"value": "Paid"
+			},
+			{
+				"key": "publisher-name",
+				"value": "Liferay"
+			}
+		]
 	},
 	{
 		"categories": [
@@ -78,6 +231,154 @@
 		"price": 0,
 		"sku": "LO_PRODUCT_SAMPLE_APP",
 		"specificationOptions": [
+		]
+	},
+	{
+		"categories": [
+			{
+				"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_APP",
+				"title": "App"
+			},
+			{
+				"externalReferenceCode": "MARKETPLACE_APP_CATEGORY_COLLABORATION_KNOWLEDGE_SHARING",
+				"title": "Collaboration & Knowledge Sharing"
+			},
+			{
+				"externalReferenceCode": "MARKETPLACE_CATEGORY_OBJECT_DEFINITION",
+				"title": "Object Definition"
+			}
+		],
+		"description": "Build and publish smart, data-driven forms with conditional logic and no code required.",
+		"displayAvailability": true,
+		"displayStockQuantity": true,
+		"externalReferenceCode": "LO_PRODUCT_TEST_APP_FORMS",
+		"images": [
+			"sample-marketplace-app.png"
+		],
+		"name": "Smart Forms Builder",
+		"options": [
+			{
+				"key": "base-license-usage-type",
+				"values": [
+					"standard"
+				]
+			}
+		],
+		"price": 0,
+		"sku": "LO_PRODUCT_TEST_APP_FORMS",
+		"specificationOptions": [
+			{
+				"key": "developer-name",
+				"value": "Acme Apps"
+			},
+			{
+				"key": "our-selection",
+				"value": "true"
+			},
+			{
+				"key": "price-model",
+				"value": "Free"
+			},
+			{
+				"key": "publisher-name",
+				"value": "Acme Apps"
+			}
+		]
+	},
+	{
+		"categories": [
+			{
+				"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT",
+				"title": "Product"
+			},
+			{
+				"externalReferenceCode": "MARKETPLACE_CATEGORY_THEME",
+				"title": "Theme"
+			}
+		],
+		"description": "A polished analytics product with prebuilt dashboards, reports, and export-ready visualizations.",
+		"displayAvailability": true,
+		"displayStockQuantity": true,
+		"externalReferenceCode": "LO_PRODUCT_TEST_PRODUCT_INSIGHTS",
+		"images": [
+			"sample-marketplace-app.png"
+		],
+		"name": "Insight Analytics Suite",
+		"options": [
+			{
+				"key": "base-license-usage-type",
+				"values": [
+					"standard"
+				]
+			}
+		],
+		"price": 0,
+		"sku": "LO_PRODUCT_TEST_PRODUCT_INSIGHTS",
+		"specificationOptions": [
+			{
+				"key": "developer-name",
+				"value": "Northwind Labs"
+			},
+			{
+				"key": "our-selection",
+				"value": "true"
+			},
+			{
+				"key": "price-model",
+				"value": "Paid"
+			},
+			{
+				"key": "publisher-name",
+				"value": "Northwind Labs"
+			}
+		]
+	},
+	{
+		"categories": [
+			{
+				"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_SOLUTION",
+				"title": "Solution"
+			},
+			{
+				"externalReferenceCode": "MARKETPLACE_SOLUTION_CATEGORY_CONTENT_MANAGEMENT_OPERATIONS",
+				"title": "Content Management & Operations"
+			}
+		],
+		"description": "An end-to-end migration solution for moving content, users, and assets onto Liferay with confidence.",
+		"displayAvailability": true,
+		"displayStockQuantity": true,
+		"externalReferenceCode": "LO_PRODUCT_TEST_SOLUTION_MIGRATE",
+		"images": [
+			"sample-marketplace-app.png"
+		],
+		"name": "Enterprise Migration Toolkit",
+		"options": [
+			{
+				"key": "base-license-usage-type",
+				"values": [
+					"standard"
+				]
+			}
+		],
+		"price": 0,
+		"sku": "LO_PRODUCT_TEST_SOLUTION_MIGRATE",
+		"specificationOptions": [
+			{
+				"key": "developer-name",
+				"value": "Globex Consulting"
+			},
+			{
+				"key": "our-selection",
+				"value": "true"
+			},
+			{
+				"key": "price-model",
+				"value": "Bundled"
+			},
+			{
+				"key": "publisher-name",
+				"value": "Globex Consulting"
+			}
 		]
 	}
 ]

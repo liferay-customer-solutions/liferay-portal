@@ -9,8 +9,8 @@ import {useProject} from '../../../context/ProjectContext';
 import i18n from '../../../i18n';
 import {getProject} from './projects';
 
-const LABEL_COLOR = '#6B6C7E';
-const VALUE_COLOR = '#272833';
+const LABEL_COLOR = 'var(--color-neutral-7)';
+const VALUE_COLOR = 'var(--color-neutral-10)';
 
 type SectionProps = {
 	children: ReactNode;
@@ -23,9 +23,11 @@ function Section({children, first, label}: SectionProps) {
 		<div
 			className="d-flex flex-column"
 			style={{
-				borderLeft: first ? undefined : '1px solid #E7E7ED',
-				gap: '0.25rem',
-				padding: first ? '0 1.5rem 0 0' : '0 1.5rem',
+				borderLeft: first
+					? undefined
+					: '1px solid var(--color-neutral-2)',
+				gap: 'var(--spacer-1)',
+				padding: first ? '0 var(--spacer-4) 0 0' : '0 var(--spacer-4)',
 			}}
 		>
 			<span
@@ -62,9 +64,9 @@ export default function ProjectHeader() {
 		<div
 			className="align-items-center d-flex flex-wrap justify-content-between mb-3"
 			style={{
-				border: '1px solid #E7E7ED',
-				borderRadius: '0.625rem',
-				padding: '1rem 0.5rem',
+				border: '1px solid var(--color-neutral-2)',
+				borderRadius: 'var(--border-radius-lg, 0.625rem)',
+				padding: 'var(--spacer-3) var(--spacer-2)',
 			}}
 		>
 			<Section first label={i18n.translate('project-term')}>
@@ -78,12 +80,12 @@ export default function ProjectHeader() {
 			<Section label={i18n.translate('agreements')}>
 				<span
 					className="align-items-center d-flex"
-					style={{gap: '0.5rem'}}
+					style={{gap: 'var(--spacer-2)'}}
 				>
 					<a
 						className="text-decoration-none"
 						href="#"
-						style={{color: '#0B5FFF'}}
+						style={{color: 'var(--color-brand-primary)'}}
 					>
 						{i18n.translate('order-form')}
 					</a>
@@ -93,7 +95,7 @@ export default function ProjectHeader() {
 					<a
 						className="text-decoration-none"
 						href="#"
-						style={{color: '#0B5FFF'}}
+						style={{color: 'var(--color-brand-primary)'}}
 					>
 						{i18n.translate('eula')}
 					</a>

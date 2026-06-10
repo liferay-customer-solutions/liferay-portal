@@ -6,10 +6,12 @@
 		"pageElements": [
 			{
 				"definition": {
-					"cssClass": "container-fluid container-fluid-max-xl",
+					"fragmentStyle": {
+						"paddingTop": "3"
+					},
 					"indexed": true,
 					"layout": {
-						"widthType": "Fluid"
+						"widthType": "Fixed"
 					}
 				},
 				"pageElements": [
@@ -28,6 +30,17 @@
 									"size": 12
 								},
 								"pageElements": [
+									{
+										"definition": {
+											"widgetInstance": {
+												"widgetConfig": {
+													"properties": "route=support"
+												},
+												"widgetName": "[$CLIENT_EXTENSION_ENTRY_ERC:LXC:liferay-one-custom-element$]"
+											}
+										},
+										"type": "Widget"
+									}
 								],
 								"type": "Column"
 							}

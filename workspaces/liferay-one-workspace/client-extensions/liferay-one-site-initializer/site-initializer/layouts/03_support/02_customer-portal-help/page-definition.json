@@ -6,7 +6,6 @@
 		"pageElements": [
 			{
 				"definition": {
-					"cssClass": "container-fluid container-fluid-max-xl",
 					"indexed": true,
 					"layout": {
 						"widthType": "Fluid"
@@ -106,12 +105,11 @@
 			},
 			{
 				"definition": {
-					"cssClass": "container-fluid container-fluid-max-xl",
 					"indexed": true,
 					"layout": {
 						"paddingBottom": 4,
 						"paddingTop": 4,
-						"widthType": "Fluid"
+						"widthType": "Fixed"
 					},
 					"name": "Help Topics"
 				},
@@ -121,6 +119,9 @@
 							"customCSS": ".[$FRAGMENT_CLASS$] > .row {\n\talign-items: stretch !important;\n}",
 							"gutters": true,
 							"indexed": true,
+							"layout": {
+								"marginBottom": "4"
+							},
 							"modulesPerRow": 3,
 							"numberOfColumns": 3,
 							"reverseOrder": false,

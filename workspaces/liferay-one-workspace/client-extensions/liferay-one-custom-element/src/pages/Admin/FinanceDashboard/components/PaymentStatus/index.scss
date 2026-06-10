@@ -3,6 +3,6 @@
 	width: 0.5rem;
 
 	&.text-warning {
-		color: #b95000 !important;
+		color: var(--color-state-warning) !important;
 	}
 }

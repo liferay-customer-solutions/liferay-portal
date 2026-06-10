@@ -1,6 +1,6 @@
 .be-breadcrumbs a {
 	color: var(--color-action-neutral-default);
-	font-size: 0.875rem;
+	font-size: var(--h6-font-size, 0.875rem);
 	text-decoration: none;
 }
 
@@ -43,5 +43,5 @@
 }
 
 .be-subtitle {
-	font-size: 0.813rem;
+	font-size: var(--text-paragraph-sm-font-size, 13px);
 }

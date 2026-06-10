@@ -1,3 +1,5 @@
+[#assign channelId = "" /]
+
 [#if configuration.channelId?has_content]
 	[#assign channelId = configuration.channelId /]
 [#else]
@@ -29,7 +31,7 @@
 			<p class="lo-section-subtitle mb-5">${configuration.sectionDescription}</p>
 		</div>
 
-		[#if configuration.specificationFilterValue?has_content]
+		[#if configuration.specificationFilterValue?has_content && channelId?has_content]
 			[#assign response = restClient.get("/headless-commerce-delivery-catalog/v1.0/channels/${channelId}/products?accountId=-1&nestedFields=categories,productSpecifications&pageSize=${configuration.pageSize}&filter=specificationValues/any(x:contains(x,'${configuration.specificationFilterValue}'))") /]
 			[#assign products = response.items /]
 
@@ -58,7 +60,7 @@
 
 							[#assign productDescription=stringUtil.shorten(htmlUtil.stripHtml(product.description!""), 140, "...") /]
 
-							<a class="d-flex flex-column mb-0 one-card product-card text-dark text-decoration-none [#if configuration.cardSize == 'large'] large [/#if] [#if configuration.cardSize == 'medium'] medium [/#if] [#if configuration.cardSize == 'small'] small [/#if]" href="/web/one/marketplace/p/${product.slug}" target="_self">
+							<a class="d-flex flex-column mb-0 one-card position-relative product-card text-dark text-decoration-none [#if configuration.cardSize == 'large'] large [/#if] [#if configuration.cardSize == 'medium'] medium [/#if] [#if configuration.cardSize == 'small'] small [/#if]" href="/web/one/marketplace/p/${product.slug}" target="_self">
 								<div class="card-image-title-container d-flex">
 									<div class="image-container mr-2 rounded">
 										<img alt="${product.name}" class="app-search-image" draggable="false" height="56" lazy="true" src="${(product.urlImage?replace('https://', 'http://'))?js_string}" width="56" />
@@ -85,7 +87,7 @@
 											${product.name}
 										</div>
 
-										<div class="catalog-name mt-0 text-black-50">
+										<div class="catalog-name font-weight-normal mt-0 text-black-50">
 											${getSpecificationValue("developer-name")}
 										</div>
 
@@ -134,12 +136,12 @@
 												[#assign tagName=stringUtil.shorten(htmlUtil.stripHtml(principalCategory.name!""), 100, "...") /]
 
 												<div class="d-flex my-1 tags-container">
-													<span class="mr-3 product-tag px-2 py-1 rounded text-nowrap" title="${principalCategory.name}">
+													<span class="font-weight-normal mr-3 product-tag px-2 py-1 rounded text-nowrap" title="${principalCategory.name}">
 														${tagName}
 													</span>
 
 													[#if categoriesListSize?has_content && remainingCategoriesText?has_content]
-														<span class="mb-1 product-tag px-2 py-1 rounded text-nowrap" title="${remainingCategoriesText?join('\n')}">
+														<span class="font-weight-normal mb-1 product-tag px-2 py-1 rounded text-nowrap" title="${remainingCategoriesText?join('\n')}">
 															+ ${categoriesListSize}
 														</span>
 													[/#if]

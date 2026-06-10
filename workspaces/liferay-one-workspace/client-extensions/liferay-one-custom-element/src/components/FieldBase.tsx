@@ -72,11 +72,14 @@ export function FieldBase({
 				'has-warning': warningMessage && !errorMessage,
 			})}
 		>
-			<div className="field-base-container">
+			<div className="d-flex field-base-container justify-content-between">
 				<div
-					className={classNames('field-base-container_label', {
-						'w-100': !localized,
-					})}
+					className={classNames(
+						'align-items-center d-flex field-base-container_label justify-content-between',
+						{
+							'w-100': !localized,
+						}
+					)}
 				>
 					{typeof label === 'string' ? (
 						<label
@@ -102,7 +105,7 @@ export function FieldBase({
 				</div>
 
 				{localized && (
-					<div className="field-base-localized-field">
+					<div className="align-items-center d-flex field-base-localized-field justify-content-start">
 						<ClayButton displayType={null}>
 							English (US)
 							<ClayIcon
@@ -125,7 +128,9 @@ export function FieldBase({
 			</div>
 
 			{description && (
-				<span className="field-base-description">{description}</span>
+				<span className="field-base-description font-weight-normal">
+					{description}
+				</span>
 			)}
 
 			{children}

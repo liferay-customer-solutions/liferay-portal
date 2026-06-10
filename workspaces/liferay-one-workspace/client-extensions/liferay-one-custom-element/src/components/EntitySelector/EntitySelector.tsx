@@ -9,8 +9,10 @@ import {ReactNode, useCallback, useRef, useState} from 'react';
 
 import i18n from '../../i18n';
 
-const LABEL_COLOR = '#6B6C7E';
-const VALUE_COLOR = '#272833';
+import './EntitySelector.scss';
+
+const LABEL_COLOR = 'var(--color-neutral-7)';
+const VALUE_COLOR = 'var(--color-neutral-10)';
 
 export type SelectorItem = {
 	icon?: ReactNode;
@@ -106,7 +108,7 @@ export default function EntitySelector({
 
 					<span
 						className="align-items-center d-flex w-100"
-						style={{gap: '0.25rem'}}
+						style={{gap: 'var(--spacer-1)'}}
 					>
 						<span
 							className="text-truncate"
@@ -135,12 +137,14 @@ export default function EntitySelector({
 						<span
 							style={{
 								alignSelf: 'flex-start',
-								backgroundColor: '#DBF0DC',
-								borderRadius: '0.25rem',
-								color: '#1F7A3D',
+								backgroundColor:
+									'var(--color-state-success-lighten-2)',
+								borderRadius:
+									'var(--border-radius-sm, 0.25rem)',
+								color: 'var(--color-state-success-darken-2)',
 								fontSize: '0.6875rem',
 								fontWeight: 700,
-								marginTop: '0.25rem',
+								marginTop: 'var(--spacer-1)',
 								padding: '0.0625rem 0.5rem',
 							}}
 						>
@@ -156,8 +160,8 @@ export default function EntitySelector({
 				ref={setTriggerElement}
 				style={{
 					backgroundColor: 'var(--color-neutral-1)',
-					borderRadius: '0.625rem',
-					gap: '0.5rem',
+					borderRadius: 'var(--border-radius-lg, 0.625rem)',
+					gap: 'var(--spacer-2)',
 					padding: '0.375rem 0.75rem 0.375rem 0.375rem',
 					width: '14rem',
 				}}
@@ -229,7 +233,7 @@ export default function EntitySelector({
 						>
 							<span
 								className="align-items-center d-flex"
-								style={{gap: '0.5rem', minWidth: 0}}
+								style={{gap: 'var(--spacer-2)', minWidth: 0}}
 							>
 								{item.icon}
 

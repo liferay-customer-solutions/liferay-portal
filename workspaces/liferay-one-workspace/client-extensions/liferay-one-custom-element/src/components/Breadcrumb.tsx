@@ -14,9 +14,9 @@ type Crumb = {
 	to?: string;
 };
 
-const LINK_COLOR = '#6B6C7E';
-const SEPARATOR_COLOR = '#A7A9BC';
-const TEXT_COLOR = '#272833';
+const LINK_COLOR = 'var(--color-neutral-7)';
+const SEPARATOR_COLOR = 'var(--color-neutral-4)';
+const TEXT_COLOR = 'var(--color-neutral-10)';
 
 function getCurrentLabel(pathname: string): Word {
 	if (pathname.startsWith('/orders')) {
@@ -47,7 +47,7 @@ export default function Breadcrumb() {
 		<nav aria-label={i18n.translate('breadcrumb')} className="mb-3">
 			<ol
 				className="align-items-center d-flex flex-wrap list-unstyled m-0"
-				style={{gap: '0.5rem'}}
+				style={{gap: 'var(--spacer-2)'}}
 			>
 				{trail.map((crumb, index) => {
 					const isLast = index === trail.length - 1;
@@ -57,7 +57,7 @@ export default function Breadcrumb() {
 						<li
 							className="align-items-center d-flex"
 							key={crumb.label}
-							style={{gap: '0.5rem'}}
+							style={{gap: 'var(--spacer-2)'}}
 						>
 							{isLast ? (
 								<span

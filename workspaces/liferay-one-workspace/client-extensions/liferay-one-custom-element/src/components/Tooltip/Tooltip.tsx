@@ -31,7 +31,7 @@ export function Tooltip({
 				})}
 			>
 				<div
-					className="tooltip-container"
+					className="align-items-center d-flex justify-content-center tooltip-container"
 					data-title-set-as-html
 					data-tooltip-align="top"
 					title={tooltip}

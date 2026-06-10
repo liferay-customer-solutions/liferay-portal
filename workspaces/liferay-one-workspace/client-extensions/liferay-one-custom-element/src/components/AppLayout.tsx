@@ -24,10 +24,15 @@ export default function AppLayout({
 	title,
 }: AppLayoutProps) {
 	return (
-		<div style={{paddingBottom: '1.5rem', paddingTop: '1.5rem'}}>
+		<div
+			style={{
+				paddingBottom: 'var(--spacer-4)',
+				paddingTop: 'var(--spacer-4)',
+			}}
+		>
 			{breadcrumb}
 
-			<div className="d-flex" style={{gap: '1rem'}}>
+			<div className="d-flex" style={{gap: 'var(--spacer-3)'}}>
 				<SideNav header={header} items={navItems} title={title} />
 
 				<main className="flex-fill overflow-auto">

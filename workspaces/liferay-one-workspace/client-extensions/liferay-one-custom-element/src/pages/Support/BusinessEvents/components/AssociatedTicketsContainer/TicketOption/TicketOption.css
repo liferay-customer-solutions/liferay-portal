@@ -1,6 +1,6 @@
 .ticket-container{
-	background: var(--color-brand-primary-lighten-6, #FBFCFE);
-	border-color: var(--color-brand-primary-lighten-5, #E7EFFF);
+	background: var(--color-brand-primary-lighten-6, var(--color-brand-primary-lighten-6));
+	border-color: var(--color-brand-primary-lighten-5, var(--color-brand-primary-lighten-5));
 	border-radius: var(--border-radius-lg, 10px);
 	border-style: solid;
 	border-width: 1px;
@@ -30,12 +30,12 @@
 		}
 
 		&:hover {
-			background-color: var(--color-action-primary-hover-lighten, #EDF3FE);
-			border-color: var(--color-action-primary-hover, #0053F0);
+			background-color: var(--color-action-primary-hover-lighten, var(--color-action-primary-hover-10));
+			border-color: var(--color-action-primary-hover, var(--color-action-primary-hover));
 
 
 			.ticket-text-container {
-				color: var(--color-action-primary-hover, #0053F0);
+				color: var(--color-action-primary-hover, var(--color-action-primary-hover));
 
 				.ticket-link-icon-exhibit, .ticket-link-icon-selected {
 					display: block!important;
@@ -44,9 +44,9 @@
 		}
 
 		.ticket-status {
-			background-color: var(--color-state-info-lighten-2, #E6EBF5);
+			background-color: var(--color-state-info-lighten-2, var(--color-state-info-lighten-2));
 			border-radius: var(--border-radius-sm, 4px);
-			color: var(--color-state-info-darken-2, #1C3667);
+			color: var(--color-state-info-darken-2, var(--color-state-info-darken-2));
 			font-size: var(--text-paragraph-xs-font-size, 11px);
 			font-weight: 400;
 			height: 16px;
@@ -62,7 +62,7 @@
 		}
 
 		.ticket-text-container {
-			color: var(--color-neutral-8, #54555F);
+			color: var(--color-neutral-8, var(--color-neutral-8));
 			font-size: var(--text-paragraph-sm-font-size, 13px);
 			font-weight: 600;
 			line-height: var(--text-small-caps-line-height, 16px);
@@ -81,17 +81,17 @@
 		border-width: 1px;
 
 		&:hover {
-			background-color: var(--color-action-primary-hover-lighten, #EDF3FE);
-			border-color: var(--color-action-primary-hover, #0053F0);
-			color: var(--color-action-primary-hover, #0053F0);
+			background-color: var(--color-action-primary-hover-lighten, var(--color-action-primary-hover-10));
+			border-color: var(--color-action-primary-hover, var(--color-action-primary-hover));
+			color: var(--color-action-primary-hover, var(--color-action-primary-hover));
 
 			.ticket-button-icon {
-				color: var(--color-action-primary-hover, #0053F0);
+				color: var(--color-action-primary-hover, var(--color-action-primary-hover));
 			}
 		}
 
 		.ticket-button-icon {
-			color: var(--color-neutral-8, #54555F);
+			color: var(--color-neutral-8, var(--color-neutral-8));
 		}
 	}
 }

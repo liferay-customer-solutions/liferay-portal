@@ -51,9 +51,10 @@ export default function ProjectSelector() {
 				<span
 					className="align-items-center d-flex justify-content-center"
 					style={{
-						background: 'linear-gradient(135deg, #E8EDFB, #D3E0FB)',
-						borderRadius: '0.625rem',
-						color: '#1B5FE0',
+						background:
+							'linear-gradient(135deg, var(--color-action-primary-active-lighten), var(--color-brand-primary-lighten-5))',
+						borderRadius: 'var(--border-radius-lg, 0.625rem)',
+						color: 'var(--color-brand-primary)',
 						flexShrink: 0,
 						height: '2.75rem',
 						width: '2.75rem',

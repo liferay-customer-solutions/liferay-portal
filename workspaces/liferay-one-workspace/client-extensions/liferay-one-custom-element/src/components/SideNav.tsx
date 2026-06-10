@@ -19,7 +19,7 @@ export type NavItem = {
 	path: string;
 };
 
-const ACTIVE_BG = '#E6EDFB';
+const ACTIVE_BG = 'var(--color-action-primary-active-lighten)';
 
 const CUSTOM_ICON_SPRITEMAPS: Record<string, string> = {
 	applications: applicationsIconUrl,
@@ -27,10 +27,10 @@ const CUSTOM_ICON_SPRITEMAPS: Record<string, string> = {
 	union: unionIconUrl,
 };
 
-const SIDEBAR_BG = '#F7F7F8';
-const TEXT_ACTIVE = '#004AD7';
-const TEXT_INACTIVE = '#282934';
-const TEXT_SECTION = '#6B6C7E';
+const SIDEBAR_BG = 'var(--color-neutral-1)';
+const TEXT_ACTIVE = 'var(--color-action-primary-active)';
+const TEXT_INACTIVE = 'var(--color-neutral-10)';
+const TEXT_SECTION = 'var(--color-neutral-7)';
 
 type SideNavItemProps = {
 	depth: number;
@@ -110,7 +110,7 @@ export default function SideNav({header, items, title}: SideNavProps) {
 				<div
 					style={{
 						backgroundColor: SIDEBAR_BG,
-						borderRadius: '0.625rem',
+						borderRadius: 'var(--border-radius-lg, 0.625rem)',
 						padding: '0.75rem',
 					}}
 				>
@@ -122,8 +122,8 @@ export default function SideNav({header, items, title}: SideNavProps) {
 				className="d-flex flex-column overflow-auto"
 				style={{
 					backgroundColor: SIDEBAR_BG,
-					borderRadius: '0.625rem',
-					padding: '0.5rem',
+					borderRadius: 'var(--border-radius-lg, 0.625rem)',
+					padding: 'var(--spacer-2)',
 				}}
 			>
 				{title && (

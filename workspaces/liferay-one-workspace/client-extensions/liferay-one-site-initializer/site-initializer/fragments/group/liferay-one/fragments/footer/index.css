@@ -2,18 +2,8 @@
 	background-color: var(--color-neutral-1);
 }
 
-.liferay-one-footer a {
-	color: var(--color-neutral-9);
-}
-
-.liferay-one-footer h3 {
-	color: var(--color-brand-primary-darken-4);
-	font-size: 1.125rem;
-}
-
 .liferay-one-footer .brand-logo {
 	height: 24px;
-	margin-right: 0.5rem;
 	width: 24px;
 }
 
@@ -24,8 +14,6 @@
 
 .liferay-one-footer .contact-container {
 	color: var(--color-neutral-10);
-	list-style: none;
-	white-space: nowrap;
 }
 
 .liferay-one-footer .footer-copyright {
@@ -42,15 +30,25 @@
 }
 
 .liferay-one-footer .liferay-link {
-	color: #0b63ce;
+	color: var(--color-brand-primary);
 }
 
 .liferay-one-footer .social-icons {
 	gap: 1rem;
-	margin-top: 1.5rem;
 }
 
 .liferay-one-footer .social-icons li img {
 	height: 18px;
 	width: 18px;
+}
+
+.liferay-one-footer a {
+	color: var(--color-neutral-9);
+}
+
+.liferay-one-footer h3 {
+	color: var(--color-brand-primary-darken-4);
+	font-size: 1.125rem;
+	font-weight: var(--font-weight-semi-bold);
+	margin-bottom: var(--spacer-3);
 }

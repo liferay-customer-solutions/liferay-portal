@@ -1,94 +1,47 @@
 <div class="lo-announcements-results">
-	<div class="lo-announcements-results-count">
+	<div class="color-neutral-8 lo-announcements-results-count mb-3 text-right">
 		<strong>${searchContainer.getTotal()}</strong> ${languageUtil.get(locale, "announcements")}
 	</div>
 
 	<ul class="list-unstyled lo-announcements-list">
 		<#if entries?has_content>
 			<#list entries as entry>
-				<li class="lo-announcement-card">
-					<a class="lo-announcement-card-title" href="${entry.getViewURL()}">
-						${entry.getHighlightedTitle()}
-					</a>
+				<li>
+					<a class="d-block lo-announcement-card mb-3 one-card p-4 text-decoration-none" href="${entry.getViewURL()}">
+						<h5 class="color-neutral-10 font-weight-semi-bold lo-announcement-card-title mb-2">
+							${entry.getHighlightedTitle()}
+						</h5>
 
-					<#if entry.isContentVisible()>
-						<p class="lo-announcement-card-content">
-							${entry.getContent()}
-						</p>
-					</#if>
-
-					<div class="lo-announcement-card-meta">
-						<#if entry.isCreationDateVisible()>
-							<span class="lo-announcement-card-date">
-								${entry.getCreationDateString()}
-							</span>
+						<#if entry.isContentVisible()>
+							<p class="lo-announcement-card-content mb-3">
+								${entry.getContent()}
+							</p>
 						</#if>
 
-						<#if entry.isAssetCategoriesOrTagsVisible()>
-							<span class="lo-announcement-card-categories">
-								<@liferay_asset["asset-categories-summary"]
-									className=entry.getClassName()
-									classPK=entry.getClassPK()
-									paramName=entry.getFieldAssetCategoryIds()
-									portletURL=entry.getPortletURL()
+						<div class="align-items-center d-flex flex-wrap lo-announcement-card-meta">
+							<#if entry.isCreationDateVisible()>
+								<span class="lo-announcement-card-date">
+									${entry.getCreationDateString()}
+								</span>
+							</#if>
+
+							<#if entry.isAssetCategoriesOrTagsVisible()>
+								<#assign
+									structuredContent = restClient.get("/headless-delivery/v1.0/structured-contents/" + entry.getClassPK()?c + "?fields=taxonomyCategoryBriefs")
 								/>
-							</span>
-						</#if>
-					</div>
+
+								<#if structuredContent.taxonomyCategoryBriefs?has_content>
+									<span class="category-badges d-inline-flex flex-wrap">
+										<#list structuredContent.taxonomyCategoryBriefs as taxonomyCategoryBrief>
+											<span class="category-badges-pill">${taxonomyCategoryBrief.taxonomyCategoryName}</span>
+										</#list>
+									</span>
+								</#if>
+							</#if>
+						</div>
+					</a>
 				</li>
 			</#list>
 		</#if>
 	</ul>
 </div>
-
-<style>
-	.lo-announcements-results .lo-announcements-results-count {
-		color: #54555f;
-		margin-bottom: 16px;
-		text-align: right;
-	}
-
-	.lo-announcements-results .lo-announcement-card {
-		background-color: #fff;
-		border: 1px solid #e7e7ed;
-		border-radius: 12px;
-		margin-bottom: 16px;
-		padding: 24px;
-	}
-
-	.lo-announcements-results .lo-announcement-card-title {
-		color: #282934;
-		display: block;
-		font-size: 18px;
-		font-weight: 600;
-		margin-bottom: 8px;
-		text-decoration: none;
-	}
-
-	.lo-announcements-results .lo-announcement-card-title:hover {
-		text-decoration: underline;
-	}
-
-	.lo-announcements-results .lo-announcement-card-content {
-		color: #54555f;
-		display: -webkit-box;
-		line-clamp: 2;
-		margin-bottom: 16px;
-		overflow: hidden;
-		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 2;
-	}
-
-	.lo-announcements-results .lo-announcement-card-meta {
-		align-items: center;
-		color: #6c6c75;
-		display: flex;
-		flex-wrap: wrap;
-		font-size: 13px;
-		gap: 12px;
-	}
-
-	.lo-announcements-results .lo-announcement-card-categories .asset-category {
-		margin-right: 4px;
-	}
-</style>

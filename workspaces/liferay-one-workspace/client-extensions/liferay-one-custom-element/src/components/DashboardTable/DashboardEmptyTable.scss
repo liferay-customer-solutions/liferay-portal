@@ -1,26 +1,20 @@
 .dashboard-empty-state {
-	align-items: center;
-	border: 1px #e2e2e4 solid;
-	border-radius: 10px;
-	display: flex;
-	flex-direction: column;
+	border: 1px var(--color-neutral-2) solid;
+	border-radius: var(--border-radius-lg, 10px);
 
 	&-background {
-		align-items: center;
-		background-color: #e7efff;
-		border-radius: 8px;
-		display: flex;
+		background-color: var(--color-brand-primary-lighten-5);
+		border-radius: var(--border-radius-lg, 8px);
 		height: 80px;
-		justify-content: center;
 		width: 144px;
 	}
 
 	&-button {
-		border-radius: 8px;
+		border-radius: var(--border-radius-lg, 8px);
 	}
 
 	&-description {
-		color: #54555f;
+		color: var(--color-neutral-8);
 		white-space: pre-line;
 		word-break: break-all;
 
@@ -37,8 +31,7 @@
 	}
 
 	&-title {
-		color: #282934;
-		font-weight: 600;
+		color: var(--color-neutral-10);
 		padding-bottom: 8px;
 		padding-top: 32px;
 	}

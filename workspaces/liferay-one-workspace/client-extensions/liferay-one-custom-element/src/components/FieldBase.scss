@@ -1,15 +1,4 @@
 .field-base {
-	&-container {
-		display: flex;
-		justify-content: space-between;
-
-		&_label {
-			align-items: center;
-			display: flex;
-			justify-content: space-between;
-		}
-	}
-
 	&-required-asterisk-icon {
 		height: 6px;
 		margin-bottom: 6px;
@@ -21,24 +10,19 @@
 	}
 
 	&-description {
-		color: #54555f;
-		font-size: 0.813rem;
-		font-weight: 400;
+		color: var(--color-neutral-8);
+		font-size: var(--text-paragraph-sm-font-size, 13px);
 		line-height: 1rem;
 		word-break: break-word;
 	}
 
 	&-feedback {
-		color: #6c6c75;
-		font-size: 13px;
+		color: var(--color-neutral-7);
+		font-size: var(--text-paragraph-sm-font-size, 13px);
 		margin-top: 8px;
 	}
 
 	&-localized-field {
-		align-items: center;
-		display: flex;
-		justify-content: flex-start;
-
 		.arrow-down-icon {
 			height: 16px;
 			width: 16px;
@@ -52,10 +36,10 @@
 		}
 
 		button {
-			color: #0b5fff;
+			color: var(--color-brand-primary);
 
 			&:hover {
-				color: #0053f0;
+				color: var(--color-action-primary-hover);
 			}
 		}
 	}

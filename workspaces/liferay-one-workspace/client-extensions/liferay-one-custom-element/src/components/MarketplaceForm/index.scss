@@ -1,59 +1,59 @@
 .marketplace-form {
 	&-help-message {
-		color: #6c6c75;
+		color: var(--color-neutral-7);
 	}
 
 	&-input {
-		background-color: #ffff;
-		border: 1px solid #b1b2b9;
-		border-radius: 8px;
+		background-color: var(--color-neutral-0);
+		border: 1px solid var(--color-neutral-4);
+		border-radius: var(--border-radius-lg, 8px);
 		height: 48px;
 	}
 
 	&-select {
-		background-color: #ffff;
-		border: 1px solid #b1b2b9;
-		border-radius: 8px;
-		color: #6c6c75;
+		background-color: var(--color-neutral-0);
+		border: 1px solid var(--color-neutral-4);
+		border-radius: var(--border-radius-lg, 8px);
+		color: var(--color-neutral-7);
 		height: 48px;
 	}
 
 	&-section {
-		border: 1px solid #e2e2e4;
-		border-radius: 4px;
+		border: 1px solid var(--color-neutral-2);
+		border-radius: var(--border-radius-sm, 4px);
 
 		.arrow-container {
-			border: 1px solid #e2e2e4;
-			border-radius: 8px;
+			border: 1px solid var(--color-neutral-2);
+			border-radius: var(--border-radius-lg, 8px);
 		}
 
 		.children-container {
-			border-top: 1px solid #e2e2e4;
+			border-top: 1px solid var(--color-neutral-2);
 		}
 
 		.controllers {
-			background-color: #f7f7f8;
+			background-color: var(--color-neutral-1);
 			height: 48px;
 		}
 	}
 }
 
 .info-bg {
-	background-color: #e6ebf5;
-	border-radius: 4px;
+	background-color: var(--color-state-info-lighten-2);
+	border-radius: var(--border-radius-sm, 4px);
 	height: 22px;
 	width: 22px;
 
 	.info-icon {
-		background-color: #e6ebf5;
-		color: #264a8d;
-		font-size: 11px;
+		background-color: var(--color-state-info-lighten-2);
+		color: var(--color-state-info-darken-1);
+		font-size: var(--text-paragraph-xs-font-size, 11px);
 		margin-left: 5px;
 		margin-top: 0.5px;
 	}
 }
 
 .required-icon {
-	font-size: 4.5px;
+	font-size: var(--text-paragraph-xxs-font-size, 9px);
 	margin-left: 2px;
 }

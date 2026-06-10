@@ -1,21 +1,21 @@
 .marketplace-donut-chart {
-	border-radius: 8px;
+	border-radius: var(--border-radius-lg, 8px);
 	height: 290px;
 	width: 346px;
 
 	&-center-legend {
-		font-size: 34px;
+		font-size: var(--h2-font-size, 2rem);
 		font-weight: 700;
 	}
 
 	.chart-legend {
 		&-data {
-			font-size: 26px;
+			font-size: var(--h3-font-size, 1.75rem);
 		}
 	}
 
 	.details-button {
-		font-size: 11px;
+		font-size: var(--text-paragraph-xs-font-size, 11px);
 	}
 
 	.donut-chart-container {

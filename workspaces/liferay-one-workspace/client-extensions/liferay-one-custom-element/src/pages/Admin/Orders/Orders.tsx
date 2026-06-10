@@ -45,7 +45,7 @@ export default function Orders() {
 			<div className="d-flex flex-column">
 				<div
 					className="d-flex flex-wrap info-container"
-					style={{marginBottom: '1rem'}}
+					style={{marginBottom: 'var(--spacer-3)'}}
 				>
 					{infoCards.map((infoCard, index) => (
 						<InfoCard

@@ -10,7 +10,7 @@ import Breadcrumb from './Breadcrumb';
 
 export default function ContentLayout() {
 	return (
-		<div className="overflow-auto p-3">
+		<div className="overflow-auto pb-3 pt-3">
 			<Breadcrumb />
 
 			<Suspense fallback={null}>

@@ -3,9 +3,9 @@
 }
 
 .custom-input {
-	background-color: #fff;
-	border: 1px solid #b1b2b9;
-	border-radius: 8px;
+	background-color: var(--color-neutral-0);
+	border: 1px solid var(--color-neutral-4);
+	border-radius: var(--border-radius-lg, 8px);
 
 	&::placeholder {
 		opacity: 40%;

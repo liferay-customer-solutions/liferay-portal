@@ -3,7 +3,6 @@
 	-webkit-line-clamp: 2;
 	display: -webkit-box;
 	font-size: 13px;
-	font-weight: 400;
 	height: 60px;
 	letter-spacing: 0%;
 	line-height: 20px;
@@ -43,7 +42,6 @@
 
 .home-apps-display .catalog-name {
 	font-size: 13px;
-	font-weight: 400;
 	letter-spacing: 0%;
 	line-height: 12px;
 }
@@ -67,7 +65,6 @@
 }
 
 .home-apps-display .product-card {
-	position: relative;
 	width: 323px;
 }
 
@@ -76,7 +73,6 @@
 	box-sizing: border-box;
 	color: var(--color-state-info);
 	font-size: 13px;
-	font-weight: 400;
 	letter-spacing: 0%;
 	line-height: 16px;
 	max-height: 24px;

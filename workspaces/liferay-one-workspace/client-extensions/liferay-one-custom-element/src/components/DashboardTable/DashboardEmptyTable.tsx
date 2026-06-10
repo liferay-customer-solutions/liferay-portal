@@ -30,8 +30,8 @@ export function DashboardEmptyTable({
 	title: string;
 }) {
 	return (
-		<div className="dashboard-empty-state py-6">
-			<div className="dashboard-empty-state-background">
+		<div className="align-items-center d-flex dashboard-empty-state flex-column py-6">
+			<div className="align-items-center d-flex dashboard-empty-state-background justify-content-center">
 				<ClayIcon
 					aria-label={title}
 					className="dashboard-empty-state-image"
@@ -39,7 +39,9 @@ export function DashboardEmptyTable({
 				/>
 			</div>
 
-			<div className="dashboard-empty-state-title h4">{title}</div>
+			<div className="dashboard-empty-state-title font-weight-semi-bold h4">
+				{title}
+			</div>
 
 			<div className="dashboard-empty-state-description">
 				{description1 && (
