@@ -7,8 +7,8 @@ import ClayLabel from '@clayui/label';
 import classNames from 'classnames';
 
 import purchasedAppIcon from '../assets/icons/purchased_app_icon.svg';
-import OrderStatus from './OrderStatus';
 import {OrderTypes} from '../enums/Order';
+import OrderStatus from './OrderStatus';
 
 type OrderDetailsStatusDescriptionProps = {
 	order?: PlacedOrder;

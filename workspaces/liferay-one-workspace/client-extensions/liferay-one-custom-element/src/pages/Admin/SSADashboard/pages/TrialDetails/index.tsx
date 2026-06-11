@@ -10,13 +10,13 @@ import {useMemo} from 'react';
 import {useParams, useSearchParams} from 'react-router-dom';
 
 import BackLink from '../../../../../components/BackLink';
+import OrderDetailsHeader from '../../../../../components/OrderDetailsHeader';
 import {PageRenderer} from '../../../../../components/Page';
 import MarketplaceDeliveryOrder from '../../../../../entity/MarketplaceDeliveryOrder';
 import {MarketplaceDeliveryProduct} from '../../../../../entity/MarketplaceDeliveryProduct';
 import useGetProductByOrderId from '../../../../../hooks/useGetProductByOrderId';
 import i18n from '../../../../../i18n';
 import {safeJSONParse} from '../../../../../utils/util';
-import OrderDetailsHeader from '../../../../../components/OrderDetailsHeader';
 import useSSAActions from '../../hooks/useSSAActions';
 import TrialDetailsBody from './TrialDetailsBody';
 

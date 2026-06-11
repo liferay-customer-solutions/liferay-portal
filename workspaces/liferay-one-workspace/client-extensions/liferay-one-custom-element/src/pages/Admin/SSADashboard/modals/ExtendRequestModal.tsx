@@ -11,7 +11,10 @@ import {ReactElement, useState} from 'react';
 import {KeyedMutator} from 'swr';
 
 import ButtonWithIcon from '../../../../components/ButtonWithIcon';
-import {OrderCustomFields, OrderStatus as Status} from '../../../../enums/Order';
+import {
+	OrderCustomFields,
+	OrderStatus as Status,
+} from '../../../../enums/Order';
 import i18n from '../../../../i18n';
 import {Liferay} from '../../../../liferay/liferay';
 import trialOAuth2 from '../../../../services/oauth/Trial';

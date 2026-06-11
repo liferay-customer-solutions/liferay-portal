@@ -66,7 +66,8 @@ export default function ManageSsaSaasUsers() {
 								const filteredRoles =
 									ssaAccount?.roleBriefs.filter((item2) =>
 										ssaRoles.some(
-											(item1) => item1.value === item2.name
+											(item1) =>
+												item1.value === item2.name
 										)
 									);
 
@@ -86,7 +87,8 @@ export default function ManageSsaSaasUsers() {
 						{
 							id: 'lastLoginDate',
 							name: i18n.translate('last-login'),
-							render: (lastLoginDate) => formatDate(lastLoginDate),
+							render: (lastLoginDate) =>
+								formatDate(lastLoginDate),
 						},
 					],
 				}}
