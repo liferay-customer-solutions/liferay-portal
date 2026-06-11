@@ -43,7 +43,7 @@ const PublisherRequestModal: React.FC<PublisherRequestModalProps> = ({
 
 	const onUpdateRequestStatus = async (status: 'completed' | 'rejected') => {
 		await fetcher.patch(
-			`o/c/requestpublisheraccounts/${selectedRequest?.id}`,
+			`o/c/publisheraccountrequests/${selectedRequest?.id}`,
 			{
 				requestStatus: status,
 			}

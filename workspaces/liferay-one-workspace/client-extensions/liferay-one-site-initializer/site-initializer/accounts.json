@@ -93,5 +93,25 @@
 		"externalReferenceCode": "ERC-019",
 		"name": "EWSA Test Account",
 		"type": "business"
+	},
+	{
+		"externalReferenceCode": "SUP-ACME",
+		"name": "Acme Apps Inc.",
+		"type": "supplier"
+	},
+	{
+		"externalReferenceCode": "SUP-DATABRIDGE",
+		"name": "DataBridge Solutions",
+		"type": "supplier"
+	},
+	{
+		"externalReferenceCode": "SUP-FORMFLOW",
+		"name": "FormFlow Labs",
+		"type": "supplier"
+	},
+	{
+		"externalReferenceCode": "SUP-NIMBUS",
+		"name": "NimbusWorks",
+		"type": "supplier"
 	}
 ]

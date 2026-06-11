@@ -126,15 +126,15 @@ function FilterSubPanel({
 			</button>
 
 			<ClayInput
-				className="orders-filter-search mt-3"
+				className="mt-3 orders-filter-search"
 				onChange={(event) => setKeywords(event.target.value)}
 				placeholder={translate('search')}
 				type="text"
 				value={keywords}
 			/>
 
-			{selectedOptions.length > 0 && (
-				<div className="orders-filter-tags mt-2">
+			{!!selectedOptions.length && (
+				<div className="mt-2 orders-filter-tags">
 					{selectedOptions.map(({label, value}) => (
 						<span className="orders-filter-tag" key={value}>
 							{label}
@@ -152,7 +152,7 @@ function FilterSubPanel({
 			)}
 
 			{hasExclude && (
-				<div className="orders-filter-exclude align-items-center d-flex justify-content-between mt-3">
+				<div className="align-items-center d-flex justify-content-between mt-3 orders-filter-exclude">
 					<span>{translate('exclude')}</span>
 
 					<ClayToggle
@@ -162,7 +162,7 @@ function FilterSubPanel({
 				</div>
 			)}
 
-			<div className="orders-filter-options mt-3">
+			<div className="mt-3 orders-filter-options">
 				{filteredOptions.map(({label, value}) => (
 					<ClayCheckbox
 						checked={draftValues.includes(value)}
@@ -174,7 +174,7 @@ function FilterSubPanel({
 			</div>
 
 			<ClayButton
-				className="orders-filter-apply mt-3 w-100"
+				className="mt-3 orders-filter-apply w-100"
 				onClick={() => onApply(draftValues, draftExclude)}
 			>
 				{translate('add-filter')}
@@ -285,8 +285,8 @@ export default function Orders() {
 			pageRendererProps={{error, isLoading: loading}}
 			title={i18n.translate('orders-list')}
 		>
-			<div className="orders-card mt-3">
-				<div className="orders-toolbar align-items-center d-flex">
+			<div className="mt-3 orders-card">
+				<div className="align-items-center d-flex orders-toolbar">
 					<ClayDropDown
 						active={filterActive}
 						className="orders-filter-dropdown"
@@ -324,7 +324,7 @@ export default function Orders() {
 									] as {key: FilterCategory; label: Word}[]
 								).map(({key, label}) => (
 									<button
-										className="orders-filter-category align-items-center d-flex justify-content-between"
+										className="align-items-center d-flex justify-content-between orders-filter-category"
 										key={key}
 										onClick={() => setFilterCategory(key)}
 										type="button"
@@ -502,8 +502,9 @@ export default function Orders() {
 									label,
 								}))}
 								labels={{
-									paginationResults:
-										translate('showing-x-to-x-of-x'),
+									paginationResults: translate(
+										'showing-x-to-x-of-x'
+									),
 									perPageItems: translate('x-items'),
 									selectPerPageItems: translate('x-items'),
 								}}

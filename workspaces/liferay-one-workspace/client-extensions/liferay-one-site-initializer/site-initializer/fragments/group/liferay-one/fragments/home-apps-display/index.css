@@ -65,7 +65,8 @@
 }
 
 .home-apps-display .product-card {
-	width: 323px;
+	flex: 1 1 0;
+	min-width: 220px;
 }
 
 .home-apps-display .product-tag {

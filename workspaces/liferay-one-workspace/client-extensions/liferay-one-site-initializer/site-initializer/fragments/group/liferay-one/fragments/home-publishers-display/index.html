@@ -1,0 +1,95 @@
+[#assign channelId = "" /]
+
+[#if configuration.channelId?has_content]
+	[#assign channelId = configuration.channelId /]
+[#else]
+	[#attempt]
+		[#assign channel = restClient.get("/headless-commerce-delivery-catalog/v1.0/channels") /]
+
+		[#if channel?has_content && (channel.items)?has_content]
+			[#assign siteChannels = channel.items?filter(siteChannel -> siteChannel.siteGroupId == themeDisplay.getSiteGroupId()) /]
+
+			[#if siteChannels?has_content]
+				[#assign channelId = siteChannels[0].id /]
+			[/#if]
+		[/#if]
+	[#recover]
+	[/#attempt]
+[/#if]
+
+[#function getPublisherName product]
+	[#if product.productSpecifications?has_content]
+		[#local specification = product.productSpecifications?filter(productSpecification ->
+			stringUtil.equals(productSpecification.specificationKey, "publisher-name")) /]
+
+		[#if specification?has_content]
+			[#return specification?first.value!"" /]
+		[/#if]
+	[/#if]
+
+	[#return "" /]
+[/#function]
+
+<div class="home-publishers-display">
+	<div class="section-container">
+		<div id="section-header">
+			<div class="d-flex flex-row justify-content-between w-100">
+				<h1 class="mb-1">${configuration.sectionTitle}</h1>
+
+				<a class="btn btn-link font-weight-semi-bold" href="/web/one/marketplace/publishers" target="_self">
+					<span class="language-caret-icon">
+						<span>${languageUtil.get(locale, "view-all")}</span>
+
+						<span>[@clay["icon"] symbol="order-arrow-right" /]</span>
+					</span>
+				</a>
+			</div>
+
+			<p class="lo-section-subtitle mb-5">${configuration.sectionDescription}</p>
+		</div>
+
+		[#if channelId?has_content]
+			[#assign response = restClient.get("/headless-commerce-delivery-catalog/v1.0/channels/${channelId}/products?accountId=-1&nestedFields=productSpecifications&pageSize=100") /]
+			[#assign products = response.items![] /]
+
+			[#assign maxPublishers = configuration.pageSize?is_number?then(configuration.pageSize, configuration.pageSize?number) /]
+			[#assign publisherNames = [] /]
+
+			[#list products as product]
+				[#if product?has_content]
+					[#assign publisherName = getPublisherName(product) /]
+
+					[#if publisherName?has_content && !publisherNames?seq_contains(publisherName)]
+						[#assign publisherNames = publisherNames + [publisherName] /]
+					[/#if]
+				[/#if]
+			[/#list]
+
+			<div id="section-body">
+				<div class="d-flex flex-row flex-wrap mb-5 publishers-container">
+					[#list publisherNames as publisherName]
+						[#if publisherName?index < maxPublishers]
+							[#assign appCount = products?filter(product -> getPublisherName(product) == publisherName)?size /]
+
+							<a class="d-flex flex-column mb-0 one-card position-relative publisher-card text-dark text-decoration-none" href="/web/one/marketplace/publishers" target="_self">
+								<div class="align-items-center d-flex flex-row mb-3">
+									<div class="align-items-center d-flex font-weight-semi-bold justify-content-center mr-3 publisher-avatar rounded-circle">
+										${publisherName?substring(0, 1)?upper_case}
+									</div>
+
+									<div class="font-weight-semi-bold publisher-name">
+										${publisherName}
+									</div>
+								</div>
+
+								<div class="font-size-paragraph-small font-weight-normal publisher-description text-black-50">
+									${appCount} ${(appCount == 1)?then("app", "apps")} on Liferay Marketplace
+								</div>
+							</a>
+						[/#if]
+					[/#list]
+				</div>
+			</div>
+		[/#if]
+	</div>
+</div>

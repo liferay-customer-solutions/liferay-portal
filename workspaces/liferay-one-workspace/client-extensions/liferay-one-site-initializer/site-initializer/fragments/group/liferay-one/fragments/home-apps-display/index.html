@@ -7,7 +7,11 @@
 		[#assign channel = restClient.get("/headless-commerce-delivery-catalog/v1.0/channels") /]
 
 		[#if channel?has_content && (channel.items)?has_content]
-			[#assign channelId = channel.items[0].id /]
+			[#assign siteChannels = channel.items?filter(siteChannel -> siteChannel.siteGroupId == themeDisplay.getSiteGroupId()) /]
+
+			[#if siteChannels?has_content]
+				[#assign channelId = siteChannels[0].id /]
+			[/#if]
 		[/#if]
 	[#recover]
 	[/#attempt]

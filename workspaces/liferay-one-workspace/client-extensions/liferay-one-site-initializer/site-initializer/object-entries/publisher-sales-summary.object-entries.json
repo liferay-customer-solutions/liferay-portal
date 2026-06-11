@@ -1,0 +1,35 @@
+{
+	"object-entries": [
+		{
+			"externalReferenceCode": "PSS_ACME_Q1_2026",
+			"paymentStatus": "unpaid",
+			"publisherName": "Acme Apps Inc.",
+			"quarter": "Q1 2026",
+			"r_accountToPublisher_accountEntryERC": "SUP-ACME"
+		},
+		{
+			"externalReferenceCode": "PSS_DATABRIDGE_Q1_2026",
+			"paymentStatus": "unpaid",
+			"publisherName": "DataBridge Solutions",
+			"quarter": "Q1 2026",
+			"r_accountToPublisher_accountEntryERC": "SUP-DATABRIDGE"
+		},
+		{
+			"externalReferenceCode": "PSS_FORMFLOW_Q4_2025",
+			"paidBy": "Test Test",
+			"paidDate": "2026-01-15T12:00:00Z",
+			"paymentStatus": "paid",
+			"publisherName": "FormFlow Labs",
+			"quarter": "Q4 2025",
+			"r_accountToPublisher_accountEntryERC": "SUP-FORMFLOW"
+		},
+		{
+			"externalReferenceCode": "PSS_NIMBUS_Q1_2026",
+			"paymentStatus": "unpaid",
+			"publisherName": "NimbusWorks",
+			"quarter": "Q1 2026",
+			"r_accountToPublisher_accountEntryERC": "SUP-NIMBUS"
+		}
+	],
+	"objectDefinitionName": "PublisherSalesSummary"
+}

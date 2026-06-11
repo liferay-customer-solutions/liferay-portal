@@ -444,7 +444,7 @@ nav.public-sites-navigation
 	.account
 	.account-dropdown
 	.account-menu-item:focus {
-	background: var(--color-action-primary-hover-10) !important;
+	background: var(--color-action-primary-hover-lighten) !important;
 	border-radius: var(--border-radius);
 	color: var(--color-action-primary-hover) !important;
 }
@@ -1772,8 +1772,14 @@ nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper .menu-ite
 nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper .menu-item:hover,
 nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper .menu-item:active,
 nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper .menu-item:focus {
-	background: var(--color-action-primary-hover);
-	color: var(--color-brand-primary);
+	background: var(--color-action-primary-hover-lighten);
+	color: var(--color-action-primary-hover);
+}
+
+nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper .menu-item:hover .menu-item-text,
+nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper .menu-item:active .menu-item-text,
+nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper .menu-item:focus .menu-item-text {
+	color: var(--color-action-primary-hover);
 }
 
 nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper .menu-item .menu-item-text {
@@ -1813,7 +1819,7 @@ nav.public-sites-navigation .liferay-sites-dropdown .menu-item-wrapper .menu-ite
 
 nav.public-sites-navigation .account-selection-dropdown {
 	--account-selection-dropdown-color-bg-default: var(--color-neutral-1);
-	--account-selection-dropdown-color-bg-light: var(--color-action-primary-hover-10);
+	--account-selection-dropdown-color-bg-light: var(--color-action-primary-hover-lighten);
 	--account-selection-dropdown-color-primary: var(--color-action-primary-hover);
 	--account-selection-dropdown-color-secondary: var(--color-neutral-7);
 	--account-selection-dropdown-transition: all 0.3s

@@ -1,10 +1,7 @@
 [
 	{
 		"categories": [
-			{
-				"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT",
-				"title": "Liferay Product"
-			}
+			"liferay-product"
 		],
 		"description": "Bring generative AI to your digital experiences with prebuilt assistants, search, and content tools.",
 		"displayAvailability": true,
@@ -30,6 +27,22 @@
 				"value": "Liferay"
 			},
 			{
+				"key": "liferay-products-capabilities",
+				"value": "Prebuilt AI assistants and copilots"
+			},
+			{
+				"key": "liferay-products-capabilities",
+				"value": "Generative AI-powered search"
+			},
+			{
+				"key": "liferay-products-capabilities",
+				"value": "Smart content and translation tools"
+			},
+			{
+				"key": "liferay-products-categories",
+				"value": "Artificial Intelligence"
+			},
+			{
 				"key": "our-selection",
 				"value": "true"
 			},
@@ -45,10 +58,7 @@
 	},
 	{
 		"categories": [
-			{
-				"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT",
-				"title": "Liferay Product"
-			}
+			"liferay-product"
 		],
 		"description": "Understand visitor behavior with dashboards, segments, and conversion insights across every channel.",
 		"displayAvailability": true,
@@ -74,6 +84,22 @@
 				"value": "Liferay"
 			},
 			{
+				"key": "liferay-products-capabilities",
+				"value": "Real-time behavior dashboards"
+			},
+			{
+				"key": "liferay-products-capabilities",
+				"value": "Audience segments and profiles"
+			},
+			{
+				"key": "liferay-products-capabilities",
+				"value": "Cross-channel conversion insights"
+			},
+			{
+				"key": "liferay-products-categories",
+				"value": "Analytics"
+			},
+			{
 				"key": "price-model",
 				"value": "Paid"
 			},
@@ -85,10 +111,7 @@
 	},
 	{
 		"categories": [
-			{
-				"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT",
-				"title": "Liferay Product"
-			}
+			"liferay-product"
 		],
 		"description": "Unify customer accounts, profiles, and engagement data in a single management platform.",
 		"displayAvailability": true,
@@ -114,6 +137,22 @@
 				"value": "Liferay"
 			},
 			{
+				"key": "liferay-products-capabilities",
+				"value": "Unified customer profiles"
+			},
+			{
+				"key": "liferay-products-capabilities",
+				"value": "Account and contact management"
+			},
+			{
+				"key": "liferay-products-capabilities",
+				"value": "Engagement and activity tracking"
+			},
+			{
+				"key": "liferay-products-categories",
+				"value": "Customer Data"
+			},
+			{
 				"key": "price-model",
 				"value": "Paid"
 			},
@@ -125,10 +164,7 @@
 	},
 	{
 		"categories": [
-			{
-				"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT",
-				"title": "Liferay Product"
-			}
+			"liferay-product"
 		],
 		"description": "Run B2B and B2C storefronts with catalogs, carts, pricing, and order management out of the box.",
 		"displayAvailability": true,
@@ -154,6 +190,22 @@
 				"value": "Liferay"
 			},
 			{
+				"key": "liferay-products-capabilities",
+				"value": "B2B and B2C storefronts"
+			},
+			{
+				"key": "liferay-products-capabilities",
+				"value": "Catalog, cart, and checkout"
+			},
+			{
+				"key": "liferay-products-capabilities",
+				"value": "Pricing and order management"
+			},
+			{
+				"key": "liferay-products-categories",
+				"value": "Commerce"
+			},
+			{
 				"key": "our-selection",
 				"value": "true"
 			},
@@ -169,10 +221,7 @@
 	},
 	{
 		"categories": [
-			{
-				"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT",
-				"title": "Liferay Product"
-			}
+			"liferay-product"
 		],
 		"description": "The digital experience platform for building portals, websites, and intranets at enterprise scale.",
 		"displayAvailability": true,
@@ -198,6 +247,22 @@
 				"value": "Liferay"
 			},
 			{
+				"key": "liferay-products-capabilities",
+				"value": "Portals, sites, and intranets"
+			},
+			{
+				"key": "liferay-products-capabilities",
+				"value": "Enterprise content management"
+			},
+			{
+				"key": "liferay-products-capabilities",
+				"value": "Low-code, extensible platform"
+			},
+			{
+				"key": "liferay-products-categories",
+				"value": "Platform"
+			},
+			{
 				"key": "price-model",
 				"value": "Paid"
 			},
@@ -209,8 +274,7 @@
 	},
 	{
 		"categories": [
-			"Analytics and Optimization",
-			"Fragments"
+			"app"
 		],
 		"description": "Sample Marketplace app used to verify the App Detail Display Page Template renders end-to-end.",
 		"displayAvailability": true,
@@ -235,18 +299,7 @@
 	},
 	{
 		"categories": [
-			{
-				"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_APP",
-				"title": "App"
-			},
-			{
-				"externalReferenceCode": "MARKETPLACE_APP_CATEGORY_COLLABORATION_KNOWLEDGE_SHARING",
-				"title": "Collaboration & Knowledge Sharing"
-			},
-			{
-				"externalReferenceCode": "MARKETPLACE_CATEGORY_OBJECT_DEFINITION",
-				"title": "Object Definition"
-			}
+			"app"
 		],
 		"description": "Build and publish smart, data-driven forms with conditional logic and no code required.",
 		"displayAvailability": true,
@@ -287,14 +340,7 @@
 	},
 	{
 		"categories": [
-			{
-				"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT",
-				"title": "Product"
-			},
-			{
-				"externalReferenceCode": "MARKETPLACE_CATEGORY_THEME",
-				"title": "Theme"
-			}
+			"product"
 		],
 		"description": "A polished analytics product with prebuilt dashboards, reports, and export-ready visualizations.",
 		"displayAvailability": true,
@@ -335,14 +381,7 @@
 	},
 	{
 		"categories": [
-			{
-				"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_SOLUTION",
-				"title": "Solution"
-			},
-			{
-				"externalReferenceCode": "MARKETPLACE_SOLUTION_CATEGORY_CONTENT_MANAGEMENT_OPERATIONS",
-				"title": "Content Management & Operations"
-			}
+			"solution"
 		],
 		"description": "An end-to-end migration solution for moving content, users, and assets onto Liferay with confidence.",
 		"displayAvailability": true,

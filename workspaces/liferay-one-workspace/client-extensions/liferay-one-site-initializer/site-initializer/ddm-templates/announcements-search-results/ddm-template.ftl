@@ -31,9 +31,9 @@
 								/>
 
 								<#if structuredContent.taxonomyCategoryBriefs?has_content>
-									<span class="category-badges d-inline-flex flex-wrap">
+									<span class="lo-badge d-inline-flex flex-wrap">
 										<#list structuredContent.taxonomyCategoryBriefs as taxonomyCategoryBrief>
-											<span class="category-badges-pill">${taxonomyCategoryBrief.taxonomyCategoryName}</span>
+											<span class="lo-badge-pill">${taxonomyCategoryBrief.taxonomyCategoryName}</span>
 										</#list>
 									</span>
 								</#if>

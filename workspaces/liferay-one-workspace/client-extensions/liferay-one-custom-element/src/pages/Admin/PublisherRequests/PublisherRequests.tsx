@@ -28,7 +28,7 @@ export default function PublisherRequests() {
 		>
 			<ListView<PublisherRequestInfo>
 				id="request-publisher-account"
-				resource="o/c/requestpublisheraccounts?sort=dateCreated:desc"
+				resource="o/c/publisheraccountrequests?sort=dateCreated:desc"
 				tableProps={{
 					columns: [
 						{

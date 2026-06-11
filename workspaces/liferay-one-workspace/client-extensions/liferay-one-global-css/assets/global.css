@@ -105,15 +105,13 @@
 	gap: 0.75rem;
 }
 
-/* ---------- Category badges ---------- */
+/* ---------- Badge ---------- */
 
-/* Shared by the category-badges fragment and the announcements search results template. */
-
-.category-badges {
+.lo-badge {
 	gap: 0.375rem;
 }
 
-.category-badges-pill {
+.lo-badge-pill {
 	background-color: var(--color-brand-primary-lighten-4);
 	border-radius: 999px;
 	color: var(--color-brand-primary-darken-2);
@@ -162,6 +160,12 @@
 }
 
 .card-developer {
+	color: var(--secondary);
+	font-size: 0.8125rem;
+	margin-bottom: 0;
+}
+
+.card-subtitle {
 	color: var(--secondary);
 	font-size: 0.8125rem;
 	margin-bottom: 0;
@@ -273,7 +277,16 @@
 }
 
 .card-bullet-item {
+	color: var(--color-neutral-8);
 	gap: var(--spacer-2);
+}
+
+.card-bullet-item + .card-bullet-item {
+	margin-top: var(--spacer-2);
+}
+
+.card-bullet-list {
+	margin-top: var(--spacer-3);
 }
 
 .facet-frequency {

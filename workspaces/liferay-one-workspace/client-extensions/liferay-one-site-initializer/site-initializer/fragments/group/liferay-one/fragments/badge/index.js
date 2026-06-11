@@ -4,12 +4,8 @@
  */
 
 (function () {
-	const container = fragmentElement.querySelector(
-		'.category-badges'
-	);
-	const source = fragmentElement.querySelector(
-		'.category-badges-source'
-	);
+	const container = fragmentElement.querySelector('.lo-badge');
+	const source = fragmentElement.querySelector('.lo-badge-source');
 
 	if (!container || !source) {
 		return;
@@ -33,7 +29,7 @@
 	names.forEach((name) => {
 		const pill = document.createElement('span');
 
-		pill.classList.add('category-badges-pill');
+		pill.classList.add('lo-badge-pill');
 		pill.textContent = name;
 
 		container.appendChild(pill);

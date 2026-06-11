@@ -1,0 +1,38 @@
+.home-publishers-display .publisher-avatar {
+	background-color: var(--color-state-info-lighten-2);
+	color: var(--color-state-info);
+	flex-shrink: 0;
+	font-size: 20px;
+	height: 48px;
+	width: 48px;
+}
+
+.home-publishers-display .publisher-card {
+	flex: 1 1 0;
+	min-width: 220px;
+	padding: var(--spacer-4);
+}
+
+.home-publishers-display .publisher-description {
+	font-size: 13px;
+	letter-spacing: 0%;
+	line-height: 20px;
+}
+
+.home-publishers-display .publisher-name {
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	display: -webkit-box;
+	font-size: 18px;
+	line-height: 20px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.home-publishers-display .publishers-container {
+	gap: var(--spacer-4);
+}
+
+.home-publishers-display .section-container h1 {
+	font-size: 36px;
+}

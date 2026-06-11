@@ -62,7 +62,7 @@
 							</div>
 
 							<#if capabilities?has_content>
-								<ul class="list-unstyled mb-0">
+								<ul class="card-bullet-list list-unstyled mb-0">
 									<#list capabilities as tag>
 										<#if tag?trim?has_content>
 											<li class="card-bullet-item d-flex align-items-start small">

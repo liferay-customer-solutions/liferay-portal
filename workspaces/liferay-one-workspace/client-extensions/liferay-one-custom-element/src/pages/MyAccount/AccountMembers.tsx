@@ -83,9 +83,7 @@ function UserAvatar({image, name}: {image?: string; name: string}) {
 		.join('');
 
 	const colorIndex =
-		name
-			.split('')
-			.reduce((total, char) => total + char.charCodeAt(0), 0) %
+		name.split('').reduce((total, char) => total + char.charCodeAt(0), 0) %
 		AVATAR_COLORS.length;
 
 	return (
@@ -151,7 +149,10 @@ export default function AccountMembers() {
 		const search = keywords.trim().toLowerCase();
 
 		return members.filter((member) => {
-			if (selectedRoles.length && !selectedRoles.includes(member.roleKey)) {
+			if (
+				selectedRoles.length &&
+				!selectedRoles.includes(member.roleKey)
+			) {
 				return false;
 			}
 
@@ -271,10 +272,7 @@ export default function AccountMembers() {
 
 				{paginatedMembers.length ? (
 					<>
-						<ClayTable
-							borderless
-							className="account-members-table"
-						>
+						<ClayTable borderless className="account-members-table">
 							<ClayTable.Head>
 								<ClayTable.Row>
 									<ClayTable.Cell headingCell>
@@ -375,8 +373,9 @@ export default function AccountMembers() {
 									label,
 								}))}
 								labels={{
-									paginationResults:
-										translate('showing-x-to-x-of-x'),
+									paginationResults: translate(
+										'showing-x-to-x-of-x'
+									),
 									perPageItems: translate('x-items'),
 									selectPerPageItems: translate('x-items'),
 								}}

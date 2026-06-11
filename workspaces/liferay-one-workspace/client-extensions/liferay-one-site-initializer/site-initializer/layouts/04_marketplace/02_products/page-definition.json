@@ -176,9 +176,6 @@
 											},
 											{
 												"definition": {
-													"fragmentStyle": {
-														"hidden": true
-													},
 													"widgetInstance": {
 														"widgetConfig": {
 															"boost": "",

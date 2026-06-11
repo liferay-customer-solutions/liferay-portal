@@ -1,0 +1,60 @@
+{
+	"fieldSets": [
+		{
+			"fields": [
+				{
+					"dataType": "string",
+					"label": "Channel ID",
+					"name": "channelId",
+					"type": "text"
+				}
+			]
+		},
+		{
+			"fields": [
+				{
+					"dataType": "string",
+					"defaultValue": "Publisher Spotlight",
+					"description": "publishers-section-title",
+					"label": "Section Title",
+					"name": "sectionTitle",
+					"type": "text"
+				}
+			]
+		},
+		{
+			"fields": [
+				{
+					"dataType": "string",
+					"defaultValue": "Engineers and bold extenders keeping the Liferay ecosystem thriving",
+					"description": "publishers-section-description",
+					"label": "Section Description",
+					"name": "sectionDescription",
+					"type": "text"
+				}
+			]
+		},
+		{
+			"fields": [
+				{
+					"dataType": "int",
+					"defaultValue": "4",
+					"description": "page-size",
+					"label": "Page Size",
+					"name": "pageSize",
+					"type": "select",
+					"typeOptions": {
+						"validValues": [
+							{
+								"value": "4"
+							},
+							{
+								"value": "8"
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

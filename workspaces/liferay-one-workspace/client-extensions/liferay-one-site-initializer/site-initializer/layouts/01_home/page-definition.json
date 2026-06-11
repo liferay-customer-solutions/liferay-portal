@@ -503,12 +503,23 @@
 														"one-card"
 													],
 													"fragmentLink": {
-														"href": {
-															"value_i18n": {
-																"en_US": "/my-account",
-																"es_ES": "/my-account",
-																"ja_JP": "/my-account",
-																"pt_BR": "/my-account"
+														"value": {
+															"href": {
+																"mapping": {
+																	"itemReference": {
+																		"className": "com.liferay.portal.kernel.model.Layout",
+																		"fields": [
+																			{
+																				"fieldName": "friendlyURL",
+																				"fieldValue": "/my-account"
+																			},
+																			{
+																				"fieldName": "privatePage",
+																				"fieldValue": "false"
+																			}
+																		]
+																	}
+																}
 															}
 														}
 													},
@@ -980,12 +991,23 @@
 														"one-card"
 													],
 													"fragmentLink": {
-														"href": {
-															"value_i18n": {
-																"en_US": "/marketplace",
-																"es_ES": "/marketplace",
-																"ja_JP": "/marketplace",
-																"pt_BR": "/marketplace"
+														"value": {
+															"href": {
+																"mapping": {
+																	"itemReference": {
+																		"className": "com.liferay.portal.kernel.model.Layout",
+																		"fields": [
+																			{
+																				"fieldName": "friendlyURL",
+																				"fieldValue": "/marketplace"
+																			},
+																			{
+																				"fieldName": "privatePage",
+																				"fieldValue": "false"
+																			}
+																		]
+																	}
+																}
 															}
 														}
 													},
@@ -1452,7 +1474,7 @@
 																			{
 																				"definition": {
 																					"fragment": {
-																						"key": "category-badges",
+																						"key": "badge",
 																						"siteKey": "[$GROUP_KEY$]"
 																					},
 																					"fragmentConfig": {
