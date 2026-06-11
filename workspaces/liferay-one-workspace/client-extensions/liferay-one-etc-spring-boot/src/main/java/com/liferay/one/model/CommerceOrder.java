@@ -15,8 +15,14 @@ public class CommerceOrder extends LiferayObject {
 	public CommerceOrder(JSONObject jsonObject) {
 		super(jsonObject);
 
+		_accountId = jsonObject.optLong("accountId");
 		_commerceOrderId = jsonObject.getLong("id");
 		_contractId = getCustomFieldLong("contractId");
+		_opportunitySoldBy = getCustomFieldString("opportunitySoldBy");
+	}
+
+	public long getAccountId() {
+		return _accountId;
 	}
 
 	public long getCommerceOrderId() {
@@ -27,7 +33,13 @@ public class CommerceOrder extends LiferayObject {
 		return _contractId;
 	}
 
+	public String getOpportunitySoldBy() {
+		return _opportunitySoldBy;
+	}
+
+	private final long _accountId;
 	private final long _commerceOrderId;
 	private final long _contractId;
+	private final String _opportunitySoldBy;
 
 }
