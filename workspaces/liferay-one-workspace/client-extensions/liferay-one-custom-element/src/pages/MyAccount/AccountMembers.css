@@ -1,0 +1,112 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2026 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+.account-members-card {
+	background-color: #fff;
+	border: 1px solid #e7e7ed;
+	border-radius: 12px;
+}
+
+.account-members-toolbar {
+	border-bottom: 1px solid #e7e7ed;
+	gap: 16px;
+	padding: 16px 24px;
+}
+
+.account-members-toolbar .account-members-search {
+	flex: 1 1 auto;
+	margin: 0;
+	max-width: none;
+}
+
+.account-members-filter-button {
+	border: 1px solid #cdced9;
+	white-space: nowrap;
+}
+
+.account-members-seats {
+	color: #1b2a3b;
+	white-space: nowrap;
+}
+
+.account-members-seats .account-members-seats-info {
+	color: #2e5aac;
+}
+
+.account-members-table {
+	margin-bottom: 0;
+}
+
+.account-members-table thead th {
+	border-top: 0;
+	color: #6b6c7e;
+	font-weight: 600;
+	padding: 12px 24px;
+	text-transform: none;
+}
+
+.account-members-table tbody td {
+	border-top: 1px solid #f1f2f5;
+	color: #1b2a3b;
+	padding: 16px 24px;
+	vertical-align: middle;
+}
+
+.account-members-avatar {
+	align-items: center;
+	border-radius: 50%;
+	color: #fff;
+	display: flex;
+	flex-shrink: 0;
+	font-weight: 600;
+	height: 40px;
+	justify-content: center;
+	object-fit: cover;
+	overflow: hidden;
+	text-transform: uppercase;
+	width: 40px;
+}
+
+.account-members-name {
+	font-weight: 600;
+}
+
+.account-members-status-dot {
+	background-color: #287d3c;
+	border-radius: 50%;
+	display: inline-block;
+	height: 8px;
+	margin-right: 8px;
+	width: 8px;
+}
+
+.account-members-seat-check {
+	color: #2e5aac;
+}
+
+.account-members-seat-empty {
+	color: #92929e;
+}
+
+.account-members-pagination {
+	border-top: 1px solid #e7e7ed;
+	padding: 8px 24px;
+}
+
+.account-members-pagination .pagination-bar {
+	margin: 0;
+}
+
+.account-members-products-card {
+	background-color: #f7f8f9;
+	border: 1px solid #e7e7ed;
+	border-radius: 12px;
+	padding: 24px 32px;
+}
+
+.account-members-products-card .btn {
+	border: 1px solid #cdced9;
+	font-weight: 600;
+}
