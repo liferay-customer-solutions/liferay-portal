@@ -1,0 +1,71 @@
+.account-details {
+	&-grid {
+		align-items: start;
+		display: grid;
+		gap: var(--spacer-4);
+		grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+
+		@media (max-width: 991px) {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+
+	&-side {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacer-4);
+	}
+
+	&-grid .detailed-card-header h2 {
+		font-size: var(--h4-font-size, 1.25rem);
+		font-weight: 600;
+		margin-bottom: 0;
+	}
+
+	&-identity {
+		gap: var(--spacer-3);
+
+		&-avatar {
+			background: var(--color-success-l1, #287d3c);
+			border-radius: 50%;
+			color: var(--color-white, #fff);
+			flex-shrink: 0;
+			font-size: 1.25rem;
+			font-weight: 600;
+			height: 48px;
+			object-fit: cover;
+			text-transform: uppercase;
+			width: 48px;
+		}
+
+		&-name {
+			font-size: var(--h5-font-size, 16px);
+			font-weight: 600;
+			margin-bottom: 0;
+		}
+
+		&-contact {
+			color: var(--color-neutral-7);
+			font-size: var(--text-paragraph-sm-font-size, 13px);
+			margin-bottom: 0;
+		}
+	}
+
+	&-tag {
+		background: var(--color-success-l5, #e7f6ea);
+		border-radius: 100px;
+		color: var(--color-success-d1, #1c6430);
+		display: inline-flex;
+		font-size: var(--text-paragraph-xs-font-size, 11px);
+		font-weight: 600;
+		padding: 0.25rem 0.75rem;
+		text-transform: uppercase;
+	}
+
+	&-subheading {
+		color: var(--color-neutral-9);
+		font-size: var(--h6-font-size, 14px);
+		font-weight: 600;
+		margin-bottom: var(--spacer-3);
+	}
+}
