@@ -11,12 +11,14 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
@@ -74,6 +76,10 @@ public abstract class OneBaseService extends BaseService {
 	protected String getAuthorization() {
 		return _liferayOAuth2AccessTokenManager.getAuthorization(
 			"liferay-one-etc-spring-boot-oahs");
+	}
+
+	protected boolean isNotFound(String status) {
+		return Objects.equals(HttpStatus.NOT_FOUND.name(), status);
 	}
 
 	private static final int _PAGE_SIZE = 500;
