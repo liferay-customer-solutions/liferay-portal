@@ -1,0 +1,163 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2026 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+.orders-card {
+	background-color: #fff;
+	border: 1px solid #e7e7ed;
+	border-radius: 12px;
+}
+
+.orders-toolbar {
+	border-bottom: 1px solid #e7e7ed;
+	gap: 16px;
+	padding: 16px 24px;
+}
+
+.orders-toolbar .orders-search {
+	flex: 1 1 auto;
+	margin: 0;
+	max-width: none;
+}
+
+.orders-filter-button {
+	border: 1px solid #cdced9;
+	white-space: nowrap;
+}
+
+.orders-filter-dropdown .dropdown-menu {
+	min-width: 280px;
+	padding: 8px;
+}
+
+.orders-filter-heading {
+	color: #6b6c7e;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+	padding: 8px 12px;
+	text-transform: uppercase;
+}
+
+.orders-filter-category {
+	background-color: transparent;
+	border: 0;
+	border-radius: 8px;
+	color: #1b2a3b;
+	cursor: pointer;
+	font-weight: 600;
+	padding: 10px 12px;
+	text-align: left;
+	width: 100%;
+}
+
+.orders-filter-category:hover {
+	background-color: #f1f2f5;
+}
+
+.orders-filter-panel {
+	padding: 8px;
+}
+
+.orders-filter-back {
+	align-items: center;
+	background-color: transparent;
+	border: 0;
+	color: #1b2a3b;
+	cursor: pointer;
+	display: flex;
+	gap: 8px;
+	padding: 4px 0;
+}
+
+.orders-filter-title {
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+}
+
+.orders-filter-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.orders-filter-tag {
+	align-items: center;
+	background-color: #f1f2f5;
+	border: 1px solid #cdced9;
+	border-radius: 4px;
+	color: #1b2a3b;
+	display: inline-flex;
+	font-size: 13px;
+	gap: 6px;
+	padding: 2px 8px;
+}
+
+.orders-filter-tag-close {
+	background-color: transparent;
+	border: 0;
+	color: #6b6c7e;
+	cursor: pointer;
+	display: inline-flex;
+	padding: 0;
+}
+
+.orders-filter-exclude {
+	color: #1b2a3b;
+	font-weight: 600;
+}
+
+.orders-filter-options {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	max-height: 200px;
+	overflow-y: auto;
+}
+
+.orders-filter-options .custom-control {
+	margin-bottom: 0;
+}
+
+.orders-table {
+	margin-bottom: 0;
+}
+
+.orders-table thead th {
+	border-top: 0;
+	color: #6b6c7e;
+	font-weight: 600;
+	padding: 12px 24px;
+	text-transform: none;
+}
+
+.orders-table tbody td {
+	border-top: 1px solid #f1f2f5;
+	color: #1b2a3b;
+	padding: 16px 24px;
+	vertical-align: middle;
+}
+
+.orders-id {
+	font-weight: 600;
+}
+
+.orders-status-dot {
+	border-radius: 50%;
+	display: inline-block;
+	height: 8px;
+	margin-right: 8px;
+	width: 8px;
+}
+
+.orders-pagination {
+	border-top: 1px solid #e7e7ed;
+	padding: 8px 24px;
+}
+
+.orders-pagination .pagination-bar {
+	margin: 0;
+}

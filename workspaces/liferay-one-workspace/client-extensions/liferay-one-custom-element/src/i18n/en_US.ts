@@ -35,6 +35,7 @@ export default {
 	'actual-event-date': 'Actual Event Date',
 	'add-currency': 'Add Currency',
 	'add-developer-licenses': 'Add Developer Licenses',
+	'add-filter': 'Add Filter',
 	'add-new-trial': 'Add New Trial',
 	'add-new-version': 'Add New Version',
 	'add-one-ip-address-per-line-ipv-six-addresses-are-not-supported':
@@ -353,6 +354,7 @@ export default {
 	'event-status': 'Event Status',
 	'event-type': 'Event Type',
 	'exact-match': 'Exact Match',
+	'exclude': 'Exclude',
 	'excluding-vat': 'Excluding VAT',
 	'exit': 'Exit',
 	'exit-from-providing-app-build': 'Exit from providing app build',
@@ -464,6 +466,7 @@ export default {
 	'intl-code': 'Intl. Code',
 	'invite-manage-roles-designate-incident-contacts':
 		'Invite, manage roles, designate incident contacts.',
+	'invoice-status': 'Invoice Status',
 	'invoices': 'Invoices',
 	'ip-addresses': 'IP Addresses',
 	'job-title': 'Job Title',
