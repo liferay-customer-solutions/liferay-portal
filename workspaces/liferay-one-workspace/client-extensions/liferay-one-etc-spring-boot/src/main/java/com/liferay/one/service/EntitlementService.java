@@ -155,7 +155,7 @@ public class EntitlementService extends OneBaseService {
 					entitlementDefinition.getEntitlementDefinitionId(),
 					commerceOrderItem.getEndDate(),
 					entitlementDefinition.getGrantType(), null,
-					entitlementDefinition.getName(),
+					entitlementDefinition.getDisplayName(),
 					entitlementDefinition.getDefaultQuantity(),
 					commerceOrderItem.getStartDate());
 			}
