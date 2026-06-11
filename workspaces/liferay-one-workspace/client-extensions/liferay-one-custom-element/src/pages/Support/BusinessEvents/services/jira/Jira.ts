@@ -72,6 +72,16 @@ export async function getBusinessEventById(
 	);
 }
 
+export async function getBusinessEventFieldOptions(fieldName: string) {
+	const response = await jiraFetch(`/business-events/field-options/${fieldName}`);
+
+	if (!response.ok) {
+		return [];
+	}
+
+	return response.json();
+}
+
 export async function getBusinessEvents(externalReferenceCode: string) {
 	const response = await jiraFetch(
 		`/accounts/${externalReferenceCode}/business-events`
@@ -91,16 +101,6 @@ export async function getBusinessEventVersions(
 	return jiraFetchJSON(
 		`/accounts/${externalReferenceCode}/business-events/${id}/versions`
 	);
-}
-
-export async function getFieldOptions(fieldName: string) {
-	const response = await jiraFetch(`/field-options/${fieldName}`);
-
-	if (!response.ok) {
-		return [];
-	}
-
-	return response.json();
 }
 
 export async function getProductVersions() {

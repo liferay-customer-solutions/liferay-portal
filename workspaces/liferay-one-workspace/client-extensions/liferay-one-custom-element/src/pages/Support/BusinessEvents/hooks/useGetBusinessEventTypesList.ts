@@ -6,7 +6,7 @@
 import {useEffect, useState} from 'react';
 
 import {IOption} from '../components/Select/Select';
-import {getFieldOptions} from '../services/jira/Jira';
+import {getBusinessEventFieldOptions} from '../services/jira/Jira';
 import {JSM_FIELDS} from '../utils/constants/jsmObjectTypes';
 
 export default function useGetBusinessEventTypesList(): {
@@ -23,13 +23,13 @@ export default function useGetBusinessEventTypesList(): {
 	useEffect(() => {
 		const fetchListTypeEntries = async () => {
 			try {
-				const response = await getFieldOptions(JSM_FIELDS.eventType);
+				const response = await getBusinessEventFieldOptions(JSM_FIELDS.eventType);
 
 				setBusinessEventTypesList(
 					response
 						.map((entry: any) => ({
-							label: entry.name,
-							value: entry.key,
+							label: entry.label,
+							value: entry.value,
 						}))
 						.sort((a: any, b: any) =>
 							a.label.localeCompare(b.label)

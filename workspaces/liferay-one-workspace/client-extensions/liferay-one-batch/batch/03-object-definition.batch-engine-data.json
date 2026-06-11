@@ -3399,16 +3399,16 @@
 			"enableCategorization": false,
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
-			"externalReferenceCode": "C_PUBLISHER_ASSETS",
+			"externalReferenceCode": "C_PUBLISHER_ASSET",
 			"label": {
-				"en_US": "Publisher Assets"
+				"en_US": "Publisher Asset"
 			},
-			"name": "PublisherAssets",
+			"name": "PublisherAsset",
 			"objectFields": [
 				{
 					"DBType": "String",
 					"businessType": "Text",
-					"externalReferenceCode": "C_PUBLISHER_ASSETS_VERSION",
+					"externalReferenceCode": "C_PUBLISHER_ASSET_VERSION",
 					"indexed": true,
 					"indexedAsKeyword": false,
 					"indexedLanguageId": "en_US",

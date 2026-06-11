@@ -68,13 +68,13 @@
 		},
 		{
 			"deletionType": "cascade",
-			"externalReferenceCode": "R_ACCOUNT_ENTRY_TO_PUBLISHER_ASSETS",
+			"externalReferenceCode": "R_ACCOUNT_ENTRY_TO_PUBLISHER_ASSET",
 			"label": {
-				"en_US": "Account Entry to Publisher Assets"
+				"en_US": "Account Entry to Publisher Asset"
 			},
-			"name": "accountEntryToPublisherAssets",
+			"name": "accountEntryToPublisherAsset",
 			"objectDefinitionExternalReferenceCode1": "L_ACCOUNT",
-			"objectDefinitionExternalReferenceCode2": "C_PUBLISHER_ASSETS",
+			"objectDefinitionExternalReferenceCode2": "C_PUBLISHER_ASSET",
 			"type": "oneToMany"
 		},
 		{
@@ -288,13 +288,13 @@
 		},
 		{
 			"deletionType": "cascade",
-			"externalReferenceCode": "R_PRODUCT_ENTRY_TO_PUBLISHER_ASSETS",
+			"externalReferenceCode": "R_PRODUCT_ENTRY_TO_PUBLISHER_ASSET",
 			"label": {
-				"en_US": "Product to Publisher Assets"
+				"en_US": "Product to Publisher Asset"
 			},
-			"name": "productEntryToPublisherAssets",
+			"name": "productEntryToPublisherAsset",
 			"objectDefinitionExternalReferenceCode1": "L_COMMERCE_PRODUCT_DEFINITION",
-			"objectDefinitionExternalReferenceCode2": "C_PUBLISHER_ASSETS",
+			"objectDefinitionExternalReferenceCode2": "C_PUBLISHER_ASSET",
 			"type": "oneToMany"
 		},
 		{
@@ -310,12 +310,12 @@
 		},
 		{
 			"deletionType": "cascade",
-			"externalReferenceCode": "R_PUBLISHER_ASSETS_TO_ATTACHMENT",
+			"externalReferenceCode": "R_PUBLISHER_ASSET_TO_ATTACHMENT",
 			"label": {
-				"en_US": "Publisher Assets to Publisher Asset Attachment"
+				"en_US": "Publisher Asset to Publisher Asset Attachment"
 			},
-			"name": "publisherAssetsToAttachment",
-			"objectDefinitionExternalReferenceCode1": "C_PUBLISHER_ASSETS",
+			"name": "publisherAssetToAttachment",
+			"objectDefinitionExternalReferenceCode1": "C_PUBLISHER_ASSET",
 			"objectDefinitionExternalReferenceCode2": "C_PUBLISHER_ASSET_ATTACHMENT",
 			"type": "oneToMany"
 		},

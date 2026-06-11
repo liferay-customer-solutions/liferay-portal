@@ -26,10 +26,10 @@ export default function useGetLiferayVersions(): {
 				setProductVersions(
 					sortLiferayVersions(
 						response.map((entry: any) => ({
-							key: entry.key,
-							name: entry.name,
+							label: entry.name,
+							value: entry.id,
 						}))
-					).map(({key, name}) => ({label: name, value: key}))
+					)
 				);
 			}
 			catch (error) {

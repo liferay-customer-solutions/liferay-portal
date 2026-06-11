@@ -7,8 +7,10 @@ package com.liferay.one;
 
 import com.liferay.client.extension.util.spring.boot3.BaseRestController;
 import com.liferay.one.converter.BusinessEventConverter;
+import com.liferay.one.model.AssetObject;
 import com.liferay.one.model.BusinessEvent;
 import com.liferay.one.model.BusinessEventVersion;
+import com.liferay.one.model.FieldOption;
 import com.liferay.one.model.JiraSupportIssue;
 import com.liferay.one.permission.BusinessEventPermission;
 import com.liferay.one.service.JiraService;
@@ -136,6 +138,55 @@ public class JiraRestController extends BaseRestController {
 		return new ResponseEntity<>(ticketsJSONArray.toString(), HttpStatus.OK);
 	}
 
+	@GetMapping("/business-events/field-options/{fieldName}")
+	public ResponseEntity<String> getBusinessEventFieldOptions(
+			@PathVariable("fieldName") String fieldName)
+		throws Exception {
+
+		try {
+			JSONArray fieldOptionsJSONArray = new JSONArray();
+
+			List<FieldOption> fieldOptions =
+				_jiraService.getBusinessEventFieldOptions(fieldName);
+
+			for (FieldOption fieldOption : fieldOptions) {
+				fieldOptionsJSONArray.put(fieldOption.toJSONObject());
+			}
+
+			return new ResponseEntity<>(
+				fieldOptionsJSONArray.toString(), HttpStatus.OK);
+		}
+		catch (Exception exception) {
+			_log.error(exception, exception);
+
+			return new ResponseEntity<>(
+				exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/product-versions")
+	public ResponseEntity<String> getProductVersions() throws Exception {
+		try {
+			JSONArray productVersionsJSONArray = new JSONArray();
+
+			List<AssetObject> productVersions = _jiraService.getAssetObjects(
+				_OBJECT_SCHEMA_BUSINESS_EVENTS, _OBJECT_TYPE_PRODUCT_VERSION);
+
+			for (AssetObject productVersion : productVersions) {
+				productVersionsJSONArray.put(productVersion.toJSONObject());
+			}
+
+			return new ResponseEntity<>(
+				productVersionsJSONArray.toString(), HttpStatus.OK);
+		}
+		catch (Exception exception) {
+			_log.error(exception, exception);
+
+			return new ResponseEntity<>(
+				exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<String> handleException(Exception exception) {
 		_log.error(exception, exception);
@@ -229,6 +280,12 @@ public class JiraRestController extends BaseRestController {
 		return new ResponseEntity<>(
 			responseJSONObject.toString(), HttpStatus.OK);
 	}
+
+	private static final String _OBJECT_SCHEMA_BUSINESS_EVENTS =
+		"Business Events";
+
+	private static final String _OBJECT_TYPE_PRODUCT_VERSION =
+		"Product Version";
 
 	private static final Log _log = LogFactory.getLog(JiraRestController.class);
 

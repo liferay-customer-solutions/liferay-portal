@@ -22,8 +22,8 @@
 		},
 		{
 			"accountEntryRestricted": true,
-			"accountEntryRestrictedObjectFieldName": "r_accountEntryToPublisherAssets_accountEntryId",
-			"externalReferenceCode": "C_PUBLISHER_ASSETS"
+			"accountEntryRestrictedObjectFieldName": "r_accountEntryToPublisherAsset_accountEntryId",
+			"externalReferenceCode": "C_PUBLISHER_ASSET"
 		},
 		{
 			"accountEntryRestricted": true,
