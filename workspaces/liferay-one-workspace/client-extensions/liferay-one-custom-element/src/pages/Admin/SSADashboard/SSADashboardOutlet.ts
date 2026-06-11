@@ -23,12 +23,10 @@ type SSADashboardOutletContext = {
 export function useSSADashboardOutlet(): SSADashboardOutletContext {
 	const {myUserAccount, properties} = useOneContext();
 
-	const {data: ssaAccount} = useSWR(
-		'/ssa-account',
-		() =>
-			HeadlessAdminUser.getAccountByExternalReferenceCode(
-				properties.accountExternalReferenceCode
-			)
+	const {data: ssaAccount} = useSWR('/ssa-account', () =>
+		HeadlessAdminUser.getAccountByExternalReferenceCode(
+			properties.accountExternalReferenceCode
+		)
 	);
 
 	const isFilterByAuthorIdEnabled =
@@ -58,10 +56,8 @@ export function useSSADashboardOutlet(): SSADashboardOutletContext {
 		shouldFetch: !!ssaAccount,
 	});
 
-	const {
-		data: ssaTrialExtend,
-		mutate: ssaTrialExtendMutate,
-	} = useSSATrialsExtend(ssaAccount!);
+	const {data: ssaTrialExtend, mutate: ssaTrialExtendMutate} =
+		useSSATrialsExtend(ssaAccount!);
 
 	return {
 		myTrialsInProgress: inProgressTrialResponse.totalCount,
