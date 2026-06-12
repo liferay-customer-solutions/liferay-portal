@@ -391,13 +391,13 @@
 							{
 								"externalReferenceCode": "LO_NAV_SUPPORT_TICKETS_ATTACHMENTS",
 								"name_i18n": {
-									"en_US": "Tickets Attachments",
-									"es_ES": "Adjuntos de Tickets",
+									"en_US": "Ticket Attachments",
+									"es_ES": "Adjuntos de Ticket",
 									"ja_JP": "チケット添付ファイル",
-									"pt_BR": "Anexos de Tickets"
+									"pt_BR": "Anexos de Ticket"
 								},
 								"type": "url",
-								"url": "/support/tickets-attachments",
+								"url": "/web/one/support/ticket-attachments",
 								"useNewTab": false
 							}
 						],
@@ -553,7 +553,7 @@
 					"en_US": "Customer Portal"
 				},
 				"type": "url",
-				"url": "http://support.liferay.com/",
+				"url": "https://support.liferay.com/",
 				"useNewTab": true
 			},
 			{

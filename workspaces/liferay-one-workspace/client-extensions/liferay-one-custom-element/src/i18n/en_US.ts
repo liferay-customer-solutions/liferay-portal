@@ -33,6 +33,8 @@ export default {
 	'active': 'Active',
 	'activity-history': 'Activity History',
 	'actual-event-date': 'Actual Event Date',
+	'add-a-description-of-the-file-related-to-this-ticket':
+		'Add a description of the file related to this ticket.',
 	'add-currency': 'Add Currency',
 	'add-developer-licenses': 'Add Developer Licenses',
 	'add-filter': 'Add Filter',
@@ -121,6 +123,9 @@ export default {
 	'areas': 'Areas',
 	'associated-tickets': 'Associated Tickets',
 	'at-least-one-role-must-be-provided': 'At least one role must be provided.',
+	'attach-file-to-ticket-x': 'Attach File to Ticket #{0}',
+	'attachment': 'Attachment',
+	'attachment-already-exists': 'Attachment Already Exists',
 	'available': 'Available',
 	'back': 'Back',
 	'back-to-apps': 'Back to Apps',
@@ -159,6 +164,7 @@ export default {
 	'cancel': 'Cancel',
 	'cancel-business-event': 'Cancel Business Event',
 	'cancel-event': 'Cancel Event',
+	'cancel-upload': 'Cancel Upload',
 	'canceled': 'Canceled',
 	'cannot-edit-canceled-or-completed-events':
 		'Cannot edit canceled or completed events.',
@@ -243,6 +249,7 @@ export default {
 	'create-license-key': 'Create License Key',
 	'create-new-licenses-and-they-will-show-up-here':
 		'Create new licenses and they will show up here.',
+	'create-new-ticket': 'Create New Ticket',
 	'create-template': 'Create Template',
 	'created-at': 'Created At',
 	'created-by': 'Created By',
@@ -293,6 +300,7 @@ export default {
 	'done': 'Done',
 	'download': 'Download',
 	'download-app': 'Download App',
+	'download-in-progress': 'Download in Progress',
 	'download-key': 'Download Key',
 	'download-your-activation-key-file-below-and-upload-it-to-the-dedicated-portal-within-your-dxp-environment-to-get-started':
 		'Download your activation key file below and upload it to the dedicated portal within your DXP environment to get started.',
@@ -347,6 +355,7 @@ export default {
 	'environments': 'Environments',
 	'error': 'Error',
 	'error-details': 'Error Details',
+	'error-downloading-attachment': 'Error downloading attachment.',
 	'eula': 'EULA',
 	'event-description': 'Event Description',
 	'event-details': 'Event Details',
@@ -379,6 +388,8 @@ export default {
 	'failed-to-reject-trial-extension': 'Failed to reject trial extension.',
 	'failure': 'Failure',
 	'file-not-available-for-download': 'File not available for download.',
+	'file-to-download-doesnt-exist-anymore':
+		"File to download doesn't exist anymore.",
 	'filter': 'Filter',
 	'filters': 'Filters',
 	'finance-dashboard': 'Finance Dashboard',
@@ -404,6 +415,7 @@ export default {
 	'go-live': 'Go Live',
 	'go-to-analytics-cloud': 'Go to Analytics Cloud',
 	'go-to-app-provisioning': 'Go to App Provisioning',
+	'go-to-attachments': 'Go to Attachments',
 	'go-to-cloud-console': 'Go to Cloud Console',
 	'go-to-dashboard': 'Go to Dashboard',
 	'go-to-download': 'Go to Download',
@@ -464,6 +476,10 @@ export default {
 	'instance-size': 'Instance Size',
 	'insufficient-resource-requirements': 'Insufficient Resource Requirements',
 	'intl-code': 'Intl. Code',
+	'invalid-or-non-existent-attachment-id':
+		'Invalid or non-existent attachment ID.',
+	'invalid-or-non-existent-ticket-number':
+		'Invalid or non-existent ticket number.',
 	'invite-manage-roles-designate-incident-contacts':
 		'Invite, manage roles, designate incident contacts.',
 	'invoice-status': 'Invoice Status',
@@ -488,6 +504,7 @@ export default {
 		'Learn more about App Resource Requirements',
 	'learn-more-about-becoming-a-liferay-customer':
 		'Learn more about becoming a Liferay Customer',
+	'leave-a-comment': 'Leave a Comment',
 	'license': 'License',
 	'license-key-deleted-successfully': 'License key deleted successfully.',
 	'license-key-uploads': 'License Key Uploads',
@@ -526,8 +543,12 @@ export default {
 	'mac-addresses': 'Mac Addresses',
 	'main': 'Main',
 	'main-information': 'Main Information',
+	'make-sure-the-attachment-id-is-correct':
+		'Make sure the attachment ID is correct.',
 	'make-sure-the-project-link-is-correct-and-that-you-have-access-to-this-project':
 		'Make sure the project link is correct and that you have access to this project.',
+	'make-sure-the-ticket-number-is-correct':
+		'Make sure the ticket number is correct.',
 	'manage': 'Manage',
 	'manage-all-your-app-purchases-and-subscriptions-in-one-place-read-other-users-reviews-get-notifications-when-updates-are-available-and-get-the-most-out-of-our-apps-catalog':
 		'Manage all your app purchases and subscriptions in one place, read other users’ reviews, get notifications when updates are available, and get the most out of our Apps catalog.',
@@ -612,6 +633,8 @@ export default {
 	'no-business-events-were-found': 'No business events were found.',
 	'no-cloud-projects-available': 'No Cloud Projects Available',
 	'no-data-found': 'No data found.',
+	'no-further-edits-can-be-made-when-tickets-are-closed-please-open-a-new-support-ticket-if-assistance-is-needed':
+		'No further edits can be made when tickets are closed. Please open a new support ticket if assistance is needed.',
 	'no-history-of-activity-was-found': 'No history of activity was found.',
 	'no-licenses-yet': 'No Licenses Yet',
 	'no-orders-yet': 'No Orders Yet',
@@ -665,9 +688,9 @@ export default {
 	'paid': 'Paid',
 	'paid-by': 'Paid By',
 	'paid-date': 'Paid Date',
+	'password-policy': 'Password Policy',
 	'pay-with-bank-transfer': 'Pay with Bank Transfer',
 	'pay-with-card': 'Pay with Card',
-	'password-policy': 'Password Policy',
 	'payment': 'Payment',
 	'payment-method': 'Payment Method',
 	'payment-status': 'Payment Status',
@@ -686,6 +709,9 @@ export default {
 		'Please be aware that since you are adding a new version of the app, the only section visible is the "Build".',
 	'please-be-sure-to-specify-liferay-compatibility-through-the-appropriate-properties-or-xml-files-in-your-plugin':
 		'Please be sure to specify Liferay compatibility through the appropriate properties or XML files in your plugin.',
+	'please-check-again-later': 'Please check again later.',
+	'please-check-this-box-if-the-file-you-upload-does-not-contain-any-personal-data-and-therefore-can-be-uploaded-to-and-accessed-from-any-liferay-support-location-globally':
+		'Please check this box if the file you upload does not contain any personal data and therefore can be uploaded to and accessed from any Liferay support location globally.',
 	'please-complete-at-least-one-of-the-following-fields-to-proceed':
 		'Please complete at least one of the following fields to proceed',
 	'please-fill-in-a-valid-email': 'Please fill in a valid email.',
@@ -795,7 +821,9 @@ export default {
 	'requester': 'Requester',
 	'resource-requirements': 'Resource Requirements',
 	'resources': 'Resources',
+	'return-to-attachments': 'Return to Attachments',
 	'return-to-marketplace': 'Return to Marketplace',
+	'return-to-ticket': 'Return to Ticket',
 	'review-and-accept-the-legal-agreement-between-you-and-liferay-before-proceeding-you-are-about-to-create-a-new-solution-submission':
 		'Review and accept the legal agreement between you and Liferay before proceeding. You are about to create a new solution submission.',
 	'review-and-submit-app': 'Review and Submit App',
@@ -823,6 +851,8 @@ export default {
 	'security': 'Security',
 	'select-a-file': 'Select a File',
 	'select-a-local-file-to-upload': 'Select a Local File to Upload',
+	'select-a-local-file-to-upload-only-one-file-can-be-attached-at-a-time':
+		'Select a local file to upload. Only one file can be attached at a time.',
 	'select-a-server-to-store-your-data-this-could-have-implications-to-your-organizations-policy-on-user-data-storage':
 		"Select a server to store your data. This could have implications to your organization's policy on user data storage.",
 	'select-account': 'Select Account',
@@ -934,6 +964,9 @@ export default {
 	'the-dxp-app-is-module-based-and-is-compatible-with-7-4-builds-of-liferay-dxp-self-managed-liferay-cloud-formerly-dxp-cloud':
 		'The DXP app is module-based and is compatible with 7.4 builds of Liferay Self-Managed.',
 	'the-file-has-already-been-uploaded': 'The file has already been uploaded.',
+	'the-file-is-downloading-automatically-if-you-encounter-any-issues-click-the-download-button-below-to-start-the-download-manually':
+		'The file is downloading automatically. If you encounter any issues, click the button below to start the download manually.',
+	'the-file-may-have-been-deleted': 'The file may have been deleted.',
 	'the-installation-process-is-ongoing-and-may-take-some-time-navigating-to-other-sections-will-not-cancel-the-process':
 		'The installation process is ongoing and may take some time... Navigating to other sections will not cancel the process.',
 	'the-installation-process-is-underway-and-should-be-completed-shortly':
@@ -971,6 +1004,7 @@ export default {
 		'This submission is currently under review by Liferay. Once the process is complete, it will be published on the Marketplace. In the meantime, no information or data from this app submission can be updated.',
 	'this-table-allows-you-to-create-manage-and-track-your-business-events-please-note-that-business-events-closed-for-more-than-a-year-will-not-be-displayed-here':
 		'This table allows you to create, manage, and track your business events. Please note that business events closed for more than a year will not be displayed here.',
+	'this-ticket-has-been-closed': 'This ticket has been closed',
 	'tickets-impacting-this-event': 'Tickets Impacting This Event',
 	'time': 'Time',
 	'time-zone': 'Time Zone',
@@ -1005,10 +1039,12 @@ export default {
 	'trial-status': 'Trial Status',
 	'trial-url': 'Trial URL',
 	'trials': 'Trials',
+	'try-again-later': 'Try again later.',
 	'try-beta': 'Try Beta',
 	'two-factor-authentication': 'Two-Factor Authentication',
 	'type': 'Type',
 	'unable-to-assign-roles': 'Unable to assign roles',
+	'unable-to-connect-to-file-server': 'Unable to connect to file server.',
 	'unable-to-download-your-license-file-please-try-again-and-or-contact-support-via-the-manage-menu-on-the-dashboard':
 		'Unable to download your license file.  Please try again and/or contact support via the manage menu on the dashboard.',
 	'unable-to-remove-roles': 'Unable to remove roles',
@@ -1021,6 +1057,7 @@ export default {
 	'upload': 'Upload',
 	'upload-at-least-one-image-or-add-a-video-url':
 		'Upload at least one image, or add a video URL',
+	'upload-confirmation': 'Upload Confirmation',
 	'upload-image': 'Upload image',
 	'upload-liferay-plugin-packages': 'Upload Liferay Plugin Packages',
 	'upload-zip-files': 'Upload ZIP Files',
@@ -1093,6 +1130,7 @@ export default {
 		'<b>{0}</b> saved as a <b>draft</b> successfully',
 	'x-selected': 'X Selected',
 	'x-tickets': '{0} Tickets',
+	'x-was-uploaded-successfully': '{0} was uploaded successfully.',
 	'x-will-be-deleted-and-this-action-cant-be-undone-are-you-sure-you-want-to-delete-it':
 		'{0} will be deleted and this action can’t be undone. Are you sure you want to delete it?',
 	'yes': 'Yes',
@@ -1114,12 +1152,22 @@ export default {
 		'You cannot upload more than {0} files.',
 	'you-do-not-have-access-to-cloud-project':
 		'You do not have access to a cloud project.',
+	'you-do-not-have-access-to-download-files':
+		'You do not have access to download files.',
+	'you-do-not-have-access-to-upload-files':
+		'You do not have access to upload files.',
 	'you-have-reached-the-maximum-number-of-active-trials-allowed-to-start-a-new-trial-please-end-one-of-your-existing-trials-first':
 		'You have reached the maximum number of active trials allowed. To start a new trial, please end one of your existing trials first.',
 	'you-ll-be-redirected-to-paypal-to-complete-your-purchase-securely-after-your-payment-you-are-able-to-activate-the-license-on-customer-dashboard-right-away':
 		"You'll be redirected to PayPal to complete your purchase securely. After your payment you are able to activate the license on customer dashboard right away",
+	'you-need-administrator-or-requester-role-on-this-project-to-download-a-file':
+		'You need Administrator or Requester role on this project to download a file.',
+	'you-need-administrator-or-requester-role-on-this-project-to-upload-a-file':
+		'You need Administrator or Requester role on this project to upload a file.',
 	'you-will-receive-an-invoice-via-email-with-all-the-details-needed-to-complete-your-payment-after-you-complete-the-payment-you-can-activate-your-license-from-the-customer-dashboard':
 		'You will receive an invoice via email with all the details needed to complete your payment. After you complete the payment, you can activate your license from the customer dashboard.',
+	'your-attachment-is-uploaded-however-we-encountered-a-problem-posting-your-comment-the-system-is-automatically-retrying-to-send-it':
+		'Your attachment is uploaded, however we encountered a problem posting your comment. The system is automatically retrying to send it.',
 	'your-current-liferay-version': 'Your Current Liferay Version',
 	'your-free-activation-key-has-been-generated':
 		'Your free activation key has been generated!',

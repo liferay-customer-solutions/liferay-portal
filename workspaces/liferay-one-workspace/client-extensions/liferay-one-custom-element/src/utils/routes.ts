@@ -24,7 +24,15 @@ type PathRoute = {
 	path: string;
 };
 
-export type AppRoute = IndexRoute | PathRoute;
+type LayoutRoute = {
+	children: AppRoute[];
+	element?: ReactNode;
+	index?: never;
+	nav?: never;
+	path?: never;
+};
+
+export type AppRoute = IndexRoute | LayoutRoute | PathRoute;
 
 export function toRouteObjects(routes: AppRoute[]): RouteObject[] {
 	return routes.map((route) => {

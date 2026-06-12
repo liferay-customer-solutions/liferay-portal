@@ -2,11 +2,17 @@ assemble:
     -   from: build/vite
         into: static
 liferay-one-custom-element:
+    cssURLs:
+        -   "assets/*.css"
     friendlyURLMapping: liferay-one-custom-element
     htmlElementName: liferay-one-custom-element
     instanceable: true
     name: Liferay One
     portletCategoryName: category.client-extensions
+    properties:
+        jira-fls-portal-url: https://liferay.atlassian.net/servicedesk/customer/portal/204
+        jira-fls-project: LRFLS
+        jira-hc-portal-url: https://liferay.atlassian.net/servicedesk/customer/portal/105
     type: customElement
     urls:
         -   "*.js"

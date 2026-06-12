@@ -53,6 +53,9 @@ export function getAttributes(element: HTMLElement) {
 		...getAttribute(element, baseAttributes),
 		featureFlags: parseArray(element.getAttribute('featureFlags')),
 		featurePreview: parseArray(element.getAttribute('featurePreview')),
+		jiraFLSPortalURL: element.getAttribute('jira-fls-portal-url'),
+		jiraFLSProject: element.getAttribute('jira-fls-project'),
+		jiraHCPortalURL: element.getAttribute('jira-hc-portal-url'),
 		kpi: getAttribute(element, baseKPIAttributes),
 		useSiteTaxonomyVocabularyQuery:
 			element.getAttribute('useSiteTaxonomyVocabularyQuery') === 'true',

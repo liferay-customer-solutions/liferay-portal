@@ -11,8 +11,9 @@ import NavigationBar from '@clayui/navigation-bar';
 import {useCallback, useMemo, useState} from 'react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 
-import Table from '../../../../../../components/BusinessEventsTable/BusinessEventsTable';
-import {IRow} from '../../../../../../components/BusinessEventsTable/BusinessEventsTable';
+import Table, {
+	IRow,
+} from '../../../../../../components/BusinessEventsTable/BusinessEventsTable';
 import ButtonDropDown from '../../../../../../components/ButtonDropDown/ButtonDropDown';
 import {translate} from '../../../../../../i18n';
 import {Liferay} from '../../../../../../liferay/liferay';

@@ -19,8 +19,7 @@ import {updateBusinessEvent} from '../../../services/jira/Jira';
 import {IBusinessEvent} from '../../../types';
 import {getFormattedEventDateTime} from '../../../utils/getFormattedEventDate';
 import BusinessEventsModal from '../../BusinessEventsModal/BusinessEventsModal';
-import Select from '../../Select/Select';
-import {IOption} from '../../Select/Select';
+import Select, {IOption} from '../../Select/Select';
 
 interface IProps {
 	accountExternalReferenceCode: string;

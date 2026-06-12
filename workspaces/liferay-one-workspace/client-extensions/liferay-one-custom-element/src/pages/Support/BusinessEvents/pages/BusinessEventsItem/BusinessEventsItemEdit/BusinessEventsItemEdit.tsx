@@ -21,8 +21,7 @@ import getKebabCase from '../../../../../../utils/getKebabCase';
 import {isValidDate} from '../../../../../../utils/validations.form';
 import AssociatedTicketsContainer from '../../../components/AssociatedTicketsContainer/AssociatedTicketsContainer';
 import Input from '../../../components/Input/Input';
-import Select from '../../../components/Select/Select';
-import {IOption} from '../../../components/Select/Select';
+import Select, {IOption} from '../../../components/Select/Select';
 import useAccountsTickets from '../../../hooks/useAccountsTickets';
 import useCanViewTickets from '../../../hooks/useCanViewTickets';
 import useGetBusinessEvent from '../../../hooks/useGetBusinessEvent';
@@ -815,8 +814,6 @@ const BusinessEventsItemEditPage: React.FC<IProps> = ({
 
 const BusinessEventsItemEdit: React.FC = () => {
 	const {accountKey, id} = useParams<{accountKey: string; id: string}>();
-
-	const navigate = useNavigate();
 
 	const {businessEvent, loading} = useGetBusinessEvent(
 		accountKey || '',

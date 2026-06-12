@@ -14,6 +14,7 @@ interface IProps extends React.ComponentPropsWithoutRef<typeof ClayButton> {
 	appendIcon?: string;
 	appendIconClassName?: string;
 	children?: ReactNode;
+	isImagePrependIcon?: boolean;
 	isLoading?: boolean;
 	prependIcon?: string;
 	prependIconClassName?: string;
@@ -24,6 +25,7 @@ const ButtonBase = (
 		appendIcon,
 		appendIconClassName,
 		children,
+		isImagePrependIcon,
 		isLoading,
 		prependIcon,
 		prependIconClassName,
@@ -44,7 +46,11 @@ const ButtonBase = (
 						prependIconClassName
 					)}
 				>
-					<ClayIcon symbol={prependIcon} />
+					{isImagePrependIcon ? (
+						<img className="mr-2" src={prependIcon} width="16" />
+					) : (
+						<ClayIcon symbol={prependIcon} />
+					)}
 				</span>
 			)}
 
