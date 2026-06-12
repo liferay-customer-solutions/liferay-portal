@@ -1,0 +1,66 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2026 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+package com.liferay.one;
+
+import com.liferay.one.exception.JiraOrganizationNotFoundException;
+import com.liferay.one.service.JiraService;
+import com.liferay.portal.kernel.util.Validator;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+/**
+ * @author Amos Fong
+ */
+public class BaseRestController
+	extends com.liferay.client.extension.util.spring.boot3.BaseRestController {
+
+	protected String getAccountKey(
+			String jiraOrganizationId, String jiraWorkspaceId)
+		throws JiraOrganizationNotFoundException {
+
+		if (Validator.isNull(jiraOrganizationId) ||
+			Validator.isNull(jiraWorkspaceId)) {
+
+			throw new JiraOrganizationNotFoundException();
+		}
+
+		JSONObject assetObjectJSONObject =
+			_jiraService.getAssetObjectJSONObject(
+				jiraWorkspaceId, jiraOrganizationId);
+
+		JSONArray jsonArray = assetObjectJSONObject.getJSONArray("attributes");
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			JSONObject attributeJSONObject = jsonArray.getJSONObject(i);
+
+			JSONObject objectTypeAttributeJSONObject =
+				attributeJSONObject.getJSONObject("objectTypeAttribute");
+
+			String name = objectTypeAttributeJSONObject.getString("name");
+
+			if (!name.equals("External Key")) {
+				continue;
+			}
+
+			JSONArray objectAttributeValuesJSONArray =
+				attributeJSONObject.getJSONArray("objectAttributeValues");
+
+			JSONObject objectAttributeValuesJSONObject =
+				objectAttributeValuesJSONArray.getJSONObject(0);
+
+			return objectAttributeValuesJSONObject.getString("value");
+		}
+
+		throw new JiraOrganizationNotFoundException();
+	}
+
+	@Autowired
+	private JiraService _jiraService;
+
+}

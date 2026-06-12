@@ -14,6 +14,7 @@ import com.liferay.one.model.AssetObjectFieldOption;
 import com.liferay.one.model.BusinessEvent;
 import com.liferay.one.model.BusinessEventVersion;
 import com.liferay.one.model.JiraSupportIssue;
+import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -46,6 +47,21 @@ import org.springframework.web.util.UriComponentsBuilder;
  */
 @Component
 public class JiraService extends BaseService {
+
+	public void addComment(String issueKey, String body) {
+		post(
+			body,
+			HashMapBuilder.put(
+				HttpHeaders.AUTHORIZATION, _getAuthorization()
+			).put(
+				HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE
+			).build(),
+			UriComponentsBuilder.fromUriString(
+				StringBundler.concat(
+					_jiraURL, "/rest/api/3/issue/", issueKey, "/comment")
+			).build(
+			).toUri());
+	}
 
 	public void createBusinessEvent(BusinessEvent businessEvent)
 		throws Exception {
@@ -103,6 +119,32 @@ public class JiraService extends BaseService {
 		}
 
 		return assetObjectFieldOptions;
+	}
+
+	public JSONObject getAssetObjectJSONObject(
+		String workspaceId, String objectId) {
+
+		JSONObject jsonObject = new JSONObject(
+			get(
+				_getAuthorization(),
+				UriComponentsBuilder.fromUriString(
+					StringBundler.concat(
+						_JIRA_CLOUD_API_URL, "/jsm/assets/workspace/",
+						workspaceId, "/v1/object/", objectId)
+				).build(
+				).toUri()));
+
+		if (jsonObject.has("errorMessages")) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"Unable to get asset object " +
+						jsonObject.getJSONArray("errorMessages"));
+			}
+
+			return null;
+		}
+
+		return jsonObject;
 	}
 
 	@Cacheable("assetObjects")
@@ -181,6 +223,48 @@ public class JiraService extends BaseService {
 		}
 
 		return businessEventVersions;
+	}
+
+	public JiraSupportIssue getJiraSupportIssue(String issueKey)
+		throws Exception {
+
+		try {
+			JSONObject issueJSONObject = new JSONObject(
+				get(
+					_getAuthorization(),
+					UriComponentsBuilder.fromUriString(
+						StringBundler.concat(
+							_jiraURL, _URL_REST_API_3, "/issue/", issueKey)
+					).queryParam(
+						"expand", "renderedFields"
+					).build(
+					).toUri()));
+
+			JSONObject issueFieldsJSONObject = issueJSONObject.optJSONObject(
+				"fields");
+
+			String organizationObjectFieldId = _getAssetObjectFieldId(
+				issueFieldsJSONObject.optJSONArray(
+					_jiraSupportHCFieldOrganization));
+
+			if (Validator.isNotNull(organizationObjectFieldId)) {
+				String[] parts = StringUtil.split(
+					organizationObjectFieldId, CharPool.COLON);
+
+				return new JiraSupportIssue(
+					issueJSONObject, parts[1], parts[0]);
+			}
+
+			return new JiraSupportIssue(issueJSONObject);
+		}
+		catch (Exception exception) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"Unable to get Jira issue with key " + issueKey, exception);
+			}
+		}
+
+		return null;
 	}
 
 	public List<JiraSupportIssue> getJSMJiraSupportIssues(
@@ -324,6 +408,16 @@ public class JiraService extends BaseService {
 		}
 
 		return new JSONObject(response);
+	}
+
+	private String _getAssetObjectFieldId(JSONArray jsonArray) {
+		if ((jsonArray != null) && (jsonArray.length() > 0)) {
+			JSONObject assetJSONObject = jsonArray.getJSONObject(0);
+
+			return assetJSONObject.getString("id");
+		}
+
+		return null;
 	}
 
 	private JSONObject _getAssetObjectJSONObject(
@@ -591,6 +685,9 @@ public class JiraService extends BaseService {
 
 	@Value("${liferay.one.jira.support.fls.project}")
 	private String _jiraSupportFLSProject;
+
+	@Value("${liferay.one.jira.support.hc.field.organization}")
+	private String _jiraSupportHCFieldOrganization;
 
 	@Value("${liferay.one.jira.support.hc.field.request.type}")
 	private String _jiraSupportHCFieldRequestType;

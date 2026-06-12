@@ -123,7 +123,7 @@ public class BusinessEvent {
 		StringBundler sb = new StringBundler(5);
 
 		sb.append(onePortalURL);
-		sb.append("/my-account/#/");
+		sb.append("/support/business-events/#/");
 		sb.append(_accountExternalReferenceCode);
 		sb.append("/business-events/");
 		sb.append(_businessEventId);

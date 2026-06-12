@@ -53,10 +53,16 @@ cloneReleaseToolEE {
 
 dependencies {
 	implementation group: "com.github.ben-manes.caffeine", name: "caffeine", version: "latest.release"
+	implementation group: "com.google.auth", name: "google-auth-library-credentials", version: "1.31.0"
+	implementation group: "com.google.auth", name: "google-auth-library-oauth2-http", version: "1.31.0"
+	implementation group: "com.google.cloud", name: "google-cloud-core", version: "2.50.0"
+	implementation group: "com.google.cloud", name: "google-cloud-core-http", version: "2.50.0"
 	implementation group: "com.google.cloud", name: "google-cloud-pubsub", version: "1.131.0"
+	implementation group: "com.google.cloud", name: "google-cloud-storage", version: "2.27.0"
 	implementation group: "com.liferay", name: "com.liferay.client.extension.util.spring.boot3", version: "latest.release"
 	implementation group: "com.liferay", name: "com.liferay.headless.admin.user.client", version: "4.0.50"
 	implementation group: "com.liferay", name: "com.liferay.notification.rest.client", version: "latest.release"
+	implementation group: "com.liferay", name: "com.liferay.petra.function", version: "latest.release"
 	implementation group: "com.liferay", name: "com.liferay.petra.io", version: "latest.release"
 	implementation group: "com.liferay", name: "com.liferay.petra.string", version: "latest.release"
 	implementation group: "com.liferay", name: "org.apache.commons.logging", version: "1.2.LIFERAY-PATCHED-2"

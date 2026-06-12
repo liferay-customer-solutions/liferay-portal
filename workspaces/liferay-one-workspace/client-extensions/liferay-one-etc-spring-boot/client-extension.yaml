@@ -13,6 +13,7 @@ liferay-one-etc-spring-boot-oahs:
         -   c_entitlementdefinition.everything.read
         -   c_licensekey.everything.read
         -   c_subscriptionentry.everything
+        -   c_ticketattachment.everything
     type: oAuthApplicationHeadlessServer
 liferay-one-etc-spring-boot-oaua:
     .serviceAddress: localhost:58081
@@ -20,6 +21,7 @@ liferay-one-etc-spring-boot-oaua:
     name: Liferay One Etc Spring Boot OAuth Application User Agent
     scopes:
         -   Liferay.Headless.Admin.User.everything.read
+        -   c_ticketattachment.everything
     type: oAuthApplicationUserAgent
 liferay-one-etc-spring-boot-object-action-commerce-order-item-entitlement-generation:
     name: Liferay One Etc Spring Boot Object Action Commerce Order Item Entitlement Generation
