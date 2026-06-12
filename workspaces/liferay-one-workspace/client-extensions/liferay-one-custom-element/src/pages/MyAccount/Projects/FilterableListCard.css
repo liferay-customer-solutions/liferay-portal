@@ -1,0 +1,190 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2026 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+.list-card {
+	background-color: #fff;
+	border: 1px solid #e7e7ed;
+	border-radius: 12px;
+}
+
+.list-card-toolbar {
+	border-bottom: 1px solid #e7e7ed;
+	gap: 16px;
+	padding: 16px 24px;
+}
+
+.list-card-toolbar .list-card-search {
+	flex: 1 1 auto;
+	margin: 0;
+	max-width: none;
+}
+
+.list-card-filter-button {
+	border: 1px solid #cdced9;
+	white-space: nowrap;
+}
+
+.list-card-filter-dropdown .dropdown-menu {
+	min-width: 280px;
+	padding: 8px;
+}
+
+.list-card-filter-heading {
+	color: #6b6c7e;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+	padding: 8px 12px;
+	text-transform: uppercase;
+}
+
+.list-card-filter-category {
+	background-color: transparent;
+	border: 0;
+	border-radius: 8px;
+	color: #1b2a3b;
+	cursor: pointer;
+	font-weight: 600;
+	padding: 10px 12px;
+	text-align: left;
+	width: 100%;
+}
+
+.list-card-filter-category:hover {
+	background-color: #f1f2f5;
+}
+
+.list-card-filter-panel {
+	padding: 8px;
+}
+
+.list-card-filter-back {
+	align-items: center;
+	background-color: transparent;
+	border: 0;
+	color: #1b2a3b;
+	cursor: pointer;
+	display: flex;
+	gap: 8px;
+	padding: 4px 0;
+}
+
+.list-card-filter-title {
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+}
+
+.list-card-filter-options {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	max-height: 200px;
+	overflow-y: auto;
+}
+
+.list-card-filter-options .custom-control {
+	margin-bottom: 0;
+}
+
+.list-card-filter-apply {
+	margin-top: 12px;
+}
+
+.list-card-table {
+	margin-bottom: 0;
+}
+
+.list-card-table thead th {
+	border-top: 0;
+	color: #6b6c7e;
+	font-weight: 600;
+	padding: 12px 24px;
+	text-transform: none;
+}
+
+.list-card-table tbody td {
+	border-top: 1px solid #f1f2f5;
+	color: #1b2a3b;
+	padding: 16px 24px;
+	vertical-align: middle;
+}
+
+.list-card-table tbody tr {
+	cursor: pointer;
+}
+
+.list-card-table tbody tr:hover {
+	background-color: #f7f8f9;
+}
+
+.list-card-name {
+	align-items: center;
+	display: flex;
+	gap: 12px;
+}
+
+.list-card-icon {
+	align-items: center;
+	border-radius: 8px;
+	color: #fff;
+	display: inline-flex;
+	flex-shrink: 0;
+	font-size: 14px;
+	font-weight: 600;
+	height: 32px;
+	justify-content: center;
+	width: 32px;
+}
+
+.list-card-name-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.list-card-name-label {
+	align-items: center;
+	display: flex;
+	font-weight: 600;
+	gap: 8px;
+}
+
+.list-card-badge {
+	background-color: #e7f0ff;
+	border-radius: 4px;
+	color: #0b5fff;
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 1.4;
+	padding: 1px 8px;
+}
+
+.list-card-subtext {
+	color: #6b6c7e;
+	font-size: 13px;
+}
+
+.list-card-status {
+	align-items: center;
+	display: flex;
+}
+
+.list-card-status-dot {
+	border-radius: 50%;
+	display: inline-block;
+	height: 8px;
+	margin-right: 8px;
+	width: 8px;
+}
+
+.list-card-pagination {
+	border-top: 1px solid #e7e7ed;
+	padding: 8px 24px;
+}
+
+.list-card-pagination .pagination-bar {
+	margin: 0;
+}

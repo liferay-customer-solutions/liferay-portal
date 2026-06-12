@@ -4,8 +4,12 @@
  */
 
 export type Project = {
+	creditLimit: string;
+	creditLimitPercent: number;
 	id: string;
 	name: string;
+	spendingLimit: string;
+	spendingLimitPercent: number;
 	status: string;
 	termRange: string;
 	termType: string;
@@ -13,22 +17,34 @@ export type Project = {
 
 export const PROJECTS: Project[] = [
 	{
+		creditLimit: '$1K / $3.5K',
+		creditLimitPercent: 34,
 		id: 'default',
 		name: 'North America Enterprise',
+		spendingLimit: '$1.7K / $2.5K',
+		spendingLimitPercent: 70,
 		status: 'active',
 		termRange: '08.09.2026 - 01.09.2027',
 		termType: 'annual',
 	},
 	{
+		creditLimit: '$0.5K / $2K',
+		creditLimitPercent: 25,
 		id: 'sandbox',
 		name: 'Sandbox',
+		spendingLimit: '$0.3K / $1K',
+		spendingLimitPercent: 30,
 		status: 'active',
 		termRange: '01.01.2026 - 31.12.2026',
 		termType: 'annual',
 	},
 	{
+		creditLimit: '$0.8K / $2K',
+		creditLimitPercent: 40,
 		id: 'staging',
 		name: 'Staging',
+		spendingLimit: '$1K / $2K',
+		spendingLimitPercent: 50,
 		status: 'active',
 		termRange: '01.03.2026 - 28.02.2027',
 		termType: 'annual',

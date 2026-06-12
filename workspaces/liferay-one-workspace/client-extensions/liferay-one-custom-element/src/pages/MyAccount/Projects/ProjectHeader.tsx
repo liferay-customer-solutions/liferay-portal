@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import ClayLabel from '@clayui/label';
 import {ReactNode} from 'react';
 
 import {useProject} from '../../../context/ProjectContext';
@@ -11,6 +12,13 @@ import {getProject} from './projects';
 
 const LABEL_COLOR = 'var(--color-neutral-7)';
 const VALUE_COLOR = 'var(--color-neutral-10)';
+
+function PercentBadge({percent}: {percent: number}) {
+	const displayType =
+		percent < 50 ? 'success' : percent < 80 ? 'warning' : 'danger';
+
+	return <ClayLabel displayType={displayType}>{percent}%</ClayLabel>;
+}
 
 type SectionProps = {
 	children: ReactNode;
@@ -75,6 +83,32 @@ export default function ProjectHeader() {
 
 			<Section label={i18n.translate('term')}>
 				{project ? i18n.translate(project.termType as 'annual') : '-'}
+			</Section>
+
+			<Section label={i18n.translate('credit-limit')}>
+				<span
+					className="align-items-center d-flex"
+					style={{gap: 'var(--spacer-2)'}}
+				>
+					{project?.creditLimit ?? '-'}
+
+					{project ? (
+						<PercentBadge percent={project.creditLimitPercent} />
+					) : null}
+				</span>
+			</Section>
+
+			<Section label={i18n.translate('spending-limit')}>
+				<span
+					className="align-items-center d-flex"
+					style={{gap: 'var(--spacer-2)'}}
+				>
+					{project?.spendingLimit ?? '-'}
+
+					{project ? (
+						<PercentBadge percent={project.spendingLimitPercent} />
+					) : null}
+				</span>
 			</Section>
 
 			<Section label={i18n.translate('agreements')}>

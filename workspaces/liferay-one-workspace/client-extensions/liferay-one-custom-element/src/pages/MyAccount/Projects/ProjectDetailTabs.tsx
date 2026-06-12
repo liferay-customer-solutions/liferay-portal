@@ -17,16 +17,20 @@ export type DetailTab = {
 };
 
 type ProjectDetailTabsProps = {
+	header?: ReactNode;
 	tabs: DetailTab[];
 };
 
-export default function ProjectDetailTabs({tabs}: ProjectDetailTabsProps) {
+export default function ProjectDetailTabs({
+	header,
+	tabs,
+}: ProjectDetailTabsProps) {
 	const {pathname} = useLocation();
 	const [searchParams, setSearchParams] = useSearchParams();
 
 	const backTo = pathname.split('/').slice(0, -1).join('/');
 
-	const activeTabKey = searchParams.get('tab') ?? tabs[0].key;
+	const activeTabKey = searchParams.get('tab') ?? tabs[0]?.key;
 	const activeTabIndex = Math.max(
 		0,
 		tabs.findIndex((tab) => tab.key === activeTabKey)
@@ -53,6 +57,8 @@ export default function ProjectDetailTabs({tabs}: ProjectDetailTabsProps) {
 				{i18n.translate('back-to-project')}
 			</Link>
 
+			{header}
+
 			<ClayTabs
 				active={activeTabIndex}
 				className="mb-4"
@@ -65,7 +71,7 @@ export default function ProjectDetailTabs({tabs}: ProjectDetailTabsProps) {
 				))}
 			</ClayTabs>
 
-			{tabs[activeTabIndex].content}
+			{tabs[activeTabIndex]?.content}
 		</div>
 	);
 }
