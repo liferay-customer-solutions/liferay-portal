@@ -203,9 +203,9 @@
 						"externalReferenceCode": "LO_NAV_MY_ACCOUNT_PROJECT_AND_ORDERS",
 						"menuItems": [
 							{
-								"externalReferenceCode": "LO_NAV_MY_ACCOUNT_PROJECT",
+								"externalReferenceCode": "LO_NAV_MY_ACCOUNT_PROJECTS",
 								"name_i18n": {
-									"en_US": "Project"
+									"en_US": "Projects"
 								},
 								"type": "url",
 								"url": "/web/one/my-account",
@@ -228,7 +228,7 @@
 						"type": "node"
 					},
 					{
-						"externalReferenceCode": "LO_NAV_MY_ACCOUNT_ACCOUNT_MANAGEMENT",
+						"externalReferenceCode": "LO_NAV_MY_ACCOUNT_ACCOUNT_AND_MEMBERS",
 						"menuItems": [
 							{
 								"externalReferenceCode": "LO_NAV_MY_ACCOUNT_ACCOUNT_DETAILS",
@@ -249,28 +249,19 @@
 								"useNewTab": "false"
 							},
 							{
-								"externalReferenceCode": "LO_NAV_MY_ACCOUNT_PUBLISHED_APPS",
+								"externalReferenceCode": "LO_NAV_MY_ACCOUNT_PUBLISHER_DASHBOARD",
 								"name_i18n": {
-									"en_US": "Published Apps"
+									"en_US": "Publisher Dashboard"
 								},
 								"type": "url",
 								"url": "/web/one/marketplace/publisher-dashboard",
 								"useNewTab": "false"
-							},
-							{
-								"externalReferenceCode": "LO_NAV_MY_ACCOUNT_PUBLISHED_SOLUTIONS",
-								"name_i18n": {
-									"en_US": "Published Solutions"
-								},
-								"type": "url",
-								"url": "/web/one/marketplace/publisher-dashboard/#/solutions",
-								"useNewTab": "false"
 							}
 						],
 						"name_i18n": {
-							"en_US": "Account Management"
+							"en_US": "Account and Members"
 						},
-						"title": "Account Management",
+						"title": "Account and Members",
 						"type": "node"
 					}
 				],
@@ -414,18 +405,6 @@
 						"externalReferenceCode": "LO_NAV_SUPPORT_LEARN_NAVIGATE",
 						"menuItems": [
 							{
-								"externalReferenceCode": "LO_NAV_SUPPORT_LIFERAY_LEARN",
-								"name_i18n": {
-									"en_US": "Liferay Learn",
-									"es_ES": "Liferay Learn",
-									"ja_JP": "Liferay Learn",
-									"pt_BR": "Liferay Learn"
-								},
-								"type": "url",
-								"url": "https://learn.liferay.com/",
-								"useNewTab": true
-							},
-							{
 								"externalReferenceCode": "LO_NAV_SUPPORT_CUSTOMER_PORTAL_HELP",
 								"name_i18n": {
 									"en_US": "Customer Portal Help",
@@ -436,6 +415,18 @@
 								"type": "url",
 								"url": "/web/one/support/customer-portal-help",
 								"useNewTab": false
+							},
+							{
+								"externalReferenceCode": "LO_NAV_SUPPORT_LIFERAY_LEARN",
+								"name_i18n": {
+									"en_US": "Liferay Learn",
+									"es_ES": "Liferay Learn",
+									"ja_JP": "Liferay Learn",
+									"pt_BR": "Liferay Learn"
+								},
+								"type": "url",
+								"url": "https://learn.liferay.com/",
+								"useNewTab": true
 							},
 							{
 								"externalReferenceCode": "LO_NAV_SUPPORT_POLICIES",

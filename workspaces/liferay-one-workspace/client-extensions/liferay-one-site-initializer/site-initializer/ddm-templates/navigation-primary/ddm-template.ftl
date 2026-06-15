@@ -63,7 +63,7 @@
 		<#list navigationMenu.navigationMenuItems as navPrimaryItem>
 			<#assign isActiveSection = activeSectionName?has_content && (navPrimaryItem.name == activeSectionName) />
 
-			<#if (navPrimaryItem.name == "My Account") && !themeDisplay.isSignedIn()>
+			<#if ((navPrimaryItem.name == "My Account") || (navPrimaryItem.name == "Admin")) && !themeDisplay.isSignedIn()>
 			<#elseif (((navPrimaryItem.navigationMenuItems)![])?size > 0)>
 				<div class="adt-nav-item dropdown dropdown-action w-100<#if isActiveSection> selected</#if>">
 					<button
@@ -135,7 +135,7 @@
 								preheaderText = getCustomFieldData(navTertiaryItem, "Menu Item Preheader")
 							/>
 
-							<#if !(((navTertiaryItem.name == "Published Apps") || (navTertiaryItem.name == "Published Solutions")) && !hasMarketplacePublisherRole)>
+							<#if !((navTertiaryItem.name == "Publisher Dashboard") && !hasMarketplacePublisherRole)>
 							<li class="adt-submenu-item-content ${menuItemType?lower_case}-type grid-column-span-${childColumns}">
 								<a class="adt-submenu-item-link" href="${(navTertiaryItem.typeSettings.url)!""}" tabindex="4">
 									<#if stringUtil.equals(menuItemType, "Image") && imageURL?has_content>

@@ -1059,8 +1059,10 @@ nav.public-sites-navigation .nav-items-wrapper .adt-nav-item .adt-submenu {
 }
 
 .adt-nav-item .adt-submenu-item-content .adt-submenu-item-link {
+	align-items: flex-start;
 	color: var(--color-neutral-10);
 	display: flex;
+	gap: 0.5rem;
 	transition:
 		box-shadow 0.1s linear,
 		background-color 0.1s linear;
@@ -1100,15 +1102,14 @@ nav.public-sites-navigation .nav-items-wrapper .adt-nav-item .adt-submenu {
 	.adt-submenu-item-description {
 	color: var(--color-neutral-8);
 	font-weight: 400;
-	margin-top: 0.5rem;
+	margin-top: 0.25rem;
 	padding-right: 0.5rem;
 }
 
 .adt-nav-item .adt-submenu-item-image {
-	border-radius: var(--border-radius-xs);
-	height: 2rem;
-	margin: 0.6rem 1rem 0rem 0.25rem;
-	width: 2rem;
+	height: 1.25rem;
+	margin-top: 0.125rem;
+	width: 1.25rem;
 }
 
 .adt-nav-item .adt-submenu-header-image {
@@ -1979,7 +1980,7 @@ nav.public-sites-navigation .liferay-one-search-form {
 }
 
 nav.public-sites-navigation .adt-nav-item .adt-submenu-item-content .adt-submenu-item-link {
-	align-items: center;
+	align-items: flex-start;
 }
 
 nav.public-sites-navigation .primary-nav-right .account-selection-dropdown {

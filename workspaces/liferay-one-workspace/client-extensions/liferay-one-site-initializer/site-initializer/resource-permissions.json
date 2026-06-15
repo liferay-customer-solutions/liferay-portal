@@ -242,6 +242,24 @@
 	},
 	{
 		"actionIds": [
+			"VIEW"
+		],
+		"primKey": "0",
+		"resourceName": "com.liferay.expando.kernel.model.ExpandoColumn",
+		"roleName": "Guest",
+		"scope": "1"
+	},
+	{
+		"actionIds": [
+			"VIEW"
+		],
+		"primKey": "0",
+		"resourceName": "com.liferay.expando.kernel.model.ExpandoColumn",
+		"roleName": "User",
+		"scope": "1"
+	},
+	{
+		"actionIds": [
 			"ADD_ARTICLE",
 			"ADD_FOLDER",
 			"VIEW"
