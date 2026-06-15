@@ -3633,6 +3633,24 @@
 				{
 					"DBType": "String",
 					"businessType": "Text",
+					"externalReferenceCode": "C_PUBLISHER_DETAILS_FULL_NAME",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Full Name"
+					},
+					"name": "fullName",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
 					"externalReferenceCode": "C_PUBLISHER_DETAILS_LOCATION",
 					"indexed": true,
 					"indexedAsKeyword": false,
@@ -3641,6 +3659,60 @@
 						"en_US": "Location"
 					},
 					"name": "location",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_PUBLISHER_DETAILS_PAYPAL_ACCOUNT",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Paypal Account"
+					},
+					"name": "paypalAccount",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_PUBLISHER_DETAILS_PHONE",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Phone"
+					},
+					"name": "phone",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_PUBLISHER_DETAILS_PRIVATE_EMAIL",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Private Email"
+					},
+					"name": "privateEmail",
 					"objectFieldSettings": [
 					],
 					"required": false,
@@ -3689,6 +3761,42 @@
 					"type": "Clob"
 				},
 				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_PUBLISHER_DETAILS_ROLE",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Role"
+					},
+					"name": "role",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_PUBLISHER_DETAILS_SALES_EMAIL",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Sales Email"
+					},
+					"name": "salesEmail",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
 					"DBType": "Boolean",
 					"businessType": "Boolean",
 					"externalReferenceCode": "C_PUBLISHER_DETAILS_SHOW_CONTACT_FORM",
@@ -3723,6 +3831,24 @@
 					"state": false,
 					"system": false,
 					"type": "Boolean"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_PUBLISHER_DETAILS_SUPPORT_EMAIL",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Support Email"
+					},
+					"name": "supportEmail",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
 				},
 				{
 					"DBType": "Clob",

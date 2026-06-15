@@ -463,6 +463,98 @@ export const filterSchema: FilterSchemas = {
 		],
 		name: 'financePayments',
 	},
+	publisherApps: {
+		fields: [
+			overrides(baseFilters.type, {
+				label: i18n.translate('app-type'),
+				name: 'specificationValues|appType',
+				operator: 'lambda',
+				options: [
+					{
+						label: i18n.translate('client-extension'),
+						value: ProductType.CLIENT_EXTENSION,
+					},
+					{
+						label: i18n.translate('cloud-app'),
+						value: ProductType.CLOUD,
+					},
+					{
+						label: i18n.translate('composite-app'),
+						value: ProductType.COMPOSITE_APP,
+					},
+					{
+						label: i18n.translate('dxp-app'),
+						value: ProductType.DXP,
+					},
+					{
+						label: i18n.translate('low-code-configuration'),
+						value: ProductType.LOW_CODE_CONFIGURATION,
+					},
+					{
+						label: i18n.translate('other'),
+						value: ProductType.OTHER,
+					},
+				],
+				type: 'checkbox',
+			}),
+			overrides(baseFilters.version, {
+				label: i18n.translate('liferay-version'),
+				name: 'specificationValues|liferayVersion',
+				operator: 'lambda',
+				resource: `o/headless-admin-list-type/v1.0/list-type-definitions/by-external-reference-code/${LIFERAY_VERSION_PICKLIST}`,
+				transformData: (item) =>
+					item.listTypeEntries.map((entry: any) => ({
+						label: entry.name,
+						value: entry.name,
+					})),
+				type: 'multiselect',
+			}),
+			overrides(baseFilters.status, {
+				name: 'statusCode',
+				options: [
+					{
+						label: i18n.translate('approved'),
+						value: `${ProductWorkflowStatusCode.APPROVED}`,
+					},
+					{
+						label: i18n.translate('draft'),
+						value: `${ProductWorkflowStatusCode.DRAFT}`,
+					},
+					{
+						label: i18n.translate('pending'),
+						value: `${ProductWorkflowStatusCode.PENDING}`,
+					},
+				],
+				removeQuoteMark: true,
+				type: 'select',
+			}),
+		],
+		name: 'publisherApps',
+	},
+	publisherSolutions: {
+		fields: [
+			overrides(baseFilters.status, {
+				name: 'statusCode',
+				options: [
+					{
+						label: i18n.translate('approved'),
+						value: `${ProductWorkflowStatusCode.APPROVED}`,
+					},
+					{
+						label: i18n.translate('draft'),
+						value: `${ProductWorkflowStatusCode.DRAFT}`,
+					},
+					{
+						label: i18n.translate('pending'),
+						value: `${ProductWorkflowStatusCode.PENDING}`,
+					},
+				],
+				removeQuoteMark: true,
+				type: 'select',
+			}),
+		],
+		name: 'publisherSolutions',
+	},
 };
 
 export type FilterSchemaOption = keyof typeof filterSchema;

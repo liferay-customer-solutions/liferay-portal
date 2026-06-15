@@ -254,7 +254,7 @@
 									"en_US": "Publisher Dashboard"
 								},
 								"type": "url",
-								"url": "/web/one/marketplace/publisher-dashboard",
+								"url": "/web/one/my-account/publisher-dashboard",
 								"useNewTab": "false"
 							}
 						],

@@ -201,7 +201,9 @@ export default {
 	'comment': 'Comment',
 	'comments': 'Comments',
 	'commerce': 'Commerce',
+	'company-address': 'Company Address',
 	'company-description': 'Company Description',
+	'company-email': 'Company Email',
 	'company-name': 'Company Name',
 	'company-profile': 'Company Profile',
 	'compatible-offering': 'Compatible Offering',
@@ -323,6 +325,7 @@ export default {
 	'edit': 'Edit',
 	'edit-details': 'Edit Details',
 	'edit-event': 'Edit Event',
+	'edit-publisher-profile': 'Edit Publisher Profile',
 	'elasticsearch': 'Elasticsearch',
 	'email': 'Email',
 	'email-address': 'Email Address',
@@ -586,6 +589,7 @@ export default {
 	'manage-your-account-and-organization-details':
 		'Manage your account and organization details.',
 	'manage-your-current-trials': 'Manage your current trials',
+	'manage-your-data-and-contacts': 'Manage your data and contacts',
 	'manage-your-products-purchased-from-the-marketplace':
 		'Manage your products purchased from the Marketplace.',
 	'manage-your-teams-trial': "Manage your team's trial",
@@ -647,6 +651,8 @@ export default {
 	'no-orders-yet': 'No Orders Yet',
 	'no-products-yet': 'No Products Yet',
 	'no-projects-available-for-x': 'No projects available for {0}',
+	'no-publisher-catalog-found': 'No Publisher Catalog Found',
+	'no-publisher-profile-to-update': 'There is no publisher profile to update',
 	'no-results-found': 'No Results Found',
 	'no-trials-yet': 'No Trials Yet',
 	'no-x': 'No {0}',
@@ -749,6 +755,7 @@ export default {
 	'primary': 'Primary',
 	'primary-contact': 'Primary Contact',
 	'privacy-policy': 'Privacy Policy',
+	'private-information': 'Private Information',
 	'processing': 'Processing',
 	'product': 'Product',
 	'product-details': 'Product Details',
@@ -772,6 +779,7 @@ export default {
 	'provided-by': 'Provided By',
 	'provisioning': 'Provisioning',
 	'provisioning-details': 'Provisioning Details',
+	'public-information': 'Public Information',
 	'publish-apps-and-they-will-show-up-here':
 		'Publish apps and they will show up here.',
 	'publish-apps-to-the-liferay-marketplace':
@@ -779,6 +787,7 @@ export default {
 	'publish-new-app': 'Publish New App',
 	'published-apps': 'Published Apps',
 	'published-at': 'Published At',
+	'published-solutions': 'Published Solutions',
 	'publisher': 'Publisher',
 	'publisher-account-request': 'Publisher Account Request',
 	'publisher-dashboard': 'Publisher Dashboard',
@@ -786,6 +795,7 @@ export default {
 	'publisher-id': 'Publisher ID',
 	'publisher-name': 'Publisher Name',
 	'publisher-payout': 'Publisher Payout',
+	'publisher-profile': 'Publisher Profile',
 	'publisher-requests': 'Publisher Requests',
 	'publisher-type': 'Publisher Type',
 	'publisher-website': 'Publisher Website',
@@ -816,6 +826,7 @@ export default {
 	'recent-trials': 'Recent Trials',
 	'recently-published': 'Recently Published',
 	'record-actual-event-date': 'Record Actual Event Date',
+	'reimbursement': 'Reimbursement',
 	'reject-request': 'Reject Request',
 	'remove': 'Remove',
 	'remove-all-roles': 'Remove all roles',
@@ -848,6 +859,7 @@ export default {
 	'saas-environments': 'SaaS Environments',
 	'saas-trials': 'SaaS Trials',
 	'sale-type': 'Sale Type',
+	'sales-email': 'Sales Email',
 	'save': 'Save',
 	'save-as-a-draft-exit': 'Save as a Draft & Exit',
 	'save-as-draft': 'Save as Draft',
@@ -1063,6 +1075,7 @@ export default {
 	'unable-to-download-your-license-file-please-try-again-and-or-contact-support-via-the-manage-menu-on-the-dashboard':
 		'Unable to download your license file.  Please try again and/or contact support via the manage menu on the dashboard.',
 	'unable-to-remove-roles': 'Unable to remove roles',
+	'unable-to-update-publisher-profile': 'Unable to update publisher profile',
 	'under-review': 'Under Review',
 	'uninstall': 'Uninstall',
 	'unlock-exclusive-benefits-with-a-business-account':
@@ -1132,6 +1145,8 @@ export default {
 	'workspace-name': 'Workspace Name',
 	'workspace-owner-email': 'Workspace Owner Email',
 	'workspace-timezone': 'Workspace Timezone',
+	'x-apps-available': '{0} apps available',
+	'x-apps-x-solutions': '{0} Apps · {1} Solutions',
 	'x-available-for-you': `{0} available for <b>${Liferay.ThemeDisplay.getUserEmailAddress()}</b> (you)`,
 	'x-in-use': '{0} in use',
 	'x-is-required': '{0} is required',
@@ -1144,6 +1159,7 @@ export default {
 	'x-saved-as-a-draft-successfully':
 		'<b>{0}</b> saved as a <b>draft</b> successfully',
 	'x-selected': 'X Selected',
+	'x-solutions-available': '{0} solutions available',
 	'x-tickets': '{0} Tickets',
 	'x-was-uploaded-successfully': '{0} was uploaded successfully.',
 	'x-will-be-deleted-and-this-action-cant-be-undone-are-you-sure-you-want-to-delete-it':

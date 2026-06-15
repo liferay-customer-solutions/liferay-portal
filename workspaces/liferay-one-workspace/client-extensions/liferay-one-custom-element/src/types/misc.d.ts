@@ -68,6 +68,29 @@ type ListTypeDefinition = {
 	name: string;
 };
 
+type PublisherDetailsEntry = {
+	catalogId?: number;
+	dateCreated?: string;
+	dateModified?: string;
+	description?: string;
+	email?: string;
+	externalReferenceCode?: string;
+	fullName?: string;
+	id?: number;
+	location?: string;
+	paypalAccount?: string;
+	phone?: string;
+	privateEmail?: string;
+	publisherName?: string;
+	publisherProfileImageURL?: string;
+	role?: string;
+	salesEmail?: string;
+	showContactForm?: boolean;
+	showOnHomePage?: boolean;
+	supportEmail?: string;
+	websiteURL?: string;
+};
+
 type PublisherRequestInfo = {
 	creator: {name: string};
 	dateCreated: string;
