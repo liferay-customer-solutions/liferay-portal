@@ -6,10 +6,15 @@
 import {useParams} from 'react-router-dom';
 
 import i18n from '../../../i18n';
+import ActivationKeysCard from './ActivationKeysCard';
 import DetailHeader from './DetailHeader';
 import DetailsCard from './DetailsCard';
+import DownloadListCard from './DownloadListCard';
+import InvoicesCard from './InvoicesCard';
+import OrdersCard from './OrdersCard';
 import ProjectDetailTabs, {DetailTab} from './ProjectDetailTabs';
 import {getProduct} from './products';
+import {BUNDLES} from './tabData';
 
 export default function ProductDetails() {
 	const {productId} = useParams();
@@ -59,11 +64,34 @@ export default function ProductDetails() {
 
 	const tabs: DetailTab[] = [
 		{content: detailsContent, key: 'details', label: 'details'},
-		{content: null, key: 'activation', label: 'activation'},
-		{content: null, key: 'download', label: 'download'},
-		{content: null, key: 'orders', label: 'orders'},
-		{content: null, key: 'invoices', label: 'invoices'},
 	];
+
+	if (product.type !== 'add-on') {
+		tabs.push(
+			{
+				content: <ActivationKeysCard />,
+				key: 'activation',
+				label: 'activation',
+			},
+			{
+				content: (
+					<DownloadListCard
+						emptyLabel="no-bundles-yet"
+						heading="bundle-name"
+						items={BUNDLES}
+						title="bundle-list"
+					/>
+				),
+				key: 'download',
+				label: 'download',
+			}
+		);
+	}
+
+	tabs.push(
+		{content: <OrdersCard />, key: 'orders', label: 'orders'},
+		{content: <InvoicesCard />, key: 'invoices', label: 'invoices'}
+	);
 
 	return (
 		<ProjectDetailTabs

@@ -6,7 +6,7 @@
 import {ReactNode} from 'react';
 
 import {DetailedCard} from '../../../components/DetailedCard/DetailedCard';
-import i18n from '../../../i18n';
+import i18n, {Word} from '../../../i18n';
 
 export type DetailsRow = {
 	label: string;
@@ -14,16 +14,22 @@ export type DetailsRow = {
 };
 
 type DetailsCardProps = {
+	icon?: string;
 	rows: DetailsRow[];
+	title?: Word;
 };
 
-export default function DetailsCard({rows}: DetailsCardProps) {
+export default function DetailsCard({
+	icon = 'catalog',
+	rows,
+	title = 'details',
+}: DetailsCardProps) {
 	return (
 		<DetailedCard
-			cardIconAltText={i18n.translate('details')}
-			cardTitle={i18n.translate('details')}
+			cardIconAltText={i18n.translate(title)}
+			cardTitle={i18n.translate(title)}
 			className="mt-3"
-			clayIcon="catalog"
+			clayIcon={icon}
 		>
 			<div
 				className="d-flex flex-column mt-3"

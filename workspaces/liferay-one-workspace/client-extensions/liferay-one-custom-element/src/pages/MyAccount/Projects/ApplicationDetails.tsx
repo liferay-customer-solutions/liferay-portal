@@ -6,10 +6,14 @@
 import {useParams} from 'react-router-dom';
 
 import i18n, {Word} from '../../../i18n';
+import ActivationKeysCard from './ActivationKeysCard';
 import DetailHeader from './DetailHeader';
 import DetailsCard from './DetailsCard';
+import DownloadListCard from './DownloadListCard';
+import HelpSupportCard from './HelpSupportCard';
 import ProjectDetailTabs, {DetailTab} from './ProjectDetailTabs';
 import {getApplication} from './applications';
+import {VERSIONS} from './tabData';
 
 export default function ApplicationDetails() {
 	const {applicationId} = useParams();
@@ -59,10 +63,25 @@ export default function ApplicationDetails() {
 
 	const tabs: DetailTab[] = [
 		{content: detailsContent, key: 'details', label: 'details'},
-		{content: null, key: 'activation', label: 'activation'},
-		{content: null, key: 'download', label: 'download'},
 		{
-			content: null,
+			content: <ActivationKeysCard />,
+			key: 'activation',
+			label: 'activation',
+		},
+		{
+			content: (
+				<DownloadListCard
+					emptyLabel="no-versions-yet"
+					heading="supported-version"
+					items={VERSIONS}
+					title="versions-list"
+				/>
+			),
+			key: 'download',
+			label: 'download',
+		},
+		{
+			content: <HelpSupportCard application={application} />,
 			key: 'help-and-support',
 			label: 'help-and-support',
 		},

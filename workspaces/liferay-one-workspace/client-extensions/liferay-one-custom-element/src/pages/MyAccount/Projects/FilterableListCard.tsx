@@ -34,6 +34,7 @@ export type ListColumn<T> = {
 };
 
 type FilterableListCardProps<T> = {
+	action?: ReactNode;
 	columns: ListColumn<T>[];
 	defaultPageSize?: number;
 	emptyLabel: Word;
@@ -42,6 +43,7 @@ type FilterableListCardProps<T> = {
 	matchesSearch: (item: T, search: string) => boolean;
 	onItemClick: (item: T) => void;
 	rowKey: (item: T) => string;
+	title?: Word;
 };
 
 type FilterSubPanelProps = {
@@ -102,6 +104,7 @@ function FilterSubPanel({
 }
 
 export default function FilterableListCard<T>({
+	action,
 	columns,
 	defaultPageSize = PAGE_SIZE_OPTIONS[0],
 	emptyLabel,
@@ -110,6 +113,7 @@ export default function FilterableListCard<T>({
 	matchesSearch,
 	onItemClick,
 	rowKey,
+	title,
 }: FilterableListCardProps<T>) {
 	const [keywords, setKeywords] = useState('');
 	const [page, setPage] = useState(1);
@@ -153,6 +157,10 @@ export default function FilterableListCard<T>({
 
 	return (
 		<div className="list-card mt-3">
+			{title && (
+				<div className="list-card-header">{translate(title)}</div>
+			)}
+
 			<div className="align-items-center d-flex list-card-toolbar">
 				<ClayDropDown
 					active={filterActive}
@@ -202,7 +210,9 @@ export default function FilterableListCard<T>({
 								<button
 									className="align-items-center d-flex justify-content-between list-card-filter-category"
 									key={filter.key}
-									onClick={() => setActiveFilterKey(filter.key)}
+									onClick={() =>
+										setActiveFilterKey(filter.key)
+									}
 									type="button"
 								>
 									<span>{translate(filter.label)}</span>
@@ -235,6 +245,10 @@ export default function FilterableListCard<T>({
 						</ClayInput.GroupInsetItem>
 					</ClayInput.GroupItem>
 				</ClayInput.Group>
+
+				{action && (
+					<div className="list-card-toolbar-action">{action}</div>
+				)}
 			</div>
 
 			{paginatedItems.length ? (
@@ -243,7 +257,10 @@ export default function FilterableListCard<T>({
 						<ClayTable.Head>
 							<ClayTable.Row>
 								{columns.map((column) => (
-									<ClayTable.Cell headingCell key={column.key}>
+									<ClayTable.Cell
+										headingCell
+										key={column.key}
+									>
 										{column.heading
 											? translate(column.heading)
 											: null}
@@ -276,8 +293,9 @@ export default function FilterableListCard<T>({
 								label,
 							}))}
 							labels={{
-								paginationResults:
-									translate('showing-x-to-x-of-x'),
+								paginationResults: translate(
+									'showing-x-to-x-of-x'
+								),
 								perPageItems: translate('x-items'),
 								selectPerPageItems: translate('x-items'),
 							}}

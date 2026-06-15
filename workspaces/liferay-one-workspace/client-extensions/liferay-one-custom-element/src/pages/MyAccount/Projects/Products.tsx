@@ -10,10 +10,7 @@ import {useNavigate} from 'react-router-dom';
 
 import Page from '../../../components/Page';
 import i18n, {Word, translate} from '../../../i18n';
-import FilterableListCard, {
-	ListColumn,
-	ListFilter,
-} from './FilterableListCard';
+import FilterableListCard, {ListColumn, ListFilter} from './FilterableListCard';
 import {PRODUCTS, Product} from './products';
 
 const STATUS_DOT_COLORS: {[key: string]: string} = {

@@ -9,10 +9,22 @@
 	border-radius: 12px;
 }
 
+.list-card-header {
+	color: #1b2a3b;
+	font-size: 18px;
+	font-weight: 600;
+	padding: 20px 24px 0;
+}
+
 .list-card-toolbar {
 	border-bottom: 1px solid #e7e7ed;
 	gap: 16px;
 	padding: 16px 24px;
+}
+
+.list-card-toolbar-action {
+	flex-shrink: 0;
+	margin-left: auto;
 }
 
 .list-card-toolbar .list-card-search {

@@ -272,72 +272,6 @@
 				"type": "node"
 			},
 			{
-				"externalReferenceCode": "LO_NAV_MARKETPLACE",
-				"menuItems": [
-					{
-						"externalReferenceCode": "LO_NAV_MARKETPLACE_LANDING_PAGE",
-						"menuItems": [
-							{
-								"externalReferenceCode": "LO_NAV_MARKETPLACE_OVERVIEW",
-								"name_i18n": {
-									"en_US": "Marketplace Overview"
-								},
-								"type": "url",
-								"url": "/web/one/marketplace",
-								"useNewTab": false
-							}
-						],
-						"name_i18n": {
-							"en_US": "Landing Page"
-						},
-						"title": "Landing Page",
-						"type": "node"
-					},
-					{
-						"externalReferenceCode": "LO_NAV_MARKETPLACE_CATALOGS",
-						"menuItems": [
-							{
-								"externalReferenceCode": "LO_NAV_MARKETPLACE_PRODUCTS_CATALOG",
-								"name_i18n": {
-									"en_US": "Products Catalog"
-								},
-								"type": "url",
-								"url": "/web/one/marketplace/products",
-								"useNewTab": false
-							},
-							{
-								"externalReferenceCode": "LO_NAV_MARKETPLACE_APPLICATIONS_CATALOG",
-								"name_i18n": {
-									"en_US": "Applications Catalog"
-								},
-								"type": "url",
-								"url": "/web/one/marketplace/applications",
-								"useNewTab": false
-							},
-							{
-								"externalReferenceCode": "LO_NAV_MARKETPLACE_SOLUTIONS_CATALOG",
-								"name_i18n": {
-									"en_US": "Solutions Catalog"
-								},
-								"type": "url",
-								"url": "/web/one/marketplace/solutions",
-								"useNewTab": false
-							}
-						],
-						"name_i18n": {
-							"en_US": "Catalogs"
-						},
-						"title": "Catalogs",
-						"type": "node"
-					}
-				],
-				"name_i18n": {
-					"en_US": "Marketplace"
-				},
-				"title": "Marketplace",
-				"type": "node"
-			},
-			{
 				"externalReferenceCode": "LO_NAV_SUPPORT",
 				"menuItems": [
 					{
@@ -507,6 +441,72 @@
 					"pt_BR": "Suporte"
 				},
 				"title": "Support",
+				"type": "node"
+			},
+			{
+				"externalReferenceCode": "LO_NAV_MARKETPLACE",
+				"menuItems": [
+					{
+						"externalReferenceCode": "LO_NAV_MARKETPLACE_LANDING_PAGE",
+						"menuItems": [
+							{
+								"externalReferenceCode": "LO_NAV_MARKETPLACE_OVERVIEW",
+								"name_i18n": {
+									"en_US": "Marketplace Overview"
+								},
+								"type": "url",
+								"url": "/web/one/marketplace",
+								"useNewTab": false
+							}
+						],
+						"name_i18n": {
+							"en_US": "Landing Page"
+						},
+						"title": "Landing Page",
+						"type": "node"
+					},
+					{
+						"externalReferenceCode": "LO_NAV_MARKETPLACE_CATALOGS",
+						"menuItems": [
+							{
+								"externalReferenceCode": "LO_NAV_MARKETPLACE_PRODUCTS_CATALOG",
+								"name_i18n": {
+									"en_US": "Products Catalog"
+								},
+								"type": "url",
+								"url": "/web/one/marketplace/products",
+								"useNewTab": false
+							},
+							{
+								"externalReferenceCode": "LO_NAV_MARKETPLACE_APPLICATIONS_CATALOG",
+								"name_i18n": {
+									"en_US": "Applications Catalog"
+								},
+								"type": "url",
+								"url": "/web/one/marketplace/applications",
+								"useNewTab": false
+							},
+							{
+								"externalReferenceCode": "LO_NAV_MARKETPLACE_SOLUTIONS_CATALOG",
+								"name_i18n": {
+									"en_US": "Solutions Catalog"
+								},
+								"type": "url",
+								"url": "/web/one/marketplace/solutions",
+								"useNewTab": false
+							}
+						],
+						"name_i18n": {
+							"en_US": "Catalogs"
+						},
+						"title": "Catalogs",
+						"type": "node"
+					}
+				],
+				"name_i18n": {
+					"en_US": "Marketplace"
+				},
+				"title": "Marketplace",
 				"type": "node"
 			},
 			{

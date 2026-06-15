@@ -40,7 +40,9 @@ export default function PublisherDashboardBreadcrumb() {
 							style={{gap: 'var(--spacer-2)'}}
 						>
 							{isLast ? (
-								<span style={{color: TEXT_COLOR, fontWeight: 600}}>
+								<span
+									style={{color: TEXT_COLOR, fontWeight: 600}}
+								>
 									{text}
 								</span>
 							) : (

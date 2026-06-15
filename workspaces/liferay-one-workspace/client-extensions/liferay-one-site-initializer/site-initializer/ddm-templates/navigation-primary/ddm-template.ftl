@@ -63,7 +63,7 @@
 		<#list navigationMenu.navigationMenuItems as navPrimaryItem>
 			<#assign isActiveSection = activeSectionName?has_content && (navPrimaryItem.name == activeSectionName) />
 
-			<#if ((navPrimaryItem.name == "My Account") || (navPrimaryItem.name == "Admin")) && !themeDisplay.isSignedIn()>
+			<#if ((navPrimaryItem.name == "My Account") || stringUtil.equals(navPrimaryItem.name, "Admin")) && !themeDisplay.isSignedIn()>
 			<#elseif (((navPrimaryItem.navigationMenuItems)![])?size > 0)>
 				<div class="adt-nav-item dropdown dropdown-action w-100<#if isActiveSection> selected</#if>">
 					<button
