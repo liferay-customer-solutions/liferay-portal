@@ -4486,6 +4486,82 @@
 			},
 			"system": false,
 			"titleObjectFieldName": "projectId"
+		},
+		{
+			"active": true,
+			"className": "com.liferay.object.model.ObjectDefinition#C_USER_PROJECT_ASSOCIATION",
+			"enableCategorization": false,
+			"enableComments": false,
+			"enableObjectEntryHistory": false,
+			"externalReferenceCode": "C_USER_PROJECT_ASSOCIATION",
+			"label": {
+				"en_US": "User Project Association"
+			},
+			"name": "UserProjectAssociation",
+			"objectFields": [
+				{
+					"DBType": "Long",
+					"businessType": "LongInteger",
+					"externalReferenceCode": "C_USER_PROJECT_ASSOCIATION_ROLE_ID",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Role ID"
+					},
+					"name": "roleId",
+					"objectFieldSettings": [
+					],
+					"required": true,
+					"state": false,
+					"system": false,
+					"type": "Long"
+				}
+			],
+			"objectFolderExternalReferenceCode": "C_LIFERAY_ONE_FOLDER",
+			"objectRelationships": [
+			],
+			"objectValidationRules": [
+			],
+			"objectViews": [
+				{
+					"defaultObjectView": true,
+					"name": {
+						"en_US": "Default View"
+					},
+					"objectDefinitionExternalReferenceCode": "C_USER_PROJECT_ASSOCIATION",
+					"objectViewColumns": [
+						{
+							"label": {
+								"en_US": "ERC"
+							},
+							"objectFieldName": "externalReferenceCode",
+							"priority": 0
+						},
+						{
+							"label": {
+								"en_US": "Role ID"
+							},
+							"objectFieldName": "roleId",
+							"priority": 1
+						}
+					]
+				}
+			],
+			"panelCategoryKey": "applications_menu.applications.content",
+			"pluralLabel": {
+				"en_US": "User Project Associations"
+			},
+			"portlet": true,
+			"restContextPath": "/o/c/userprojectassociations",
+			"scope": "company",
+			"status": {
+				"code": 0,
+				"label": "approved",
+				"label_i18n": "Approved"
+			},
+			"system": false,
+			"titleObjectFieldName": "roleId"
 		}
 	]
 }

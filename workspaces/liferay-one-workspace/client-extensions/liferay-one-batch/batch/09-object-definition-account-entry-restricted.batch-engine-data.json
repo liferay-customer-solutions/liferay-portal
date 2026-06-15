@@ -34,6 +34,11 @@
 			"accountEntryRestricted": true,
 			"accountEntryRestrictedObjectFieldName": "r_accountToTrialExtensionRequest_accountEntryId",
 			"externalReferenceCode": "C_TRIAL_EXTENSION_REQUEST"
+		},
+		{
+			"accountEntryRestricted": true,
+			"accountEntryRestrictedObjectFieldName": "r_accountEntryToUserProjectAssociation_accountEntryId",
+			"externalReferenceCode": "C_USER_PROJECT_ASSOCIATION"
 		}
 	]
 }

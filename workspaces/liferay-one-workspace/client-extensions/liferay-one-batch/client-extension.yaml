@@ -12,6 +12,7 @@ liferay-one-batch-oahs:
     scopes:
         -   c_project.everything
         -   c_property.everything
+        -   c_userprojectassociation.everything
         -   Liferay.Headless.Admin.List.Type.everything
         -   Liferay.Headless.Admin.User.everything
         -   Liferay.Headless.Batch.Engine.everything
