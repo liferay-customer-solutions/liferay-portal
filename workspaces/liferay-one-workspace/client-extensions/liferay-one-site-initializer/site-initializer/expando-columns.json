@@ -418,6 +418,19 @@
 	{
 		"dataType": 15,
 		"modelResource": "com.liferay.commerce.model.CommerceOrderItem",
+		"name": "nonProductionSubscriptionUuid",
+		"properties": {
+			"hidden": false,
+			"indexType": 2,
+			"localizeField": false,
+			"localizeFieldName": true,
+			"secret": false,
+			"visibleWithUpdatePermission": false
+		}
+	},
+	{
+		"dataType": 15,
+		"modelResource": "com.liferay.commerce.model.CommerceOrderItem",
 		"name": "opportunitySoldBy",
 		"properties": {
 			"hidden": false,
@@ -432,6 +445,19 @@
 		"dataType": 15,
 		"modelResource": "com.liferay.commerce.model.CommerceOrderItem",
 		"name": "orderType",
+		"properties": {
+			"hidden": false,
+			"indexType": 2,
+			"localizeField": false,
+			"localizeFieldName": true,
+			"secret": false,
+			"visibleWithUpdatePermission": false
+		}
+	},
+	{
+		"dataType": 15,
+		"modelResource": "com.liferay.commerce.model.CommerceOrderItem",
+		"name": "productionSubscriptionUuid",
 		"properties": {
 			"hidden": false,
 			"indexType": 2,
