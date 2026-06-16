@@ -75,21 +75,6 @@
 		"type": 6
 	},
 	{
-		"externalReferenceCode": "ROLE_LIFERAY_ADVOCACY_SPECIALIST",
-		"name": "Liferay Advocacy Specialist",
-		"type": 6
-	},
-	{
-		"externalReferenceCode": "ROLE_LIFERAY_CUSTOMER_SUCCESS",
-		"name": "Liferay Customer Success",
-		"type": 6
-	},
-	{
-		"externalReferenceCode": "ROLE_LIFERAY_MANAGED_SERVICES",
-		"name": "Liferay Managed Services",
-		"type": 6
-	},
-	{
 		"externalReferenceCode": "ROLE_LIFERAY_SALES",
 		"name": "Liferay Sales",
 		"type": 6
