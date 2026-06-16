@@ -29,13 +29,17 @@ Check `git diff --name-only` and pick every touched `client-extensions/liferay-o
 ```bash
 # Single
 ./gradlew :client-extensions:<name>:clean :client-extensions:<name>:deploy \
-    -Ddeploy.docker.container.id=$(docker compose -f ~/repos/lfris-www/docker-compose.yml ps -q liferay)
+    -Ddeploy.docker.container.id=$(docker ps --filter "name=^liferay$" --quiet)
 
 # All
 ./gradlew clean deploy \
-    -Ddeploy.docker.container.id=$(docker compose -f ~/repos/lfris-www/docker-compose.yml ps -q liferay)
+    -Ddeploy.docker.container.id=$(docker ps --filter "name=^liferay$" --quiet)
 ```
 
-Deploy also rebuilds the `liferay-one-etc-spring-boot:local` image and recreates the `liferay-one-etc-spring-boot` container, so the deployed `liferay-one-etc-spring-boot` client extension picks up code changes.
+Deploy also rebuilds the `liferay-one-etc-spring-boot:latest` image and recreates the `liferay-one-etc-spring-boot` container, so the deployed `liferay-one-etc-spring-boot` client extension picks up code changes. `buildDockerImage` regenerates `build/local.env` as it builds; if a previous `gradlew clean` removed it, regenerate it before recreating the container:
+
+```bash
+[ -f client-extensions/liferay-one-etc-spring-boot/build/local.env ] || ./gradlew :client-extensions:liferay-one-etc-spring-boot:buildDockerImage --rerun-tasks
+```
 
 Report: what was deployed, Gradle result, and log evidence of pickup.

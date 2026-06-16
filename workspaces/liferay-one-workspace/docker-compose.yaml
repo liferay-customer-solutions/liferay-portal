@@ -68,7 +68,7 @@ services:
             start_period: 60s
             test: ["CMD", "curl", "--fail", "--silent", "http://localhost:58081/ready"]
             timeout: 5s
-        image: liferay-one-etc-spring-boot:local
+        image: liferay-one-etc-spring-boot:latest
         network_mode: service:liferay
         volumes:
             -   liferay_routes:/opt/liferay/routes:ro

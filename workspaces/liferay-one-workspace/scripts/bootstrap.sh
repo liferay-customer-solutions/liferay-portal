@@ -33,9 +33,6 @@ function main {
 	echo "Tagging ${workspace_name}-liferay:${version_tag} as liferay:local."
 	docker tag "${workspace_name}-liferay:${version_tag}" "liferay:local"
 
-	echo "Building Spring Boot client extension image."
-	bash client-extensions/liferay-one-etc-spring-boot/scripts/build_spring_boot_image.sh
-
 	echo "Starting containers."
 	docker compose --file docker-compose.yaml up --detach
 

@@ -99,3 +99,25 @@ test {
 }
 
 compileJava.dependsOn cloneReleaseToolEE
+
+buildDockerImage {
+	doLast {
+		def propertiesFile = file("src/main/resources/application-default.properties")
+		def localEnvironmentFile = file("build/local.env")
+
+		def names = [] as TreeSet
+
+		propertiesFile.eachLine {
+			line ->
+
+			def matcher = (line =~ /\$\{([A-Z0-9_]+)\}/)
+
+			while (matcher.find()) {
+				names.add(matcher.group(1))
+			}
+		}
+
+		localEnvironmentFile.text =
+		names.collect { "${it}=unused" }.join("\n") + "\n"
+	}
+}
