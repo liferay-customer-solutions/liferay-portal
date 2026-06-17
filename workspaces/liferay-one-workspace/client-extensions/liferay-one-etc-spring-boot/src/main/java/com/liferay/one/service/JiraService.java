@@ -9,12 +9,14 @@ import com.liferay.client.extension.util.spring.boot3.service.BaseService;
 import com.liferay.one.constants.JiraIssueConstants;
 import com.liferay.one.converter.BusinessEventConverter;
 import com.liferay.one.converter.BusinessEventVersionConverter;
+import com.liferay.one.converter.JiraOrganizationConverter;
+import com.liferay.one.exception.JiraOrganizationNotFoundException;
 import com.liferay.one.model.AssetObject;
 import com.liferay.one.model.AssetObjectFieldOption;
 import com.liferay.one.model.BusinessEvent;
 import com.liferay.one.model.BusinessEventVersion;
+import com.liferay.one.model.JiraOrganization;
 import com.liferay.one.model.JiraSupportIssue;
-import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -48,7 +50,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Component
 public class JiraService extends BaseService {
 
-	public void addComment(String issueKey, String body) {
+	public void addComment(String body, String issueKey) {
 		post(
 			body,
 			HashMapBuilder.put(
@@ -70,7 +72,7 @@ public class JiraService extends BaseService {
 	}
 
 	public void deleteBusinessEvent(String id) throws Exception {
-		_deleteAssetObjectJSONObject(id, _jiraWorkspaceId);
+		_deleteAssetObjectJSONObject(id);
 	}
 
 	public String getAccountObjectKey(String externalKey) throws Exception {
@@ -94,7 +96,7 @@ public class JiraService extends BaseService {
 			new ArrayList<>();
 
 		JSONArray objectTypeAttributesJSONArray =
-			_getObjectTypeAttributesJSONArray(objectTypeId, _jiraWorkspaceId);
+			_getObjectTypeAttributesJSONArray(objectTypeId);
 
 		for (int i = 0; i < objectTypeAttributesJSONArray.length(); i++) {
 			JSONObject objectTypeAttributeJSONObject =
@@ -121,32 +123,6 @@ public class JiraService extends BaseService {
 		return assetObjectFieldOptions;
 	}
 
-	public JSONObject getAssetObjectJSONObject(
-		String workspaceId, String objectId) {
-
-		JSONObject jsonObject = new JSONObject(
-			get(
-				_getAuthorization(),
-				UriComponentsBuilder.fromUriString(
-					StringBundler.concat(
-						_JIRA_CLOUD_API_URL, "/jsm/assets/workspace/",
-						workspaceId, "/v1/object/", objectId)
-				).build(
-				).toUri()));
-
-		if (jsonObject.has("errorMessages")) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(
-					"Unable to get asset object " +
-						jsonObject.getJSONArray("errorMessages"));
-			}
-
-			return null;
-		}
-
-		return jsonObject;
-	}
-
 	@Cacheable("assetObjects")
 	public List<AssetObject> getAssetObjects(
 			String objectSchemaName, String objectTypeName)
@@ -158,8 +134,7 @@ public class JiraService extends BaseService {
 			"objectSchema = \"", objectSchemaName, "\" AND objectType = \"",
 			objectTypeName, "\"");
 
-		JSONArray assetsObjectsJSONArray = _searchAssetsObjectsJSONArray(
-			aql, _jiraWorkspaceId);
+		JSONArray assetsObjectsJSONArray = _searchAssetsObjectsJSONArray(aql);
 
 		for (int i = 0; i < assetsObjectsJSONArray.length(); i++) {
 			assetObjects.add(
@@ -171,7 +146,7 @@ public class JiraService extends BaseService {
 
 	public BusinessEvent getBusinessEvent(String id) throws Exception {
 		return _businessEventConverter.toBusinessEvent(
-			StringPool.BLANK, _getAssetObjectJSONObject(id, _jiraWorkspaceId));
+			StringPool.BLANK, _getAssetObjectJSONObject(id));
 	}
 
 	public List<BusinessEvent> getBusinessEvents(
@@ -185,8 +160,7 @@ public class JiraService extends BaseService {
 			"Event\" AND \"Account\".\"External Key\" = \"",
 			accountExternalReferenceCode, "\"");
 
-		JSONArray assetsObjectsJSONArray = _searchAssetsObjectsJSONArray(
-			aql, _jiraWorkspaceId);
+		JSONArray assetsObjectsJSONArray = _searchAssetsObjectsJSONArray(aql);
 
 		if (assetsObjectsJSONArray != null) {
 			for (int i = 0; i < assetsObjectsJSONArray.length(); i++) {
@@ -211,8 +185,7 @@ public class JiraService extends BaseService {
 			"Event Version\" AND \"Business Event\" = ", businessEventId,
 			" ORDER BY Updated DESC");
 
-		JSONArray assetsObjectsJSONArray = _searchAssetsObjectsJSONArray(
-			aql, _jiraWorkspaceId);
+		JSONArray assetsObjectsJSONArray = _searchAssetsObjectsJSONArray(aql);
 
 		if (assetsObjectsJSONArray != null) {
 			for (int i = 0; i < assetsObjectsJSONArray.length(); i++) {
@@ -240,22 +213,15 @@ public class JiraService extends BaseService {
 					).build(
 					).toUri()));
 
-			JSONObject issueFieldsJSONObject = issueJSONObject.optJSONObject(
-				"fields");
+			JiraOrganization jiraOrganization = _getJiraOrganization(
+				issueJSONObject.optJSONObject("fields"));
 
-			String organizationObjectFieldId = _getAssetObjectFieldId(
-				issueFieldsJSONObject.optJSONArray(
-					_jiraSupportHCFieldOrganization));
+			return new JiraSupportIssue(jiraOrganization, issueJSONObject);
+		}
+		catch (JiraOrganizationNotFoundException
+					jiraOrganizationNotFoundException) {
 
-			if (Validator.isNotNull(organizationObjectFieldId)) {
-				String[] parts = StringUtil.split(
-					organizationObjectFieldId, CharPool.COLON);
-
-				return new JiraSupportIssue(
-					issueJSONObject, parts[1], parts[0]);
-			}
-
-			return new JiraSupportIssue(issueJSONObject);
+			throw jiraOrganizationNotFoundException;
 		}
 		catch (Exception exception) {
 			if (_log.isWarnEnabled()) {
@@ -358,12 +324,11 @@ public class JiraService extends BaseService {
 		_syncBusinessEvent(businessEvent, id);
 
 		return _businessEventConverter.toBusinessEvent(
-			StringPool.BLANK, _getAssetObjectJSONObject(id, _jiraWorkspaceId));
+			StringPool.BLANK, _getAssetObjectJSONObject(id));
 	}
 
 	private JSONObject _createAssetObjectJSONObject(
-			JSONObject attributesJSONObject, String objectTypeId,
-			String workspaceId)
+			JSONObject attributesJSONObject, String objectTypeId)
 		throws Exception {
 
 		JSONObject bodyJSONObject = new JSONObject(
@@ -382,24 +347,23 @@ public class JiraService extends BaseService {
 			).build(),
 			UriComponentsBuilder.fromUriString(
 				StringBundler.concat(
-					_JIRA_CLOUD_API_URL, "/jsm/assets/workspace/", workspaceId,
-					"/v1/object/create")
+					_JIRA_CLOUD_API_URL, "/jsm/assets/workspace/",
+					_jiraWorkspaceId, "/v1/object/create")
 			).build(
 			).toUri());
 
 		return new JSONObject(response);
 	}
 
-	private JSONObject _deleteAssetObjectJSONObject(
-			String objectId, String workspaceId)
+	private JSONObject _deleteAssetObjectJSONObject(String objectId)
 		throws Exception {
 
 		String response = delete(
 			_getAuthorization(), StringPool.BLANK,
 			UriComponentsBuilder.fromUriString(
 				StringBundler.concat(
-					_JIRA_CLOUD_API_URL, "/jsm/assets/workspace/", workspaceId,
-					"/v1/object/", objectId)
+					_JIRA_CLOUD_API_URL, "/jsm/assets/workspace/",
+					_jiraWorkspaceId, "/v1/object/", objectId)
 			).build(
 			).toUri());
 
@@ -410,18 +374,7 @@ public class JiraService extends BaseService {
 		return new JSONObject(response);
 	}
 
-	private String _getAssetObjectFieldId(JSONArray jsonArray) {
-		if ((jsonArray != null) && (jsonArray.length() > 0)) {
-			JSONObject assetJSONObject = jsonArray.getJSONObject(0);
-
-			return assetJSONObject.getString("id");
-		}
-
-		return null;
-	}
-
-	private JSONObject _getAssetObjectJSONObject(
-			String objectId, String workspaceId)
+	private JSONObject _getAssetObjectJSONObject(String objectId)
 		throws Exception {
 
 		return new JSONObject(
@@ -430,7 +383,7 @@ public class JiraService extends BaseService {
 				UriComponentsBuilder.fromUriString(
 					StringBundler.concat(
 						_JIRA_CLOUD_API_URL, "/jsm/assets/workspace/",
-						workspaceId, "/v1/object/", objectId)
+						_jiraWorkspaceId, "/v1/object/", objectId)
 				).build(
 				).toUri()));
 	}
@@ -444,8 +397,25 @@ public class JiraService extends BaseService {
 		return "Basic " + encoder.encodeToString(credentials.getBytes());
 	}
 
-	private JSONArray _getObjectTypeAttributesJSONArray(
-			String objectTypeId, String workspaceId)
+	private JiraOrganization _getJiraOrganization(JSONObject jsonObject)
+		throws JiraOrganizationNotFoundException {
+
+		try {
+			JSONArray jsonArray = jsonObject.optJSONArray(
+				_jiraSupportHCFieldOrganization);
+
+			JSONObject assetJSONObject = jsonArray.getJSONObject(0);
+
+			return _jiraOrganizationConverter.toJiraOrganization(
+				_getAssetObjectJSONObject(
+					assetJSONObject.getString("objectId")));
+		}
+		catch (Exception exception) {
+			throw new JiraOrganizationNotFoundException(exception);
+		}
+	}
+
+	private JSONArray _getObjectTypeAttributesJSONArray(String objectTypeId)
 		throws Exception {
 
 		return new JSONArray(
@@ -454,7 +424,7 @@ public class JiraService extends BaseService {
 				UriComponentsBuilder.fromUriString(
 					StringBundler.concat(
 						_JIRA_CLOUD_API_URL, "/jsm/assets/workspace/",
-						workspaceId, "/v1/objecttype/", objectTypeId,
+						_jiraWorkspaceId, "/v1/objecttype/", objectTypeId,
 						"/attributes")
 				).build(
 				).toUri()));
@@ -489,8 +459,7 @@ public class JiraService extends BaseService {
 				).toUri()));
 	}
 
-	private JSONArray _searchAssetsObjectsJSONArray(
-			String aql, String workspaceId)
+	private JSONArray _searchAssetsObjectsJSONArray(String aql)
 		throws Exception {
 
 		JSONArray itemsJSONArray = new JSONArray();
@@ -500,7 +469,7 @@ public class JiraService extends BaseService {
 
 		while (!last) {
 			JSONObject resultsJSONObject = _searchAssetsObjectsPageJSONObject(
-				aql, _MAX_RESULTS, startAt, workspaceId);
+				aql, _MAX_RESULTS, startAt);
 
 			JSONArray valuesJSONArray = resultsJSONObject.optJSONArray(
 				"values");
@@ -520,7 +489,7 @@ public class JiraService extends BaseService {
 	}
 
 	private JSONObject _searchAssetsObjectsPageJSONObject(
-			String aql, int maxResults, int startAt, String workspaceId)
+			String aql, int maxResults, int startAt)
 		throws Exception {
 
 		String response = post(
@@ -535,8 +504,8 @@ public class JiraService extends BaseService {
 			).build(),
 			UriComponentsBuilder.fromUriString(
 				StringBundler.concat(
-					_JIRA_CLOUD_API_URL, "/jsm/assets/workspace/", workspaceId,
-					"/v1/object/aql")
+					_JIRA_CLOUD_API_URL, "/jsm/assets/workspace/",
+					_jiraWorkspaceId, "/v1/object/aql")
 			).queryParam(
 				"maxResults", maxResults
 			).queryParam(
@@ -595,13 +564,13 @@ public class JiraService extends BaseService {
 					getAccountObjectKey(
 						businessEvent.getAccountExternalReferenceCode()),
 					businessEvent),
-				_jiraBusinessEventAssetObjectTypeId, _jiraWorkspaceId);
+				_jiraBusinessEventAssetObjectTypeId);
 		}
 		else {
 			_updateAssetObjectJSONObject(
 				_businessEventConverter.toAttributesJSONObject(
 					null, businessEvent),
-				id, _jiraWorkspaceId);
+				id);
 		}
 	}
 
@@ -633,8 +602,7 @@ public class JiraService extends BaseService {
 	}
 
 	private JSONObject _updateAssetObjectJSONObject(
-			JSONObject attributesJSONObject, String objectId,
-			String workspaceId)
+			JSONObject attributesJSONObject, String objectId)
 		throws Exception {
 
 		return new JSONObject(
@@ -651,7 +619,7 @@ public class JiraService extends BaseService {
 				UriComponentsBuilder.fromUriString(
 					StringBundler.concat(
 						_JIRA_CLOUD_API_URL, "/jsm/assets/workspace/",
-						workspaceId, "/v1/object/", objectId)
+						_jiraWorkspaceId, "/v1/object/", objectId)
 				).build(
 				).toUri()));
 	}
@@ -679,6 +647,9 @@ public class JiraService extends BaseService {
 
 	@Value("${liferay.one.jira.business.event.asset.object.type.id}")
 	private String _jiraBusinessEventAssetObjectTypeId;
+
+	@Autowired
+	private JiraOrganizationConverter _jiraOrganizationConverter;
 
 	@Value("${liferay.one.jira.support.fls.portal.url}")
 	private String _jiraSupportFLSPortalURL;

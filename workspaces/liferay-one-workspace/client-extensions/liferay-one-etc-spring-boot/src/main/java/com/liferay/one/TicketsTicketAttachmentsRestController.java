@@ -5,6 +5,7 @@
 
 package com.liferay.one;
 
+import com.liferay.client.extension.util.spring.boot3.BaseRestController;
 import com.liferay.headless.admin.user.client.dto.v1_0.Account;
 import com.liferay.headless.admin.user.client.dto.v1_0.AccountBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.OrganizationBrief;
@@ -14,6 +15,7 @@ import com.liferay.headless.admin.user.client.resource.v1_0.AccountResource;
 import com.liferay.headless.admin.user.client.resource.v1_0.UserAccountResource;
 import com.liferay.one.constants.RoleConstants;
 import com.liferay.one.exception.JiraOrganizationNotFoundException;
+import com.liferay.one.model.JiraOrganization;
 import com.liferay.one.model.JiraSupportIssue;
 import com.liferay.one.service.JiraService;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -44,7 +46,7 @@ public class TicketsTicketAttachmentsRestController extends BaseRestController {
 		@AuthenticationPrincipal Jwt jwt,
 		@PathVariable("ticketId") String ticketId) {
 
-		return _getResponseEntity(jwt, ticketId, true);
+		return _getResponseEntity(true, jwt, ticketId);
 	}
 
 	@GetMapping("/upload-access-check")
@@ -52,11 +54,11 @@ public class TicketsTicketAttachmentsRestController extends BaseRestController {
 		@AuthenticationPrincipal Jwt jwt,
 		@PathVariable("ticketId") String ticketId) {
 
-		return _getResponseEntity(jwt, ticketId, false);
+		return _getResponseEntity(false, jwt, ticketId);
 	}
 
 	private ResponseEntity<String> _getResponseEntity(
-		Jwt jwt, String ticketId, boolean allowClosedTicket) {
+		boolean allowClosedTicket, Jwt jwt, String ticketId) {
 
 		try {
 			JiraSupportIssue jiraSupportIssue =
@@ -72,12 +74,10 @@ public class TicketsTicketAttachmentsRestController extends BaseRestController {
 					"TICKET_IS_CLOSED", HttpStatus.BAD_REQUEST);
 			}
 
-			if (!_hasViewPermission(
-					jwt,
-					getAccountKey(
-						jiraSupportIssue.getOrganizationId(),
-						jiraSupportIssue.getWorkspaceId()))) {
+			JiraOrganization jiraOrganization =
+				jiraSupportIssue.getJiraOrganization();
 
+			if (!_hasViewPermission(jiraOrganization.getExternalKey(), jwt)) {
 				return new ResponseEntity<>(
 					"FORBIDDEN_ACCESS", HttpStatus.FORBIDDEN);
 			}
@@ -87,15 +87,13 @@ public class TicketsTicketAttachmentsRestController extends BaseRestController {
 		catch (JiraOrganizationNotFoundException
 					jiraOrganizationNotFoundException) {
 
-			_log.error(
-				jiraOrganizationNotFoundException,
-				jiraOrganizationNotFoundException);
+			_log.error(jiraOrganizationNotFoundException);
 
 			return new ResponseEntity<>(
 				"JIRA_ORGANIZATION_ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (Exception exception) {
-			_log.error(exception, exception);
+			_log.error(exception);
 
 			return new ResponseEntity<>(
 				"UNEXPECTED_ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -103,7 +101,7 @@ public class TicketsTicketAttachmentsRestController extends BaseRestController {
 	}
 
 	private boolean _hasViewPermission(
-			Jwt jwt, String accountExternalReferenceCode)
+			String accountExternalReferenceCode, Jwt jwt)
 		throws Exception {
 
 		UserAccountResource userAccountResource = UserAccountResource.builder(
@@ -115,29 +113,27 @@ public class TicketsTicketAttachmentsRestController extends BaseRestController {
 
 		UserAccount userAccount = userAccountResource.getMyUserAccount();
 
-		if (userAccount == null) {
-			return false;
-		}
-
 		for (RoleBrief roleBrief : userAccount.getRoleBriefs()) {
-			String name = roleBrief.getName();
+			String roleBriefName = roleBrief.getName();
 
-			if (name.equals(RoleConstants.NAME_PROVISIONING_MEMBER)) {
+			if (roleBriefName.equals(RoleConstants.NAME_PROVISIONING_MEMBER)) {
 				return true;
 			}
 		}
 
 		for (AccountBrief accountBrief : userAccount.getAccountBriefs()) {
-			if (accountExternalReferenceCode.equals(
+			if (!accountExternalReferenceCode.equals(
 					accountBrief.getExternalReferenceCode())) {
 
-				for (RoleBrief roleBrief : accountBrief.getRoleBriefs()) {
-					if (ArrayUtil.contains(
-							RoleConstants.SUPPORT_ACCOUNT_TICKET_ROLES,
-							roleBrief.getName())) {
+				continue;
+			}
 
-						return true;
-					}
+			for (RoleBrief roleBrief : accountBrief.getRoleBriefs()) {
+				if (ArrayUtil.contains(
+						RoleConstants.NAMES_SUPPORT_ACCOUNT_TICKET,
+						roleBrief.getName())) {
+
+					return true;
 				}
 			}
 		}
@@ -152,19 +148,13 @@ public class TicketsTicketAttachmentsRestController extends BaseRestController {
 		Account account = accountResource.getAccountByExternalReferenceCode(
 			accountExternalReferenceCode);
 
-		if ((account == null) || (account.getOrganizationIds() == null)) {
-			return false;
-		}
-
-		Long[] organizationIds = account.getOrganizationIds();
-
 		for (OrganizationBrief organizationBrief :
 				userAccount.getOrganizationBriefs()) {
 
-			for (long organizationId : organizationIds) {
-				if (organizationBrief.getId() == organizationId) {
-					return true;
-				}
+			if (ArrayUtil.contains(
+					account.getOrganizationIds(), organizationBrief.getId())) {
+
+				return true;
 			}
 		}
 

@@ -479,8 +479,6 @@ public class LicenseKeyExporter {
 			maxHttpSessions, maxServers, maxUsers, owner, productName,
 			productId, productVersion, new String[] {serverIds}, startDate);
 
-		// See LRDCOM-2568
-
 		if (productVersion.equals(ProductVersion.PORTAL_VERSION_6_1_10) ||
 			productVersion.equals("6.1 GA 1")) {
 

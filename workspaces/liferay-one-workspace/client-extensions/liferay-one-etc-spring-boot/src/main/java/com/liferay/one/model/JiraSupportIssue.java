@@ -20,6 +20,14 @@ import org.json.JSONObject;
  */
 public class JiraSupportIssue {
 
+	public JiraSupportIssue(
+		JiraOrganization jiraOrganization, JSONObject jsonObject) {
+
+		this(jsonObject);
+
+		_jiraOrganization = jiraOrganization;
+	}
+
 	public JiraSupportIssue(JSONObject jsonObject) {
 		_key = jsonObject.getString("key");
 
@@ -50,13 +58,8 @@ public class JiraSupportIssue {
 		_ticketURL = ticketURL;
 	}
 
-	public JiraSupportIssue(
-		JSONObject jsonObject, String organizationId, String workspaceId) {
-
-		this(jsonObject);
-
-		_organizationId = organizationId;
-		_workspaceId = workspaceId;
+	public JiraOrganization getJiraOrganization() {
+		return _jiraOrganization;
 	}
 
 	public String getKey() {
@@ -65,10 +68,6 @@ public class JiraSupportIssue {
 
 	public String[] getLabels() {
 		return _labels;
-	}
-
-	public String getOrganizationId() {
-		return _organizationId;
 	}
 
 	public String getStatus() {
@@ -81,10 +80,6 @@ public class JiraSupportIssue {
 
 	public String getTicketURL() {
 		return _ticketURL;
-	}
-
-	public String getWorkspaceId() {
-		return _workspaceId;
 	}
 
 	public boolean isClosed() {
@@ -104,12 +99,11 @@ public class JiraSupportIssue {
 		);
 	}
 
+	private JiraOrganization _jiraOrganization;
 	private final String _key;
 	private final String[] _labels;
-	private String _organizationId = StringPool.BLANK;
 	private final String _status;
 	private final String _summary;
 	private String _ticketURL = StringPool.BLANK;
-	private String _workspaceId = StringPool.BLANK;
 
 }

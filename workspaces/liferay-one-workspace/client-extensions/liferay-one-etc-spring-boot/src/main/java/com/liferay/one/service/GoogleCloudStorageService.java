@@ -53,13 +53,13 @@ public class GoogleCloudStorageService extends BaseService {
 			delete(
 				"Bearer " + _getAccessToken(), "",
 				UriComponentsBuilder.fromUriString(
-					getBaseURL() + "/storage/v1/b/{bucketName}/o/{objectName}"
+					_getBaseURL() + "/storage/v1/b/{bucketName}/o/{objectName}"
 				).build(
 					bucketName, objectName
 				));
 		}
 		catch (Exception exception) {
-			_log.error(exception, exception);
+			_log.error(exception);
 
 			throw new FileServerUnavailableException(exception);
 		}
@@ -101,15 +101,15 @@ public class GoogleCloudStorageService extends BaseService {
 			throw storageException;
 		}
 		catch (Exception exception) {
-			_log.error(exception, exception);
+			_log.error(exception);
 
 			throw new FileServerUnavailableException(exception);
 		}
 	}
 
 	public String getUploadSessionURL(
-			String origin, String bucketName, String objectName,
-			String fileSize)
+			String bucketName, String fileSize, String objectName,
+			String origin)
 		throws Exception {
 
 		try {
@@ -117,7 +117,7 @@ public class GoogleCloudStorageService extends BaseService {
 			).post(
 			).uri(
 				UriComponentsBuilder.fromUriString(
-					getBaseURL() + "/upload/storage/v1/b/{bucketName}" +
+					_getBaseURL() + "/upload/storage/v1/b/{bucketName}" +
 						"/o?uploadType=resumable&name={objectName}"
 				).build(
 					bucketName, objectName
@@ -157,14 +157,10 @@ public class GoogleCloudStorageService extends BaseService {
 			return location.toString();
 		}
 		catch (WebClientException webClientException) {
-			_log.error(webClientException, webClientException);
+			_log.error(webClientException);
 
 			throw new FileServerUnavailableException(webClientException);
 		}
-	}
-
-	protected String getBaseURL() {
-		return "https://storage.googleapis.com";
 	}
 
 	private String _getAccessToken() throws Exception {
@@ -185,6 +181,10 @@ public class GoogleCloudStorageService extends BaseService {
 
 			return accessToken.getTokenValue();
 		}
+	}
+
+	private String _getBaseURL() {
+		return "https://storage.googleapis.com";
 	}
 
 	private static final Log _log = LogFactory.getLog(

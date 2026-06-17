@@ -7,12 +7,14 @@ package com.liferay.one;
 
 import com.google.cloud.storage.StorageException;
 
+import com.liferay.client.extension.util.spring.boot3.BaseRestController;
 import com.liferay.client.extension.util.spring.boot3.client.LiferayOAuth2AccessTokenManager;
 import com.liferay.one.constants.JiraIssueConstants;
 import com.liferay.one.exception.FileServerUnavailableException;
 import com.liferay.one.exception.JiraOrganizationNotFoundException;
 import com.liferay.one.exception.TicketAttachmentAlreadyApprovedException;
 import com.liferay.one.exception.TicketAttachmentNotFoundException;
+import com.liferay.one.model.JiraOrganization;
 import com.liferay.one.model.JiraSupportIssue;
 import com.liferay.one.model.TicketAttachment;
 import com.liferay.one.service.GoogleCloudStorageService;
@@ -75,8 +77,8 @@ public class TicketAttachmentsRestController extends BaseRestController {
 					"Bearer " + jwt.getTokenValue(), ticketAttachmentId);
 
 			_ticketAttachmentService.updateTicketAttachmentState(
-				"Bearer " + jwt.getTokenValue(), ticketAttachmentId,
-				WorkflowConstants.STATUS_IN_TRASH);
+				"Bearer " + jwt.getTokenValue(),
+				WorkflowConstants.STATUS_IN_TRASH, ticketAttachmentId);
 
 			try {
 				_googleCloudStorageService.deleteObject(
@@ -89,7 +91,7 @@ public class TicketAttachmentsRestController extends BaseRestController {
 				return new ResponseEntity<>(HttpStatus.OK);
 			}
 			catch (Exception exception) {
-				_log.error(exception, exception);
+				_log.error(exception);
 
 				return new ResponseEntity<>("", HttpStatus.ACCEPTED);
 			}
@@ -97,15 +99,13 @@ public class TicketAttachmentsRestController extends BaseRestController {
 		catch (TicketAttachmentNotFoundException
 					ticketAttachmentNotFoundException) {
 
-			_log.error(
-				ticketAttachmentNotFoundException,
-				ticketAttachmentNotFoundException);
+			_log.error(ticketAttachmentNotFoundException);
 
 			return new ResponseEntity<>(
 				"ATTACHMENT_NOT_FOUND", HttpStatus.NOT_FOUND);
 		}
 		catch (Exception exception) {
-			_log.error(exception, exception);
+			_log.error(exception);
 
 			return new ResponseEntity<>(
 				"UNEXPECTED_ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -150,16 +150,16 @@ public class TicketAttachmentsRestController extends BaseRestController {
 
 			try {
 				_jiraService.addComment(
-					ticketAttachment.getJiraIssueKey(), jiraIssueCommentBody);
+					jiraIssueCommentBody, ticketAttachment.getJiraIssueKey());
 
 				return new ResponseEntity<>(HttpStatus.OK);
 			}
 			catch (Exception exception) {
-				_log.error(exception, exception);
+				_log.error(exception);
 
 				_ticketAttachmentService.updateTicketAttachmentDraftCommentBody(
-					"Bearer " + jwt.getTokenValue(), ticketAttachmentId,
-					jiraIssueCommentBody);
+					"Bearer " + jwt.getTokenValue(), jiraIssueCommentBody,
+					ticketAttachmentId);
 
 				return new ResponseEntity<>(
 					"COMMENT_POST_FAILED_RETRYING", HttpStatus.ACCEPTED);
@@ -176,15 +176,13 @@ public class TicketAttachmentsRestController extends BaseRestController {
 		catch (TicketAttachmentAlreadyApprovedException
 					ticketAttachmentAlreadyApprovedException) {
 
-			_log.error(
-				ticketAttachmentAlreadyApprovedException,
-				ticketAttachmentAlreadyApprovedException);
+			_log.error(ticketAttachmentAlreadyApprovedException);
 
 			return new ResponseEntity<>(
 				"ATTACHMENT_ALREADY_EXISTS", HttpStatus.CONFLICT);
 		}
 		catch (Exception exception) {
-			_log.error(exception, exception);
+			_log.error(exception);
 
 			return new ResponseEntity<>(
 				"UNEXPECTED_ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -219,9 +217,10 @@ public class TicketAttachmentsRestController extends BaseRestController {
 					"TICKET_IS_CLOSED", HttpStatus.BAD_REQUEST);
 			}
 
-			String accountKey = getAccountKey(
-				jiraSupportIssue.getOrganizationId(),
-				jiraSupportIssue.getWorkspaceId());
+			JiraOrganization jiraOrganization =
+				jiraSupportIssue.getJiraOrganization();
+
+			String accountKey = jiraOrganization.getExternalKey();
 
 			TicketAttachment ticketAttachment =
 				_ticketAttachmentService.fetchTicketAttachment(
@@ -240,7 +239,7 @@ public class TicketAttachmentsRestController extends BaseRestController {
 				String type = jsonObject.optString("type");
 
 				ticketAttachment = _ticketAttachmentService.addTicketAttachment(
-					"Bearer " + jwt.getTokenValue(), accountKey,
+					accountKey, "Bearer " + jwt.getTokenValue(),
 					externalReferenceCode, fileName, fileSize, ticketId,
 					md5Checksum, TicketAttachment.STATUS_DRAFT, type);
 			}
@@ -260,16 +259,15 @@ public class TicketAttachmentsRestController extends BaseRestController {
 				responseJSONObject.put(
 					"gcsSessionURL",
 					_googleCloudStorageService.getUploadSessionURL(
-						origin, ticketAttachment.getGCSBucketName(),
-						ticketAttachment.getGCSObjectName(), fileSize));
+						ticketAttachment.getGCSBucketName(), fileSize,
+						ticketAttachment.getGCSObjectName(), origin));
 			}
 
 			return new ResponseEntity<>(
 				responseJSONObject.toString(), HttpStatus.OK);
 		}
 		catch (FileServerUnavailableException fileServerUnavailableException) {
-			_log.error(
-				fileServerUnavailableException, fileServerUnavailableException);
+			_log.error(fileServerUnavailableException);
 
 			return new ResponseEntity<>(
 				"FILE_SERVER_UNAVAILABLE", HttpStatus.SERVICE_UNAVAILABLE);
@@ -283,15 +281,13 @@ public class TicketAttachmentsRestController extends BaseRestController {
 		catch (JiraOrganizationNotFoundException
 					jiraOrganizationNotFoundException) {
 
-			_log.error(
-				jiraOrganizationNotFoundException,
-				jiraOrganizationNotFoundException);
+			_log.error(jiraOrganizationNotFoundException);
 
 			return new ResponseEntity<>(
 				"JIRA_ORGANIZATION_ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (Exception exception) {
-			_log.error(exception, exception);
+			_log.error(exception);
 
 			return new ResponseEntity<>(
 				"UNEXPECTED_ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -342,7 +338,7 @@ public class TicketAttachmentsRestController extends BaseRestController {
 					ticketAttachment.getTicketAttachmentId());
 			}
 			catch (Exception exception) {
-				_log.error(exception, exception);
+				_log.error(exception);
 
 				_notificationQueueEntryService.addNotificationQueueEntry(
 					"solutions@liferay.com", "Liferay One",
@@ -369,15 +365,15 @@ public class TicketAttachmentsRestController extends BaseRestController {
 		for (TicketAttachment ticketAttachment : ticketAttachments) {
 			try {
 				_jiraService.addComment(
-					ticketAttachment.getJiraIssueKey(),
-					ticketAttachment.getDraftCommentBody());
+					ticketAttachment.getDraftCommentBody(),
+					ticketAttachment.getJiraIssueKey());
 
 				_ticketAttachmentService.updateTicketAttachmentDraftCommentBody(
-					_getAuthorization(),
-					ticketAttachment.getTicketAttachmentId(), "");
+					_getAuthorization(), StringPool.BLANK,
+					ticketAttachment.getTicketAttachmentId());
 			}
 			catch (Exception exception) {
-				_log.error(exception, exception);
+				_log.error(exception);
 
 				_notificationQueueEntryService.addNotificationQueueEntry(
 					"solutions@liferay.com", "Liferay One",
@@ -615,14 +611,13 @@ public class TicketAttachmentsRestController extends BaseRestController {
 				HttpStatus.OK);
 		}
 		catch (FileServerUnavailableException fileServerUnavailableException) {
-			_log.error(
-				fileServerUnavailableException, fileServerUnavailableException);
+			_log.error(fileServerUnavailableException);
 
 			return new ResponseEntity<>(
 				"FILE_SERVER_UNAVAILABLE", HttpStatus.SERVICE_UNAVAILABLE);
 		}
 		catch (StorageException storageException) {
-			_log.error(storageException, storageException);
+			_log.error(storageException);
 
 			if (storageException.getCode() == 404) {
 				return new ResponseEntity<>(
@@ -635,15 +630,13 @@ public class TicketAttachmentsRestController extends BaseRestController {
 		catch (TicketAttachmentNotFoundException
 					ticketAttachmentNotFoundException) {
 
-			_log.error(
-				ticketAttachmentNotFoundException,
-				ticketAttachmentNotFoundException);
+			_log.error(ticketAttachmentNotFoundException);
 
 			return new ResponseEntity<>(
 				"ATTACHMENT_NOT_FOUND", HttpStatus.NOT_FOUND);
 		}
 		catch (Exception exception) {
-			_log.error(exception, exception);
+			_log.error(exception);
 
 			return new ResponseEntity<>(
 				"UNEXPECTED_ERROR", HttpStatus.INTERNAL_SERVER_ERROR);

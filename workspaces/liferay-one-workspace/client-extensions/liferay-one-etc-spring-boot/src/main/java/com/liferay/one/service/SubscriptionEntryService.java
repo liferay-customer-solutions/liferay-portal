@@ -231,8 +231,6 @@ public class SubscriptionEntryService extends OneBaseService {
 
 		String languageId = _getLanguageId(userAccount);
 
-		// TODO "ACCOUNT_URL"
-
 		Map<String, String> placeholders = HashMapBuilder.put(
 			"EXPIRATION_STATUS", _getExpirationStatus(languageId, days)
 		).put(

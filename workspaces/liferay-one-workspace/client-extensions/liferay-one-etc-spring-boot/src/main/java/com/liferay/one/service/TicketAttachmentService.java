@@ -37,7 +37,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class TicketAttachmentService extends OneBaseService {
 
 	public TicketAttachment addTicketAttachment(
-			String authorization, String accountKey,
+			String accountKey, String authorization,
 			String externalReferenceCode, String fileName, String fileSize,
 			String jiraIssueKey, String md5Checksum, int statusCode,
 			String type)
@@ -194,7 +194,7 @@ public class TicketAttachmentService extends OneBaseService {
 				httpClientErrorException);
 		}
 		catch (Exception exception) {
-			_log.error(exception, exception);
+			_log.error(exception);
 
 			throw exception;
 		}
@@ -225,7 +225,7 @@ public class TicketAttachmentService extends OneBaseService {
 				httpClientErrorException);
 		}
 		catch (Exception exception) {
-			_log.error(exception, exception);
+			_log.error(exception);
 
 			throw exception;
 		}
@@ -262,8 +262,8 @@ public class TicketAttachmentService extends OneBaseService {
 	}
 
 	public TicketAttachment updateTicketAttachmentDraftCommentBody(
-			String authorization, long ticketAttachmentId,
-			String draftCommentBody)
+			String authorization, String draftCommentBody,
+			long ticketAttachmentId)
 		throws Exception {
 
 		JSONObject requestJSONObject = new JSONObject();
@@ -282,7 +282,7 @@ public class TicketAttachmentService extends OneBaseService {
 	}
 
 	public TicketAttachment updateTicketAttachmentState(
-			String authorization, long ticketAttachmentId, long state)
+			String authorization, long state, long ticketAttachmentId)
 		throws Exception {
 
 		JSONObject requestJSONObject = new JSONObject();
