@@ -35,8 +35,27 @@ import org.apache.commons.logging.LogFactory;
  */
 public abstract class BasePubsubSubscriber extends BasePubsubClient {
 
+	public final void dispatch(Message message) throws Exception {
+		receive(message);
+	}
+
+	public String getTopic() {
+		return StringPool.BLANK;
+	}
+
 	@PostConstruct
 	public void initialize() throws Exception {
+		if (Validator.isNull(getProjectId())) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"Skipping Pub/Sub subscription startup for " +
+						getClass().getName() +
+							" because no project ID is configured");
+			}
+
+			return;
+		}
+
 		String subscriptionName = getSubscriptionName();
 
 		if (Validator.isNull(subscriptionName)) {
@@ -131,10 +150,6 @@ public abstract class BasePubsubSubscriber extends BasePubsubClient {
 	}
 
 	protected String getSubscriptionName() {
-		return StringPool.BLANK;
-	}
-
-	protected String getTopic() {
 		return StringPool.BLANK;
 	}
 

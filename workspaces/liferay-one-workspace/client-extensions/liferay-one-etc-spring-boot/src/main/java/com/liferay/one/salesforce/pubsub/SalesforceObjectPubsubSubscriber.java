@@ -40,6 +40,11 @@ import org.springframework.stereotype.Component;
 public class SalesforceObjectPubsubSubscriber extends BasePubsubSubscriber {
 
 	@Override
+	public String getTopic() {
+		return _topic;
+	}
+
+	@Override
 	protected String getProjectId() {
 		return _projectId;
 	}
@@ -173,5 +178,8 @@ public class SalesforceObjectPubsubSubscriber extends BasePubsubSubscriber {
 
 	@Value("${liferay.one.salesforce.object.pubsub.subscriber.subscription}")
 	private String _subscription;
+
+	@Value("${liferay.one.salesforce.object.pubsub.subscriber.topic}")
+	private String _topic;
 
 }
