@@ -21,6 +21,9 @@ public interface RoleConstants {
 
 	public static final String NAME_LIFERAY_STAFF = "Liferay Staff";
 
+	public static final String NAME_PROVISIONING_ADMINISTRATOR =
+		"Provisioning Administrator";
+
 	public static final String NAME_PROVISIONING_MEMBER = "Provisioning Member";
 
 	public static final String[] NAMES_SUPPORT_ACCOUNT = {
