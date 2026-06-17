@@ -7,6 +7,9 @@ package com.liferay.one;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 
+import java.util.concurrent.TimeUnit;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +22,10 @@ import org.springframework.context.annotation.Configuration;
 public class CacheConfiguration {
 
 	@Bean
-	public CacheManager cacheManager() {
+	public CacheManager cacheManager(
+		@Value("${liferay.one.okta.oauth.token.cache.ttl.seconds:300}") long
+			oauthTokenCacheTtlSeconds) {
+
 		CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager(
 			"assetObjectFieldOptions", "assetObjects");
 
@@ -28,6 +34,15 @@ public class CacheConfiguration {
 			).maximumSize(
 				1000
 			));
+
+		caffeineCacheManager.registerCustomCache(
+			"oauthTokenUsers",
+			Caffeine.newBuilder(
+			).expireAfterWrite(
+				oauthTokenCacheTtlSeconds, TimeUnit.SECONDS
+			).maximumSize(
+				1000
+			).build());
 
 		return caffeineCacheManager;
 	}

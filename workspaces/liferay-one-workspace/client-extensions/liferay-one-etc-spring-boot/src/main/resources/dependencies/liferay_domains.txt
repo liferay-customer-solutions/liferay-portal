@@ -1,0 +1,8 @@
+bp.liferay.com
+connect.liferay.com
+dev.liferay.com
+gs.liferay.com
+in.liferay.com
+liferay.com
+liferay.io
+testray.io
