@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import ClayIcon from '@clayui/icon';
 import {useEffect, useState} from 'react';
 
+import AccountAvatar from '../../components/AccountAvatar';
 import EntitySelector, {
 	SelectorItem,
 } from '../../components/EntitySelector/EntitySelector';
@@ -15,52 +15,6 @@ import {Liferay} from '../../liferay/liferay';
 import {setCurrentAccount} from '../../utils/account';
 
 const SEARCH_DELAY = 400;
-
-function AccountAvatar({
-	logoURL,
-	size = 32,
-	type,
-}: {
-	logoURL?: string;
-	size?: number;
-	type?: string;
-}) {
-
-	// Liferay always returns a logoURL, falling back to a default placeholder
-	// portrait (img_id=0) when no logo is set. Treat that as no logo so the
-	// account-type icon shows instead.
-
-	const hasLogo = Boolean(logoURL) && !logoURL?.includes('img_id=0');
-
-	if (hasLogo) {
-		return (
-			<img
-				alt=""
-				className="rounded-circle"
-				src={logoURL}
-				style={{
-					flexShrink: 0,
-					height: size,
-					objectFit: 'cover',
-					width: size,
-				}}
-			/>
-		);
-	}
-
-	return (
-		<span
-			className="align-items-center bg-light d-flex justify-content-center rounded-circle text-neutral-6"
-			style={{flexShrink: 0, height: size, width: size}}
-		>
-			<ClayIcon
-				symbol={
-					type?.toLowerCase() === 'business' ? 'briefcase' : 'user'
-				}
-			/>
-		</span>
-	);
-}
 
 export default function AccountSelector() {
 	const account = Liferay.CommerceContext?.account;

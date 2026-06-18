@@ -28,9 +28,13 @@ const routers: Record<string, React.LazyExoticComponent<RouterComponent>> = {
 		() => import('./pages/Support/BusinessEvents/BusinessEventsRouter')
 	),
 	'my-account': React.lazy(() => import('./pages/MyAccount/MyAccountRouter')),
+	'product-purchase': React.lazy(
+		() => import('./pages/ProductPurchase/ProductPurchaseRouter')
+	),
 	'publisher-dashboard': React.lazy(
 		() => import('./pages/PublisherDashboard/PublisherDashboardRouter')
 	),
+	'support': React.lazy(() => import('./pages/Support/SupportRouter')),
 	'ticket-attachments': React.lazy(
 		() => import('./pages/Support/Attachments/TicketAttachmentsRouter')
 	),

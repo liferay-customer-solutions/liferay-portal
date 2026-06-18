@@ -23,6 +23,7 @@ export default {
 	'account-selection': 'Account Selection',
 	'account-type': 'Account Type',
 	'accounts': 'Accounts',
+	'accounts-available-for-x-you': 'Accounts available for {0} (you)',
 	'actions': 'Actions',
 	'activation': 'Activation',
 	'activation-key': 'Activation Key',
@@ -81,6 +82,7 @@ export default {
 	'an-unexpected-error-occurred': 'An unexpected error occurred.',
 	'analytics-group-id': 'Analytics Group ID',
 	'and': 'and',
+	'and-the': 'and the',
 	'annual': 'Annual',
 	'annual-target': 'Annual Target',
 	'app': 'App',
@@ -166,7 +168,7 @@ export default {
 	'business-event-created-successfully':
 		'Business event created successfully.',
 	'business-events': 'Business Events',
-	'by': 'By',
+	'by': 'by',
 	'by-requesting-a-publisher-account-you-agree-to-the':
 		'By requesting a Publisher account, you agree to the',
 	'by-x': 'By {0}',
@@ -440,6 +442,8 @@ export default {
 	'go-to-the-catalog': 'Go to the Catalog',
 	'go-to-trial': 'Go to Trial',
 	'got-it': 'Got it',
+	'hang-tight-your-purchase-is-being-processed':
+		'Hang tight, your purchase is being processed.',
 	'header': 'Header',
 	'help-and-support': 'Help & Support',
 	'hold-tight-we-re-preparing-your-environment-so-you-can-start-using-your-liferay-data-platform-this-will-only-take-a-moment':
@@ -527,6 +531,7 @@ export default {
 	'license-selection': 'License Selection',
 	'license-type': 'License Type',
 	'licenses': 'Licenses',
+	'licenses-summary': 'Licenses Summary',
 	'licensing': 'Licensing',
 	'liferay-dsr-eula-disclaimer-prefix':
 		'This release of the Digital Sales Room (DSR) is a Beta. You acknowledge that Liferay is not obligated to provide support services while in Beta. For clarity, the Subscription benefits of any active Subscriptions you may have for Liferay Software shall not extend to cover the Beta release of the DSR and participation in the Beta does not grant access to any future GA version of the product. Use of DSR is subject to the Liferay Enterprise Services Agreement (ESA), applicable Appendix, and the Liferay Data Processing Addendum, each as available at',
@@ -645,6 +650,7 @@ export default {
 	'new-version': 'New Version',
 	'no': 'No',
 	'no-account-members-were-found': 'No account members were found.',
+	'no-accounts-available': 'No accounts available',
 	'no-activation-keys-yet': 'No Activation Keys Yet',
 	'no-applications-yet': 'No Applications Yet',
 	'no-apps-yet': 'No Apps Yet',
@@ -672,6 +678,7 @@ export default {
 	'no-versions-yet': 'No Versions Yet',
 	'no-x': 'No {0}',
 	'not-installed': 'Not Installed',
+	'not-seeing-a-specific-account': 'Not seeing a specific Account?',
 	'not-seeing-a-specific-project': 'Not seeing a specific Project?',
 	'notes': 'Notes',
 	'notes-pertaining-to-the-release-of-the-project-these-will-be-displayed-when-the-customer-goes-to-purchase-and-or-update-the-app':
@@ -682,6 +689,7 @@ export default {
 	'number-of-purchases': 'Number of purchases',
 	'object-action': 'Object Action',
 	'objective': 'Objective',
+	'of-service': 'of Service.',
 	'of-target': 'of target',
 	'offline-payments-using-the-invoice': 'Offline payments using the invoice',
 	'okta-sso': 'Okta SSO',
@@ -984,12 +992,14 @@ export default {
 	'technology-partnership-with-integrations':
 		'Technology Partnership With Integrations',
 	'term': 'Term',
+	'terms': 'Terms',
 	'terms-of-service': 'Terms of Service',
 	'terms-privacy-returns-or-contact-support-all-costs-are-in-us-dollars':
 		'Terms, privacy, returns, or contact support. All costs are in US Dollars',
 	'text-block': 'Text Block',
 	'text-images-block': 'Text Images Block',
 	'text-video-block': 'Text Video Block',
+	'thank-you-for-choosing': 'Thank you for choosing',
 	'thank-you-for-trying-the-beta-version-of-this-product-your-feedback-is-essential-to-improve-the-final-release-this-survey-takes-3–5-minutes':
 		'Thank you for trying the beta version of this product! Your feedback is essential to improve the final release. This survey takes ~3–5 minutes.',
 	'thank-you-for-your': 'Thank you for your',
@@ -1234,6 +1244,9 @@ export default {
 	'your-current-liferay-version': 'Your Current Liferay Version',
 	'your-free-activation-key-has-been-generated':
 		'Your free activation key has been generated!',
+	'your-order-id-is': 'Your Order ID is:',
+	'your-purchase-has-been-successfully-processed-to-continue-please-click-the-button-below-to-download-or-install-the-app':
+		'Your purchase has been successfully processed. To continue, please click the button below to download or install the app.',
 	'your-request-completed-successfully':
 		'Your request completed successfully',
 	'zip-files-must-be-in-universal-file-format-archive-luffa-the-specially-structured-zip-encoded-archive-used-to-package-client-extension-project-outputs-this-format-must-support-the-following-use-cases-deliver-batch-engine-data-files-compatible-with-all-deployment-targets-deliver-dxp-configuration-resource-compatible-with-all-deployment-targets-deliver-static-resources-compatible-with-all-deployment-targets-deliver-the-infrastructure-metadata-necessary-to-deploy-to-lxc-sm-for-more-information-see':
