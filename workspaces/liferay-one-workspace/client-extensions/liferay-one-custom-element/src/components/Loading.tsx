@@ -6,6 +6,8 @@
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {ComponentProps, ReactNode} from 'react';
 
+import './Loading.scss';
+
 type LoadingProps = ComponentProps<typeof ClayLoadingIndicator>;
 
 type FullScreenProps = {
