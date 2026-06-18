@@ -94,7 +94,7 @@ export function isTrialSKU(sku: SKU) {
  * @param sku
  */
 export function getNormalizedSKUOptions(sku: SKU) {
-	return sku.skuOptions.map((skuOption) => {
+	return (sku.skuOptions || []).map((skuOption) => {
 		if ((skuOption as unknown as DeliverySKUOption).skuOptionKey) {
 			return {
 				key: (skuOption as unknown as DeliverySKUOption).skuOptionKey,
@@ -129,7 +129,7 @@ export function getSkuByOptionValueKey(
 	return product.skus.find(
 		({purchasable, skuOptions}) =>
 			purchasable &&
-			skuOptions.find(
+			skuOptions?.find(
 				(skuOption) =>
 					[ProductLicense.CLOUD, ProductLicense.DXP].includes(
 						skuOption.skuOptionKey as ProductLicense
