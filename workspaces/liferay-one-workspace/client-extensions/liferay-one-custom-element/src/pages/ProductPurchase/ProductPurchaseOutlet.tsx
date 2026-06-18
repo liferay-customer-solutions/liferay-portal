@@ -15,9 +15,11 @@ import AccountAvatar from '../../components/AccountAvatar';
 import Loading from '../../components/Loading';
 import i18n from '../../i18n';
 import {Liferay} from '../../liferay/liferay';
+import {getProductPriceModel} from '../../utils/productUtils';
 import ProductPurchaseHeader from './components/ProductPurchaseHeader';
 import ProductPurchaseSteps from './components/ProductPurchaseSteps';
 import useAccounts from './hooks/useAccounts';
+import useProductPurchaseCart from './hooks/useProductPurchaseCart';
 import {ProductPurchaseRoute} from './productPurchaseRoutes';
 import ProductPurchaseApp from './services/ProductPurchaseApp';
 
@@ -37,6 +39,7 @@ export type ProductPurchaseOutletContext = {
 	isSingleAccount: boolean;
 	isSubmitting: boolean;
 	product: DeliveryProduct;
+	productPurchaseCart: ReturnType<typeof useProductPurchaseCart>;
 	selectedAccount: Account;
 	setSelectedAccount: React.Dispatch<React.SetStateAction<Account>>;
 };
@@ -48,6 +51,21 @@ const ProductPurchaseOutlet = ({
 	const [isSubmitting, setSubmitting] = useState(false);
 	const {accounts, isLoading, selectedAccount, setSelectedAccount} =
 		useAccounts();
+
+	const productPurchaseCart = useProductPurchaseCart(
+		selectedAccount?.id,
+		product,
+		ProductPurchaseApp.getOrderTypeExternalReferenceCode(product)
+	);
+
+	const {isFreeApp} = getProductPriceModel(product);
+
+	const priceLabel = isFreeApp
+		? i18n.translate('free')
+		: productPurchaseCart.cart?.summary?.totalFormatted ||
+			product.skus?.find((sku) => sku?.price?.priceFormatted)?.price
+				?.priceFormatted ||
+			i18n.translate('free');
 
 	const {pathname} = useLocation();
 	const navigate = useNavigate();
@@ -110,6 +128,7 @@ const ProductPurchaseOutlet = ({
 		isSingleAccount: accounts.length === 1,
 		isSubmitting,
 		product,
+		productPurchaseCart,
 		selectedAccount,
 		setSelectedAccount,
 	};
@@ -133,7 +152,7 @@ const ProductPurchaseOutlet = ({
 						</small>
 
 						<span className="font-weight-semi-bold">
-							{i18n.translate('free')}
+							{priceLabel}
 						</span>
 					</div>
 				}

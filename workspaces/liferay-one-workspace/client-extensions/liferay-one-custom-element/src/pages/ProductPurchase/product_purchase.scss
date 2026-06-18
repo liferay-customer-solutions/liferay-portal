@@ -59,4 +59,33 @@
 	.product-purchase-summary-label {
 		min-width: 80px;
 	}
+
+	.product-purchase-license-card {
+		border-color: #e2e2e4;
+		border-radius: 10px;
+
+		.product-purchase-license-card-icon {
+			color: #377cff;
+		}
+	}
+
+	.product-purchase-license-card-stepper {
+		height: 40px;
+
+		span {
+			min-width: 32px;
+			text-align: center;
+		}
+	}
+
+	.product-purchase-license-card-tier {
+		background-color: #f7f7f8;
+		border-radius: 8px;
+
+		.product-purchase-license-tier-text {
+			color: #6c6c75;
+			font-size: 13px;
+			line-height: 16px;
+		}
+	}
 }

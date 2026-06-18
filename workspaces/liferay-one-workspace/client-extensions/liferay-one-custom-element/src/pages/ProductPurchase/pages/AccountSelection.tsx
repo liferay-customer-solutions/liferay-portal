@@ -19,6 +19,7 @@ import {Liferay} from '../../../liferay/liferay';
 import {
 	getLicenseTagText,
 	getProductImageFallback,
+	getProductPriceModel,
 	getProductSpecificationValue,
 } from '../../../utils/productUtils';
 import {normalizeURLProtocol} from '../../../utils/string';
@@ -30,6 +31,7 @@ const HELP_CENTER_URL = 'https://help.liferay.com';
 const AccountSelection = () => {
 	const {
 		accounts,
+		actions: {nextStep},
 		isLoadingAccounts,
 		isSingleAccount,
 		product,
@@ -39,13 +41,15 @@ const AccountSelection = () => {
 
 	const navigate = useNavigate();
 
+	const {isPaidApp} = getProductPriceModel(product);
+
 	useEffect(() => {
 		if (isSingleAccount) {
 			setSelectedAccount(accounts[0]);
 
-			navigate('/summary', {replace: true});
+			navigate(isPaidApp ? '/license' : '/summary', {replace: true});
 		}
-	}, [accounts, isSingleAccount, navigate, setSelectedAccount]);
+	}, [accounts, isPaidApp, isSingleAccount, navigate, setSelectedAccount]);
 
 	if (isLoadingAccounts || isSingleAccount) {
 		return (
@@ -66,7 +70,7 @@ const AccountSelection = () => {
 				backButtonProps: {className: 'd-none'},
 				continueButtonProps: {
 					disabled: !selectedAccount?.id,
-					onClick: () => navigate('/summary'),
+					onClick: () => nextStep(),
 				},
 			}}
 			title={i18n.translate('account-selection')}

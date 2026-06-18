@@ -12,7 +12,6 @@ import {useDeliveryProduct} from '../../hooks/data/useProduct';
 import i18n from '../../i18n';
 import {Liferay} from '../../liferay/liferay';
 import {getProductPriceModel} from '../../utils/productUtils';
-import {getSiteURL} from '../../utils/site';
 import ProductPurchaseOutlet from './ProductPurchaseOutlet';
 import {getProductPurchaseRoutes} from './productPurchaseRoutes';
 
@@ -29,9 +28,7 @@ const ProductPurchaseRouter = () => {
 
 	const {data: product, isLoading} = useDeliveryProduct(productId);
 
-	const {isFreeApp, isPaidApp} = getProductPriceModel(
-		product as DeliveryProduct
-	);
+	const {isPaidApp} = getProductPriceModel(product as DeliveryProduct);
 
 	useEffect(() => {
 		if (!isSignedIn) {
@@ -43,17 +40,7 @@ const ProductPurchaseRouter = () => {
 		}
 	}, [isSignedIn]);
 
-	useEffect(() => {
-
-		// TODO LPD-94233: route paid apps through the license and payment
-		// steps instead of bouncing back to the marketplace
-
-		if (product && !isFreeApp) {
-			Liferay.Util.navigate(`${getSiteURL()}/marketplace`);
-		}
-	}, [isFreeApp, product]);
-
-	if (!isSignedIn || (product && !isFreeApp)) {
+	if (!isSignedIn) {
 		return null;
 	}
 

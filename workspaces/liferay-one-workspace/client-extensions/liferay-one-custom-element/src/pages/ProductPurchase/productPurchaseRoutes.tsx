@@ -8,6 +8,7 @@ import {ReactNode, lazy} from 'react';
 import i18n from '../../i18n';
 
 const AccountSelection = lazy(() => import('./pages/AccountSelection'));
+const License = lazy(() => import('./pages/License'));
 const Summary = lazy(() => import('./pages/Summary'));
 
 export type ProductPurchaseRoute = {
@@ -24,6 +25,12 @@ export function getProductPurchaseRoutes(isPaidApp: boolean) {
 			element: <AccountSelection />,
 			index: true,
 			title: i18n.translate('account'),
+		},
+		{
+			element: <License />,
+			isPaidOnly: true,
+			path: 'license',
+			title: i18n.translate('license-selection'),
 		},
 		{
 			element: <Summary />,

@@ -35,6 +35,7 @@ export default {
 	'active': 'Active',
 	'activity-history': 'Activity History',
 	'actual-event-date': 'Actual Event Date',
+	'add': 'Add',
 	'add-a-description-of-the-file-related-to-this-ticket':
 		'Add a description of the file related to this ticket.',
 	'add-currency': 'Add Currency',
@@ -662,6 +663,7 @@ export default {
 	'no-further-edits-can-be-made-when-tickets-are-closed-please-open-a-new-support-ticket-if-assistance-is-needed':
 		'No further edits can be made when tickets are closed. Please open a new support ticket if assistance is needed.',
 	'no-history-of-activity-was-found': 'No history of activity was found.',
+	'no-licenses-available': 'No licenses available',
 	'no-licenses-yet': 'No Licenses Yet',
 	'no-orders-yet': 'No Orders Yet',
 	'no-products-yet': 'No Products Yet',
@@ -921,6 +923,8 @@ export default {
 	'select-tags': 'Select Tags',
 	'select-the-account-and-ticket-you-want-to-attach-a-file-to':
 		'Select the account and ticket you want to attach a file to.',
+	'select-the-license-type-and-the-number-of-licenses-you-want-to-purchase':
+		'Select the license type and the number of licenses you want to purchase.',
 	'select-the-offering-of-liferay-your-app-is-compatible-with-the-compatibility-selections-will-determine-on-what-platforms-your-app-is-tested':
 		'Select the offering of Liferay your app is compatible with. The compatibility selections will determine on what platforms your app is tested.',
 	'select-the-option': 'Select the Option',
