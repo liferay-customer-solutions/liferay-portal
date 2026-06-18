@@ -174,7 +174,7 @@
 															"federatedSearchKey": "",
 															"filterField": "assetCategoryIds",
 															"filterQueryType": "match",
-															"filterValue": "[$TAXONOMY_CATEGORY_ID:/site-initializer/taxonomy-vocabularies/company/marketplace-product-type/product.json$]",
+															"filterValue": "[$TAXONOMY_CATEGORY_ID:/site-initializer/taxonomy-vocabularies/company/marketplace-product-type/liferay-product.json$]",
 															"immutable": "true",
 															"invisible": "true",
 															"occur": "must",
