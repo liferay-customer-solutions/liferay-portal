@@ -1,0 +1,40 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+.loading-container {
+	text-align: center;
+	z-index: 100;
+}
+
+.loading-overlay {
+	align-items: center;
+	display: flex;
+	height: 100%;
+	justify-content: center;
+	left: 0;
+	overflow-y: hidden;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 100;
+}
+
+.loading-overlay:before {
+	-webkit-backdrop-filter: blur(3px);
+	backdrop-filter: blur(3px);
+	background: rgba(255, 255, 255, 0.7);
+	content: '';
+	height: 100%;
+	left: 0;
+	pointer-events: none;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 2;
+}
+
+.loading-text {
+	width: 300px;
+}
