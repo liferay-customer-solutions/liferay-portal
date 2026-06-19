@@ -49,7 +49,9 @@ export default class HeadlessCommerceDeliveryCart {
 
 	static async getPaymentMethodURL(cartId: number, callbackURL: string) {
 		const response = await Liferay.Util.fetch(
-			`/o/headless-commerce-delivery-cart/v1.0/carts/${cartId}/payment-url?callbackURL=${callbackURL}`
+			`/o/headless-commerce-delivery-cart/v1.0/carts/${cartId}/payment-url?callbackURL=${encodeURIComponent(
+				callbackURL
+			)}`
 		);
 
 		return response.text();

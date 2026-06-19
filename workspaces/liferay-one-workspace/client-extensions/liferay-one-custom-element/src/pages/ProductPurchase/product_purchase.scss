@@ -88,4 +88,22 @@
 			line-height: 16px;
 		}
 	}
+
+	.product-purchase-radio-card {
+		cursor: pointer;
+
+		&.selected {
+			background-color: #e7f0ff;
+			border-color: #0b60ff !important;
+		}
+	}
+
+	.product-purchase-new-address {
+		background-color: #fff;
+		border-color: #0b60ff !important;
+
+		&:hover {
+			background-color: #e7f0ff;
+		}
+	}
 }

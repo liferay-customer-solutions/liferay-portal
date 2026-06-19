@@ -190,6 +190,7 @@ export default {
 	'choose-currency': 'Choose Currency',
 	'choose-the-marketplace-category-that-most-accurately-describes-what-your-solution-does-users-looking-for-specific-types-of-solutions-will-often-browse-categories-by-searching-for-a-specific-category-name-on-the-main-marketplace-home-page-having-your-solution-listed-under-the-appropriate-category-will-help-them-find-it':
 		'Choose the Marketplace category that most accurately describes what your solution does. Users looking for specific types of solutions will often browse categories by searching for a specific category name on the main Marketplace home page. Having your solution listed under the appropriate category will help them find it.',
+	'city': 'City',
 	'clear': 'Clear',
 	'clear-all-filters': 'Clear All Filters',
 	'click-on-browse-catalog-to-start': "Click on 'Browse Catalog' to start.",
@@ -699,6 +700,7 @@ export default {
 	'once-canceled-no-further-edits-can-be-made-to-this-event':
 		'Once canceled, no further edits can be made to this event.',
 	'one-time-purchases': 'One-Time Purchases',
+	'online-payments-with-paypal': 'Online payments with PayPal',
 	'only-gif-jpg-jpeg-png-are-allowed-max-file-size-is-5mb':
 		'Only GIF, JPG, JPEG, and PNG are allowed. Max file size is 5MB.',
 	'only-jar-war-files-are-allowed-max-file-size-is-500mb':
@@ -709,6 +711,7 @@ export default {
 		'Only ZIP files are allowed. Max file size is 500MB.',
 	'oops-something-went-wrong': 'Oops! Something went wrong.',
 	'open': 'Open',
+	'order-confirmation': 'Order Confirmation',
 	'order-date': 'Order Date',
 	'order-details': 'Order Details',
 	'order-form': 'Order Form',
@@ -967,6 +970,7 @@ export default {
 	'start-date': 'Start Date',
 	'start-date-exp-date': 'Start Date - Exp. Date',
 	'start-trial': 'Start Trial',
+	'state': 'State',
 	'status': 'Status',
 	'storefront': 'Storefront',
 	'submit': 'Submit',
@@ -1243,6 +1247,7 @@ export default {
 		'You need Administrator or Requester role on this project to upload a file.',
 	'you-will-receive-an-invoice-via-email-with-all-the-details-needed-to-complete-your-payment-after-you-complete-the-payment-you-can-activate-your-license-from-the-customer-dashboard':
 		'You will receive an invoice via email with all the details needed to complete your payment. After you complete the payment, you can activate your license from the customer dashboard.',
+	'you-will-receive-an-invoice-via-email-with-the-instructions-to-complete-your-bank-transfer-payment': 'You will receive an invoice via email with the instructions to complete your bank transfer payment.',
 	'your-attachment-is-uploaded-however-we-encountered-a-problem-posting-your-comment-the-system-is-automatically-retrying-to-send-it':
 		'Your attachment is uploaded, however we encountered a problem posting your comment. The system is automatically retrying to send it.',
 	'your-current-liferay-version': 'Your Current Liferay Version',
@@ -1253,6 +1258,7 @@ export default {
 		'Your purchase has been successfully processed. To continue, please click the button below to download or install the app.',
 	'your-request-completed-successfully':
 		'Your request completed successfully',
+	'zip-area-code': 'Zip/Area Code',
 	'zip-files-must-be-in-universal-file-format-archive-luffa-the-specially-structured-zip-encoded-archive-used-to-package-client-extension-project-outputs-this-format-must-support-the-following-use-cases-deliver-batch-engine-data-files-compatible-with-all-deployment-targets-deliver-dxp-configuration-resource-compatible-with-all-deployment-targets-deliver-static-resources-compatible-with-all-deployment-targets-deliver-the-infrastructure-metadata-necessary-to-deploy-to-lxc-sm-for-more-information-see':
 		'ZIP Files must be in universal file format archive (LUFFA) - the specially structured, ZIP encoded archive used to package client extension project outputs This format must support the following use cases: deliver batch engine data files compatible with all deployment targets deliver DXP configuration resource compatible with all deployment targets deliver static resources compatible with all deployment targets deliver the infrastructure metadata necessary to deploy to Liferay PaaS for more information see: ',
 } as const;

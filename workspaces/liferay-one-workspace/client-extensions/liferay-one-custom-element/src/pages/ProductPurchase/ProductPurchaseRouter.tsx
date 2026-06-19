@@ -17,6 +17,9 @@ import {getProductPurchaseRoutes} from './productPurchaseRoutes';
 
 import './product_purchase.scss';
 
+const BankTransferCompleted = lazy(
+	() => import('./pages/BankTransferCompleted')
+);
 const PurchaseCompleted = lazy(() => import('./pages/PurchaseCompleted'));
 
 const ProductPurchaseRouter = () => {
@@ -95,6 +98,13 @@ const ProductPurchaseRouter = () => {
 								)
 							)}
 						</Route>
+
+						<Route
+							element={
+								<BankTransferCompleted product={product} />
+							}
+							path="bank-transfer-completed"
+						/>
 
 						<Route
 							element={<PurchaseCompleted product={product} />}

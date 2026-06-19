@@ -15,6 +15,7 @@ import AccountAvatar from '../../components/AccountAvatar';
 import Loading from '../../components/Loading';
 import i18n from '../../i18n';
 import {Liferay} from '../../liferay/liferay';
+import HeadlessCommerceDeliveryCart from '../../services/rest/HeadlessCommerceDeliveryCart';
 import {getProductPriceModel} from '../../utils/productUtils';
 import ProductPurchaseHeader from './components/ProductPurchaseHeader';
 import ProductPurchaseSteps from './components/ProductPurchaseSteps';
@@ -22,6 +23,7 @@ import useAccounts from './hooks/useAccounts';
 import useProductPurchaseCart from './hooks/useProductPurchaseCart';
 import {ProductPurchaseRoute} from './productPurchaseRoutes';
 import ProductPurchaseApp from './services/ProductPurchaseApp';
+import {PaymentMethodType, ProductPurchasePayment} from './types';
 
 type ProductPurchaseOutletProps = {
 	product: DeliveryProduct;
@@ -38,9 +40,11 @@ export type ProductPurchaseOutletContext = {
 	isLoadingAccounts: boolean;
 	isSingleAccount: boolean;
 	isSubmitting: boolean;
+	payment: ProductPurchasePayment;
 	product: DeliveryProduct;
 	productPurchaseCart: ReturnType<typeof useProductPurchaseCart>;
 	selectedAccount: Account;
+	setPayment: React.Dispatch<React.SetStateAction<ProductPurchasePayment>>;
 	setSelectedAccount: React.Dispatch<React.SetStateAction<Account>>;
 };
 
@@ -49,6 +53,13 @@ const ProductPurchaseOutlet = ({
 	routes,
 }: ProductPurchaseOutletProps) => {
 	const [isSubmitting, setSubmitting] = useState(false);
+	const [payment, setPayment] = useState<ProductPurchasePayment>({
+		billingAddress: {} as BillingAddress,
+		invoice: {email: '', purchaseOrderNumber: ''},
+		taxId: '',
+		type: PaymentMethodType.PAY_NOW,
+	});
+
 	const {accounts, isLoading, selectedAccount, setSelectedAccount} =
 		useAccounts();
 
@@ -58,7 +69,7 @@ const ProductPurchaseOutlet = ({
 		ProductPurchaseApp.getOrderTypeExternalReferenceCode(product)
 	);
 
-	const {isFreeApp} = getProductPriceModel(product);
+	const {isFreeApp, isPaidApp} = getProductPriceModel(product);
 
 	const priceLabel = isFreeApp
 		? i18n.translate('free')
@@ -99,6 +110,37 @@ const ProductPurchaseOutlet = ({
 				product
 			);
 
+			if (isPaidApp) {
+				const cart = await productPurchase.createOrder({
+					...productPurchaseCart.cart,
+					billingAddress: payment.billingAddress,
+					cartItems: productPurchaseCart.cartItems,
+					paymentMethod:
+						payment.type === PaymentMethodType.PAY_NOW
+							? 'paypal-integration'
+							: 'money-order',
+					shippingAddress: payment.billingAddress,
+				});
+
+				if (payment.type === PaymentMethodType.PAY_NOW) {
+					window.location.href =
+						await HeadlessCommerceDeliveryCart.getPaymentMethodURL(
+							cart.id,
+							`${
+								window.location.href.split('#')[0]
+							}#/purchase-completed?orderId=${cart.id}`
+						);
+
+					return;
+				}
+
+				navigate(`/bank-transfer-completed?orderId=${cart.id}`, {
+					state: {account: selectedAccount},
+				});
+
+				return;
+			}
+
 			const order = await productPurchase.createOrder();
 
 			navigate(await productPurchase.getNextStepsLink(order), {
@@ -127,9 +169,11 @@ const ProductPurchaseOutlet = ({
 		isLoadingAccounts: isLoading,
 		isSingleAccount: accounts.length === 1,
 		isSubmitting,
+		payment,
 		product,
 		productPurchaseCart,
 		selectedAccount,
+		setPayment,
 		setSelectedAccount,
 	};
 

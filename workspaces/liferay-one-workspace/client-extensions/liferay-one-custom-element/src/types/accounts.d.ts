@@ -41,6 +41,7 @@ type AccountPostalAddresses = {
 	addressType: string;
 	id: number;
 	name: string;
+	phoneNumber: string;
 	postalCode: number;
 	primary: boolean;
 	streetAddressLine1: string;

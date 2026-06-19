@@ -7,12 +7,15 @@ import classNames from 'classnames';
 import {useState} from 'react';
 import {Navigate} from 'react-router-dom';
 
+import Section from '../../../components/Section/Section';
 import i18n from '../../../i18n';
 import {Liferay} from '../../../liferay/liferay';
 import {formatCurrency} from '../../../utils/currencies';
+import {getProductPriceModel} from '../../../utils/productUtils';
 import {useProductPurchaseOutletContext} from '../ProductPurchaseOutlet';
 import LicenseTermsCheckbox from '../components/LicenseTermsCheckbox';
 import ProductPurchaseShell from '../components/ProductPurchaseShell';
+import {PaymentMethodType} from '../types';
 
 const Summary = () => {
 	const [eulaAgreement, setEulaAgreement] = useState(false);
@@ -22,7 +25,9 @@ const Summary = () => {
 		handlePurchase,
 		isSingleAccount,
 		isSubmitting,
+		payment,
 		product,
+		productPurchaseCart,
 		selectedAccount,
 	} = useProductPurchaseOutletContext();
 
@@ -30,32 +35,84 @@ const Summary = () => {
 		return <Navigate replace to="/" />;
 	}
 
+	const {isPaidApp} = getProductPriceModel(product);
+
 	const freePrice = formatCurrency(
 		0,
 		Liferay.CommerceContext.currency.currencyCode
 	);
 
+	const summary = productPurchaseCart.cart?.summary;
+
+	const billingAddress = payment.billingAddress;
+
 	const summaryRows = [
-		{label: i18n.translate('net-price'), value: freePrice},
-		{label: i18n.translate('vat'), value: freePrice},
-		{label: i18n.translate('total'), value: freePrice},
+		{
+			label: i18n.translate('net-price'),
+			value: (isPaidApp && summary?.subtotalFormatted) || freePrice,
+		},
+		{
+			label: i18n.translate('vat'),
+			value: (isPaidApp && summary?.taxValueFormatted) || freePrice,
+		},
+		{
+			label: i18n.translate('total'),
+			value: (isPaidApp && summary?.totalFormatted) || freePrice,
+		},
 	];
 
 	return (
 		<ProductPurchaseShell
 			footerProps={{
 				backButtonProps: {
-					className: classNames({'d-none': isSingleAccount}),
+					className: classNames({
+						'd-none': !isPaidApp && isSingleAccount,
+					}),
 					onClick: () => previousStep(),
 				},
 				continueButtonProps: {
-					children: i18n.translate('get-app'),
+					children: i18n.translate(
+						isPaidApp ? 'purchase-app' : 'get-app'
+					),
 					disabled: !eulaAgreement || isSubmitting,
 					onClick: () => handlePurchase(),
 				},
 			}}
 			title={i18n.translate('summary')}
 		>
+			{isPaidApp && (
+				<>
+					<Section label={i18n.translate('billing-address')}>
+						<div className="border p-3 rounded">
+							<strong className="d-block">
+								{billingAddress.name}
+							</strong>
+
+							<small className="text-muted">
+								{[
+									billingAddress.street1,
+									billingAddress.city,
+									billingAddress.regionISOCode,
+									billingAddress.country,
+								]
+									.filter(Boolean)
+									.join(', ')}
+							</small>
+						</div>
+					</Section>
+
+					<Section label={i18n.translate('payment-method')}>
+						<div className="border p-3 rounded">
+							{i18n.translate(
+								payment.type === PaymentMethodType.PAY_NOW
+									? 'pay-with-card'
+									: 'pay-with-bank-transfer'
+							)}
+						</div>
+					</Section>
+				</>
+			)}
+
 			<h5 className="mb-2">{i18n.translate('order-summary')}</h5>
 
 			<hr className="mt-0" />

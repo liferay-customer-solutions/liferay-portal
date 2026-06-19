@@ -17,6 +17,6 @@ export default class GetAppInformation {
 	static async postGetAppInformation(
 		getAppInformation: GetAppInformationBody
 	) {
-		return fetcher.post('/o/c/getappinformations/', getAppInformation);
+		return fetcher.post('/o/c/getappinformations', getAppInformation);
 	}
 }
