@@ -289,7 +289,7 @@ const CreateTrialModalForm: React.FC<CreateTrialModalFormProps> = ({
 			</ClayForm.Group>
 
 			<ClayForm.Group className="mb-3">
-				<SectionTitle title="Usage" />
+				<SectionTitle title={i18n.translate('usage')} />
 
 				<div className="d-flex">
 					<div className="pr-2 w-100">

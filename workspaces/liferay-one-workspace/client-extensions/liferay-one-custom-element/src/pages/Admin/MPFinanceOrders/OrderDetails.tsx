@@ -154,8 +154,8 @@ const OrderDetails = () => {
 								value: textWrapper(
 									order?.paymentMethod ===
 										'paypal-integration'
-										? 'Paypal Integration'
-										: 'Offline Payment'
+										? i18n.translate('paypal')
+										: i18n.translate('offline-payment')
 								),
 							},
 							{

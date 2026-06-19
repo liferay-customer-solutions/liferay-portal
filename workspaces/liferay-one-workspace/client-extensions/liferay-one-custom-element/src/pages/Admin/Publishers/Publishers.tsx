@@ -32,7 +32,7 @@ export default function Publishers() {
 					columns: [
 						{
 							id: 'name',
-							name: 'Name',
+							name: i18n.translate('name'),
 							render: (name, {logoURL}) => (
 								<div>
 									<img
@@ -51,15 +51,15 @@ export default function Publishers() {
 						},
 						{
 							id: 'id',
-							name: 'ID',
+							name: i18n.translate('id'),
 						},
 						{
 							id: 'externalReferenceCode',
-							name: 'External Reference Code',
+							name: i18n.translate('external-reference-code'),
 						},
 						{
 							id: 'customFields',
-							name: 'Type',
+							name: i18n.translate('type'),
 							render: (customFields) => {
 								const type = customFields?.find(
 									({name}) => name === 'AccountType'
@@ -74,13 +74,13 @@ export default function Publishers() {
 						},
 						{
 							id: 'dateCreated',
-							name: 'Created at',
+							name: i18n.translate('created-at'),
 							render: (createDate) => formatDate(createDate),
 							sortable: true,
 						},
 						{
 							id: 'status',
-							name: 'Status',
+							name: i18n.translate('status'),
 							render: (status) => {
 								return (
 									<Label

@@ -120,7 +120,7 @@ export default function TrialListView({
 					columns: [
 						{
 							id: 'placedOrderItems',
-							name: 'Project ID',
+							name: i18n.translate('project-id'),
 							render: (_, {customFields, id}) => (
 								<Link
 									className="font-weight-semi-bold ml-2"
@@ -142,7 +142,7 @@ export default function TrialListView({
 						},
 						{
 							id: 'author',
-							name: 'Created By',
+							name: i18n.translate('created-by'),
 							render: (author, {createDate}) => (
 								<div className="d-flex flex-column">
 									<span className="dashboard-table-row-text">
@@ -158,7 +158,7 @@ export default function TrialListView({
 						},
 						{
 							id: 'customFields',
-							name: 'Solution Type',
+							name: i18n.translate('solution-type'),
 							render: (customFields) =>
 								safeJSONParse(
 									customFields[
@@ -169,7 +169,7 @@ export default function TrialListView({
 						},
 						{
 							id: 'createDate',
-							name: 'End Date',
+							name: i18n.translate('end-date'),
 							render: (_, {customFields}) =>
 								formatDateTime(
 									customFields[
@@ -181,7 +181,7 @@ export default function TrialListView({
 						},
 						{
 							id: 'orderStatusInfo',
-							name: 'Trial Status',
+							name: i18n.translate('trial-status'),
 							render: (orderStatusInfo) => (
 								<TrialStatus
 									trialStatus={orderStatusInfo?.label}
@@ -190,7 +190,7 @@ export default function TrialListView({
 						},
 						{
 							id: 'id',
-							name: 'Extension Status',
+							name: i18n.translate('extension-status'),
 							render: (orderId, placedOrder) => {
 								const ssaTrialsExtendRequests =
 									ssaTrialExtend.items;

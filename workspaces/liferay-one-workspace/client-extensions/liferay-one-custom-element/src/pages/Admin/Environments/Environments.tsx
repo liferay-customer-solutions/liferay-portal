@@ -26,7 +26,7 @@ export default function Environments() {
 					{i18n.translate('add-new-trial')}
 				</ClayButton>
 			}
-			title="SaaS Demos"
+			title={i18n.translate('saas-demos')}
 		>
 			<TrialListView
 				actions={actions}

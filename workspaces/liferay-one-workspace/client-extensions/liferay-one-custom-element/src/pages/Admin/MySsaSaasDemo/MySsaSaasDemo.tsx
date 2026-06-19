@@ -55,7 +55,7 @@ export default function MySsaSaasDemo() {
 					{i18n.translate('add-new-trial')}
 				</ClayButton>
 			}
-			title="My SaaS Demos"
+			title={i18n.translate('my-saas-demos')}
 		>
 			{hasSSAPermission ? (
 				<TrialListView

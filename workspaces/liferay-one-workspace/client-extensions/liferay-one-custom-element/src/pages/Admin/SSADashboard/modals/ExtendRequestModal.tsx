@@ -92,12 +92,12 @@ const ExtendRequestModal: React.FC<ExtendSSATrialModalProps> = ({
 
 					<span>
 						<ButtonWithIcon
-							aria-label="Close"
+							aria-label={i18n.translate('close')}
 							borderless
 							className="text-dark"
 							onClick={onClose}
 							symbol="times"
-							title="Close"
+							title={i18n.translate('close')}
 						/>
 					</span>
 				</div>

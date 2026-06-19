@@ -21,7 +21,10 @@ export default function Solutions() {
 	const navigate = useNavigate();
 
 	return (
-		<Page pageRendererProps={{className: 'border py-2'}} title="Solutions">
+		<Page
+			pageRendererProps={{className: 'border py-2'}}
+			title={i18n.translate('solutions')}
+		>
 			<ListView<Product>
 				defaultFilters={{
 					filter: `${SearchBuilder.lambda(

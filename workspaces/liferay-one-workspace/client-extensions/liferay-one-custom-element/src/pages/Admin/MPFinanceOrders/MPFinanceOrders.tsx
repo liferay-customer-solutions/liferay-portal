@@ -87,7 +87,7 @@ const MPFinanceOrders = () => {
 						},
 						{
 							id: 'orderDate',
-							name: 'Date',
+							name: i18n.translate('date'),
 							render: (orderDate) => {
 								const date = new Date(orderDate as string);
 
@@ -142,8 +142,8 @@ const MPFinanceOrders = () => {
 
 									<p className="mb-0 text-muted">
 										{paymentMethod === 'paypal-integration'
-											? 'PayPal'
-											: 'Offline Payment'}
+											? i18n.translate('paypal')
+											: i18n.translate('offline-payment')}
 									</p>
 								</div>
 							),
