@@ -5,6 +5,9 @@
 
 package com.liferay.one.service;
 
+import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.Currency;
+import com.liferay.headless.commerce.admin.catalog.client.pagination.Pagination;
+import com.liferay.headless.commerce.admin.catalog.client.resource.v1_0.CurrencyResource;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Account;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.BillingAddress;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Order;
@@ -16,6 +19,7 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.math.BigDecimal;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -91,14 +95,26 @@ public class CommerceOrderService extends OneBaseService {
 				});
 		}
 
+		_setExchangeRate(order);
+
 		orderResource.patchOrder(
 			commerceOrderId,
 			new Order() {
 				{
+					setCustomFields(order::getCustomFields);
 					setTaxAmount(() -> taxAmount);
 					setTotal(() -> total);
 				}
 			});
+	}
+
+	private CurrencyResource _getCurrencyResource() {
+		return CurrencyResource.builder(
+		).endpoint(
+			lxcDXPMainDomain, lxcDXPServerProtocol
+		).header(
+			HttpHeaders.AUTHORIZATION, getAuthorization()
+		).build();
 	}
 
 	private OrderItemResource _getOrderItemResource() {
@@ -117,7 +133,7 @@ public class CommerceOrderService extends OneBaseService {
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).parameters(
-			"nestedFields", "account,billingAddress,orderItems"
+			"nestedFields", "account,billingAddress,customFields,orderItems"
 		).build();
 	}
 
@@ -135,6 +151,34 @@ public class CommerceOrderService extends OneBaseService {
 		}
 
 		return false;
+	}
+
+	private void _setExchangeRate(Order order) throws Exception {
+		Map<String, String> customFields =
+			(Map<String, String>)order.getCustomFields();
+
+		JSONObject orderMetadataJSONObject = new JSONObject(
+			customFields.getOrDefault("order-metadata", "{}"));
+
+		if (orderMetadataJSONObject.has("exchangeRate")) {
+			return;
+		}
+
+		CurrencyResource currencyResource = _getCurrencyResource();
+
+		Currency currency = currencyResource.getCurrenciesPage(
+			null, "code eq 'EUR'", Pagination.of(1, 1), null
+		).fetchFirstItem();
+
+		if (currency == null) {
+			return;
+		}
+
+		customFields.put(
+			"order-metadata",
+			orderMetadataJSONObject.put(
+				"exchangeRate", currency.getRate()
+			).toString());
 	}
 
 	private static final int _ACCOUNT_TYPE_BUSINESS = 2;
