@@ -56,3 +56,5 @@ camelCase. Booleans phrased as questions: `internal`, `clustered`, `hasDisasterD
 ### Friendly URL Separators
 
 4 lowercase letters matching the ERC suffix. Must be unique across all Objects in the workspace.
+
+**Exception — `AccountNote` uses `l`** (Liferay's default separator), which skips friendly-URL generation. Its title field `content` can contain slashes/newlines/links that would otherwise throw `MustNotHaveTrailingSlash`.

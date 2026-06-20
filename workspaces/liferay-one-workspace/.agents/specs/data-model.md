@@ -74,7 +74,7 @@
 | `modifiedByUserId` | long | FK to User |
 | `modifiedByUserName` | string | |
 | `koroneikiAccountKey` | string | Parent Koroneiki accountKey; migration traceability |
-| `koroneikiProjectName` | string | Name of the originating Koroneiki child project |
+| `projectId` | long | FK to Project |
 
 ---
 
@@ -479,7 +479,7 @@ Aggregated periodic report over UsageEvents.
 | Object | ERC | Separator |
 |---|---|---|
 | `AccountFlag` | `C_ACCNT_FLAG` | `cpaf` |
-| `AccountNote` | `C_ACCNT_NOTE` | `cpan` |
+| `AccountNote` | `C_ACCNT_NOTE` | `l` |
 | `BannedEmailDomain` | `C_BANNED_EMAIL` | `cpbd` |
 | `Contract` | `C_CONTRACT` | `cpct` |
 | `CreditHold` | `C_CREDIT_HOLD` | `cpch` |

@@ -17,7 +17,7 @@
 			"enableComments": true,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_ACCOUNT_NOTE",
-			"friendlyURLSeparator": "cpan",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Account Note"
 			},
@@ -133,24 +133,6 @@
 					"type": "String"
 				},
 				{
-					"DBType": "String",
-					"businessType": "Text",
-					"externalReferenceCode": "C_ACCOUNT_NOTE_KORONEIKI_PROJECT_NAME",
-					"indexed": true,
-					"indexedAsKeyword": false,
-					"indexedLanguageId": "en_US",
-					"label": {
-						"en_US": "Koroneiki Project Name"
-					},
-					"name": "koroneikiProjectName",
-					"objectFieldSettings": [
-					],
-					"required": false,
-					"state": false,
-					"system": false,
-					"type": "String"
-				},
-				{
 					"DBType": "Long",
 					"businessType": "LongInteger",
 					"externalReferenceCode": "C_ACCOUNT_NOTE_MODIFIED_BY_USER_ID",
@@ -206,6 +188,24 @@
 					"type": "String"
 				},
 				{
+					"DBType": "Long",
+					"businessType": "LongInteger",
+					"externalReferenceCode": "C_ACCOUNT_NOTE_PROJECT_ID",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Project ID"
+					},
+					"name": "projectId",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Long"
+				},
+				{
 					"DBType": "String",
 					"businessType": "Picklist",
 					"externalReferenceCode": "C_ACCOUNT_NOTE_TYPE",
@@ -229,6 +229,87 @@
 			"objectRelationships": [
 			],
 			"objectValidationRules": [
+			],
+			"objectViews": [
+				{
+					"defaultObjectView": true,
+					"name": {
+						"en_US": "Default View"
+					},
+					"objectDefinitionExternalReferenceCode": "C_ACCOUNT_NOTE",
+					"objectViewColumns": [
+						{
+							"label": {
+								"en_US": "ID"
+							},
+							"objectFieldName": "id",
+							"priority": 0
+						},
+						{
+							"label": {
+								"en_US": "ERC"
+							},
+							"objectFieldName": "externalReferenceCode",
+							"priority": 1
+						},
+						{
+							"label": {
+								"en_US": "Koroneiki Account Key"
+							},
+							"objectFieldName": "koroneikiAccountKey",
+							"priority": 2
+						},
+						{
+							"label": {
+								"en_US": "Created By User Name"
+							},
+							"objectFieldName": "createdByUserName",
+							"priority": 3
+						},
+						{
+							"label": {
+								"en_US": "Modified By User Name"
+							},
+							"objectFieldName": "modifiedByUserName",
+							"priority": 4
+						},
+						{
+							"label": {
+								"en_US": "Priority"
+							},
+							"objectFieldName": "priority",
+							"priority": 5
+						},
+						{
+							"label": {
+								"en_US": "Type"
+							},
+							"objectFieldName": "type",
+							"priority": 6
+						},
+						{
+							"label": {
+								"en_US": "Content"
+							},
+							"objectFieldName": "content",
+							"priority": 7
+						},
+						{
+							"label": {
+								"en_US": "Status"
+							},
+							"objectFieldName": "customStatus",
+							"priority": 8
+						},
+						{
+							"label": {
+								"en_US": "Project ID"
+							},
+							"objectFieldName": "projectId",
+							"priority": 9
+						}
+					]
+				}
 			],
 			"panelCategoryKey": "applications_menu.applications.content",
 			"pluralLabel": {
