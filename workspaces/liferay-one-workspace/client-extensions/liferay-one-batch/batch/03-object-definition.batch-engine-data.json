@@ -3964,7 +3964,7 @@
 				"en_US": "Publisher Details"
 			},
 			"portlet": true,
-			"restContextPath": "/o/c/publisherdetailses",
+			"restContextPath": "/o/c/publisherdetails",
 			"scope": "company",
 			"status": {
 				"code": 0,

@@ -1,0 +1,5 @@
+{
+	"main": "dist/index.js",
+	"name": "eslint-plugin-local",
+	"version": "1.0.0"
+}

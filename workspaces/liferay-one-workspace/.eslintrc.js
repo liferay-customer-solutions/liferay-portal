@@ -11,7 +11,7 @@ const config = {
 		es2021: true,
 		node: true,
 	},
-	extends: ['plugin:@liferay/portal'],
+	extends: ['plugin:@liferay/portal', 'plugin:local/recommended'],
 	globals: {
 		Liferay: true,
 		configuration: true,
@@ -20,16 +20,36 @@ const config = {
 		layoutMode: true,
 		themeDisplay: true,
 	},
-	ignorePatterns: ['!*'],
+	ignorePatterns: ['!*', '**/build/**', 'tools/eslint-plugin-local/dist/**'],
 	parserOptions: {
 		ecmaFeatures: {
 			jsx: true,
 		},
 		ecmaVersion: 2023,
 	},
-	plugins: ['@liferay'],
+	plugins: ['@liferay', 'local'],
+	overrides: [
+		{
+			files: ['client-extensions/liferay-one-custom-element/@vite/**/*.ts'],
+			rules: {
+				'@liferay/no-absolute-import': 'off',
+			},
+		},
+		{
+			files: ['*.json'],
+			parser: 'jsonc-eslint-parser',
+			plugins: ['jsonc'],
+			rules: {
+				'@typescript-eslint/no-explicit-any': 'off',
+				'jsonc/no-dupe-keys': 'error',
+				'jsonc/sort-keys': 'error',
+				'notice/notice': 'off',
+			},
+		},
+	],
 	root: true,
 	rules: {
+		'@typescript-eslint/no-explicit-any': 'error',
 		'@liferay/empty-line-between-elements': 'off',
 		'@liferay/import-extensions': 'off',
 		'@liferay/portal/deprecation': 'off',

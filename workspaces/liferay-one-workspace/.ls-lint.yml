@@ -1,0 +1,23 @@
+ignore:
+    -   .git
+    -   node_modules
+    -   client-extensions/liferay-one-custom-element/build
+    -   client-extensions/liferay-one-site-initializer/build
+ls:
+    client-extensions/liferay-one-custom-element/src:
+        .gif: regex:^[a-z0-9]+(_[a-z0-9]+)*$
+        .ico: regex:^[a-z0-9]+(_[a-z0-9]+)*$
+        .jpeg: regex:^[a-z0-9]+(_[a-z0-9]+)*$
+        .jpg: regex:^[a-z0-9]+(_[a-z0-9]+)*$
+        .png: regex:^[a-z0-9]+(_[a-z0-9]+)*$
+        .svg: regex:^[a-z0-9]+(_[a-z0-9]+)*$
+        .webp: regex:^[a-z0-9]+(_[a-z0-9]+)*$
+    client-extensions/liferay-one-site-initializer:
+        .css: regex:^[a-z0-9]+(_[a-z0-9]+)*$
+        .gif: regex:^[a-z0-9]+(_[a-z0-9]+)*$
+        .ico: regex:^[a-z0-9]+(_[a-z0-9]+)*$
+        .jpeg: regex:^[a-z0-9]+(_[a-z0-9]+)*$
+        .jpg: regex:^[a-z0-9]+(_[a-z0-9]+)*$
+        .png: regex:^[a-z0-9]+(_[a-z0-9]+)*$
+        .svg: regex:^[a-z0-9]+(_[a-z0-9]+)*$
+        .webp: regex:^[a-z0-9]+(_[a-z0-9]+)*$

@@ -6,7 +6,8 @@
 /poshi/poshi-ext.properties
 /poshi/test-results
 /poshi/tests
-@vite/
+@vite/*
+!@vite/refresh.ts
 bin
 build
 dist

@@ -3,23 +3,37 @@
 		"@liferay/eslint-plugin": "1.6.0",
 		"@liferay/prettier-plugin": "1.1.5",
 		"@liferay/stylelint-plugin": "1.1.0",
+		"@ls-lint/ls-lint": "^2.2.3",
 		"@typescript-eslint/eslint-plugin": "^5.12.1",
 		"@typescript-eslint/parser": "^5.12.1",
 		"babel-eslint": "^10.1.0",
 		"eslint": "7.32.0",
+		"eslint-plugin-jsonc": "^2.0.0",
+		"eslint-plugin-local": "file:./tools/eslint-plugin-local",
+		"jsonc-eslint-parser": "^2.0.0",
 		"prettier": "3.2.5",
 		"typescript": "4.4.2"
 	},
 	"private": true,
+	"resolutions": {
+		"eslint-plugin-sort-destructure-keys": "1.5.0"
+	},
 	"scripts": {
 		"bootstrap:tests": "./tests/scripts/bootstrap.sh",
+		"build:plugin": "tsc --project tools/eslint-plugin-local/tsconfig.json",
+		"format": "node_modules/.bin/prettier --write \"client-extensions/liferay-one-custom-element/src/**/*.{ts,tsx,css}\" \"client-extensions/liferay-one-custom-element/@vite/**/*.ts\"",
+		"lint": "node_modules/.bin/eslint --ext .ts,.tsx,.json client-extensions/liferay-one-custom-element/src client-extensions/liferay-one-custom-element/@vite client-extensions/liferay-one-site-initializer",
+		"lint:fix": "node_modules/.bin/eslint --ext .ts,.tsx --fix client-extensions/liferay-one-custom-element/src client-extensions/liferay-one-custom-element/@vite",
+		"lint:fs": "node_modules/.bin/ls-lint",
+		"prelint": "yarn build:plugin && yarn install --check-files",
 		"test:e2e": "yarn workspace @liferay/liferay-one-workspace-tests playwright:e2e",
 		"test:integration": "yarn workspace @liferay/liferay-one-workspace-tests playwright:integration",
 		"test:unit": "yarn workspace @liferay/liferay-one-custom-element test"
 	},
 	"workspaces": {
 		"packages": [
-			"client-extensions/liferay-one-custom-element"
+			"client-extensions/liferay-one-custom-element",
+			"tools/eslint-plugin-local"
 		]
 	}
 }
