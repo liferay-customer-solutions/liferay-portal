@@ -6,9 +6,12 @@
 package com.liferay.one;
 
 import com.liferay.client.extension.util.spring.boot3.BaseRestController;
+import com.liferay.one.permission.CommerceOrderPermission;
 import com.liferay.one.service.CommerceOrderService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,11 +26,17 @@ public class CommerceOrdersRestController extends BaseRestController {
 
 	@PostMapping("/{commerceOrderId}/tax-calculate")
 	public void postTaxCalculate(
+			@AuthenticationPrincipal Jwt jwt,
 			@PathVariable("commerceOrderId") long commerceOrderId)
 		throws Exception {
 
+		_commerceOrderPermission.check(commerceOrderId, jwt);
+
 		_commerceOrderService.taxCalculate(commerceOrderId);
 	}
+
+	@Autowired
+	private CommerceOrderPermission _commerceOrderPermission;
 
 	@Autowired
 	private CommerceOrderService _commerceOrderService;

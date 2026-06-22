@@ -55,6 +55,20 @@ public class CommerceOrderService extends OneBaseService {
 		return new CommerceOrder(new JSONObject(response));
 	}
 
+	public Long getCommerceOrderAccountId(long commerceOrderId)
+		throws Exception {
+
+		Order order = _getOrderResource().getOrder(commerceOrderId);
+
+		Account account = order.getAccount();
+
+		if (account == null) {
+			return null;
+		}
+
+		return account.getId();
+	}
+
 	public void taxCalculate(long commerceOrderId) throws Exception {
 		OrderResource orderResource = _getOrderResource();
 
