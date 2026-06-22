@@ -11,6 +11,7 @@ import com.liferay.one.model.CommerceOrderItem;
 import com.liferay.one.model.Entitlement;
 import com.liferay.one.model.EntitlementDefinition;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.util.ArrayUtil;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class EntitlementService extends OneBaseService {
 
 	public Entitlement addEntitlement(
-			long commerceOrderItemId, long contractId,
+			long accountEntryId, long commerceOrderItemId, long contractId,
 			long entitlementDefinitionId, String endDate, String grantType,
 			Double maxQuantity, String name, Double quantity, String startDate)
 		throws Exception {
@@ -66,6 +67,11 @@ public class EntitlementService extends OneBaseService {
 		).put(
 			"startDate", startDate
 		);
+
+		if (accountEntryId > 0) {
+			entitlementJSONObject.put(
+				"r_accountEntryToEntitlement_accountEntryId", accountEntryId);
+		}
 
 		if (contractId > 0) {
 			entitlementJSONObject.put(
@@ -129,14 +135,23 @@ public class EntitlementService extends OneBaseService {
 					"') and (active eq true)"),
 				commerceOrderItem.getProductOptions());
 
-		long contractId = _getContractId(commerceOrderItem);
+		long accountEntryId = 0;
+		long contractId = 0;
+
+		CommerceOrder commerceOrder = _commerceOrderService.fetchCommerceOrder(
+			commerceOrderItem.getOrderId());
+
+		if (commerceOrder != null) {
+			accountEntryId = commerceOrder.getAccountId();
+			contractId = commerceOrder.getContractId();
+		}
 
 		for (EntitlementDefinition entitlementDefinition :
 				entitlementDefinitions) {
 
 			try {
 				addEntitlement(
-					commerceOrderItemId, contractId,
+					accountEntryId, commerceOrderItemId, contractId,
 					entitlementDefinition.getEntitlementDefinitionId(),
 					commerceOrderItem.getEndDate(),
 					entitlementDefinition.getGrantType(), null,
@@ -161,17 +176,21 @@ public class EntitlementService extends OneBaseService {
 		return getAllItems("/o/c/entitlements", filterString, Entitlement::new);
 	}
 
-	private long _getContractId(CommerceOrderItem commerceOrderItem)
+	public boolean hasEntitlement(long accountId, String... entitlementNames)
 		throws Exception {
 
-		CommerceOrder commerceOrder = _commerceOrderService.fetchCommerceOrder(
-			commerceOrderItem.getOrderId());
+		List<Entitlement> entitlements = getEntitlements(
+			StringBundler.concat(
+				"r_accountEntryToEntitlement_accountEntryId eq '", accountId,
+				"'"));
 
-		if (commerceOrder == null) {
-			return 0;
+		for (Entitlement entitlement : entitlements) {
+			if (ArrayUtil.contains(entitlementNames, entitlement.getName())) {
+				return true;
+			}
 		}
 
-		return commerceOrder.getContractId();
+		return false;
 	}
 
 	private static final Log _log = LogFactory.getLog(EntitlementService.class);

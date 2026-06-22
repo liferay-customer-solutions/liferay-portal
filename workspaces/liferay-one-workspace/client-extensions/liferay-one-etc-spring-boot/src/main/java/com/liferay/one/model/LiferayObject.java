@@ -19,6 +19,17 @@ import org.json.JSONObject;
 public class LiferayObject {
 
 	public LiferayObject(JSONObject jsonObject) {
+		JSONObject customFieldsJSONObject = jsonObject.optJSONObject(
+			"customFields");
+
+		if (customFieldsJSONObject != null) {
+			for (String key : customFieldsJSONObject.keySet()) {
+				_customFieldValues.put(key, customFieldsJSONObject.opt(key));
+			}
+
+			return;
+		}
+
 		JSONArray customFieldsJSONArray = jsonObject.optJSONArray(
 			"customFields");
 

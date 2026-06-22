@@ -1,0 +1,27 @@
+{
+	"description": "",
+	"editorType": "richText",
+	"externalReferenceCode": "PROVISIONING-WELCOME",
+	"name": "Provisioning Welcome",
+	"recipientType": "email",
+	"recipients": [
+		{
+			"bcc": "",
+			"cc": "",
+			"from": "[%FROM_EMAIL%]",
+			"fromName": {
+				"en-US": "Liferay Provisioning"
+			},
+			"to": {
+				"en-US": "[%TO_EMAIL%]"
+			}
+		}
+	],
+	"subject": {
+		"en_US": "New Liferay Project Invitation[%PROJECT_NAME_SUFFIX%]",
+		"es_ES": "Invitación al nuevo proyecto de Liferay[%PROJECT_NAME_SUFFIX%]",
+		"ja_JP": "新しいLiferayプロジェクトの招待状[%PROJECT_NAME_SUFFIX%]",
+		"pt_BR": "Convite para novo projeto Liferay[%PROJECT_NAME_SUFFIX%]"
+	},
+	"type": "email"
+}
