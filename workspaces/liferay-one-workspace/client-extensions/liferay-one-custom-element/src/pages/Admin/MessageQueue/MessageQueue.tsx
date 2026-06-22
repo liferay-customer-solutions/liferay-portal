@@ -4,13 +4,16 @@
  */
 
 import ClayButton from '@clayui/button';
-import ClayForm, {ClayInput} from '@clayui/form';
+import ClayForm, {ClayInput, ClaySelect} from '@clayui/form';
 import ClayTable from '@clayui/table';
 import {useEffect, useState} from 'react';
 
+import EmptyState from '../../../components/EmptyState';
 import Page from '../../../components/Page';
 import {translate} from '../../../i18n';
 import {Liferay} from '../../../liferay/liferay';
+import FetcherError from '../../../services/fetcher/FetcherError';
+import useHasMessageQueuePermissions from './hooks/useHasMessageQueuePermissions';
 import {
 	RoutingKey,
 	dispatchMessage,
@@ -24,11 +27,24 @@ export default function MessageQueue() {
 	const [routingKey, setRoutingKey] = useState('');
 	const [routingKeys, setRoutingKeys] = useState<RoutingKey[]>([]);
 
+	const {hasMessageQueuePermissions, loading} =
+		useHasMessageQueuePermissions();
+
 	useEffect(() => {
+		if (!hasMessageQueuePermissions) {
+			return;
+		}
+
 		getRoutingKeys()
-			.then(setRoutingKeys)
+			.then((items) => {
+				setRoutingKeys(items);
+
+				if (items.length) {
+					setRoutingKey(items[0].routingKey);
+				}
+			})
 			.catch(() => setRoutingKeys([]));
-	}, []);
+	}, [hasMessageQueuePermissions]);
 
 	const handleSubmit = async (event: {preventDefault: () => void}) => {
 		event.preventDefault();
@@ -43,10 +59,14 @@ export default function MessageQueue() {
 				type: 'success',
 			});
 		}
-		catch (error: any) {
+		catch (error) {
+			const info = (error as FetcherError)?.info;
+
 			Liferay.Util.openToast({
 				message:
-					error?.message || translate('an-unexpected-error-occurred'),
+					info?.detail ??
+					info?.title ??
+					translate('an-unexpected-error-occurred'),
 				type: 'danger',
 			});
 		}
@@ -55,23 +75,52 @@ export default function MessageQueue() {
 		}
 	};
 
+	if (!loading && !hasMessageQueuePermissions) {
+		return (
+			<Page title={translate('message-queue')}>
+				<EmptyState
+					description={translate(
+						'you-do-not-have-access-to-the-message-queue'
+					)}
+					title={translate('access-required')}
+					type="NO_ACCESS"
+				/>
+			</Page>
+		);
+	}
+
 	return (
-		<Page title={translate('message-queue')}>
+		<Page
+			pageRendererProps={{isLoading: loading}}
+			title={translate('message-queue')}
+		>
 			<form onSubmit={handleSubmit}>
 				<ClayForm.Group>
 					<label htmlFor="messageQueueRoutingKey">
 						{translate('routing-key')}
 					</label>
 
-					<ClayInput
+					<ClaySelect
 						id="messageQueueRoutingKey"
 						onChange={(event: {target: {value: string}}) =>
 							setRoutingKey(event.target.value)
 						}
 						required
-						type="text"
 						value={routingKey}
-					/>
+					>
+						<ClaySelect.Option
+							label={translate('select-a-routing-key')}
+							value=""
+						/>
+
+						{routingKeys.map((item) => (
+							<ClaySelect.Option
+								key={`${item.routingKey}:${item.subscriber}`}
+								label={item.routingKey}
+								value={item.routingKey}
+							/>
+						))}
+					</ClaySelect>
 				</ClayForm.Group>
 
 				<ClayForm.Group>
@@ -110,7 +159,7 @@ export default function MessageQueue() {
 				</ClayButton>
 			</form>
 
-			{routingKeys.length > 0 && (
+			{!!routingKeys.length && (
 				<div className="mt-4">
 					<h4>{translate('routing-keys')}</h4>
 

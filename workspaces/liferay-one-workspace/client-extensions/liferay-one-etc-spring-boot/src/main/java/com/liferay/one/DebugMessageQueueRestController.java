@@ -10,6 +10,7 @@ import com.liferay.one.permission.DebugMessageQueuePermission;
 import com.liferay.one.pubsub.Message;
 import com.liferay.one.pubsub.subscriber.BasePubsubSubscriber;
 import com.liferay.petra.string.CharPool;
+import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -24,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -33,6 +35,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * @author Ryan Schuhler
@@ -83,15 +86,37 @@ public class DebugMessageQueueRestController extends BaseRestController {
 	}
 
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<String> handleException(Exception exception) {
+	public ResponseEntity<ProblemDetail> handleException(Exception exception) {
 		_log.error(exception);
 
+		return _toResponseEntity(
+			HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");
+	}
+
+	@ExceptionHandler(PrincipalException.class)
+	public ResponseEntity<ProblemDetail> handleException(
+		PrincipalException principalException) {
+
+		_log.error(principalException);
+
+		return _toResponseEntity(
+			HttpStatus.FORBIDDEN,
+			"You do not have permission to access this resource");
+	}
+
+	@ExceptionHandler(ResponseStatusException.class)
+	public ResponseEntity<ProblemDetail> handleException(
+		ResponseStatusException responseStatusException) {
+
+		_log.error(responseStatusException);
+
 		return new ResponseEntity<>(
-			exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			responseStatusException.getBody(),
+			responseStatusException.getStatusCode());
 	}
 
 	@PostMapping
-	public ResponseEntity<String> post(
+	public ResponseEntity<Void> post(
 			@AuthenticationPrincipal Jwt jwt, @RequestBody String json)
 		throws Exception {
 
@@ -108,12 +133,35 @@ public class DebugMessageQueueRestController extends BaseRestController {
 
 		Message message = new Message(attributes, payload, routingKey);
 
+		boolean dispatched = false;
+
 		for (BasePubsubSubscriber basePubsubSubscriber :
 				_basePubsubSubscribers) {
 
-			if (routingKey.equals(basePubsubSubscriber.getTopic())) {
-				basePubsubSubscriber.dispatch(message);
+			if (!routingKey.equals(basePubsubSubscriber.getTopic())) {
+				continue;
 			}
+
+			try {
+				basePubsubSubscriber.dispatch(message);
+
+				dispatched = true;
+			}
+			catch (Exception exception) {
+				Class<?> clazz = basePubsubSubscriber.getClass();
+
+				throw new ResponseStatusException(
+					HttpStatus.BAD_GATEWAY,
+					"Unable to dispatch message to subscriber " +
+						clazz.getSimpleName(),
+					exception);
+			}
+		}
+
+		if (!dispatched) {
+			throw new ResponseStatusException(
+				HttpStatus.NOT_FOUND,
+				"No subscriber consumes routing key " + routingKey);
 		}
 
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -125,14 +173,25 @@ public class DebugMessageQueueRestController extends BaseRestController {
 		String[] lines = StringUtil.split(properties, CharPool.NEW_LINE);
 
 		for (String line : lines) {
-			String[] parts = StringUtil.split(line, CharPool.EQUAL);
+			int index = line.indexOf(CharPool.EQUAL);
 
-			if (parts.length == 2) {
-				attributes.put(parts[0], parts[1]);
+			if (index <= 0) {
+				throw new ResponseStatusException(
+					HttpStatus.BAD_REQUEST,
+					"Unable to parse properties line: " + line);
 			}
+
+			attributes.put(line.substring(0, index), line.substring(index + 1));
 		}
 
 		return attributes;
+	}
+
+	private ResponseEntity<ProblemDetail> _toResponseEntity(
+		HttpStatus httpStatus, String detail) {
+
+		return new ResponseEntity<>(
+			ProblemDetail.forStatusAndDetail(httpStatus, detail), httpStatus);
 	}
 
 	private static final Log _log = LogFactory.getLog(

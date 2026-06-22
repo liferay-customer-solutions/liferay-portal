@@ -916,6 +916,7 @@ export default {
 	'select-a-local-file-to-upload': 'Select a Local File to Upload',
 	'select-a-local-file-to-upload-only-one-file-can-be-attached-at-a-time':
 		'Select a local file to upload. Only one file can be attached at a time.',
+	'select-a-routing-key': 'Select a Routing Key',
 	'select-a-server-to-store-your-data-this-could-have-implications-to-your-organizations-policy-on-user-data-storage':
 		"Select a server to store your data. This could have implications to your organization's policy on user data storage.",
 	'select-a-ticket': 'Select a Ticket',
@@ -1241,6 +1242,8 @@ export default {
 		'You do not have access to a cloud project.',
 	'you-do-not-have-access-to-download-files':
 		'You do not have access to download files.',
+	'you-do-not-have-access-to-the-message-queue':
+		'You do not have access to the Message Queue.',
 	'you-do-not-have-access-to-upload-files':
 		'You do not have access to upload files.',
 	'you-have-reached-the-maximum-number-of-active-trials-allowed-to-start-a-new-trial-please-end-one-of-your-existing-trials-first':

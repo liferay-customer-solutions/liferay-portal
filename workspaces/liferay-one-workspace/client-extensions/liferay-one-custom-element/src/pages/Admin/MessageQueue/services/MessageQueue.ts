@@ -5,6 +5,8 @@
 
 import * as OAuth2 from '@liferay/oauth2-provider-web/client';
 
+import FetcherError from '../../../../services/fetcher/FetcherError';
+
 const BASE_PATH = '/admin/debug-message-queue';
 const OAUTH2_APP = 'liferay-one-etc-spring-boot-oaua';
 
@@ -13,39 +15,53 @@ export type RoutingKey = {
 	subscriber: string;
 };
 
-async function debugMessageQueueFetch(
-	path: string,
-	options?: RequestInit
-): Promise<Response> {
-	const oAuth2Client = await OAuth2.FromUserAgentApplication(OAUTH2_APP);
+async function parseError(response: Error | Response): Promise<Response> {
+	if (response instanceof Response && !response.ok) {
+		const error = new FetcherError('An error occurred while fetching.');
 
-	return oAuth2Client.fetch(`${BASE_PATH}${path}`, options);
+		error.info = await response.json().catch(() => undefined);
+		error.status = response.status;
+
+		throw error;
+	}
+
+	return response as Response;
 }
 
-export async function dispatchMessage(message: {
+async function request<T>(path: string, options?: RequestInit): Promise<T> {
+	const oAuth2Client = await OAuth2.FromUserAgentApplication(OAUTH2_APP);
+
+	const response = await oAuth2Client
+		.fetch(`${BASE_PATH}${path}`, options)
+		.catch(parseError);
+
+	if (!(response instanceof Response)) {
+		return response as T;
+	}
+
+	if (!response.ok) {
+		throw await parseError(response);
+	}
+
+	if (response.headers.get('Content-Length') === '0') {
+		return undefined as T;
+	}
+
+	return response.json();
+}
+
+export function dispatchMessage(message: {
 	message: string;
 	properties: string;
 	routingKey: string;
-}): Promise<Response> {
-	const response = await debugMessageQueueFetch('', {
+}): Promise<void> {
+	return request('', {
 		body: JSON.stringify(message),
 		headers: {'Content-Type': 'application/json'},
 		method: 'POST',
 	});
-
-	if (!response.ok) {
-		throw new Error(await response.text());
-	}
-
-	return response;
 }
 
-export async function getRoutingKeys(): Promise<RoutingKey[]> {
-	const response = await debugMessageQueueFetch('/routing-keys');
-
-	if (!response.ok) {
-		throw new Error(await response.text());
-	}
-
-	return response.json();
+export function getRoutingKeys(): Promise<RoutingKey[]> {
+	return request('/routing-keys');
 }
