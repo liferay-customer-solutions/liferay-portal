@@ -301,7 +301,7 @@
 	{
 		"dataType": 15,
 		"modelResource": "com.liferay.commerce.model.CommerceOrder",
-		"name": "projectKey",
+		"name": "salesforceProjectId",
 		"properties": {
 			"hidden": false,
 			"indexType": 2,
