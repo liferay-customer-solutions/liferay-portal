@@ -8,7 +8,7 @@
 		"displayStockQuantity": true,
 		"externalReferenceCode": "PRDCT-TEST-APP",
 		"images": [
-			"sample-marketplace-app.png"
+			"sample_marketplace_app.png"
 		],
 		"name": "Test App",
 		"options": [
@@ -69,7 +69,7 @@
 		"displayStockQuantity": true,
 		"externalReferenceCode": "PRDCT-TEST-CRM-ACCELERATOR",
 		"images": [
-			"sample-marketplace-app.png"
+			"sample_marketplace_app.png"
 		],
 		"name": "Test Supplier CRM Accelerator",
 		"options": [
@@ -134,7 +134,7 @@
 		"displayStockQuantity": true,
 		"externalReferenceCode": "PRDCT-TEST-PARTNER-PORTAL",
 		"images": [
-			"sample-marketplace-app.png"
+			"sample_marketplace_app.png"
 		],
 		"name": "Test Supplier Partner Portal",
 		"options": [
@@ -199,7 +199,7 @@
 		"displayStockQuantity": true,
 		"externalReferenceCode": "PRDCT-TEST-SLACK-CONNECTOR",
 		"images": [
-			"sample-marketplace-app.png"
+			"sample_marketplace_app.png"
 		],
 		"name": "Test Supplier Slack Connector",
 		"options": [
@@ -260,7 +260,7 @@
 		"displayStockQuantity": true,
 		"externalReferenceCode": "PRDCT-TEST-THEME-PACK",
 		"images": [
-			"sample-marketplace-app.png"
+			"sample_marketplace_app.png"
 		],
 		"name": "Test Supplier Theme Pack",
 		"options": [

@@ -39,7 +39,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RequestMapping("/tickets/{ticketId}/ticket-attachments")
 @RestController
-public class TicketsTicketAttachmentsRestController extends OneBaseRestController {
+public class TicketsTicketAttachmentsRestController
+	extends OneBaseRestController {
 
 	@GetMapping("/download-access-check")
 	public ResponseEntity<String> getDownloadAccessCheck(

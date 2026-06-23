@@ -8,7 +8,7 @@
 		"displayStockQuantity": true,
 		"externalReferenceCode": "PRDCT-DXP",
 		"images": [
-			"sample-marketplace-app.png"
+			"sample_marketplace_app.png"
 		],
 		"name": "Liferay DXP - Free Tier",
 		"options": [
@@ -89,7 +89,7 @@
 		"displayStockQuantity": true,
 		"externalReferenceCode": "PRDCT-OPENSEARCH",
 		"images": [
-			"sample-marketplace-app.png"
+			"sample_marketplace_app.png"
 		],
 		"name": "Liferay Connector to OpenSearch 2",
 		"options": [
@@ -154,7 +154,7 @@
 		"displayStockQuantity": true,
 		"externalReferenceCode": "PRDCT-PUNCHOUT",
 		"images": [
-			"sample-marketplace-app.png"
+			"sample_marketplace_app.png"
 		],
 		"name": "Liferay Commerce Connector to PunchOut2Go",
 		"options": [
@@ -215,7 +215,7 @@
 		"displayStockQuantity": true,
 		"externalReferenceCode": "PRDCT-TRIAL",
 		"images": [
-			"sample-marketplace-app.png"
+			"sample_marketplace_app.png"
 		],
 		"name": "Liferay Pre-Built 7 Day Trial",
 		"options": [
@@ -288,7 +288,7 @@
 		"displayStockQuantity": true,
 		"externalReferenceCode": "PRDCT-ZENDESK",
 		"images": [
-			"sample-marketplace-app.png"
+			"sample_marketplace_app.png"
 		],
 		"name": "Liferay Click to Chat Integration for Zendesk",
 		"options": [

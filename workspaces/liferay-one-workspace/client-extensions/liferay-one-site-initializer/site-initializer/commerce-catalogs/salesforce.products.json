@@ -8,7 +8,7 @@
 		"displayStockQuantity": true,
 		"externalReferenceCode": "PRDCT-AI-HUB",
 		"images": [
-			"sample-marketplace-app.png"
+			"sample_marketplace_app.png"
 		],
 		"name": "Liferay AI Hub",
 		"options": [
@@ -89,7 +89,7 @@
 		"displayStockQuantity": true,
 		"externalReferenceCode": "PRDCT-CONTENT-MARKETING",
 		"images": [
-			"sample-marketplace-app.png"
+			"sample_marketplace_app.png"
 		],
 		"name": "Content Marketing Platform",
 		"options": [
@@ -166,7 +166,7 @@
 		"displayStockQuantity": true,
 		"externalReferenceCode": "PRDCT-DATA-PLATFORM",
 		"images": [
-			"sample-marketplace-app.png"
+			"sample_marketplace_app.png"
 		],
 		"name": "Liferay Data Platform",
 		"options": [
@@ -247,7 +247,7 @@
 		"displayStockQuantity": true,
 		"externalReferenceCode": "PRDCT-DSR",
 		"images": [
-			"sample-marketplace-app.png"
+			"sample_marketplace_app.png"
 		],
 		"name": "Digital Sales Room",
 		"options": [

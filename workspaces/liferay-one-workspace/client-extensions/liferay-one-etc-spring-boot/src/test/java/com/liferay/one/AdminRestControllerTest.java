@@ -8,7 +8,6 @@ package com.liferay.one;
 import com.liferay.one.permission.AdminPermission;
 import com.liferay.one.pubsub.Message;
 import com.liferay.one.pubsub.subscriber.BasePubsubSubscriber;
-import com.liferay.portal.kernel.security.auth.PrincipalException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +21,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.server.ResponseStatusException;
@@ -39,8 +37,8 @@ public class AdminRestControllerTest {
 		BasePubsubSubscriber basePubsubSubscriber = _createSubscriber(
 			"test-topic");
 
-		AdminRestController adminRestController =
-			_createController(basePubsubSubscriber);
+		AdminRestController adminRestController = _createController(
+			basePubsubSubscriber);
 
 		String json = new JSONObject(
 		).put(
@@ -86,8 +84,8 @@ public class AdminRestControllerTest {
 		BasePubsubSubscriber basePubsubSubscriber = _createSubscriber(
 			"test-topic");
 
-		AdminRestController adminRestController =
-			_createController(basePubsubSubscriber);
+		AdminRestController adminRestController = _createController(
+			basePubsubSubscriber);
 
 		String json = new JSONObject(
 		).put(
@@ -128,8 +126,8 @@ public class AdminRestControllerTest {
 			Mockito.any()
 		);
 
-		AdminRestController adminRestController =
-			_createController(basePubsubSubscriber);
+		AdminRestController adminRestController = _createController(
+			basePubsubSubscriber);
 
 		String json = new JSONObject(
 		).put(
@@ -158,8 +156,8 @@ public class AdminRestControllerTest {
 		BasePubsubSubscriber basePubsubSubscriber = _createSubscriber(
 			"test-topic");
 
-		AdminRestController adminRestController =
-			_createController(basePubsubSubscriber);
+		AdminRestController adminRestController = _createController(
+			basePubsubSubscriber);
 
 		String json = new JSONObject(
 		).put(
@@ -192,8 +190,8 @@ public class AdminRestControllerTest {
 		BasePubsubSubscriber basePubsubSubscriber = _createSubscriber(
 			"other-topic");
 
-		AdminRestController adminRestController =
-			_createController(basePubsubSubscriber);
+		AdminRestController adminRestController = _createController(
+			basePubsubSubscriber);
 
 		String json = new JSONObject(
 		).put(
@@ -224,8 +222,7 @@ public class AdminRestControllerTest {
 	private AdminRestController _createController(
 		BasePubsubSubscriber... basePubsubSubscribers) {
 
-		AdminRestController adminRestController =
-			new AdminRestController();
+		AdminRestController adminRestController = new AdminRestController();
 
 		ReflectionTestUtils.setField(
 			adminRestController, "_basePubsubSubscribers",
