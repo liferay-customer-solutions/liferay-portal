@@ -4,11 +4,10 @@
  */
 
 import classNames from 'classnames';
+import {EXTEND_TRIAL_STATUS_LABEL} from '~/pages/Admin/SSADashboard/utils/constants';
+import {ExtendRequestStatus} from '~/types/ssaDashboard';
 
-import {EXTEND_TRIAL_STATUS_LABEL} from '../../constants';
-import {ExtendRequestStatus} from '../../enums/SSATrials';
-
-import './ExtensionStatus.scss';
+import './ExtensionStatus.css';
 
 type ExtensionStatusProps = {
 	className?: string;
@@ -23,18 +22,16 @@ const ExtensionStatus = ({
 		<span
 			className={classNames('extension-status', {
 				'extension-status-approved': [
-					ExtendRequestStatus.APPROVED,
-					ExtendRequestStatus.AUTO_APPROVED,
+					'Approved',
+					'AutoApproved',
 				].includes(extensionStatus as ExtendRequestStatus),
 				'extension-status-expired': [
-					ExtendRequestStatus.EXTENSION_EXPIRED,
-					ExtendRequestStatus.REJECTED,
+					'extension-expired',
+					'Rejected',
 				].includes(extensionStatus as ExtendRequestStatus),
 				'extension-status-not-requested':
-					extensionStatus === ExtendRequestStatus.NOT_REQUESTED ||
-					!extensionStatus,
-				'extension-status-pending':
-					extensionStatus === ExtendRequestStatus.PENDING,
+					extensionStatus === 'not-requested' || !extensionStatus,
+				'extension-status-pending': extensionStatus === 'Pending',
 			})}
 		>
 			{EXTEND_TRIAL_STATUS_LABEL[extensionStatus ?? 'not-requested']}

@@ -1,0 +1,25 @@
+.extension-status {
+	border-radius: 4px;
+	font-size: 13px;
+	padding: 0.25rem 0.5rem;
+}
+
+.extension-status-approved {
+	background-color: #e9f5e8;
+	color: #2c6723;
+}
+
+.extension-status-expired {
+	background-color: #fbe3e3;
+	color: #830c0c;
+}
+
+.extension-status-not-requested {
+	background-color: #e1e1e4;
+	color: #54555f;
+}
+
+.extension-status-pending {
+	background-color: #f7eae0;
+	color: #6f3000;
+}

@@ -5,17 +5,18 @@
 
 import Label from '@clayui/label';
 import {ComponentProps} from 'react';
-
-import ListView, {ListViewProps} from '../../../../components/ListView';
-import {ManagementToolbarProps} from '../../../../components/ListView/components/ManagementToolbar';
+import ListView, {ListViewProps} from '~/components/ListView/ListView';
+import {ManagementToolbarProps} from '~/components/ManagementToolbar/ManagementToolbar';
+import i18n from '~/i18n';
+import {formatDate} from '~/utils/dateUtils';
 import {
 	ProductSpecificationKey,
 	ProductTypeLabels,
 	ProductWorkflowDisplayType,
 	ProductWorkflowStatusLabel,
-} from '../../../../enums/Product';
-import i18n from '../../../../i18n';
-import {formatDate} from '../../../../utils/date';
+} from '~/utils/productUtils';
+
+import type {Product} from '~/types/product';
 
 type AdministratorAppsListViewProps = {
 	filter?: string;

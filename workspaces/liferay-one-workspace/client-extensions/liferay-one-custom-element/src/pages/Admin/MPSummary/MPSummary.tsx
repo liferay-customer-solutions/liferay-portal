@@ -6,12 +6,12 @@
 import ClayIcon from '@clayui/icon';
 import {useMemo} from 'react';
 import {Link} from 'react-router-dom';
+import ErrorBoundary from '~/components/ErrorBoundary/ErrorBoundary';
+import Page from '~/components/Page/Page';
+import {useOneContext} from '~/context/OneContextProvider';
+import i18n from '~/i18n';
+import {formatCurrency} from '~/utils/formatCurrency';
 
-import ErrorBoundary from '../../../components/ErrorBoundary';
-import Page from '../../../components/Page';
-import {useOneContext} from '../../../context/OneContext';
-import i18n from '../../../i18n';
-import {formatCurrency} from '../../../utils/currencies';
 import AdministratorAppsListView from './components/AdministratorAppsListView';
 import AdministratorMostPurchasedSection from './components/AdministratorMostPurchasedSection';
 import {AdministratorOrdersListView} from './components/AdministratorOrdersListView';
@@ -21,13 +21,13 @@ import useAccountsMetrics from './hooks/useAccountsMetrics';
 import useKPI from './hooks/useKPI';
 import useOrderMetrics from './hooks/useOrderMetrics';
 
-import './MPSummary.scss';
+import './MPSummary.css';
 
 export default function MPSummary() {
 	const {data: {kpis = []} = {}} = useKPI();
 	const {data: accounts} = useAccountsMetrics('week');
 	const {data: orderMetrics} = useOrderMetrics('week');
-	const {marketplaceUserAccount} = useOneContext();
+	const {userAccountModel} = useOneContext();
 
 	const infoCards = useMemo(
 		() => [
@@ -98,7 +98,7 @@ export default function MPSummary() {
 							className: 'border py-2 rounded-lg',
 						}}
 						rightButton={
-							marketplaceUserAccount?.isAdmin && (
+							userAccountModel?.isAdmin && (
 								<Link
 									className="font-weight-bold"
 									to="/admin/mp-orders"

@@ -1,0 +1,38 @@
+.dashboard-empty-state {
+	border: 1px var(--color-neutral-2) solid;
+	border-radius: var(--border-radius-lg, 10px);
+}
+
+.dashboard-empty-state-background {
+	background-color: var(--color-brand-primary-lighten-5);
+	border-radius: var(--border-radius-lg, 8px);
+	height: 80px;
+	width: 144px;
+}
+
+.dashboard-empty-state-button {
+	border-radius: var(--border-radius-lg, 8px);
+}
+
+.dashboard-empty-state-description {
+	color: var(--color-neutral-8);
+	white-space: pre-line;
+	word-break: break-all;
+}
+
+.dashboard-empty-state-description-first::after {
+	content: '\a';
+	white-space: pre;
+}
+
+.dashboard-empty-state-image {
+	filter: invert(18%) sepia(87%) saturate(3738%) hue-rotate(218deg)
+		brightness(85%) contrast(103%);
+	width: 32px;
+}
+
+.dashboard-empty-state-title {
+	color: var(--color-neutral-10);
+	padding-bottom: 8px;
+	padding-top: 32px;
+}

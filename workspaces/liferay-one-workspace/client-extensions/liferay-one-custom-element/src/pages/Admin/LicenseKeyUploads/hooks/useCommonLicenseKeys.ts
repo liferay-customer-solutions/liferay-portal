@@ -4,11 +4,12 @@
  */
 
 import useSWR from 'swr';
-
-import commonLicenseKeyOAuth2, {
+import CommonLicenseKeys, {
 	CommonLicenseKey,
 	ProductGroup,
-} from '../../../../services/oauth/CommonLicenseKey';
+} from '~/services/spring-boot/CommonLicenseKeys';
+
+import type {APIResponse} from '~/types/api';
 
 export const PAGE_SIZE = 20;
 
@@ -19,7 +20,7 @@ export default function useCommonLicenseKeys(
 	return useSWR<APIResponse<CommonLicenseKey>>(
 		['common-license-keys', productGroup, page],
 		() =>
-			commonLicenseKeyOAuth2.getCommonLicenseKeys({
+			CommonLicenseKeys.getCommonLicenseKeys({
 				page,
 				pageSize: PAGE_SIZE,
 				productGroup,

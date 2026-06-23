@@ -14,23 +14,7 @@ import React, {
 } from 'react';
 import {useSearchParams} from 'react-router-dom';
 import {KeyedMutator} from 'swr';
-
-import CreateFilters from '../../core/CreateFilters';
-import {useFetch} from '../../hooks/useFetch';
-import i18n from '../../i18n';
-import {
-	FilterSchema as FilterSchemaType,
-	RendererFields,
-	filterSchema as filterSchemas,
-} from '../../schema/filters';
-import {PAGINATION, SortDirection} from '../../utils/constants';
-import {safeJSONParse} from '../../utils/util';
-import EmptyState from '../EmptyState';
-import Loading from '../Loading';
-import ManagementToolbar, {
-	ManagementToolbarProps,
-} from './components/ManagementToolbar';
-import Table, {TableProps} from './components/Table';
+import EmptyState from '~/components/EmptyState/EmptyState';
 import ListViewContextProvider, {
 	AppActions,
 	InitialState as ListViewContextState,
@@ -38,16 +22,35 @@ import ListViewContextProvider, {
 	ListViewContextProviderProps,
 	ListViewTypes,
 	Sort,
-} from './hooks/ListViewContext';
+} from '~/components/ListView/context/ListViewContextProvider';
+import Table, {TableProps} from '~/components/ListViewTable/ListViewTable';
+import Loading from '~/components/Loading/Loading';
+import ManagementToolbar, {
+	ManagementToolbarProps,
+} from '~/components/ManagementToolbar/ManagementToolbar';
+import {useFetch} from '~/hooks/useFetch';
+import i18n from '~/i18n';
+import {
+	FilterSchema as FilterSchemaType,
+	FilterSchemaOption,
+	RendererFields,
+	filterSchema as filterSchemas,
+} from '~/types/filters';
+import CreateFilters from '~/utils/CreateFilters';
+import {PAGINATION, SortDirection} from '~/utils/appConstants';
+import {safeJSONParse} from '~/utils/safeJSONParse';
+
 import useUpdateUrlParams from './hooks/useUpdateUrlParams';
+
+import type {APIResponse} from '~/types/api';
 
 type ChildrenOptions = {
 	dispatch: React.Dispatch<AppActions>;
 	listViewContext: ListViewContextState;
-	mutate: KeyedMutator<APIResponse<any>>;
+	mutate: KeyedMutator<APIResponse<unknown>>;
 };
 
-export type ListViewProps<T extends Record<string, any>> = {
+export type ListViewProps<T extends Record<string, unknown>> = {
 	children?: (
 		response: APIResponse<T>,
 		options: ChildrenOptions
@@ -57,12 +60,6 @@ export type ListViewProps<T extends Record<string, any>> = {
 
 	emptyStateProps?: ComponentProps<typeof EmptyState>;
 
-	/**
-	 * The key of SWR Cache for the list view.
-	 * It must be provided to avoid cache collisions.
-	 *
-	 * @default 'listView:{id}?page={page}&pageSize={pageSize}'
-	 */
 	id: string;
 
 	initialContext?: ListViewContextProviderProps;
@@ -78,11 +75,6 @@ export type ListViewProps<T extends Record<string, any>> = {
 		| 'totalItems'
 	>;
 
-	/**
-	 * The options for the pagination.
-	 *
-	 * @default {displayType: true}
-	 */
 	paginationOptions?: {
 		displayType: boolean;
 	};
@@ -96,12 +88,6 @@ export type ListViewProps<T extends Record<string, any>> = {
 		'items' | 'mutate' | 'onSelectAllRows' | 'onSort'
 	>;
 
-	/**
-	 * A function to transform the data before rendering.
-	 * It can be used to format or filter the data.
-	 *
-	 * @default undefined
-	 */
 	transformData?: (response: APIResponse<T>) => APIResponse<T>;
 };
 
@@ -117,7 +103,7 @@ function getMatchedOption(rawValue: string, field?: RendererFields) {
 		: {label: rawValue, value: rawValue};
 }
 
-const ListView = <T extends Record<string, any>>({
+const ListViewBase = <T extends Record<string, unknown>>({
 	children,
 	defaultFilters,
 	emptyStateProps,
@@ -138,8 +124,8 @@ const ListView = <T extends Record<string, any>>({
 
 	const {filters, keywords, sort} = listViewContext;
 
-	const filterSchema = (filterSchemas as any)[
-		managementToolbarProps?.filterSchema ?? ''
+	const filterSchema = filterSchemas[
+		managementToolbarProps?.filterSchema as FilterSchemaOption
 	] as FilterSchemaType;
 
 	const encodedFilter = searchParams.get('filter');
@@ -247,8 +233,8 @@ const ListView = <T extends Record<string, any>>({
 	const {
 		data: response,
 		error,
+		isLoading: loading,
 		isValidating,
-		loading,
 		mutate,
 	} = useFetch(
 		resource,
@@ -336,13 +322,13 @@ const ListView = <T extends Record<string, any>>({
 		</>
 	);
 };
-const ListViewWithContext = <T extends Record<string, any>>({
+const ListView = <T extends Record<string, unknown>>({
 	initialContext,
 	...otherProps
 }: ListViewProps<T>): React.ReactElement => (
 	<ListViewContextProvider {...initialContext} id={otherProps.id}>
-		<ListView {...otherProps} />
+		<ListViewBase {...otherProps} />
 	</ListViewContextProvider>
 );
 
-export default ListViewWithContext;
+export default ListView;

@@ -3,10 +3,15 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-export enum PaymentMethodType {
-	INVOICE,
-	PAY_NOW,
-}
+import type {BillingAddress} from '~/types/orders';
+
+export const PaymentMethodType = {
+	INVOICE: 0,
+	PAY_NOW: 1,
+} as const;
+
+export type PaymentMethodType =
+	(typeof PaymentMethodType)[keyof typeof PaymentMethodType];
 
 export type ProductPurchaseInvoice = {
 	email: string;

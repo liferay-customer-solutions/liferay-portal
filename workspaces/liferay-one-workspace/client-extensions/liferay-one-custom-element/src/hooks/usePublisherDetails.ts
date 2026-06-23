@@ -4,14 +4,9 @@
  */
 
 import useSWR, {SWRConfiguration} from 'swr';
+import PublisherDetails from '~/services/objects/PublisherDetails';
+import SearchBuilder from '~/utils/SearchBuilder';
 
-import SearchBuilder from '../core/SearchBuilder';
-import PublisherDetails from '../services/rest/PublisherDetails';
-
-/**
- * Loads the PublisherDetails record for a catalog. There is a single record per
- * publisher account, keyed to the account's Commerce catalog through catalogId.
- */
 const usePublisherDetails = (
 	catalogId?: number | null,
 	swrOptions?: SWRConfiguration

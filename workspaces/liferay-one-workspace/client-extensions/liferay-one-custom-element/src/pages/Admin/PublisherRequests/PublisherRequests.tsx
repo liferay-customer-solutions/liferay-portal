@@ -7,13 +7,15 @@ import ClayLabel from '@clayui/label';
 import {useModal} from '@clayui/modal';
 import {format} from 'date-fns';
 import {ComponentProps, useState} from 'react';
+import ListView from '~/components/ListView/ListView';
+import Page from '~/components/Page/Page';
+import i18n from '~/i18n';
 
-import ListView from '../../../components/ListView';
-import Page from '../../../components/Page';
-import i18n from '../../../i18n';
 import PublisherRequestModal, {
 	PublisherStatusDisplayType,
 } from './components/PublisherRequestModal';
+
+import type {PublisherRequestInfo} from '~/types/publisher';
 
 export default function PublisherRequests() {
 	const modal = useModal();

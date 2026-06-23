@@ -6,16 +6,14 @@
 import Label from '@clayui/label';
 import {ComponentProps} from 'react';
 import {useNavigate} from 'react-router-dom';
+import ListView from '~/components/ListView/ListView';
+import Page from '~/components/Page/Page';
+import i18n from '~/i18n';
+import SearchBuilder from '~/utils/SearchBuilder';
+import {formatDate} from '~/utils/dateUtils';
+import {ProductWorkflowDisplayType} from '~/utils/productUtils';
 
-import ListView from '../../../components/ListView';
-import Page from '../../../components/Page';
-import SearchBuilder from '../../../core/SearchBuilder';
-import {
-	ProductTypeVocabulary,
-	ProductWorkflowDisplayType,
-} from '../../../enums/Product';
-import i18n from '../../../i18n';
-import {formatDate} from '../../../utils/date';
+import type {Product} from '~/types/product';
 
 export default function Solutions() {
 	const navigate = useNavigate();
@@ -29,7 +27,7 @@ export default function Solutions() {
 				defaultFilters={{
 					filter: `${SearchBuilder.lambda(
 						'categoryNames',
-						ProductTypeVocabulary.SOLUTION
+						'Solution'
 					)}`,
 				}}
 				id="administrator-solutions"

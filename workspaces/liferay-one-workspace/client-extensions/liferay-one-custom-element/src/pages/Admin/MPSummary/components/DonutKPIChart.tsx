@@ -8,11 +8,10 @@ import ClayIcon from '@clayui/icon';
 import Label from '@clayui/label';
 import React from 'react';
 import {Cell, Pie, PieChart, ResponsiveContainer} from 'recharts';
+import i18n from '~/i18n';
+import {percentage as getPercentage} from '~/pages/Admin/MPSummary/utils/constants';
 
-import i18n from '../../../../i18n';
-import {percentage as getPercentage} from '../util';
-
-import './DonutKPIChart.scss';
+import './DonutKPIChart.css';
 
 type DonutKPIChartProps = {
 	annualTargetCurrent: number;
@@ -99,7 +98,7 @@ const DonutKPIChart: React.FC<DonutKPIChartProps> = ({
 								paddingAngle={0}
 								startAngle={90}
 							>
-								{data.map((_: any, index: number) => (
+								{data.map((_: unknown, index: number) => (
 									<Cell fill={colors[index]} key={index} />
 								))}
 							</Pie>

@@ -5,8 +5,7 @@
 
 import {Text} from '@clayui/core';
 import ClayIcon from '@clayui/icon';
-
-import {translate} from '../../i18n';
+import {translate} from '~/i18n';
 
 import './RestrictedFeatureMessage.css';
 

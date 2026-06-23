@@ -4,8 +4,8 @@
  */
 
 import ClayButton from '@clayui/button';
+import i18n from '~/i18n';
 
-import i18n from '../i18n';
 import useModalContext, {ModalOptions} from './useModalContext';
 
 type ConfirmationModalProps = {

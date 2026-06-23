@@ -5,11 +5,12 @@
 
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
+import {ReactNode} from 'react';
 
 interface IProps {
 	alertType?: 'danger' | 'info' | 'success' | 'warning';
 	badgeClassName?: string;
-	children?: any;
+	children?: ReactNode;
 }
 
 const Badge = ({

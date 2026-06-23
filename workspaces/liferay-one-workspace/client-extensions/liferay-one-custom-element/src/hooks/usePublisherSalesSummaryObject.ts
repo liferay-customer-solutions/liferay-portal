@@ -4,11 +4,12 @@
  */
 
 import useSWR, {SWRConfiguration} from 'swr';
+import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
+import HeadlessCommerceAdminOrder from '~/services/headless/HeadlessCommerceAdminOrder';
+import HeadlessCommerceDeliveryOrder from '~/services/headless/HeadlessCommerceDeliveryOrder';
+import PublisherSalesSummaries from '~/services/objects/PublisherSalesSummaries';
 
-import HeadlessAdminUser from '../services/rest/HeadlessAdminUser';
-import HeadlessCommerceAdminOrder from '../services/rest/HeadlessCommerceAdminOrder';
-import HeadlessCommerceDeliveryOrder from '../services/rest/HeadlessCommerceDeliveryOrder';
-import PublisherSalesSummary from '../services/rest/PublisherSalesSummary';
+import type {OrderItem, PlacedOrderItems} from '~/types/orders';
 
 type ExtendedOrderItems = OrderItem & {
 	account: {
@@ -34,7 +35,7 @@ const usePublisherSalesSummaryObject = (
 		`/publisher-sales-summary/${entryId}`,
 		async () => {
 			const publisherSalesSummary =
-				await PublisherSalesSummary.getPublisherSalesSummaryById(
+				await PublisherSalesSummaries.getPublisherSalesSummaryById(
 					entryId,
 					new URLSearchParams({
 						nestedFields: 'publisherToCommerceOrder',

@@ -6,13 +6,15 @@
 import ClayIcon from '@clayui/icon';
 import ClayLabel from '@clayui/label';
 import classNames from 'classnames';
+import Page from '~/components/Page/Page';
+import i18n from '~/i18n';
+import InfoCard from '~/pages/Admin/MPSummary/components/InfoCard';
+import {Availability} from '~/services/spring-boot/Trial';
 
-import Page from '../../../components/Page';
-import i18n from '../../../i18n';
-import {Availability} from '../../../services/oauth/Trial';
-import InfoCard from '../MPSummary/components/InfoCard';
 import TrialTable from './components/TrialTable';
 import useTrialMetrics from './hooks/useTrialMetrics';
+
+import type {Order} from '~/types/orders';
 
 const getAvailabilityResourceLabel = (availability: Availability) => {
 	if (availability.fallback) {
@@ -40,10 +42,14 @@ export default function Trials() {
 
 							<ClayLabel
 								displayType={
-									availability.active ? 'success' : 'danger'
+									(availability as Availability).active
+										? 'success'
+										: 'danger'
 								}
 							>
-								{getAvailabilityResourceLabel(availability)}
+								{getAvailabilityResourceLabel(
+									availability as Availability
+								)}
 							</ClayLabel>
 						</div>
 
@@ -125,7 +131,9 @@ export default function Trials() {
 
 				<div className="border d-flex flex-column justify-content-center p-6 rounded-lg">
 					<TrialTable
-						items={orderTableData?.items || []}
+						items={
+							(orderTableData?.items as unknown as Order[]) || []
+						}
 						revalidate={mutate}
 					/>
 				</div>

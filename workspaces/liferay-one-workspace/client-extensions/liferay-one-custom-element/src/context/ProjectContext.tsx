@@ -5,16 +5,15 @@
 
 import {ReactNode, createContext, useContext, useEffect, useMemo} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-
-import {useUnassignedCommerce} from '../hooks/data/useProjectCommerce';
-import i18n from '../i18n';
+import {useUnassignedCommerce} from '~/hooks/useProjectCommerce';
+import i18n from '~/i18n';
 import {
 	LAST_PROJECT_STORAGE_KEY,
 	UNASSIGNED_PROJECT_ERC,
 	UserProject,
 	resolveProjectId,
 	useUserProjects,
-} from '../pages/MyAccount/Projects/projects';
+} from '~/pages/MyAccount/Projects/projects';
 
 type ProjectContextValue = {
 	loading: boolean;
@@ -35,10 +34,6 @@ export function ProjectProvider({children}: {children: ReactNode}) {
 
 	const {entitlements: unassignedEntitlements, loading: unassignedLoading} =
 		useUnassignedCommerce();
-
-	// When the account has products or applications on contracts that are not
-	// linked to a project, surface them through a synthetic "One-Time Purchases"
-	// project appended after the real ones.
 
 	const projects = useMemo<UserProject[]>(() => {
 		if (!unassignedEntitlements.length) {
@@ -64,17 +59,11 @@ export function ProjectProvider({children}: {children: ReactNode}) {
 		(project) => project.externalReferenceCode === projectId
 	);
 
-	// The selected project lives in the URL. Persist it so it can be restored
-	// as the default the next time the user lands without a project in the URL.
-
 	useEffect(() => {
 		if (accessible) {
 			localStorage.setItem(LAST_PROJECT_STORAGE_KEY, projectId);
 		}
 	}, [accessible, projectId]);
-
-	// When the URL has no project (or one the user cannot access), redirect to
-	// the last viewed project, falling back to the first accessible one.
 
 	useEffect(() => {
 		if (loading || !projects.length || accessible) {

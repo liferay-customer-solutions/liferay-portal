@@ -8,82 +8,45 @@ import ClayIcon from '@clayui/icon';
 import ClayTimePicker from '@clayui/time-picker';
 import {Input as TimeInput} from '@clayui/time-picker/lib';
 import classNames from 'classnames';
-import {useField} from 'formik';
-
-import {getIconSpriteMap} from '../../liferay/constants';
-import {requiredTimeInput, validate} from '../../utils/validations.form';
-import Badge from '../Badge/Badge';
+import Badge from '~/components/Badge/Badge';
+import {getIconSpriteMap} from '~/services/liferay/liferay';
 
 import './TimePicker.css';
 
 interface IProps {
 	badgeClassName?: string;
 	className?: string;
+	error?: string;
 	groupStyle?: string;
 	helper?: string;
 	id?: string;
 	label?: string;
-	name: string;
 	onBlur?: () => void;
 	onChange?: (date: TimeInput) => void;
 	required?: boolean;
-	validations?: ((value: any) => string | undefined)[];
+	value?: TimeInput;
 }
 
 const TimePicker: React.FC<IProps> = ({
 	badgeClassName,
-	className,
+	error,
 	groupStyle,
 	helper,
-	id,
 	label,
-	name,
 	onBlur,
 	onChange,
 	required,
-	validations = [],
+	value,
 }) => {
-	if (required) {
-		validations = validations
-			? [...validations, (value: TimeInput) => requiredTimeInput(value)]
-			: [(value: TimeInput) => requiredTimeInput(value)];
-	}
-
-	const [field, meta, helpers] = useField<TimeInput>({
-		className,
-		id,
-		name,
-		required,
-		validate: (value) => validate(validations, value),
-	});
-
-	const getStyleStatus = () => {
-		if (meta.touched) {
-			return meta.error ? 'has-error' : 'has-success';
-		}
-
-		return;
-	};
-
-	const handleBlur = () => {
-		helpers.setTouched(true);
-
-		if (onBlur) {
-			onBlur();
-		}
-	};
-
-	const handleChange = (value: TimeInput) => {
-		helpers.setValue(value);
-
+	const handleChange = (nextValue: TimeInput) => {
 		if (onChange) {
-			onChange(value);
+			onChange(nextValue);
 		}
 	};
 
 	return (
 		<ClayForm.Group
-			className={classNames('w-100', getStyleStatus(), groupStyle)}
+			className={classNames('w-100', error && 'has-error', groupStyle)}
 		>
 			<label className="date-picker">
 				{label}
@@ -95,17 +58,17 @@ const TimePicker: React.FC<IProps> = ({
 				)}
 
 				<ClayTimePicker
-					onBlur={handleBlur}
+					onBlur={onBlur}
 					onChange={handleChange}
 					spritemap={getIconSpriteMap()}
 					use12Hours={false}
-					value={field.value}
+					value={value}
 				/>
 			</label>
 
-			{meta.touched && meta.error && required && (
+			{error && required && (
 				<Badge badgeClassName={badgeClassName}>
-					<span className="pl-1">{meta.error}</span>
+					<span className="pl-1">{error}</span>
 				</Badge>
 			)}
 

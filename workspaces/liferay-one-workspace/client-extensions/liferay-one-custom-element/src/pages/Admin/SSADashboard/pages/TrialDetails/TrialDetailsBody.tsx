@@ -4,32 +4,34 @@
  */
 
 import DOMPurify from 'dompurify';
+import {DetailedCard} from '~/components/DetailedCard/DetailedCard';
+import QATable, {Orientation} from '~/components/QATable/QATable';
+import {useOneContext} from '~/context/OneContextProvider';
+import i18n from '~/i18n';
+import DeliveryOrderModel from '~/models/DeliveryOrderModel';
+import {DeliveryProductModel} from '~/models/DeliveryProductModel';
+import ExtensionStatus from '~/pages/Admin/SSADashboard/components/ExtensionStatus/ExtensionStatus';
+import TrialStatus from '~/pages/Admin/SSADashboard/components/TrialStatus/TrialStatus';
+import {useSSADashboardOutlet} from '~/pages/Admin/SSADashboard/hooks/useSSADashboardOutlet';
+import {EXTEND_TRIAL_STATUS_LABEL} from '~/pages/Admin/SSADashboard/utils/constants';
+import {formatDate, formatDateTime} from '~/utils/dateUtils';
+import {OrderWorkflowStatusCode} from '~/utils/orderUtils';
 
-import {DetailedCard} from '../../../../../components/DetailedCard/DetailedCard';
-import ExternalLink from '../../../../../components/ExternalLink';
-import QATable, {Orientation} from '../../../../../components/QATable';
-import {useOneContext} from '../../../../../context/OneContext';
-import MarketplaceDeliveryOrder from '../../../../../entity/MarketplaceDeliveryOrder';
-import {MarketplaceDeliveryProduct} from '../../../../../entity/MarketplaceDeliveryProduct';
-import {OrderWorkflowStatusCode} from '../../../../../enums/Order';
-import i18n from '../../../../../i18n';
-import {formatDate, formatDateTime} from '../../../../../utils/date';
-import {useSSADashboardOutlet} from '../../SSADashboardOutlet';
-import ExtensionStatus from '../../components/ExtensionStatus/ExtensionStatus';
-import TrialStatus from '../../components/TrialStatus/TrialStatus';
-import {EXTEND_TRIAL_STATUS_LABEL} from '../../constants';
+import ExternalLink from './ExternalLink/ExternalLink';
+
+import type {PlacedOrder} from '~/types/orders';
 
 type TrialDetailsBodyProps = {
-	marketplaceOrder: MarketplaceDeliveryOrder;
-	marketplaceProduct: MarketplaceDeliveryProduct;
+	orderModel: DeliveryOrderModel;
 	placedOrder: PlacedOrder;
+	productModel: DeliveryProductModel;
 	projectId: string;
 };
 
 const TrialDetailsBody: React.FC<TrialDetailsBodyProps> = ({
-	marketplaceOrder,
-	marketplaceProduct,
+	orderModel,
 	placedOrder,
+	productModel,
 	projectId,
 }) => {
 	const {properties} = useOneContext();
@@ -143,17 +145,16 @@ const TrialDetailsBody: React.FC<TrialDetailsBodyProps> = ({
 							{
 								title: i18n.translate('trial-start-date'),
 								value: formatDateTime(
-									marketplaceOrder.customFields
-										.TRIAL_START_DATE
+									orderModel.customFields.TRIAL_START_DATE
 								),
-								visible: !marketplaceOrder.isCancelled,
+								visible: !orderModel.isCancelled,
 							},
 							{
 								title: i18n.translate('trial-end-date'),
 								value: formatDateTime(
-									marketplaceOrder.customFields.TRIAL_END_DATE
+									orderModel.customFields.TRIAL_END_DATE
 								),
-								visible: !marketplaceOrder.isCancelled,
+								visible: !orderModel.isCancelled,
 							},
 							{
 								className: 'mb-2',
@@ -161,10 +162,10 @@ const TrialDetailsBody: React.FC<TrialDetailsBodyProps> = ({
 								value: (
 									<ExternalLink
 										className="h5 py-1"
-										href={`https://${marketplaceOrder.customFields.TRIAL_VIRTUAL_HOST}`}
+										href={`https://${orderModel.customFields.TRIAL_VIRTUAL_HOST}`}
 									>
 										{
-											marketplaceOrder.customFields
+											orderModel.customFields
 												.TRIAL_VIRTUAL_HOST
 										}
 									</ExternalLink>
@@ -208,7 +209,7 @@ const TrialDetailsBody: React.FC<TrialDetailsBodyProps> = ({
 										Provisioning
 									</div>
 								),
-								visible: marketplaceOrder.isCancelled,
+								visible: orderModel.isCancelled,
 							},
 							{
 								title: i18n.translate('extension-status'),
@@ -236,7 +237,7 @@ const TrialDetailsBody: React.FC<TrialDetailsBodyProps> = ({
 						className="app-review-section-body-description-paragraph mt-3"
 						dangerouslySetInnerHTML={{
 							__html: DOMPurify.sanitize(
-								marketplaceProduct.description
+								productModel.description
 							),
 						}}
 					/>

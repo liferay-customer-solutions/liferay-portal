@@ -4,13 +4,11 @@
  */
 
 import useSWR from 'swr';
-
-import HeadlessAdminUser from '../../../services/rest/HeadlessAdminUser';
+import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
 
 const useAccountAddresses = (accountId?: number) =>
-	useSWR(
-		accountId ? `/account-postal-addresses/${accountId}` : null,
-		() => HeadlessAdminUser.getAccountPostalAddresses(accountId as number)
+	useSWR(accountId ? `/account-postal-addresses/${accountId}` : null, () =>
+		HeadlessAdminUser.getAccountPostalAddresses(accountId as number)
 	);
 
 export default useAccountAddresses;

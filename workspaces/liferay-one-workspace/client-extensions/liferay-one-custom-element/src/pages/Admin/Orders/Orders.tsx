@@ -4,12 +4,11 @@
  */
 
 import {useMemo} from 'react';
-
-import Page from '../../../components/Page';
-import i18n from '../../../i18n';
-import {AdministratorOrdersListView} from '../MPSummary/components/AdministratorOrdersListView';
-import InfoCard from '../MPSummary/components/InfoCard';
-import useOrderMetrics from '../MPSummary/hooks/useOrderMetrics';
+import Page from '~/components/Page/Page';
+import i18n from '~/i18n';
+import {AdministratorOrdersListView} from '~/pages/Admin/MPSummary/components/AdministratorOrdersListView';
+import InfoCard from '~/pages/Admin/MPSummary/components/InfoCard';
+import useOrderMetrics from '~/pages/Admin/MPSummary/hooks/useOrderMetrics';
 
 export default function Orders() {
 	const {data: metrics} = useOrderMetrics('week');

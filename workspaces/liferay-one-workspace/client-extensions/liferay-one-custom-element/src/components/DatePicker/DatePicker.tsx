@@ -8,14 +8,8 @@ import {IYears} from '@clayui/date-picker/lib/types';
 import ClayForm from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
-import {useField} from 'formik';
-
-import {getIconSpriteMap} from '../../liferay/constants';
-import {
-	required as requiredValidation,
-	validate,
-} from '../../utils/validations.form';
-import Badge from '../Badge/Badge';
+import Badge from '~/components/Badge/Badge';
+import {getIconSpriteMap} from '~/services/liferay/liferay';
 
 import './DatePicker.css';
 
@@ -23,16 +17,16 @@ interface IProps {
 	badgeClassName?: string;
 	className?: string;
 	dateFormat?: string;
+	error?: string;
 	groupStyle?: string;
 	helper?: string;
 	id?: string;
 	label?: string;
-	name: string;
 	onBlur?: () => void;
 	onChange?: (date: string) => void;
 	placeholder?: string;
 	required?: boolean;
-	validations?: ((value: any) => string | undefined)[];
+	value?: string;
 	years?: IYears;
 	yearsCheck?: boolean;
 }
@@ -41,60 +35,33 @@ const DatePicker: React.FC<IProps> = ({
 	badgeClassName,
 	className,
 	dateFormat = 'MM/dd/yyyy',
+	error,
 	groupStyle,
 	helper,
 	id,
 	label,
-	name,
 	onBlur,
 	onChange,
 	placeholder,
 	required,
-	validations = [],
+	value = '',
 	years,
 	yearsCheck,
 }) => {
-	if (required) {
-		validations = validations
-			? [...validations, (value: string) => requiredValidation(value)]
-			: [(value: string) => requiredValidation(value)];
-	}
-
-	const [field, meta, helpers] = useField({
-		className,
-		id,
-		name,
-		required,
-		validate: (value) => validate(validations, value),
-	});
-
-	const getStyleStatus = () => {
-		if (meta.touched) {
-			return meta.error ? 'has-error' : 'has-success';
-		}
-
-		return;
-	};
-
-	const handleBlur = () => {
-		helpers.setTouched(true);
-
-		if (onBlur) {
-			onBlur();
-		}
-	};
-
-	const handleChange = (value: string) => {
-		helpers.setValue(value);
-
+	const handleChange = (nextValue: string) => {
 		if (onChange) {
-			onChange(value);
+			onChange(nextValue);
 		}
 	};
 
 	return (
 		<ClayForm.Group
-			className={classNames('w-100', getStyleStatus(), groupStyle)}
+			className={classNames(
+				'w-100',
+				error && 'has-error',
+				className,
+				groupStyle
+			)}
 		>
 			<label>
 				{label}
@@ -106,19 +73,20 @@ const DatePicker: React.FC<IProps> = ({
 				)}
 				<ClayDatePicker
 					dateFormat={dateFormat}
-					onBlur={handleBlur}
+					id={id}
+					onBlur={onBlur}
 					onChange={handleChange}
 					placeholder={placeholder}
 					spritemap={getIconSpriteMap()}
-					value={field.value}
+					value={value}
 					years={years}
 					yearsCheck={yearsCheck}
 				/>
 			</label>
 
-			{meta.touched && meta.error && required && (
+			{error && required && (
 				<Badge badgeClassName={badgeClassName}>
-					<span className="pl-1">{meta.error}</span>
+					<span className="pl-1">{error}</span>
 				</Badge>
 			)}
 

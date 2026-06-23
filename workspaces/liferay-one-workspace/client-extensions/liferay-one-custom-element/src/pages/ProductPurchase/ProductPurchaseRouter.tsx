@@ -4,23 +4,60 @@
  */
 
 import {Suspense, lazy, useEffect} from 'react';
-import {HashRouter, Route, Routes} from 'react-router-dom';
+import {HashRouter, useRoutes} from 'react-router-dom';
+import EmptyState from '~/components/EmptyState/EmptyState';
+import Loading from '~/components/Loading/Loading';
+import {useDeliveryProduct} from '~/hooks/useDeliveryProduct';
+import i18n from '~/i18n';
+import {Liferay} from '~/services/liferay/liferay';
+import {getProductPriceModel} from '~/utils/productUtils';
+import {AppRoute, toRouteObjects} from '~/utils/routeUtils';
 
-import EmptyState from '../../components/EmptyState';
-import Loading from '../../components/Loading';
-import {useDeliveryProduct} from '../../hooks/data/useProduct';
-import i18n from '../../i18n';
-import {Liferay} from '../../liferay/liferay';
-import {getProductPriceModel} from '../../utils/productUtils';
-import ProductPurchaseOutlet from './ProductPurchaseOutlet';
-import {getProductPurchaseRoutes} from './productPurchaseRoutes';
+import ProductPurchaseLayout from './components/ProductPurchaseLayout/ProductPurchaseLayout';
+import {
+	getProductPurchaseSteps,
+	toStepItems,
+	toStepRoutes,
+} from './productPurchaseRoutes';
 
-import './product_purchase.scss';
+import './ProductPurchase.css';
+
+import type {DeliveryProduct} from '~/types/product';
 
 const BankTransferCompleted = lazy(
-	() => import('./pages/BankTransferCompleted')
+	() => import('./BankTransferCompleted/BankTransferCompleted')
 );
-const PurchaseCompleted = lazy(() => import('./pages/PurchaseCompleted'));
+const PurchaseCompleted = lazy(
+	() => import('./PurchaseCompleted/PurchaseCompleted')
+);
+
+const ProductPurchaseRoutes = ({product}: {product: DeliveryProduct}) => {
+	const {isPaidApp} = getProductPriceModel(product);
+
+	const steps = getProductPurchaseSteps(isPaidApp);
+
+	const routes: AppRoute[] = [
+		{
+			children: toStepRoutes(steps),
+			element: (
+				<ProductPurchaseLayout
+					product={product}
+					steps={toStepItems(steps)}
+				/>
+			),
+		},
+		{
+			element: <BankTransferCompleted product={product} />,
+			path: 'bank-transfer-completed',
+		},
+		{
+			element: <PurchaseCompleted product={product} />,
+			path: 'purchase-completed',
+		},
+	];
+
+	return useRoutes(toRouteObjects(routes));
+};
 
 const ProductPurchaseRouter = () => {
 	const searchParams = new URLSearchParams(window.location.search);
@@ -30,8 +67,6 @@ const ProductPurchaseRouter = () => {
 	const isSignedIn = Liferay.ThemeDisplay.isSignedIn();
 
 	const {data: product, isLoading} = useDeliveryProduct(productId);
-
-	const {isPaidApp} = getProductPriceModel(product as DeliveryProduct);
 
 	useEffect(() => {
 		if (!isSignedIn) {
@@ -67,50 +102,11 @@ const ProductPurchaseRouter = () => {
 		);
 	}
 
-	const routes = getProductPurchaseRoutes(isPaidApp);
-
 	return (
 		<HashRouter>
 			<div className="my-7 product-purchase">
 				<Suspense fallback={null}>
-					<Routes>
-						<Route
-							element={
-								<ProductPurchaseOutlet
-									product={product}
-									routes={routes}
-								/>
-							}
-						>
-							{routes.map((route, index) =>
-								route.index ? (
-									<Route
-										element={route.element}
-										index
-										key={index}
-									/>
-								) : (
-									<Route
-										element={route.element}
-										key={index}
-										path={route.path}
-									/>
-								)
-							)}
-						</Route>
-
-						<Route
-							element={
-								<BankTransferCompleted product={product} />
-							}
-							path="bank-transfer-completed"
-						/>
-
-						<Route
-							element={<PurchaseCompleted product={product} />}
-							path="purchase-completed"
-						/>
-					</Routes>
+					<ProductPurchaseRoutes product={product} />
 				</Suspense>
 			</div>
 		</HashRouter>

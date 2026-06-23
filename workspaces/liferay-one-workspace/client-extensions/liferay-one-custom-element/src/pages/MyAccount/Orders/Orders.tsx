@@ -12,21 +12,23 @@ import ClayTable from '@clayui/table';
 import {format} from 'date-fns';
 import {useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-
-import Button from '../../../components/Button/Button';
-import Page from '../../../components/Page';
+import Button from '~/components/Button/Button';
+import Page from '~/components/Page/Page';
+import {useFetch} from '~/hooks/useFetch';
+import i18n, {Word, translate} from '~/i18n';
+import {Liferay} from '~/services/liferay/liferay';
 import {
 	OrderCustomFields,
 	PaymentStatus,
 	getOrderStatusLabel,
 	orderWorkflowDisplayType,
-} from '../../../enums/Order';
-import {useFetch} from '../../../hooks/useFetch';
-import i18n, {Word, translate} from '../../../i18n';
-import {Liferay} from '../../../liferay/liferay';
-import {safeJSONParse} from '../../../utils/util';
+} from '~/utils/orderUtils';
+import {safeJSONParse} from '~/utils/safeJSONParse';
 
 import './Orders.css';
+
+import type {APIResponse} from '~/types/api';
+import type {PlacedOrder} from '~/types/orders';
 
 const PAGE_SIZE_OPTIONS = [10, 20, 30, 50];
 
@@ -205,7 +207,11 @@ export default function Orders() {
 		[]
 	);
 
-	const {data, error, loading} = useFetch<APIResponse<PlacedOrder>>(
+	const {
+		data,
+		error,
+		isLoading: loading,
+	} = useFetch<APIResponse<PlacedOrder>>(
 		accountId && channelId
 			? `/o/headless-commerce-delivery-order/v1.0/channels/${channelId}/accounts/${accountId}/placed-orders`
 			: null,

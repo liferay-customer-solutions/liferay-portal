@@ -6,11 +6,12 @@
 import {addDays} from 'date-fns';
 import {useEffect, useMemo, useState} from 'react';
 import useSWR from 'swr';
+import HeadlessCommerceAdminOrder from '~/services/headless/HeadlessCommerceAdminOrder';
+import trialOAuth2, {Availability} from '~/services/spring-boot/Trial';
+import SearchBuilder from '~/utils/SearchBuilder';
+import {OrderWorkflowStatusCode} from '~/utils/orderUtils';
 
-import SearchBuilder from '../../../../core/SearchBuilder';
-import {OrderTypes, OrderWorkflowStatusCode} from '../../../../enums/Order';
-import trialOAuth2 from '../../../../services/oauth/Trial';
-import HeadlessCommerceAdminOrder from '../../../../services/rest/HeadlessCommerceAdminOrder';
+import type {PlacedOrder} from '~/types/orders';
 
 type FilterType = 'month' | 'q1' | 'q2' | 'q3' | 'q4' | 'week';
 
@@ -27,7 +28,7 @@ const ACTIVE_REFRESH_INTERVAL = 60 * 1000;
 const DEFAULT_REFRESH_INTERVAL = 240 * 1000;
 
 const trialSearchBuilder = new SearchBuilder()
-	.eq('orderTypeExternalReferenceCode', OrderTypes.SOLUTIONS7)
+	.eq('orderTypeExternalReferenceCode', 'SOLUTIONS7')
 	.and();
 
 const useTrialMetrics = (param: FilterType) => {
@@ -93,7 +94,7 @@ const useTrialMetrics = (param: FilterType) => {
 		error,
 		isLoading,
 		mutate,
-	} = useSWR<any>(
+	} = useSWR<unknown>(
 		'administrator-dashboard/metrics/trial',
 		() =>
 			Promise.all([
@@ -111,7 +112,13 @@ const useTrialMetrics = (param: FilterType) => {
 		expiredResponse,
 		inProgressResponse,
 		onHoldResponse,
-	] = trialDataResponse;
+	] = trialDataResponse as [
+		Availability | undefined,
+		{items?: PlacedOrder[]; totalCount?: number} | undefined,
+		{totalCount?: number} | undefined,
+		{totalCount?: number} | undefined,
+		{totalCount?: number} | undefined,
+	];
 
 	const orderItems = useMemo(
 		() => orderTableData?.items ?? [],
@@ -119,11 +126,12 @@ const useTrialMetrics = (param: FilterType) => {
 	);
 
 	useEffect(() => {
-		const isProcessing = orderItems.some(({orderStatusInfo}: any) =>
-			[
-				OrderWorkflowStatusCode.PROCESSING,
-				OrderWorkflowStatusCode.ON_HOLD,
-			].includes(orderStatusInfo.code)
+		const isProcessing = orderItems.some(
+			({orderStatusInfo}: {orderStatusInfo: {code: number}}) =>
+				[
+					OrderWorkflowStatusCode.PROCESSING,
+					OrderWorkflowStatusCode.ON_HOLD,
+				].includes(orderStatusInfo.code)
 		);
 
 		setRefreshInterval(
@@ -135,7 +143,8 @@ const useTrialMetrics = (param: FilterType) => {
 		availability: {
 			...availabilityResponse,
 			resourcesAvailable: `${
-				availabilityResponse?.max - availabilityResponse?.available || 0
+				(availabilityResponse?.max ?? 0) -
+					(availabilityResponse?.available ?? 0) || 0
 			} / ${availabilityResponse?.max || 0}`,
 		},
 		error,

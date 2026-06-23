@@ -5,8 +5,7 @@
 
 import {lazy} from 'react';
 import {Navigate} from 'react-router-dom';
-
-import {AppRoute} from '../../utils/routes';
+import {AppRoute} from '~/utils/routeUtils';
 
 const Apps = lazy(() => import('./Apps/Apps'));
 const Environments = lazy(() => import('./Environments/Environments'));
@@ -27,9 +26,11 @@ const PublisherRequests = lazy(
 	() => import('./PublisherRequests/PublisherRequests')
 );
 const Publishers = lazy(() => import('./Publishers/Publishers'));
-const Pubsub = lazy(() => import('./Pubsub/Pubsub'));
+const PubSub = lazy(() => import('./PubSub/PubSub'));
 const Solutions = lazy(() => import('./Solutions/Solutions'));
-const TrialDetails = lazy(() => import('./SSADashboard/pages/TrialDetails'));
+const TrialDetails = lazy(
+	() => import('./SSADashboard/pages/TrialDetails/TrialDetails')
+);
 const Trials = lazy(() => import('./Trials/Trials'));
 
 export const adminRoutes: AppRoute[] = [
@@ -108,9 +109,9 @@ export const adminRoutes: AppRoute[] = [
 		path: 'details/:orderId',
 	},
 	{
-		element: <Pubsub />,
-		nav: {icon: 'message-boards', label: 'Pub/Sub'},
-		path: 'pubsub',
+		element: <PubSub />,
+		nav: {icon: 'message-boards', label: 'PubSub'},
+		path: 'pub-sub',
 	},
 	{
 		element: <LicenseKeyUploads />,

@@ -25,7 +25,12 @@ interface IProps {
 	rows: IRow[];
 }
 
-const Table = ({className, columns, onRowClick, rows}: IProps) => {
+const BusinessEventsTable = ({
+	className,
+	columns,
+	onRowClick,
+	rows,
+}: IProps) => {
 	return (
 		<ClayTable
 			borderless
@@ -81,4 +86,4 @@ const Table = ({className, columns, onRowClick, rows}: IProps) => {
 	);
 };
 
-export default Table;
+export default BusinessEventsTable;

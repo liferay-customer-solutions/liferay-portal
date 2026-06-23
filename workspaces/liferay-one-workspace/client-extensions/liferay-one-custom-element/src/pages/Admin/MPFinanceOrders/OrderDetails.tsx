@@ -4,30 +4,35 @@
  */
 
 import {useParams} from 'react-router-dom';
-
-import {DetailedCard} from '../../../components/DetailedCard/DetailedCard';
-import {PageRenderer} from '../../../components/Page';
-import QATable, {Orientation} from '../../../components/QATable';
-import Table from '../../../components/Table/Table';
-import {CurrencyAbbreviation} from '../../../enums/CurrencyAbbreviation';
+import {DetailedCard} from '~/components/DetailedCard/DetailedCard';
+import {PageRenderer} from '~/components/Page/Page';
+import PaymentDetailsHeader from '~/components/PaymentDetailsHeader/PaymentDetailsHeader';
+import PaymentStatusBadge from '~/components/PaymentStatusBadge/PaymentStatusBadge';
+import QATable, {Orientation} from '~/components/QATable/QATable';
+import Table from '~/components/Table/Table';
+import useAdminOrderProduct from '~/hooks/useAdminOrderProduct';
+import i18n from '~/i18n';
+import HeadlessCommerceAdminOrder from '~/services/headless/HeadlessCommerceAdminOrder';
+import {Liferay} from '~/services/liferay/liferay';
+import {formatDateTime} from '~/utils/dateUtils';
+import {formatAddress} from '~/utils/formatAddress';
+import {formatCurrency} from '~/utils/formatCurrency';
 import {
 	OrderCustomFields,
 	PaymentStatus as PaymentStatusCode,
-} from '../../../enums/Order';
-import {ProductSpecificationKey} from '../../../enums/Product';
-import useAdminOrderProduct from '../../../hooks/useAdminOrderProduct';
-import i18n from '../../../i18n';
-import {Liferay} from '../../../liferay/liferay';
-import HeadlessCommerceAdminOrder from '../../../services/rest/HeadlessCommerceAdminOrder';
-import {safeJSONParse} from '../../../utils/util';
-import DetailsHeader from '../FinanceDashboard/components/DetailsHeader/DetailsHeader';
-import PaymentStatusBadge from '../FinanceDashboard/components/PaymentStatus/PaymentStatusBadge';
-import {formatCurrency} from '../FinanceDashboard/util/finance';
-import {
-	formatAddress,
-	formatDate,
-	textWrapper,
-} from '../FinanceDashboard/util/util';
+} from '~/utils/orderUtils';
+import {ProductSpecificationKey} from '~/utils/productUtils';
+import {safeJSONParse} from '~/utils/safeJSONParse';
+
+import type {BillingAddress} from '~/types/orders';
+
+function textWrapper(content: string | number | undefined) {
+	if (content === undefined || content === null || content === '') {
+		return <p className="mb-2 mt-1">-</p>;
+	}
+
+	return <p className="mb-2 mt-1">{content}</p>;
+}
 
 const OrderDetails = () => {
 	const {orderId} = useParams();
@@ -45,7 +50,7 @@ const OrderDetails = () => {
 		(project: {name: string}) => project?.name
 	);
 
-	const currencyCode = order?.currencyCode || CurrencyAbbreviation.USD;
+	const currencyCode = order?.currencyCode || 'USD';
 
 	return (
 		<PageRenderer
@@ -53,7 +58,7 @@ const OrderDetails = () => {
 			error={error}
 			isLoading={isLoading}
 		>
-			<DetailsHeader
+			<PaymentDetailsHeader
 				backLink="/mp-finance-orders"
 				onClick={async () =>
 					HeadlessCommerceAdminOrder.patchOrder(orderId as string, {
@@ -146,7 +151,7 @@ const OrderDetails = () => {
 							{
 								title: i18n.translate('purchase-date'),
 								value: textWrapper(
-									formatDate(order?.createDate)
+									formatDateTime(order?.createDate)
 								),
 							},
 							{
@@ -165,7 +170,7 @@ const OrderDetails = () => {
 							{
 								title: i18n.translate('fulfillment-date'),
 								value: textWrapper(
-									formatDate(order?.orderDate)
+									formatDateTime(order?.orderDate)
 								),
 							},
 							{
@@ -181,9 +186,17 @@ const OrderDetails = () => {
 							},
 							{
 								title: i18n.translate('error-details'),
-								value: payments?.items[0]?.errorMessages,
+								value: (
+									payments?.items[0] as {
+										errorMessages?: string;
+									}
+								)?.errorMessages,
 								visible:
-									!!payments?.items[0]?.errorMessages &&
+									!!(
+										payments?.items[0] as {
+											errorMessages?: string;
+										}
+									)?.errorMessages &&
 									order?.paymentStatus ===
 										PaymentStatusCode.FAILED,
 							},
@@ -191,7 +204,13 @@ const OrderDetails = () => {
 								className: 'mt-2',
 								title: i18n.translate('paid-date'),
 								value: textWrapper(
-									formatDate(payments?.items?.[0]?.createDate)
+									formatDateTime(
+										(
+											payments?.items?.[0] as {
+												createDate?: string;
+											}
+										)?.createDate
+									)
 								),
 								visible:
 									order?.paymentStatus ===
@@ -214,13 +233,16 @@ const OrderDetails = () => {
 					columns={[
 						{
 							key: 'options',
-							render: (options, {quantity}) => {
-								const [skuOption] = safeJSONParse(options, [
-									{
-										skuOptionValueKey: 'Standard',
-										skuOptionValueName: 'Standard',
-									},
-								]);
+							render: (value, {quantity}) => {
+								const [skuOption] = safeJSONParse(
+									value as string,
+									[
+										{
+											skuOptionValueKey: 'Standard',
+											skuOptionValueName: 'Standard',
+										},
+									]
+								);
 
 								return (
 									<div className="pt-2">
@@ -264,31 +286,35 @@ const OrderDetails = () => {
 						},
 						{
 							key: 'finalPrice',
-							render: (finalPrice) =>
+							render: (value) =>
 								textWrapper(
-									formatCurrency(currencyCode, finalPrice)
+									formatCurrency(
+										value as number,
+										currencyCode
+									)
 								),
 							title: i18n.translate('net-price'),
 						},
 						{
 							key: 'finalPriceWithTaxAmount',
-							render: (finalPriceWithTaxAmount, order) =>
+							render: (value, order) =>
 								textWrapper(
 									formatCurrency(
-										currencyCode,
-										finalPriceWithTaxAmount -
-											order?.finalPrice
+										(value as number) -
+											(order as {finalPrice?: number})
+												?.finalPrice!,
+										currencyCode
 									)
 								),
 							title: i18n.translate('vat'),
 						},
 						{
 							key: 'finalPriceWithTaxAmount',
-							render: (finalPriceWithTaxAmount) =>
+							render: (value) =>
 								textWrapper(
 									formatCurrency(
-										currencyCode,
-										finalPriceWithTaxAmount
+										value as number,
+										currencyCode
 									)
 								),
 							title: i18n.translate('total'),

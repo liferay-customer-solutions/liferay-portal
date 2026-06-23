@@ -5,10 +5,9 @@
 
 import {addDays} from 'date-fns';
 import useSWR from 'swr';
-
-import SearchBuilder from '../../../../core/SearchBuilder';
-import {ProductWorkflowStatusCode} from '../../../../enums/Product';
-import HeadlessCommerceAdminCatalog from '../../../../services/rest/HeadlessCommerceAdminCatalog';
+import HeadlessCommerceAdminCatalog from '~/services/headless/HeadlessCommerceAdminCatalog';
+import SearchBuilder from '~/utils/SearchBuilder';
+import {ProductWorkflowStatusCode} from '~/utils/productUtils';
 
 type FilterType = 'month' | 'q1' | 'q2' | 'q3' | 'q4' | 'week';
 
@@ -34,7 +33,7 @@ const inReview = new SearchBuilder()
 
 const currentTime = new Date();
 
-const useAppsMetricks = (param: FilterType = 'week') => {
+const useAppsMetrics = (param: FilterType = 'week') => {
 	const beforeLastPeriod = addDays(
 		currentTime,
 		-METRIC_PARAMETER[param as keyof typeof METRIC_PARAMETER] * 2
@@ -110,4 +109,4 @@ const useAppsMetricks = (param: FilterType = 'week') => {
 	};
 };
 
-export default useAppsMetricks;
+export default useAppsMetrics;

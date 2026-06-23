@@ -4,8 +4,7 @@
  */
 
 import useSWR from 'swr';
-
-import HeadlessAdminAddress from '../../../services/rest/HeadlessAdminAddress';
+import HeadlessAdminAddress from '~/services/headless/HeadlessAdminAddress';
 
 const useCommerceRegions = () =>
 	useSWR('/admin-address-countries', () =>

@@ -4,17 +4,15 @@
  */
 
 import useSWR, {SWRConfiguration} from 'swr';
-
-import MarketplaceDeliveryOrder from '../entity/MarketplaceDeliveryOrder';
-import {MarketplaceDeliveryProduct} from '../entity/MarketplaceDeliveryProduct';
-import {ProductImageFallbackCategories} from '../enums/Product';
-import {Liferay} from '../liferay/liferay';
-import HeadlessCommerceDeliveryCatalog from '../services/rest/HeadlessCommerceDeliveryCatalog';
-import HeadlessCommerceDeliveryOrder from '../services/rest/HeadlessCommerceDeliveryOrder';
+import DeliveryOrderModel from '~/models/DeliveryOrderModel';
+import {DeliveryProductModel} from '~/models/DeliveryProductModel';
+import HeadlessCommerceDeliveryCatalog from '~/services/headless/HeadlessCommerceDeliveryCatalog';
+import HeadlessCommerceDeliveryOrder from '~/services/headless/HeadlessCommerceDeliveryOrder';
+import {Liferay} from '~/services/liferay/liferay';
 import {
 	getProductFallback,
 	getProductImageFallback,
-} from '../utils/productUtils';
+} from '~/utils/productUtils';
 
 const useGetProductByOrderId = (
 	orderId: string,
@@ -54,20 +52,14 @@ const useGetProductByOrderId = (
 
 				product = getProductFallback();
 				placedOrder.placedOrderItems[0].thumbnail =
-					getProductImageFallback(
-						ProductImageFallbackCategories.PRODUCT_IMAGE
-					);
+					getProductImageFallback('productImage');
 			}
 
 			return {
-				marketplaceDeliveryOrder: new MarketplaceDeliveryOrder(
-					placedOrder
-				),
-				marketplaceDeliveryProduct: new MarketplaceDeliveryProduct(
-					product
-				),
+				orderModel: new DeliveryOrderModel(placedOrder),
 				placedOrder,
 				product,
+				productModel: new DeliveryProductModel(product),
 			};
 		},
 		swrOptions

@@ -4,7 +4,7 @@
  */
 
 class FetcherError extends Error {
-	public info: any;
+	public info?: {detail?: string; title?: string; type?: string};
 	public status?: number;
 
 	constructor(message: string) {

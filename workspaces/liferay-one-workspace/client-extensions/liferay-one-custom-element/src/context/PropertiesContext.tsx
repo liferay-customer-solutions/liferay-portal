@@ -4,8 +4,7 @@
  */
 
 import {ReactNode, createContext, useContext} from 'react';
-
-import {Properties} from '../utils/attributes';
+import {Properties} from '~/utils/attributeUtils';
 
 const PropertiesContext = createContext<Properties | null>(null);
 

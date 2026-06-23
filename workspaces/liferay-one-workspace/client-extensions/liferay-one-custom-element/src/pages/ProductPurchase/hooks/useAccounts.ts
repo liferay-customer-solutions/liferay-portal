@@ -5,11 +5,12 @@
 
 import {useMemo, useState} from 'react';
 import useSWR from 'swr';
+import {useOneContext} from '~/context/OneContextProvider';
+import fetcher from '~/services/fetcher/fetcher';
+import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
+import {Liferay} from '~/services/liferay/liferay';
 
-import {useOneContext} from '../../../context/OneContext';
-import {Liferay} from '../../../liferay/liferay';
-import fetcher from '../../../services/fetcher';
-import HeadlessAdminUser from '../../../services/rest/HeadlessAdminUser';
+import type {Account} from '~/types/accounts';
 
 const useAccounts = () => {
 	const {myUserAccount} = useOneContext();

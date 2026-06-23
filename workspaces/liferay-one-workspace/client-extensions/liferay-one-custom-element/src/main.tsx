@@ -7,35 +7,36 @@ import {ClayIconSpriteContext} from '@clayui/icon';
 import {ClayModalProvider} from '@clayui/modal';
 import React, {Suspense} from 'react';
 import {Root, createRoot} from 'react-dom/client';
-import {SWRConfig} from 'swr';
+import {SWRConfig, SWRConfiguration} from 'swr';
+import ErrorBoundary from '~/components/ErrorBoundary/ErrorBoundary';
+import OneContextProvider from '~/context/OneContextProvider';
+import {PropertiesProvider} from '~/context/PropertiesContext';
+import SWRCacheProvider from '~/services/fetcher/SWRCacheProvider';
+import fetcher from '~/services/fetcher/fetcher';
+import {getIconSpriteMap} from '~/services/liferay/liferay';
+import {baseAttributes, getAttributes} from '~/utils/attributeUtils';
 
-import ErrorBoundary from './components/ErrorBoundary';
-import OneContextProvider from './context/OneContext';
-import {PropertiesProvider} from './context/PropertiesContext';
-import {getIconSpriteMap} from './liferay/constants';
-import SWRCacheProvider from './services/SWRCacheProvider';
-import fetcher from './services/fetcher';
-import {baseAttributes, getAttributes} from './utils/attributes';
+type CacheProvider = Required<SWRConfiguration>['provider'];
 
 type RouterComponent = React.ComponentType;
 
 const routers: Record<string, React.LazyExoticComponent<RouterComponent>> = {
 	'account-selector': React.lazy(
-		() => import('./pages/AccountSelector/AccountSelectorRouter')
+		() => import('~/pages/AccountSelector/AccountSelectorRouter')
 	),
-	'admin': React.lazy(() => import('./pages/Admin/AdminRouter')),
+	'admin': React.lazy(() => import('~/pages/Admin/AdminRouter')),
 	'business-events': React.lazy(
-		() => import('./pages/Support/BusinessEvents/BusinessEventsRouter')
+		() => import('~/pages/BusinessEvents/BusinessEventsRouter')
 	),
-	'my-account': React.lazy(() => import('./pages/MyAccount/MyAccountRouter')),
+	'my-account': React.lazy(() => import('~/pages/MyAccount/MyAccountRouter')),
 	'product-purchase': React.lazy(
-		() => import('./pages/ProductPurchase/ProductPurchaseRouter')
+		() => import('~/pages/ProductPurchase/ProductPurchaseRouter')
 	),
 	'publisher-dashboard': React.lazy(
-		() => import('./pages/PublisherDashboard/PublisherDashboardRouter')
+		() => import('~/pages/PublisherDashboard/PublisherDashboardRouter')
 	),
 	'ticket-attachments': React.lazy(
-		() => import('./pages/Support/Attachments/TicketAttachmentsRouter')
+		() => import('~/pages/TicketAttachments/TicketAttachmentsRouter')
 	),
 };
 
@@ -59,7 +60,8 @@ class WebComponent extends HTMLElement {
 					<SWRConfig
 						value={{
 							fetcher,
-							provider: SWRCacheProvider,
+							provider:
+								SWRCacheProvider as unknown as CacheProvider,
 							revalidateIfStale: true,
 							revalidateOnFocus: false,
 						}}

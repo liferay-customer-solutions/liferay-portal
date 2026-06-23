@@ -6,7 +6,7 @@
 import ClayIcon from '@clayui/icon';
 import {ReactNode} from 'react';
 
-import './DetailedCard.scss';
+import './DetailedCard.css';
 
 type DetailedCardProps = {
 	cardIcon?: string;

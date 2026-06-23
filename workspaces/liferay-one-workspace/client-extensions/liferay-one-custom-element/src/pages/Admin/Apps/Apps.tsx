@@ -4,12 +4,12 @@
  */
 
 import {useSearchParams} from 'react-router-dom';
+import Page from '~/components/Page/Page';
+import i18n from '~/i18n';
+import AdministratorAppsListView from '~/pages/Admin/MPSummary/components/AdministratorAppsListView';
+import InfoCard from '~/pages/Admin/MPSummary/components/InfoCard';
+import {percentage} from '~/pages/Admin/MPSummary/utils/constants';
 
-import Page from '../../../components/Page';
-import i18n from '../../../i18n';
-import AdministratorAppsListView from '../MPSummary/components/AdministratorAppsListView';
-import InfoCard from '../MPSummary/components/InfoCard';
-import {percentage} from '../MPSummary/util';
 import useAppsMetrics from './hooks/useAppsMetrics';
 
 export default function Apps() {

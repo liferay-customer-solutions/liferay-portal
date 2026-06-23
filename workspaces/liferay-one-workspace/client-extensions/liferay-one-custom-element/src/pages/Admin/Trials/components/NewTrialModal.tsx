@@ -7,21 +7,26 @@ import Autocomplete from '@clayui/autocomplete';
 import ClayButton from '@clayui/button';
 import ClayForm, {ClayInput, ClayToggle} from '@clayui/form';
 import ClayMultiSelect from '@clayui/multi-select';
+import {zodResolver} from '@hookform/resolvers/zod';
 import classNames from 'classnames';
 import {useState} from 'react';
 import {useForm} from 'react-hook-form';
+import {z} from 'zod';
+import BaseWrapper from '~/components/BaseWrapper/BaseWrapper';
+import Select from '~/components/Select/Select';
+import {useOneContext} from '~/context/OneContextProvider';
+import useDebounce from '~/hooks/useDebounce';
+import i18n from '~/i18n';
+import {useTrialProducts} from '~/pages/Admin/Trials/hooks/useTrialProducts';
+import commerceSchemas from '~/schema/commerceSchemas';
+import ProductPurchaseSolutionTrial from '~/services/commerce/ProductPurchaseSolutionTrial';
+import {Liferay} from '~/services/liferay/liferay';
+import {OrderCustomFields} from '~/utils/orderUtils';
+import {getProductType} from '~/utils/productUtils';
 
-import BaseWrapper from '../../../../components/Input/base/BaseWrapper';
-import Select from '../../../../components/Select/Select';
-import {useOneContext} from '../../../../context/OneContext';
-import {OrderCustomFields} from '../../../../enums/Order';
-import useDebounce from '../../../../hooks/useDebounce';
-import i18n from '../../../../i18n';
-import {Liferay} from '../../../../liferay/liferay';
-import zodSchema, {z, zodResolver} from '../../../../schema/zod';
-import {getProductType} from '../../../../utils/productUtils';
-import ProductPurchaseSolutionTrial from '../../../ProductPurchase/services/ProductPurchasePreBuiltTrial';
-import {useTrialProducts} from './useTrialProducts';
+import type {Account} from '~/types/accounts';
+import type {Cart} from '~/types/orders';
+import type {DeliveryProduct} from '~/types/product';
 
 type NewTrialModalProps = {
 	onClose: () => void;
@@ -56,7 +61,7 @@ const NewTrialModal: React.FC<NewTrialModalProps> = ({onClose, revalidate}) => {
 			},
 			mode: 'all',
 			reValidateMode: 'onChange',
-			resolver: zodResolver(zodSchema.trialForm),
+			resolver: zodResolver(commerceSchemas.trialForm),
 		});
 
 	const {isValid} = formState;
@@ -73,7 +78,9 @@ const NewTrialModal: React.FC<NewTrialModalProps> = ({onClose, revalidate}) => {
 		debouncedSearch
 	);
 
-	const onSubmit = async (form: z.infer<typeof zodSchema.trialForm>) => {
+	const onSubmit = async (
+		form: z.infer<typeof commerceSchemas.trialForm>
+	) => {
 		const product = form.product as DeliveryProduct;
 
 		const {isDXP} = getProductType(product);
@@ -103,7 +110,7 @@ const NewTrialModal: React.FC<NewTrialModalProps> = ({onClose, revalidate}) => {
 						sendNotificationEmail: form.sendNotificationEmail,
 					}),
 				},
-			} as Cart);
+			} as unknown as Cart);
 
 			await revalidate();
 
@@ -143,16 +150,15 @@ const NewTrialModal: React.FC<NewTrialModalProps> = ({onClose, revalidate}) => {
 				>
 					{(product) => (
 						<Autocomplete.Item
-							{...({} as any)}
 							disabled
 							key={product.productId}
 							onClick={() => {
-								setValue('product', product as any);
+								setValue('product', product as never);
 
 								trigger();
 							}}
 						>
-							{product.name}
+							{product.name.en_US}
 						</Autocomplete.Item>
 					)}
 				</Autocomplete>
@@ -200,12 +206,12 @@ const NewTrialModal: React.FC<NewTrialModalProps> = ({onClose, revalidate}) => {
 							onItemsChange={(values: MultiSelectValue[]) => {
 								setValue(
 									'_refInviteEmailAddresses',
-									values as any
+									values as never
 								);
 
 								setValue(
 									'consoleInviteEmailAddresses',
-									values.map(({value}) => value) as any
+									values.map(({value}) => value) as never
 								);
 							}}
 							value={emailAddressText}

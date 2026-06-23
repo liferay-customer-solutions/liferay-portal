@@ -6,10 +6,9 @@
 import ClayDropDown, {Align} from '@clayui/drop-down';
 import ClayIcon from '@clayui/icon';
 import {ReactNode, useCallback, useRef, useState} from 'react';
+import i18n from '~/i18n';
 
-import i18n from '../../i18n';
-
-import './EntitySelector.scss';
+import './EntitySelector.css';
 
 const LABEL_COLOR = 'var(--color-neutral-7)';
 const VALUE_COLOR = 'var(--color-neutral-10)';
@@ -55,9 +54,6 @@ export default function EntitySelector({
 	const [active, setActive] = useState(false);
 	const [menuWidth, setMenuWidth] = useState<number>();
 	const triggerElementRef = useRef<HTMLButtonElement | null>(null);
-
-	// ClayDropDown only forwards function refs to its trigger, so a ref object
-	// would never be populated. Use a callback ref to capture the element.
 
 	const setTriggerElement = useCallback((node: HTMLButtonElement | null) => {
 		triggerElementRef.current = node;

@@ -7,31 +7,41 @@ import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import ClayTable from '@clayui/table';
 import {useParams} from 'react-router-dom';
-
-import {DetailedCard} from '../../../components/DetailedCard/DetailedCard';
-import {PageRenderer} from '../../../components/Page';
-import QATable, {Orientation} from '../../../components/QATable';
-import Table from '../../../components/Table/Table';
-import {PaymentStatus as PaymentStatusCode} from '../../../enums/Order';
-import usePublisherSalesSummaryObject from '../../../hooks/usePublisherSalesSummaryObject';
-import i18n from '../../../i18n';
-import {Liferay} from '../../../liferay/liferay';
-import PublisherSalesSummary from '../../../services/rest/PublisherSalesSummary';
-import {exportToCSV} from '../../../utils/csv';
-import {safeJSONParse} from '../../../utils/util';
-import DetailsHeader from '../FinanceDashboard/components/DetailsHeader/DetailsHeader';
-import PaymentStatusBadge from '../FinanceDashboard/components/PaymentStatus/PaymentStatusBadge';
+import {DetailedCard} from '~/components/DetailedCard/DetailedCard';
+import {PageRenderer} from '~/components/Page/Page';
+import PaymentDetailsHeader from '~/components/PaymentDetailsHeader/PaymentDetailsHeader';
+import PaymentStatusBadge from '~/components/PaymentStatusBadge/PaymentStatusBadge';
+import QATable, {Orientation} from '~/components/QATable/QATable';
+import Table from '~/components/Table/Table';
+import usePublisherSalesSummaryObject from '~/hooks/usePublisherSalesSummaryObject';
+import i18n from '~/i18n';
+import {Liferay} from '~/services/liferay/liferay';
+import PublisherSalesSummaries from '~/services/objects/PublisherSalesSummaries';
+import {formatDateTime} from '~/utils/dateUtils';
+import {exportToCSV} from '~/utils/exportToCSV';
+import {formatCurrency} from '~/utils/formatCurrency';
 import {
-	formatCurrency,
+	PaymentStatus as PaymentStatusCode,
 	getTotalByOrderKey,
-} from '../FinanceDashboard/util/finance';
-import {formatDate, textWrapper} from '../FinanceDashboard/util/util';
+} from '~/utils/orderUtils';
+import {safeJSONParse} from '~/utils/safeJSONParse';
+
 import {PublisherPayoutStatus} from './Payments';
 
-enum Payouts {
-	MP_COMMISSION = 0.2,
-	PUBLISHER_PAYOUT = 0.8,
+import type {AccountPostalAddresses} from '~/types/accounts';
+
+function textWrapper(content: string | number | undefined) {
+	if (content === undefined || content === null || content === '') {
+		return <p className="mb-2 mt-1">-</p>;
+	}
+
+	return <p className="mb-2 mt-1">{content}</p>;
 }
+
+const Payouts = {
+	MP_COMMISSION: 0.2,
+	PUBLISHER_PAYOUT: 0.8,
+} as const;
 
 export function formatPostalAddress(
 	address: AccountPostalAddresses | undefined
@@ -131,10 +141,10 @@ const PaymentDetails = () => {
 			error={error}
 			isLoading={isLoading}
 		>
-			<DetailsHeader
+			<PaymentDetailsHeader
 				backLink="/mp-payments"
 				onClick={() =>
-					PublisherSalesSummary.patchPublisherSalesSummary(
+					PublisherSalesSummaries.patchPublisherSalesSummary(
 						{
 							paidBy: Liferay.ThemeDisplay.getUserName(),
 							paidDate: new Date().toISOString(),
@@ -264,7 +274,9 @@ const PaymentDetails = () => {
 								className: 'mt-2',
 								title: i18n.translate('paid-date'),
 								value: textWrapper(
-									formatDate(publisherSalesSummary?.paidDate)
+									formatDateTime(
+										publisherSalesSummary?.paidDate
+									)
 								),
 								visible:
 									paymentStatus ===
@@ -314,9 +326,15 @@ const PaymentDetails = () => {
 					columns={[
 						{
 							key: 'placedOrderItem',
-							render: (placedOrderItem) => {
+							render: (value) => {
+								const placedOrderItem = value as {
+									name?: string;
+									options?: string;
+									quantity?: number;
+									thumbnail?: string;
+								};
 								const [skuOption] = safeJSONParse(
-									placedOrderItem.options,
+									placedOrderItem.options ?? null,
 									[
 										{
 											skuOptionValueKey: 'Standard',
@@ -355,45 +373,72 @@ const PaymentDetails = () => {
 						},
 						{
 							key: 'placedOrderItem',
-							render: (placedOrderItem, order) => (
-								<div className="d-flex flex-column justify-content-center">
-									<p className="mb-0">
-										{order.orderItem.account.name}
-									</p>
-									<p className="finance-dashboard-secondary-text mb-0">
-										{placedOrderItem.author}
-									</p>
-								</div>
-							),
+							render: (value, row) => {
+								const placedOrderItem = value as {
+									author?: string;
+								};
+								const order = row as {
+									orderItem?: {account?: {name?: string}};
+								};
+
+								return (
+									<div className="d-flex flex-column justify-content-center">
+										<p className="mb-0">
+											{order.orderItem?.account?.name}
+										</p>
+										<p className="finance-dashboard-secondary-text mb-0">
+											{placedOrderItem.author}
+										</p>
+									</div>
+								);
+							},
 							title: i18n.translate('account'),
 						},
 						{
 							key: 'orderItem',
-							render: (orderItem) =>
-								formatCurrency(
-									orderItem.currencyCode,
-									orderItem.finalPrice
-								),
+							render: (value) => {
+								const orderItem = value as {
+									currencyCode?: string;
+									finalPrice?: number;
+								};
 
+								return formatCurrency(
+									orderItem.finalPrice ?? 0,
+									orderItem.currencyCode
+								);
+							},
 							title: i18n.translate('net-price'),
 						},
 						{
 							key: 'orderItem',
-							render: (orderItem) =>
-								formatCurrency(
-									orderItem.currencyCode,
-									orderItem.finalPriceWithTaxAmount -
-										orderItem.finalPrice
-								),
+							render: (value) => {
+								const orderItem = value as {
+									currencyCode?: string;
+									finalPrice?: number;
+									finalPriceWithTaxAmount?: number;
+								};
+
+								return formatCurrency(
+									(orderItem.finalPriceWithTaxAmount ?? 0) -
+										(orderItem.finalPrice ?? 0),
+									orderItem.currencyCode
+								);
+							},
 							title: i18n.translate('vat'),
 						},
 						{
 							key: 'orderItem',
-							render: (orderItem) =>
-								formatCurrency(
-									orderItem.currencyCode,
-									orderItem?.finalPriceWithTaxAmount
-								),
+							render: (value) => {
+								const orderItem = value as {
+									currencyCode?: string;
+									finalPriceWithTaxAmount?: number;
+								};
+
+								return formatCurrency(
+									orderItem?.finalPriceWithTaxAmount ?? 0,
+									orderItem.currencyCode
+								);
+							},
 							title: i18n.translate('total'),
 						},
 					]}

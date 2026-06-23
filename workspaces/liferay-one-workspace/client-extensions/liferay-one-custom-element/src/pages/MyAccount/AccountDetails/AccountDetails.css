@@ -1,0 +1,60 @@
+.account-details-grid {
+	align-items: start;
+	display: grid;
+	gap: var(--spacer-4);
+	grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+}
+
+@media (max-width: 991px) {
+	.account-details-grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+.account-details-side {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacer-4);
+}
+
+.account-details-grid .detailed-card-header h2 {
+	font-size: var(--h4-font-size, 1.25rem);
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.account-details-identity {
+	gap: var(--spacer-3);
+}
+
+.account-details-identity-avatar {
+	background: var(--color-success-l1, #287d3c);
+	border-radius: 50%;
+	color: var(--color-white, #fff);
+	flex-shrink: 0;
+	font-size: 1.25rem;
+	font-weight: 600;
+	height: 48px;
+	object-fit: cover;
+	text-transform: uppercase;
+	width: 48px;
+}
+
+.account-details-identity-name {
+	font-size: var(--h5-font-size, 16px);
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.account-details-identity-contact {
+	color: var(--color-neutral-7);
+	font-size: var(--text-paragraph-sm-font-size, 13px);
+	margin-bottom: 0;
+}
+
+.account-details-subheading {
+	color: var(--color-neutral-9);
+	font-size: var(--h6-font-size, 14px);
+	font-weight: 600;
+	margin-bottom: var(--spacer-3);
+}

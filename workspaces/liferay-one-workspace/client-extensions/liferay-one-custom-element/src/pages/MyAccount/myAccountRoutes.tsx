@@ -5,17 +5,18 @@
 
 import {lazy} from 'react';
 import {Navigate} from 'react-router-dom';
+import {AppRoute} from '~/utils/routeUtils';
 
-import {AppRoute} from '../../utils/routes';
-
-const AccountDetails = lazy(() => import('./AccountDetails'));
-const AccountMembers = lazy(() => import('./AccountMembers'));
-const OrderDetails = lazy(() => import('./Orders/OrderDetails'));
-const OrderHistory = lazy(() => import('./Orders/OrderHistory'));
+const AccountDetails = lazy(() => import('./AccountDetails/AccountDetails'));
+const AccountMembers = lazy(() => import('./AccountMembers/AccountMembers'));
+const OrderDetails = lazy(() => import('./Orders/OrderDetails/OrderDetails'));
+const OrderHistory = lazy(() => import('./Orders/OrderHistory/OrderHistory'));
 const Orders = lazy(() => import('./Orders/Orders'));
-const Applications = lazy(() => import('./Projects/Applications'));
-const ProjectItemDetails = lazy(() => import('./Projects/ProjectItemDetails'));
-const Products = lazy(() => import('./Projects/Products'));
+const Applications = lazy(() => import('./Projects/Applications/Applications'));
+const ProjectItemDetails = lazy(
+	() => import('./Projects/ProjectItemDetails/ProjectItemDetails')
+);
+const Products = lazy(() => import('./Projects/Products/Products'));
 
 export const projectDetailRoutes: AppRoute[] = [
 	{element: <Navigate replace to="products" />, index: true},

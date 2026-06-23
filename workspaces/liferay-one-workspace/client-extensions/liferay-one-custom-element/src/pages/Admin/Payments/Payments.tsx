@@ -5,27 +5,33 @@
 
 import {useNavigate} from 'react-router-dom';
 import {KeyedMutator} from 'swr';
+import ListView from '~/components/ListView/ListView';
+import Page from '~/components/Page/Page';
+import PaymentStatus from '~/components/PaymentStatusBadge/PaymentStatusBadge';
+import i18n from '~/i18n';
+import {Liferay} from '~/services/liferay/liferay';
+import PublisherSalesSummaries from '~/services/objects/PublisherSalesSummaries';
+import {
+	PaymentStatus as PaymentStatusCode,
+	getTotalByOrderKey,
+} from '~/utils/orderUtils';
 
-import ListView from '../../../components/ListView';
-import Page from '../../../components/Page';
-import {PaymentStatus as PaymentStatusCode} from '../../../enums/Order';
-import i18n from '../../../i18n';
-import {Liferay} from '../../../liferay/liferay';
-import PublisherSalesSummary from '../../../services/rest/PublisherSalesSummary';
-import PaymentStatus from '../FinanceDashboard/components/PaymentStatus/PaymentStatusBadge';
-import {getTotalByOrderKey} from '../FinanceDashboard/util/finance';
+import type {PublisherSalesSummaryEntry} from '~/types/publisher';
 
-export enum PublisherPayoutStatus {
-	PAID = 'paid',
-	UNPAID = 'unpaid',
-}
+export const PublisherPayoutStatus = {
+	PAID: 'paid',
+	UNPAID: 'unpaid',
+} as const;
+
+export type PublisherPayoutStatus =
+	(typeof PublisherPayoutStatus)[keyof typeof PublisherPayoutStatus];
 
 async function onClickMarkAsPaid(
 	entry: PublisherSalesSummaryEntry,
-	mutate: KeyedMutator<any>
+	mutate: KeyedMutator<unknown>
 ) {
 	try {
-		await PublisherSalesSummary.patchPublisherSalesSummary(
+		await PublisherSalesSummaries.patchPublisherSalesSummary(
 			{
 				paidBy: Liferay.ThemeDisplay.getUserName(),
 				paidDate: new Date().toISOString(),

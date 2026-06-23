@@ -6,7 +6,7 @@
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import classNames from 'classnames';
 
-import './Tooltip.scss';
+import './Tooltip.css';
 
 import ClayIcon from '@clayui/icon';
 

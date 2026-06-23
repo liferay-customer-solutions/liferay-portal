@@ -5,12 +5,16 @@
 
 import {addDays} from 'date-fns';
 import useSWR from 'swr';
+import {
+	METRIC_PARAMETER,
+	MetricPeriod,
+} from '~/pages/Admin/MPSummary/utils/constants';
+import GraphQL from '~/services/headless/GraphQL';
+import SearchBuilder from '~/utils/SearchBuilder';
+import {getLastDayOfMonth} from '~/utils/dateUtils';
+import {OrderWorkflowStatusCode} from '~/utils/orderUtils';
 
-import SearchBuilder from '../../../../core/SearchBuilder';
-import {OrderWorkflowStatusCode} from '../../../../enums/Order';
-import GraphQL from '../../../../services/rest/HeadlessGraphQL';
-import {getLastDayOfMonth} from '../../../../utils/date';
-import {METRIC_PARAMETER, MetricPeriod} from '../util';
+import type {Order} from '~/types/orders';
 
 const useOrderMetrics = (param: MetricPeriod) => {
 	return useSWR(['metrics/order', param], async () => {

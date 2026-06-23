@@ -5,11 +5,10 @@
 
 import ClayButton from '@clayui/button';
 import {useModal} from '@clayui/modal';
-
-import Page from '../../../components/Page';
-import i18n from '../../../i18n';
-import TrialListView from '../SSADashboard/components/TrialListView/TrialListView';
-import useSSAActions from '../SSADashboard/hooks/useSSAActions';
+import Page from '~/components/Page/Page';
+import i18n from '~/i18n';
+import TrialListView from '~/pages/Admin/SSADashboard/components/TrialListView/TrialListView';
+import useSSAActions from '~/pages/Admin/SSADashboard/hooks/useSSAActions';
 
 export default function Environments() {
 	const actions = useSSAActions();

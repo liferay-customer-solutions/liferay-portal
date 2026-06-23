@@ -5,12 +5,12 @@
 
 import {Context} from '@clayui/modal';
 import {Size} from '@clayui/modal/lib/types';
-import {ReactElement, useContext} from 'react';
+import {ReactElement, ReactNode, useContext} from 'react';
 
 export type ModalOptions = {
 	body: string | ReactElement;
 	center?: boolean;
-	footer?: (any | ReactElement)[];
+	footer?: ReactNode[];
 	header?: string | ReactElement;
 	size?: Size | 'md';
 	status?: 'danger' | 'info' | 'success' | 'warning';
@@ -26,6 +26,9 @@ const useModalContext = () => {
 				payload: {
 					...payload,
 					center,
+					footer: payload.footer as
+						| (ReactElement | undefined)[]
+						| undefined,
 					size: payload.size as Size,
 				},
 				type: 1,

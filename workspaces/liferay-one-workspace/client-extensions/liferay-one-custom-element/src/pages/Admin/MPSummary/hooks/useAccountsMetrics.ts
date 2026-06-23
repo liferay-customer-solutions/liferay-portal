@@ -5,10 +5,12 @@
 
 import {addDays} from 'date-fns';
 import useSWR from 'swr';
-
-import SearchBuilder from '../../../../core/SearchBuilder';
-import HeadlessAdminUser from '../../../../services/rest/HeadlessAdminUser';
-import {METRIC_PARAMETER, MetricPeriod} from '../util';
+import {
+	METRIC_PARAMETER,
+	MetricPeriod,
+} from '~/pages/Admin/MPSummary/utils/constants';
+import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
+import SearchBuilder from '~/utils/SearchBuilder';
 
 const useAccountsMetrics = (param: MetricPeriod) => {
 	const getAccountsMetrics = async () => {

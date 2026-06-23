@@ -4,9 +4,9 @@
  */
 
 import {HashRouter, useRoutes} from 'react-router-dom';
+import {toRouteObjects} from '~/utils/routeUtils';
 
-import {toRouteObjects} from '../../utils/routes';
-import PublisherDashboardLayout from './PublisherDashboardLayout';
+import PublisherDashboardLayout from './components/PublisherDashboardLayout/PublisherDashboardLayout';
 import {publisherDashboardRoutes} from './publisherDashboardRoutes';
 
 function PublisherDashboardRoutes() {

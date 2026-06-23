@@ -7,12 +7,13 @@ import ClayLabel from '@clayui/label';
 import {Status} from '@clayui/modal/lib/types';
 import {formatDistance} from 'date-fns';
 import {z} from 'zod';
+import QATable from '~/components/QATable/QATable';
+import i18n from '~/i18n';
+import commerceSchemas from '~/schema/commerceSchemas';
+import {OrderCustomFields} from '~/utils/orderUtils';
+import {safeJSONParse} from '~/utils/safeJSONParse';
 
-import QATable from '../../../../components/QATable';
-import {OrderCustomFields} from '../../../../enums/Order';
-import i18n from '../../../../i18n';
-import zodSchema from '../../../../schema/zod';
-import {safeJSONParse} from '../../../../utils/util';
+import type {Order} from '~/types/orders';
 
 type TrialDetailsProps = {
 	order: Order;
@@ -29,9 +30,9 @@ const getDateOrDefault = (customField: string) =>
 		? formatDistance(new Date(customField), Date.now(), {addSuffix: true})
 		: 'N/A';
 
-type TrialFormSchema = z.infer<typeof zodSchema.trialForm>;
+type TrialFormSchema = z.infer<typeof commerceSchemas.trialForm>;
 
-const TrialDetails: React.FC<TrialDetailsProps> = ({order}) => {
+const TrialDetailsModal: React.FC<TrialDetailsProps> = ({order}) => {
 	const customFields = order?.customFields || {};
 
 	const trialSettings = safeJSONParse<
@@ -132,4 +133,4 @@ const TrialDetails: React.FC<TrialDetailsProps> = ({order}) => {
 	);
 };
 
-export default TrialDetails;
+export default TrialDetailsModal;

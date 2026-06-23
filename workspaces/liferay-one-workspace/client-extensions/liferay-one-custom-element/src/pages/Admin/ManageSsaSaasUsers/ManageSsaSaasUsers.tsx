@@ -5,26 +5,27 @@
 
 import {useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
+import ListView from '~/components/ListView/ListView';
+import Page from '~/components/Page/Page';
+import {useOneContext} from '~/context/OneContextProvider';
+import i18n from '~/i18n';
+import useManageUserActions from '~/pages/Admin/SSADashboard/hooks/useManageUserActions';
+import {ssaRoles} from '~/pages/Admin/SSADashboard/utils/constants';
+import {formatDate} from '~/utils/dateUtils';
 
-import ListView from '../../../components/ListView';
-import Page from '../../../components/Page';
-import {useOneContext} from '../../../context/OneContext';
-import i18n from '../../../i18n';
-import {formatDate} from '../../../utils/date';
-import {ssaRoles} from '../SSADashboard/constants';
-import useManageUserActions from '../SSADashboard/hooks/useManageUserActions';
+import type {UserAccount} from '~/types/accounts';
 
 export default function ManageSsaSaasUsers() {
-	const {marketplaceUserAccount} = useOneContext();
+	const {userAccountModel} = useOneContext();
 	const {properties} = useOneContext();
 	const actions = useManageUserActions();
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (!marketplaceUserAccount.isSSAAdmin) {
+		if (!userAccountModel.isSSAAdmin) {
 			navigate('/');
 		}
-	}, [marketplaceUserAccount.isSSAAdmin, navigate]);
+	}, [userAccountModel.isSSAAdmin, navigate]);
 
 	return (
 		<Page

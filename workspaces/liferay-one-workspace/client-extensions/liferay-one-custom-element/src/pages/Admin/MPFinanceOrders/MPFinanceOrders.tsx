@@ -5,17 +5,18 @@
 
 import {useNavigate} from 'react-router-dom';
 import {KeyedMutator} from 'swr';
+import ListView from '~/components/ListView/ListView';
+import Page from '~/components/Page/Page';
+import PaymentStatusBadge from '~/components/PaymentStatusBadge/PaymentStatusBadge';
+import i18n from '~/i18n';
+import HeadlessCommerceAdminOrder from '~/services/headless/HeadlessCommerceAdminOrder';
+import {Liferay} from '~/services/liferay/liferay';
+import SearchBuilder from '~/utils/SearchBuilder';
+import {PaymentStatus} from '~/utils/orderUtils';
 
-import ListView from '../../../components/ListView';
-import Page from '../../../components/Page';
-import SearchBuilder from '../../../core/SearchBuilder';
-import {PaymentStatus} from '../../../enums/Order';
-import i18n from '../../../i18n';
-import {Liferay} from '../../../liferay/liferay';
-import HeadlessCommerceAdminOrder from '../../../services/rest/HeadlessCommerceAdminOrder';
-import PaymentStatusBadge from '../FinanceDashboard/components/PaymentStatus/PaymentStatusBadge';
+import type {Order} from '~/types/orders';
 
-async function onClickMarkAsPaid(order: Order, mutate: KeyedMutator<any>) {
+async function onClickMarkAsPaid(order: Order, mutate: KeyedMutator<unknown>) {
 	try {
 		await HeadlessCommerceAdminOrder.patchOrder(order.id, {
 			paymentStatus: PaymentStatus.PAID,

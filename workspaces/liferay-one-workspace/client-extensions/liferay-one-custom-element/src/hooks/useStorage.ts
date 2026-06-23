@@ -4,12 +4,11 @@
  */
 
 import {useCallback, useMemo, useState} from 'react';
-
 import MarketplaceStorage, {
 	CONSENT_TYPE,
 	STORAGE_KEYS,
 	StorageType,
-} from '../core/Storage';
+} from '~/services/liferay/MarketplaceStorage';
 
 type UseStorage<T> = [T, (value: T) => void];
 

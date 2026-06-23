@@ -4,9 +4,8 @@
  */
 
 import Label from '@clayui/label';
-
-import {orderTypeLabel} from '../../../../enums/Order';
-import i18n from '../../../../i18n';
+import i18n from '~/i18n';
+import {orderTypeLabel} from '~/utils/orderUtils';
 
 type ProjectOrder = {
 	creatorEmailAddress: string;
@@ -75,7 +74,7 @@ function ProjectUsingMarketplace({index, order}: ProjectUsingMarketplaceProps) {
 	);
 }
 
-export default function ProjectsUsingMarketplaceModalBody({
+export default function ProjectsUsingMarketplace({
 	projectsUsingMarkeplaceApps,
 }: ProjectsUsingMarketplaceModalBodyProps) {
 	return (

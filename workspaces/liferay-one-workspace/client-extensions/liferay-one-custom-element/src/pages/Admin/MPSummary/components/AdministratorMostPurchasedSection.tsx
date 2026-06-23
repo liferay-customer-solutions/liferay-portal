@@ -4,20 +4,19 @@
  */
 
 import React, {useEffect, useState} from 'react';
+import Loading from '~/components/Loading/Loading';
+import Page from '~/components/Page/Page';
+import {useFetch} from '~/hooks/useFetch';
+import i18n from '~/i18n';
+import HeadlessCommerceAdminCatalog from '~/services/headless/HeadlessCommerceAdminCatalog';
+import {APP_ORDER_TYPES, LIFERAY_PRODUCT_ORDER_TYPES} from '~/utils/orderUtils';
+import {safeJSONParse} from '~/utils/safeJSONParse';
 
-import Loading from '../../../../components/Loading';
-import Page from '../../../../components/Page';
-import {
-	APP_ORDER_TYPES,
-	LIFERAY_PRODUCT_ORDER_TYPES,
-} from '../../../../enums/Order';
-import {useFetch} from '../../../../hooks/useFetch';
-import i18n from '../../../../i18n';
-import HeadlessCommerceAdminCatalog from '../../../../services/rest/HeadlessCommerceAdminCatalog';
-import {safeJSONParse} from '../../../../utils/util';
 import AdministratorMostPurchasedListView, {
 	PurchasedItem,
 } from './AdministratorMostPurchasedListView';
+
+import type {APIResponse} from '~/types/api';
 
 type ProductsCountEntry = {
 	orderTypeExternalReferenceCode: string;
@@ -97,9 +96,9 @@ const AdministratorMostPurchasedSection: React.FC = () => {
 	});
 	const [loadingDetails, setLoadingDetails] = useState(false);
 
-	const {data: reportsData, loading} = useFetch<APIResponse<ReportsEntry>>(
-		`${REPORTS_ENDPOINT}?filter=${encodeURIComponent(REPORTS_FILTER)}`
-	);
+	const {data: reportsData, isLoading: loading} = useFetch<
+		APIResponse<ReportsEntry>
+	>(`${REPORTS_ENDPOINT}?filter=${encodeURIComponent(REPORTS_FILTER)}`);
 
 	useEffect(() => {
 		let cancelled = false;

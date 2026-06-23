@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {Liferay} from '../liferay/liferay';
+import {Liferay} from '~/services/liferay/liferay';
 
 export default {
 	'1-ticket': '1 Ticket',
@@ -816,6 +816,7 @@ export default {
 	'provided-by': 'Provided By',
 	'provisioning': 'Provisioning',
 	'provisioning-details': 'Provisioning Details',
+	'pub-sub': 'Pub/Sub',
 	'public-information': 'Public Information',
 	'publish-apps-and-they-will-show-up-here':
 		'Publish apps and they will show up here.',
@@ -840,7 +841,6 @@ export default {
 	'publisher-with-apps-supporting-quarterly-release':
 		'Publisher With Apps Supporting Quarterly Release',
 	'publishers': 'Publishers',
-	'pubsub': 'Pub/Sub',
 	'purchase-and-install-new-apps-and-they-will-show-up-here':
 		'Purchase and install new apps and they will show up here.',
 	'purchase-app': 'Purchase App',
@@ -1246,8 +1246,7 @@ export default {
 		'You do not have access to a cloud project.',
 	'you-do-not-have-access-to-download-files':
 		'You do not have access to download files.',
-	'you-do-not-have-access-to-pubsub':
-		'You do not have access to Pub/Sub.',
+	'you-do-not-have-access-to-pub-sub': 'You do not have access to PubSub.',
 	'you-do-not-have-access-to-upload-files':
 		'You do not have access to upload files.',
 	'you-have-reached-the-maximum-number-of-active-trials-allowed-to-start-a-new-trial-please-end-one-of-your-existing-trials-first':
@@ -1260,7 +1259,8 @@ export default {
 		'You need Administrator or Requester role on this project to upload a file.',
 	'you-will-receive-an-invoice-via-email-with-all-the-details-needed-to-complete-your-payment-after-you-complete-the-payment-you-can-activate-your-license-from-the-customer-dashboard':
 		'You will receive an invoice via email with all the details needed to complete your payment. After you complete the payment, you can activate your license from the customer dashboard.',
-	'you-will-receive-an-invoice-via-email-with-the-instructions-to-complete-your-bank-transfer-payment': 'You will receive an invoice via email with the instructions to complete your bank transfer payment.',
+	'you-will-receive-an-invoice-via-email-with-the-instructions-to-complete-your-bank-transfer-payment':
+		'You will receive an invoice via email with the instructions to complete your bank transfer payment.',
 	'your-attachment-is-uploaded-however-we-encountered-a-problem-posting-your-comment-the-system-is-automatically-retrying-to-send-it':
 		'Your attachment is uploaded, however we encountered a problem posting your comment. The system is automatically retrying to send it.',
 	'your-current-liferay-version': 'Your Current Liferay Version',

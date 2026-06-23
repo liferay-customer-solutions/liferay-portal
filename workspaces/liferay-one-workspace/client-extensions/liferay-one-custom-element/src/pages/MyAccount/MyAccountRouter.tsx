@@ -4,25 +4,24 @@
  */
 
 import {HashRouter, Navigate, useRoutes} from 'react-router-dom';
+import {ProjectProvider} from '~/context/ProjectContext';
+import {toRouteObjects} from '~/utils/routeUtils';
 
-import ContentLayout from '../../components/ContentLayout';
-import {ProjectProvider} from '../../context/ProjectContext';
-import {toRouteObjects} from '../../utils/routes';
-import AccountGuard from './AccountGuard';
-import CurrentAccountRedirect from './CurrentAccountRedirect';
-import MyAccountIndex from './MyAccountIndex';
-import MyAccountLayout from './MyAccountLayout';
-import ProjectIndexRedirect from './Projects/ProjectIndexRedirect';
+import MyAccount from './MyAccount';
+import MyAccountRedirect from './MyAccountRedirect';
+import AccountGuard from './components/AccountGuard/AccountGuard';
+import AccountLayout from './components/AccountLayout/AccountLayout';
+import ProjectLayout from './components/ProjectLayout/ProjectLayout';
 import {accountRoutes, projectDetailRoutes} from './myAccountRoutes';
 
 function MyAccountRoutes() {
 	return useRoutes([
 		{
 			children: [
-				{element: <MyAccountIndex />, index: true},
-				{element: <CurrentAccountRedirect />, path: 'account-details'},
-				{element: <CurrentAccountRedirect />, path: 'account-members'},
-				{element: <CurrentAccountRedirect />, path: 'orders/*'},
+				{element: <MyAccount />, index: true},
+				{element: <MyAccountRedirect />, path: 'account-details'},
+				{element: <MyAccountRedirect />, path: 'account-members'},
+				{element: <MyAccountRedirect />, path: 'orders/*'},
 				{
 					children: [
 						{
@@ -32,10 +31,6 @@ function MyAccountRoutes() {
 						{
 							children: [
 								{
-									element: <ProjectIndexRedirect />,
-									index: true,
-								},
-								{
 									children:
 										toRouteObjects(projectDetailRoutes),
 									path: ':projectERC',
@@ -43,14 +38,14 @@ function MyAccountRoutes() {
 							],
 							element: (
 								<ProjectProvider>
-									<MyAccountLayout />
+									<ProjectLayout />
 								</ProjectProvider>
 							),
 							path: 'project',
 						},
 						{
 							children: toRouteObjects(accountRoutes),
-							element: <ContentLayout />,
+							element: <AccountLayout />,
 						},
 					],
 					element: <AccountGuard />,

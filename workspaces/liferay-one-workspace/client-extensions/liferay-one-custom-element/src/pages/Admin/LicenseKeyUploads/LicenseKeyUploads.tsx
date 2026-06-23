@@ -9,20 +9,20 @@ import {useModal} from '@clayui/modal';
 import ClayTabs from '@clayui/tabs';
 import {ChangeEvent, FormEvent, useRef, useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
-
-import ButtonWithIcon from '../../../components/ButtonWithIcon';
-import Loading from '../../../components/Loading';
-import Modal from '../../../components/Modal';
-import Page from '../../../components/Page';
-import Table from '../../../components/Table/Table';
-import i18n from '../../../i18n';
-import {Liferay} from '../../../liferay/liferay';
-import FetcherError from '../../../services/fetcher/FetcherError';
-import commonLicenseKeyOAuth2, {
+import ButtonWithIcon from '~/components/ButtonWithIcon/ButtonWithIcon';
+import Loading from '~/components/Loading/Loading';
+import Modal from '~/components/Modal/Modal';
+import Page from '~/components/Page/Page';
+import Table from '~/components/Table/Table';
+import i18n from '~/i18n';
+import FetcherError from '~/services/fetcher/FetcherError';
+import {Liferay} from '~/services/liferay/liferay';
+import CommonLicenseKeys, {
 	CommonLicenseKey,
 	ProductGroup,
-} from '../../../services/oauth/CommonLicenseKey';
-import {formatDate} from '../../../utils/date';
+} from '~/services/spring-boot/CommonLicenseKeys';
+import {formatDate} from '~/utils/dateUtils';
+
 import useCommonLicenseKeys, {PAGE_SIZE} from './hooks/useCommonLicenseKeys';
 
 type Tab = 'commerce' | 'elasticsearch';
@@ -83,7 +83,7 @@ function LicenseKeyUploadsPanel({productGroup}: LicenseKeyUploadsPanelProps) {
 		setUploadError(undefined);
 
 		try {
-			await commonLicenseKeyOAuth2.uploadCommonLicenseKeys(
+			await CommonLicenseKeys.uploadCommonLicenseKeys(
 				productGroup,
 				selectedFiles
 			);
@@ -117,7 +117,7 @@ function LicenseKeyUploadsPanel({productGroup}: LicenseKeyUploadsPanelProps) {
 		}
 
 		try {
-			await commonLicenseKeyOAuth2.deleteCommonLicenseKey(selectedKey.id);
+			await CommonLicenseKeys.deleteCommonLicenseKey(selectedKey.id);
 
 			if (data?.items.length === 1 && page > 1) {
 				setPage(page - 1);
@@ -154,7 +154,7 @@ function LicenseKeyUploadsPanel({productGroup}: LicenseKeyUploadsPanelProps) {
 				{
 					label: i18n.translate('download'),
 					onClick: () =>
-						commonLicenseKeyOAuth2.downloadCommonLicenseKey(
+						CommonLicenseKeys.downloadCommonLicenseKey(
 							row.id,
 							row.name
 						),
@@ -221,7 +221,9 @@ function LicenseKeyUploadsPanel({productGroup}: LicenseKeyUploadsPanelProps) {
 				<Loading />
 			) : (
 				<Table
-					Actions={RowActions}
+					Actions={
+						RowActions as React.FC<{row: Record<string, unknown>}>
+					}
 					columns={[
 						{key: 'name', title: i18n.translate('name')},
 						{
@@ -230,12 +232,14 @@ function LicenseKeyUploadsPanel({productGroup}: LicenseKeyUploadsPanelProps) {
 						},
 						{
 							key: 'startDate',
-							render: (startDate) => formatDate(startDate),
+							render: (value) =>
+								formatDate(value as string | undefined),
 							title: i18n.translate('start-date'),
 						},
 						{
 							key: 'endDate',
-							render: (endDate) => formatDate(endDate),
+							render: (value) =>
+								formatDate(value as string | undefined),
 							title: i18n.translate('end-date'),
 						},
 					]}

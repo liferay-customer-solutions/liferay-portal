@@ -4,11 +4,10 @@
  */
 
 import classNames from 'classnames';
-import React, {InputHTMLAttributes} from 'react';
+import React, {SelectHTMLAttributes} from 'react';
+import BaseWrapper from '~/components/BaseWrapper/BaseWrapper';
 
-import BaseWrapper from '../Input/base/BaseWrapper';
-
-import './Select.scss';
+import './Select.css';
 
 type InputProps = {
 	boldLabel?: boolean;
@@ -16,17 +15,20 @@ type InputProps = {
 	defaultOption?: boolean;
 	defaultOptionLabel?: string;
 	disabled?: boolean;
-	errors?: any;
+	errors?: Record<string, {message?: string}>;
 	helpText?: string;
 	id?: string;
 	label?: string;
 	name: string;
 	options?: {disabled?: boolean; key: string; name: string}[];
-	register?: any;
+	register?: (
+		name: string,
+		options?: Record<string, unknown>
+	) => Record<string, unknown> | void;
 	required?: boolean;
-} & InputHTMLAttributes<HTMLInputElement>;
+} & SelectHTMLAttributes<HTMLSelectElement>;
 
-const Select = React.forwardRef<HTMLInputElement, InputProps>(
+const Select = React.forwardRef<HTMLSelectElement, InputProps>(
 	(
 		{
 			boldLabel,

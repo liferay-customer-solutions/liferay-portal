@@ -4,15 +4,17 @@
  */
 
 import {useEffect, useState} from 'react';
-
-import AccountAvatar from '../../components/AccountAvatar';
+import AccountAvatar from '~/components/AccountAvatar/AccountAvatar';
 import EntitySelector, {
 	SelectorItem,
-} from '../../components/EntitySelector/EntitySelector';
-import {useFetch} from '../../hooks/useFetch';
-import i18n from '../../i18n';
-import {Liferay} from '../../liferay/liferay';
-import {setCurrentAccount} from '../../utils/account';
+} from '~/components/EntitySelector/EntitySelector';
+import {useFetch} from '~/hooks/useFetch';
+import i18n from '~/i18n';
+import {Liferay} from '~/services/liferay/liferay';
+import {setCurrentAccount} from '~/utils/setCurrentAccount';
+
+import type {Account} from '~/types/accounts';
+import type {APIResponse} from '~/types/api';
 
 const SEARCH_DELAY = 400;
 
@@ -38,7 +40,7 @@ export default function AccountSelector() {
 			: null
 	);
 
-	const {data, loading} = useFetch<APIResponse<Account>>(
+	const {data, isLoading: loading} = useFetch<APIResponse<Account>>(
 		currentAccountId ? '/o/headless-admin-user/v1.0/accounts' : null,
 		{
 			params: {
@@ -73,10 +75,6 @@ export default function AccountSelector() {
 		}
 
 		await setCurrentAccount(accountId);
-
-		// The My Account routes deep-link the account by external reference
-		// code. Realign that hash before reloading so its AccountGuard does not
-		// switch the commerce context back to the previously selected account.
 
 		const externalReferenceCode = (data?.items ?? []).find(
 			(item) => String(item.id) === accountId

@@ -6,21 +6,16 @@
 import {ComponentProps} from 'react';
 import {useNavigate} from 'react-router-dom';
 import useSWR from 'swr';
-
-import {useOneContext} from '../../../../context/OneContext';
-import SearchBuilder from '../../../../core/SearchBuilder';
-import {AccountType} from '../../../../enums/Account';
-import {
-	ProductType,
-	ProductWorkflowStatusCode,
-} from '../../../../enums/Product';
-import useListTypeDefinition from '../../../../hooks/useListTypeDefinition';
-import useModalContext from '../../../../hooks/useModalContext';
-import i18n from '../../../../i18n';
-import HeadlessCommerceAdminCatalog from '../../../../services/rest/HeadlessCommerceAdminCatalog';
-import GraphQL from '../../../../services/rest/HeadlessGraphQL';
-import {safeJSONParse} from '../../../../utils/util';
-import ProjectsUsingMarketplaceModalBody from '../components/ProjectsUsingMarketplace';
+import {useOneContext} from '~/context/OneContextProvider';
+import useListTypeDefinition from '~/hooks/useListTypeDefinition';
+import useModalContext from '~/hooks/useModalContext';
+import i18n from '~/i18n';
+import ProjectsUsingMarketplaceModalBody from '~/pages/Admin/MPSummary/components/ProjectsUsingMarketplace';
+import GraphQL from '~/services/headless/GraphQL';
+import HeadlessCommerceAdminCatalog from '~/services/headless/HeadlessCommerceAdminCatalog';
+import SearchBuilder from '~/utils/SearchBuilder';
+import {ProductWorkflowStatusCode} from '~/utils/productUtils';
+import {safeJSONParse} from '~/utils/safeJSONParse';
 
 const currentYear = new Date().getFullYear();
 const lastYear = currentYear - 1;
@@ -50,7 +45,7 @@ const buildQReleaseFilter = (base: SearchBuilder) =>
 		.group('CLOSE')
 		.and()
 		.not()
-		.lambda('specificationValues', ProductType.LOW_CODE_CONFIGURATION)
+		.lambda('specificationValues', 'low-code-configuration')
 		.build();
 
 const appsAndConnectorSupportingQReleaseFilter =
@@ -62,22 +57,22 @@ const lastYearAppsAndConnectorSupportingQReleaseFilter = buildQReleaseFilter(
 
 const lowCodeConfigurationsPublishedFilter = baseSearchBuilder
 	.clone()
-	.lambda('specificationValues', ProductType.LOW_CODE_CONFIGURATION)
+	.lambda('specificationValues', 'low-code-configuration')
 	.build();
 
 const lastYearLowCodeConfigurationsPublishedFilter = lastYearBaseSearchBuilder
 	.clone()
-	.lambda('specificationValues', ProductType.LOW_CODE_CONFIGURATION)
+	.lambda('specificationValues', 'low-code-configuration')
 	.build();
 
 const technologyPartnershipIntegrationFilter = new SearchBuilder()
-	.lambda('specificationValues', AccountType.TECHNOLOGY_PARTNER)
+	.lambda('specificationValues', 'Technology Partner')
 	.build();
 
 const lastYearTechnologyPartnershipIntegrationFilter = new SearchBuilder()
 	.lt('createDate', lastYearISO)
 	.and()
-	.lambda('specificationValues', AccountType.TECHNOLOGY_PARTNER)
+	.lambda('specificationValues', 'Technology Partner')
 	.build();
 
 const getAnnualTargetValues = (kpiTarget: string, value: number) => {
@@ -291,7 +286,7 @@ const useKPI = () => {
 				{
 					onClick: () =>
 						navigate(
-							`/admin/publishers?filter={"customFields/AccountType":["${AccountType.TECHNOLOGY_PARTNER}"]}&filterSchema=administratorPublishers`
+							`/admin/publishers?filter={"customFields/AccountType":["${'Technology Partner'}"]}&filterSchema=administratorPublishers`
 						),
 					...getAnnualTargetValues(
 						kpiPartnershipIntegration,
@@ -381,7 +376,7 @@ const useKPI = () => {
 					lastYearLabel,
 					onClick: () =>
 						navigate(
-							`/admin/mp-apps?filter={"specificationValues|appType":"${ProductType.LOW_CODE_CONFIGURATION}"}&filterSchema=administratorApps`
+							`/admin/mp-apps?filter={"specificationValues|appType":"${'low-code-configuration'}"}&filterSchema=administratorApps`
 						),
 					title: i18n.translate('low-code-configurations-published'),
 				},

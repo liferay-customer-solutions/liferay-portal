@@ -1,0 +1,42 @@
+.field-base-required-asterisk-icon {
+	height: 6px;
+	margin-bottom: 6px;
+	width: 6px;
+}
+
+.field-base-tooltip {
+	margin-left: 22px;
+}
+
+.field-base-description {
+	color: var(--color-neutral-8);
+	font-size: var(--text-paragraph-sm-font-size, 13px);
+	line-height: 1rem;
+	word-break: break-word;
+}
+
+.field-base-feedback {
+	color: var(--color-neutral-7);
+	font-size: var(--text-paragraph-sm-font-size, 13px);
+	margin-top: 8px;
+}
+
+.field-base-localized-field .arrow-down-icon {
+	height: 16px;
+	width: 16px;
+	filter: invert(26%) sepia(83%) saturate(5507%) hue-rotate(220deg)
+		brightness(104%) contrast(97%);
+}
+
+.field-base-localized-field .arrow-down-icon:hover {
+	filter: invert(20%) sepia(92%) saturate(5175%) hue-rotate(214deg)
+		brightness(86%) contrast(110%);
+}
+
+.field-base-localized-field button {
+	color: var(--color-brand-primary);
+}
+
+.field-base-localized-field button:hover {
+	color: var(--color-action-primary-hover);
+}

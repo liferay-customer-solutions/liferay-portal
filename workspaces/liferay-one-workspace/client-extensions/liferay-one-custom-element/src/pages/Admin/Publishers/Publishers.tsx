@@ -4,12 +4,13 @@
  */
 
 import Label from '@clayui/label';
+import ListView from '~/components/ListView/ListView';
+import Page from '~/components/Page/Page';
+import i18n from '~/i18n';
+import SearchBuilder from '~/utils/SearchBuilder';
+import {formatDate} from '~/utils/dateUtils';
 
-import ListView from '../../../components/ListView';
-import Page from '../../../components/Page';
-import SearchBuilder from '../../../core/SearchBuilder';
-import i18n from '../../../i18n';
-import {formatDate} from '../../../utils/date';
+import type {Account} from '~/types/accounts';
 
 export default function Publishers() {
 	return (

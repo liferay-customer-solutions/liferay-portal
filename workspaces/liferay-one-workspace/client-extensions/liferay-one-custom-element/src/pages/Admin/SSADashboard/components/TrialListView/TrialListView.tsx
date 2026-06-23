@@ -3,33 +3,33 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {useModal} from '@clayui/core';
 import {useMemo} from 'react';
 import {Link} from 'react-router-dom';
+import ListView, {ListViewProps} from '~/components/ListView/ListView';
+import {ManagementToolbarProps} from '~/components/ManagementToolbar/ManagementToolbar';
+import {useOneContext} from '~/context/OneContextProvider';
+import i18n from '~/i18n';
+import CreateTrialModalForm from '~/pages/Admin/SSADashboard/components/CreateTrialModalForm';
+import ExtensionStatus from '~/pages/Admin/SSADashboard/components/ExtensionStatus/ExtensionStatus';
+import TrialStatus from '~/pages/Admin/SSADashboard/components/TrialStatus/TrialStatus';
+import {useSSADashboardOutlet} from '~/pages/Admin/SSADashboard/hooks/useSSADashboardOutlet';
+import {EXTEND_TRIAL_STATUS_LABEL} from '~/pages/Admin/SSADashboard/utils/constants';
+import {Liferay} from '~/services/liferay/liferay';
+import SearchBuilder from '~/utils/SearchBuilder';
+import {Action} from '~/utils/appConstants';
+import {formatDate, formatDateTime} from '~/utils/dateUtils';
+import {OrderCustomFields} from '~/utils/orderUtils';
+import {safeJSONParse} from '~/utils/safeJSONParse';
 
-import ListView, {ListViewProps} from '../../../../../components/ListView';
-import {ManagementToolbarProps} from '../../../../../components/ListView/components/ManagementToolbar';
-import {useOneContext} from '../../../../../context/OneContext';
-import SearchBuilder from '../../../../../core/SearchBuilder';
-import {
-	OrderCustomFields,
-	OrderStatus,
-	OrderTypes,
-} from '../../../../../enums/Order';
-import i18n from '../../../../../i18n';
-import {Liferay} from '../../../../../liferay/liferay';
-import {Action} from '../../../../../utils/constants';
-import {formatDate, formatDateTime} from '../../../../../utils/date';
-import {safeJSONParse} from '../../../../../utils/util';
-import {useSSADashboardOutlet} from '../../SSADashboardOutlet';
-import {EXTEND_TRIAL_STATUS_LABEL} from '../../constants';
-import CreateTrialModalForm from '../../modals/CreateTrialModalform';
-import ExtensionStatus from '../ExtensionStatus/ExtensionStatus';
-import TrialStatus from '../TrialStatus/TrialStatus';
+import type {APIResponse} from '~/types/api';
+import type {PlacedOrder} from '~/types/orders';
+import type {TrialExtend} from '~/types/trial';
 
 type TrialsListViewProps = {
 	actions: Action[];
 	authorOnlyTrials?: boolean;
-	createTrialFormModal: any;
+	createTrialFormModal: ReturnType<typeof useModal>;
 	isSortable?: boolean;
 	listViewProps?: Partial<ListViewProps<PlacedOrder>>;
 	managementToolbarProps?: {
@@ -44,8 +44,6 @@ type TrialsListViewProps = {
 	>;
 	parentPath?: string;
 };
-
-// Refresh the table every 60 seconds
 
 const refreshInterval = 60 * 1000;
 
@@ -82,7 +80,7 @@ export default function TrialListView({
 	const searchBuilder = useMemo(() => {
 		const searchBuilder = new SearchBuilder().eq(
 			'orderTypeExternalReferenceCode',
-			OrderTypes.SSA_SAAS
+			'SSA_SAAS'
 		);
 
 		if (authorOnlyTrials) {
@@ -218,7 +216,7 @@ export default function TrialListView({
 									<ExtensionStatus
 										extensionStatus={
 											placedOrder.orderStatusInfo
-												.label === OrderStatus.COMPLETED
+												.label === 'completed'
 												? 'extension-expired'
 												: (extendRequests[0]?.dueStatus
 														.key as keyof typeof EXTEND_TRIAL_STATUS_LABEL)
@@ -234,7 +232,12 @@ export default function TrialListView({
 				{(_, {mutate}) => (
 					<CreateTrialModalForm
 						modal={createTrialFormModal}
-						mutate={mutate}
+						mutate={
+							mutate as unknown as (
+								fn: (data: APIResponse<PlacedOrder>) => unknown,
+								options?: {revalidate: boolean}
+							) => Promise<unknown>
+						}
 					/>
 				)}
 			</ListView>

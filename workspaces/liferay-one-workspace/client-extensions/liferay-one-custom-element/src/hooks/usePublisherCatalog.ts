@@ -4,16 +4,10 @@
  */
 
 import useSWR, {SWRConfiguration} from 'swr';
+import HeadlessCommerceAdminCatalog from '~/services/headless/HeadlessCommerceAdminCatalog';
+import {Liferay} from '~/services/liferay/liferay';
+import SearchBuilder from '~/utils/SearchBuilder';
 
-import SearchBuilder from '../core/SearchBuilder';
-import {Liferay} from '../liferay/liferay';
-import HeadlessCommerceAdminCatalog from '../services/rest/HeadlessCommerceAdminCatalog';
-
-/**
- * Resolves the Commerce catalog owned by the currently selected account. The
- * publisher's catalog scopes every published app and solution, so it is the
- * anchor for the rest of the dashboard.
- */
 const usePublisherCatalog = (swrOptions?: SWRConfiguration) => {
 	const accountId = Liferay.CommerceContext.account?.accountId;
 

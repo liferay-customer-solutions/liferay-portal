@@ -5,17 +5,19 @@
 
 import Button from '@clayui/button';
 import {useMemo} from 'react';
+import {Tooltip} from '~/components/Tooltip/Tooltip';
+import {useOneContext} from '~/context/OneContextProvider';
+import useModalContext from '~/hooks/useModalContext';
+import i18n from '~/i18n';
+import ManageUserModal from '~/pages/Admin/SSADashboard/components/ManageUserRolesModal';
+import {useSSADashboardOutlet} from '~/pages/Admin/SSADashboard/hooks/useSSADashboardOutlet';
+import {ssaRoles as ssaRolesValues} from '~/pages/Admin/SSADashboard/utils/constants';
+import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
+import {Liferay} from '~/services/liferay/liferay';
+import {Action} from '~/utils/appConstants';
 
-import {Tooltip} from '../../../../components/Tooltip/Tooltip';
-import {useOneContext} from '../../../../context/OneContext';
-import useModalContext from '../../../../hooks/useModalContext';
-import i18n from '../../../../i18n';
-import {Liferay} from '../../../../liferay/liferay';
-import HeadlessAdminUser from '../../../../services/rest/HeadlessAdminUser';
-import {Action} from '../../../../utils/constants';
-import {useSSADashboardOutlet} from '../SSADashboardOutlet';
-import {ssaRoles as ssaRolesValues} from '../constants';
-import ManageUserModal from '../modals/ManageUserRolesModal';
+import type {UserAccount} from '~/types/accounts';
+import type {APIResponse} from '~/types/api';
 
 function mutateUser(
 	accountERC: string,

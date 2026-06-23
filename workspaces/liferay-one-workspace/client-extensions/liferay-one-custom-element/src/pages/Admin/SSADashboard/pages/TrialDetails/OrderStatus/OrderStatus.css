@@ -1,0 +1,24 @@
+.order-status-icon {
+	height: 0.5rem;
+	width: 0.5rem;
+}
+
+.order-status-icon-completed {
+	color: #4aab3b;
+}
+
+.order-status-icon-processing {
+	color: #2e5aac;
+}
+
+.order-status-icon-pending {
+	color: #b95000;
+}
+
+.order-status-text {
+	color: #6c6c75;
+	font-size: 0.813rem;
+	font-weight: 600;
+	line-height: 1rem;
+	text-transform: capitalize;
+}

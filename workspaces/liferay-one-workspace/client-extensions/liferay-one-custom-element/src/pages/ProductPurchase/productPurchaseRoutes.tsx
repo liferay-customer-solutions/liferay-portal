@@ -4,15 +4,17 @@
  */
 
 import {ReactNode, lazy} from 'react';
+import i18n from '~/i18n';
+import {AppRoute} from '~/utils/routeUtils';
 
-import i18n from '../../i18n';
+const AccountSelection = lazy(
+	() => import('./AccountSelection/AccountSelection')
+);
+const License = lazy(() => import('./License/License'));
+const PaymentMethod = lazy(() => import('./PaymentMethod/PaymentMethod'));
+const Summary = lazy(() => import('./Summary/Summary'));
 
-const AccountSelection = lazy(() => import('./pages/AccountSelection'));
-const License = lazy(() => import('./pages/License'));
-const PaymentMethod = lazy(() => import('./pages/PaymentMethod'));
-const Summary = lazy(() => import('./pages/Summary'));
-
-export type ProductPurchaseRoute = {
+export type ProductPurchaseStep = {
 	element: ReactNode;
 	index?: boolean;
 	isPaidOnly?: boolean;
@@ -20,8 +22,15 @@ export type ProductPurchaseRoute = {
 	title: string;
 };
 
-export function getProductPurchaseRoutes(isPaidApp: boolean) {
-	const routes: ProductPurchaseRoute[] = [
+export type ProductPurchaseStepItem = {
+	key: string;
+	title: string;
+};
+
+export function getProductPurchaseSteps(
+	isPaidApp: boolean
+): ProductPurchaseStep[] {
+	const steps: ProductPurchaseStep[] = [
 		{
 			element: <AccountSelection />,
 			index: true,
@@ -46,11 +55,23 @@ export function getProductPurchaseRoutes(isPaidApp: boolean) {
 		},
 	];
 
-	return routes.filter((route) => {
-		if (isPaidApp) {
-			return true;
-		}
+	return steps.filter((step) => (isPaidApp ? true : !step.isPaidOnly));
+}
 
-		return !route.isPaidOnly;
-	});
+export function getStepKey(step: Pick<ProductPurchaseStep, 'index' | 'path'>) {
+	return step.index ? '/' : `/${step.path}`;
+}
+
+export function toStepRoutes(steps: ProductPurchaseStep[]): AppRoute[] {
+	return steps.map((step) =>
+		step.index
+			? {element: step.element, index: true}
+			: {element: step.element, path: step.path as string}
+	);
+}
+
+export function toStepItems(
+	steps: ProductPurchaseStep[]
+): ProductPurchaseStepItem[] {
+	return steps.map((step) => ({key: getStepKey(step), title: step.title}));
 }

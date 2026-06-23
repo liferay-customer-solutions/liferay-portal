@@ -4,12 +4,12 @@
  */
 
 import {useMemo} from 'react';
+import AppLayout from '~/components/AppLayout/AppLayout';
+import {buildNavItems} from '~/utils/routeUtils';
 
-import AppLayout from '../../components/AppLayout';
-import {buildNavItems} from '../../utils/routes';
 import {adminRoutes} from './adminRoutes';
 
-import './admin.scss';
+import './Admin.css';
 
 export default function AdminLayout() {
 	const adminNav = useMemo(() => buildNavItems(adminRoutes), []);

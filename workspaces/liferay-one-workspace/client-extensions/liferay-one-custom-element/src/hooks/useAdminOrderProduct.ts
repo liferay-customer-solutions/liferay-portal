@@ -4,11 +4,10 @@
  */
 
 import useSWR, {SWRConfiguration} from 'swr';
-
-import SearchBuilder from '../core/SearchBuilder';
-import HeadlessCommerceAdminCatalog from '../services/rest/HeadlessCommerceAdminCatalog';
-import HeadlessCommerceAdminOrder from '../services/rest/HeadlessCommerceAdminOrder';
-import HeadlessCommerceAdminPayment from '../services/rest/HeadlessCommerceAdminPayment';
+import HeadlessCommerceAdminCatalog from '~/services/headless/HeadlessCommerceAdminCatalog';
+import HeadlessCommerceAdminOrder from '~/services/headless/HeadlessCommerceAdminOrder';
+import HeadlessCommerceAdminPayment from '~/services/headless/HeadlessCommerceAdminPayment';
+import SearchBuilder from '~/utils/SearchBuilder';
 
 const useAdminOrderProduct = (
 	orderId: string,

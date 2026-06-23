@@ -4,13 +4,14 @@
  */
 
 import useSWR from 'swr';
+import TrialExtensionRequests from '~/services/objects/TrialExtensionRequests';
+import SearchBuilder from '~/utils/SearchBuilder';
 
-import SearchBuilder from '../../../../core/SearchBuilder';
-import HeadlessTrialExtensionRequest from '../../../../services/rest/HeadlessTrialExtensionRequest';
+import type {Account} from '~/types/accounts';
 
 const useSSATrialsExtend = (account: Account) =>
 	useSWR(account?.id ? '/o/c/trialextensionrequests' : null, () =>
-		HeadlessTrialExtensionRequest.getTrialExtensionRequest(
+		TrialExtensionRequests.getTrialExtensionRequest(
 			new URLSearchParams({
 				filter: SearchBuilder.eq(
 					'r_accountEntryToTrialExtensionRequest_accountEntryId',

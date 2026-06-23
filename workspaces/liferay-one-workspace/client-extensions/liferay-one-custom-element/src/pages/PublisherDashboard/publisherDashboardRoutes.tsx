@@ -5,13 +5,18 @@
 
 import {lazy} from 'react';
 import {Navigate} from 'react-router-dom';
+import {AppRoute} from '~/utils/routeUtils';
 
-import {AppRoute} from '../../utils/routes';
-
-const PublishedApps = lazy(() => import('./PublishedApps'));
-const PublishedSolutions = lazy(() => import('./PublishedSolutions'));
-const PublisherProfile = lazy(() => import('./PublisherProfile'));
-const PublisherProfileEdit = lazy(() => import('./PublisherProfileEdit'));
+const PublishedApps = lazy(() => import('./PublishedApps/PublishedApps'));
+const PublishedSolutions = lazy(
+	() => import('./PublishedSolutions/PublishedSolutions')
+);
+const PublisherProfile = lazy(
+	() => import('./PublisherProfile/PublisherProfile')
+);
+const PublisherProfileEdit = lazy(
+	() => import('./PublisherProfileEdit/PublisherProfileEdit')
+);
 
 export const publisherDashboardRoutes: AppRoute[] = [
 	{element: <Navigate replace to="published-apps" />, index: true},

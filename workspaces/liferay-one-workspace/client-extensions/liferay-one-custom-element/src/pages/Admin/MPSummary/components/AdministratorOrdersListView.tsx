@@ -10,19 +10,20 @@ import {Status} from '@clayui/modal/lib/types';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import {formatDistance} from 'date-fns';
 import {Fragment} from 'react';
-
-import ListView, {ListViewProps} from '../../../../components/ListView';
-import {ManagementToolbarProps} from '../../../../components/ListView/components/ManagementToolbar';
+import ListView, {ListViewProps} from '~/components/ListView/ListView';
+import {ManagementToolbarProps} from '~/components/ManagementToolbar/ManagementToolbar';
+import i18n from '~/i18n';
+import Orders from '~/services/spring-boot/Orders';
+import {FilterSchemaOption} from '~/types/filters';
 import {
 	OrderCustomFields,
 	orderTypeLabel,
 	orderWorkflowDisplayType,
 	paymentWorkflowDisplayType,
-} from '../../../../enums/Order';
-import i18n from '../../../../i18n';
-import {FilterSchemaOption} from '../../../../schema/filters';
-import oneOAuth2 from '../../../../services/oauth/One';
-import {safeJSONParse} from '../../../../utils/util';
+} from '~/utils/orderUtils';
+import {safeJSONParse} from '~/utils/safeJSONParse';
+
+import type {Order} from '~/types/orders';
 
 type AdministratorOrdersListViewProps = {
 	isSortable?: boolean;
@@ -50,9 +51,7 @@ export function AdministratorOrdersListView({
 			id="administrator-orders"
 			managementToolbarProps={{
 				actionButton: (
-					filter: {
-						[key: string]: string;
-					},
+					filter: Record<string, unknown>,
 					filterSchema?: FilterSchemaOption
 				) => {
 					return (
@@ -60,8 +59,8 @@ export function AdministratorOrdersListView({
 							className="align-items-center d-flex h-100 justify-content-center ml-3 mr-4"
 							displayType="unstyled"
 							onClick={() =>
-								oneOAuth2.downloadOrderReport(
-									filter,
+								Orders.downloadOrderReport(
+									filter as {[key: string]: string},
 									filterSchema
 								)
 							}

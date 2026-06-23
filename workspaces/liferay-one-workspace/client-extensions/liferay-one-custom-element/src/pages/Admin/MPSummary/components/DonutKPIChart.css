@@ -1,0 +1,27 @@
+.marketplace-donut-chart {
+	border-radius: var(--border-radius-lg, 8px);
+	height: 290px;
+	width: 346px;
+}
+
+.marketplace-donut-chart-center-legend {
+	font-size: var(--h2-font-size, 2rem);
+	font-weight: 700;
+}
+
+.marketplace-donut-chart .chart-legend-data {
+	font-size: var(--h3-font-size, 1.75rem);
+}
+
+.marketplace-donut-chart .details-button {
+	font-size: var(--text-paragraph-xs-font-size, 11px);
+}
+
+.marketplace-donut-chart .donut-chart-container {
+	height: 165px;
+	width: 165px;
+}
+
+.recharts-pie * {
+	outline: none !important;
+}

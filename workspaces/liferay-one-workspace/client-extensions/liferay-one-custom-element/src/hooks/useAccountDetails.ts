@@ -4,9 +4,8 @@
  */
 
 import useSWR, {SWRConfiguration} from 'swr';
-
-import {Liferay} from '../liferay/liferay';
-import HeadlessAdminUser from '../services/rest/HeadlessAdminUser';
+import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
+import {Liferay} from '~/services/liferay/liferay';
 
 const useAccountDetails = (swrOptions?: SWRConfiguration) => {
 	const accountId = Liferay.CommerceContext.account?.accountId;

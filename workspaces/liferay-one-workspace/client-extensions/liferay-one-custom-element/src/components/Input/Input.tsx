@@ -5,10 +5,9 @@
 
 import {ClayInput} from '@clayui/form';
 import React from 'react';
+import {FieldBase} from '~/components/FieldBase/FieldBase';
 
-import {FieldBase} from '../FieldBase';
-
-import './Input.scss';
+import './Input.css';
 
 interface InputProps
 	extends React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {

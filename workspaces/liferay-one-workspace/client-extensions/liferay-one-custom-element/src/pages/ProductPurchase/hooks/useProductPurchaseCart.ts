@@ -4,9 +4,11 @@
  */
 
 import {useCallback, useEffect, useState} from 'react';
+import HeadlessCommerceDeliveryCart from '~/services/headless/HeadlessCommerceDeliveryCart';
+import {Liferay} from '~/services/liferay/liferay';
 
-import {Liferay} from '../../../liferay/liferay';
-import HeadlessCommerceDeliveryCart from '../../../services/rest/HeadlessCommerceDeliveryCart';
+import type {Cart, CartItem} from '~/types/orders';
+import type {DeliveryProduct} from '~/types/product';
 
 const useProductPurchaseCart = (
 	accountId?: number,
@@ -20,17 +22,13 @@ const useProductPurchaseCart = (
 
 	const cartId = cart?.id;
 
-	const syncCartItems = useCallback(
-		async (id: number, items: CartItem[]) => {
-			const updatedCart = await HeadlessCommerceDeliveryCart.updateCart(
-				id,
-				{cartItems: items}
-			);
+	const syncCartItems = useCallback(async (id: number, items: CartItem[]) => {
+		const updatedCart = await HeadlessCommerceDeliveryCart.updateCart(id, {
+			cartItems: items,
+		});
 
-			setCart(updatedCart);
-		},
-		[]
-	);
+		setCart(updatedCart);
+	}, []);
 
 	const addCart = async (productId: number, skuId: number) => {
 		let currentCart = cart;

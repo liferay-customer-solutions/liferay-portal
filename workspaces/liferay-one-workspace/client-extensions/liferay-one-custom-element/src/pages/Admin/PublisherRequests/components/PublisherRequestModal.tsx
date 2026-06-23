@@ -7,12 +7,15 @@ import ClayButton from '@clayui/button';
 import {useModal} from '@clayui/modal';
 import {Status} from '@clayui/modal/lib/types';
 import {KeyedMutator} from 'swr';
+import Modal from '~/components/Modal/Modal';
+import i18n from '~/i18n';
+import fetcher from '~/services/fetcher/fetcher';
+import {Liferay} from '~/services/liferay/liferay';
 
-import Modal from '../../../../components/Modal';
-import i18n from '../../../../i18n';
-import {Liferay} from '../../../../liferay/liferay';
-import fetcher from '../../../../services/fetcher';
 import PublisherSummaryContent from './PublisherSummaryContent';
+
+import type {APIResponse} from '~/types/api';
+import type {PublisherRequestInfo} from '~/types/publisher';
 
 export const PublisherStatusDisplayType = {
 	completed: 'success',
@@ -96,11 +99,13 @@ const PublisherRequestModal: React.FC<PublisherRequestModalProps> = ({
 						publisherType: Array.isArray(
 							selectedRequest?.publisherType
 						)
-							? (selectedRequest?.publisherType as any[])?.map(
-									({name}) => name
-								)
+							? (
+									selectedRequest?.publisherType as unknown as {
+										name: string;
+									}[]
+								)?.map(({name}) => name)
 							: ['App Publisher'],
-					} as any
+					} as PublisherRequestInfo
 				}
 			/>
 		</Modal>

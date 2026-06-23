@@ -5,17 +5,20 @@
 
 import {useMemo} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {useOneContext} from '~/context/OneContextProvider';
+import useModalContext from '~/hooks/useModalContext';
+import i18n from '~/i18n';
+import ExpireSSAModal from '~/pages/Admin/SSADashboard/components/ExpireSSAModal';
+import ExtendRequestModal from '~/pages/Admin/SSADashboard/components/ExtendRequestModal';
+import ExtendSSATrialModal from '~/pages/Admin/SSADashboard/components/ExtendSSATrialModal';
+import {useSSADashboardOutlet} from '~/pages/Admin/SSADashboard/hooks/useSSADashboardOutlet';
+import {ExtendRequestStatus} from '~/types/ssaDashboard';
+import {Action} from '~/utils/appConstants';
+import {OrderCustomFields} from '~/utils/orderUtils';
 
-import {useOneContext} from '../../../../context/OneContext';
-import {OrderCustomFields, OrderStatus} from '../../../../enums/Order';
-import useModalContext from '../../../../hooks/useModalContext';
-import i18n from '../../../../i18n';
-import {Action} from '../../../../utils/constants';
-import {useSSADashboardOutlet} from '../SSADashboardOutlet';
-import {ExtendRequestStatus} from '../enums/SSATrials';
-import ExpireSSAModal from '../modals/ExpireSSAModal';
-import ExtendRequestModal from '../modals/ExtendRequestModal';
-import ExtendSSATrialModal from '../modals/ExtendSSATrialModal';
+import type {APIResponse} from '~/types/api';
+import type {PlacedOrder} from '~/types/orders';
+import type {TrialExtend} from '~/types/trial';
 
 const getOrderExtendRequests =
 	(trialExtendRequests: APIResponse<TrialExtend>['items']) =>
@@ -27,7 +30,7 @@ const getOrderExtendRequests =
 		);
 
 const useSSAActions = () => {
-	const {marketplaceUserAccount} = useOneContext();
+	const {userAccountModel} = useOneContext();
 	const modalContext = useModalContext();
 	const navigate = useNavigate();
 
@@ -47,7 +50,7 @@ const useSSAActions = () => {
 			},
 			{
 				disabled: (order: PlacedOrder) =>
-					order.orderStatusInfo.label !== OrderStatus.IN_PROGRESS,
+					order.orderStatusInfo.label !== 'in-progress',
 				name: i18n.translate('go-to-trial'),
 				onClick: (order: PlacedOrder) =>
 					window.open(
@@ -60,16 +63,13 @@ const useSSAActions = () => {
 			},
 			{
 				hidden: (order: PlacedOrder) => {
-					if (!marketplaceUserAccount.isSSAAdmin) {
+					if (!userAccountModel.isSSAAdmin) {
 						return true;
 					}
 
 					const extendRequests = _getOrderExtendRequests(order);
 
-					return (
-						extendRequests[0]?.dueStatus?.key !==
-						ExtendRequestStatus.PENDING
-					);
+					return extendRequests[0]?.dueStatus?.key !== 'Pending';
 				},
 				name: i18n.translate('view-request'),
 				onClick: (order: PlacedOrder, orderMutate) => {
@@ -91,8 +91,8 @@ const useSSAActions = () => {
 									extendRequests.filter(
 										({dueStatus}: TrialExtend) =>
 											[
-												ExtendRequestStatus.APPROVED,
-												ExtendRequestStatus.AUTO_APPROVED,
+												'Approved',
+												'AutoApproved',
 											].includes(
 												dueStatus?.key as ExtendRequestStatus
 											)
@@ -113,10 +113,8 @@ const useSSAActions = () => {
 					}
 
 					return (
-						order.orderStatusInfo.label !==
-							OrderStatus.IN_PROGRESS ||
-						extendRequests[0]?.dueStatus.key ===
-							ExtendRequestStatus.PENDING
+						order.orderStatusInfo.label !== 'in-progress' ||
+						extendRequests[0]?.dueStatus.key === 'Pending'
 					);
 				},
 				name: i18n.translate('extend-trial'),
@@ -140,7 +138,7 @@ const useSSAActions = () => {
 			},
 			{
 				disabled: (order: PlacedOrder) =>
-					order.orderStatusInfo.label !== OrderStatus.IN_PROGRESS,
+					order.orderStatusInfo.label !== 'in-progress',
 				name: i18n.translate('expire-trial'),
 				onClick: (order: PlacedOrder, mutate) => {
 					modalContext.onOpenModal({
@@ -159,7 +157,7 @@ const useSSAActions = () => {
 			},
 		] as Action[];
 	}, [
-		marketplaceUserAccount.isSSAAdmin,
+		userAccountModel.isSSAAdmin,
 		modalContext,
 		navigate,
 		selectedAccountId,

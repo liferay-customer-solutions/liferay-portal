@@ -5,10 +5,9 @@
 
 import {Button as ClayButton} from '@clayui/core';
 import ClayIcon from '@clayui/icon';
-
-import {translate} from '../../i18n';
-import FilterDropdown from './FilterDropdown/FilterDropdown';
-import FilterContent from './FilterDropdown/components/FilterContent/FilterContent';
+import FilterContent from '~/components/FilterContent/FilterContent';
+import FilterDropdown from '~/components/FilterDropdown/FilterDropdown';
+import {Word, translate} from '~/i18n';
 
 export interface IFilterOption {
 	key: string;
@@ -25,11 +24,17 @@ export interface IProps {
 	selectedFilters: IFilterOption[];
 }
 
+type MenuEntry = {
+	child?: React.ReactNode;
+	title: string;
+	type?: 'divider' | 'component' | 'item';
+};
+
 const Filter = ({availableFilters, onChange, selectedFilters}: IProps) => {
-	const menus: Record<string, any> = {
+	const menus: Record<string, MenuEntry[]> = {
 		root: availableFilters.map((filter) => ({
 			child: filter.name,
-			title: translate(filter.name as any),
+			title: translate(filter.name as Word),
 			type: 'item',
 		})),
 	};
@@ -44,6 +49,7 @@ const Filter = ({availableFilters, onChange, selectedFilters}: IProps) => {
 						selectedFilters={selectedFilters}
 					/>
 				),
+				title: '',
 				type: 'component',
 			},
 		];

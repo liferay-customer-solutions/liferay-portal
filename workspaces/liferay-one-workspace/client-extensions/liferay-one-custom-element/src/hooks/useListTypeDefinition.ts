@@ -4,8 +4,9 @@
  */
 
 import useSWR from 'swr';
+import fetcher from '~/services/fetcher/fetcher';
 
-import fetcher from '../services/fetcher';
+import type {ListTypeDefinition} from '~/types/listTypeDefinition';
 
 const useListTypeDefinition = (externalReferenceCode: string | null) => {
 	return useSWR(

@@ -7,8 +7,7 @@ import {ClayButtonWithIcon} from '@clayui/button';
 import {ClayInput} from '@clayui/form';
 import classNames from 'classnames';
 import {memo, useState} from 'react';
-
-import {translate} from '../../i18n';
+import {translate} from '~/i18n';
 
 interface IProps {
 	isBusinessEvent?: boolean;

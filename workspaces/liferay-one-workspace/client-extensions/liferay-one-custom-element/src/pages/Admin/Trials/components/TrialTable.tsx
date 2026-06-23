@@ -9,22 +9,21 @@ import ClayIcon from '@clayui/icon';
 import ClayLabel from '@clayui/label';
 import {Status} from '@clayui/modal/lib/types';
 import {formatDistance} from 'date-fns';
+import Loading from '~/components/Loading/Loading';
+import Table from '~/components/Table/Table';
+import {useConfirmationModal} from '~/hooks/useConfirmationModal';
+import useModalContext from '~/hooks/useModalContext';
+import i18n from '~/i18n';
+import HeadlessCommerceAdminOrder from '~/services/headless/HeadlessCommerceAdminOrder';
+import trialOAuth2 from '~/services/spring-boot/Trial';
+import {OrderCustomFields, OrderWorkflowStatusCode} from '~/utils/orderUtils';
 
-import {DashboardPage} from '../../../../components/DashBoardPage/DashboardPage';
-import {DashboardEmptyTable} from '../../../../components/DashboardTable/DashboardEmptyTable';
-import Loading from '../../../../components/Loading';
-import Table from '../../../../components/Table/Table';
-import {
-	OrderCustomFields,
-	OrderWorkflowStatusCode,
-} from '../../../../enums/Order';
-import {useConfirmationModal} from '../../../../hooks/useConfirmationModal';
-import useModalContext from '../../../../hooks/useModalContext';
-import i18n from '../../../../i18n';
-import trialOAuth2 from '../../../../services/oauth/Trial';
-import HeadlessCommerceAdminOrder from '../../../../services/rest/HeadlessCommerceAdminOrder';
+import {DashboardEmptyTable} from './DashboardEmptyTable/DashboardEmptyTable';
+import {DashboardPage} from './DashboardPage/DashboardPage';
 import NewTrialModal from './NewTrialModal';
 import TrialDetailsModal, {ORDER_STATUS_LABEL} from './TrialDetailsModal';
+
+import type {Order} from '~/types/orders';
 
 type TrialTableProps = {
 	items: Order[];
@@ -37,7 +36,7 @@ type DropDownItems = {
 	onClick: (item?: Order) => void;
 };
 
-const safeRunner = async (promise: any) => {
+const safeRunner = async (promise: Promise<unknown>) => {
 	try {
 		await promise;
 	}
@@ -134,94 +133,144 @@ const TrialTable: React.FC<TrialTableProps> = ({items, revalidate}) => {
 					columns={[
 						{
 							key: 'id',
-							render: (id) => (
-								<span className="font-weight-bold">{id}</span>
+							render: (value) => (
+								<span className="font-weight-bold">
+									{value as string}
+								</span>
 							),
 							title: i18n.translate('id'),
 						},
 						{
 							key: 'orderItems',
-							render: (orderItems) => orderItems[0]?.name.en_US,
+							render: (value) => {
+								const orderItems = value as {
+									name?: {en_US?: string};
+								}[];
+
+								return orderItems[0]?.name?.en_US;
+							},
 							title: i18n.translate('product'),
 						},
 						{
 							key: 'account',
-							render: (account) => account?.name,
+							render: (value) => {
+								const account = value as
+									| {name?: string}
+									| null
+									| undefined;
+
+								return account?.name;
+							},
 							title: i18n.translate('user-account'),
 						},
 						{
 							key: 'orderStatusInfo',
-							render: (orderStatusInfo) => (
-								<div className="align-items-center d-flex">
-									<ClayLabel
-										className="text-nowrap"
-										displayType={
-											ORDER_STATUS_LABEL[
-												orderStatusInfo?.label as keyof typeof ORDER_STATUS_LABEL
-											] as Status
-										}
-									>
-										{orderStatusInfo?.label_i18n}
-									</ClayLabel>
+							render: (value) => {
+								const orderStatusInfo = value as
+									| {
+											code?: number;
+											label?: string;
+											label_i18n?: string;
+									  }
+									| null
+									| undefined;
 
-									{[
-										OrderWorkflowStatusCode.ON_HOLD,
-										OrderWorkflowStatusCode.PROCESSING,
-									].includes(orderStatusInfo.code) && (
-										<Loading
-											displayType="primary"
-											shape="circle"
-											size="sm"
-										/>
-									)}
-								</div>
-							),
+								return (
+									<div className="align-items-center d-flex">
+										<ClayLabel
+											className="text-nowrap"
+											displayType={
+												ORDER_STATUS_LABEL[
+													orderStatusInfo?.label as keyof typeof ORDER_STATUS_LABEL
+												] as Status
+											}
+										>
+											{orderStatusInfo?.label_i18n}
+										</ClayLabel>
+
+										{[
+											OrderWorkflowStatusCode.ON_HOLD,
+											OrderWorkflowStatusCode.PROCESSING,
+										].includes(
+											orderStatusInfo?.code ?? -1
+										) && (
+											<Loading
+												displayType="primary"
+												shape="circle"
+												size="sm"
+											/>
+										)}
+									</div>
+								);
+							},
 							title: i18n.translate('trial-status'),
 						},
 						{
 							key: 'createDate',
-							render: (createDate) => (
-								<span className="ml-2 text-capitalize text-nowrap">
-									{createDate &&
-										formatDistance(
-											new Date(createDate),
-											Date.now(),
-											{addSuffix: true}
-										)}
-								</span>
-							),
+							render: (value) => {
+								const createDate = value as string | undefined;
+
+								return (
+									<span className="ml-2 text-capitalize text-nowrap">
+										{createDate &&
+											formatDistance(
+												new Date(createDate),
+												Date.now(),
+												{addSuffix: true}
+											)}
+									</span>
+								);
+							},
 							title: i18n.translate('created-at'),
 						},
 						{
 							key: 'customFields',
-							render: (customFields) => (
-								<span className="ml-2 text-capitalize text-nowrap">
-									{customFields['trial-start-date'] &&
-										formatDistance(
-											new Date(
-												customFields['trial-start-date']
-											),
-											Date.now(),
-											{addSuffix: true}
-										)}
-								</span>
-							),
+							render: (value) => {
+								const customFields = value as Record<
+									string,
+									string | undefined
+								>;
+
+								return (
+									<span className="ml-2 text-capitalize text-nowrap">
+										{customFields['trial-start-date'] &&
+											formatDistance(
+												new Date(
+													customFields[
+														'trial-start-date'
+													]
+												),
+												Date.now(),
+												{addSuffix: true}
+											)}
+									</span>
+								);
+							},
 							title: i18n.translate('start-date'),
 						},
 						{
 							key: 'customFields',
-							render: (customFields) => (
-								<span className="ml-2 text-capitalize text-nowrap">
-									{customFields['trial-end-date'] &&
-										formatDistance(
-											new Date(
-												customFields['trial-end-date']
-											),
-											Date.now(),
-											{addSuffix: true}
-										)}
-								</span>
-							),
+							render: (value) => {
+								const customFields = value as Record<
+									string,
+									string | undefined
+								>;
+
+								return (
+									<span className="ml-2 text-capitalize text-nowrap">
+										{customFields['trial-end-date'] &&
+											formatDistance(
+												new Date(
+													customFields[
+														'trial-end-date'
+													]
+												),
+												Date.now(),
+												{addSuffix: true}
+											)}
+									</span>
+								);
+							},
 							title: i18n.translate('expiration-date'),
 						},
 						{
@@ -249,7 +298,9 @@ const TrialTable: React.FC<TrialTableProps> = ({items, revalidate}) => {
 												<DropDown.Item
 													key={item.name}
 													onClick={() =>
-														item.onClick(order)
+														item.onClick(
+															order as Order
+														)
 													}
 												>
 													{item?.name}

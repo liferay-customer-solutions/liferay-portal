@@ -4,15 +4,14 @@
  */
 
 import React, {useMemo, useState} from 'react';
+import EmptyState from '~/components/EmptyState/EmptyState';
+import {Sort} from '~/components/ListView/context/ListViewContextProvider';
+import Table, {TableProps} from '~/components/ListViewTable/ListViewTable';
+import i18n from '~/i18n';
+import {SortOption} from '~/utils/appConstants';
+import {orderTypeLabel} from '~/utils/orderUtils';
 
-import EmptyState from '../../../../components/EmptyState';
-import Table, {
-	TableProps,
-} from '../../../../components/ListView/components/Table';
-import {Sort} from '../../../../components/ListView/hooks/ListViewContext';
-import {OrderTypes, orderTypeLabel} from '../../../../enums/Order';
-import i18n from '../../../../i18n';
-import {SortOption} from '../../../../utils/constants';
+import type {OrderTypes} from '~/types/orders';
 
 export type PurchasedItem = {
 	orderTypeExternalReferenceCode: string;

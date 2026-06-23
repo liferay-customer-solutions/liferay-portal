@@ -1,0 +1,125 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2026 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+import ClayDropDown from '@clayui/drop-down';
+import {ClayInput} from '@clayui/form';
+import ClayIcon from '@clayui/icon';
+import {ChangeEvent, useCallback, useRef, useState} from 'react';
+import {translate} from '~/i18n';
+import {ITicket} from '~/pages/BusinessEvents/types';
+
+import TicketList from './TicketList/TicketList';
+
+import './AssociatedTicketsContainer.css';
+
+interface IProps {
+	editing?: boolean;
+	handleRemove?: (value: ITicket) => void;
+	handleSelect?: (value: ITicket) => void;
+	selectedTickets?: ITicket[];
+	ticketOptions: ITicket[];
+}
+
+const AssociatedTicketsContainer: React.FC<IProps> = ({
+	editing,
+	handleRemove = () => {},
+	handleSelect = () => {},
+	selectedTickets,
+	ticketOptions,
+}) => {
+	const [expand, setExpand] = useState<boolean>(false);
+
+	const [searchTerm, setSearchTerm] = useState<string>('');
+
+	const handleOnChange = (event: ChangeEvent<HTMLInputElement>): void => {
+		setSearchTerm(event.target.value);
+	};
+
+	const triggerElementRef = useRef<HTMLElement | null>(null);
+
+	const handleExpand = (event: React.SyntheticEvent, expand: boolean) => {
+		triggerElementRef.current = event.target as HTMLElement;
+
+		setExpand(expand);
+	};
+
+	const openTicket = useCallback((ticket: ITicket) => {
+		window.open(ticket.link, '_blank', 'noreferrer');
+	}, []);
+
+	return (
+		<>
+			{editing && selectedTickets ? (
+				<div className="associated-tickets-container p-3 w-100">
+					<div className="associated-tickets-options pb-3">
+						<div className="align-items-center d-flex position-relative w-100">
+							<ClayInput
+								className="associated-tickets-input px-3"
+								onChange={handleOnChange}
+								onClick={(event) => handleExpand(event, true)}
+								placeholder={translate(
+									'search-for-support-tickets'
+								)}
+								type="text"
+								value={searchTerm}
+							/>
+
+							<ClayIcon
+								className="associated-tickets-icon position-absolute"
+								symbol="search"
+							/>
+						</div>
+
+						<ClayDropDown.Menu
+							active={expand}
+							alignElementRef={triggerElementRef}
+							autoBestAlign={false}
+							onActiveChange={() => setExpand(!expand)}
+							width="sm"
+						>
+							<TicketList
+								primaryAction={handleSelect}
+								secondaryAction={openTicket}
+								tickets={ticketOptions.filter(
+									(ticket) =>
+										!ticket.selected &&
+										(String(ticket.ticketId)
+											.toLowerCase()
+											.includes(
+												searchTerm.toLowerCase()
+											) ||
+											ticket.subject
+												?.toLowerCase()
+												.includes(
+													searchTerm.toLowerCase()
+												))
+								)}
+								type="option"
+							/>
+						</ClayDropDown.Menu>
+					</div>
+
+					<div className="pb-3 pl-1 text-neutral-8 text-paragraph-sm">
+						{translate('tickets-impacting-this-event')}
+					</div>
+
+					<TicketList
+						primaryAction={openTicket}
+						secondaryAction={handleRemove}
+						tickets={selectedTickets}
+						type="selected"
+					/>
+				</div>
+			) : (
+				<TicketList
+					primaryAction={openTicket}
+					tickets={ticketOptions}
+				/>
+			)}
+		</>
+	);
+};
+
+export default AssociatedTicketsContainer;

@@ -6,18 +6,18 @@
 import ClayIcon from '@clayui/icon';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import classNames from 'classnames';
+import {TRIAL_STATUS_LABEL} from '~/pages/Admin/SSADashboard/utils/constants';
 
-import {OrderStatus as Status} from '../../../../../enums/Order';
-import {TRIAL_STATUS_LABEL} from '../../constants';
+import './TrialStatus.css';
 
-import './TrialStatus.scss';
+import type {OrderStatus} from '~/types/orders';
 
 type TrialStatusProps = {
 	trialStatus: string;
 };
 
 const TrialStatus = ({trialStatus}: TrialStatusProps) => {
-	if (Status.PROCESSING === trialStatus) {
+	if ('processing' === trialStatus) {
 		return (
 			<span className="d-flex trial-status-text">
 				<ClayLoadingIndicator
@@ -38,16 +38,16 @@ const TrialStatus = ({trialStatus}: TrialStatusProps) => {
 			<ClayIcon
 				className={classNames('mr-2 trial-status-icon', {
 					'trial-status-icon-completed': [
-						Status.APPROVED,
-						Status.CANCELLED,
-						Status.COMPLETED,
-					].includes(trialStatus as Status),
+						'approved',
+						'cancelled',
+						'completed',
+					].includes(trialStatus as OrderStatus),
 					'trial-status-icon-in_progress':
-						Status.IN_PROGRESS === trialStatus,
-					'trial-status-icon-on-hold': Status.ON_HOLD === trialStatus,
-					'trial-status-icon-pending': Status.PENDING === trialStatus,
+						'in-progress' === trialStatus,
+					'trial-status-icon-on-hold': 'on-hold' === trialStatus,
+					'trial-status-icon-pending': 'pending' === trialStatus,
 					'trial-status-icon-processing':
-						trialStatus === Status.PROCESSING,
+						trialStatus === 'processing',
 				})}
 				symbol="circle"
 			/>

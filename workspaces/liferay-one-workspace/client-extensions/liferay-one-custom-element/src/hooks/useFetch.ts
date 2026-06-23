@@ -39,7 +39,10 @@ function getPageParameter(
 	}
 
 	for (const key in parameters) {
-		const value = (parameters as any)[key] as string | number | undefined;
+		const value = (parameters as Record<string, unknown>)[key] as
+			| string
+			| number
+			| undefined;
 
 		if (value) {
 			searchParams.set(key, value.toString());
@@ -69,9 +72,10 @@ const getBaseURL = (url: string | null, options?: APIParametersOptions) => {
 	return baseURL;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useFetch<Data = any, Error = any>(
 	url: string | null,
-	fetchParameters?: Record<string, any>,
+	fetchParameters?: {params?: APIParametersOptions},
 	refreshInterval?: number
 ) {
 	const {params} = fetchParameters ?? {};
@@ -84,8 +88,8 @@ export function useFetch<Data = any, Error = any>(
 	return {
 		data,
 		error,
+		isLoading,
 		isValidating,
-		loading: isLoading,
 		mutate,
 		revalidate: () => mutate((response) => response, {revalidate: true}),
 	};

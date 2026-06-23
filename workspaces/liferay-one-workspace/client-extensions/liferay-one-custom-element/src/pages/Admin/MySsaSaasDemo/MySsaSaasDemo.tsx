@@ -5,28 +5,27 @@
 
 import ClayButton from '@clayui/button';
 import {useModal} from '@clayui/modal';
-
-import EmptyState from '../../../components/EmptyState';
-import Page from '../../../components/Page';
-import {useOneContext} from '../../../context/OneContext';
-import useModalContext from '../../../hooks/useModalContext';
-import i18n from '../../../i18n';
-import {useSSADashboardOutlet} from '../SSADashboard/SSADashboardOutlet';
-import TrialListView from '../SSADashboard/components/TrialListView/TrialListView';
-import useSSAActions from '../SSADashboard/hooks/useSSAActions';
+import EmptyState from '~/components/EmptyState/EmptyState';
+import Page from '~/components/Page/Page';
+import {useOneContext} from '~/context/OneContextProvider';
+import useModalContext from '~/hooks/useModalContext';
+import i18n from '~/i18n';
+import TrialListView from '~/pages/Admin/SSADashboard/components/TrialListView/TrialListView';
+import useSSAActions from '~/pages/Admin/SSADashboard/hooks/useSSAActions';
+import {useSSADashboardOutlet} from '~/pages/Admin/SSADashboard/hooks/useSSADashboardOutlet';
 
 export default function MySsaSaasDemo() {
-	const {marketplaceUserAccount} = useOneContext();
+	const {userAccountModel} = useOneContext();
 	const {onOpenModal} = useModalContext();
 	const {myTrialsInProgress} = useSSADashboardOutlet();
 	const actions = useSSAActions();
 	const createTrialFormModal = useModal();
 
-	const isSSAAdmin = marketplaceUserAccount.isSSAAdmin;
+	const isSSAAdmin = userAccountModel.isSSAAdmin;
 
 	const canCreateTrial = isSSAAdmin ? true : myTrialsInProgress < 3;
 
-	const hasSSAPermission = isSSAAdmin || marketplaceUserAccount.isSSAUser;
+	const hasSSAPermission = isSSAAdmin || userAccountModel.isSSAUser;
 
 	return (
 		<Page

@@ -8,9 +8,9 @@ import ClayTable from '@clayui/table';
 import classNames from 'classnames';
 import {ReactNode} from 'react';
 
-import './Table.scss';
+import './Table.css';
 
-type TableProps<T = any> = {
+type TableProps<T extends Record<string, unknown> = Record<string, unknown>> = {
 	Actions?: React.FC<{row: T}>;
 	children?: ReactNode;
 	className?: string;
@@ -24,21 +24,22 @@ type TableProps<T = any> = {
 	rows: T[];
 };
 
-type TableColumn<T = any> = {
-	align?: 'center' | 'left' | 'right';
-	bodyClass?: string;
-	columnTextAlignment?: 'center' | 'end' | 'start';
-	disableCustomClickOnRow?: boolean;
-	expanded?: boolean;
-	key: string;
-	noWrap?: boolean;
-	onClick?: (item: T) => void;
-	render?: (value: any, item: T) => ReactNode | string;
-	styles?: string;
-	title?: ReactNode;
-	truncate?: boolean;
-	width?: string;
-};
+type TableColumn<T extends Record<string, unknown> = Record<string, unknown>> =
+	{
+		align?: 'center' | 'left' | 'right';
+		bodyClass?: string;
+		columnTextAlignment?: 'center' | 'end' | 'start';
+		disableCustomClickOnRow?: boolean;
+		expanded?: boolean;
+		key: string;
+		noWrap?: boolean;
+		onClick?: (item: T) => void;
+		render?: (value: unknown, item: T) => ReactNode | string;
+		styles?: string;
+		title?: ReactNode;
+		truncate?: boolean;
+		width?: string;
+	};
 
 type PaginationProps = {
 	activeDelta: number;
@@ -127,7 +128,7 @@ const Table: React.FC<TableProps> = ({
 										}}
 										truncate={column.truncate}
 									>
-										{value}
+										{value as React.ReactNode}
 									</ClayTable.Cell>
 								);
 							})}
