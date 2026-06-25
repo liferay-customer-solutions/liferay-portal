@@ -10,6 +10,7 @@ import EmptyState from '~/components/EmptyState/EmptyState';
 import i18n from '~/i18n';
 import ProductPurchaseHeaderCards from '~/pages/ProductPurchase/components/ProductPurchaseHeaderCards/ProductPurchaseHeaderCards';
 import {Liferay} from '~/services/liferay/liferay';
+import {getProductPriceModel} from '~/utils/productUtils';
 import {getSiteURL} from '~/utils/siteUtils';
 
 import type {Account} from '~/types/accounts';
@@ -29,6 +30,10 @@ const PurchaseCompleted = ({product}: PurchaseCompletedProps) => {
 	const orderId = urlSearchParams.get('orderId') ?? '';
 
 	const account = (state as {account?: Account} | null)?.account;
+
+	const {isPaidApp} = getProductPriceModel(product);
+
+	const installTab = isPaidApp ? 'activation' : 'download';
 
 	if (!orderId) {
 		return (
@@ -87,7 +92,7 @@ const PurchaseCompleted = ({product}: PurchaseCompletedProps) => {
 					className="ml-3"
 					onClick={() =>
 						Liferay.Util.navigate(
-							`${getSiteURL()}/my-account#/project/applications/${orderId}?tab=download`
+							`${getSiteURL()}/my-account#/project/applications/${orderId}?tab=${installTab}`
 						)
 					}
 				>
