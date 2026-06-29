@@ -23,6 +23,18 @@ function main {
 
 	cd ..
 
+	# Bootstrap is the local orchestrator: it always seeds the localhost bundle
+	# with admin credentials. The seed scripts now default to OAuth and read the
+	# workspace .env (which may target a remote environment), so pin them to
+	# basic auth against localhost and bypass the .env so a local bootstrap is
+	# never redirected at a remote URL.
+
+	export LIFERAY_ADMIN_EMAIL=test@liferay.com
+	export LIFERAY_ADMIN_PASSWORD=test
+	export LIFERAY_AUTH_MODE=basic
+	export LIFERAY_ENV_FILE=/dev/null
+	export LIFERAY_URL=http://localhost:8080
+
 	if [ "${reset}" == "true" ]
 	then
 		echo "Tearing down containers and volumes."
@@ -31,8 +43,8 @@ function main {
 
 	./gradlew clean
 
-	bash scripts/extract_hotfix.sh
-	bash scripts/extract_license.sh
+	bash scripts/bootstrap/extract_hotfix.sh
+	bash scripts/bootstrap/extract_license.sh
 
 	echo "Building Docker image."
 	./gradlew buildDockerImage
@@ -55,24 +67,12 @@ function main {
 	done
 
 	echo "Deploying artifacts to Liferay container."
-	bash scripts/deploy_client_extensions.sh
+	bash scripts/bootstrap/deploy_client_extensions.sh
 
-	echo "Activating seeded user accounts."
-	bash scripts/activate_user_accounts.sh
+	echo "Seeding data."
+	bash scripts/seed.sh
 
-	echo "Linking object entries to commerce products."
-	bash scripts/link_commerce_products.sh
-
-	echo "Linking supplier accounts to commerce catalogs."
-	bash scripts/link_commerce_catalogs.sh
-
-	echo "Creating publisher details."
-	bash scripts/create_publisher_details.sh
-
-	echo "Populating orders, order items, and entitlements."
-	bash scripts/populate_orders.sh
-
-	echo "Done. Liferay is running at http://localhost:8080."
+	echo "Done. Liferay is running at http://localhost."
 }
 
 main "${@}"

@@ -1,0 +1,118 @@
+{
+	"configuration": {
+		"className": "com.liferay.headless.commerce.admin.catalog.dto.v1_0.Option",
+		"parameters": {
+			"containsHeaders": "true",
+			"createStrategy": "INSERT",
+			"onErrorFail": "false",
+			"taskItemDelegateName": "DEFAULT",
+			"updateStrategy": "PARTIAL_UPDATE"
+		}
+	},
+	"items": [
+		{
+			"description": {
+				"en_US": "Apps that are not DXP or Cloud can be licensed using this base type."
+			},
+			"externalReferenceCode": "LO_OPTION_BASE_LICENSE_USAGE",
+			"facetable": false,
+			"fieldType": "radio",
+			"key": "base-license-usage-type",
+			"name": {
+				"en_US": "Base License Usage Type"
+			},
+			"optionValues": [
+				{
+					"externalReferenceCode": "LO_OPTION_BASE_LICENSE_USAGE_DEVELOPER",
+					"key": "developer",
+					"name": {
+						"en_US": "Developer"
+					},
+					"priority": 0
+				},
+				{
+					"externalReferenceCode": "LO_OPTION_BASE_LICENSE_USAGE_STANDARD",
+					"key": "standard",
+					"name": {
+						"en_US": "Standard"
+					},
+					"priority": 1
+				}
+			],
+			"required": true,
+			"skuContributor": true
+		},
+		{
+			"description": {
+				"en_US": "Apps that run on Liferay Cloud can be licensed using this type."
+			},
+			"externalReferenceCode": "LO_OPTION_CLOUD_LICENSE_USAGE",
+			"facetable": false,
+			"fieldType": "radio",
+			"key": "cloud-license-usage-type",
+			"name": {
+				"en_US": "Cloud License Usage Type"
+			},
+			"optionValues": [
+				{
+					"externalReferenceCode": "LO_OPTION_CLOUD_LICENSE_USAGE_STANDARD",
+					"key": "standard",
+					"name": {
+						"en_US": "Standard"
+					},
+					"priority": 0
+				},
+				{
+					"externalReferenceCode": "LO_OPTION_CLOUD_LICENSE_USAGE_TRIAL",
+					"key": "trial",
+					"name": {
+						"en_US": "Trial"
+					},
+					"priority": 1
+				}
+			],
+			"required": true,
+			"skuContributor": true
+		},
+		{
+			"description": {
+				"en_US": "Apps built for Liferay DXP can be licensed using this type."
+			},
+			"externalReferenceCode": "LO_OPTION_DXP_LICENSE_USAGE",
+			"facetable": false,
+			"fieldType": "radio",
+			"key": "dxp-license-usage-type",
+			"name": {
+				"en_US": "DXP License Usage Type"
+			},
+			"optionValues": [
+				{
+					"externalReferenceCode": "LO_OPTION_DXP_LICENSE_USAGE_DEVELOPER",
+					"key": "developer",
+					"name": {
+						"en_US": "Developer"
+					},
+					"priority": 0
+				},
+				{
+					"externalReferenceCode": "LO_OPTION_DXP_LICENSE_USAGE_STANDARD",
+					"key": "standard",
+					"name": {
+						"en_US": "Standard"
+					},
+					"priority": 1
+				},
+				{
+					"externalReferenceCode": "LO_OPTION_DXP_LICENSE_USAGE_TRIAL",
+					"key": "trial",
+					"name": {
+						"en_US": "Trial"
+					},
+					"priority": 2
+				}
+			],
+			"required": true,
+			"skuContributor": true
+		}
+	]
+}
