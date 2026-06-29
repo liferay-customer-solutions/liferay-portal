@@ -4,12 +4,19 @@
  */
 
 import ClayButton from '@clayui/button';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
+import useSWR from 'swr';
+import purchaseFailedIconUrl from '~/assets/icons/purchase_failed.svg';
 import purchaseSuccessIconUrl from '~/assets/icons/purchase_success.svg';
+import purchaseSuccessCardIconUrl from '~/assets/icons/purchase_success_card.svg';
 import EmptyState from '~/components/EmptyState/EmptyState';
+import Loading from '~/components/Loading/Loading';
+import {usePlacedOrder} from '~/hooks/usePlacedOrder';
 import i18n from '~/i18n';
 import ProductPurchaseHeaderCards from '~/pages/ProductPurchase/components/ProductPurchaseHeaderCards/ProductPurchaseHeaderCards';
+import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
 import {Liferay} from '~/services/liferay/liferay';
+import {PaymentStatus} from '~/utils/orderUtils';
 import {getProductPriceModel} from '~/utils/productUtils';
 import {getSiteURL} from '~/utils/siteUtils';
 
@@ -22,6 +29,7 @@ type PurchaseCompletedProps = {
 
 const PurchaseCompleted = ({product}: PurchaseCompletedProps) => {
 	const {search, state} = useLocation();
+	const navigate = useNavigate();
 
 	const urlSearchParams = new URLSearchParams(
 		search || window.location.search
@@ -29,11 +37,16 @@ const PurchaseCompleted = ({product}: PurchaseCompletedProps) => {
 
 	const orderId = urlSearchParams.get('orderId') ?? '';
 
-	const account = (state as {account?: Account} | null)?.account;
+	const {isFreeApp, isPaidApp} = getProductPriceModel(product);
 
-	const {isPaidApp} = getProductPriceModel(product);
+	const {data: order, isLoading: isOrderLoading} = usePlacedOrder(orderId, {
+		revalidateOnFocus: false,
+	});
 
-	const installTab = isPaidApp ? 'activation' : 'download';
+	const {data: fetchedAccount, isLoading: isAccountLoading} = useSWR(
+		order?.accountId ? `/account/${order.accountId}` : null,
+		() => HeadlessAdminUser.getAccount(order!.accountId)
+	);
 
 	if (!orderId) {
 		return (
@@ -44,6 +57,81 @@ const PurchaseCompleted = ({product}: PurchaseCompletedProps) => {
 		);
 	}
 
+	if (isOrderLoading || isAccountLoading) {
+		return (
+			<div className="d-flex justify-content-center my-7">
+				<Loading />
+			</div>
+		);
+	}
+
+	const account =
+		fetchedAccount ?? (state as {account?: Account} | null)?.account;
+
+	const hasVatId = Boolean(fetchedAccount?.taxId);
+
+	const paymentStatus = order?.paymentStatus;
+
+	const isPaymentError =
+		isPaidApp &&
+		(paymentStatus === PaymentStatus.FAILED ||
+			paymentStatus === PaymentStatus.CANCELED);
+
+	if (isPaymentError) {
+		return (
+			<div className="product-purchase-completed">
+				<ProductPurchaseHeaderCards account={account} product={product} />
+
+				<div className="d-flex justify-content-center mt-5">
+					<img
+						alt=""
+						height="67px"
+						src={purchaseFailedIconUrl}
+						width="74px"
+					/>
+				</div>
+
+				<h1 className="mt-4 product-purchase-shell-title text-center">
+					{i18n.translate('payment-failed')}
+				</h1>
+
+				<p className="mt-3 text-center text-muted">
+					{i18n.translate('we-were-unable-to-process-the-payment-for')}{' '}
+					<strong>{product.name}</strong>.{' '}
+					{i18n.translate(
+						'please-review-your-payment-details-and-try-again'
+					)}
+				</p>
+
+				<p className="mt-4 text-center">
+					{i18n.translate('your-order-id-is')}{' '}
+					<strong className="text-primary">{orderId}</strong>
+				</p>
+
+				<hr className="my-4" />
+
+				<div className="d-flex justify-content-center">
+					<ClayButton
+						displayType="secondary"
+						onClick={() =>
+							Liferay.Util.navigate(`${getSiteURL()}/marketplace`)
+						}
+					>
+						{i18n.translate('go-to-the-catalog')}
+					</ClayButton>
+
+					<ClayButton className="ml-3" onClick={() => navigate('/')}>
+						{i18n.translate('try-again')}
+					</ClayButton>
+				</div>
+			</div>
+		);
+	}
+
+	const installTab = isPaidApp ? 'activation' : 'download';
+
+	const showCardIcon = !isFreeApp && hasVatId;
+
 	return (
 		<div className="product-purchase-completed">
 			<ProductPurchaseHeaderCards account={account} product={product} />
@@ -51,9 +139,13 @@ const PurchaseCompleted = ({product}: PurchaseCompletedProps) => {
 			<div className="d-flex justify-content-center mt-5">
 				<img
 					alt=""
-					height="64px"
-					src={purchaseSuccessIconUrl}
-					width="74px"
+					height={showCardIcon ? '80px' : '64px'}
+					src={
+						showCardIcon
+							? purchaseSuccessCardIconUrl
+							: purchaseSuccessIconUrl
+					}
+					width={showCardIcon ? '80px' : '74px'}
 				/>
 			</div>
 

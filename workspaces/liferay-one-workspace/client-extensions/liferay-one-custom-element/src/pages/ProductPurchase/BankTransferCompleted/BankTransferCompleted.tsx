@@ -5,6 +5,7 @@
 
 import ClayButton from '@clayui/button';
 import {useLocation} from 'react-router-dom';
+import purchaseInvoiceIconUrl from '~/assets/icons/purchase_invoice.svg';
 import EmptyState from '~/components/EmptyState/EmptyState';
 import i18n from '~/i18n';
 import ProductPurchaseHeaderCards from '~/pages/ProductPurchase/components/ProductPurchaseHeaderCards/ProductPurchaseHeaderCards';
@@ -42,7 +43,16 @@ const BankTransferCompleted = ({product}: BankTransferCompletedProps) => {
 		<div className="product-purchase-completed">
 			<ProductPurchaseHeaderCards account={account} product={product} />
 
-			<h1 className="mt-5 product-purchase-shell-title text-center">
+			<div className="d-flex justify-content-center mt-5">
+				<img
+					alt=""
+					height="64px"
+					src={purchaseInvoiceIconUrl}
+					width="74px"
+				/>
+			</div>
+
+			<h1 className="mt-4 product-purchase-shell-title text-center">
 				{i18n.translate('order-confirmation')}
 			</h1>
 

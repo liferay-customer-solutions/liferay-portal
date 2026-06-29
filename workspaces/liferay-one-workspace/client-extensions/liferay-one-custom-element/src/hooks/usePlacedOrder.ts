@@ -23,7 +23,7 @@ const usePlacedOrder = (
 	swrOptions?: SWRConfiguration
 ) =>
 	useSWR(
-		`/placed-order/${orderId}`,
+		orderId ? `/placed-order/${orderId}` : null,
 		async () => HeadlessCommerceDeliveryOrder.getPlacedOrder(orderId),
 		swrOptions
 	);

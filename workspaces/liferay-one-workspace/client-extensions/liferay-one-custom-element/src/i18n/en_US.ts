@@ -741,6 +741,7 @@ export default {
 	'pay-with-card': 'Pay with Card',
 	'payload': 'Payload',
 	'payment': 'Payment',
+	'payment-failed': 'Payment Failed',
 	'payment-method': 'Payment Method',
 	'payment-status': 'Payment Status',
 	'payment-summary': 'Payment Summary',
@@ -780,6 +781,8 @@ export default {
 		'Please review before submitting. Once sent, you will not be able to edit any information until this submission is fully reviewed by Liferay.',
 	'please-review-the-order-summary-below-and-flag-the-checkbox-to-complete-your-purchase':
 		'Please review the order summary below and flag the checkbox to complete your purchase',
+	'please-review-your-payment-details-and-try-again':
+		'Please review your payment details and try again.',
 	'please-select-an-actual-event-date-that-has-already-occurred-or-is-today':
 		'Please select an actual event date that has already occurred or is today.',
 	'please-select-the-account-you-wish-to-link-to-your-liferay-dxp-below':
@@ -1121,6 +1124,7 @@ export default {
 	'trial-status': 'Trial Status',
 	'trial-url': 'Trial URL',
 	'trials': 'Trials',
+	'try-again': 'Try Again',
 	'try-again-later': 'Try again later.',
 	'try-beta': 'Try Beta',
 	'two-factor-authentication': 'Two-Factor Authentication',
@@ -1194,6 +1198,8 @@ export default {
 		'We couldn’t set up your environment. Please contact support.',
 	'we-understand-that-plans-change-please-let-us-know-why-the-planned-event-date-for-this-event-is-being-updated':
 		'We understand that plans change. Please let us know why the planned event date for this event is being updated.',
+	'we-were-unable-to-process-the-payment-for':
+		'We were unable to process the payment for',
 	'website': 'Website',
 	'what-features-would-you-like-in-the-final-release':
 		'What features would you like in the final release?',

@@ -9,6 +9,7 @@ import i18n from '~/i18n';
 import {useProductPurchaseLayoutContext} from '~/pages/ProductPurchase/components/ProductPurchaseLayout/ProductPurchaseLayout';
 import ProductPurchaseShell from '~/pages/ProductPurchase/components/ProductPurchaseShell/ProductPurchaseShell';
 import commerceSchemas from '~/schema/commerceSchemas';
+import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
 import HeadlessCommerceDeliveryCart from '~/services/headless/HeadlessCommerceDeliveryCart';
 import CommerceOrders from '~/services/spring-boot/CommerceOrders';
 
@@ -45,6 +46,12 @@ const PaymentMethod = () => {
 					billingAddress: payment.billingAddress,
 					shippingAddress: payment.billingAddress,
 				});
+
+				if (payment.taxId && !selectedAccount.taxId) {
+					await HeadlessAdminUser.updateAccount(selectedAccount.id, {
+						taxId: payment.taxId,
+					}).catch(console.error);
+				}
 
 				await CommerceOrders.calculateTax(cartId).catch(console.error);
 
