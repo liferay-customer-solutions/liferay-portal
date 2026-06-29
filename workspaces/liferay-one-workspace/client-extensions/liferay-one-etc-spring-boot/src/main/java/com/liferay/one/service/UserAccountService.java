@@ -40,4 +40,17 @@ public class UserAccountService extends OneBaseService {
 		return userAccountResource.getUserAccount(userId);
 	}
 
+	public UserAccount getUserAccountByEmailAddress(String emailAddress)
+		throws Exception {
+
+		UserAccountResource userAccountResource = UserAccountResource.builder(
+		).endpoint(
+			lxcDXPMainDomain, lxcDXPServerProtocol
+		).header(
+			HttpHeaders.AUTHORIZATION, getAuthorization()
+		).build();
+
+		return userAccountResource.getUserAccountByEmailAddress(emailAddress);
+	}
+
 }
