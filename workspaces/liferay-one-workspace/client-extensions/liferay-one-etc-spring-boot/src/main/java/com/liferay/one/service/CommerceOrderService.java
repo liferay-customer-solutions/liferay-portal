@@ -16,6 +16,7 @@ import com.liferay.headless.commerce.admin.order.client.dto.v1_0.OrderItem;
 import com.liferay.headless.commerce.admin.order.client.pagination.Page;
 import com.liferay.headless.commerce.admin.order.client.problem.Problem;
 import com.liferay.headless.commerce.admin.order.client.resource.v1_0.OrderResource;
+import com.liferay.one.constants.CommerceOrderConstants;
 import com.liferay.one.constants.SupportRegionConstants;
 import com.liferay.one.util.SupportRegionUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -89,6 +90,27 @@ public class CommerceOrderService extends OneBaseService {
 		}
 	}
 
+	public void completeOrder(long orderId, int paymentStatus)
+		throws Exception {
+
+		completeOrder(null, orderId, paymentStatus);
+	}
+
+	public void completeOrder(
+			Map<String, ?> customFields, long orderId, int paymentStatus)
+		throws Exception {
+
+		updateOrder(
+			customFields, orderId, CommerceOrderConstants.ORDER_STATUS_PENDING);
+
+		updateOrder(
+			null, orderId, CommerceOrderConstants.ORDER_STATUS_PROCESSING);
+
+		updateOrder(
+			null, orderId, CommerceOrderConstants.ORDER_STATUS_COMPLETED,
+			paymentStatus);
+	}
+
 	public Order fetchCommerceOrder(long commerceOrderId) throws Exception {
 		OrderResource orderResource = _buildOrderResource();
 
@@ -142,6 +164,40 @@ public class CommerceOrderService extends OneBaseService {
 		}
 
 		return SupportRegionConstants.GLOBAL;
+	}
+
+	public void updateOrder(
+			Map<String, ?> customFields, long orderId, int orderStatus)
+		throws Exception {
+
+		OrderResource orderResource = _buildOrderResource();
+
+		orderResource.patchOrder(
+			orderId,
+			new Order() {
+				{
+					setCustomFields(() -> customFields);
+					setOrderStatus(() -> orderStatus);
+				}
+			});
+	}
+
+	public void updateOrder(
+			Map<String, ?> customFields, long orderId, int orderStatus,
+			int paymentStatus)
+		throws Exception {
+
+		OrderResource orderResource = _buildOrderResource();
+
+		orderResource.patchOrder(
+			orderId,
+			new Order() {
+				{
+					setCustomFields(() -> customFields);
+					setOrderStatus(() -> orderStatus);
+					setPaymentStatus(() -> paymentStatus);
+				}
+			});
 	}
 
 	private CurrencyResource _buildCurrencyResource() {
