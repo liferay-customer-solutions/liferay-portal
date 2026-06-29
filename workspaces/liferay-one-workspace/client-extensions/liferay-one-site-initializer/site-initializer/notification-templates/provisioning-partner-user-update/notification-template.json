@@ -1,0 +1,24 @@
+{
+	"description": "",
+	"editorType": "richText",
+	"externalReferenceCode": "PROVISIONING-PARTNER-USER-UPDATE",
+	"name": "Provisioning Partner User Update",
+	"recipientType": "email",
+	"recipients": [
+		{
+			"bcc": "",
+			"cc": "",
+			"from": "[%FROM_EMAIL%]",
+			"fromName": {
+				"en-US": "Liferay Provisioning"
+			},
+			"to": {
+				"en-US": "[%TO_EMAIL%]"
+			}
+		}
+	],
+	"subject": {
+		"en_US": "Partner user has been updated"
+	},
+	"type": "email"
+}

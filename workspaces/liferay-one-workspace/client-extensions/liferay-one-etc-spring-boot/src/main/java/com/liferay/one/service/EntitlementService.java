@@ -161,6 +161,36 @@ public class EntitlementService extends OneBaseService {
 		return getAllItems("/o/c/entitlements", filterString, Entitlement::new);
 	}
 
+	public boolean hasEntitlement(long accountId, String... entitlementNames)
+		throws Exception {
+
+		if (entitlementNames.length == 0) {
+			return false;
+		}
+
+		StringBundler sb = new StringBundler();
+
+		sb.append("(r_accountEntryToEntitlement_accountEntryId eq '");
+		sb.append(accountId);
+		sb.append("') and (");
+
+		for (int i = 0; i < entitlementNames.length; i++) {
+			if (i > 0) {
+				sb.append(" or ");
+			}
+
+			sb.append("name eq '");
+			sb.append(entitlementNames[i]);
+			sb.append("'");
+		}
+
+		sb.append(")");
+
+		return !getEntitlements(
+			sb.toString()
+		).isEmpty();
+	}
+
 	private long _getContractId(OrderItem orderItem) throws Exception {
 		Order order = _commerceOrderService.fetchCommerceOrder(
 			orderItem.getOrderId());

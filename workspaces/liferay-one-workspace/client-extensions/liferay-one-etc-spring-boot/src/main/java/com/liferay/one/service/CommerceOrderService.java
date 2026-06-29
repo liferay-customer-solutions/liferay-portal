@@ -5,6 +5,7 @@
 
 package com.liferay.one.service;
 
+import com.liferay.headless.admin.user.client.dto.v1_0.PostalAddress;
 import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.Currency;
 import com.liferay.headless.commerce.admin.catalog.client.pagination.Pagination;
 import com.liferay.headless.commerce.admin.catalog.client.resource.v1_0.CurrencyResource;
@@ -14,6 +15,9 @@ import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Order;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.OrderItem;
 import com.liferay.headless.commerce.admin.order.client.problem.Problem;
 import com.liferay.headless.commerce.admin.order.client.resource.v1_0.OrderResource;
+import com.liferay.one.constants.SupportRegionConstants;
+import com.liferay.one.util.SupportRegionUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.math.BigDecimal;
 
@@ -21,11 +25,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * @author Felipe Veloso
@@ -99,6 +105,65 @@ public class CommerceOrderService extends OneBaseService {
 
 			throw problemException;
 		}
+	}
+
+	public String getSupportRegion(long accountId, Long defaultBillingAddressId)
+		throws Exception {
+
+		String addressCountry = null;
+
+		if (Validator.isNotNull(defaultBillingAddressId)) {
+			PostalAddress postalAddress =
+				_postalAddressService.getPostalAddress(defaultBillingAddressId);
+
+			addressCountry = postalAddress.getAddressCountry();
+		}
+
+		String response = get(
+			getAuthorization(),
+			UriComponentsBuilder.fromPath(
+				"/o/headless-commerce-admin-order/v1.0/orders"
+			).queryParam(
+				"filter", "accountId/any(x:x eq " + accountId + ")"
+			).queryParam(
+				"nestedFields", "customFields"
+			).build(
+			).toUri());
+
+		if (Validator.isNull(response)) {
+			return SupportRegionConstants.GLOBAL;
+		}
+
+		JSONObject responseJSONObject = new JSONObject(response);
+
+		JSONArray itemsJSONArray = responseJSONObject.optJSONArray("items");
+
+		if (itemsJSONArray == null) {
+			return SupportRegionConstants.GLOBAL;
+		}
+
+		for (int i = 0; i < itemsJSONArray.length(); i++) {
+			JSONObject orderJSONObject = itemsJSONArray.getJSONObject(i);
+
+			JSONObject customFieldsJSONObject = orderJSONObject.optJSONObject(
+				"customFields");
+
+			if (customFieldsJSONObject == null) {
+				continue;
+			}
+
+			String opportunitySoldBy = customFieldsJSONObject.optString(
+				"opportunitySoldBy");
+
+			if (Validator.isNull(opportunitySoldBy)) {
+				continue;
+			}
+
+			return SupportRegionUtil.getSupportRegion(
+				opportunitySoldBy, addressCountry);
+		}
+
+		return SupportRegionConstants.GLOBAL;
 	}
 
 	private CurrencyResource _buildCurrencyResource() {
@@ -180,5 +245,8 @@ public class CommerceOrderService extends OneBaseService {
 
 	@Autowired
 	private CommerceOrderItemService _commerceOrderItemService;
+
+	@Autowired
+	private PostalAddressService _postalAddressService;
 
 }

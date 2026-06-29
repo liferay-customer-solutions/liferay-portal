@@ -11,18 +11,17 @@ import com.liferay.one.constants.ClassNameConstants;
 import com.liferay.one.constants.ProductGroupConstants;
 import com.liferay.one.model.LicenseKey;
 import com.liferay.one.model.SubscriptionEntry;
+import com.liferay.one.util.LocaleUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.SetUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.time.Year;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -144,23 +143,25 @@ public class SubscriptionEntryService extends OneBaseService {
 			return _messageSource.getMessage(
 				"expiration-message-today",
 				new Object[] {expirationDate, productGroup},
-				_toLocale(languageId));
+				LocaleUtil.fromLanguageId(languageId));
 		}
 
 		return _messageSource.getMessage(
 			"expiration-message-future",
-			new Object[] {expirationDate, productGroup}, _toLocale(languageId));
+			new Object[] {expirationDate, productGroup},
+			LocaleUtil.fromLanguageId(languageId));
 	}
 
 	private String _getExpirationStatus(String languageId, int days) {
 		if (days == 0) {
 			return _messageSource.getMessage(
-				"expiration-status-today", null, _toLocale(languageId));
+				"expiration-status-today", null,
+				LocaleUtil.fromLanguageId(languageId));
 		}
 
 		return _messageSource.getMessage(
 			"expiration-status-future", new Object[] {days},
-			_toLocale(languageId));
+			LocaleUtil.fromLanguageId(languageId));
 	}
 
 	private String _getLanguageId(UserAccount userAccount) {
@@ -272,10 +273,6 @@ public class SubscriptionEntryService extends OneBaseService {
 					licenseKeyExpirationDateOffset);
 			}
 		}
-	}
-
-	private Locale _toLocale(String languageId) {
-		return Locale.forLanguageTag(StringUtil.replace(languageId, '_', '-'));
 	}
 
 	private static final String _DEFAULT_LANGUAGE_ID = "en_US";

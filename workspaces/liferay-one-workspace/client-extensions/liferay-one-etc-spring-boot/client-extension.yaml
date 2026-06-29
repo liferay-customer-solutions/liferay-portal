@@ -5,7 +5,7 @@ liferay-one-etc-spring-boot-oahs:
     .serviceScheme: http
     name: Liferay One Etc Spring Boot OAuth Application Headless Server
     scopes:
-        -   Liferay.Headless.Admin.User.everything.read
+        -   Liferay.Headless.Admin.User.everything
         -   Liferay.Headless.Commerce.Admin.Catalog.everything
         -   Liferay.Headless.Commerce.Admin.Order.everything
         -   Liferay.Headless.Commerce.Admin.Pricing.everything
@@ -13,6 +13,8 @@ liferay-one-etc-spring-boot-oahs:
         -   c_entitlement.everything
         -   c_entitlementdefinition.everything.read
         -   c_licensekey.everything.read
+        -   c_project.everything.read
+        -   c_projectmembership.everything
         -   c_subscriptionentry.everything
         -   c_ticketattachment.everything
     type: oAuthApplicationHeadlessServer
