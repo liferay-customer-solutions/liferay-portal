@@ -3,7 +3,7 @@ assemble:
         into: static
 liferay-one-custom-element:
     cssURLs:
-        -   "assets/*.css"
+        -   index.*.css
     friendlyURLMapping: liferay-one-custom-element
     htmlElementName: liferay-one-custom-element
     instanceable: true
@@ -15,5 +15,5 @@ liferay-one-custom-element:
         jira-hc-portal-url: https://liferay.atlassian.net/servicedesk/customer/portal/105
     type: customElement
     urls:
-        -   "*.js"
+        -   index.*.js
     useESM: true

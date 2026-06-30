@@ -9,16 +9,22 @@ import {defineConfig} from 'vite';
 
 export default defineConfig({
 	build: {
+		chunkSizeWarningLimit: 2000,
+		cssCodeSplit: false,
 		outDir: 'build/vite',
 		rollupOptions: {
 			external: ['@liferay/oauth2-provider-web/client'],
 			output: {
-				assetFileNames: 'assets/[name].[hash][extname]',
-				chunkFileNames: '[name].[hash].js',
-				entryFileNames: '[name].[hash].js',
-				manualChunks: {
-					vendor: ['react', 'react-dom', 'react-router-dom'],
+				assetFileNames: (assetInfo) => {
+					const name = assetInfo.name ?? '';
+
+					return name.endsWith('.css')
+						? 'index.[hash][extname]'
+						: 'assets/[name].[hash][extname]';
 				},
+				chunkFileNames: '[name].[hash].js',
+				entryFileNames: 'index.[hash].js',
+				inlineDynamicImports: true,
 			},
 		},
 	},
