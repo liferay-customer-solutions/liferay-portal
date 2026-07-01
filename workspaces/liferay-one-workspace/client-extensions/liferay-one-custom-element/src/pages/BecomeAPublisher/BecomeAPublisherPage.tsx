@@ -14,13 +14,13 @@ import i18n from '~/i18n';
 import {Liferay} from '~/services/liferay/liferay';
 import {getSiteURL} from '~/utils/siteUtils';
 
-import './PublisherGatePage.scss';
+import './BecomeAPublisherPage.scss';
 
-export function PublisherGatePage() {
+export function BecomeAPublisherPage() {
 	const navigate = useNavigate();
 
 	return (
-		<div className="publisher-gate-page-body">
+		<div className="become-a-publisher-page-body">
 			<Header
 				description={i18n.translate(
 					'we-are-happy-to-have-you-interested-in-the-liferay-marketplace-at-the-moment-we-are-working-on-enhancing-the-experience-for-our-publishers-in-the-marketplace-if-you-are-an-existing-liferay-developer-or-partner-you-can-choose-to-join-our-pilot-group-of-publishers-to-submit-apps-to-the-marketplace-continue-to-request-a-publisher-account'
@@ -55,11 +55,11 @@ export function PublisherGatePage() {
 				title={i18n.translate('monetize-your-apps-and-solutions')}
 			/>
 
-			<hr className="publisher-gate-page-divider" />
+			<hr className="become-a-publisher-page-divider" />
 
-			<div className="publisher-gate-page-button-container">
+			<div className="become-a-publisher-page-button-container">
 				<ClayButton
-					className="mr-4 publisher-gate-page-button"
+					className="mr-4 become-a-publisher-page-button"
 					displayType="secondary"
 					onClick={() => {
 						Liferay.Util.navigate(
@@ -71,7 +71,7 @@ export function PublisherGatePage() {
 				</ClayButton>
 
 				<ClayButton
-					className="publisher-gate-page-button"
+					className="become-a-publisher-page-button"
 					onClick={() => navigate('/request-account')}
 				>
 					{i18n.translate('request-account')}

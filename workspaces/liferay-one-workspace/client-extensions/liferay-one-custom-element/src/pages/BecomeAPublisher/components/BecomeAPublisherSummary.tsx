@@ -9,22 +9,22 @@ import {Header} from '~/components/Header/Header';
 import i18n from '~/i18n';
 import {Liferay} from '~/services/liferay/liferay';
 import {getSiteURL} from '~/utils/siteUtils';
-import {PublisherGateStep} from './PublisherGateSteps';
+import {BecomeAPublisherStep} from './BecomeAPublisherSteps';
 
-type PublisherGateSummaryProps = {
+type BecomeAPublisherSummaryProps = {
 	children: JSX.Element;
-	setStep: React.Dispatch<React.SetStateAction<PublisherGateStep>>;
+	setStep: React.Dispatch<React.SetStateAction<BecomeAPublisherStep>>;
 	submit: () => void;
 };
 
-const PublisherGateSummary: React.FC<PublisherGateSummaryProps> = ({
+const BecomeAPublisherSummary: React.FC<BecomeAPublisherSummaryProps> = ({
 	children,
 	setStep,
 	submit,
 }) => {
 	return (
 		<>
-			<div className="publisher-gate-page-body">
+			<div className="become-a-publisher-page-body">
 				<Header
 					description={i18n.translate(
 						'review-the-new-publisher-info-and-the-liferay-marketplace-terms-before-proceeding'
@@ -88,7 +88,7 @@ const PublisherGateSummary: React.FC<PublisherGateSummaryProps> = ({
 							<ClayButton
 								className="mr-4"
 								displayType="secondary"
-								onClick={() => setStep(PublisherGateStep.FORM)}
+								onClick={() => setStep(BecomeAPublisherStep.FORM)}
 							>
 								{i18n.translate('back')}
 							</ClayButton>
@@ -104,4 +104,4 @@ const PublisherGateSummary: React.FC<PublisherGateSummaryProps> = ({
 	);
 };
 
-export default PublisherGateSummary;
+export default BecomeAPublisherSummary;

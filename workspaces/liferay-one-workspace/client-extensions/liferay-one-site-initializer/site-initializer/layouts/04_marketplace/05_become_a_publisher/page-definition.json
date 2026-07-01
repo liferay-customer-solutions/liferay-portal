@@ -23,7 +23,7 @@
 						"definition": {
 							"widgetInstance": {
 								"widgetConfig": {
-									"properties": "route=publisher-gate"
+									"properties": "route=become-a-publisher"
 								},
 								"widgetName": "com_liferay_client_extension_web_internal_portlet_ClientExtensionEntryPortlet_[$COMPANY_ID$]_LXC_liferay_one_custom_element"
 							}

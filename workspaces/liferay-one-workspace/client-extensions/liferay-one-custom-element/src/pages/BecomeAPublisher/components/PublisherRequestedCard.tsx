@@ -7,13 +7,13 @@ import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import ClayLink from '@clayui/link';
 
-import createdProjectIcon from '../../../assets/images/add_user.svg';
+import createdProjectIcon from '~/assets/images/add_user.svg';
 import i18n from '~/i18n';
 import {Liferay} from '~/services/liferay/liferay';
 import {getSiteURL} from '~/utils/siteUtils';
 
-const PubliserhRequestedCard = () => (
-	<div className="d-flex flex-column pb-8 publisher-gate-page-body">
+const PublisherRequestedCard = () => (
+	<div className="d-flex flex-column pb-8 become-a-publisher-page-body">
 		<div className="border mt-8 p-8 rounded">
 			<div className="d-flex justify-content-center mb-6">
 				<img
@@ -68,4 +68,4 @@ const PubliserhRequestedCard = () => (
 	</div>
 );
 
-export default PubliserhRequestedCard;
+export default PublisherRequestedCard;
