@@ -80,7 +80,10 @@ const PurchaseCompleted = ({product}: PurchaseCompletedProps) => {
 	if (isPaymentError) {
 		return (
 			<div className="product-purchase-completed">
-				<ProductPurchaseHeaderCards account={account} product={product} />
+				<ProductPurchaseHeaderCards
+					account={account}
+					product={product}
+				/>
 
 				<div className="d-flex justify-content-center mt-5">
 					<img
@@ -96,7 +99,9 @@ const PurchaseCompleted = ({product}: PurchaseCompletedProps) => {
 				</h1>
 
 				<p className="mt-3 text-center text-muted">
-					{i18n.translate('we-were-unable-to-process-the-payment-for')}{' '}
+					{i18n.translate(
+						'we-were-unable-to-process-the-payment-for'
+					)}{' '}
 					<strong>{product.name}</strong>.{' '}
 					{i18n.translate(
 						'please-review-your-payment-details-and-try-again'
