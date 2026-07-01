@@ -18,13 +18,13 @@ import i18n from '~/i18n';
 import {Liferay} from '~/services/liferay/liferay';
 import {phones} from '~/utils/phones';
 import {getSiteURL} from '~/utils/siteUtils';
-import {PublisherForm, PublisherGateStep} from './PublisherGateSteps';
+import {PublisherForm, BecomeAPublisherStep} from './BecomeAPublisherSteps';
 import type {ListTypeDefinition} from '~/types/listTypeDefinition';
 
-type PublisherGateFormProps = {
+type BecomeAPublisherFormProps = {
 	form: UseFormReturn<PublisherForm, any>;
 	listTypeDefinition?: ListTypeDefinition;
-	setStep: React.Dispatch<React.SetStateAction<PublisherGateStep>>;
+	setStep: React.Dispatch<React.SetStateAction<BecomeAPublisherStep>>;
 };
 
 const tooltipText = {
@@ -33,7 +33,7 @@ const tooltipText = {
 		'Solutions built on Liferay, requires existing Liferay Partnership',
 };
 
-const PublisherGateForm: React.FC<PublisherGateFormProps> = ({
+const BecomeAPublisherForm: React.FC<BecomeAPublisherFormProps> = ({
 	form,
 	listTypeDefinition,
 	setStep,
@@ -65,7 +65,7 @@ const PublisherGateForm: React.FC<PublisherGateFormProps> = ({
 
 	return (
 		<>
-			<div className="publisher-gate-page-body">
+			<div className="become-a-publisher-page-body">
 				<Header
 					description={i18n.translate(
 						'enter-your-contact-details-in-the-fields-below-in-the-request-description-enter-the-name-and-a-brief-description-of-the-app-you-would-like-to-submit-we-will-be-in-contact-regarding-your-request'
@@ -281,7 +281,7 @@ const PublisherGateForm: React.FC<PublisherGateFormProps> = ({
 							<ClayButton
 								disabled={!form.formState.isValid}
 								onClick={() =>
-									setStep(PublisherGateStep.SUMMARY)
+									setStep(BecomeAPublisherStep.SUMMARY)
 								}
 							>
 								{i18n.translate('continue')}
@@ -294,4 +294,4 @@ const PublisherGateForm: React.FC<PublisherGateFormProps> = ({
 	);
 };
 
-export default PublisherGateForm;
+export default BecomeAPublisherForm;

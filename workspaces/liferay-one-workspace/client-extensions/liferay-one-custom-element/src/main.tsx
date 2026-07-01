@@ -35,8 +35,8 @@ const routers: Record<string, React.LazyExoticComponent<RouterComponent>> = {
 	'publisher-dashboard': React.lazy(
 		() => import('~/pages/PublisherDashboard/PublisherDashboardRouter')
 	),
-	'publisher-gate': React.lazy(
-		() => import('~/pages/PublisherGate/PublisherGateRouter')
+	'become-a-publisher': React.lazy(
+		() => import('~/pages/BecomeAPublisher/BecomeAPublisherRouter')
 	),
 	'ticket-attachments': React.lazy(
 		() => import('~/pages/TicketAttachments/TicketAttachmentsRouter')

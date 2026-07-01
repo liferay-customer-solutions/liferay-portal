@@ -8,28 +8,28 @@ import {useForm} from 'react-hook-form';
 import {z} from 'zod';
 import {zodResolver} from '@hookform/resolvers/zod';
 
-import {useOneContext} from '../../../context/OneContextProvider';
-import useListTypeDefinition from '../../../hooks/useListTypeDefinition';
+import {useOneContext} from '~/context/OneContextProvider';
+import useListTypeDefinition from '~/hooks/useListTypeDefinition';
 import i18n from '~/i18n';
-import publishingSchemas from '../../../schema/publishingSchemas';
-import fetcher from '../../../services/fetcher/fetcher';
+import publishingSchemas from '~/schema/publishingSchemas';
+import fetcher from '~/services/fetcher/fetcher';
 import {Liferay} from '~/services/liferay/liferay';
-import PublisherGateForm from './PublisherGateForm';
-import PublisherGateSummary from './PublisherGateSummary';
-import PubliserhRequestedCard from './PublisherRequestedCard';
+import BecomeAPublisherForm from './BecomeAPublisherForm';
+import BecomeAPublisherSummary from './BecomeAPublisherSummary';
+import PublisherRequestedCard from './PublisherRequestedCard';
 import PublisherSummaryContent from './PublisherSummaryContent';
 
 export type PublisherForm = z.infer<typeof publishingSchemas.becomePublisherForm>;
 
-export enum PublisherGateStep {
+export enum BecomeAPublisherStep {
 	FORM = 'form',
 	SUMMARY = 'summary',
 	REQUESTED = 'requested',
 }
 
-const PublisherGateSteps = () => {
+const BecomeAPublisherSteps = () => {
 	const {myUserAccount} = useOneContext();
-	const [step, setStep] = useState<PublisherGateStep>(PublisherGateStep.FORM);
+	const [step, setStep] = useState<BecomeAPublisherStep>(BecomeAPublisherStep.FORM);
 	const userPhone =
 		myUserAccount?.userAccountContactInformation?.telephones || [];
 
@@ -84,7 +84,7 @@ const PublisherGateSteps = () => {
 		try {
 			await fetcher.post('/o/c/publisheraccountrequests', formData);
 
-			setStep(PublisherGateStep.REQUESTED);
+			setStep(BecomeAPublisherStep.REQUESTED);
 		}
 		catch (error) {
 			console.error(error);
@@ -97,18 +97,18 @@ const PublisherGateSteps = () => {
 	};
 
 	const StepsAccount = {
-		[PublisherGateStep.FORM]: {
+		[BecomeAPublisherStep.FORM]: {
 			component: (
-				<PublisherGateForm
+				<BecomeAPublisherForm
 					form={form}
 					listTypeDefinition={data}
 					setStep={setStep}
 				/>
 			),
 		},
-		[PublisherGateStep.SUMMARY]: {
+		[BecomeAPublisherStep.SUMMARY]: {
 			component: (
-				<PublisherGateSummary
+				<BecomeAPublisherSummary
 					setStep={setStep}
 					submit={form.handleSubmit(submit)}
 				>
@@ -143,15 +143,15 @@ const PublisherGateSteps = () => {
 							}
 						/>
 					</div>
-				</PublisherGateSummary>
+				</BecomeAPublisherSummary>
 			),
 		},
-		[PublisherGateStep.REQUESTED]: {
-			component: <PubliserhRequestedCard />,
+		[BecomeAPublisherStep.REQUESTED]: {
+			component: <PublisherRequestedCard />,
 		},
 	};
 
 	return StepsAccount[step].component;
 };
 
-export default PublisherGateSteps;
+export default BecomeAPublisherSteps;

@@ -1,11 +1,11 @@
 {
 	"description": "",
 	"fragmentCompositionDefinitionPath": "page-definition.json",
-	"friendlyURL": "/marketplace/publisher-gate",
+	"friendlyURL": "/marketplace/become-a-publisher",
 	"hidden": true,
-	"name": "Publisher Gate",
+	"name": "Become a Publisher",
 	"name_i18n": {
-		"en_US": "Publisher Gate"
+		"en_US": "Become a Publisher"
 	},
 	"permissions": [
 		{
