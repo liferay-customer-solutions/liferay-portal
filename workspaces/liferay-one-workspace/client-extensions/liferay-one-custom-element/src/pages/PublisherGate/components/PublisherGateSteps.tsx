@@ -13,6 +13,7 @@ import useListTypeDefinition from '../../../hooks/useListTypeDefinition';
 import i18n from '~/i18n';
 import publishingSchemas from '../../../schema/publishingSchemas';
 import fetcher from '../../../services/fetcher/fetcher';
+import {Liferay} from '~/services/liferay/liferay';
 import PublisherGateForm from './PublisherGateForm';
 import PublisherGateSummary from './PublisherGateSummary';
 import PubliserhRequestedCard from './PublisherRequestedCard';
@@ -35,14 +36,14 @@ const PublisherGateSteps = () => {
 	const form = useForm<PublisherForm>({
 		defaultValues: {
 			emailAddress: myUserAccount ? myUserAccount?.emailAddress : '',
-			extension: userPhone?.length ? userPhone[0]?.extension : '',
+			extension: userPhone?.[0]?.extension ?? '',
 			firstName: myUserAccount ? myUserAccount?.givenName : '',
 			lastName: myUserAccount ? myUserAccount?.familyName : '',
 			phone: {
 				code: '+1',
 				flag: 'en-us',
 			},
-			phoneNumber: userPhone?.length ? userPhone[0]?.phoneNumber : '',
+			phoneNumber: userPhone?.[0]?.phoneNumber ?? '',
 			publisherType: ['appPublisher'],
 			requestDescription: '',
 		},
@@ -55,14 +56,14 @@ const PublisherGateSteps = () => {
 			const telephones = myUserAccount?.userAccountContactInformation?.telephones || [];
 			form.reset({
 				emailAddress: myUserAccount.emailAddress || '',
-				extension: telephones?.length ? telephones[0]?.extension : '',
+				extension: telephones?.[0]?.extension ?? '',
 				firstName: myUserAccount.givenName || '',
 				lastName: myUserAccount.familyName || '',
 				phone: {
 					code: '+1',
 					flag: 'en-us',
 				},
-				phoneNumber: telephones?.length ? telephones[0]?.phoneNumber : '',
+				phoneNumber: telephones?.[0]?.phoneNumber ?? '',
 				publisherType: ['appPublisher'],
 				requestDescription: '',
 			});
@@ -74,9 +75,11 @@ const PublisherGateSteps = () => {
 	const {data} = useListTypeDefinition('LT_PUBLISHER_TYPE');
 
 	const submit = async (formValues: PublisherForm) => {
-		const formData = {...formValues, intlCode: formValues?.phone?.code};
-
-		delete formData.phone;
+		const {phone, ...restFormValues} = formValues;
+		const formData = {
+			...restFormValues,
+			intlCode: phone?.code,
+		};
 
 		try {
 			await fetcher.post('/o/c/publisheraccountrequests', formData);
@@ -85,6 +88,11 @@ const PublisherGateSteps = () => {
 		}
 		catch (error) {
 			console.error(error);
+
+			Liferay.Util.openToast({
+				message: i18n.translate('an-unexpected-error-occurred'),
+				type: 'danger',
+			});
 		}
 	};
 
@@ -111,8 +119,8 @@ const PublisherGateSteps = () => {
 								{
 									...userInfo,
 									phone: {
-										code: userInfo?.phone?.code as string,
-										flag: userInfo?.phone?.flag as string,
+										code: userInfo?.phone?.code ?? '',
+										flag: userInfo?.phone?.flag ?? '',
 									},
 									publisherType: userInfo.publisherType.map(
 										(type) => {

@@ -84,10 +84,10 @@ const PublisherSummaryContent: React.FC<PublisherSummaryContentProps> = ({
 					info={
 						<ClayLabel
 							displayType={
-								STATUS[
+								(STATUS[
 									userInfo?.requestStatus
 										?.key as keyof typeof STATUS
-								] as Status
+								] || 'secondary') as Status
 							}
 						>
 							{userInfo?.requestStatus?.name}
@@ -121,7 +121,7 @@ const PublisherSummaryContent: React.FC<PublisherSummaryContentProps> = ({
 				<DisplayCardInfo
 					className="mb-5"
 					icon="order-form-tag"
-					info={<small>{userInfo?.publisherType.join(', ')}</small>}
+					info={<small>{userInfo?.publisherType?.join(', ') ?? ''}</small>}
 					title={i18n.translate('publisher-type')}
 				/>
 			</div>
