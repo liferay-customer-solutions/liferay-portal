@@ -72,7 +72,7 @@
 	.product-purchase-license-card-stepper {
 		height: 40px;
 
-		span {
+		:is(span) {
 			min-width: 32px;
 			text-align: center;
 		}

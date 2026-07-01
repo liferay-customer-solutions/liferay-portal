@@ -17,13 +17,17 @@
 	[/#attempt]
 [/#if]
 
+[#function langKey label]
+	[#return label?lower_case?replace(" ", "-", "r")?replace("&", "and", "r")?replace(",", "", "r")?replace("/", "-", "r") /]
+[/#function]
+
 <div class="home-apps-display">
 	<div class="section-container">
 		<div id="section-header">
 			<div class="d-flex flex-row justify-content-between w-100">
 				<h1 class="mb-1">${configuration.sectionTitle}</h1>
 
-				<a class="btn btn-link font-weight-semi-bold" href="/marketplace/applications?our-selection=${configuration.specificationFilterValue}" target="_self">
+				<a class="btn btn-link" href="/marketplace/applications?our-selection=${configuration.specificationFilterValue}" target="_self">
 					<span class="language-caret-icon">
 						<span>${languageUtil.get(locale, "view-all")}</span>
 
@@ -64,23 +68,25 @@
 
 							[#assign productDescription=stringUtil.shorten(htmlUtil.stripHtml(product.description!""), 140, "...") /]
 
+							[#assign productIcon=getSpecificationValue("product-icon", "liferay_waffle") /]
+
 							<a class="d-flex flex-column mb-0 one-card position-relative product-card text-dark text-decoration-none [#if configuration.cardSize == 'large'] large [/#if] [#if configuration.cardSize == 'medium'] medium [/#if] [#if configuration.cardSize == 'small'] small [/#if]" href="/p/${product.slug}" target="_self">
 								<div class="card-image-title-container d-flex">
 									<div class="image-container mr-2 rounded">
-										<img alt="${product.name}" class="app-search-image" draggable="false" height="56" lazy="true" src="${(product.urlImage?replace('https://', 'http://'))?js_string}" width="56" />
+										<img alt="${product.name}" class="app-search-image" draggable="false" height="56" lazy="true" src="/documents/d${themeDisplay.getScopeGroup().getFriendlyURL()}/${productIcon}-svg" width="56" />
 									</div>
 
 									<div class="d-flex flex-column w-100">
 										[#if productType?has_content]
 											[#if configuration.cardSize != 'small']
 												<span class="d-flex justify-content-end">
-													[#if productType.name == 'Other']
+													[#if productType.title == 'Other']
 														<div class="app-type-badge"></div>
 													[#else]
 														[#assign badgeType = productType.name?lower_case?replace(" ", "-", "r")?replace("/", "-", "r")]
 
 														<div class="app-type-badge ${badgeType} font-weight-semi-bold">
-															${productType.name}
+															${languageUtil.get(locale, langKey(productType.title), productType.title)}
 														</div>
 													[/#if]
 												</span>
@@ -132,15 +138,15 @@
 												[#assign principalCategory=productCategories[0] remainingCategories=productCategories?filter(category -> category.name != principalCategory.name) /]
 
 												[#list remainingCategories as category]
-													[#assign remainingCategoriesText=remainingCategoriesText + [category.name] /]
+													[#assign remainingCategoriesText=remainingCategoriesText + [languageUtil.get(locale, langKey(category.title), category.title)] /]
 												[/#list]
 											[/#if]
 
 											[#if principalCategory?has_content]
-												[#assign tagName=stringUtil.shorten(htmlUtil.stripHtml(principalCategory.name!""), 100, "...") /]
+												[#assign principalCategoryTitle=languageUtil.get(locale, langKey(principalCategory.title), principalCategory.title) tagName=stringUtil.shorten(htmlUtil.stripHtml(principalCategoryTitle!""), 100, "...") /]
 
-												<div class="d-flex my-1 tags-container">
-													<span class="font-weight-normal mr-3 product-tag px-2 py-1 rounded text-nowrap" title="${principalCategory.name}">
+												<div class="my-1 tags-container">
+													<span class="font-weight-normal mb-3 mr-3 product-tag px-2 py-1 rounded text-nowrap" title="${principalCategoryTitle}">
 														${tagName}
 													</span>
 

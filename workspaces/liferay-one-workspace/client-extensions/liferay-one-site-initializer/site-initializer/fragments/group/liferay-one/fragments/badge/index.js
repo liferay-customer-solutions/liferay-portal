@@ -29,7 +29,13 @@
 	names.forEach((name) => {
 		const pill = document.createElement('span');
 
-		pill.classList.add('badge', 'badge-primary');
+		pill.classList.add(
+			'product-tag',
+			'px-2',
+			'py-1',
+			'rounded',
+			'text-nowrap'
+		);
 		pill.textContent = name;
 
 		container.appendChild(pill);

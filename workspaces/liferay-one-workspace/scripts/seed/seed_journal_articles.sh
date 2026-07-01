@@ -217,6 +217,7 @@ print(json.dumps({
 	'structuredContentFolderId': int(sys.argv[4]),
 	'taxonomyCategoryIds': json.loads(sys.argv[5]),
 	'title': metadata['name'],
+	'viewableBy': 'Anyone',
 }))
 " "${article_metadata}" "${article_xml}" "${content_structure_id}" "${folder_id}" "${taxonomy_category_ids}"
 }

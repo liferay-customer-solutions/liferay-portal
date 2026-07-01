@@ -31,6 +31,13 @@ function main {
 
 	mkdir --parents "${license_dir}"
 
+	if [[ ${force} == true ]]
+	then
+		echo "Pulling the latest \"liferay/dxp:latest\" image."
+
+		docker pull liferay/dxp:latest
+	fi
+
 	docker run \
 		--entrypoint sh \
 		--rm \

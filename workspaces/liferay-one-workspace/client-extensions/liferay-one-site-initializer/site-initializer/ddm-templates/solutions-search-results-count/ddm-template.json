@@ -1,0 +1,6 @@
+{
+	"className": "com.liferay.commerce.product.content.search.web.internal.portlet.CPSearchResultsPortlet",
+	"ddmTemplateKey": "SOLUTIONS_SEARCH_RESULTS_COUNT",
+	"name": "Solutions Search Results Count",
+	"resourceClassName": "com.liferay.portlet.display.template.PortletDisplayTemplate"
+}

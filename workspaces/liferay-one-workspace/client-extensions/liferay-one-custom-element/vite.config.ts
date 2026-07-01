@@ -14,6 +14,16 @@ export default defineConfig({
 		outDir: 'build/vite',
 		rollupOptions: {
 			external: ['@liferay/oauth2-provider-web/client'],
+			onwarn(warning, warn) {
+				if (
+					warning.code === 'MODULE_LEVEL_DIRECTIVE' &&
+					warning.message.includes('use client')
+				) {
+					return;
+				}
+
+				warn(warning);
+			},
 			output: {
 				assetFileNames: (assetInfo) => {
 					const name = assetInfo.name ?? '';

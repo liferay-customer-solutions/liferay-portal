@@ -1,0 +1,929 @@
+[
+	{
+		"key": "61",
+		"value": {
+			"en-US": "6.1",
+			"es-ES": "6.1",
+			"ja-JP": "6.1",
+			"pt-BR": "6.1"
+		}
+	},
+	{
+		"key": "62",
+		"value": {
+			"en-US": "6.2",
+			"es-ES": "6.2",
+			"ja-JP": "6.2",
+			"pt-BR": "6.2"
+		}
+	},
+	{
+		"key": "70",
+		"value": {
+			"en-US": "7.0",
+			"es-ES": "7.0",
+			"ja-JP": "7.0",
+			"pt-BR": "7.0"
+		}
+	},
+	{
+		"key": "71",
+		"value": {
+			"en-US": "7.1",
+			"es-ES": "7.1",
+			"ja-JP": "7.1",
+			"pt-BR": "7.1"
+		}
+	},
+	{
+		"key": "72",
+		"value": {
+			"en-US": "7.2",
+			"es-ES": "7.2",
+			"ja-JP": "7.2",
+			"pt-BR": "7.2"
+		}
+	},
+	{
+		"key": "73",
+		"value": {
+			"en-US": "7.3",
+			"es-ES": "7.3",
+			"ja-JP": "7.3",
+			"pt-BR": "7.3"
+		}
+	},
+	{
+		"key": "74",
+		"value": {
+			"en-US": "7.4",
+			"es-ES": "7.4",
+			"ja-JP": "7.4",
+			"pt-BR": "7.4"
+		}
+	},
+	{
+		"key": "accelerator",
+		"value": {
+			"en-US": "Accelerator",
+			"es-ES": "Acelerador",
+			"ja-JP": "アクセラレーター",
+			"pt-BR": "Acelerador"
+		}
+	},
+	{
+		"key": "agent-portal",
+		"value": {
+			"en-US": "Agent Portal",
+			"es-ES": "Portal de agentes",
+			"ja-JP": "エージェントポータル",
+			"pt-BR": "Portal de agentes"
+		}
+	},
+	{
+		"key": "ai",
+		"value": {
+			"en-US": "AI",
+			"es-ES": "IA",
+			"ja-JP": "AI",
+			"pt-BR": "IA"
+		}
+	},
+	{
+		"key": "analytics",
+		"value": {
+			"en-US": "Analytics",
+			"es-ES": "Analítica",
+			"ja-JP": "分析",
+			"pt-BR": "Análise"
+		}
+	},
+	{
+		"key": "analytics-and-optimization",
+		"value": {
+			"en-US": "Analytics and Optimization",
+			"es-ES": "Analítica y optimización",
+			"ja-JP": "分析と最適化",
+			"pt-BR": "Análise e otimização"
+		}
+	},
+	{
+		"key": "app",
+		"value": {
+			"en-US": "App",
+			"es-ES": "Aplicación",
+			"ja-JP": "アプリ",
+			"pt-BR": "Aplicativo"
+		}
+	},
+	{
+		"key": "architecture",
+		"value": {
+			"en-US": "Architecture",
+			"es-ES": "Arquitectura",
+			"ja-JP": "アーキテクチャ",
+			"pt-BR": "Arquitetura"
+		}
+	},
+	{
+		"key": "automation",
+		"value": {
+			"en-US": "Automation",
+			"es-ES": "Automatización",
+			"ja-JP": "自動化",
+			"pt-BR": "Automação"
+		}
+	},
+	{
+		"key": "banking",
+		"value": {
+			"en-US": "Banking",
+			"es-ES": "Banca",
+			"ja-JP": "銀行",
+			"pt-BR": "Serviços bancários"
+		}
+	},
+	{
+		"key": "batch",
+		"value": {
+			"en-US": "Batch",
+			"es-ES": "Lote",
+			"ja-JP": "バッチ",
+			"pt-BR": "Lote"
+		}
+	},
+	{
+		"key": "branding",
+		"value": {
+			"en-US": "Branding",
+			"es-ES": "Marca",
+			"ja-JP": "ブランディング",
+			"pt-BR": "Marca"
+		}
+	},
+	{
+		"key": "business-use",
+		"value": {
+			"en-US": "Business Use",
+			"es-ES": "Uso empresarial",
+			"ja-JP": "ビジネス利用",
+			"pt-BR": "Uso empresarial"
+		}
+	},
+	{
+		"key": "checkout",
+		"value": {
+			"en-US": "Checkout",
+			"es-ES": "Pago",
+			"ja-JP": "チェックアウト",
+			"pt-BR": "Checkout"
+		}
+	},
+	{
+		"key": "citizen-portal",
+		"value": {
+			"en-US": "Citizen Portal",
+			"es-ES": "Portal ciudadano",
+			"ja-JP": "市民ポータル",
+			"pt-BR": "Portal do cidadão"
+		}
+	},
+	{
+		"key": "client-extension-type",
+		"value": {
+			"en-US": "Client Extension Type",
+			"es-ES": "Tipo de extensión de cliente",
+			"ja-JP": "クライアント拡張機能タイプ",
+			"pt-BR": "Tipo de extensão de cliente"
+		}
+	},
+	{
+		"key": "clinical-trials",
+		"value": {
+			"en-US": "Clinical Trials",
+			"es-ES": "Ensayos clínicos",
+			"ja-JP": "臨床試験",
+			"pt-BR": "Ensaios clínicos"
+		}
+	},
+	{
+		"key": "collaboration",
+		"value": {
+			"en-US": "Collaboration",
+			"es-ES": "Colaboración",
+			"ja-JP": "コラボレーション",
+			"pt-BR": "Colaboração"
+		}
+	},
+	{
+		"key": "collaboration-and-knowledge-sharing",
+		"value": {
+			"en-US": "Collaboration & Knowledge Sharing",
+			"es-ES": "Colaboración e intercambio de conocimiento",
+			"ja-JP": "コラボレーションとナレッジ共有",
+			"pt-BR": "Colaboração e compartilhamento de conhecimento"
+		}
+	},
+	{
+		"key": "collaboration-knowledge-sharing",
+		"value": {
+			"en-US": "Collaboration & Knowledge Sharing",
+			"es-ES": "Colaboración e intercambio de conocimiento",
+			"ja-JP": "コラボレーションとナレッジ共有",
+			"pt-BR": "Colaboração e compartilhamento de conhecimento"
+		}
+	},
+	{
+		"key": "community",
+		"value": {
+			"en-US": "Community",
+			"es-ES": "Comunidad",
+			"ja-JP": "コミュニティ",
+			"pt-BR": "Comunidade"
+		}
+	},
+	{
+		"key": "community-platform",
+		"value": {
+			"en-US": "Community Platform",
+			"es-ES": "Plataforma comunitaria",
+			"ja-JP": "コミュニティプラットフォーム",
+			"pt-BR": "Plataforma de comunidade"
+		}
+	},
+	{
+		"key": "consumer-products",
+		"value": {
+			"en-US": "Consumer Products",
+			"es-ES": "Productos de consumo",
+			"ja-JP": "消費財",
+			"pt-BR": "Produtos de consumo"
+		}
+	},
+	{
+		"key": "content-management-and-operations",
+		"value": {
+			"en-US": "Content Management & Operations",
+			"es-ES": "Gestión de contenido y operaciones",
+			"ja-JP": "コンテンツ管理と運用",
+			"pt-BR": "Gestão de conteúdo e operações"
+		}
+	},
+	{
+		"key": "content-management-operations",
+		"value": {
+			"en-US": "Content Management & Operations",
+			"es-ES": "Gestión de contenido y operaciones",
+			"ja-JP": "コンテンツ管理と運用",
+			"pt-BR": "Gestão de conteúdo e operações"
+		}
+	},
+	{
+		"key": "crm",
+		"value": {
+			"en-US": "CRM",
+			"es-ES": "CRM",
+			"ja-JP": "CRM",
+			"pt-BR": "CRM"
+		}
+	},
+	{
+		"key": "customer-data-management",
+		"value": {
+			"en-US": "Customer Data Management",
+			"es-ES": "Gestión de datos de clientes",
+			"ja-JP": "顧客データ管理",
+			"pt-BR": "Gestão de dados de clientes"
+		}
+	},
+	{
+		"key": "customer-portal",
+		"value": {
+			"en-US": "Customer Portal",
+			"es-ES": "Portal del cliente",
+			"ja-JP": "カスタマーポータル",
+			"pt-BR": "Portal do cliente"
+		}
+	},
+	{
+		"key": "data-lake",
+		"value": {
+			"en-US": "Data Lake",
+			"es-ES": "Data Lake",
+			"ja-JP": "データレイク",
+			"pt-BR": "Data Lake"
+		}
+	},
+	{
+		"key": "data-modeler",
+		"value": {
+			"en-US": "Data modeler",
+			"es-ES": "Modelador de datos",
+			"ja-JP": "データモデラー",
+			"pt-BR": "Modelador de dados"
+		}
+	},
+	{
+		"key": "data-modeling-and-business-logic",
+		"value": {
+			"en-US": "Data Modeling and Business Logic",
+			"es-ES": "Modelado de datos y lógica de negocio",
+			"ja-JP": "データモデリングとビジネスロジック",
+			"pt-BR": "Modelagem de dados e lógica de negócios"
+		}
+	},
+	{
+		"key": "data-modeling-process-and-business-logic",
+		"value": {
+			"en-US": "Data Modeling, Process, and Business Logic",
+			"es-ES": "Modelado de datos, procesos y lógica de negocio",
+			"ja-JP": "データモデリング、プロセス、ビジネスロジック",
+			"pt-BR": "Modelagem de dados, processos e lógica de negócios"
+		}
+	},
+	{
+		"key": "data-modeling-process-business-logic",
+		"value": {
+			"en-US": "Data Modeling, Process & Business Logic",
+			"es-ES": "Modelado de datos, procesos y lógica de negocio",
+			"ja-JP": "データモデリング、プロセス、ビジネスロジック",
+			"pt-BR": "Modelagem de dados, processos e lógica de negócios"
+		}
+	},
+	{
+		"key": "data-visualization",
+		"value": {
+			"en-US": "Data Visualization",
+			"es-ES": "Visualización de datos",
+			"ja-JP": "データ可視化",
+			"pt-BR": "Visualização de dados"
+		}
+	},
+	{
+		"key": "development-framework",
+		"value": {
+			"en-US": "Development Framework",
+			"es-ES": "Framework de desarrollo",
+			"ja-JP": "開発フレームワーク",
+			"pt-BR": "Framework de desenvolvimento"
+		}
+	},
+	{
+		"key": "digital-workplace",
+		"value": {
+			"en-US": "Digital Workplace",
+			"es-ES": "Puesto de trabajo digital",
+			"ja-JP": "デジタルワークプレイス",
+			"pt-BR": "Local de trabalho digital"
+		}
+	},
+	{
+		"key": "e-commerce",
+		"value": {
+			"en-US": "e-Commerce",
+			"es-ES": "Comercio electrónico",
+			"ja-JP": "eコマース",
+			"pt-BR": "Comércio eletrônico"
+		}
+	},
+	{
+		"key": "ecm",
+		"value": {
+			"en-US": "ECM",
+			"es-ES": "ECM",
+			"ja-JP": "ECM",
+			"pt-BR": "ECM"
+		}
+	},
+	{
+		"key": "education",
+		"value": {
+			"en-US": "Education",
+			"es-ES": "Educación",
+			"ja-JP": "教育",
+			"pt-BR": "Educação"
+		}
+	},
+	{
+		"key": "employee-experience",
+		"value": {
+			"en-US": "Employee Experience",
+			"es-ES": "Experiencia del empleado",
+			"ja-JP": "従業員エクスペリエンス",
+			"pt-BR": "Experiência do funcionário"
+		}
+	},
+	{
+		"key": "employee-portal",
+		"value": {
+			"en-US": "Employee Portal",
+			"es-ES": "Portal del empleado",
+			"ja-JP": "従業員ポータル",
+			"pt-BR": "Portal do funcionário"
+		}
+	},
+	{
+		"key": "enterprise",
+		"value": {
+			"en-US": "Enterprise",
+			"es-ES": "Empresa",
+			"ja-JP": "エンタープライズ",
+			"pt-BR": "Empresa"
+		}
+	},
+	{
+		"key": "enterprise-search",
+		"value": {
+			"en-US": "Enterprise Search",
+			"es-ES": "Búsqueda empresarial",
+			"ja-JP": "エンタープライズ検索",
+			"pt-BR": "Pesquisa empresarial"
+		}
+	},
+	{
+		"key": "events",
+		"value": {
+			"en-US": "Events",
+			"es-ES": "Eventos",
+			"ja-JP": "イベント",
+			"pt-BR": "Eventos"
+		}
+	},
+	{
+		"key": "experience-management",
+		"value": {
+			"en-US": "Experience Management",
+			"es-ES": "Gestión de la experiencia",
+			"ja-JP": "エクスペリエンス管理",
+			"pt-BR": "Gestão da experiência"
+		}
+	},
+	{
+		"key": "extensibility-and-integration",
+		"value": {
+			"en-US": "Extensibility and Integration",
+			"es-ES": "Extensibilidad e integración",
+			"ja-JP": "拡張性と統合",
+			"pt-BR": "Extensibilidade e integração"
+		}
+	},
+	{
+		"key": "extranet",
+		"value": {
+			"en-US": "Extranet",
+			"es-ES": "Extranet",
+			"ja-JP": "エクストラネット",
+			"pt-BR": "Extranet"
+		}
+	},
+	{
+		"key": "financial-portal",
+		"value": {
+			"en-US": "Financial Portal",
+			"es-ES": "Portal financiero",
+			"ja-JP": "金融ポータル",
+			"pt-BR": "Portal financeiro"
+		}
+	},
+	{
+		"key": "fragments",
+		"value": {
+			"en-US": "Fragments",
+			"es-ES": "Fragmentos",
+			"ja-JP": "フラグメント",
+			"pt-BR": "Fragmentos"
+		}
+	},
+	{
+		"key": "gamification",
+		"value": {
+			"en-US": "Gamification",
+			"es-ES": "Gamificación",
+			"ja-JP": "ゲーミフィケーション",
+			"pt-BR": "Gamificação"
+		}
+	},
+	{
+		"key": "government",
+		"value": {
+			"en-US": "Government",
+			"es-ES": "Gobierno",
+			"ja-JP": "行政",
+			"pt-BR": "Governo"
+		}
+	},
+	{
+		"key": "healthcare",
+		"value": {
+			"en-US": "Healthcare",
+			"es-ES": "Salud",
+			"ja-JP": "ヘルスケア",
+			"pt-BR": "Saúde"
+		}
+	},
+	{
+		"key": "higher-education",
+		"value": {
+			"en-US": "Higher Education",
+			"es-ES": "Educación superior",
+			"ja-JP": "高等教育",
+			"pt-BR": "Ensino superior"
+		}
+	},
+	{
+		"key": "identity-management-and-governance",
+		"value": {
+			"en-US": "Identity Management and Governance",
+			"es-ES": "Gestión de identidad y gobernanza",
+			"ja-JP": "アイデンティティ管理とガバナンス",
+			"pt-BR": "Gestão de identidade e governança"
+		}
+	},
+	{
+		"key": "identity-management-governance",
+		"value": {
+			"en-US": "Identity Management & Governance",
+			"es-ES": "Gestión de identidad y gobernanza",
+			"ja-JP": "アイデンティティ管理とガバナンス",
+			"pt-BR": "Gestão de identidade e governança"
+		}
+	},
+	{
+		"key": "industry",
+		"value": {
+			"en-US": "Industry",
+			"es-ES": "Industria",
+			"ja-JP": "業界",
+			"pt-BR": "Setor"
+		}
+	},
+	{
+		"key": "insurance",
+		"value": {
+			"en-US": "Insurance",
+			"es-ES": "Seguros",
+			"ja-JP": "保険",
+			"pt-BR": "Seguros"
+		}
+	},
+	{
+		"key": "intranet",
+		"value": {
+			"en-US": "Intranet",
+			"es-ES": "Intranet",
+			"ja-JP": "イントラネット",
+			"pt-BR": "Intranet"
+		}
+	},
+	{
+		"key": "iot",
+		"value": {
+			"en-US": "IoT",
+			"es-ES": "IoT",
+			"ja-JP": "IoT",
+			"pt-BR": "IoT"
+		}
+	},
+	{
+		"key": "knowledge-management",
+		"value": {
+			"en-US": "Knowledge Management",
+			"es-ES": "Gestión del conocimiento",
+			"ja-JP": "ナレッジ管理",
+			"pt-BR": "Gestão do conhecimento"
+		}
+	},
+	{
+		"key": "kpis",
+		"value": {
+			"en-US": "KPIs",
+			"es-ES": "KPIs",
+			"ja-JP": "KPI",
+			"pt-BR": "KPIs"
+		}
+	},
+	{
+		"key": "life-sciences",
+		"value": {
+			"en-US": "Life Sciences",
+			"es-ES": "Ciencias de la vida",
+			"ja-JP": "ライフサイエンス",
+			"pt-BR": "Ciências da vida"
+		}
+	},
+	{
+		"key": "liferay-paas",
+		"value": {
+			"en-US": "Liferay PaaS",
+			"es-ES": "Liferay PaaS",
+			"ja-JP": "Liferay PaaS",
+			"pt-BR": "Liferay PaaS"
+		}
+	},
+	{
+		"key": "liferay-product",
+		"value": {
+			"en-US": "Liferay Product",
+			"es-ES": "Producto Liferay",
+			"ja-JP": "Liferay製品",
+			"pt-BR": "Produto Liferay"
+		}
+	},
+	{
+		"key": "liferay-saas",
+		"value": {
+			"en-US": "Liferay SaaS",
+			"es-ES": "Liferay SaaS",
+			"ja-JP": "Liferay SaaS",
+			"pt-BR": "Liferay SaaS"
+		}
+	},
+	{
+		"key": "liferay-self-hosted",
+		"value": {
+			"en-US": "Liferay Self-Hosted",
+			"es-ES": "Liferay Self-Hosted",
+			"ja-JP": "Liferay Self-Hosted",
+			"pt-BR": "Liferay Self-Hosted"
+		}
+	},
+	{
+		"key": "low-code",
+		"value": {
+			"en-US": "Low-code",
+			"es-ES": "Low-code",
+			"ja-JP": "ローコード",
+			"pt-BR": "Low-code"
+		}
+	},
+	{
+		"key": "manufacturing",
+		"value": {
+			"en-US": "Manufacturing",
+			"es-ES": "Fabricación",
+			"ja-JP": "製造",
+			"pt-BR": "Manufatura"
+		}
+	},
+	{
+		"key": "metadata",
+		"value": {
+			"en-US": "Metadata",
+			"es-ES": "Metadatos",
+			"ja-JP": "メタデータ",
+			"pt-BR": "Metadados"
+		}
+	},
+	{
+		"key": "navigation-and-discovery",
+		"value": {
+			"en-US": "Navigation and Discovery",
+			"es-ES": "Navegación y descubrimiento",
+			"ja-JP": "ナビゲーションと発見",
+			"pt-BR": "Navegação e descoberta"
+		}
+	},
+	{
+		"key": "no-code",
+		"value": {
+			"en-US": "No-code",
+			"es-ES": "No-code",
+			"ja-JP": "ノーコード",
+			"pt-BR": "No-code"
+		}
+	},
+	{
+		"key": "object-definition",
+		"value": {
+			"en-US": "Object Definition",
+			"es-ES": "Definición de objeto",
+			"ja-JP": "オブジェクト定義",
+			"pt-BR": "Definição de objeto"
+		}
+	},
+	{
+		"key": "orders-and-fulfillment",
+		"value": {
+			"en-US": "Orders and Fulfillment",
+			"es-ES": "Pedidos y cumplimiento",
+			"ja-JP": "注文とフルフィルメント",
+			"pt-BR": "Pedidos e fulfillment"
+		}
+	},
+	{
+		"key": "other",
+		"value": {
+			"en-US": "Other",
+			"es-ES": "Otro",
+			"ja-JP": "その他",
+			"pt-BR": "Outro"
+		}
+	},
+	{
+		"key": "payment-methods",
+		"value": {
+			"en-US": "Payment Methods",
+			"es-ES": "Métodos de pago",
+			"ja-JP": "支払方法",
+			"pt-BR": "Métodos de pagamento"
+		}
+	},
+	{
+		"key": "performance-management",
+		"value": {
+			"en-US": "Performance Management",
+			"es-ES": "Gestión del rendimiento",
+			"ja-JP": "パフォーマンス管理",
+			"pt-BR": "Gestão de desempenho"
+		}
+	},
+	{
+		"key": "personalization",
+		"value": {
+			"en-US": "Personalization",
+			"es-ES": "Personalización",
+			"ja-JP": "パーソナライゼーション",
+			"pt-BR": "Personalização"
+		}
+	},
+	{
+		"key": "personalization-and-segmentation",
+		"value": {
+			"en-US": "Personalization and Segmentation",
+			"es-ES": "Personalización y segmentación",
+			"ja-JP": "パーソナライゼーションとセグメンテーション",
+			"pt-BR": "Personalização e segmentação"
+		}
+	},
+	{
+		"key": "pro-code",
+		"value": {
+			"en-US": "Pro-code",
+			"es-ES": "Pro-code",
+			"ja-JP": "プロコード",
+			"pt-BR": "Pro-code"
+		}
+	},
+	{
+		"key": "procurement",
+		"value": {
+			"en-US": "Procurement",
+			"es-ES": "Adquisiciones",
+			"ja-JP": "調達",
+			"pt-BR": "Aquisições"
+		}
+	},
+	{
+		"key": "product",
+		"value": {
+			"en-US": "Product",
+			"es-ES": "Producto",
+			"ja-JP": "製品",
+			"pt-BR": "Produto"
+		}
+	},
+	{
+		"key": "prompt",
+		"value": {
+			"en-US": "Prompt",
+			"es-ES": "Prompt",
+			"ja-JP": "プロンプト",
+			"pt-BR": "Prompt"
+		}
+	},
+	{
+		"key": "public-sector",
+		"value": {
+			"en-US": "Public Sector",
+			"es-ES": "Sector público",
+			"ja-JP": "公共部門",
+			"pt-BR": "Setor público"
+		}
+	},
+	{
+		"key": "purchasing",
+		"value": {
+			"en-US": "Purchasing",
+			"es-ES": "Compras",
+			"ja-JP": "購買",
+			"pt-BR": "Compras"
+		}
+	},
+	{
+		"key": "rapid-development",
+		"value": {
+			"en-US": "Rapid Development",
+			"es-ES": "Desarrollo rápido",
+			"ja-JP": "高速開発",
+			"pt-BR": "Desenvolvimento rápido"
+		}
+	},
+	{
+		"key": "retail",
+		"value": {
+			"en-US": "Retail",
+			"es-ES": "Comercio minorista",
+			"ja-JP": "小売",
+			"pt-BR": "Varejo"
+		}
+	},
+	{
+		"key": "search",
+		"value": {
+			"en-US": "Search",
+			"es-ES": "Búsqueda",
+			"ja-JP": "検索",
+			"pt-BR": "Pesquisa"
+		}
+	},
+	{
+		"key": "self-service-portal",
+		"value": {
+			"en-US": "Self-Service Portal",
+			"es-ES": "Portal de autoservicio",
+			"ja-JP": "セルフサービスポータル",
+			"pt-BR": "Portal de autoatendimento"
+		}
+	},
+	{
+		"key": "shared-investigator-platform",
+		"value": {
+			"en-US": "Shared Investigator Platform",
+			"es-ES": "Plataforma compartida de investigadores",
+			"ja-JP": "共有治験責任医師プラットフォーム",
+			"pt-BR": "Plataforma compartilhada de investigadores"
+		}
+	},
+	{
+		"key": "site-initializer",
+		"value": {
+			"en-US": "Site Initializer",
+			"es-ES": "Inicializador de sitio",
+			"ja-JP": "サイトイニシャライザー",
+			"pt-BR": "Inicializador de site"
+		}
+	},
+	{
+		"key": "solution",
+		"value": {
+			"en-US": "Solution",
+			"es-ES": "Solución",
+			"ja-JP": "ソリューション",
+			"pt-BR": "Solução"
+		}
+	},
+	{
+		"key": "supplier-portal",
+		"value": {
+			"en-US": "Supplier Portal",
+			"es-ES": "Portal de proveedores",
+			"ja-JP": "サプライヤーポータル",
+			"pt-BR": "Portal do fornecedor"
+		}
+	},
+	{
+		"key": "telecommunications",
+		"value": {
+			"en-US": "Telecommunications",
+			"es-ES": "Telecomunicaciones",
+			"ja-JP": "電気通信",
+			"pt-BR": "Telecomunicações"
+		}
+	},
+	{
+		"key": "theme",
+		"value": {
+			"en-US": "Theme",
+			"es-ES": "Tema",
+			"ja-JP": "テーマ",
+			"pt-BR": "Tema"
+		}
+	},
+	{
+		"key": "training",
+		"value": {
+			"en-US": "Training",
+			"es-ES": "Formación",
+			"ja-JP": "トレーニング",
+			"pt-BR": "Treinamento"
+		}
+	},
+	{
+		"key": "vr",
+		"value": {
+			"en-US": "VR",
+			"es-ES": "RV",
+			"ja-JP": "VR",
+			"pt-BR": "RV"
+		}
+	},
+	{
+		"key": "workflow-action",
+		"value": {
+			"en-US": "Workflow Action",
+			"es-ES": "Acción de flujo de trabajo",
+			"ja-JP": "ワークフローアクション",
+			"pt-BR": "Ação de fluxo de trabalho"
+		}
+	}
+]

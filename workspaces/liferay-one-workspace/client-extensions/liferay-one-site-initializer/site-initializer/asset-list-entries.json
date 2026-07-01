@@ -35,5 +35,46 @@
 				}
 			]
 		}
+	},
+	{
+		"assetEntrySubtypeId": "[$DATA_DEFINITION_ID:ANNOUNCEMENT$]",
+		"title": "Customer Portal Help",
+		"unicodeProperties": {
+			"anyClassType": "anyClassTypeJournalArticleAssetRendererFactory",
+			"classNameIds": "com.liferay.journal.model.JournalArticle",
+			"classTypeIds": "classTypeIdsJournalArticleAssetRendererFactory",
+			"orderBy": [
+				{
+					"key": "orderByColumn1",
+					"value": "publishDate"
+				},
+				{
+					"key": "orderByType1",
+					"value": "DESC"
+				},
+				{
+					"key": "orderByType2",
+					"value": "ASC"
+				}
+			],
+			"query": [
+				{
+					"key": "queryAndOperator0",
+					"value": "true"
+				},
+				{
+					"key": "queryContains0",
+					"value": "true"
+				},
+				{
+					"key": "queryName0",
+					"value": "assetCategories"
+				},
+				{
+					"key": "queryValues0",
+					"value": "[$TAXONOMY_CATEGORY_ID:/site-initializer/taxonomy-vocabularies/group/article-categories/customer-portal-help.json$]"
+				}
+			]
+		}
 	}
 ]

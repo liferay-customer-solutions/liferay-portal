@@ -10,10 +10,6 @@
 	text-overflow: ellipsis;
 }
 
-.home-apps-display .tags-container {
-	gap: var(--spacer-2);
-}
-
 .home-apps-display .app-name {
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 2;
@@ -67,18 +63,6 @@
 .home-apps-display .product-card {
 	flex: 1 1 0;
 	min-width: 220px;
-}
-
-.home-apps-display .product-tag {
-	background-color: var(--color-state-info-lighten-2);
-	box-sizing: border-box;
-	color: var(--color-state-info);
-	font-size: 13px;
-	letter-spacing: 0%;
-	line-height: 16px;
-	max-height: 24px;
-	transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
-	vertical-align: middle;
 }
 
 .home-apps-display .section-container h1 {

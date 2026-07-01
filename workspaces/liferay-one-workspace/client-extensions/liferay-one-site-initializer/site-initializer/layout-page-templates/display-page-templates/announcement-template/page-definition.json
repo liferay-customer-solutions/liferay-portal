@@ -3,83 +3,111 @@
 		"pageElements": [
 			{
 				"definition": {
-					"fragmentStyle": {
-						"backgroundColor": "colorBrandPrimaryDarken3",
-						"paddingBottom": "3",
-						"paddingLeft": "5",
-						"paddingRight": "5",
-						"paddingTop": "4",
-						"textColor": "colorNeutral0"
-					},
 					"indexed": true,
 					"layout": {
-						"paddingBottom": 1,
-						"paddingLeft": 4,
-						"paddingRight": 4,
-						"paddingTop": 2
+						"widthType": "Fluid"
 					}
 				},
 				"pageElements": [
 					{
 						"definition": {
-							"fragmentStyle": {
-								"maxWidth": "var(--container-max-xl)"
-							},
+							"gutters": false,
 							"indexed": true,
-							"layout": {
-								"widthType": "Fixed"
-							}
+							"modulesPerRow": 1,
+							"numberOfColumns": 1
 						},
 						"pageElements": [
 							{
 								"definition": {
-									"fragment": {
-										"key": "BASIC_COMPONENT-heading"
-									},
-									"fragmentConfig": {
-										"headingLevel": "h1"
-									},
-									"fragmentFields": [
-										{
-											"id": "element-text",
-											"value": {
-												"fragmentLink": {
+									"size": 12
+								},
+								"pageElements": [
+									{
+										"definition": {
+											"fragment": {
+												"key": "hero-banner",
+												"siteKey": "[$GROUP_KEY$]"
+											},
+											"fragmentConfig": {
+												"homeLink": "/home",
+												"parentLink": "/support/customer-portal-help",
+												"showSubtitle": false
+											},
+											"fragmentFields": [
+												{
+													"id": "backgroundImage",
+													"value": {
+														"backgroundFragmentImage": {
+															"url": {
+																"mapping": {
+																	"fieldKey": "FileEntry_previewImage",
+																	"itemReference": {
+																		"className": "com.liferay.portal.kernel.repository.model.FileEntry",
+																		"classPK": "[#DOCUMENT_FILE_ENTRY_ID:/site-initializer/documents/group/hero_banner_gradient_bubbles.png#]"
+																	}
+																}
+															}
+														}
+													}
 												},
-												"text": {
-													"value_i18n": {
-														"en_US": "Announcements",
-														"es_ES": "Anuncios",
-														"ja_JP": "アナウンスメント",
-														"pt_BR": "Avisos"
+												{
+													"id": "breadcrumb-current",
+													"value": {
+														"text": {
+															"value_i18n": {
+																"en_US": "Announcements"
+															}
+														}
+													}
+												},
+												{
+													"id": "breadcrumb-parent",
+													"value": {
+														"text": {
+															"value_i18n": {
+																"en_US": "Support"
+															}
+														}
+													}
+												},
+												{
+													"id": "title",
+													"value": {
+														"text": {
+															"value_i18n": {
+																"en_US": "Announcements",
+																"es_ES": "Anuncios",
+																"ja_JP": "アナウンスメント",
+																"pt_BR": "Avisos"
+															}
+														}
 													}
 												}
-											}
-										}
-									],
-									"indexed": true
-								},
-								"type": "Fragment"
+											],
+											"indexed": true
+										},
+										"type": "Fragment"
+									}
+								],
+								"type": "Column"
 							}
 						],
-						"type": "Section"
+						"type": "Row"
 					}
 				],
 				"type": "Section"
 			},
 			{
 				"definition": {
+					"cssClass": "lo-announcement-content",
 					"fragmentStyle": {
-						"maxWidth": "var(--container-max-lg)",
 						"paddingBottom": "4",
-						"paddingLeft": "4",
-						"paddingRight": "4",
 						"paddingTop": "4"
 					},
 					"indexed": true,
 					"layout": {
+						"contentDisplay": "Block",
 						"paddingBottom": 2,
-						"paddingLeft": 2,
-						"paddingRight": 2,
 						"paddingTop": 2,
 						"widthType": "Fixed"
 					}
@@ -238,7 +266,7 @@
 	},
 	"settings": {
 		"masterPage": {
-			"key": "main"
+			"key": "liferay-one"
 		}
 	}
 }

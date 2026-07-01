@@ -604,7 +604,7 @@
 					"pt_BR": "Primeiros Passos"
 				},
 				"type": "url",
-				"url": "/support/getting-started",
+				"url": "/support/customer-portal-help/getting-started",
 				"useNewTab": false
 			},
 			{
@@ -616,7 +616,7 @@
 					"pt_BR": "Usando o Portal do Cliente"
 				},
 				"type": "url",
-				"url": "/support/customer-portal-help",
+				"url": "/support/customer-portal-help/using-customer-portal",
 				"useNewTab": false
 			},
 			{
