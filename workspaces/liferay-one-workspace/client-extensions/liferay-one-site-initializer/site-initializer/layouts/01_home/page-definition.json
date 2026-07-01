@@ -445,11 +445,11 @@
 						"pageElements": [
 							{
 								"definition": {
-									"customCSS": ".[$FRAGMENT_CLASS$] > .row {\n\talign-items: stretch !important;\n}",
+									"customCSS": ".[$FRAGMENT_CLASS$] > .row {\n\talign-items: stretch !important;\n}\n\n@media (min-width: 768px) {\n\t.[$FRAGMENT_CLASS$] > .row > [class*=\"col-\"] {\n\t\tflex: 1 1 0 !important;\n\t\tmax-width: none !important;\n\t}\n}\n\n.[$FRAGMENT_CLASS$] > .row > [class*=\"col-\"]:has(.one-optional-service-card):not(:has(.one-conditional-wrapper)) {\n\tdisplay: none;\n}\n\n.[$FRAGMENT_CLASS$] .one-optional-service-card,\n.[$FRAGMENT_CLASS$] .one-optional-service-card > div,\n.[$FRAGMENT_CLASS$] .one-optional-service-card .one-conditional-wrapper,\n.[$FRAGMENT_CLASS$] .one-optional-service-card .one-conditional-wrapper > div,\n.[$FRAGMENT_CLASS$] .one-optional-service-card .one-conditional-wrapper > div > a {\n\theight: 100%;\n}",
 									"gutters": true,
 									"indexed": true,
-									"modulesPerRow": 4,
-									"numberOfColumns": 4,
+									"modulesPerRow": 5,
+									"numberOfColumns": 5,
 									"reverseOrder": false,
 									"rowViewports": [
 										{
@@ -663,140 +663,353 @@
 													"id": "tablet"
 												}
 											],
-											"size": 3
+											"size": 2
 										},
 										"pageElements": [
 											{
 												"definition": {
 													"cssClasses": [
-														"h-100",
-														"one-card"
+														"one-optional-service-card"
 													],
-													"fragmentLink": {
-														"href": {
-															"value_i18n": {
-																"en_US": "https://liferay.atlassian.net/servicedesk/customer/portals",
-																"es_ES": "https://liferay.atlassian.net/servicedesk/customer/portals",
-																"ja_JP": "https://liferay.atlassian.net/servicedesk/customer/portals",
-																"pt_BR": "https://liferay.atlassian.net/servicedesk/customer/portals"
-															}
-														}
+													"fragment": {
+														"key": "conditional-wrapper",
+														"siteKey": "[$GROUP_KEY$]"
 													},
-													"fragmentStyle": {
-														"paddingBottom": "4",
-														"paddingLeft": "4",
-														"paddingRight": "4",
-														"paddingTop": "4"
+													"fragmentConfig": {
+														"displayMode": "inRoleOnly",
+														"roles": "Customer"
 													},
-													"indexed": true,
-													"layout": {
-														"align": "Start",
-														"contentDisplay": "FlexColumn"
-													}
+													"indexed": true
 												},
 												"pageElements": [
 													{
 														"definition": {
-															"fragment": {
-																"key": "BASIC_COMPONENT-image"
-															},
-															"fragmentFields": [
-																{
-																	"id": "image-square",
-																	"value": {
-																		"fragmentImage": {
-																			"url": {
-																				"mapping": {
-																					"fieldKey": "FileEntry_previewImage",
-																					"itemReference": {
-																						"className": "com.liferay.portal.kernel.repository.model.FileEntry",
-																						"classPK": "[#DOCUMENT_FILE_ENTRY_ID:/site-initializer/documents/group/service_card_support.svg#]"
+															"fragmentDropZoneId": "2"
+														},
+														"pageElements": [
+															{
+																"definition": {
+																	"cssClasses": [
+																		"h-100",
+																		"one-card"
+																	],
+																	"fragmentLink": {
+																		"href": {
+																			"value_i18n": {
+																				"en_US": "https://liferay.atlassian.net/servicedesk/customer/user/requests",
+																				"es_ES": "https://liferay.atlassian.net/servicedesk/customer/user/requests",
+																				"ja_JP": "https://liferay.atlassian.net/servicedesk/customer/user/requests",
+																				"pt_BR": "https://liferay.atlassian.net/servicedesk/customer/user/requests"
+																			}
+																		}
+																	},
+																	"fragmentStyle": {
+																		"paddingBottom": "4",
+																		"paddingLeft": "4",
+																		"paddingRight": "4",
+																		"paddingTop": "4"
+																	},
+																	"indexed": true,
+																	"layout": {
+																		"align": "Start",
+																		"contentDisplay": "FlexColumn"
+																	}
+																},
+																"pageElements": [
+																	{
+																		"definition": {
+																			"fragment": {
+																				"key": "BASIC_COMPONENT-image"
+																			},
+																			"fragmentFields": [
+																				{
+																					"id": "image-square",
+																					"value": {
+																						"fragmentImage": {
+																							"url": {
+																								"mapping": {
+																									"fieldKey": "FileEntry_previewImage",
+																									"itemReference": {
+																										"className": "com.liferay.portal.kernel.repository.model.FileEntry",
+																										"classPK": "[#DOCUMENT_FILE_ENTRY_ID:/site-initializer/documents/group/my_tickets.svg#]"
+																									}
+																								}
+																							}
+																						},
+																						"fragmentLink": {
+																						}
 																					}
 																				}
-																			}
+																			],
+																			"fragmentStyle": {
+																				"height": "32px",
+																				"marginBottom": "3",
+																				"width": "32px"
+																			},
+																			"indexed": true
 																		},
-																		"fragmentLink": {
-																		}
-																	}
-																}
-															],
-															"fragmentStyle": {
-																"height": "32px",
-																"marginBottom": "3",
-																"width": "32px"
-															},
-															"indexed": true
-														},
-														"type": "Fragment"
-													},
-													{
-														"definition": {
-															"fragment": {
-																"key": "BASIC_COMPONENT-heading"
-															},
-															"fragmentConfig": {
-																"headingLevel": "h5"
-															},
-															"fragmentFields": [
-																{
-																	"id": "element-text",
-																	"value": {
-																		"fragmentLink": {
+																		"type": "Fragment"
+																	},
+																	{
+																		"definition": {
+																			"fragment": {
+																				"key": "BASIC_COMPONENT-heading"
+																			},
+																			"fragmentConfig": {
+																				"headingLevel": "h5"
+																			},
+																			"fragmentFields": [
+																				{
+																					"id": "element-text",
+																					"value": {
+																						"fragmentLink": {
+																						},
+																						"text": {
+																							"value_i18n": {
+																								"en_US": "My Tickets",
+																								"es_ES": "Mis Tickets",
+																								"ja_JP": "マイチケット",
+																								"pt_BR": "Meus Tickets"
+																							}
+																						}
+																					}
+																				}
+																			],
+																			"fragmentStyle": {
+																				"marginBottom": "2",
+																				"marginTop": "0"
+																			},
+																			"indexed": true
 																		},
-																		"text": {
-																			"value_i18n": {
-																				"en_US": "Support",
-																				"es_ES": "Soporte",
-																				"ja_JP": "サポート",
-																				"pt_BR": "Suporte"
-																			}
-																		}
-																	}
-																}
-															],
-															"fragmentStyle": {
-																"marginBottom": "2",
-																"marginTop": "0"
-															},
-															"indexed": true
-														},
-														"type": "Fragment"
-													},
-													{
-														"definition": {
-															"cssClasses": [
-																"small",
-																"text-secondary"
-															],
-															"fragment": {
-																"key": "BASIC_COMPONENT-paragraph"
-															},
-															"fragmentFields": [
-																{
-																	"id": "element-text",
-																	"value": {
-																		"fragmentLink": {
+																		"type": "Fragment"
+																	},
+																	{
+																		"definition": {
+																			"cssClasses": [
+																				"small",
+																				"text-secondary"
+																			],
+																			"fragment": {
+																				"key": "BASIC_COMPONENT-paragraph"
+																			},
+																			"fragmentFields": [
+																				{
+																					"id": "element-text",
+																					"value": {
+																						"fragmentLink": {
+																						},
+																						"text": {
+																							"value_i18n": {
+																								"en_US": "Track your open and closed support requests.",
+																								"es_ES": "Consulta tus solicitudes de soporte abiertas y cerradas.",
+																								"ja_JP": "オープンおよびクローズされたサポートリクエストを確認できます。",
+																								"pt_BR": "Acompanhe suas solicitações de suporte abertas e fechadas."
+																							}
+																						}
+																					}
+																				}
+																			],
+																			"fragmentStyle": {
+																				"marginBottom": "0"
+																			},
+																			"indexed": true
 																		},
-																		"text": {
-																			"value_i18n": {
-																				"en_US": "Get help with your Liferay products, submit tickets, and find answers in our knowledge base.",
-																				"es_ES": "Obtén ayuda con tus productos Liferay, envía tickets y encuentra respuestas en nuestra base de conocimientos.",
-																				"ja_JP": "Liferay製品のサポートを受け、チケットを送信し、ナレッジベースで回答を見つけることができます。",
-																				"pt_BR": "Obtenha ajuda com seus produtos Liferay, envie tickets e encontre respostas em nossa base de conhecimentos."
-																			}
-																		}
+																		"type": "Fragment"
 																	}
-																}
-															],
-															"fragmentStyle": {
-																"marginBottom": "0"
-															},
-															"indexed": true
-														},
-														"type": "Fragment"
+																],
+																"type": "Section"
+															}
+														],
+														"type": "FragmentDropZone"
 													}
 												],
-												"type": "Section"
+												"type": "Fragment"
+											}
+										],
+										"type": "Column"
+									},
+									{
+										"definition": {
+											"columnViewports": [
+												{
+													"columnViewportDefinition": {
+														"size": 12
+													},
+													"id": "landscapeMobile"
+												},
+												{
+													"columnViewportDefinition": {
+														"size": 12
+													},
+													"id": "portraitMobile"
+												},
+												{
+													"columnViewportDefinition": {
+													},
+													"id": "tablet"
+												}
+											],
+											"size": 2
+										},
+										"pageElements": [
+											{
+												"definition": {
+													"cssClasses": [
+														"one-optional-service-card"
+													],
+													"fragment": {
+														"key": "conditional-wrapper",
+														"siteKey": "[$GROUP_KEY$]"
+													},
+													"fragmentConfig": {
+														"displayMode": "inRoleOnly",
+														"roles": "Customer"
+													},
+													"indexed": true
+												},
+												"pageElements": [
+													{
+														"definition": {
+															"fragmentDropZoneId": "2"
+														},
+														"pageElements": [
+															{
+																"definition": {
+																	"cssClasses": [
+																		"h-100",
+																		"one-card"
+																	],
+																	"fragmentLink": {
+																		"href": {
+																			"value_i18n": {
+																				"en_US": "https://liferay.atlassian.net/servicedesk/customer/portals",
+																				"es_ES": "https://liferay.atlassian.net/servicedesk/customer/portals",
+																				"ja_JP": "https://liferay.atlassian.net/servicedesk/customer/portals",
+																				"pt_BR": "https://liferay.atlassian.net/servicedesk/customer/portals"
+																			}
+																		}
+																	},
+																	"fragmentStyle": {
+																		"paddingBottom": "4",
+																		"paddingLeft": "4",
+																		"paddingRight": "4",
+																		"paddingTop": "4"
+																	},
+																	"indexed": true,
+																	"layout": {
+																		"align": "Start",
+																		"contentDisplay": "FlexColumn"
+																	}
+																},
+																"pageElements": [
+																	{
+																		"definition": {
+																			"fragment": {
+																				"key": "BASIC_COMPONENT-image"
+																			},
+																			"fragmentFields": [
+																				{
+																					"id": "image-square",
+																					"value": {
+																						"fragmentImage": {
+																							"url": {
+																								"mapping": {
+																									"fieldKey": "FileEntry_previewImage",
+																									"itemReference": {
+																										"className": "com.liferay.portal.kernel.repository.model.FileEntry",
+																										"classPK": "[#DOCUMENT_FILE_ENTRY_ID:/site-initializer/documents/group/submit_a_request.svg#]"
+																									}
+																								}
+																							}
+																						},
+																						"fragmentLink": {
+																						}
+																					}
+																				}
+																			],
+																			"fragmentStyle": {
+																				"height": "32px",
+																				"marginBottom": "3",
+																				"width": "32px"
+																			},
+																			"indexed": true
+																		},
+																		"type": "Fragment"
+																	},
+																	{
+																		"definition": {
+																			"fragment": {
+																				"key": "BASIC_COMPONENT-heading"
+																			},
+																			"fragmentConfig": {
+																				"headingLevel": "h5"
+																			},
+																			"fragmentFields": [
+																				{
+																					"id": "element-text",
+																					"value": {
+																						"fragmentLink": {
+																						},
+																						"text": {
+																							"value_i18n": {
+																								"en_US": "Submit a Request",
+																								"es_ES": "Enviar una Solicitud",
+																								"ja_JP": "リクエストを送信",
+																								"pt_BR": "Enviar uma Solicitação"
+																							}
+																						}
+																					}
+																				}
+																			],
+																			"fragmentStyle": {
+																				"marginBottom": "2",
+																				"marginTop": "0"
+																			},
+																			"indexed": true
+																		},
+																		"type": "Fragment"
+																	},
+																	{
+																		"definition": {
+																			"cssClasses": [
+																				"small",
+																				"text-secondary"
+																			],
+																			"fragment": {
+																				"key": "BASIC_COMPONENT-paragraph"
+																			},
+																			"fragmentFields": [
+																				{
+																					"id": "element-text",
+																					"value": {
+																						"fragmentLink": {
+																						},
+																						"text": {
+																							"value_i18n": {
+																								"en_US": "Get help with your Liferay products, submit tickets, and find answers in our knowledge base.",
+																								"es_ES": "Obtén ayuda con tus productos Liferay, envía tickets y encuentra respuestas en nuestra base de conocimientos.",
+																								"ja_JP": "Liferay製品のサポートを受け、チケットを送信し、ナレッジベースで回答を見つけることができます。",
+																								"pt_BR": "Obtenha ajuda com seus produtos Liferay, envie tickets e encontre respostas em nossa base de conhecimentos."
+																							}
+																						}
+																					}
+																				}
+																			],
+																			"fragmentStyle": {
+																				"marginBottom": "0"
+																			},
+																			"indexed": true
+																		},
+																		"type": "Fragment"
+																	}
+																],
+																"type": "Section"
+															}
+														],
+														"type": "FragmentDropZone"
+													}
+												],
+												"type": "Fragment"
 											}
 										],
 										"type": "Column"
