@@ -39,7 +39,7 @@ const PublisherGateForm: React.FC<PublisherGateFormProps> = ({
 	setStep,
 }) => {
 	const phone = form.watch('phone');
-	const [currentPhonesFlags, setCurrentPhonesFlags] = useState(phone);
+	const publisherType = form.watch('publisherType') || [];
 	const navigate = useNavigate();
 
 	const listTypeEntries =
@@ -62,13 +62,6 @@ const PublisherGateForm: React.FC<PublisherGateFormProps> = ({
 		register: form.register as any,
 		required: true,
 	};
-
-	// Keep currentPhonesFlags synchronized when form value is reset/asynchronously loaded
-	useEffect(() => {
-		if (phone) {
-			setCurrentPhonesFlags(phone);
-		}
-	}, [phone]);
 
 	return (
 		<>
@@ -129,38 +122,33 @@ const PublisherGateForm: React.FC<PublisherGateFormProps> = ({
 											<ClayIcon
 												className="mr-2"
 												symbol={
-													(currentPhonesFlags?.flag || 'en-us') as string
+													(phone?.flag || 'en-us') as string
 												}
 											/>
 
-											{currentPhonesFlags?.code || '+1'}
+											{phone?.code || '+1'}
 										</div>
 									}
 								>
 									<DropDown.ItemList items={phones as any}>
 										{(item) => {
-											const phone = item as any;
+											const phoneItem = item as any;
 
 											return (
 												<DropDown.Item
 													onClick={() => {
-														setCurrentPhonesFlags({
-															code: phone.code,
-															flag: phone.flag,
-														});
-
 														form.setValue('phone', {
-															code: phone.code,
-															flag: phone.flag,
+															code: phoneItem.code,
+															flag: phoneItem.flag,
 														});
 													}}
 												>
 													<ClayIcon
 														className="mr-2"
-														symbol={phone.flag}
+														symbol={phoneItem.flag}
 													/>
 
-													{phone.code}
+													{phoneItem.code}
 												</DropDown.Item>
 											);
 										}}
@@ -207,9 +195,7 @@ const PublisherGateForm: React.FC<PublisherGateFormProps> = ({
 							<Fragment key={index}>
 								<ClayCheckbox
 									aria-label={listTypeEntry.name}
-									checked={form
-										.watch('publisherType')
-										.includes(listTypeEntry.key)}
+									checked={publisherType.includes(listTypeEntry.key)}
 									key={index}
 									label={
 										(
