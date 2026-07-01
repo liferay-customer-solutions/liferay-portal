@@ -41,9 +41,13 @@
 	type = getSpecificationValue("type")?lower_case
 >
 <@section title = languageUtil.get(locale, "developer")>
-	<a href = "/applications?publisherName=${developerName}">
+	<#if (publisherDetails.friendlyUrlPath)?has_content>
+		<a href = "/c_publisherdetails/${publisherDetails.friendlyUrlPath}">
+			${developerName}
+		</a>
+	<#else>
 		${developerName}
-	</a>
+	</#if>
 </@section>
 
 <@section title = languageUtil.get(locale, "publisher-date", "Publisher Date")>
@@ -56,7 +60,7 @@
 
 <@section title = languageUtil.get(locale, "deployment-method", "Deployment Method")>
 	<#list platformOffering as offering>
-		<p>${offering.name}</p>
+		<p>${languageUtil.get(locale, offering.name, offering.title)}</p>
 	</#list>
 </@section>
 
@@ -112,7 +116,7 @@
 		<#list purchasableSkus as sku>
 			<#assign matched = false />
 
-			<#list sku.skuOptions as opt>
+			<#list (sku.skuOptions)![] as opt>
 				<#if stringUtil.equals(opt.skuOptionValueKey, "standard")>
 					<#assign
 						matched = true

@@ -3,6 +3,14 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+:root {
+	--primary-d1: var(--color-brand-primary-darken-1, #0053f0);
+	--primary-d2: var(--color-brand-primary-darken-2, #004ad7);
+	--primary-l1: var(--color-brand-primary-lighten-2);
+	--primary-l2: var(--color-brand-primary-lighten-3);
+	--primary-l3: var(--color-brand-primary-lighten-4);
+}
+
 body .container-fluid-max-xl {
 	margin-left: auto;
 	margin-right: auto;
@@ -27,6 +35,92 @@ body nav.public-sites-navigation {
 	}
 }
 
+/*
+ * Critical, above-the-fold navigation layout. Mirrored from the "header"
+ * fragment's index.css so it ships in this render-blocking global CSS and the
+ * nav lands in its final position and shape on the first paint, instead of
+ * briefly rendering as an unstyled list of links (FOUC). Keep this block in
+ * sync with index.css; the rules must stay in index.css too, since the
+ * fragment renders standalone in edit mode (position: static). Fallback values
+ * mirror the "liferay-one" style book in case the token variables resolve
+ * after first paint.
+ */
+
+.public-sites-navigation-padding {
+	padding-top: 7rem;
+}
+
+.has-control-menu.has-edit-mode-menu .public-sites-navigation-padding {
+	padding-top: 0;
+}
+
+.has-control-menu nav.public-sites-navigation {
+	margin-top: 3.5rem;
+}
+
+.has-control-menu.has-edit-mode-menu nav.public-sites-navigation {
+	margin-top: 0;
+	position: static;
+}
+
+nav.public-sites-navigation {
+	font-size: var(--font-size-base, 1rem);
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 101;
+}
+
+nav.public-sites-navigation .utility-nav {
+	max-height: 3rem;
+}
+
+.utility-nav-container {
+	border-bottom: 1px solid var(--color-neutral-3, #c9c9cf);
+}
+
+nav.public-sites-navigation .primary-nav {
+	background: var(--white, #fff);
+	min-height: 4rem;
+	padding-bottom: 0.375rem;
+	padding-top: 0.375rem;
+}
+
+nav.public-sites-navigation .nav-items-wrapper {
+	align-items: center;
+	background-color: var(--white, #fff);
+	display: flex;
+	margin-left: auto;
+	padding: 0;
+}
+
+.adt-navigation {
+	display: flex;
+	flex-wrap: inherit;
+	list-style: none;
+	margin-bottom: 0;
+	padding-left: 0;
+}
+
+.adt-nav-item {
+	position: static;
+}
+
+.solution-card-image-container {
+	background-color: var(--color-neutral-1);
+	height: 160px;
+	min-height: 160px;
+
+	.solution-card-image {
+		height: 100%;
+		object-fit: cover;
+	}
+}
+
+html body:not(.has-edit-mode-menu) .content #main-content.layout-content {
+	margin-top: 3.5rem;
+}
+
 .account-selector-compact {
 	.account-name,
 	.dropdown-arrow {
@@ -35,6 +129,46 @@ body nav.public-sites-navigation {
 
 	.avatar {
 		margin-right: 0 !important;
+	}
+}
+
+.app-card {
+	min-height: 220px;
+
+	.app-card-description {
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		color: var(--secondary);
+		display: -webkit-box;
+		font-size: 13px;
+		line-height: 20px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.app-name {
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		display: -webkit-box;
+		font-size: 18px;
+		line-height: 20px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.app-search-image {
+		height: 56px;
+		object-fit: contain;
+		width: 56px;
+	}
+
+	.card-image-title-container {
+		min-height: 56px;
+	}
+
+	.catalog-name {
+		font-size: 13px;
+		line-height: 16px;
 	}
 }
 
@@ -87,7 +221,7 @@ body nav.public-sites-navigation {
 	padding: 0 8px;
 	position: absolute;
 	right: 32px;
-	top: 1px;
+	top: -6px;
 
 	&.batch,
 	&.checkout,
@@ -210,16 +344,28 @@ body nav.public-sites-navigation {
 }
 
 .card-image-wrapper {
-	background:
-		linear-gradient(80deg, var(--white), transparent 50%),
-		linear-gradient(0deg, var(--white), transparent 80%),
-		radial-gradient(circle, var(--white) 35%, var(--primary-l3));
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
 	height: 221px;
 	overflow: hidden;
 	position: relative;
+
+	> * {
+		position: relative;
+		z-index: 1;
+	}
+
+	@media screen and (max-width: 599px) {
+		height: 140px;
+	}
+}
+
+.card-image-wrapper-liferay-product {
+	background:
+		linear-gradient(80deg, var(--white), transparent 50%),
+		linear-gradient(0deg, var(--white), transparent 80%),
+		radial-gradient(circle, var(--white) 35%, var(--primary-l3));
 
 	&::after {
 		background: radial-gradient(circle, var(--primary-l2), transparent 40%);
@@ -245,24 +391,16 @@ body nav.public-sites-navigation {
 			width: 120vw;
 		}
 	}
+}
 
-	> * {
-		position: relative;
-		z-index: 1;
-	}
-
-	@media screen and (max-width: 599px) {
-		height: 140px;
-	}
+.card-labels {
+	gap: 0.375rem;
+	margin-top: var(--spacer-1);
 }
 
 .card-price {
 	font-size: 0.875rem;
 	font-weight: var(--font-weight-semi-bold);
-}
-
-.card-price-free {
-	color: var(--success);
 }
 
 .card-product-image {
@@ -273,8 +411,11 @@ body nav.public-sites-navigation {
 
 .card-subtitle {
 	color: var(--secondary);
-	font-size: 0.8125rem;
+	font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+	letter-spacing: normal;
 	margin-bottom: 0;
+	text-transform: none;
 }
 
 .card-title {
@@ -319,7 +460,7 @@ body nav.public-sites-navigation {
 }
 
 .diamond-icon-container {
-	color: var(--neutral-5);
+	color: var(--color-neutral-5);
 	height: 4px;
 	width: 4px;
 }
@@ -354,7 +495,7 @@ body nav.public-sites-navigation {
 }
 
 .facet-panel {
-	border: 1px solid var(--neutral-5);
+	border: 1px solid var(--color-neutral-2);
 	border-radius: 0.5rem;
 	margin-bottom: 0.75rem;
 	overflow: hidden;
@@ -368,6 +509,12 @@ body nav.public-sites-navigation {
 		background-color: var(--white);
 		border-bottom: none;
 		padding: 0.875rem var(--spacer-3);
+	}
+
+	button.btn-unstyled {
+		color: var(--color-action-neutral-default);
+		font-size: 0.75rem;
+		font-weight: 400;
 	}
 
 	& hr.separator {
@@ -480,6 +627,10 @@ body nav.public-sites-navigation {
 .lexicon-icon-overwide .lexicon-icon {
 	height: 2em;
 	margin: 0;
+}
+
+.lfr-layout-structure-item-container.align-items-center:has(.portlet-sort) {
+	align-items: flex-start !important;
 }
 
 .liferay-one-nav {
@@ -644,8 +795,26 @@ body nav.public-sites-navigation {
 	font-size: 1.125rem;
 }
 
+.lo-announcement-content {
+	background-color: var(--white);
+	border: 1px solid var(--color-neutral-5);
+	border-radius: 10px;
+}
+
 .lo-badge {
 	gap: 0.375rem;
+}
+
+.lo-product-label {
+	align-items: center;
+	background-color: var(--color-state-info-lighten-2);
+	border-radius: 0.375rem;
+	color: var(--color-state-info);
+	display: inline-flex;
+	font-size: 0.75rem;
+	font-weight: var(--font-weight-semi-bold);
+	line-height: 1.2;
+	padding: 0.1875rem 0.5rem;
 }
 
 .lo-section-subtitle {
@@ -697,7 +866,7 @@ body nav.public-sites-navigation {
 }
 
 .modal-icon-background {
-	background-color: var(--neutral-5);
+	background-color: var(--color-neutral-5);
 	border-radius: var(--border-radius-circle);
 	flex-shrink: 0;
 	height: 2.5rem;
@@ -771,6 +940,7 @@ body nav.public-sites-navigation {
 	border: 1px solid var(--color-neutral-2);
 	border-radius: 10px;
 	box-sizing: border-box;
+	overflow: visible;
 	transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 
 	&:hover {
@@ -801,6 +971,28 @@ body nav.public-sites-navigation {
 
 .portlet-language .portlet {
 	margin-bottom: 0 !important;
+}
+
+.portlet-sort .form-control-select {
+	padding-bottom: 0.4375rem;
+	padding-left: 0.75rem;
+	padding-top: 0.4375rem;
+}
+
+.portlet-sort label[for$="sortSelectionDropdown"] {
+	display: none;
+}
+
+.product-tag {
+	background-color: var(--color-state-info-lighten-2);
+	box-sizing: border-box;
+	color: var(--color-state-info);
+	font-size: 13px;
+	letter-spacing: normal;
+	line-height: 16px;
+	max-height: 24px;
+	transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+	vertical-align: middle;
 }
 
 .publisher-profile-image {
@@ -887,7 +1079,7 @@ body nav.public-sites-navigation {
 
 .view-full-gallery {
 	background-color: var(--white);
-	border: 1px solid var(--neutral-5);
+	border: 1px solid var(--color-neutral-5);
 	border-radius: 12px;
 	color: var(--primary);
 	cursor: pointer;

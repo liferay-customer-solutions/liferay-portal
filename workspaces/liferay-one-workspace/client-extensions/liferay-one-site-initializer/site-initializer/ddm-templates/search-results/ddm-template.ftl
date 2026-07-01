@@ -33,7 +33,7 @@
 								<#if structuredContent.taxonomyCategoryBriefs?has_content>
 									<span class="d-inline-flex flex-wrap lo-badge">
 										<#list structuredContent.taxonomyCategoryBriefs as taxonomyCategoryBrief>
-											<span class="lo-badge-pill">${taxonomyCategoryBrief.taxonomyCategoryName}</span>
+											<span class="product-tag px-2 py-1 rounded text-nowrap">${taxonomyCategoryBrief.taxonomyCategoryName}</span>
 										</#list>
 									</span>
 								</#if>

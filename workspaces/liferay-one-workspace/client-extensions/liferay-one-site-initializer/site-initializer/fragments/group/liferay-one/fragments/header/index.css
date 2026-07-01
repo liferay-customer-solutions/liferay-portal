@@ -1,3 +1,13 @@
+/*
+ * The critical, above-the-fold layout rules below (fixed positioning, the
+ * navigation-padding spacer, .primary-nav / .utility-nav sizing, the
+ * .adt-navigation list reset, and the nav-items-wrapper flex layout) are also
+ * mirrored into liferay-one-global-css/assets/global.css. That render-blocking
+ * copy prevents the nav from flashing unstyled before this fragment stylesheet
+ * loads (FOUC). Keep both copies in sync; the rules must stay here too so the
+ * fragment renders correctly standalone in edit mode.
+ */
+
 .has-control-menu nav.public-sites-navigation {
 	margin-top: 3.5rem;
 }

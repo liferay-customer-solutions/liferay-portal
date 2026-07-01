@@ -1,0 +1,276 @@
+{
+	"masterPage": {
+		"key": "liferay-one"
+	},
+	"pageElement": {
+		"pageElements": [
+			{
+				"definition": {
+					"indexed": true,
+					"layout": {
+						"widthType": "Fixed"
+					}
+				},
+				"pageElements": [
+					{
+						"definition": {
+							"indexed": true,
+							"layout": {
+								"paddingBottom": 2,
+								"paddingTop": 3
+							},
+							"name": "Breadcrumb"
+						},
+						"pageElements": [
+							{
+								"definition": {
+									"widgetInstance": {
+										"widgetConfig": {
+										},
+										"widgetName": "com_liferay_site_navigation_breadcrumb_web_portlet_SiteNavigationBreadcrumbPortlet"
+									}
+								},
+								"type": "Widget"
+							}
+						],
+						"type": "Section"
+					},
+					{
+						"definition": {
+							"indexed": true,
+							"layout": {
+								"paddingTop": 2
+							}
+						},
+						"pageElements": [
+							{
+								"definition": {
+									"gutters": true,
+									"indexed": true,
+									"modulesPerRow": 2,
+									"numberOfColumns": 2,
+									"reverseOrder": false,
+									"rowViewports": [
+										{
+											"id": "landscapeMobile",
+											"rowViewportDefinition": {
+												"modulesPerRow": 1
+											}
+										},
+										{
+											"id": "portraitMobile",
+											"rowViewportDefinition": {
+												"modulesPerRow": 1
+											}
+										},
+										{
+											"id": "tablet",
+											"rowViewportDefinition": {
+											}
+										}
+									],
+									"verticalAlignment": "top"
+								},
+								"pageElements": [
+									{
+										"definition": {
+											"columnViewports": [
+												{
+													"columnViewportDefinition": {
+														"size": 12
+													},
+													"id": "landscapeMobile"
+												},
+												{
+													"columnViewportDefinition": {
+														"size": 12
+													},
+													"id": "portraitMobile"
+												},
+												{
+													"columnViewportDefinition": {
+													},
+													"id": "tablet"
+												}
+											],
+											"size": 3
+										},
+										"pageElements": [
+											{
+												"definition": {
+													"widgetInstance": {
+														"widgetConfig": {
+															"displayStyle": "ddmTemplate_NAVIGATION_SUPPORT",
+															"displayStyleGroupId": "[$GROUP_ID$]"
+														},
+														"widgetName": "com_liferay_site_navigation_menu_web_portlet_SiteNavigationMenuPortlet"
+													}
+												},
+												"type": "Widget"
+											}
+										],
+										"type": "Column"
+									},
+									{
+										"definition": {
+											"columnViewports": [
+												{
+													"columnViewportDefinition": {
+														"size": 12
+													},
+													"id": "landscapeMobile"
+												},
+												{
+													"columnViewportDefinition": {
+														"size": 12
+													},
+													"id": "portraitMobile"
+												},
+												{
+													"columnViewportDefinition": {
+													},
+													"id": "tablet"
+												}
+											],
+											"size": 9
+										},
+										"pageElements": [
+											{
+												"definition": {
+													"collectionConfig": {
+														"collectionReference": {
+															"className": "com.liferay.asset.list.model.AssetListEntry",
+															"classPK": "[$ASSET_LIST_ENTRY_ID:CUSTOMER PORTAL HELP$]"
+														},
+														"collectionType": "Collection"
+													},
+													"collectionViewports": [
+														{
+															"collectionViewportDefinition": {
+																"numberOfColumns": 1
+															},
+															"id": "landscapeMobile"
+														},
+														{
+															"collectionViewportDefinition": {
+																"numberOfColumns": 1
+															},
+															"id": "portraitMobile"
+														},
+														{
+															"collectionViewportDefinition": {
+																"numberOfColumns": 1
+															},
+															"id": "tablet"
+														}
+													],
+													"displayAllItems": false,
+													"displayAllPages": false,
+													"emptyCollectionConfig": {
+														"displayMessage": true
+													},
+													"listItemStyle": "",
+													"listStyle": "",
+													"numberOfColumns": 1,
+													"numberOfItems": 1,
+													"numberOfItemsPerPage": 1,
+													"numberOfPages": 1,
+													"paginationType": "None",
+													"showAllItems": false,
+													"templateKey": ""
+												},
+												"pageElements": [
+													{
+														"definition": {
+															"collectionItemConfig": {
+															}
+														},
+														"pageElements": [
+															{
+																"definition": {
+																	"fragment": {
+																		"key": "BASIC_COMPONENT-heading"
+																	},
+																	"fragmentConfig": {
+																		"headingLevel": "h1"
+																	},
+																	"fragmentFields": [
+																		{
+																			"id": "element-text",
+																			"value": {
+																				"fragmentLink": {
+																				},
+																				"text": {
+																					"mapping": {
+																						"fieldKey": "title",
+																						"itemReference": {
+																							"contextSource": "CollectionItem"
+																						}
+																					}
+																				}
+																			}
+																		}
+																	],
+																	"fragmentStyle": {
+																		"marginBottom": "4",
+																		"marginTop": "0"
+																	},
+																	"indexed": true
+																},
+																"type": "Fragment"
+															},
+															{
+																"definition": {
+																	"fragment": {
+																		"key": "BASIC_COMPONENT-paragraph"
+																	},
+																	"fragmentConfig": {
+																	},
+																	"fragmentFields": [
+																		{
+																			"id": "element-text",
+																			"value": {
+																				"fragmentLink": {
+																				},
+																				"text": {
+																					"mapping": {
+																						"fieldKey": "content",
+																						"itemReference": {
+																							"contextSource": "CollectionItem"
+																						}
+																					}
+																				}
+																			}
+																		}
+																	],
+																	"indexed": true
+																},
+																"type": "Fragment"
+															}
+														],
+														"type": "CollectionItem"
+													}
+												],
+												"type": "Collection"
+											}
+										],
+										"type": "Column"
+									}
+								],
+								"type": "Row"
+							}
+						],
+						"type": "Section"
+					}
+				],
+				"type": "Section"
+			}
+		],
+		"type": "Root"
+	},
+	"settings": {
+		"masterPage": {
+			"key": "liferay-one"
+		}
+	}
+}

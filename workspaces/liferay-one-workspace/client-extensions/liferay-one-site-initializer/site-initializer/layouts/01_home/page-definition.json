@@ -503,22 +503,20 @@
 														"one-card"
 													],
 													"fragmentLink": {
-														"value": {
-															"href": {
-																"mapping": {
-																	"itemReference": {
-																		"className": "com.liferay.portal.kernel.model.Layout",
-																		"fields": [
-																			{
-																				"fieldName": "friendlyURL",
-																				"fieldValue": "/my-account"
-																			},
-																			{
-																				"fieldName": "privatePage",
-																				"fieldValue": "false"
-																			}
-																		]
-																	}
+														"href": {
+															"mapping": {
+																"itemReference": {
+																	"className": "com.liferay.portal.kernel.model.Layout",
+																	"fields": [
+																		{
+																			"fieldName": "friendlyURL",
+																			"fieldValue": "/my-account"
+																		},
+																		{
+																			"fieldName": "privatePage",
+																			"fieldValue": "false"
+																		}
+																	]
 																}
 															}
 														}
@@ -855,161 +853,134 @@
 											{
 												"definition": {
 													"cssClasses": [
-														"one-optional-service-card"
+														"h-100",
+														"one-card"
 													],
-													"fragment": {
-														"key": "conditional-wrapper",
-														"siteKey": "[$GROUP_KEY$]"
+													"fragmentLink": {
+														"href": {
+															"value_i18n": {
+																"en_US": "https://liferay.atlassian.net/servicedesk/customer/portals",
+																"es_ES": "https://liferay.atlassian.net/servicedesk/customer/portals",
+																"ja_JP": "https://liferay.atlassian.net/servicedesk/customer/portals",
+																"pt_BR": "https://liferay.atlassian.net/servicedesk/customer/portals"
+															}
+														}
 													},
-													"fragmentConfig": {
-														"displayMode": "inRoleOnly",
-														"roles": "Customer"
+													"fragmentStyle": {
+														"paddingBottom": "4",
+														"paddingLeft": "4",
+														"paddingRight": "4",
+														"paddingTop": "4"
 													},
-													"indexed": true
+													"indexed": true,
+													"layout": {
+														"align": "Start",
+														"contentDisplay": "FlexColumn"
+													}
 												},
 												"pageElements": [
 													{
 														"definition": {
-															"fragmentDropZoneId": "2"
+															"fragment": {
+																"key": "BASIC_COMPONENT-image"
+															},
+															"fragmentFields": [
+																{
+																	"id": "image-square",
+																	"value": {
+																		"fragmentImage": {
+																			"url": {
+																				"mapping": {
+																					"fieldKey": "FileEntry_previewImage",
+																					"itemReference": {
+																						"className": "com.liferay.portal.kernel.repository.model.FileEntry",
+																						"classPK": "[#DOCUMENT_FILE_ENTRY_ID:/site-initializer/documents/group/submit_a_request.svg#]"
+																					}
+																				}
+																			}
+																		},
+																		"fragmentLink": {
+																		}
+																	}
+																}
+															],
+															"fragmentStyle": {
+																"height": "32px",
+																"marginBottom": "3",
+																"width": "32px"
+															},
+															"indexed": true
 														},
-														"pageElements": [
-															{
-																"definition": {
-																	"cssClasses": [
-																		"h-100",
-																		"one-card"
-																	],
-																	"fragmentLink": {
-																		"href": {
+														"type": "Fragment"
+													},
+													{
+														"definition": {
+															"fragment": {
+																"key": "BASIC_COMPONENT-heading"
+															},
+															"fragmentConfig": {
+																"headingLevel": "h5"
+															},
+															"fragmentFields": [
+																{
+																	"id": "element-text",
+																	"value": {
+																		"fragmentLink": {
+																		},
+																		"text": {
 																			"value_i18n": {
-																				"en_US": "https://liferay.atlassian.net/servicedesk/customer/portals",
-																				"es_ES": "https://liferay.atlassian.net/servicedesk/customer/portals",
-																				"ja_JP": "https://liferay.atlassian.net/servicedesk/customer/portals",
-																				"pt_BR": "https://liferay.atlassian.net/servicedesk/customer/portals"
+																				"en_US": "Submit a Request",
+																				"es_ES": "Enviar una Solicitud",
+																				"ja_JP": "リクエストを送信",
+																				"pt_BR": "Enviar uma Solicitação"
 																			}
 																		}
-																	},
-																	"fragmentStyle": {
-																		"paddingBottom": "4",
-																		"paddingLeft": "4",
-																		"paddingRight": "4",
-																		"paddingTop": "4"
-																	},
-																	"indexed": true,
-																	"layout": {
-																		"align": "Start",
-																		"contentDisplay": "FlexColumn"
 																	}
-																},
-																"pageElements": [
-																	{
-																		"definition": {
-																			"fragment": {
-																				"key": "BASIC_COMPONENT-image"
-																			},
-																			"fragmentFields": [
-																				{
-																					"id": "image-square",
-																					"value": {
-																						"fragmentImage": {
-																							"url": {
-																								"mapping": {
-																									"fieldKey": "FileEntry_previewImage",
-																									"itemReference": {
-																										"className": "com.liferay.portal.kernel.repository.model.FileEntry",
-																										"classPK": "[#DOCUMENT_FILE_ENTRY_ID:/site-initializer/documents/group/submit_a_request.svg#]"
-																									}
-																								}
-																							}
-																						},
-																						"fragmentLink": {
-																						}
-																					}
-																				}
-																			],
-																			"fragmentStyle": {
-																				"height": "32px",
-																				"marginBottom": "3",
-																				"width": "32px"
-																			},
-																			"indexed": true
+																}
+															],
+															"fragmentStyle": {
+																"marginBottom": "2",
+																"marginTop": "0"
+															},
+															"indexed": true
+														},
+														"type": "Fragment"
+													},
+													{
+														"definition": {
+															"cssClasses": [
+																"small",
+																"text-secondary"
+															],
+															"fragment": {
+																"key": "BASIC_COMPONENT-paragraph"
+															},
+															"fragmentFields": [
+																{
+																	"id": "element-text",
+																	"value": {
+																		"fragmentLink": {
 																		},
-																		"type": "Fragment"
-																	},
-																	{
-																		"definition": {
-																			"fragment": {
-																				"key": "BASIC_COMPONENT-heading"
-																			},
-																			"fragmentConfig": {
-																				"headingLevel": "h5"
-																			},
-																			"fragmentFields": [
-																				{
-																					"id": "element-text",
-																					"value": {
-																						"fragmentLink": {
-																						},
-																						"text": {
-																							"value_i18n": {
-																								"en_US": "Submit a Request",
-																								"es_ES": "Enviar una Solicitud",
-																								"ja_JP": "リクエストを送信",
-																								"pt_BR": "Enviar uma Solicitação"
-																							}
-																						}
-																					}
-																				}
-																			],
-																			"fragmentStyle": {
-																				"marginBottom": "2",
-																				"marginTop": "0"
-																			},
-																			"indexed": true
-																		},
-																		"type": "Fragment"
-																	},
-																	{
-																		"definition": {
-																			"cssClasses": [
-																				"small",
-																				"text-secondary"
-																			],
-																			"fragment": {
-																				"key": "BASIC_COMPONENT-paragraph"
-																			},
-																			"fragmentFields": [
-																				{
-																					"id": "element-text",
-																					"value": {
-																						"fragmentLink": {
-																						},
-																						"text": {
-																							"value_i18n": {
-																								"en_US": "Get help with your Liferay products, submit tickets, and find answers in our knowledge base.",
-																								"es_ES": "Obtén ayuda con tus productos Liferay, envía tickets y encuentra respuestas en nuestra base de conocimientos.",
-																								"ja_JP": "Liferay製品のサポートを受け、チケットを送信し、ナレッジベースで回答を見つけることができます。",
-																								"pt_BR": "Obtenha ajuda com seus produtos Liferay, envie tickets e encontre respostas em nossa base de conhecimentos."
-																							}
-																						}
-																					}
-																				}
-																			],
-																			"fragmentStyle": {
-																				"marginBottom": "0"
-																			},
-																			"indexed": true
-																		},
-																		"type": "Fragment"
+																		"text": {
+																			"value_i18n": {
+																				"en_US": "Get help with your Liferay products, submit tickets, and find answers in our knowledge base.",
+																				"es_ES": "Obtén ayuda con tus productos Liferay, envía tickets y encuentra respuestas en nuestra base de conocimientos.",
+																				"ja_JP": "Liferay製品のサポートを受け、チケットを送信し、ナレッジベースで回答を見つけることができます。",
+																				"pt_BR": "Obtenha ajuda com seus produtos Liferay, envie tickets e encontre respostas em nossa base de conhecimentos."
+																			}
+																		}
 																	}
-																],
-																"type": "Section"
-															}
-														],
-														"type": "FragmentDropZone"
+																}
+															],
+															"fragmentStyle": {
+																"marginBottom": "0"
+															},
+															"indexed": true
+														},
+														"type": "Fragment"
 													}
 												],
-												"type": "Fragment"
+												"type": "Section"
 											}
 										],
 										"type": "Column"
@@ -1204,22 +1175,20 @@
 														"one-card"
 													],
 													"fragmentLink": {
-														"value": {
-															"href": {
-																"mapping": {
-																	"itemReference": {
-																		"className": "com.liferay.portal.kernel.model.Layout",
-																		"fields": [
-																			{
-																				"fieldName": "friendlyURL",
-																				"fieldValue": "/marketplace"
-																			},
-																			{
-																				"fieldName": "privatePage",
-																				"fieldValue": "false"
-																			}
-																		]
-																	}
+														"href": {
+															"mapping": {
+																"itemReference": {
+																	"className": "com.liferay.portal.kernel.model.Layout",
+																	"fields": [
+																		{
+																			"fieldName": "friendlyURL",
+																			"fieldValue": "/marketplace"
+																		},
+																		{
+																			"fieldName": "privatePage",
+																			"fieldValue": "false"
+																		}
+																	]
 																}
 															}
 														}
@@ -1839,6 +1808,7 @@
 										}
 									],
 									"fragmentStyle": {
+										"marginBottom": "5",
 										"textColor": "#82828C"
 									},
 									"indexed": true

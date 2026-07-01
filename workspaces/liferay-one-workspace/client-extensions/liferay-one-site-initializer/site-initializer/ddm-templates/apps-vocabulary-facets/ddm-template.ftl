@@ -1,6 +1,11 @@
+<#function langKey label>
+	<#return label?lower_case?replace(" ", "-", "r")?replace("&", "and", "r")?replace(",", "", "r")?replace("/", "-", "r") />
+</#function>
+
 <#assign
 	filteredCount = 0
-	title = assetCategoriesSearchFacetDisplayContext.getParameterName()
+	parameterName = assetCategoriesSearchFacetDisplayContext.getParameterName()
+	title = languageUtil.get(locale, langKey(parameterName), parameterName)
 />
 
 <#list entries as entry>
@@ -14,7 +19,7 @@
 </#if>
 
 <@liferay_ui["panel-container"]
-	cssClass="bg-white border-radius-xlarge facet-panel"
+	cssClass="border-radius-xlarge facet-panel"
 	extended=true
 	id="${namespace + 'facetAssetCategoriesPanelContainer'}"
 	markupView="lexicon"
@@ -61,7 +66,7 @@
 
 							<span class="custom-control-label font-size-paragraph-small term-name ${(entry.isSelected())?then('facet-term-selected', 'facet-term-unselected')}">
 								<span class="custom-control-label-text">
-									${htmlUtil.escape(entry.getDisplayName())}
+									${htmlUtil.escape(languageUtil.get(locale, langKey(entry.getDisplayName()), entry.getDisplayName()))}
 
 									<span class="facet-frequency">(${entry.getFrequency()})</span>
 								</span>

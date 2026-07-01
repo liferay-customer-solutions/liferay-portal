@@ -1,0 +1,7 @@
+{
+	"className": "com.liferay.template.model.TemplateEntry",
+	"ddmTemplateKey": "MARKETPLACE_APP_BREADCRUMB",
+	"infoItemClassName": "com.liferay.commerce.product.model.CPDefinition",
+	"name": "Marketplace App Breadcrumb",
+	"resourceClassName": "com.liferay.template.model.TemplateEntry"
+}

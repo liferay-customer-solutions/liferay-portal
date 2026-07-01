@@ -209,7 +209,6 @@
 									{
 										"definition": {
 											"fragmentStyle": {
-												"backgroundColor": "whiteColor",
 												"borderRadius": "10px",
 												"overflow": "hidden"
 											},

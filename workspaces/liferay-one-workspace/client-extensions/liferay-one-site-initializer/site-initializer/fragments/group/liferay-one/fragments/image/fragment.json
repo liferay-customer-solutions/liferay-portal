@@ -1,0 +1,9 @@
+{
+	"configurationPath": "configuration.json",
+	"cssPath": "index.css",
+	"htmlPath": "index.html",
+	"icon": "picture",
+	"jsPath": "index.js",
+	"name": "Product Icon",
+	"type": "component"
+}

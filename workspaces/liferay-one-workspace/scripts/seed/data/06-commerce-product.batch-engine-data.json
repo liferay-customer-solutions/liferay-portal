@@ -96,9 +96,15 @@
 					}
 				},
 				{
+					"specificationKey": "product-icon",
+					"value": {
+						"en_US": "ai_hub"
+					}
+				},
+				{
 					"specificationKey": "publisher-name",
 					"value": {
-						"en_US": "Liferay"
+						"en_US": "Liferay, Inc."
 					}
 				},
 				{
@@ -522,9 +528,15 @@
 					}
 				},
 				{
+					"specificationKey": "product-icon",
+					"value": {
+						"en_US": "cmp"
+					}
+				},
+				{
 					"specificationKey": "publisher-name",
 					"value": {
-						"en_US": "Liferay"
+						"en_US": "Liferay, Inc."
 					}
 				},
 				{
@@ -659,7 +671,7 @@
 				{
 					"specificationKey": "publisher-name",
 					"value": {
-						"en_US": "Liferay"
+						"en_US": "Liferay, Inc."
 					}
 				},
 				{
@@ -788,7 +800,7 @@
 				{
 					"specificationKey": "publisher-name",
 					"value": {
-						"en_US": "Liferay"
+						"en_US": "Liferay, Inc."
 					}
 				},
 				{
@@ -915,9 +927,15 @@
 					}
 				},
 				{
+					"specificationKey": "product-icon",
+					"value": {
+						"en_US": "dxp"
+					}
+				},
+				{
 					"specificationKey": "publisher-name",
 					"value": {
-						"en_US": "Liferay"
+						"en_US": "Liferay, Inc."
 					}
 				},
 				{
@@ -974,6 +992,24 @@
 			"active": true,
 			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
 			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_APP_CATEGORY_EXTENSIBILITY_AND_INTEGRATION"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_APP_CATEGORY_NAVIGATION_AND_DISCOVERY"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_CATEGORY_BATCH"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_LIFERAY_PLATFORM_OFFERING_LIFERAY_PAAS"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_LIFERAY_PLATFORM_OFFERING_LIFERAY_SELF_HOSTED"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_LIFERAY_VERSION_74"
+				},
 				{
 					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_APP"
 				}
@@ -1085,6 +1121,24 @@
 			"active": true,
 			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
 			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_APP_CATEGORY_E_COMMERCE"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_APP_CATEGORY_ORDERS_AND_FULFILLMENT"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_CATEGORY_CHECKOUT"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_LIFERAY_PLATFORM_OFFERING_LIFERAY_PAAS"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_LIFERAY_PLATFORM_OFFERING_LIFERAY_SELF_HOSTED"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_LIFERAY_VERSION_74"
+				},
 				{
 					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_APP"
 				}
@@ -1377,7 +1431,28 @@
 			"catalogExternalReferenceCode": "TEST_SUPPLIER_CATALOG",
 			"categories": [
 				{
+					"externalReferenceCode": "MARKETPLACE_AVAILABILITY_ENTERPRISE"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_LIFERAY_PLATFORM_OFFERING_LIFERAY_SAAS"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_LIFERAY_PLATFORM_OFFERING_LIFERAY_SELF_HOSTED"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_LIFERAY_VERSION_74"
+				},
+				{
 					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_SOLUTION"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_SOLUTION_CATEGORY_CUSTOMER_DATA_MANAGEMENT"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_SOLUTION_TAGS_ACCELERATOR"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_SOLUTION_TAGS_CRM"
 				}
 			],
 			"description": {
@@ -1488,7 +1563,28 @@
 			"catalogExternalReferenceCode": "TEST_SUPPLIER_CATALOG",
 			"categories": [
 				{
+					"externalReferenceCode": "MARKETPLACE_AVAILABILITY_ENTERPRISE"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_LIFERAY_PLATFORM_OFFERING_LIFERAY_PAAS"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_LIFERAY_PLATFORM_OFFERING_LIFERAY_SELF_HOSTED"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_LIFERAY_VERSION_74"
+				},
+				{
 					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_SOLUTION"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_SOLUTION_CATEGORY_EXTENSIBILITY_AND_INTEGRATION"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_SOLUTION_TAGS_ACCELERATOR"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_SOLUTION_TAGS_SUPPLIER_PORTAL"
 				}
 			],
 			"description": {
@@ -1809,7 +1905,25 @@
 			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
 			"categories": [
 				{
+					"externalReferenceCode": "MARKETPLACE_AVAILABILITY_COMMUNITY"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_LIFERAY_PLATFORM_OFFERING_LIFERAY_SAAS"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_LIFERAY_VERSION_74"
+				},
+				{
 					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_SOLUTION"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_SOLUTION_CATEGORY_EXPERIENCE_MANAGEMENT"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_SOLUTION_TAGS_LOW_CODE"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_SOLUTION_TAGS_NO_CODE"
 				}
 			],
 			"description": {
@@ -1931,6 +2045,24 @@
 			"active": true,
 			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
 			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_APP_CATEGORY_COLLABORATION_KNOWLEDGE_SHARING"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_APP_CATEGORY_CUSTOMER_DATA_MANAGEMENT"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_CATEGORY_FRAGMENTS"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_LIFERAY_PLATFORM_OFFERING_LIFERAY_SAAS"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_LIFERAY_PLATFORM_OFFERING_LIFERAY_SELF_HOSTED"
+				},
+				{
+					"externalReferenceCode": "MARKETPLACE_LIFERAY_VERSION_74"
+				},
 				{
 					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_APP"
 				}

@@ -2,7 +2,7 @@
 	background-color: var(--white);
 	background-position: right top;
 	background-repeat: no-repeat;
-	background-size: auto 100% !important;
+	background-size: 50% auto !important;
 	min-height: 272px;
 }
 
@@ -24,6 +24,7 @@
 
 .lo-hero-banner .lo-hero-banner-content {
 	gap: 32px;
+	padding: var(--spacer-5) 0;
 	z-index: 1;
 }
 

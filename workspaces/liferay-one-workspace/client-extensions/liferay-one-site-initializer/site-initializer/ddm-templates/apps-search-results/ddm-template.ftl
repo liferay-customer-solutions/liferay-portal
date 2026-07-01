@@ -1,7 +1,18 @@
 <#assign
-	commerceContext = renderRequest.getAttribute("COMMERCE_CONTEXT")
+	scopeGroupId = themeDisplay.getScopeGroupId()
 	specificationGroups = cpContentHelper.getCPOptionCategories(themeDisplay.getCompanyId())
+
+	channelId = ""
 />
+
+<#attempt>
+	<#assign channel = restClient.get("/headless-commerce-delivery-catalog/v1.0/channels?accountId=-1&filter=siteGroupId eq '${scopeGroupId}'") />
+
+	<#if (channel.items)?has_content>
+		<#assign channelId = channel.items[0].id />
+	</#if>
+<#recover>
+</#attempt>
 
 <#function getSpecificationValue specificationGroupKey specificationKey productId defaultValue="">
 	<#local specificationGroup = specificationGroups?filter(specificationGroup -> specificationGroup.getKey() == specificationGroupKey) />
@@ -12,10 +23,14 @@
 		<#local specification = specifications?filter(productSpecification ->
 			stringUtil.equals(productSpecification.getCPSpecificationOption().getKey(), specificationKey)) />
 
-		<#return (specification?first.value)!defaultValue />
+		<#return (specification?first.getValue(locale))!defaultValue />
 	</#if>
 
 	<#return defaultValue />
+</#function>
+
+<#function langKey label>
+	<#return label?lower_case?replace(" ", "-", "r")?replace("&", "and", "r")?replace(",", "", "r")?replace("/", "-", "r") />
 </#function>
 
 <div class="card-grid">
@@ -28,29 +43,81 @@
 						priceModel = getSpecificationValue("pricing-licensing-terms", "price-model", entry.getCPDefinitionId())
 						productDescription = stringUtil.shorten(htmlUtil.stripHtml(entry.getDescription()!""), 120, "...")
 						productId = entry.getCPDefinitionId()
-						productImage = cpContentHelper.getDefaultImageFileURL(commerceContext.getAccountEntry().getAccountEntryId(), productId)
+						productIcon = getSpecificationValue("product-metadata", "product-icon", productId, "liferay_waffle")
+						productImage = "/documents/d" + themeDisplay.getScopeGroup().getFriendlyURL() + "/" + productIcon + "-svg"
+
+						categoriesListSize = 0
+						principalCategory = ""
+						productCategories = []
+						remainingCategoriesText = []
 					/>
 
-					<a class="card d-flex flex-column overflow-hidden text-dark text-decoration-none" href="${cpContentHelper.getFriendlyURL(entry, themeDisplay)}">
-						<div class="align-items-center card-image-wrapper d-flex justify-content-center w-100">
-							<img alt="${entry.getName()}" class="card-product-image" draggable="false" loading="lazy" src="${productImage}" />
+					<#if channelId?has_content>
+						<#attempt>
+							<#assign product = restClient.get("/headless-commerce-delivery-catalog/v1.0/channels/" + channelId + "/products/" + entry.getCProductId() + "?accountId=-1&nestedFields=categories") />
+
+							<#if (product.categories)?has_content>
+								<#assign productCategories = product.categories?filter(productCategory -> productCategory.vocabulary?replace(" ", "-") == "marketplace-app-category") />
+							</#if>
+						<#recover>
+						</#attempt>
+					</#if>
+
+					<#if productCategories?has_content>
+						<#assign
+							principalCategory = productCategories[0]
+							categoriesListSize = productCategories?size - 1
+							remainingCategories = productCategories?filter(category -> category.name != principalCategory.name)
+						/>
+
+						<#list remainingCategories as category>
+							<#assign remainingCategoriesText = remainingCategoriesText + [languageUtil.get(locale, langKey(category.title), category.title)] />
+						</#list>
+					</#if>
+
+					<a class="app-card d-flex flex-column one-card p-4 text-dark text-decoration-none" href="${cpContentHelper.getFriendlyURL(entry, themeDisplay)}">
+						<div class="card-image-title-container d-flex mb-3">
+							<div class="image-container mr-3 rounded">
+								<img alt="${entry.getName()}" class="app-search-image" draggable="false" loading="lazy" src="${productImage}" />
+							</div>
+
+							<div class="d-flex flex-column justify-content-center w-100">
+								<h3 class="app-name font-weight-semi-bold mb-1">${entry.getName()}</h3>
+
+								<#if developerName?has_content>
+									<p class="catalog-name font-weight-normal m-0 text-black-50">${developerName}</p>
+								</#if>
+							</div>
 						</div>
 
-						<div class="card-body d-flex flex-column">
-							<h3 class="card-title">${entry.getName()}</h3>
+						<#if productDescription?has_content>
+							<p class="app-card-description font-weight-normal">${productDescription}</p>
+						</#if>
 
-							<#if developerName?has_content>
-								<p class="card-developer">${developerName}</p>
-							</#if>
+						<#if priceModel?has_content>
+							<span class="card-price mt-2">
+								${priceModel?cap_first}
+							</span>
+						</#if>
 
-							<p class="card-description">${productDescription}</p>
+						<#if principalCategory?has_content>
+							<#assign
+								principalCategoryTitle = languageUtil.get(locale, langKey(principalCategory.title), principalCategory.title)
+								tagName = stringUtil.shorten(htmlUtil.stripHtml(principalCategoryTitle!""), 100, "...")
+							/>
 
-							<#if priceModel?has_content>
-								<span class="card-price mt-auto <#if priceModel?lower_case == 'free'>card-price-free</#if>">
-									${priceModel?cap_first}
+							<div class="my-1 tags-container">
+								<span class="font-weight-normal mb-3 mr-3 product-tag px-2 py-1 rounded text-nowrap" title="${principalCategoryTitle}">
+									${tagName}
 								</span>
-							</#if>
-						</div>
+
+								<#if categoriesListSize gt 0 && remainingCategoriesText?has_content>
+									<span class="font-weight-normal mb-1 product-tag px-2 py-1 rounded text-nowrap" title="${remainingCategoriesText?join('\n')}">
+										+ ${categoriesListSize}
+									</span>
+								</#if>
+							</div>
+						</#if>
 					</a>
 				</#if>
 			</#list>
