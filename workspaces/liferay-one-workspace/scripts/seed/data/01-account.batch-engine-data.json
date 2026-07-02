@@ -127,6 +127,11 @@
 			"externalReferenceCode": "ACCNT-022",
 			"name": "No Project Test Account",
 			"type": "business"
+		},
+		{
+			"externalReferenceCode": "SSA-ACCOUNT",
+			"name": "SSA Account",
+			"type": "business"
 		}
 	]
 }
