@@ -5,6 +5,8 @@
 
 package com.liferay.one.service;
 
+import com.liferay.headless.admin.user.client.custom.field.CustomField;
+import com.liferay.headless.admin.user.client.custom.field.CustomValue;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
 import com.liferay.headless.admin.user.client.pagination.Page;
 import com.liferay.headless.admin.user.client.pagination.Pagination;
@@ -165,6 +167,25 @@ public class UserAccountService extends OneBaseService {
 		}
 
 		return false;
+	}
+
+	public void setVerified(long userId) throws Exception {
+		UserAccountResource userAccountResource = _buildUserAccountResource();
+
+		CustomValue customValue = new CustomValue();
+
+		customValue.setData(() -> Boolean.TRUE);
+
+		CustomField customField = new CustomField();
+
+		customField.setCustomValue(() -> customValue);
+		customField.setName(() -> "verified");
+
+		UserAccount userAccount = new UserAccount();
+
+		userAccount.setCustomFields(() -> new CustomField[] {customField});
+
+		userAccountResource.patchUserAccount(userId, userAccount);
 	}
 
 	private UserAccountResource _buildUserAccountResource(

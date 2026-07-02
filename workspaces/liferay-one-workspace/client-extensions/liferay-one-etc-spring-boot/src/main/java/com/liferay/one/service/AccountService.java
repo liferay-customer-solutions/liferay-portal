@@ -251,6 +251,19 @@ public class AccountService extends OneBaseService {
 		return false;
 	}
 
+	public void removeAccountUserAccount(long accountId, long userId)
+		throws Exception {
+
+		delete(
+			getAuthorization(), StringPool.BLANK,
+			UriComponentsBuilder.fromPath(
+				"/o/headless-admin-user/v1.0/accounts/{accountId}" +
+					"/user-accounts/{userId}"
+			).buildAndExpand(
+				accountId, userId
+			).toUri());
+	}
+
 	public void removeAccountUserAccount(
 			String externalReferenceCode, Jwt jwt, long userId)
 		throws Exception {
