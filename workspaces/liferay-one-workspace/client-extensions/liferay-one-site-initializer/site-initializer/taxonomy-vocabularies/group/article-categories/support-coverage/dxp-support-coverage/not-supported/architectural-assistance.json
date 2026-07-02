@@ -1,0 +1,18 @@
+{
+	"description": "Architectural Assistance",
+	"description_i18n": {
+		"en_US": "Architectural Assistance",
+		"es_ES": "Ayuda de arquitectura",
+		"ja_JP": "アーキテクチャのサポート",
+		"pt_BR": "Assistência de Arquitetura"
+	},
+	"externalReferenceCode": "T_AC_ARCHITECTURAL_ASSISTANCE",
+	"name": "Architectural Assistance",
+	"name_i18n": {
+		"en_US": "Architectural Assistance",
+		"es_ES": "Ayuda de arquitectura",
+		"ja_JP": "アーキテクチャのサポート",
+		"pt_BR": "Assistência de Arquitetura"
+	},
+	"viewableBy": "Anyone"
+}

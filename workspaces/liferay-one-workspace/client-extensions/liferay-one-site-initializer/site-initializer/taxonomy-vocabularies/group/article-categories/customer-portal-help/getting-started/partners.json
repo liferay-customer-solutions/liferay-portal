@@ -1,0 +1,18 @@
+{
+	"description": "Partners",
+	"description_i18n": {
+		"en_US": "Partners",
+		"es_ES": "Partners",
+		"ja_JP": "パートナー",
+		"pt_BR": "Partners"
+	},
+	"externalReferenceCode": "T_AC_PARTNERS",
+	"name": "Partners",
+	"name_i18n": {
+		"en_US": "Partners",
+		"es_ES": "Partners",
+		"ja_JP": "パートナー",
+		"pt_BR": "Partners"
+	},
+	"viewableBy": "Anyone"
+}

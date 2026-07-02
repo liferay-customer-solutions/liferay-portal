@@ -1,0 +1,18 @@
+{
+	"description": "Upgrades",
+	"description_i18n": {
+		"en_US": "Upgrades",
+		"es_ES": "Migraciones",
+		"ja_JP": "アップグレード",
+		"pt_BR": "Atualizações"
+	},
+	"externalReferenceCode": "T_AC_UPGRADES",
+	"name": "Upgrades",
+	"name_i18n": {
+		"en_US": "Upgrades",
+		"es_ES": "Migraciones",
+		"ja_JP": "アップグレード",
+		"pt_BR": "Atualizações"
+	},
+	"viewableBy": "Anyone"
+}

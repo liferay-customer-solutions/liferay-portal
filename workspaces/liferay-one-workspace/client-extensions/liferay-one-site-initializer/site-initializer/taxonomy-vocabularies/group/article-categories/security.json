@@ -1,0 +1,18 @@
+{
+	"description": "Security",
+	"description_i18n": {
+		"en_US": "Security",
+		"es_ES": "Seguridad",
+		"ja_JP": "セキュリティ",
+		"pt_BR": "Segurança"
+	},
+	"externalReferenceCode": "T_AC_SECURITY",
+	"name": "Security",
+	"name_i18n": {
+		"en_US": "Security",
+		"es_ES": "Seguridad",
+		"ja_JP": "セキュリティ",
+		"pt_BR": "Segurança"
+	},
+	"viewableBy": "Anyone"
+}

@@ -1,0 +1,18 @@
+{
+	"description": "General",
+	"description_i18n": {
+		"en_US": "General",
+		"es_ES": "General",
+		"ja_JP": "全般",
+		"pt_BR": "General"
+	},
+	"externalReferenceCode": "T_AC_GENERAL",
+	"name": "General",
+	"name_i18n": {
+		"en_US": "General",
+		"es_ES": "General",
+		"ja_JP": "全般",
+		"pt_BR": "General"
+	},
+	"viewableBy": "Anyone"
+}

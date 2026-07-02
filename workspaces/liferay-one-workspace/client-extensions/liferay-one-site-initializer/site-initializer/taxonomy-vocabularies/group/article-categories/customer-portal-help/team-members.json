@@ -1,0 +1,18 @@
+{
+	"description": "Team Members",
+	"description_i18n": {
+		"en_US": "Team Members",
+		"es_ES": "Miembros del equipo",
+		"ja_JP": "チームメンバー",
+		"pt_BR": "Membros da equipe"
+	},
+	"externalReferenceCode": "T_AC_TEAM_MEMBERS",
+	"name": "Team Members",
+	"name_i18n": {
+		"en_US": "Team Members",
+		"es_ES": "Miembros del equipo",
+		"ja_JP": "チームメンバー",
+		"pt_BR": "Membros da equipe"
+	},
+	"viewableBy": "Anyone"
+}

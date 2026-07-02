@@ -1,0 +1,18 @@
+{
+	"description": "Analytics Cloud - Product Changelog",
+	"description_i18n": {
+		"en_US": "Analytics Cloud - Product Changelog",
+		"es_ES": "Analytics Cloud - Histórico de Actualizaciones",
+		"ja_JP": "Analytics Cloud - 製品チェンジログ",
+		"pt_BR": "Analytics Cloud - Histórico de Atualizações"
+	},
+	"externalReferenceCode": "T_AC_ANALYTICS_CLOUD_PRODUCT_CHANGELOG",
+	"name": "Analytics Cloud - Product Changelog",
+	"name_i18n": {
+		"en_US": "Analytics Cloud - Product Changelog",
+		"es_ES": "Analytics Cloud - Histórico de Actualizaciones",
+		"ja_JP": "Analytics Cloud - 製品チェンジログ",
+		"pt_BR": "Analytics Cloud - Histórico de Atualizações"
+	},
+	"viewableBy": "Anyone"
+}

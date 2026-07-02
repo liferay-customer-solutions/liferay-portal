@@ -1,0 +1,18 @@
+{
+	"description": "Code Development",
+	"description_i18n": {
+		"en_US": "Code Development",
+		"es_ES": "Desarrollo de código",
+		"ja_JP": "コード開発／API関連事象",
+		"pt_BR": "Desenvolvimento de Código"
+	},
+	"externalReferenceCode": "T_AC_CODE_DEVELOPMENT",
+	"name": "Code Development",
+	"name_i18n": {
+		"en_US": "Code Development",
+		"es_ES": "Desarrollo de código",
+		"ja_JP": "コード開発／API関連事象",
+		"pt_BR": "Desenvolvimento de Código"
+	},
+	"viewableBy": "Anyone"
+}

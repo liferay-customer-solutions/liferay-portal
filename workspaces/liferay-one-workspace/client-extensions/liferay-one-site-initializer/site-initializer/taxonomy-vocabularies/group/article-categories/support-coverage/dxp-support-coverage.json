@@ -1,0 +1,18 @@
+{
+	"description": "DXP Support Coverage",
+	"description_i18n": {
+		"en_US": "DXP Support Coverage",
+		"es_ES": "Cobertura de soporte DXP",
+		"ja_JP": "DXPのサポート範囲",
+		"pt_BR": "Cobertura de Suporte do DXP"
+	},
+	"externalReferenceCode": "T_AC_DXP_SUPPORT_COVERAGE",
+	"name": "DXP Support Coverage",
+	"name_i18n": {
+		"en_US": "DXP Support Coverage",
+		"es_ES": "Cobertura de soporte DXP",
+		"ja_JP": "DXPのサポート範囲",
+		"pt_BR": "Cobertura de Suporte do DXP"
+	},
+	"viewableBy": "Anyone"
+}

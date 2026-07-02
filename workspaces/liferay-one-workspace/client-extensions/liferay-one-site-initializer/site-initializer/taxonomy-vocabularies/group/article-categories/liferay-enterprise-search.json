@@ -1,0 +1,18 @@
+{
+	"description": "Liferay Enterprise Search",
+	"description_i18n": {
+		"en_US": "Liferay Enterprise Search",
+		"es_ES": "Liferay Enterprise Search",
+		"ja_JP": "Liferay エンタープライズサーチ",
+		"pt_BR": "Liferay Enterprise Search"
+	},
+	"externalReferenceCode": "T_AC_LIFERAY_ENTERPRISE_SEARCH",
+	"name": "Liferay Enterprise Search",
+	"name_i18n": {
+		"en_US": "Liferay Enterprise Search",
+		"es_ES": "Liferay Enterprise Search",
+		"ja_JP": "Liferay エンタープライズサーチ",
+		"pt_BR": "Liferay Enterprise Search"
+	},
+	"viewableBy": "Anyone"
+}

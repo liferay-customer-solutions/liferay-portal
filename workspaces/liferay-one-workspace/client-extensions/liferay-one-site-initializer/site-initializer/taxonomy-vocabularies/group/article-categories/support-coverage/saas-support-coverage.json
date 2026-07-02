@@ -1,0 +1,18 @@
+{
+	"description": "SaaS Support Coverage",
+	"description_i18n": {
+		"en_US": "SaaS Support Coverage",
+		"es_ES": "Cobertura de soporte SaaS",
+		"ja_JP": "SaaSのサポート範囲",
+		"pt_BR": "Cobertura de Suporte do SaaS"
+	},
+	"externalReferenceCode": "T_AC_SAAS_SUPPORT_COVERAGE",
+	"name": "SaaS Support Coverage",
+	"name_i18n": {
+		"en_US": "SaaS Support Coverage",
+		"es_ES": "Cobertura de soporte SaaS",
+		"ja_JP": "SaaSのサポート範囲",
+		"pt_BR": "Cobertura de Suporte do SaaS"
+	},
+	"viewableBy": "Anyone"
+}

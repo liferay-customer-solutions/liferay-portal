@@ -1,0 +1,18 @@
+{
+	"description": "Product Delivery",
+	"description_i18n": {
+		"en_US": "Product Delivery",
+		"es_ES": "Entrega de Producto",
+		"ja_JP": "プロダクトデリバリー",
+		"pt_BR": "Entrega do Produto"
+	},
+	"externalReferenceCode": "T_AC_PRODUCT_DELIVERY",
+	"name": "Product Delivery",
+	"name_i18n": {
+		"en_US": "Product Delivery",
+		"es_ES": "Entrega de Producto",
+		"ja_JP": "プロダクトデリバリー",
+		"pt_BR": "Entrega do Produto"
+	},
+	"viewableBy": "Anyone"
+}

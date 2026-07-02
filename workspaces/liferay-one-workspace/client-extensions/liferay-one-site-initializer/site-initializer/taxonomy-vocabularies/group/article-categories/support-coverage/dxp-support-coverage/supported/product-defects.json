@@ -1,0 +1,18 @@
+{
+	"description": "Product Defects",
+	"description_i18n": {
+		"en_US": "Product Defects",
+		"es_ES": "Defectos de producto",
+		"ja_JP": "製品の欠陥",
+		"pt_BR": "Defeitos do Produto"
+	},
+	"externalReferenceCode": "T_AC_PRODUCT_DEFECTS",
+	"name": "Product Defects",
+	"name_i18n": {
+		"en_US": "Product Defects",
+		"es_ES": "Defectos de producto",
+		"ja_JP": "製品の欠陥",
+		"pt_BR": "Defeitos do Produto"
+	},
+	"viewableBy": "Anyone"
+}

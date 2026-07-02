@@ -1,0 +1,18 @@
+{
+	"description": "Liferay Documentation",
+	"description_i18n": {
+		"en_US": "Liferay Documentation",
+		"es_ES": "Documentación de Liferay",
+		"ja_JP": "Liferay ドキュメンテーション",
+		"pt_BR": "Documentação Liferay"
+	},
+	"externalReferenceCode": "T_AC_LIFERAY_DOCUMENTATION",
+	"name": "Liferay Documentation",
+	"name_i18n": {
+		"en_US": "Liferay Documentation",
+		"es_ES": "Documentación de Liferay",
+		"ja_JP": "Liferay ドキュメンテーション",
+		"pt_BR": "Documentação Liferay"
+	},
+	"viewableBy": "Anyone"
+}

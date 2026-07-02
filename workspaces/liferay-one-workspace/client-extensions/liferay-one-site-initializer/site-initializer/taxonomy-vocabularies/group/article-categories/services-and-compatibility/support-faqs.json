@@ -1,0 +1,18 @@
+{
+	"description": "Support FAQs",
+	"description_i18n": {
+		"en_US": "Support FAQs",
+		"es_ES": "Preguntas más frecuentes sobre soporte",
+		"ja_JP": "サポートFAQ",
+		"pt_BR": "Perguntas Frequentes sobre Suporte"
+	},
+	"externalReferenceCode": "T_AC_SUPPORT_FAQS",
+	"name": "Support FAQs",
+	"name_i18n": {
+		"en_US": "Support FAQs",
+		"es_ES": "Preguntas más frecuentes sobre soporte",
+		"ja_JP": "サポートFAQ",
+		"pt_BR": "Perguntas Frequentes sobre Suporte"
+	},
+	"viewableBy": "Anyone"
+}

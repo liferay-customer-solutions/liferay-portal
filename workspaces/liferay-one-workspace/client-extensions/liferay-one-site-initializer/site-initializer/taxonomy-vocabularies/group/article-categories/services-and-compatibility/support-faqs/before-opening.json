@@ -1,0 +1,18 @@
+{
+	"description": "Before Opening",
+	"description_i18n": {
+		"en_US": "Before Opening",
+		"es_ES": "Antes de abrir",
+		"ja_JP": "チケットの作成前に",
+		"pt_BR": "Antes de Abrir"
+	},
+	"externalReferenceCode": "T_AC_BEFORE_OPENING",
+	"name": "Before Opening",
+	"name_i18n": {
+		"en_US": "Before Opening",
+		"es_ES": "Antes de abrir",
+		"ja_JP": "チケットの作成前に",
+		"pt_BR": "Antes de Abrir"
+	},
+	"viewableBy": "Anyone"
+}

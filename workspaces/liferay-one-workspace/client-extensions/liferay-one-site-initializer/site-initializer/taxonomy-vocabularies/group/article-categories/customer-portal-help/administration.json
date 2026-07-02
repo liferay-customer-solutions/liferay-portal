@@ -1,0 +1,18 @@
+{
+	"description": "Administration",
+	"description_i18n": {
+		"en_US": "Administration",
+		"es_ES": "Administración",
+		"ja_JP": "管理部門",
+		"pt_BR": "Administração"
+	},
+	"externalReferenceCode": "T_AC_ADMINISTRATION",
+	"name": "Administration",
+	"name_i18n": {
+		"en_US": "Administration",
+		"es_ES": "Administración",
+		"ja_JP": "管理部門",
+		"pt_BR": "Administração"
+	},
+	"viewableBy": "Anyone"
+}

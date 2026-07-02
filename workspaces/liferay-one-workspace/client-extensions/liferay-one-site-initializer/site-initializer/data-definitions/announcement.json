@@ -6,7 +6,8 @@
 	"dataDefinitionFields": [
 		{
 			"customProperties": {
-				"dataType": "string"
+				"dataType": "string",
+				"fieldReference": "content"
 			},
 			"defaultValue": {
 				"en_US": ""
@@ -18,6 +19,114 @@
 			},
 			"localizable": true,
 			"name": "content",
+			"readOnly": false,
+			"repeatable": false,
+			"required": false,
+			"showLabel": true,
+			"tip": {
+				"en_US": ""
+			}
+		},
+		{
+			"customProperties": {
+				"fieldReference": "button",
+				"rows": [
+					{
+						"columns": [
+							{
+								"fields": [
+									"buttonText"
+								],
+								"size": 12
+							}
+						]
+					},
+					{
+						"columns": [
+							{
+								"fields": [
+									"buttonURL"
+								],
+								"size": 12
+							}
+						]
+					}
+				]
+			},
+			"fieldType": "fieldset",
+			"label": {
+				"en_US": "Button"
+			},
+			"localizable": false,
+			"name": "button",
+			"nestedDataDefinitionFields": [
+				{
+					"customProperties": {
+						"dataType": "string",
+						"fieldReference": "buttonText"
+					},
+					"defaultValue": {
+						"en_US": ""
+					},
+					"fieldType": "text",
+					"indexType": "keyword",
+					"label": {
+						"en_US": "Button Text"
+					},
+					"localizable": true,
+					"name": "buttonText",
+					"readOnly": false,
+					"repeatable": false,
+					"required": false,
+					"showLabel": true,
+					"tip": {
+						"en_US": ""
+					}
+				},
+				{
+					"customProperties": {
+						"dataType": "string",
+						"fieldReference": "buttonURL"
+					},
+					"defaultValue": {
+						"en_US": ""
+					},
+					"fieldType": "text",
+					"indexType": "keyword",
+					"label": {
+						"en_US": "Button URL"
+					},
+					"localizable": true,
+					"name": "buttonURL",
+					"readOnly": false,
+					"repeatable": false,
+					"required": false,
+					"showLabel": true,
+					"tip": {
+						"en_US": ""
+					}
+				}
+			],
+			"readOnly": false,
+			"repeatable": false,
+			"required": false,
+			"showLabel": true
+		},
+		{
+			"customProperties": {
+				"dataType": "string",
+				"fieldReference": "category"
+			},
+			"defaultValue": {
+				"en_US": ""
+			},
+			"fieldType": "text",
+			"indexType": "keyword",
+			"label": {
+				"en_US": "Category"
+			},
+			"localizable": false,
+			"name": "category",
 			"readOnly": false,
 			"repeatable": false,
 			"required": false,
@@ -38,6 +147,26 @@
 								"columnSize": 12,
 								"fieldNames": [
 									"content"
+								]
+							}
+						]
+					},
+					{
+						"dataLayoutColumns": [
+							{
+								"columnSize": 12,
+								"fieldNames": [
+									"button"
+								]
+							}
+						]
+					},
+					{
+						"dataLayoutColumns": [
+							{
+								"columnSize": 12,
+								"fieldNames": [
+									"category"
 								]
 							}
 						]
