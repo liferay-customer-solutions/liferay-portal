@@ -25,6 +25,9 @@ const routers: Record<string, React.LazyExoticComponent<RouterComponent>> = {
 		() => import('~/pages/AccountSelector/AccountSelectorRouter')
 	),
 	'admin': React.lazy(() => import('~/pages/Admin/AdminRouter')),
+	'become-a-publisher': React.lazy(
+		() => import('~/pages/BecomeAPublisher/BecomeAPublisherRouter')
+	),
 	'business-events': React.lazy(
 		() => import('~/pages/BusinessEvents/BusinessEventsRouter')
 	),
@@ -34,9 +37,6 @@ const routers: Record<string, React.LazyExoticComponent<RouterComponent>> = {
 	),
 	'publisher-dashboard': React.lazy(
 		() => import('~/pages/PublisherDashboard/PublisherDashboardRouter')
-	),
-	'become-a-publisher': React.lazy(
-		() => import('~/pages/BecomeAPublisher/BecomeAPublisherRouter')
 	),
 	'ticket-attachments': React.lazy(
 		() => import('~/pages/TicketAttachments/TicketAttachmentsRouter')

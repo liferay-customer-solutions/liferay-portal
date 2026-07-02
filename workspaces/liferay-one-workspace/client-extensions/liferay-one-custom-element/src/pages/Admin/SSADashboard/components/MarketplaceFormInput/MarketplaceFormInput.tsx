@@ -7,7 +7,7 @@ import {ClayInput} from '@clayui/form';
 import classNames from 'classnames';
 import {InputHTMLAttributes} from 'react';
 
-interface MarketplaceFormInputProps
+interface IMarketplaceFormInputProps
 	extends InputHTMLAttributes<HTMLInputElement> {
 	component?: 'input' | 'textarea';
 	name: string;
@@ -16,7 +16,7 @@ interface MarketplaceFormInputProps
 export function MarketplaceFormInput({
 	component,
 	...props
-}: MarketplaceFormInputProps) {
+}: IMarketplaceFormInputProps) {
 	const maxLength = props.maxLength;
 
 	return (

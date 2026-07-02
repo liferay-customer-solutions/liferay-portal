@@ -13,6 +13,8 @@ export default {
 		'A request will be sent to deactivate the selected activation key. From now on, it will be hidden and no longer visible.',
 	'a-sleek-and-intuitive-admin-dashboard-for-monitoring-key-metrics':
 		'A sleek and intuitive admin dashboard for monitoring key metrics.',
+	'ability-to-publish-dxp-and-cloud-free-or-charged':
+		'Ability to publish DXP and Cloud - Free or Charged',
 	'access-required': 'Access required.',
 	'account': 'Account',
 	'account-details': 'Account Details',
@@ -345,6 +347,7 @@ export default {
 	'enter-app-description': 'Enter app description',
 	'enter-domain-here': 'Enter domain here',
 	'enter-email-address': 'Enter email address',
+	'enter-ext': 'Enter +ext',
 	'enter-first-name': 'Enter first name',
 	'enter-last-name': 'Enter last name',
 	'enter-the-name-and-a-brief-description-of-the-app-you-would-like-to-submit':
@@ -945,6 +948,7 @@ export default {
 	'select-the-option': 'Select the Option',
 	'select-the-versions-of-liferay-that-your-app-is-compatible-with':
 		'Select the versions of Liferay that your app is compatible with.',
+	'select-your-desired-publisher-type': 'Select your desired publisher type',
 	'selected-project': 'Selected Project',
 	'self-managed': 'Self-Managed',
 	'send-request': 'Send Request',
@@ -968,6 +972,8 @@ export default {
 	'solution-type': 'Solution Type',
 	'solution-x-submitted': 'Solution <b>{0}</b> submitted.',
 	'solutions': 'Solutions',
+	'solutions-built-on-liferay-requires-existing-liferay-partnership':
+		'Solutions built on Liferay, requires existing Liferay Partnership',
 	'solutions-info': 'Solutions Info',
 	'something-went-wrong': 'Something went wrong.',
 	'sorry-there-are-no-results-found': 'Sorry, there are no results found.',

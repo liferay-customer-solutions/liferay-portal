@@ -5,18 +5,18 @@
 
 import ClayButton from '@clayui/button';
 import {useNavigate} from 'react-router-dom';
-
-import cash from '../../assets/images/cash.svg';
-import cloudUpload from '../../assets/images/cloud_upload.svg';
-import {GateCard} from '../../components/Card/GateCard';
-import {Header} from '../../components/Header/Header';
 import i18n from '~/i18n';
 import {Liferay} from '~/services/liferay/liferay';
 import {getSiteURL} from '~/utils/siteUtils';
 
-import './BecomeAPublisherPage.scss';
+import cash from '../../assets/images/cash.svg';
+import cloudUpload from '../../assets/images/cloud_upload.svg';
+import {GateCard} from '../../components/GateCard/GateCard';
+import {Header} from '../../components/Header/Header';
 
-export function BecomeAPublisherPage() {
+import './BecomeAPublisher.css';
+
+export function BecomeAPublisher() {
 	const navigate = useNavigate();
 
 	return (
@@ -59,7 +59,7 @@ export function BecomeAPublisherPage() {
 
 			<div className="become-a-publisher-page-button-container">
 				<ClayButton
-					className="mr-4 become-a-publisher-page-button"
+					className="become-a-publisher-page-button mr-4"
 					displayType="secondary"
 					onClick={() => {
 						Liferay.Util.navigate(

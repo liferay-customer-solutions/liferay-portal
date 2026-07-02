@@ -7,7 +7,7 @@ import ClayIcon from '@clayui/icon';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import {LabelHTMLAttributes} from 'react';
 
-interface MarketplaceFormLabelProps
+interface IMarketplaceFormLabelProps
 	extends LabelHTMLAttributes<HTMLLabelElement> {
 	info?: string;
 	required?: boolean;
@@ -17,7 +17,7 @@ export function MarketplaceFormLabel({
 	info,
 	required,
 	...props
-}: MarketplaceFormLabelProps) {
+}: IMarketplaceFormLabelProps) {
 	return (
 		<>
 			<label {...props} />

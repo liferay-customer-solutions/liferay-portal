@@ -4,20 +4,20 @@
  */
 
 import ClayButton from '@clayui/button';
-
 import {Header} from '~/components/Header/Header';
 import i18n from '~/i18n';
 import {Liferay} from '~/services/liferay/liferay';
 import {getSiteURL} from '~/utils/siteUtils';
-import {BecomeAPublisherStep} from './BecomeAPublisherSteps';
 
-type BecomeAPublisherSummaryProps = {
+import {RequestAccountStep} from '../RequestAccount';
+
+type RequestAccountSummaryProps = {
 	children: JSX.Element;
-	setStep: React.Dispatch<React.SetStateAction<BecomeAPublisherStep>>;
+	setStep: React.Dispatch<React.SetStateAction<RequestAccountStep>>;
 	submit: () => void;
 };
 
-const BecomeAPublisherSummary: React.FC<BecomeAPublisherSummaryProps> = ({
+const RequestAccountSummary: React.FC<RequestAccountSummaryProps> = ({
 	children,
 	setStep,
 	submit,
@@ -44,6 +44,7 @@ const BecomeAPublisherSummary: React.FC<BecomeAPublisherSummaryProps> = ({
 							<a
 								className="d-inline-block"
 								href="https://www.liferay.com/legal/marketplace-terms-of-service"
+								rel="noopener noreferrer"
 								target="_blank"
 							>
 								<strong>
@@ -54,6 +55,7 @@ const BecomeAPublisherSummary: React.FC<BecomeAPublisherSummaryProps> = ({
 							<a
 								className="d-inline-block"
 								href="https://www.liferay.com/privacy-policy"
+								rel="noopener noreferrer"
 								target="_blank"
 							>
 								<strong>
@@ -72,7 +74,7 @@ const BecomeAPublisherSummary: React.FC<BecomeAPublisherSummaryProps> = ({
 
 				<hr className="mb-5 mt-8" />
 
-				<div className="mb-8 purchased-solutions-button-container">
+				<div className="mb-8">
 					<div className="align-items-center d-flex justify-content-between mb-4 w-100">
 						<ClayButton
 							className="p-3"
@@ -88,7 +90,7 @@ const BecomeAPublisherSummary: React.FC<BecomeAPublisherSummaryProps> = ({
 							<ClayButton
 								className="mr-4"
 								displayType="secondary"
-								onClick={() => setStep(BecomeAPublisherStep.FORM)}
+								onClick={() => setStep(RequestAccountStep.FORM)}
 							>
 								{i18n.translate('back')}
 							</ClayButton>
@@ -104,4 +106,4 @@ const BecomeAPublisherSummary: React.FC<BecomeAPublisherSummaryProps> = ({
 	);
 };
 
-export default BecomeAPublisherSummary;
+export default RequestAccountSummary;

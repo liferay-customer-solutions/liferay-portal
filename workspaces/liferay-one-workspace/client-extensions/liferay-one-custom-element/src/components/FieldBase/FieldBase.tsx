@@ -27,7 +27,7 @@ export function RequiredMask() {
 	);
 }
 
-interface FieldBaseProps {
+interface IFieldBaseProps {
 	children?: ReactNode;
 	className?: string;
 	description?: string;
@@ -63,7 +63,7 @@ export function FieldBase({
 	tooltip,
 	tooltipText,
 	warningMessage,
-}: FieldBaseProps) {
+}: IFieldBaseProps) {
 	return (
 		<ClayForm.Group
 			className={classNames(className, {

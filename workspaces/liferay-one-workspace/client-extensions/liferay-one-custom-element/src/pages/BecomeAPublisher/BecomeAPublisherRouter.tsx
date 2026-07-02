@@ -5,18 +5,15 @@
 
 import {HashRouter, Route, Routes} from 'react-router-dom';
 
-import {BecomeAPublisherPage} from './BecomeAPublisherPage';
-import BecomeAPublisherSteps from './components/BecomeAPublisherSteps';
+import {BecomeAPublisher} from './BecomeAPublisher';
+import RequestAccount from './RequestAccount/RequestAccount';
 
 const BecomeAPublisherRouter = () => (
 	<div className="become-a-publisher-page-container">
 		<HashRouter>
 			<Routes>
-				<Route element={<BecomeAPublisherPage />} index />
-				<Route
-					element={<BecomeAPublisherSteps />}
-					path="request-account"
-				/>
+				<Route element={<BecomeAPublisher />} index />
+				<Route element={<RequestAccount />} path="request-account" />
 			</Routes>
 		</HashRouter>
 	</div>

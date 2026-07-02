@@ -1,0 +1,97 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+.become-a-publisher-page-body {
+	margin-top: 4.5rem;
+	width: 37.5rem;
+}
+
+.become-a-publisher-page-body svg {
+	margin-top: 1px !important;
+}
+
+.become-a-publisher-page-body .border {
+	background: var(--neutral-00, #fff);
+	border: 1px solid var(--neutral-02, #e2e2e4) !important;
+}
+
+.become-a-publisher-page-body .rounded {
+	border-radius: 10px !important;
+}
+
+.become-a-publisher-page-body hr {
+	border: 1px solid var(--neutral-02, #e2e2e4) !important;
+}
+
+.become-a-publisher-page-button {
+	margin-bottom: 1.5rem;
+}
+
+.become-a-publisher-page-button-container {
+	display: flex;
+	justify-content: end;
+	margin-bottom: 7.5rem;
+}
+
+.become-a-publisher-page-button-link {
+	color: #fff;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 24px;
+}
+
+.become-a-publisher-page-container {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 100%;
+}
+
+.become-a-publisher-page-container .text-secondary {
+	color: #54555f !important;
+}
+
+.become-a-publisher-page-container .icon-container {
+	background-color: #e2e2e4;
+	border-radius: 100%;
+	box-sizing: border-box;
+	height: 45px;
+	padding: 12px;
+	width: 45px;
+}
+
+.become-a-publisher-page-container .privacy-text {
+	color: var(--neutral-08, #54555f);
+	font-size: 13px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 16px;
+}
+
+.become-a-publisher-page-container .display-card-description {
+	word-break: normal;
+}
+
+.become-a-publisher-page-divider {
+	margin-bottom: 1.5rem;
+	margin-top: 2rem;
+}
+
+.become-a-publisher-page-icon {
+	color: #0b5fff;
+}
+
+.become-a-publisher-page-link {
+	font-size: 16px;
+}
+
+.become-a-publisher-page-text {
+	margin-bottom: 2rem;
+}
+
+.header-description {
+	color: #54555f;
+}

@@ -1,6 +1,7 @@
 [
 	{
 		"active": true,
+		"conditionExpression": "",
 		"externalReferenceCode": "ONE-PUBLISHER-ACCOUNT-REQUEST-EMAIL",
 		"label": {
 			"en_US": "Publisher Account Request Email Template"

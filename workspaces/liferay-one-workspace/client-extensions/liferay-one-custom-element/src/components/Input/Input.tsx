@@ -9,7 +9,7 @@ import {FieldBase} from '~/components/FieldBase/FieldBase';
 
 import './Input.css';
 
-interface InputProps
+interface IInputProps
 	extends React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
 	component?: 'input' | 'textarea';
 	description?: string;
@@ -27,7 +27,7 @@ interface InputProps
 	value?: string;
 }
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+export const Input = React.forwardRef<HTMLInputElement, IInputProps>(
 	(
 		{
 			className,
