@@ -114,6 +114,17 @@ public class OktaService {
 		return oktaUser;
 	}
 
+	public void deleteApplication(String appId) throws Exception {
+		_oktaPubsubPublisher.publish(
+			new Message(
+				null,
+				new JSONObject(
+				).put(
+					"appId", appId
+				).toString(),
+				"okta-app-delete"));
+	}
+
 	public OktaUser fetchContactByEmailAddress(String emailAddress)
 		throws Exception {
 

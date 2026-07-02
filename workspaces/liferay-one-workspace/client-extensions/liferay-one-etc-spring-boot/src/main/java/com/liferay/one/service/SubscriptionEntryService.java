@@ -70,6 +70,22 @@ public class SubscriptionEntryService extends OneBaseService {
 		return new SubscriptionEntry(new JSONObject(response));
 	}
 
+	public void deleteAccountLicenseKeySubscriptionEntries(
+			long accountId, long userId)
+		throws Exception {
+
+		List<LicenseKey> licenseKeys = _licenseKeyService.getLicenseKeys(
+			StringBundler.concat(
+				"r_accountEntryToLicenseKey_accountEntryId eq '", accountId,
+				"'"));
+
+		for (LicenseKey licenseKey : licenseKeys) {
+			deleteSubscriptionEntry(
+				ClassNameConstants.LICENSE_KEY, licenseKey.getLicenseKeyId(),
+				userId);
+		}
+	}
+
 	public void deleteSubscriptionEntries(long userId) throws Exception {
 		List<SubscriptionEntry> subscriptionEntries = getSubscriptionEntries(
 			"(customUserId eq " + userId + ")");
