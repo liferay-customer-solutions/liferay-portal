@@ -64,6 +64,18 @@ const config = {
 		'@liferay/portal/no-react-dom-render': 'off',
 		'@liferay/portal/no-side-navigation': 'off',
 		'@liferay/portal/unexecuted-ismounted': 'off',
+		'@typescript-eslint/naming-convention': [
+			'error',
+			{
+				filter: {
+					match: false,
+					regex: '^Window$',
+				},
+				format: ['PascalCase'],
+				prefix: ['I'],
+				selector: 'interface',
+			},
+		],
 		'@typescript-eslint/no-explicit-any': 'error',
 		'no-empty': ['error', {allowEmptyCatch: true}],
 		'notice/notice': [
