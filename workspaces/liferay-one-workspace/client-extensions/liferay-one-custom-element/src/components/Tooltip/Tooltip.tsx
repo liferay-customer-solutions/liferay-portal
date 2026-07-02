@@ -10,7 +10,7 @@ import './Tooltip.css';
 
 import ClayIcon from '@clayui/icon';
 
-interface TooltipProps {
+interface ITooltipProps {
 	showTooltipBackground?: boolean;
 	tooltip?: string;
 	tooltipText?: string;
@@ -20,7 +20,7 @@ export function Tooltip({
 	showTooltipBackground = true,
 	tooltip,
 	tooltipText,
-}: TooltipProps) {
+}: ITooltipProps) {
 	return (
 		<ClayTooltipProvider>
 			<div

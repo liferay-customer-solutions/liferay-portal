@@ -5,7 +5,7 @@
 
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import {defineConfig, splitVendorChunkPlugin} from 'vite';
+import {defineConfig} from 'vite';
 
 export default defineConfig({
 	build: {
@@ -51,7 +51,7 @@ export default defineConfig({
 		},
 		exclude: ['@liferay/oauth2-provider-web/client'],
 	},
-	plugins: [react(), splitVendorChunkPlugin()],
+	plugins: [react()],
 	resolve: {
 		alias: {
 			'~': path.resolve(__dirname, './src/'),

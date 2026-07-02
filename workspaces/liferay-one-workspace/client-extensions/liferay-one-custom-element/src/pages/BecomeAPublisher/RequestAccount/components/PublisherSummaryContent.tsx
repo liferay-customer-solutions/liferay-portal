@@ -7,21 +7,20 @@ import ClayIcon from '@clayui/icon';
 import ClayLabel from '@clayui/label';
 import {Status} from '@clayui/modal/lib/types';
 import classNames from 'classnames';
-
 import i18n from '~/i18n';
+
 import type {PublisherRequestInfo} from '~/types/publisher';
 
 type DisplayCardInfoProps = {
 	className?: string;
 	icon: string;
-	iconAlign?: any;
-	info: any;
+	info: React.ReactNode;
 	title: string;
 };
 
 type PublisherSummaryContentProps = {
 	title?: string;
-	userInfo?: PublisherRequestInfo;
+	userInfo?: Partial<PublisherRequestInfo>;
 };
 
 const STATUS = {
@@ -39,8 +38,8 @@ const DisplayCardInfo: React.FC<DisplayCardInfoProps> = ({
 }) => (
 	<div
 		className={classNames('d-flex ', className, {
-			'align-items-center': info?.length < 60,
-			'align-items-start': info?.length >= 60,
+			'align-items-center': typeof info === 'string' && info.length < 60,
+			'align-items-start': typeof info === 'string' && info.length >= 60,
 		})}
 	>
 		<span className="align-items-center d-flex icon-container justify-content-center mr-4">
@@ -121,7 +120,11 @@ const PublisherSummaryContent: React.FC<PublisherSummaryContentProps> = ({
 				<DisplayCardInfo
 					className="mb-5"
 					icon="order-form-tag"
-					info={<small>{userInfo?.publisherType?.join(', ') ?? ''}</small>}
+					info={
+						<small>
+							{userInfo?.publisherType?.join(', ') ?? ''}
+						</small>
+					}
 					title={i18n.translate('publisher-type')}
 				/>
 			</div>

@@ -7,33 +7,28 @@ import ClayButton from '@clayui/button';
 import DropDown from '@clayui/drop-down';
 import ClayForm, {ClayCheckbox} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
-import {Fragment, useState, useEffect} from 'react';
 import {UseFormReturn} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
-
-import {Header} from '~/components/Header/Header';
 import FormInput from '~/components/FormInput/FormInput';
+import {Header} from '~/components/Header/Header';
 import {Tooltip} from '~/components/Tooltip/Tooltip';
 import i18n from '~/i18n';
 import {Liferay} from '~/services/liferay/liferay';
-import {phones} from '~/utils/phones';
+import phones from '~/utils/phones';
 import {getSiteURL} from '~/utils/siteUtils';
-import {PublisherForm, BecomeAPublisherStep} from './BecomeAPublisherSteps';
+
+import {PUBLISHER_TYPE_TOOLTIPS, getPublisherTypeEntries} from '../../utils';
+import {PublisherForm, RequestAccountStep} from '../RequestAccount';
+
 import type {ListTypeDefinition} from '~/types/listTypeDefinition';
 
-type BecomeAPublisherFormProps = {
-	form: UseFormReturn<PublisherForm, any>;
+type RequestAccountFormProps = {
+	form: UseFormReturn<PublisherForm>;
 	listTypeDefinition?: ListTypeDefinition;
-	setStep: React.Dispatch<React.SetStateAction<BecomeAPublisherStep>>;
+	setStep: React.Dispatch<React.SetStateAction<RequestAccountStep>>;
 };
 
-const tooltipText = {
-	appPublisher: 'Ability to publish DXP and Cloud - Free or Charged',
-	solutionPublisher:
-		'Solutions built on Liferay, requires existing Liferay Partnership',
-};
-
-const BecomeAPublisherForm: React.FC<BecomeAPublisherFormProps> = ({
+const RequestAccountForm: React.FC<RequestAccountFormProps> = ({
 	form,
 	listTypeDefinition,
 	setStep,
@@ -42,24 +37,14 @@ const BecomeAPublisherForm: React.FC<BecomeAPublisherFormProps> = ({
 	const publisherType = form.watch('publisherType') || [];
 	const navigate = useNavigate();
 
-	const listTypeEntries =
-		listTypeDefinition?.listTypeEntries &&
-		listTypeDefinition.listTypeEntries.length > 0
-			? listTypeDefinition.listTypeEntries
-			: [
-					{
-						key: 'appPublisher',
-						name: i18n.translate('app-publisher'),
-					},
-					{
-						key: 'solutionPublisher',
-						name: i18n.translate('solution-publisher'),
-					},
-			  ];
+	const listTypeEntries = getPublisherTypeEntries(listTypeDefinition);
 
 	const inputProps = {
 		errors: form.formState.errors,
-		register: form.register as any,
+		register: form.register as (
+			name: string,
+			options?: Record<string, unknown>
+		) => Record<string, unknown> | void,
 		required: true,
 	};
 
@@ -112,7 +97,7 @@ const BecomeAPublisherForm: React.FC<BecomeAPublisherFormProps> = ({
 							{i18n.translate('phone')}
 						</label>
 
-						<div className="d-flex justify-content-between purchased-solutions-phone">
+						<div className="d-flex justify-content-between">
 							<div className="col-3 p-0">
 								<DropDown
 									closeOnClick
@@ -121,34 +106,35 @@ const BecomeAPublisherForm: React.FC<BecomeAPublisherFormProps> = ({
 										<div className="align-items-center custom-input custom-select d-flex form-control p-2 rounded-xs">
 											<ClayIcon
 												className="mr-2"
-												symbol={
-													(phone?.flag || 'en-us') as string
-												}
+												symbol={phone?.flag || 'en-us'}
 											/>
 
 											{phone?.code || '+1'}
 										</div>
 									}
 								>
-									<DropDown.ItemList items={phones as any}>
+									<DropDown.ItemList items={[...phones]}>
 										{(item) => {
-											const phoneItem = item as any;
+											const phoneOption =
+												item as (typeof phones)[number];
 
 											return (
 												<DropDown.Item
 													onClick={() => {
 														form.setValue('phone', {
-															code: phoneItem.code,
-															flag: phoneItem.flag,
+															code: phoneOption.code,
+															flag: phoneOption.flag,
 														});
 													}}
 												>
 													<ClayIcon
 														className="mr-2"
-														symbol={phoneItem.flag}
+														symbol={
+															phoneOption.flag
+														}
 													/>
 
-													{phoneItem.code}
+													{phoneOption.code}
 												</DropDown.Item>
 											);
 										}}
@@ -180,7 +166,7 @@ const BecomeAPublisherForm: React.FC<BecomeAPublisherFormProps> = ({
 										'extension-optional'
 									)}
 									name="extension"
-									placeholder="Enter +ext"
+									placeholder={i18n.translate('enter-ext')}
 								/>
 							</div>
 						</div>
@@ -188,40 +174,37 @@ const BecomeAPublisherForm: React.FC<BecomeAPublisherFormProps> = ({
 
 					<ClayForm.Group>
 						<label className="mb-4">
-							Select your desired publisher type
+							{i18n.translate(
+								'select-your-desired-publisher-type'
+							)}
 						</label>
 
 						{listTypeEntries.map((listTypeEntry, index) => (
-							<Fragment key={index}>
+							<div
+								className="align-items-center d-flex w-25"
+								key={index}
+							>
 								<ClayCheckbox
 									aria-label={listTypeEntry.name}
-									checked={publisherType.includes(listTypeEntry.key)}
-									key={index}
-									label={
-										(
-											<div className="d-flex justify-content-between w-25">
-												{listTypeEntry.name}
-												{(tooltipText as any)[
-													listTypeEntry.key
-												] && (
-													<Tooltip
-														showTooltipBackground={
-															false
-														}
-														tooltip={
-															(
-																tooltipText as any
-															)[listTypeEntry.key]
-														}
-													/>
-												)}
-											</div>
-										) as any
-									}
+									checked={publisherType.includes(
+										listTypeEntry.key
+									)}
+									label={listTypeEntry.name}
 									value={listTypeEntry.key}
 									{...form.register('publisherType')}
 								/>
-							</Fragment>
+
+								{PUBLISHER_TYPE_TOOLTIPS[listTypeEntry.key] && (
+									<Tooltip
+										showTooltipBackground={false}
+										tooltip={
+											PUBLISHER_TYPE_TOOLTIPS[
+												listTypeEntry.key
+											]
+										}
+									/>
+								)}
+							</div>
 						))}
 					</ClayForm.Group>
 
@@ -257,7 +240,7 @@ const BecomeAPublisherForm: React.FC<BecomeAPublisherFormProps> = ({
 
 				<hr className="mb-5 mt-8" />
 
-				<div className="mb-8 purchased-solutions-button-container">
+				<div className="mb-8">
 					<div className="align-items-center d-flex justify-content-between mb-4 w-100">
 						<ClayButton
 							className="p-3"
@@ -281,7 +264,7 @@ const BecomeAPublisherForm: React.FC<BecomeAPublisherFormProps> = ({
 							<ClayButton
 								disabled={!form.formState.isValid}
 								onClick={() =>
-									setStep(BecomeAPublisherStep.SUMMARY)
+									setStep(RequestAccountStep.SUMMARY)
 								}
 							>
 								{i18n.translate('continue')}
@@ -294,4 +277,4 @@ const BecomeAPublisherForm: React.FC<BecomeAPublisherFormProps> = ({
 	);
 };
 
-export default BecomeAPublisherForm;
+export default RequestAccountForm;

@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import React from 'react';
 import {CSSTransition} from 'react-transition-group';
 
-interface FilterNavigationItem {
+interface IFilterNavigationItem {
 	child?: React.ReactNode;
 	className?: string;
 	disabled?: boolean;
@@ -23,7 +23,7 @@ interface IProps {
 	active: boolean;
 	direction: 'prev' | 'next';
 	header?: string;
-	items?: FilterNavigationItem[];
+	items?: IFilterNavigationItem[];
 	onBack: () => void;
 	onForward: (title: string, child: React.ReactNode) => void;
 }

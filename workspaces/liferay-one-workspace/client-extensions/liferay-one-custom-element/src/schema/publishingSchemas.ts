@@ -46,10 +46,16 @@ export const publishingSchemas = {
 		}),
 	},
 	becomePublisherForm: z.object({
-		emailAddress: z.string().email('Please fill in valid email'),
+		emailAddress: z
+			.string()
+			.email(i18n.translate('please-fill-in-a-valid-email')),
 		extension: z.string().optional(),
-		firstName: z.string().min(3, 'First name is required'),
-		lastName: z.string().min(3, 'Last name is required'),
+		firstName: z
+			.string()
+			.min(1, {message: i18n.translate('this-field-is-required')}),
+		lastName: z
+			.string()
+			.min(1, {message: i18n.translate('this-field-is-required')}),
 		phone: z
 			.object({
 				code: z.string(),
@@ -62,7 +68,7 @@ export const publishingSchemas = {
 		publisherType: z.array(z.string()).min(1),
 		requestDescription: z
 			.string()
-			.min(3, {message: 'Request Description is required'}),
+			.min(1, {message: i18n.translate('this-field-is-required')}),
 	}),
 	solutionPublishing: {
 		company: z

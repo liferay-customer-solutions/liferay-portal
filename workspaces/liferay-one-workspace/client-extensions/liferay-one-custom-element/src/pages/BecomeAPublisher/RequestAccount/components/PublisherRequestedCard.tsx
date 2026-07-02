@@ -6,18 +6,17 @@
 import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import ClayLink from '@clayui/link';
-
 import createdProjectIcon from '~/assets/images/add_user.svg';
 import i18n from '~/i18n';
 import {Liferay} from '~/services/liferay/liferay';
 import {getSiteURL} from '~/utils/siteUtils';
 
 const PublisherRequestedCard = () => (
-	<div className="d-flex flex-column pb-8 become-a-publisher-page-body">
+	<div className="become-a-publisher-page-body d-flex flex-column pb-8">
 		<div className="border mt-8 p-8 rounded">
 			<div className="d-flex justify-content-center mb-6">
 				<img
-					alt="project icon"
+					alt={i18n.translate('publisher-account-request')}
 					className="gate-card-image"
 					src={createdProjectIcon}
 				/>
@@ -26,9 +25,7 @@ const PublisherRequestedCard = () => (
 			<div className="d-flex justify-content-center mb-2 mt-5 text-center">
 				<h1 className="col-10">
 					{i18n.translate('thank-you-for-your')}&nbsp;
-					<span className="created-project-cart-title">
-						{i18n.translate('publisher-account-request')}
-					</span>
+					<span>{i18n.translate('publisher-account-request')}</span>
 				</h1>
 			</div>
 
@@ -42,7 +39,7 @@ const PublisherRequestedCard = () => (
 						<span>
 							<ClayLink
 								className="text-weight-bold"
-								href="mailto: marketplace-admin@liferay.com"
+								href="mailto:marketplace-admin@liferay.com"
 							>
 								marketplace-admin@liferay.com
 							</ClayLink>
@@ -51,7 +48,7 @@ const PublisherRequestedCard = () => (
 				</div>
 			</div>
 
-			<div className="d-flex justify-content-center mt-6 purchased-solutions-button-container">
+			<div className="d-flex justify-content-center mt-6">
 				<ClayButton
 					className="py-3"
 					onClick={() => {
