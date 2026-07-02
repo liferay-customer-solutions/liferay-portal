@@ -1,0 +1,18 @@
+{
+	"description": "Admin",
+	"description_i18n": {
+		"en_US": "Admin",
+		"es_ES": "Administración",
+		"ja_JP": "管理者",
+		"pt_BR": "Administração"
+	},
+	"externalReferenceCode": "T_AC_ADMIN",
+	"name": "Admin",
+	"name_i18n": {
+		"en_US": "Admin",
+		"es_ES": "Administración",
+		"ja_JP": "管理者",
+		"pt_BR": "Administração"
+	},
+	"viewableBy": "Anyone"
+}

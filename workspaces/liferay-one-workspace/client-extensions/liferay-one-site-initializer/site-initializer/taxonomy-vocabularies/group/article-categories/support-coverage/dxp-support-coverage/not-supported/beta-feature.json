@@ -1,0 +1,18 @@
+{
+	"description": "Beta Feature",
+	"description_i18n": {
+		"en_US": "Beta Feature",
+		"es_ES": "Funcionalidades beta",
+		"ja_JP": "ベータ版機能",
+		"pt_BR": "Recursos Beta"
+	},
+	"externalReferenceCode": "T_AC_BETA_FEATURE",
+	"name": "Beta Feature",
+	"name_i18n": {
+		"en_US": "Beta Feature",
+		"es_ES": "Funcionalidades beta",
+		"ja_JP": "ベータ版機能",
+		"pt_BR": "Recursos Beta"
+	},
+	"viewableBy": "Anyone"
+}

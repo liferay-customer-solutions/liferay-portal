@@ -1,0 +1,18 @@
+{
+	"description": "Service Levels",
+	"description_i18n": {
+		"en_US": "Service Levels",
+		"es_ES": "Niveles de servicio",
+		"ja_JP": "サービスレベル",
+		"pt_BR": "Níveis de serviço"
+	},
+	"externalReferenceCode": "T_AC_SERVICE_LEVELS",
+	"name": "Service Levels",
+	"name_i18n": {
+		"en_US": "Service Levels",
+		"es_ES": "Niveles de servicio",
+		"ja_JP": "サービスレベル",
+		"pt_BR": "Níveis de serviço"
+	},
+	"viewableBy": "Anyone"
+}

@@ -1,0 +1,18 @@
+{
+	"description": "Databases",
+	"description_i18n": {
+		"en_US": "Databases",
+		"es_ES": "Bases de datos",
+		"ja_JP": "データベース",
+		"pt_BR": "Banco de dados"
+	},
+	"externalReferenceCode": "T_AC_DATABASES",
+	"name": "Databases",
+	"name_i18n": {
+		"en_US": "Databases",
+		"es_ES": "Bases de datos",
+		"ja_JP": "データベース",
+		"pt_BR": "Banco de dados"
+	},
+	"viewableBy": "Anyone"
+}

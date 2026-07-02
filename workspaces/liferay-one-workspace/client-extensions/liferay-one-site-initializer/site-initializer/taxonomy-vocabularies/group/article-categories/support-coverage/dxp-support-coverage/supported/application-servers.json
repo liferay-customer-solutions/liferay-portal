@@ -1,0 +1,18 @@
+{
+	"description": "Application Servers",
+	"description_i18n": {
+		"en_US": "Application Servers",
+		"es_ES": "Servidores de aplicaciones",
+		"ja_JP": "アプリケーション・サーバー",
+		"pt_BR": "Servidores de aplicação"
+	},
+	"externalReferenceCode": "T_AC_APPLICATION_SERVERS",
+	"name": "Application Servers",
+	"name_i18n": {
+		"en_US": "Application Servers",
+		"es_ES": "Servidores de aplicaciones",
+		"ja_JP": "アプリケーション・サーバー",
+		"pt_BR": "Servidores de aplicação"
+	},
+	"viewableBy": "Anyone"
+}

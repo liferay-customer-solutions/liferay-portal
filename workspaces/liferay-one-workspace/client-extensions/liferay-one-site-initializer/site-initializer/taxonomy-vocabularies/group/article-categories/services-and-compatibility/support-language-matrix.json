@@ -1,0 +1,18 @@
+{
+	"description": "Support Language Matrix",
+	"description_i18n": {
+		"en_US": "Support Language Matrix",
+		"es_ES": "Matriz de soporte de idiomas",
+		"ja_JP": "サポート言語のマトリクス",
+		"pt_BR": "Matriz de Idiomas de Suporte"
+	},
+	"externalReferenceCode": "T_AC_SUPPORT_LANGUAGE_MATRIX",
+	"name": "Support Language Matrix",
+	"name_i18n": {
+		"en_US": "Support Language Matrix",
+		"es_ES": "Matriz de soporte de idiomas",
+		"ja_JP": "サポート言語のマトリクス",
+		"pt_BR": "Matriz de Idiomas de Suporte"
+	},
+	"viewableBy": "Anyone"
+}

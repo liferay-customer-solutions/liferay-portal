@@ -1,0 +1,18 @@
+{
+	"description": "Liferay Cloud Platform",
+	"description_i18n": {
+		"en_US": "Liferay Cloud Platform",
+		"es_ES": "Plataforma de Liferay Cloud",
+		"ja_JP": "Liferay Cloud Platform",
+		"pt_BR": "Plataforma Liferay Cloud"
+	},
+	"externalReferenceCode": "T_AC_LIFERAY_CLOUD_PLATFORM",
+	"name": "Liferay Cloud Platform",
+	"name_i18n": {
+		"en_US": "Liferay Cloud Platform",
+		"es_ES": "Plataforma de Liferay Cloud",
+		"ja_JP": "Liferay Cloud Platform",
+		"pt_BR": "Plataforma Liferay Cloud"
+	},
+	"viewableBy": "Anyone"
+}

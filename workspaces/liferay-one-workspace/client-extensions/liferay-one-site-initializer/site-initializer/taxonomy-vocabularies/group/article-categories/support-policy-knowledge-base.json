@@ -1,0 +1,18 @@
+{
+	"description": "Support Policy Knowledge Base",
+	"description_i18n": {
+		"en_US": "Support Policy Knowledge Base",
+		"es_ES": "Base de conocimiento de la política de soporte",
+		"ja_JP": "サポートポリシー ナレッジベース",
+		"pt_BR": "Base de Conhecimento da Política de Suporte"
+	},
+	"externalReferenceCode": "T_AC_SUPPORT_POLICY_KNOWLEDGE_BASE",
+	"name": "Support Policy Knowledge Base",
+	"name_i18n": {
+		"en_US": "Support Policy Knowledge Base",
+		"es_ES": "Base de conocimiento de la política de soporte",
+		"ja_JP": "サポートポリシー ナレッジベース",
+		"pt_BR": "Base de Conhecimento da Política de Suporte"
+	},
+	"viewableBy": "Anyone"
+}

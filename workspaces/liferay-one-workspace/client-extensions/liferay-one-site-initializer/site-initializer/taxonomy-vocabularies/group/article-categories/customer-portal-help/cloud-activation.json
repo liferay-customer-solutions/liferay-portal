@@ -1,0 +1,18 @@
+{
+	"description": "Cloud Activation",
+	"description_i18n": {
+		"en_US": "Cloud Activation",
+		"es_ES": "Activación de Cloud",
+		"ja_JP": "クラウドアクティベーション",
+		"pt_BR": "Ativação de Cloud"
+	},
+	"externalReferenceCode": "T_AC_CLOUD_ACTIVATION",
+	"name": "Cloud Activation",
+	"name_i18n": {
+		"en_US": "Cloud Activation",
+		"es_ES": "Activación de Cloud",
+		"ja_JP": "クラウドアクティベーション",
+		"pt_BR": "Ativação de Cloud"
+	},
+	"viewableBy": "Anyone"
+}

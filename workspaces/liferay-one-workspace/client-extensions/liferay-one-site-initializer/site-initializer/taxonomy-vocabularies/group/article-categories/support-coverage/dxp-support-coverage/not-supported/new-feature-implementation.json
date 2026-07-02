@@ -1,0 +1,18 @@
+{
+	"description": "New Feature Implementation",
+	"description_i18n": {
+		"en_US": "New Feature Implementation",
+		"es_ES": "Implementación de nuevas funcionalidades",
+		"ja_JP": "新機能の実装",
+		"pt_BR": "Implementação de Nova Funcionalidade"
+	},
+	"externalReferenceCode": "T_AC_NEW_FEATURE_IMPLEMENTATION",
+	"name": "New Feature Implementation",
+	"name_i18n": {
+		"en_US": "New Feature Implementation",
+		"es_ES": "Implementación de nuevas funcionalidades",
+		"ja_JP": "新機能の実装",
+		"pt_BR": "Implementação de Nova Funcionalidade"
+	},
+	"viewableBy": "Anyone"
+}

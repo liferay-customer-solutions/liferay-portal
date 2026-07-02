@@ -1,0 +1,18 @@
+{
+	"description": "Platform Changelog",
+	"description_i18n": {
+		"en_US": "Platform Changelog",
+		"es_ES": "Registro de cambios en la plataforma",
+		"ja_JP": "プラットフォームチェンジログ",
+		"pt_BR": "Registro de Alterações da Plataforma"
+	},
+	"externalReferenceCode": "T_AC_PLATFORM_CHANGELOG",
+	"name": "Platform Changelog",
+	"name_i18n": {
+		"en_US": "Platform Changelog",
+		"es_ES": "Registro de cambios en la plataforma",
+		"ja_JP": "プラットフォームチェンジログ",
+		"pt_BR": "Registro de Alterações da Plataforma"
+	},
+	"viewableBy": "Anyone"
+}

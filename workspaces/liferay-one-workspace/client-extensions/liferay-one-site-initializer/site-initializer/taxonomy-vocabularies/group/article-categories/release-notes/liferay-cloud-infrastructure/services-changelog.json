@@ -1,0 +1,18 @@
+{
+	"description": "Services Changelog",
+	"description_i18n": {
+		"en_US": "Services Changelog",
+		"es_ES": "Registro de cambios en los servicios",
+		"ja_JP": "サービスチェンジログ",
+		"pt_BR": "Registro de Alterações dos Serviços"
+	},
+	"externalReferenceCode": "T_AC_SERVICES_CHANGELOG",
+	"name": "Services Changelog",
+	"name_i18n": {
+		"en_US": "Services Changelog",
+		"es_ES": "Registro de cambios en los servicios",
+		"ja_JP": "サービスチェンジログ",
+		"pt_BR": "Registro de Alterações dos Serviços"
+	},
+	"viewableBy": "Anyone"
+}

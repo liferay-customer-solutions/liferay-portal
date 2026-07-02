@@ -1,0 +1,18 @@
+{
+	"description": "Usage",
+	"description_i18n": {
+		"en_US": "Usage",
+		"es_ES": "Uso",
+		"ja_JP": "使用方法",
+		"pt_BR": "Uso"
+	},
+	"externalReferenceCode": "T_AC_USAGE",
+	"name": "Usage",
+	"name_i18n": {
+		"en_US": "Usage",
+		"es_ES": "Uso",
+		"ja_JP": "使用方法",
+		"pt_BR": "Uso"
+	},
+	"viewableBy": "Anyone"
+}

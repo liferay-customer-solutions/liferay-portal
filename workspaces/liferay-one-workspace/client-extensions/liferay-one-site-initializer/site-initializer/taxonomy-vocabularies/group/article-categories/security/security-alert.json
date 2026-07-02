@@ -1,0 +1,18 @@
+{
+	"description": "Security Alert",
+	"description_i18n": {
+		"en_US": "Security Alert",
+		"es_ES": "Alerta de seguridad",
+		"ja_JP": "セキュリティアラート",
+		"pt_BR": "Alerta de Segurança"
+	},
+	"externalReferenceCode": "T_AC_SECURITY_ALERT",
+	"name": "Security Alert",
+	"name_i18n": {
+		"en_US": "Security Alert",
+		"es_ES": "Alerta de seguridad",
+		"ja_JP": "セキュリティアラート",
+		"pt_BR": "Alerta de Segurança"
+	},
+	"viewableBy": "Anyone"
+}

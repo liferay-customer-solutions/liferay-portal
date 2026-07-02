@@ -1,0 +1,18 @@
+{
+	"description": "Support Coverage",
+	"description_i18n": {
+		"en_US": "Support Coverage",
+		"es_ES": "Cobertura de soporte",
+		"ja_JP": "サポート範囲",
+		"pt_BR": "Cobertura de suporte"
+	},
+	"externalReferenceCode": "T_AC_SUPPORT_COVERAGE",
+	"name": "Support Coverage",
+	"name_i18n": {
+		"en_US": "Support Coverage",
+		"es_ES": "Cobertura de soporte",
+		"ja_JP": "サポート範囲",
+		"pt_BR": "Cobertura de suporte"
+	},
+	"viewableBy": "Anyone"
+}

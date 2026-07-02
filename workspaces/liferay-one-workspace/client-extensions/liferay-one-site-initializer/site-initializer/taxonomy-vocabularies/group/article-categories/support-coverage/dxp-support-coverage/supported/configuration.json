@@ -1,0 +1,18 @@
+{
+	"description": "Configuration",
+	"description_i18n": {
+		"en_US": "Configuration",
+		"es_ES": "Configuración",
+		"ja_JP": "構成",
+		"pt_BR": "Configuração"
+	},
+	"externalReferenceCode": "T_AC_CONFIGURATION",
+	"name": "Configuration",
+	"name_i18n": {
+		"en_US": "Configuration",
+		"es_ES": "Configuración",
+		"ja_JP": "構成",
+		"pt_BR": "Configuração"
+	},
+	"viewableBy": "Anyone"
+}

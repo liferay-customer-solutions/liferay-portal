@@ -1,0 +1,18 @@
+{
+	"description": "Services and Compatibility",
+	"description_i18n": {
+		"en_US": "Services and Compatibility",
+		"es_ES": "Servicios y compatibilidad",
+		"ja_JP": "サービスと互換性",
+		"pt_BR": "Serviços e Compatibilidade"
+	},
+	"externalReferenceCode": "T_AC_SERVICES_AND_COMPATIBILITY",
+	"name": "Services and Compatibility",
+	"name_i18n": {
+		"en_US": "Services and Compatibility",
+		"es_ES": "Servicios y compatibilidad",
+		"ja_JP": "サービスと互換性",
+		"pt_BR": "Serviços e Compatibilidade"
+	},
+	"viewableBy": "Anyone"
+}

@@ -1,0 +1,18 @@
+{
+	"description": "Operating Systems",
+	"description_i18n": {
+		"en_US": "Operating Systems",
+		"es_ES": "Sistemas operativos",
+		"ja_JP": "オペレーティング・システム",
+		"pt_BR": "Sistemas Operacionais"
+	},
+	"externalReferenceCode": "T_AC_OPERATING_SYSTEMS",
+	"name": "Operating Systems",
+	"name_i18n": {
+		"en_US": "Operating Systems",
+		"es_ES": "Sistemas operativos",
+		"ja_JP": "オペレーティング・システム",
+		"pt_BR": "Sistemas Operacionais"
+	},
+	"viewableBy": "Anyone"
+}

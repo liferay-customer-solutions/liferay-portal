@@ -1,0 +1,18 @@
+{
+	"description": "Search Compatibility",
+	"description_i18n": {
+		"en_US": "Search Compatibility",
+		"es_ES": "Compatibilidad de búsqueda",
+		"ja_JP": "検索互換性",
+		"pt_BR": "Compatibilidade de Pesquisa"
+	},
+	"externalReferenceCode": "T_AC_SEARCH_COMPATIBILITY",
+	"name": "Search Compatibility",
+	"name_i18n": {
+		"en_US": "Search Compatibility",
+		"es_ES": "Compatibilidad de búsqueda",
+		"ja_JP": "検索互換性",
+		"pt_BR": "Compatibilidade de Pesquisa"
+	},
+	"viewableBy": "Anyone"
+}

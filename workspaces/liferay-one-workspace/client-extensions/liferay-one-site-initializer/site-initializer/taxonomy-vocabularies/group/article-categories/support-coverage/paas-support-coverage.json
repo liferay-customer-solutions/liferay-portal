@@ -1,0 +1,18 @@
+{
+	"description": "PaaS Support Coverage",
+	"description_i18n": {
+		"en_US": "PaaS Support Coverage",
+		"es_ES": "Cobertura de soporte PaaS",
+		"ja_JP": "PaaSのサポート範囲",
+		"pt_BR": "Cobertura de Suporte do PaaS"
+	},
+	"externalReferenceCode": "T_AC_PAAS_SUPPORT_COVERAGE",
+	"name": "PaaS Support Coverage",
+	"name_i18n": {
+		"en_US": "PaaS Support Coverage",
+		"es_ES": "Cobertura de soporte PaaS",
+		"ja_JP": "PaaSのサポート範囲",
+		"pt_BR": "Cobertura de Suporte do PaaS"
+	},
+	"viewableBy": "Anyone"
+}
