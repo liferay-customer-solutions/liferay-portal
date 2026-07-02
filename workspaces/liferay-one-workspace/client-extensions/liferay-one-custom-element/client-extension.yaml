@@ -10,9 +10,11 @@ liferay-one-custom-element:
     name: Liferay One
     portletCategoryName: category.client-extensions
     properties:
+        accountExternalReferenceCode: SSA-ACCOUNT
         jira-fls-portal-url: https://liferay.atlassian.net/servicedesk/customer/portal/204
         jira-fls-project: LRFLS
         jira-hc-portal-url: https://liferay.atlassian.net/servicedesk/customer/portal/105
+        productId: 42226
     type: customElement
     urls:
         -   index.*.js
