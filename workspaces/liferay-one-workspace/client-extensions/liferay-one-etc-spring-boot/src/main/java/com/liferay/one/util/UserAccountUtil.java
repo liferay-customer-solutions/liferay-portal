@@ -10,6 +10,7 @@ import com.liferay.headless.admin.user.client.custom.field.CustomValue;
 import com.liferay.headless.admin.user.client.dto.v1_0.AccountBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.RoleBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 
 import java.util.HashSet;
@@ -53,6 +54,28 @@ public class UserAccountUtil {
 		return roleNames;
 	}
 
+	public static boolean hasAccountMembership(UserAccount userAccount) {
+		return ArrayUtil.isNotEmpty(userAccount.getAccountBriefs());
+	}
+
+	public static boolean hasAccountMembership(
+		UserAccount userAccount, long accountId) {
+
+		AccountBrief[] accountBriefs = userAccount.getAccountBriefs();
+
+		if (accountBriefs == null) {
+			return false;
+		}
+
+		for (AccountBrief accountBrief : accountBriefs) {
+			if (Objects.equals(accountBrief.getId(), accountId)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public static boolean hasAccountRole(
 		UserAccount userAccount, long accountId, String[] roleNames) {
 
@@ -62,6 +85,34 @@ public class UserAccountUtil {
 		for (String roleName : roleNames) {
 			if (accountRoleNames.contains(roleName)) {
 				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean hasAccountRole(
+		UserAccount userAccount, String[] roleNames) {
+
+		AccountBrief[] accountBriefs = userAccount.getAccountBriefs();
+
+		if (accountBriefs == null) {
+			return false;
+		}
+
+		for (AccountBrief accountBrief : accountBriefs) {
+			RoleBrief[] roleBriefs = accountBrief.getRoleBriefs();
+
+			if (roleBriefs == null) {
+				continue;
+			}
+
+			for (RoleBrief roleBrief : roleBriefs) {
+				for (String roleName : roleNames) {
+					if (Objects.equals(roleBrief.getName(), roleName)) {
+						return true;
+					}
+				}
 			}
 		}
 

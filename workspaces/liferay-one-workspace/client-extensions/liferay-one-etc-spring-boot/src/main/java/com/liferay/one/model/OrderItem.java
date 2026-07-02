@@ -31,6 +31,7 @@ public class OrderItem {
 
 		_cProductId = GetterUtil.getLong(orderItem.getProductId());
 		_commerceOrderItemId = GetterUtil.getLong(orderItem.getId());
+		_name = _getName(orderItem.getName());
 		_orderId = GetterUtil.getLong(orderItem.getOrderId());
 		_productOptions = _getProductOptions(orderItem.getOptions());
 
@@ -40,6 +41,7 @@ public class OrderItem {
 		_endDate = GetterUtil.getString(customFieldValues.get("endDate"));
 		_sizing = GetterUtil.getInteger(customFieldValues.get("sizing"));
 		_startDate = GetterUtil.getString(customFieldValues.get("startDate"));
+		_status = GetterUtil.getString(customFieldValues.get("customStatus"));
 	}
 
 	public long getCommerceOrderItemId() {
@@ -52,6 +54,10 @@ public class OrderItem {
 
 	public String getEndDate() {
 		return _endDate;
+	}
+
+	public String getName() {
+		return _name;
 	}
 
 	public long getOrderId() {
@@ -68,6 +74,10 @@ public class OrderItem {
 
 	public String getStartDate() {
 		return _startDate;
+	}
+
+	public String getStatus() {
+		return _status;
 	}
 
 	private Map<String, Object> _getCustomFieldValues(
@@ -93,6 +103,14 @@ public class OrderItem {
 		}
 
 		return customFieldValues;
+	}
+
+	private String _getName(Map<String, String> nameMap) {
+		if (nameMap == null) {
+			return null;
+		}
+
+		return nameMap.get("en_US");
 	}
 
 	private String _getOptionValue(JSONObject optionJSONObject) {
@@ -143,9 +161,11 @@ public class OrderItem {
 	private final long _commerceOrderItemId;
 	private final long _cProductId;
 	private final String _endDate;
+	private final String _name;
 	private final long _orderId;
 	private final Map<String, String> _productOptions;
 	private final int _sizing;
 	private final String _startDate;
+	private final String _status;
 
 }

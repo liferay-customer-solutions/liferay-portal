@@ -10,13 +10,17 @@ import com.liferay.headless.admin.user.client.custom.field.CustomValue;
 import com.liferay.headless.admin.user.client.dto.v1_0.Account;
 import com.liferay.headless.admin.user.client.dto.v1_0.AccountBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.AccountContactInformation;
+import com.liferay.headless.admin.user.client.dto.v1_0.AccountRole;
 import com.liferay.headless.admin.user.client.dto.v1_0.EmailAddress;
 import com.liferay.headless.admin.user.client.dto.v1_0.Phone;
 import com.liferay.headless.admin.user.client.dto.v1_0.PostalAddress;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
 import com.liferay.headless.admin.user.client.dto.v1_0.WebUrl;
+import com.liferay.headless.admin.user.client.pagination.Page;
+import com.liferay.headless.admin.user.client.pagination.Pagination;
 import com.liferay.headless.admin.user.client.problem.Problem;
 import com.liferay.headless.admin.user.client.resource.v1_0.AccountResource;
+import com.liferay.headless.admin.user.client.resource.v1_0.AccountRoleResource;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -41,19 +45,6 @@ public class AccountService extends OneBaseService {
 			long accountId, long userId, Long accountRoleId)
 		throws Exception {
 
-		if (accountRoleId != null) {
-			post(
-				getAuthorization(), "",
-				UriComponentsBuilder.fromPath(
-					"/o/headless-admin-user/v1.0/accounts/{accountId}" +
-						"/account-roles/{accountRoleId}/user-accounts/{userId}"
-				).buildAndExpand(
-					accountId, accountRoleId, userId
-				).toUri());
-
-			return;
-		}
-
 		UserAccount userAccount = _userAccountService.getUserAccount(userId);
 
 		post(
@@ -64,6 +55,17 @@ public class AccountService extends OneBaseService {
 			).buildAndExpand(
 				accountId, userAccount.getEmailAddress()
 			).toUri());
+
+		if (accountRoleId != null) {
+			post(
+				getAuthorization(), "",
+				UriComponentsBuilder.fromPath(
+					"/o/headless-admin-user/v1.0/accounts/{accountId}" +
+						"/account-roles/{accountRoleId}/user-accounts/{userId}"
+				).buildAndExpand(
+					accountId, accountRoleId, userId
+				).toUri());
+		}
 	}
 
 	public void ensureAccountUserAccount(long accountId, long userId)
@@ -110,6 +112,70 @@ public class AccountService extends OneBaseService {
 
 		return accountResource.getAccountByExternalReferenceCode(
 			externalReferenceCode);
+	}
+
+	public String getAccountRoleName(long accountId, long accountRoleId)
+		throws Exception {
+
+		AccountRoleResource accountRoleResource = AccountRoleResource.builder(
+		).endpoint(
+			lxcDXPMainDomain, lxcDXPServerProtocol
+		).header(
+			HttpHeaders.AUTHORIZATION, getAuthorization()
+		).build();
+
+		Page<AccountRole> accountRolesPage =
+			accountRoleResource.getAccountAccountRolesPage(
+				accountId, null, null, Pagination.of(1, _PAGE_SIZE), null);
+
+		for (AccountRole accountRole : accountRolesPage.getItems()) {
+			if (Objects.equals(accountRole.getId(), accountRoleId)) {
+				return accountRole.getName();
+			}
+		}
+
+		return null;
+	}
+
+	public boolean hasAccountUserAccount(long accountId, long userId)
+		throws Exception {
+
+		for (UserAccount userAccount :
+				_userAccountService.getAccountUserAccounts(accountId)) {
+
+			if (Objects.equals(userAccount.getId(), userId)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public void removeAccountUserAccount(long accountId, long userId)
+		throws Exception {
+
+		delete(
+			getAuthorization(), "",
+			UriComponentsBuilder.fromPath(
+				"/o/headless-admin-user/v1.0/accounts/{accountId}" +
+					"/user-accounts/{userId}"
+			).buildAndExpand(
+				accountId, userId
+			).toUri());
+	}
+
+	public void removeAccountUserAccountRole(
+			long accountId, long userId, long accountRoleId)
+		throws Exception {
+
+		delete(
+			getAuthorization(), "",
+			UriComponentsBuilder.fromPath(
+				"/o/headless-admin-user/v1.0/accounts/{accountId}" +
+					"/account-roles/{accountRoleId}/user-accounts/{userId}"
+			).buildAndExpand(
+				accountId, accountRoleId, userId
+			).toUri());
 	}
 
 	public void upsertAccount(
@@ -390,6 +456,8 @@ public class AccountService extends OneBaseService {
 			}
 		}
 	}
+
+	private static final int _PAGE_SIZE = 500;
 
 	@Autowired
 	private UserAccountService _userAccountService;

@@ -6,12 +6,10 @@
 package com.liferay.one.constants;
 
 /**
- * @author Kyle Bischof
+ * @author Felipe Veloso
  */
-public class CommerceProductConstants {
+public class PropertyConstants {
 
-	public static final String NAME_PAAS_EXPERIENCE = "PaaS Experience";
-
-	public static final String TYPE_SIMPLE = "simple";
+	public static final String NAME_OKTA_APPLICATION = "okta:application";
 
 }

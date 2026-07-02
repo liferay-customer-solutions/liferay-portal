@@ -20,6 +20,9 @@ public class RoleConstants {
 
 	public static final String NAME_ADMINISTRATOR = "Administrator";
 
+	public static final String NAME_CLOUD_NATIVE_CONTACT =
+		"Cloud Native Contact";
+
 	public static final String NAME_LIFERAY_STAFF = "Liferay Staff";
 
 	public static final String NAME_PARTNER_MANAGER = "Partner Manager";

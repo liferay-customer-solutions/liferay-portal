@@ -29,6 +29,13 @@ public class ProjectMembershipService extends OneBaseService {
 
 		_accountService.ensureAccountUserAccount(accountId, userId);
 
+		List<ProjectMembership> projectMemberships = _getProjectMemberships(
+			accountId, userId, projectExternalReferenceCode);
+
+		if (!projectMemberships.isEmpty()) {
+			return;
+		}
+
 		JSONObject jsonObject = new JSONObject();
 
 		jsonObject.put(
@@ -50,6 +57,25 @@ public class ProjectMembershipService extends OneBaseService {
 			).toUri());
 	}
 
+	public void deleteProjectMembership(
+			long accountId, long userId, String projectExternalReferenceCode)
+		throws Exception {
+
+		List<ProjectMembership> projectMemberships = _getProjectMemberships(
+			accountId, userId, projectExternalReferenceCode);
+
+		for (ProjectMembership projectMembership : projectMemberships) {
+			delete(
+				getAuthorization(), "",
+				UriComponentsBuilder.fromPath(
+					"/o/c/projectmemberships/by-external-reference-code" +
+						"/{externalReferenceCode}"
+				).buildAndExpand(
+					projectMembership.getExternalReferenceCode()
+				).toUri());
+		}
+	}
+
 	public List<ProjectMembership> getProjectMemberships(
 			long accountId, long userId)
 		throws Exception {
@@ -60,6 +86,20 @@ public class ProjectMembershipService extends OneBaseService {
 				"r_accountEntryToProjectMembership_accountEntryId eq '",
 				accountId, "' and r_userToProjectMembership_userId eq '",
 				userId, "'"),
+			ProjectMembership::new);
+	}
+
+	private List<ProjectMembership> _getProjectMemberships(
+			long accountId, long userId, String projectExternalReferenceCode)
+		throws Exception {
+
+		return getAllItems(
+			"/o/c/projectmemberships",
+			StringBundler.concat(
+				"r_accountEntryToProjectMembership_accountEntryId eq '",
+				accountId, "' and r_userToProjectMembership_userId eq '",
+				userId, "' and r_projectToProjectMembership_c_projectERC eq '",
+				projectExternalReferenceCode, "'"),
 			ProjectMembership::new);
 	}
 
