@@ -18,7 +18,7 @@ import Loading from '~/components/Loading/Loading';
 import Modal from '~/components/Modal/Modal';
 import Select from '~/components/Select/Select';
 import {useOneContext} from '~/context/OneContextProvider';
-import {useDeliveryProduct} from '~/hooks/useDeliveryProduct';
+import {useDeliveryProductByExternalReferenceCode} from '~/hooks/useDeliveryProductByExternalReferenceCode';
 import i18n from '~/i18n';
 import {useSSADashboardOutlet} from '~/pages/Admin/SSADashboard/hooks/useSSADashboardOutlet';
 import {
@@ -70,7 +70,9 @@ const CreateTrialModalForm: React.FC<CreateTrialModalFormProps> = ({
 }) => {
 	const {ssaAccount} = useSSADashboardOutlet();
 	const {properties} = useOneContext();
-	const {data: product} = useDeliveryProduct(properties.productId);
+	const {data: product} = useDeliveryProductByExternalReferenceCode(
+		properties.productExternalReferenceCode
+	);
 
 	const productPurchase = useMemo(() => {
 		if (!ssaAccount || !product) {
