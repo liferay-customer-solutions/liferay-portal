@@ -11,6 +11,7 @@ liferay-one-custom-element:
     portletCategoryName: category.client-extensions
     properties:
         accountExternalReferenceCode: SSA-ACCOUNT
+        cloudConsoleURL: https://console.liferay.cloud
         jira-fls-portal-url: https://liferay.atlassian.net/servicedesk/customer/portal/204
         jira-fls-project: LRFLS
         jira-hc-portal-url: https://liferay.atlassian.net/servicedesk/customer/portal/105
