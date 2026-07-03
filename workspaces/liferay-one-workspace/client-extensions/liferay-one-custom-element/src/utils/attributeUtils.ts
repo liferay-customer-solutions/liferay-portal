@@ -16,7 +16,7 @@ export const baseAttributes = [
 	'lastYearProjectsUsingMarketplaceAppsCount',
 	'marketoFormIdDefault',
 	'marketoFormIdLiferayProduct',
-	'productId',
+	'productExternalReferenceCode',
 	'publisherLicenseAgreement',
 	'ssaProjectPrefix',
 	'trialAccountCheck',
