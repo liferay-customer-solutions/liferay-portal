@@ -19,7 +19,10 @@ export default function PublishedApps() {
 	return (
 		<PublishedProductsListView
 			categoryVocabulary="App"
-			countWord="x-apps-available"
+			ctaLabel="publish-new-app"
+			description="manage-and-publish-apps-on-the-marketplace"
+			emptyStateDescription="publish-your-first-app-to-make-it-available"
+			emptyStateTitle="you-havent-published-any-apps-yet"
 			filterSchema="publisherApps"
 			id="publisher-published-apps"
 			tableProps={{

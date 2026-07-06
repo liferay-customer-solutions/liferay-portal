@@ -585,6 +585,8 @@ export default {
 	'manage-analytics-cloud-users': 'Manage Analytics Cloud Users',
 	'manage-and-publish-apps-on-the-marketplace':
 		'Manage and publish apps on the Marketplace',
+	'manage-and-publish-solutions-on-the-marketplace':
+		'Manage and publish solutions on the Marketplace',
 	'manage-app': 'Manage App',
 	'manage-license-keys': 'Manage License Key(s)',
 	'manage-lxc-sm-users': 'Manage LXC - SM Users',
@@ -655,6 +657,7 @@ export default {
 	'new-potential-expiration-date': 'New Potential Expiration Date',
 	'new-projects-using-marketplace-apps':
 		'New Projects Using Marketplace Apps',
+	'new-solution-template': 'New Solution Template',
 	'new-trial': 'New Trial',
 	'new-version': 'New Version',
 	'no': 'No',
@@ -830,6 +833,10 @@ export default {
 	'publish-apps-to-the-liferay-marketplace':
 		'Publish apps to the Liferay Marketplace',
 	'publish-new-app': 'Publish New App',
+	'publish-your-first-app-to-make-it-available':
+		'Publish your first app to make it available.',
+	'publish-your-first-solution-to-make-it-available':
+		'Publish your first solution to make it available.',
 	'published-apps': 'Published Apps',
 	'published-at': 'Published At',
 	'published-solutions': 'Published Solutions',
@@ -1265,6 +1272,9 @@ export default {
 		'You do not have access to upload files.',
 	'you-have-reached-the-maximum-number-of-active-trials-allowed-to-start-a-new-trial-please-end-one-of-your-existing-trials-first':
 		'You have reached the maximum number of active trials allowed. To start a new trial, please end one of your existing trials first.',
+	'you-havent-published-any-apps-yet': "You haven't published any apps yet.",
+	'you-havent-published-any-solutions-yet':
+		"You haven't published any solutions yet.",
 	'you-ll-be-redirected-to-paypal-to-complete-your-purchase-securely-after-your-payment-you-are-able-to-activate-the-license-on-customer-dashboard-right-away':
 		"You'll be redirected to PayPal to complete your purchase securely. After your payment you are able to activate the license on customer dashboard right away",
 	'you-need-administrator-or-requester-role-on-this-project-to-download-a-file':

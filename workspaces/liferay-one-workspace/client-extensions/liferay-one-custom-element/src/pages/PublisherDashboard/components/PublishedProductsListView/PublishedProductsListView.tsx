@@ -3,11 +3,12 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import openSourceIcon from '~/assets/icons/open_source.svg';
+import Button from '~/components/Button/Button';
 import EmptyState from '~/components/EmptyState/EmptyState';
 import ListView, {ListViewProps} from '~/components/ListView/ListView';
 import Loading from '~/components/Loading/Loading';
 import Page from '~/components/Page/Page';
-import {useFetch} from '~/hooks/useFetch';
 import usePublisherCatalog from '~/hooks/usePublisherCatalog';
 import i18n, {Word} from '~/i18n';
 import SearchBuilder from '~/utils/SearchBuilder';
@@ -133,7 +134,10 @@ export function renderProductStatus(
 
 type PublishedProductsListViewProps = {
 	categoryVocabulary: ProductTypeVocabulary;
-	countWord: Word;
+	ctaLabel: Word;
+	description: Word;
+	emptyStateDescription: Word;
+	emptyStateTitle: Word;
 	filterSchema: string;
 	id: string;
 	tableProps: ListViewProps<Product>['tableProps'];
@@ -142,7 +146,10 @@ type PublishedProductsListViewProps = {
 
 export default function PublishedProductsListView({
 	categoryVocabulary,
-	countWord,
+	ctaLabel,
+	description,
+	emptyStateDescription,
+	emptyStateTitle,
 	filterSchema,
 	id,
 	tableProps,
@@ -156,45 +163,43 @@ export default function PublishedProductsListView({
 		? buildCatalogCategoryFilter(catalogId, categoryVocabulary)
 		: undefined;
 
-	const {data: countData} = useFetch(catalogId ? PRODUCTS_RESOURCE : null, {
-		params: {filter: baseFilter, pageSize: 1},
-	});
-
 	if (isLoading) {
 		return <Loading className="mt-3" />;
 	}
 
-	if (!catalog) {
-		return (
-			<Page title={i18n.translate(title)}>
-				<EmptyState
-					title={i18n.translate('no-publisher-catalog-found')}
-					type="EMPTY_STATE"
-				/>
-			</Page>
-		);
-	}
+	const emptyStateProps = {
+		description: i18n.translate(emptyStateDescription),
+		imgSrc: openSourceIcon,
+		title: i18n.translate(emptyStateTitle),
+	};
 
 	return (
 		<Page
-			description={
-				countData?.totalCount !== undefined
-					? i18n.sub(countWord, String(countData.totalCount))
-					: undefined
+			description={i18n.translate(description)}
+			pageRendererProps={{className: 'border py-2 rounded-lg'}}
+			rightButton={
+				<Button displayType="primary" onClick={() => {}}>
+					{i18n.translate(ctaLabel)}
+				</Button>
 			}
 			title={i18n.translate(title)}
 		>
-			<ListView<Product>
-				defaultFilters={{filter: baseFilter!}}
-				id={id}
-				managementToolbarProps={{
-					filterSchema,
-					searchVisible: true,
-					visible: true,
-				}}
-				resource={PRODUCTS_RESOURCE}
-				tableProps={tableProps}
-			/>
+			{catalog ? (
+				<ListView<Product>
+					defaultFilters={{filter: baseFilter!}}
+					emptyStateProps={emptyStateProps}
+					id={id}
+					managementToolbarProps={{
+						filterSchema,
+						searchVisible: true,
+						visible: true,
+					}}
+					resource={PRODUCTS_RESOURCE}
+					tableProps={tableProps}
+				/>
+			) : (
+				<EmptyState {...emptyStateProps} />
+			)}
 		</Page>
 	);
 }

@@ -17,7 +17,10 @@ export default function PublishedSolutions() {
 	return (
 		<PublishedProductsListView
 			categoryVocabulary="Solution"
-			countWord="x-solutions-available"
+			ctaLabel="new-solution-template"
+			description="manage-and-publish-solutions-on-the-marketplace"
+			emptyStateDescription="publish-your-first-solution-to-make-it-available"
+			emptyStateTitle="you-havent-published-any-solutions-yet"
 			filterSchema="publisherSolutions"
 			id="publisher-published-solutions"
 			tableProps={{
