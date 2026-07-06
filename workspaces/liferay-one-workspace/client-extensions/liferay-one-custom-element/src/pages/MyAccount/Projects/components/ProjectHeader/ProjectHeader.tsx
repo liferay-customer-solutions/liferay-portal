@@ -72,48 +72,19 @@ export default function ProjectHeader() {
 	const {contract} = useProjectCommerce(projectId);
 
 	const termRange = formatTermRange(contract?.startDate, contract?.endDate);
-	const annualTerm = contract?.termMonths === 12;
 
 	return (
 		<div
-			className="align-items-center d-flex flex-wrap justify-content-between mb-3"
+			className="align-items-center d-flex flex-wrap mb-3"
 			style={{
 				border: '1px solid var(--color-neutral-2)',
 				borderRadius: 'var(--border-radius-lg, 0.625rem)',
 				padding: 'var(--spacer-3) var(--spacer-2)',
+				width: 'fit-content',
 			}}
 		>
-			<Section first label={i18n.translate('project-term')}>
+			<Section first label={i18n.translate('contract-term')}>
 				{termRange}
-			</Section>
-
-			<Section label={i18n.translate('term')}>
-				{annualTerm ? i18n.translate('annual') : '-'}
-			</Section>
-
-			<Section label={i18n.translate('agreements')}>
-				<span
-					className="align-items-center d-flex"
-					style={{gap: 'var(--spacer-2)'}}
-				>
-					<a
-						className="text-decoration-none"
-						href="#"
-						style={{color: 'var(--color-brand-primary)'}}
-					>
-						{i18n.translate('order-form')}
-					</a>
-
-					<span style={{color: LABEL_COLOR}}>·</span>
-
-					<a
-						className="text-decoration-none"
-						href="#"
-						style={{color: 'var(--color-brand-primary)'}}
-					>
-						{i18n.translate('eula')}
-					</a>
-				</span>
 			</Section>
 		</div>
 	);

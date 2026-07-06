@@ -245,6 +245,7 @@ export default {
 	'continue': 'Continue',
 	'continue-to-download': 'Continue to Download',
 	'continue-to-install': 'Continue to Install',
+	'contract-term': 'Contract Term',
 	'copied-x-to-the-clipboard': 'Copied {0} to the clipboard.',
 	'copy': 'Copy',
 	'copy-this-token-to-your-liferay-dxp-instance':
@@ -811,7 +812,6 @@ export default {
 	'project-name': 'Project Name',
 	'project-selected': 'Project Selected',
 	'project-selection': 'Project Selection',
-	'project-term': 'Project Term',
 	'project-type': 'Project Type',
 	'projects': 'Projects',
 	'projects-and-resources': 'Projects and Resources',
