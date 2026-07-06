@@ -6,6 +6,7 @@
 import ClayIcon from '@clayui/icon';
 import {useMemo} from 'react';
 import {Link, useParams} from 'react-router-dom';
+import RowActionsMenu from '~/components/RowActionsMenu/RowActionsMenu';
 import {useProject} from '~/context/ProjectContext';
 import {ProjectOrder, useProjectOrders} from '~/hooks/useProjectOrders';
 import {translate} from '~/i18n';
@@ -15,7 +16,6 @@ import FilterableListCard, {
 	ListColumn,
 	ListFilter,
 } from '../FilterableListCard/FilterableListCard';
-import RowActionsMenu from '../RowActionsMenu/RowActionsMenu';
 
 function matchesSearch(order: ProjectOrder, search: string): boolean {
 	return order.orderId.toLowerCase().includes(search);
