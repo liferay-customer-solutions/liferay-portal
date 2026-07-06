@@ -8,6 +8,7 @@ package com.liferay.one.service;
 import com.liferay.headless.admin.user.client.custom.field.CustomField;
 import com.liferay.headless.admin.user.client.custom.field.CustomValue;
 import com.liferay.headless.admin.user.client.dto.v1_0.Account;
+import com.liferay.headless.admin.user.client.dto.v1_0.AccountBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.AccountContactInformation;
 import com.liferay.headless.admin.user.client.dto.v1_0.EmailAddress;
 import com.liferay.headless.admin.user.client.dto.v1_0.Phone;
@@ -63,6 +64,16 @@ public class AccountService extends OneBaseService {
 			).buildAndExpand(
 				accountId, userAccount.getEmailAddress()
 			).toUri());
+	}
+
+	public void ensureAccountUserAccount(long accountId, long userId)
+		throws Exception {
+
+		if (_hasAccountUserAccount(accountId, userId)) {
+			return;
+		}
+
+		addAccountUserAccount(accountId, userId, null);
 	}
 
 	public Account fetchAccount(long accountId) throws Exception {
@@ -151,6 +162,26 @@ public class AccountService extends OneBaseService {
 
 			_upsertAccount(accountResource, account, salesforceAccount.getId());
 		}
+	}
+
+	private boolean _hasAccountUserAccount(long accountId, long userId)
+		throws Exception {
+
+		UserAccount userAccount = _userAccountService.getUserAccount(userId);
+
+		AccountBrief[] accountBriefs = userAccount.getAccountBriefs();
+
+		if (accountBriefs == null) {
+			return false;
+		}
+
+		for (AccountBrief accountBrief : accountBriefs) {
+			if (Objects.equals(accountBrief.getId(), accountId)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private void _setAccountContactInformation(

@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -25,6 +26,8 @@ public class ProjectMembershipService extends OneBaseService {
 			long accountId, long userId, String projectExternalReferenceCode,
 			String roleExternalReferenceCode)
 		throws Exception {
+
+		_accountService.ensureAccountUserAccount(accountId, userId);
 
 		JSONObject jsonObject = new JSONObject();
 
@@ -59,5 +62,8 @@ public class ProjectMembershipService extends OneBaseService {
 				userId, "'"),
 			ProjectMembership::new);
 	}
+
+	@Autowired
+	private AccountService _accountService;
 
 }
