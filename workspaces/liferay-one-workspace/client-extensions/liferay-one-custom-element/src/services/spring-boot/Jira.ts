@@ -32,11 +32,11 @@ async function jiraFetchJSON<T = any>(
 }
 
 export async function createBusinessEvent(
-	externalReferenceCode: string,
-	businessEvent: Record<string, unknown>
+	businessEvent: Record<string, unknown>,
+	projectExternalReferenceCode: string
 ) {
 	const response = await jiraFetch(
-		`/accounts/${externalReferenceCode}/business-events`,
+		`/projects/${projectExternalReferenceCode}/business-events`,
 		{
 			body: JSON.stringify(businessEvent),
 			headers: {'Content-Type': 'application/json'},
@@ -53,23 +53,25 @@ export async function createBusinessEvent(
 	return response;
 }
 
-export async function getAccountTickets(
-	externalReferenceCode: string,
+export async function getProjectTickets(
+	projectExternalReferenceCode: string,
 	ticketIds?: string[]
 ) {
 	const params = ticketIds?.length
 		? `?${ticketIds.map((id) => `ticketIds=${id}`).join('&')}`
 		: '';
 
-	return jiraFetchJSON(`/accounts/${externalReferenceCode}/tickets${params}`);
+	return jiraFetchJSON(
+		`/projects/${projectExternalReferenceCode}/tickets${params}`
+	);
 }
 
 export async function getBusinessEventById(
-	externalReferenceCode: string,
-	id: string
+	id: string,
+	projectExternalReferenceCode: string
 ) {
 	return jiraFetchJSON(
-		`/accounts/${externalReferenceCode}/business-events/${id}`
+		`/projects/${projectExternalReferenceCode}/business-events/${id}`
 	);
 }
 
@@ -85,9 +87,11 @@ export async function getBusinessEventFieldOptions(fieldName: string) {
 	return response.json();
 }
 
-export async function getBusinessEvents(externalReferenceCode: string) {
+export async function getBusinessEvents(
+	projectExternalReferenceCode: string
+) {
 	const response = await jiraFetch(
-		`/accounts/${externalReferenceCode}/business-events`
+		`/projects/${projectExternalReferenceCode}/business-events`
 	);
 
 	if (!response.ok) {
@@ -98,11 +102,11 @@ export async function getBusinessEvents(externalReferenceCode: string) {
 }
 
 export async function getBusinessEventVersions(
-	externalReferenceCode: string,
-	id: string
+	id: string,
+	projectExternalReferenceCode: string
 ) {
 	return jiraFetchJSON(
-		`/accounts/${externalReferenceCode}/business-events/${id}/versions`
+		`/projects/${projectExternalReferenceCode}/business-events/${id}/versions`
 	);
 }
 
@@ -117,12 +121,12 @@ export async function getProductVersions() {
 }
 
 export async function updateBusinessEvent(
-	externalReferenceCode: string,
+	fieldsToPatch: Record<string, unknown>,
 	id: string,
-	fieldsToPatch: Record<string, unknown>
+	projectExternalReferenceCode: string
 ) {
 	return jiraFetchJSON(
-		`/accounts/${externalReferenceCode}/business-events/${id}`,
+		`/projects/${projectExternalReferenceCode}/business-events/${id}`,
 		{
 			body: JSON.stringify(fieldsToPatch),
 			headers: {'Content-Type': 'application/json'},

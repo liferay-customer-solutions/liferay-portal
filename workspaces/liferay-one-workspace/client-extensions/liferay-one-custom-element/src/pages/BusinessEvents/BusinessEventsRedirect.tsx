@@ -4,62 +4,59 @@
  */
 
 import ClayLoadingIndicator from '@clayui/loading-indicator';
-import {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useEffect} from 'react';
+import {Outlet, useNavigate, useParams} from 'react-router-dom';
+import RestrictedFeatureMessage from '~/components/RestrictedFeatureMessage/RestrictedFeatureMessage';
 import {translate} from '~/i18n';
-import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
-import {Liferay} from '~/services/liferay/liferay';
-
 import {
+	getCurrentUserId,
 	getLastViewedProjectCookie,
+	getSelectedAccountId,
+	resolveProjectERC,
 	setLastViewedProjectCookie,
-} from './utils/projectCookieUtils';
+	useUserProjects,
+} from '~/pages/MyAccount/Projects/projects';
 
 const BusinessEventsRedirect = () => {
 	const navigate = useNavigate();
 
-	const [loading, setLoading] = useState(true);
-	const [noAccounts, setNoAccounts] = useState(false);
+	const {projectERC} = useParams<{projectERC: string}>();
+
+	const {hasAccountProjects, loading, projects} = useUserProjects();
+
+	const userId = getCurrentUserId();
+	const accountId = getSelectedAccountId();
+
+	const isAccessible =
+		Boolean(projectERC) &&
+		projects.some((project) => project.externalReferenceCode === projectERC);
 
 	useEffect(() => {
-		const userId = Liferay.ThemeDisplay.getUserId();
-		const lastViewedERC = getLastViewedProjectCookie(userId);
+		if (loading) {
+			return;
+		}
 
-		if (lastViewedERC) {
-			navigate(`/${decodeURIComponent(lastViewedERC)}/business-events`, {
-				replace: true,
-			});
+		if (isAccessible) {
+			setLastViewedProjectCookie(accountId, projectERC as string, userId);
 
 			return;
 		}
 
-		HeadlessAdminUser.getMyUserAccount()
-			.then((userAccount) => {
-				const firstAccount = userAccount?.accountBriefs?.[0];
+		if (!projects.length) {
+			return;
+		}
 
-				if (firstAccount) {
-					setLastViewedProjectCookie(
-						userId,
-						firstAccount.externalReferenceCode
-					);
+		const resolvedProjectERC = resolveProjectERC(
+			projects,
+			getLastViewedProjectCookie(accountId, userId)
+		);
 
-					navigate(
-						`/${firstAccount.externalReferenceCode}/business-events`,
-						{replace: true}
-					);
-				}
-				else {
-					setNoAccounts(true);
-					setLoading(false);
-				}
-			})
-			.catch(() => {
-				setNoAccounts(true);
-				setLoading(false);
-			});
-	}, [navigate]);
+		if (resolvedProjectERC) {
+			navigate(`/${resolvedProjectERC}/business-events`, {replace: true});
+		}
+	}, [accountId, isAccessible, loading, navigate, projectERC, projects, userId]);
 
-	if (loading && !noAccounts) {
+	if (loading || (!isAccessible && projects.length > 0)) {
 		return (
 			<div className="mx-auto">
 				<ClayLoadingIndicator size="sm" />
@@ -67,15 +64,21 @@ const BusinessEventsRedirect = () => {
 		);
 	}
 
-	return (
-		<div className="p-4">
-			<p>
-				{translate(
-					'login-as-a-user-that-has-access-to-a-project-or-contact-your-project-administrator-to-add-you-to-a-project.'
-				)}
-			</p>
-		</div>
-	);
+	if (!projects.length) {
+		return (
+			<RestrictedFeatureMessage
+				message={
+					hasAccountProjects
+						? translate(
+								'login-as-a-user-that-has-access-to-a-project-or-contact-your-project-administrator-to-add-you-to-a-project.'
+							)
+						: undefined
+				}
+			/>
+		);
+	}
+
+	return <Outlet />;
 };
 
 export default BusinessEventsRedirect;

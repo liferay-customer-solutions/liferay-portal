@@ -14,19 +14,19 @@ import {Word, translate} from '~/i18n';
 import AssociatedTicketsContainer from '~/pages/BusinessEvents/components/AssociatedTicketsContainer/AssociatedTicketsContainer';
 import ButtonDropDown from '~/pages/BusinessEvents/components/ButtonDropDown/ButtonDropDown';
 import ManageEventModal from '~/pages/BusinessEvents/components/ManageEventModal/ManageEventModal';
-import useAccountsTickets from '~/pages/BusinessEvents/hooks/useAccountsTickets';
 import useCanViewTickets from '~/pages/BusinessEvents/hooks/useCanViewTickets';
 import useGetBusinessEvent from '~/pages/BusinessEvents/hooks/useGetBusinessEvent';
 import useHasAllEventsPermissions from '~/pages/BusinessEvents/hooks/useHasAllEventsPermissions';
-import {ITicket} from '~/pages/BusinessEvents/types';
+import useProjectTickets from '~/pages/BusinessEvents/hooks/useProjectTickets';
 import {getFormattedDate} from '~/pages/BusinessEvents/utils/getFormattedDate';
 import {getFormattedTime} from '~/pages/BusinessEvents/utils/getFormattedTime';
 import parseAssociatedTickets from '~/pages/BusinessEvents/utils/parseAssociatedTickets';
 import {Liferay} from '~/services/liferay/liferay';
+import {ITicket} from '~/types/ticket';
 import getKebabCase from '~/utils/getKebabCase';
 
 const BusinessEventsDetails = () => {
-	const {accountKey, id} = useParams<{accountKey: string; id: string}>();
+	const {projectERC, id} = useParams<{projectERC: string; id: string}>();
 
 	const navigate = useNavigate();
 
@@ -34,21 +34,21 @@ const BusinessEventsDetails = () => {
 		businessEvent,
 		fetchBusinessEvent,
 		loading: loadingBusinessEvents,
-	} = useGetBusinessEvent(accountKey || '', id || '');
+	} = useGetBusinessEvent(id || '', projectERC || '');
 
 	const [modalType, setModalType] = useState('');
 	const {hasAllEventsPermissions} = useHasAllEventsPermissions(
-		accountKey || ''
+		projectERC || ''
 	);
 
-	const {loading: loadingTickets, tickets} = useAccountsTickets(
+	const {loading: loadingTickets, tickets} = useProjectTickets(
 		businessEvent,
-		accountKey,
+		projectERC,
 		loadingBusinessEvents || !businessEvent?.associatedTickets
 	);
 
 	const {canViewTickets, loading: loadingJiraAccountChecking} =
-		useCanViewTickets(accountKey || '');
+		useCanViewTickets(projectERC || '');
 
 	const loading = loadingBusinessEvents || loadingJiraAccountChecking;
 
@@ -359,13 +359,13 @@ const BusinessEventsDetails = () => {
 
 			{businessEvent && open && (
 				<ManageEventModal
-					accountExternalReferenceCode={accountKey || ''}
 					businessEvent={businessEvent}
 					closeFunction={handleCloseModal}
 					modalType={modalType}
 					observer={observer}
 					onCancel={handleOnCancel}
 					onCompleted={handleOnCompleted}
+					projectExternalReferenceCode={projectERC || ''}
 				/>
 			)}
 		</div>

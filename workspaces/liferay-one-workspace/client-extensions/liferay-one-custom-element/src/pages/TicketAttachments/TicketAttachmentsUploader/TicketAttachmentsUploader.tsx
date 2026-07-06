@@ -128,12 +128,12 @@ const TicketAttachmentsUploader = ({
 		}
 
 		const uploadResponse = await uploadFile({
-			accountKey: initiationResult.uploadProperties?.accountKey ?? '',
 			comment,
 			file,
 			fileMd5: calculatedMd5.hash,
 			gcsSessionURL:
 				initiationResult.uploadProperties?.gcsSessionURL ?? '',
+			projectKey: initiationResult.uploadProperties?.projectKey ?? '',
 			ticketAttachmentId:
 				initiationResult.uploadProperties?.ticketAttachmentId ?? '',
 			ticketId,
@@ -202,7 +202,7 @@ const TicketAttachmentsUploader = ({
 			<UploadConfirmation
 				attachmentName={uploadStateData.attachmentName ?? ''}
 				ticketURL={ticketURL ?? ''}
-				uploadAccountKey={uploadStateData.uploadAccountKey ?? ''}
+				uploadProjectKey={uploadStateData.uploadProjectKey ?? ''}
 			/>
 		);
 	}
@@ -211,7 +211,7 @@ const TicketAttachmentsUploader = ({
 		return (
 			<CommentPostFailed
 				ticketURL={ticketURL ?? ''}
-				uploadAccountKey={uploadStateData.uploadAccountKey ?? ''}
+				uploadProjectKey={uploadStateData.uploadProjectKey ?? ''}
 			/>
 		);
 	}
@@ -220,7 +220,7 @@ const TicketAttachmentsUploader = ({
 		return (
 			<ServerUnavailable
 				ticketURL={ticketURL ?? ''}
-				uploadAccountKey={uploadStateData.uploadAccountKey ?? ''}
+				uploadProjectKey={uploadStateData.uploadProjectKey ?? ''}
 			/>
 		);
 	}

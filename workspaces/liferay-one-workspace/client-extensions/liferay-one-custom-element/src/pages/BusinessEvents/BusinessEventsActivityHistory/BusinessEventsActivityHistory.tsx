@@ -24,23 +24,23 @@ import {getFormattedTime} from '~/pages/BusinessEvents/utils/getFormattedTime';
 import {Liferay} from '~/services/liferay/liferay';
 
 const BusinessEventsActivityHistory = () => {
-	const {accountKey, id} = useParams<{accountKey: string; id: string}>();
+	const {projectERC, id} = useParams<{projectERC: string; id: string}>();
 
 	const navigate = useNavigate();
 
 	const {businessEvent, fetchBusinessEvent, loading} = useGetBusinessEvent(
-		accountKey || '',
-		id || ''
+		id || '',
+		projectERC || ''
 	);
 
 	const {
 		businessEventVersions,
 		fetchBusinessEventVersions,
 		loading: loadingVersions,
-	} = useGetBusinessEventVersions(accountKey || '', id || '');
+	} = useGetBusinessEventVersions(id || '', projectERC || '');
 
 	const {hasAllEventsPermissions} = useHasAllEventsPermissions(
-		accountKey || ''
+		projectERC || ''
 	);
 
 	const [modalType, setModalType] = useState('');
@@ -249,13 +249,13 @@ const BusinessEventsActivityHistory = () => {
 
 			{businessEvent && open && (
 				<ManageEventModal
-					accountExternalReferenceCode={accountKey || ''}
 					businessEvent={businessEvent}
 					closeFunction={onOpenChange}
 					modalType={modalType}
 					observer={observer}
 					onCancel={handleOnCancel}
 					onCompleted={handleOnCompleted}
+					projectExternalReferenceCode={projectERC || ''}
 				/>
 			)}
 

@@ -13,23 +13,23 @@ import CancelEventPage from './CancelEventPage/CancelEventPage';
 import RecordGoLiveEventPage from './RecordGoLiveEventPage/RecordGoLiveEventPage';
 
 interface IProps {
-	accountExternalReferenceCode: string;
 	businessEvent: IBusinessEvent;
 	closeFunction?: (value: boolean) => void;
 	modalType: string;
 	observer: Observer;
 	onCancel: () => void;
 	onCompleted: () => void;
+	projectExternalReferenceCode: string;
 }
 
 const ManageEventModal: React.FC<IProps> = ({
-	accountExternalReferenceCode,
 	businessEvent,
 	closeFunction,
 	modalType,
 	observer,
 	onCancel,
 	onCompleted,
+	projectExternalReferenceCode,
 }) => {
 	const methods = useForm({
 		defaultValues: {
@@ -51,24 +51,24 @@ const ManageEventModal: React.FC<IProps> = ({
 		<>
 			{modalType === 'cancelEvent' ? (
 				<CancelEventPage
-					accountExternalReferenceCode={accountExternalReferenceCode}
 					businessEvent={businessEvent}
 					closeFunction={closeFunction}
 					modalType={modalType}
 					observer={observer}
 					onCancel={onCancel}
+					projectExternalReferenceCode={projectExternalReferenceCode}
 				/>
 			) : (
 				<FormProvider {...methods}>
 					<RecordGoLiveEventPage
-						accountExternalReferenceCode={
-							accountExternalReferenceCode
-						}
 						businessEvent={businessEvent}
 						closeFunction={closeFunction}
 						modalType={modalType}
 						observer={observer}
 						onCompleted={onCompleted}
+						projectExternalReferenceCode={
+							projectExternalReferenceCode
+						}
 					/>
 				</FormProvider>
 			)}

@@ -5842,6 +5842,24 @@
 					"type": "String"
 				},
 				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_TICKET_ATTACHMENT_PROJECT_KEY",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Project Key"
+					},
+					"name": "projectKey",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
 					"DBType": "Long",
 					"businessType": "LongInteger",
 					"externalReferenceCode": "C_TICKET_ATTACHMENT_STATE",

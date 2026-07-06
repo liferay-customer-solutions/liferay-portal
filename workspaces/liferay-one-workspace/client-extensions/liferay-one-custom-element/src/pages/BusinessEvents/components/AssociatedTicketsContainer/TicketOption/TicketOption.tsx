@@ -6,7 +6,7 @@
 import Button from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import {Word, translate} from '~/i18n';
-import {ITicket} from '~/pages/BusinessEvents/types';
+import {ITicket} from '~/types/ticket';
 
 import './TicketOption.css';
 

@@ -11,8 +11,8 @@ import {Liferay} from '~/services/liferay/liferay';
 import {getBusinessEventById} from '~/services/spring-boot/Jira';
 
 export default function useGetBusinessEvent(
-	accountKey: string,
-	id: string
+	id: string,
+	projectERC: string
 ): {
 	businessEvent: IBusinessEvent | undefined;
 	fetchBusinessEvent: () => Promise<void>;
@@ -27,7 +27,7 @@ export default function useGetBusinessEvent(
 	const navigate = useNavigate();
 
 	const fetchBusinessEvent = useCallback(async () => {
-		if (!accountKey) {
+		if (!projectERC) {
 			return;
 		}
 
@@ -35,8 +35,8 @@ export default function useGetBusinessEvent(
 
 		try {
 			const businessEventResponse = await getBusinessEventById(
-				accountKey,
-				id
+				id,
+				projectERC
 			);
 
 			setBusinessEvent(businessEventResponse as IBusinessEvent);
@@ -47,12 +47,12 @@ export default function useGetBusinessEvent(
 				type: 'danger',
 			});
 
-			navigate(`/${accountKey}/business-events`);
+			navigate(`/${projectERC}/business-events`);
 		}
 		finally {
 			setLoading(false);
 		}
-	}, [accountKey, id, navigate]);
+	}, [id, navigate, projectERC]);
 
 	useEffect(() => {
 		if (!id) {

@@ -5,7 +5,11 @@
 
 import {Liferay} from '~/services/liferay/liferay';
 
-import type {AccountRoleType, UserAccount} from '~/types/accounts';
+import type {
+	AccountRoleType,
+	RegularRoleType,
+	UserAccount,
+} from '~/types/accounts';
 
 export class UserAccountModel {
 	constructor(protected userAccount: UserAccount) {}
@@ -22,8 +26,16 @@ export class UserAccountModel {
 		return this.userAccount.type;
 	}
 
+	get isAccountAdministrator() {
+		return this.hasAccountRole('Account Administrator');
+	}
+
 	get isAdmin() {
 		return this.hasRegularRole('Administrator');
+	}
+
+	get isLiferayStaff() {
+		return this.hasRegularRole('Liferay Staff');
 	}
 
 	get isSolutionPublisher() {
@@ -53,7 +65,7 @@ export class UserAccountModel {
 		return this.hasAccountRoleName(roleName);
 	}
 
-	private hasRegularRole(roleName: AccountRoleType) {
+	private hasRegularRole(roleName: RegularRoleType) {
 		return this.userAccount?.roleBriefs.some(
 			(role) => role?.name === roleName
 		);

@@ -26,7 +26,7 @@ const useCanViewTickets = (externalReferenceCode?: string, skip?: boolean) => {
 				await OAuth2.FromUserAgentApplication(OAUTH2_APP);
 
 			const data = await oauth2Client
-				.fetch(`/accounts/${externalReferenceCode}/jira/object-key`)
+				.fetch(`/projects/${externalReferenceCode}/jira/object-key`)
 				.then((response: Response) => response.text());
 
 			setCanViewTickets(Boolean(data));

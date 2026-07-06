@@ -54,6 +54,17 @@
 	},
 	{
 		"actionIds": [
+			"DELETE",
+			"UPDATE",
+			"VIEW"
+		],
+		"primKey": "0",
+		"resourceName": "[$OBJECT_DEFINITION_CLASS_NAME:TicketAttachment$]",
+		"roleName": "Provisioning Member",
+		"scope": "1"
+	},
+	{
+		"actionIds": [
 			"VIEW"
 		],
 		"primKey": "0",
@@ -497,6 +508,59 @@
 		"resourceName": "com.liferay.layout.seo",
 		"roleName": "Documentation Administrator",
 		"scope": "3"
+	},
+	{
+		"actionIds": [
+			"CREATE_TOKEN"
+		],
+		"resourceName": "com.liferay.oauth2.provider.model.OAuth2Application",
+		"roleName": "User",
+		"scope": "1"
+	},
+	{
+		"actionIds": [
+			"ADD_OBJECT_ENTRY"
+		],
+		"primKey": "0",
+		"resourceName": "com.liferay.object#[$OBJECT_DEFINITION_ID:TicketAttachment$]",
+		"roleName": "Account Administrator",
+		"scope": "3"
+	},
+	{
+		"actionIds": [
+			"ADD_OBJECT_ENTRY"
+		],
+		"primKey": "0",
+		"resourceName": "com.liferay.object#[$OBJECT_DEFINITION_ID:TicketAttachment$]",
+		"roleName": "Organization User",
+		"scope": "3"
+	},
+	{
+		"actionIds": [
+			"ADD_OBJECT_ENTRY"
+		],
+		"primKey": "0",
+		"resourceName": "com.liferay.object#[$OBJECT_DEFINITION_ID:TicketAttachment$]",
+		"roleName": "Project Admin",
+		"scope": "3"
+	},
+	{
+		"actionIds": [
+			"ADD_OBJECT_ENTRY"
+		],
+		"primKey": "0",
+		"resourceName": "com.liferay.object#[$OBJECT_DEFINITION_ID:TicketAttachment$]",
+		"roleName": "Project Requester",
+		"scope": "3"
+	},
+	{
+		"actionIds": [
+			"ADD_OBJECT_ENTRY"
+		],
+		"primKey": "0",
+		"resourceName": "com.liferay.object#[$OBJECT_DEFINITION_ID:TicketAttachment$]",
+		"roleName": "Provisioning Member",
+		"scope": "1"
 	},
 	{
 		"actionIds": [

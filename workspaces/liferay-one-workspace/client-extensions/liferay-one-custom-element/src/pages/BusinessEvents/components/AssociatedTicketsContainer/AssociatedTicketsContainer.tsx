@@ -8,7 +8,7 @@ import {ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import {ChangeEvent, useCallback, useRef, useState} from 'react';
 import {translate} from '~/i18n';
-import {ITicket} from '~/pages/BusinessEvents/types';
+import {ITicket} from '~/types/ticket';
 
 import TicketList from './TicketList/TicketList';
 

@@ -9,10 +9,10 @@ import routerPath from '~/utils/routerPath';
 
 interface IProps {
 	ticketURL: string;
-	uploadAccountKey: string;
+	uploadProjectKey: string;
 }
 
-const CommentPostFailed = ({ticketURL, uploadAccountKey}: IProps) => {
+const CommentPostFailed = ({ticketURL, uploadProjectKey}: IProps) => {
 	const pageRoutes = routerPath();
 
 	return (
@@ -21,10 +21,10 @@ const CommentPostFailed = ({ticketURL, uploadAccountKey}: IProps) => {
 			subtitle="please-check-again-later"
 			title="your-attachment-is-uploaded-however-we-encountered-a-problem-posting-your-comment-the-system-is-automatically-retrying-to-send-it"
 		>
-			{uploadAccountKey && (
+			{uploadProjectKey && (
 				<a
 					className="btn btn-secondary mr-2 uploader-secondary-button"
-					href={`${pageRoutes.project(uploadAccountKey)}/attachments`}
+					href={`${pageRoutes.project(uploadProjectKey)}/attachments`}
 				>
 					{i18n.translate('return-to-attachments')}
 				</a>

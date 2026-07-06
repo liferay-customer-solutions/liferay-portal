@@ -4,12 +4,12 @@
  */
 
 export interface IUpload {
-	accountKey?: string;
 	attachmentName?: string;
 	errorCode?: string;
 	errorMessage?: string;
 	gcsSessionURL?: string;
+	projectKey?: string;
 	ticketAttachmentId?: string;
 	ticketId?: string;
-	uploadAccountKey?: string;
+	uploadProjectKey?: string;
 }

@@ -10,16 +10,26 @@ import {useNavigate} from 'react-router-dom';
 import Table, {
 	IRow,
 } from '~/components/BusinessEventsTable/BusinessEventsTable';
+import ProjectSelector from '~/components/ProjectSelector/ProjectSelector';
 import RestrictedFeatureMessage from '~/components/RestrictedFeatureMessage/RestrictedFeatureMessage';
+import {useOneContext} from '~/context/OneContextProvider';
 import {useProperties} from '~/context/PropertiesContext';
+import {useConfirmationModal} from '~/hooks/useConfirmationModal';
 import {useFetch} from '~/hooks/useFetch';
 import {translate} from '~/i18n';
-import {useHasProject} from '~/pages/MyAccount/Projects/projects';
+import {
+	useSelectedProject,
+	useUserProjects,
+} from '~/pages/MyAccount/Projects/projects';
+import useDeleteTicketAttachment from '~/pages/TicketAttachments/hooks/useDeleteTicketAttachment';
 import formatFileSize from '~/pages/TicketAttachments/utils/formatFileSize';
+import {Liferay} from '~/services/liferay/liferay';
+import SearchBuilder from '~/utils/SearchBuilder';
 
 import type {APIResponse} from '~/types/api';
 
 interface ITicketAttachment {
+	creator: {id: number};
 	dateCreated: string;
 	externalReferenceCode: string;
 	fileName: string;
@@ -54,19 +64,44 @@ const columns = [
 const TicketAttachmentsList = () => {
 	const navigate = useNavigate();
 
+	const confirmationModal = useConfirmationModal();
+
+	const {userAccountModel} = useOneContext();
+
+	const currentUserId = Liferay.ThemeDisplay.getUserId();
+
+	const canManageAttachments = Boolean(
+		userAccountModel?.isAdmin ||
+			userAccountModel?.isLiferayStaff ||
+			userAccountModel?.isAccountAdministrator
+	);
+
 	const {jiraFLSPortalURL, jiraFLSProject, jiraHCPortalURL} = useProperties();
 
-	const {hasProject, loading: projectsLoading} = useHasProject();
+	const {hasAccountProjects, loading: projectsLoading, projects} =
+		useUserProjects();
 
-	const {data, isLoading: loading} = useFetch<APIResponse<ITicketAttachment>>(
-		'/o/c/ticketattachments',
+	const {projectERC, selectProject} = useSelectedProject(
+		projectsLoading,
+		projects
+	);
+
+	const {
+		data,
+		isLoading: loading,
+		revalidate,
+	} = useFetch<APIResponse<ITicketAttachment>>(
+		projectERC ? '/o/c/ticketattachments' : null,
 		{
 			params: {
+				filter: SearchBuilder.eq('projectKey', projectERC),
 				pageSize: 200,
 				sort: 'dateCreated:desc',
 			},
 		}
 	);
+
+	const {deleteAttachment} = useDeleteTicketAttachment(revalidate);
 
 	const getTicketURL = (jiraIssueKey: string) => {
 		if (jiraFLSProject && jiraIssueKey.startsWith(jiraFLSProject)) {
@@ -90,13 +125,26 @@ const TicketAttachmentsList = () => {
 				</h6>
 			</div>
 
-			<Button displayType="primary" onClick={() => navigate('/new')}>
-				{translate('new-attachment')}
-			</Button>
+			<div
+				className="align-items-center d-flex"
+				style={{gap: 'var(--spacer-3)'}}
+			>
+				{projects.length > 0 && (
+					<ProjectSelector
+						onSelect={selectProject}
+						projects={projects}
+						selectedProjectERC={projectERC}
+					/>
+				)}
+
+				<Button displayType="primary" onClick={() => navigate('/new')}>
+					{translate('new-attachment')}
+				</Button>
+			</div>
 		</div>
 	);
 
-	if (loading || projectsLoading) {
+	if (projectsLoading) {
 		return (
 			<div className="mx-auto">
 				<ClayLoadingIndicator size="sm" />
@@ -104,17 +152,37 @@ const TicketAttachmentsList = () => {
 		);
 	}
 
-	if (!hasProject) {
+	if (!projects.length) {
 		return (
 			<div className="py-4">
 				{header}
 
-				<RestrictedFeatureMessage />
+				<RestrictedFeatureMessage
+					message={
+						hasAccountProjects
+							? translate(
+									'login-as-a-user-that-has-access-to-a-project-or-contact-your-project-administrator-to-add-you-to-a-project.'
+								)
+							: undefined
+					}
+				/>
 			</div>
 		);
 	}
 
 	const attachments = data?.items ?? [];
+
+	const handleDeleteClick = (attachment: ITicketAttachment) => {
+		confirmationModal.openModal({
+			body: (
+				<p>
+					{translate('are-you-sure-you-want-to-delete-this-attachment')}
+				</p>
+			),
+			header: translate('confirm-deletion'),
+			onConfirm: () => deleteAttachment(attachment.id),
+		});
+	};
 
 	const rows = attachments.map((attachment) => ({
 		actions: (
@@ -125,6 +193,18 @@ const TicketAttachmentsList = () => {
 				>
 					{translate('download')}
 				</ClayLink>
+
+				{(canManageAttachments ||
+					String(attachment.creator?.id) === currentUserId) && (
+					<ClayLink
+						className="ml-3"
+						displayType="danger"
+						onClick={() => handleDeleteClick(attachment)}
+						title={translate('delete')}
+					>
+						{translate('delete')}
+					</ClayLink>
+				)}
 			</div>
 		),
 		dateCreated: (
@@ -159,7 +239,11 @@ const TicketAttachmentsList = () => {
 			{header}
 
 			<div className="mt-3">
-				{attachments.length ? (
+				{!projectERC || loading ? (
+					<div className="mx-auto">
+						<ClayLoadingIndicator size="sm" />
+					</div>
+				) : attachments.length ? (
 					<Table columns={columns} rows={rows as unknown as IRow[]} />
 				) : (
 					<div className="p-3">

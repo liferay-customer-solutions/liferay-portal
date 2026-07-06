@@ -6,7 +6,7 @@
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {useState} from 'react';
 import RestrictedFeatureMessage from '~/components/RestrictedFeatureMessage/RestrictedFeatureMessage';
-import {useHasProject} from '~/pages/MyAccount/Projects/projects';
+import {useUserProjects} from '~/pages/MyAccount/Projects/projects';
 import AttachmentAlreadyExists from '~/pages/TicketAttachments/components/TicketAttachmentsMessages/AttachmentAlreadyExists';
 import AttachmentNotFound from '~/pages/TicketAttachments/components/TicketAttachmentsMessages/AttachmentNotFound';
 import ForbiddenAccessUpload from '~/pages/TicketAttachments/components/TicketAttachmentsMessages/ForbiddenAccessUpload';
@@ -28,13 +28,13 @@ const renderErrorComponent = (
 		case 'INVALID_TICKET_NUMBER':
 			return <InvalidTicketNumber />;
 		case 'JIRA_ORGANIZATION_ERROR': {
-			if (!uploadStateData?.uploadAccountKey) {
+			if (!uploadStateData?.uploadProjectKey) {
 				return <UnexpectedError uploadErrorMessage="try-again-later" />;
 			}
 
 			return (
 				<AttachmentNotFound
-					uploadAccountKey={uploadStateData.uploadAccountKey}
+					uploadProjectKey={uploadStateData.uploadProjectKey}
 				/>
 			);
 		}
@@ -53,7 +53,7 @@ const renderErrorComponent = (
 
 const TicketAttachmentsUploaderOutlet = () => {
 	const {errorCode, hasAccess, loading} = useCheckAttachmentAccess();
-	const {hasProject, loading: projectsLoading} = useHasProject();
+	const {loading: projectsLoading, projects} = useUserProjects();
 	const [uploadStateData, setUploadStateData] = useState<IUpload | null>(
 		null
 	);
@@ -66,7 +66,7 @@ const TicketAttachmentsUploaderOutlet = () => {
 		);
 	}
 
-	if (!hasProject) {
+	if (!projects.length) {
 		return <RestrictedFeatureMessage />;
 	}
 

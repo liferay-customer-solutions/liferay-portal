@@ -30,6 +30,7 @@ type EntitySelectorProps = {
 	name: string;
 	onSearchChange: (value: string) => void;
 	onSelect: (id: string) => void;
+	readOnly?: boolean;
 	searchValue: string;
 	selectedId?: string;
 	triggerIcon: ReactNode;
@@ -46,6 +47,7 @@ export default function EntitySelector({
 	name,
 	onSearchChange,
 	onSelect,
+	readOnly = false,
 	searchValue,
 	selectedId,
 	triggerIcon,
@@ -75,11 +77,19 @@ export default function EntitySelector({
 		onSelect(id);
 	}
 
+	const caretIcon = readOnly ? null : (
+		<ClayIcon
+			style={{color: LABEL_COLOR, flexShrink: 0, marginLeft: 'auto'}}
+			symbol="caret-bottom"
+		/>
+	);
+
 	const trigger =
 		variant === 'rich' ? (
 			<button
 				aria-label={ariaLabel}
 				className="align-items-center bg-transparent border-0 d-flex p-0 text-left w-100"
+				disabled={readOnly}
 				ref={setTriggerElement}
 				style={{gap: '0.75rem'}}
 				type="button"
@@ -119,14 +129,7 @@ export default function EntitySelector({
 							{name}
 						</span>
 
-						<ClayIcon
-							style={{
-								color: LABEL_COLOR,
-								flexShrink: 0,
-								marginLeft: 'auto',
-							}}
-							symbol="caret-bottom"
-						/>
+						{caretIcon}
 					</span>
 
 					{badge && (
@@ -152,6 +155,7 @@ export default function EntitySelector({
 			<button
 				aria-label={ariaLabel}
 				className="align-items-center border-0 d-flex entity-selector-trigger"
+				disabled={readOnly}
 				ref={setTriggerElement}
 				style={{
 					backgroundColor: 'var(--color-neutral-1)',
@@ -176,16 +180,13 @@ export default function EntitySelector({
 					{name}
 				</span>
 
-				<ClayIcon
-					style={{
-						color: LABEL_COLOR,
-						flexShrink: 0,
-						marginLeft: 'auto',
-					}}
-					symbol="caret-bottom"
-				/>
+				{caretIcon}
 			</button>
 		);
+
+	if (readOnly) {
+		return trigger;
+	}
 
 	return (
 		<ClayDropDown

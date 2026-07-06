@@ -83,8 +83,8 @@ const useTicketAttachmentsInitiateUpload = (): IProps => {
 				return {
 					success: true,
 					uploadProperties: {
-						accountKey: responseJSON.accountKey,
 						gcsSessionURL: responseJSON.gcsSessionURL,
+						projectKey: responseJSON.projectKey,
 						ticketAttachmentId: responseJSON.ticketAttachmentId,
 					},
 				};

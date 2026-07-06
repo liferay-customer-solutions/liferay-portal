@@ -13,9 +13,12 @@ export default {
 	'an-unexpected-error-occurred': '予期しないエラーが発生しました。',
 	'are-there-any-support-tickets-impacting-this-event':
 		'このイベントに影響するサポートチケットはありますか？',
+	'are-you-sure-you-want-to-delete-this-attachment':
+		'この添付ファイルを削除してもよろしいですか？',
 	'associated-tickets': '関連チケット',
 	'attach-file-to-ticket-x': 'チケット番号{0}にファイルを添付する',
 	'attachment': '添付ファイル',
+	'attachment-deleted-successfully': '添付ファイルは正常に削除されました。',
 	'back-to-business-events': 'ビジネスイベントに戻る',
 	'business-event-actual-event-date-recorded-successfully':
 		'ビジネスイベントの実際のイベント日が正常に記録されました。',
@@ -101,6 +104,8 @@ export default {
 	'select-a-local-file-to-upload-only-one-file-can-be-attached-at-a-time':
 		'アップロードするローカルファイルを選択します。一度に添付できるファイルは1つだけです。',
 	'select-the-option': 'オプションの選択',
+	'select-the-project-and-ticket-you-want-to-attach-a-file-to':
+		'ファイルを添付するプロジェクトとチケットを選択してください。',
 	'the-changes-were-saved-successfully': '変更点は正常に保存されました。',
 	'the-file-may-have-been-deleted': 'ファイルが削除された可能性があります。',
 	'there-are-currently-no-open-tickets-under-this-project':
@@ -113,6 +118,7 @@ export default {
 	'time-zone': 'タイムゾーン',
 	'try-again-later': '後でもう一度試してください。',
 	'unable-to-connect-to-file-server': 'ファイルサーバーに接続できない',
+	'unable-to-delete-attachment': '添付ファイルを削除できませんでした。',
 	'upgrade': 'アップグレード',
 	'upload': 'アップロード',
 	'user': 'ユーザー',

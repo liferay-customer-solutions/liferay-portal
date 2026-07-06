@@ -4,41 +4,65 @@
  */
 
 import {useOneContext} from '~/context/OneContextProvider';
+import {useFetch} from '~/hooks/useFetch';
+import {Liferay} from '~/services/liferay/liferay';
 
-const ACCOUNT_ADMIN_ROLE = 'Account Administrator';
-const ACCOUNT_REQUESTER_ROLE = 'Account Requester';
-const LIFERAY_STAFF_ROLE = 'Liferay Staff';
+import type {APIResponse} from '~/types/api';
 
-export default function useHasAllEventsPermissions(accountKey?: string): {
+const PROJECT_ADMIN_ROLE_ERC = 'C_PROJECT_ADMIN';
+const PROJECT_REQUESTER_ROLE_ERC = 'C_PROJECT_REQUESTER';
+
+type ProjectMembershipAPIItem = {
+	roleExternalReferenceCode: string;
+};
+
+export default function useHasAllEventsPermissions(projectERC?: string): {
 	hasAllEventsPermissions: boolean;
 	loading: boolean;
 } {
-	const {myUserAccount} = useOneContext();
+	const {myUserAccount, userAccountModel} = useOneContext();
+
+	const userId = Liferay.ThemeDisplay.getUserId();
+
+	const hasElevatedRole = Boolean(
+		userAccountModel?.isAdmin ||
+			userAccountModel?.isLiferayStaff ||
+			userAccountModel?.isAccountAdministrator
+	);
+
+	const {data: membershipData, isLoading: membershipLoading} = useFetch<
+		APIResponse<ProjectMembershipAPIItem>
+	>(
+		!hasElevatedRole && projectERC && userId
+			? '/o/c/projectmemberships'
+			: null,
+		{
+			params: {
+				fields: 'roleExternalReferenceCode',
+				filter: `r_projectToProjectMembership_c_projectERC eq '${projectERC}' and r_userToProjectMembership_userId eq '${userId}'`,
+				pageSize: 1,
+			},
+		}
+	);
 
 	if (!myUserAccount) {
 		return {hasAllEventsPermissions: false, loading: true};
 	}
 
-	const isAdministrator = myUserAccount.roleBriefs?.some(
-		(role) => role.name === 'Administrator'
-	);
+	if (hasElevatedRole) {
+		return {hasAllEventsPermissions: true, loading: false};
+	}
 
-	const isLiferayStaff = myUserAccount.roleBriefs?.some(
-		(role) => role.name === LIFERAY_STAFF_ROLE
-	);
+	const membershipRoleExternalReferenceCode =
+		membershipData?.items?.[0]?.roleExternalReferenceCode;
 
-	const hasAccountRole = myUserAccount.accountBriefs?.some(
-		(accountBrief) =>
-			accountBrief.externalReferenceCode === accountKey &&
-			accountBrief.roleBriefs?.some((role) =>
-				[ACCOUNT_ADMIN_ROLE, ACCOUNT_REQUESTER_ROLE].includes(role.name)
-			)
-	);
+	const hasProjectTicketRole = [
+		PROJECT_ADMIN_ROLE_ERC,
+		PROJECT_REQUESTER_ROLE_ERC,
+	].includes(membershipRoleExternalReferenceCode ?? '');
 
 	return {
-		hasAllEventsPermissions: Boolean(
-			isAdministrator || isLiferayStaff || hasAccountRole
-		),
-		loading: false,
+		hasAllEventsPermissions: hasProjectTicketRole,
+		loading: membershipLoading,
 	};
 }

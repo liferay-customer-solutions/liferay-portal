@@ -60,6 +60,14 @@ export type AccountRole = {
 	roleId: number;
 };
 
+export type AccountRoleType =
+	| 'Account Administrator'
+	| 'SSA Admin'
+	| 'SSA User'
+	| 'Solution Publisher';
+
+export type RegularRoleType = 'Administrator' | 'Liferay Staff';
+
 export type RoleBrief = {
 	id: number;
 	name: string;
@@ -93,16 +101,3 @@ export type UserAccount = {
 		}[];
 	};
 };
-
-export type AccountRoleType =
-	| 'Administrator'
-	| 'SSA Admin'
-	| 'SSA User'
-	| 'Solution Publisher';
-
-export type AccountType =
-	| 'Marketplace Developer'
-	| 'Strategic Partner'
-	| 'Technology Partner';
-
-export type AccountTypes = 'business' | 'guest' | 'person' | 'supplier';

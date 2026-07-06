@@ -144,6 +144,8 @@ export default {
 	'apps-sold': 'Apps Sold',
 	'are-there-any-support-tickets-impacting-this-event':
 		'Are there any support tickets impacting this event?',
+	'are-you-sure-you-want-to-delete-this-attachment':
+		'Are you sure you want to delete this attachment?',
 	'are-you-sure-you-want-to-delete-this-common-license-key':
 		'Are you sure you want to delete this common license key?',
 	'are-you-sure-you-want-to-expire-this-trial-this-action-implies-the-permanent-end-of-the-test-environment':
@@ -163,6 +165,7 @@ export default {
 	'attach-file-to-ticket-x': 'Attach File to Ticket #{0}',
 	'attachment': 'Attachment',
 	'attachment-already-exists': 'Attachment Already Exists',
+	'attachment-deleted-successfully': 'Attachment deleted successfully.',
 	'attributes': 'Attributes',
 	'available': 'Available',
 	'back': 'Back',
@@ -1058,13 +1061,13 @@ export default {
 	'select-project': 'Select Project',
 	'select-purpose': 'Select Purpose',
 	'select-tags': 'Select Tags',
-	'select-the-account-and-ticket-you-want-to-attach-a-file-to':
-		'Select the account and ticket you want to attach a file to.',
 	'select-the-license-type-and-the-number-of-licenses-you-want-to-purchase':
 		'Select the license type and the number of licenses you want to purchase.',
 	'select-the-offering-of-liferay-your-app-is-compatible-with-the-compatibility-selections-will-determine-on-what-platforms-your-app-is-tested':
 		'Select the offering of Liferay your app is compatible with. The compatibility selections will determine on what platforms your app is tested.',
 	'select-the-option': 'Select the Option',
+	'select-the-project-and-ticket-you-want-to-attach-a-file-to':
+		'Select the project and ticket you want to attach a file to.',
 	'select-the-versions-of-liferay-that-your-app-is-compatible-with':
 		'Select the versions of Liferay that your app is compatible with.',
 	'select-your-desired-publisher-type': 'Select your desired publisher type',
@@ -1277,6 +1280,7 @@ export default {
 	'uat': 'UAT',
 	'unable-to-assign-roles': 'Unable to assign roles',
 	'unable-to-connect-to-file-server': 'Unable to connect to file server.',
+	'unable-to-delete-attachment': 'Unable to delete attachment.',
 	'unable-to-download-your-license-file-please-try-again-and-or-contact-support-via-the-manage-menu-on-the-dashboard':
 		'Unable to download your license file.  Please try again and/or contact support via the manage menu on the dashboard.',
 	'unable-to-invite-member': 'Unable to invite member.',

@@ -4,21 +4,29 @@
  */
 
 import {useMemo} from 'react';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import AppLayout from '~/components/AppLayout/AppLayout';
 import Breadcrumb from '~/components/Breadcrumb/Breadcrumb';
+import ProjectSelector from '~/components/ProjectSelector/ProjectSelector';
 import {useProject} from '~/context/ProjectContext';
 import i18n from '~/i18n';
 import {buildNavItems} from '~/utils/routeUtils';
 
 import ProjectHeader from '../../Projects/components/ProjectHeader/ProjectHeader';
-import ProjectSelector from '../../Projects/components/ProjectSelector/ProjectSelector';
 import {isUnassignedProject} from '../../Projects/projects';
 import {projectDetailRoutes} from '../../myAccountRoutes';
 
 export default function ProjectLayout() {
 	const {accountERC} = useParams();
 	const {loading, projectId, projects} = useProject();
+
+	const navigate = useNavigate();
+
+	function handleSelectProject(id: string) {
+		if (id !== projectId) {
+			navigate(`/${accountERC}/project/${id}/products`);
+		}
+	}
 
 	const navItems = useMemo(
 		() =>
@@ -45,7 +53,17 @@ export default function ProjectLayout() {
 		<AppLayout
 			breadcrumb={<Breadcrumb />}
 			contentHeader={contentHeader}
-			header={<ProjectSelector />}
+			header={
+				<ProjectSelector
+					emptyLabel="no-projects-yet"
+					loading={loading}
+					onSelect={handleSelectProject}
+					projects={projects}
+					readOnly={false}
+					selectedProjectERC={projectId}
+					showProjectCount
+				/>
+			}
 			navItems={navItems}
 		/>
 	);
