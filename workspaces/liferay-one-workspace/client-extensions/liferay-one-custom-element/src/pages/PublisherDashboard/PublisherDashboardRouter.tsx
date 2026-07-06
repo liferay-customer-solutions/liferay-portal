@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {useLayoutEffect} from 'react';
 import {HashRouter, useRoutes} from 'react-router-dom';
 import {toRouteObjects} from '~/utils/routeUtils';
 
@@ -10,6 +11,16 @@ import PublisherDashboardLayout from './components/PublisherDashboardLayout/Publ
 import {publisherDashboardRoutes} from './publisherDashboardRoutes';
 
 function PublisherDashboardRoutes() {
+	useLayoutEffect(() => {
+		if (!window.location.pathname.endsWith('/')) {
+			window.history.replaceState(
+				null,
+				'',
+				`${window.location.pathname}/${window.location.hash}`
+			);
+		}
+	}, []);
+
 	return useRoutes([
 		{
 			children: toRouteObjects(publisherDashboardRoutes),

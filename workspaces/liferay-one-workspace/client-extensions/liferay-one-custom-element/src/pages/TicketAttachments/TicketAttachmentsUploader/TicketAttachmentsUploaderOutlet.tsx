@@ -6,7 +6,7 @@
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {useState} from 'react';
 import RestrictedFeatureMessage from '~/components/RestrictedFeatureMessage/RestrictedFeatureMessage';
-import {useUserProjects} from '~/pages/MyAccount/Projects/projects';
+import {useHasProject} from '~/pages/MyAccount/Projects/projects';
 import AttachmentAlreadyExists from '~/pages/TicketAttachments/components/TicketAttachmentsMessages/AttachmentAlreadyExists';
 import AttachmentNotFound from '~/pages/TicketAttachments/components/TicketAttachmentsMessages/AttachmentNotFound';
 import ForbiddenAccessUpload from '~/pages/TicketAttachments/components/TicketAttachmentsMessages/ForbiddenAccessUpload';
@@ -53,7 +53,7 @@ const renderErrorComponent = (
 
 const TicketAttachmentsUploaderOutlet = () => {
 	const {errorCode, hasAccess, loading} = useCheckAttachmentAccess();
-	const {loading: projectsLoading, projects} = useUserProjects();
+	const {hasProject, loading: projectsLoading} = useHasProject();
 	const [uploadStateData, setUploadStateData] = useState<IUpload | null>(
 		null
 	);
@@ -66,7 +66,7 @@ const TicketAttachmentsUploaderOutlet = () => {
 		);
 	}
 
-	if (!projects.length) {
+	if (!hasProject) {
 		return <RestrictedFeatureMessage />;
 	}
 

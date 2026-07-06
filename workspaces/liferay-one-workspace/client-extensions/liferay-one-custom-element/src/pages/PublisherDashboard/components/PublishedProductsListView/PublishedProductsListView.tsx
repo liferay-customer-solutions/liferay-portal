@@ -19,6 +19,8 @@ import {
 	ProductWorkflowStatusLabel,
 } from '~/utils/productUtils';
 
+import './PublishedProductsListView.css';
+
 import type {
 	Product,
 	ProductSpecification,
@@ -168,6 +170,7 @@ export default function PublishedProductsListView({
 	}
 
 	const emptyStateProps = {
+		className: 'publisher-dashboard-empty-state',
 		description: i18n.translate(emptyStateDescription),
 		imgSrc: openSourceIcon,
 		title: i18n.translate(emptyStateTitle),

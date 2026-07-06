@@ -16,7 +16,7 @@ import Table, {
 } from '~/components/BusinessEventsTable/BusinessEventsTable';
 import RestrictedFeatureMessage from '~/components/RestrictedFeatureMessage/RestrictedFeatureMessage';
 import {Word, sub, translate} from '~/i18n';
-import {useUserProjects} from '~/pages/MyAccount/Projects/projects';
+import {useHasProject} from '~/pages/MyAccount/Projects/projects';
 import {Liferay} from '~/services/liferay/liferay';
 import getKebabCase from '~/utils/getKebabCase';
 
@@ -77,7 +77,7 @@ const BusinessEvents = () => {
 
 	const {isSaasOnly} = useIsSaasOnly();
 
-	const {loading: projectsLoading, projects} = useUserProjects();
+	const {hasProject, loading: projectsLoading} = useHasProject();
 
 	const navigate = useNavigate();
 
@@ -431,7 +431,7 @@ const BusinessEvents = () => {
 		</div>
 	);
 
-	if (!projects.length) {
+	if (!hasProject) {
 		return (
 			<div className="py-4">
 				{header}
