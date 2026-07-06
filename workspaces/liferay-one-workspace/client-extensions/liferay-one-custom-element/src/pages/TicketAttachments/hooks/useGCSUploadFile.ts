@@ -10,11 +10,11 @@ import useGCSGetUploadOffset from './useGCSGetUploadOffset';
 import useTicketAttachmentsCompleteUpload from './useTicketAttachmentsCompleteUpload';
 
 interface IParams {
-	accountKey: string;
 	comment: string;
 	file: File;
 	fileMd5: string;
 	gcsSessionURL: string;
+	projectKey: string;
 	ticketAttachmentId: string;
 	ticketId: string;
 }
@@ -50,11 +50,11 @@ const useGCSUploadFile = (): IProps => {
 	const uploadFile = useCallback(
 		async (params: IParams) => {
 			const {
-				accountKey,
 				comment,
 				file,
 				fileMd5,
 				gcsSessionURL,
+				projectKey,
 				ticketAttachmentId,
 				ticketId,
 			} = params;
@@ -193,7 +193,7 @@ const useGCSUploadFile = (): IProps => {
 						uploadProperties: {
 							attachmentName: file.name,
 							ticketId,
-							uploadAccountKey: accountKey,
+							uploadProjectKey: projectKey,
 						},
 					};
 				}
@@ -220,7 +220,7 @@ const useGCSUploadFile = (): IProps => {
 						errorCode,
 						errorMessage: String(uploadError),
 						ticketId,
-						uploadAccountKey: accountKey,
+						uploadProjectKey: projectKey,
 					},
 				};
 			}

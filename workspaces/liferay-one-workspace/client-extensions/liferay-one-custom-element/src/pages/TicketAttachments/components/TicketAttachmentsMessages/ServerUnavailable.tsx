@@ -9,10 +9,10 @@ import routerPath from '~/utils/routerPath';
 
 interface IProps {
 	ticketURL: string;
-	uploadAccountKey: string;
+	uploadProjectKey: string;
 }
 
-const ServerUnavailable = ({ticketURL, uploadAccountKey}: IProps) => {
+const ServerUnavailable = ({ticketURL, uploadProjectKey}: IProps) => {
 	const pageRoutes = routerPath();
 
 	return (
@@ -21,10 +21,10 @@ const ServerUnavailable = ({ticketURL, uploadAccountKey}: IProps) => {
 			subtitle="try-again-later"
 			title="unable-to-connect-to-file-server"
 		>
-			{uploadAccountKey && (
+			{uploadProjectKey && (
 				<a
 					className="btn btn-secondary mr-2 uploader-secondary-button"
-					href={`${pageRoutes.project(uploadAccountKey)}/attachments`}
+					href={`${pageRoutes.project(uploadProjectKey)}/attachments`}
 				>
 					{i18n.translate('return-to-attachments')}
 				</a>

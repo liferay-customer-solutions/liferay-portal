@@ -27,11 +27,3 @@ export interface IBusinessEventVersion {
 	comment?: string;
 	createdDate?: string;
 }
-
-export interface ITicket {
-	link: string;
-	selected?: boolean;
-	status: string;
-	subject: string;
-	ticketId: string;
-}

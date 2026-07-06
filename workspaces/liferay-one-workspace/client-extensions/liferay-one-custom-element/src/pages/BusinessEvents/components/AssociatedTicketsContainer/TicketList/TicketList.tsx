@@ -4,7 +4,7 @@
  */
 
 import TicketOption from '~/pages/BusinessEvents/components/AssociatedTicketsContainer/TicketOption/TicketOption';
-import {ITicket} from '~/pages/BusinessEvents/types';
+import {ITicket} from '~/types/ticket';
 
 interface IProps {
 	primaryAction?: (value: ITicket) => void;

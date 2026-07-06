@@ -13,9 +13,12 @@ export default {
 	'an-unexpected-error-occurred': 'Ocorreu um erro inesperado.',
 	'are-there-any-support-tickets-impacting-this-event':
 		'Existem tickets de suporte impactando este evento?',
+	'are-you-sure-you-want-to-delete-this-attachment':
+		'Tem certeza de que deseja excluir este anexo?',
 	'associated-tickets': 'Tickets Associados',
 	'attach-file-to-ticket-x': 'Anexar Arquivo ao Chamado nº {0}',
 	'attachment': 'Anexo',
+	'attachment-deleted-successfully': 'Anexo excluído com sucesso.',
 	'back-to-business-events': 'Voltar para Eventos de Negócios',
 	'business-event-actual-event-date-recorded-successfully':
 		'Data real do evento de negócio registrada com sucesso.',
@@ -103,6 +106,8 @@ export default {
 	'select-a-local-file-to-upload-only-one-file-can-be-attached-at-a-time':
 		'Selecione um arquivo local para fazer upload. Apenas um arquivo pode ser anexado por vez',
 	'select-the-option': 'Selecione a Opção',
+	'select-the-project-and-ticket-you-want-to-attach-a-file-to':
+		'Selecione o projeto e o chamado ao qual deseja anexar um arquivo.',
 	'the-changes-were-saved-successfully':
 		'As alterações foram salvas com sucesso.',
 	'the-file-may-have-been-deleted': 'O arquivo pode ter sido excluído.',
@@ -117,6 +122,7 @@ export default {
 	'try-again-later': 'Tente novamente mais tarde.',
 	'unable-to-connect-to-file-server':
 		'Não foi possível conectar ao servidor de arquivos.',
+	'unable-to-delete-attachment': 'Não foi possível excluir o anexo.',
 	'upgrade': 'Atualização',
 	'upload': 'Enviar',
 	'user': 'Usuário',

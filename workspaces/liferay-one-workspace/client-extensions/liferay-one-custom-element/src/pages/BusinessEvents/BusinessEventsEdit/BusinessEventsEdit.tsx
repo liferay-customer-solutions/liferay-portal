@@ -24,7 +24,6 @@ import BusinessEventsConfirmation from '~/pages/BusinessEvents/BusinessEventsCon
 import AssociatedTicketsContainer from '~/pages/BusinessEvents/components/AssociatedTicketsContainer/AssociatedTicketsContainer';
 import Input from '~/pages/BusinessEvents/components/Input/Input';
 import Select, {IOption} from '~/pages/BusinessEvents/components/Select/Select';
-import useAccountsTickets from '~/pages/BusinessEvents/hooks/useAccountsTickets';
 import useCanViewTickets from '~/pages/BusinessEvents/hooks/useCanViewTickets';
 import useGetBusinessEvent from '~/pages/BusinessEvents/hooks/useGetBusinessEvent';
 import useGetBusinessEventTypesList from '~/pages/BusinessEvents/hooks/useGetBusinessEventTypesList';
@@ -32,7 +31,8 @@ import useGetLiferayVersions from '~/pages/BusinessEvents/hooks/useGetLiferayVer
 import useGetUTCTimeZonesList from '~/pages/BusinessEvents/hooks/useGetUTCTimeZonesList';
 import useHasAllEventsPermissions from '~/pages/BusinessEvents/hooks/useHasAllEventsPermissions';
 import useIsSaasOnly from '~/pages/BusinessEvents/hooks/useIsSaasOnly';
-import {IBusinessEvent, ITicket} from '~/pages/BusinessEvents/types';
+import useProjectTickets from '~/pages/BusinessEvents/hooks/useProjectTickets';
+import {IBusinessEvent} from '~/pages/BusinessEvents/types';
 import {containsOption} from '~/pages/BusinessEvents/utils/containsOption';
 import {
 	getFormattedEventDateTime,
@@ -41,6 +41,7 @@ import {
 import parseAssociatedTickets from '~/pages/BusinessEvents/utils/parseAssociatedTickets';
 import {Liferay} from '~/services/liferay/liferay';
 import {updateBusinessEvent} from '~/services/spring-boot/Jira';
+import {ITicket} from '~/types/ticket';
 import {isValidDate, requiredTimeInput} from '~/utils/formValidationUtils';
 import getKebabCase from '~/utils/getKebabCase';
 
@@ -51,7 +52,7 @@ interface IProps {
 const NAVIGATION_YEARS_RANGE = 2;
 
 const BusinessEventsEditPage: React.FC<IProps> = ({originalBusinessEvent}) => {
-	const {accountKey} = useParams<{accountKey: string}>();
+	const {projectERC} = useParams<{projectERC: string}>();
 
 	const {
 		control,
@@ -94,7 +95,7 @@ const BusinessEventsEditPage: React.FC<IProps> = ({originalBusinessEvent}) => {
 	);
 
 	const {hasAllEventsPermissions} = useHasAllEventsPermissions(
-		accountKey || ''
+		projectERC || ''
 	);
 
 	const [hasImpactingEvents, setHasImpactingEvents] = useState(() => {
@@ -118,9 +119,9 @@ const BusinessEventsEditPage: React.FC<IProps> = ({originalBusinessEvent}) => {
 
 	const {isSaasOnly} = useIsSaasOnly();
 
-	const {loading: loadingTickets, tickets} = useAccountsTickets(
+	const {loading: loadingTickets, tickets} = useProjectTickets(
 		originalBusinessEvent,
-		accountKey || '',
+		projectERC || '',
 		hasImpactingEvents === 'no'
 	);
 
@@ -141,7 +142,7 @@ const BusinessEventsEditPage: React.FC<IProps> = ({originalBusinessEvent}) => {
 	});
 
 	const {canViewTickets, loading: loadingJiraAccountChecking} =
-		useCanViewTickets(accountKey || '');
+		useCanViewTickets(projectERC || '');
 
 	const {loading: loadingLiferayVersions, productVersions} =
 		useGetLiferayVersions();
@@ -229,9 +230,9 @@ const BusinessEventsEditPage: React.FC<IProps> = ({originalBusinessEvent}) => {
 			}
 
 			await updateBusinessEvent(
-				accountKey || '',
+				formattedBusinessEvent,
 				businessEvent.id,
-				formattedBusinessEvent
+				projectERC || ''
 			);
 
 			navigate('..');
@@ -919,11 +920,11 @@ const BusinessEventsEditForm: React.FC<IFormProps> = ({
 };
 
 const BusinessEventsEdit: React.FC = () => {
-	const {accountKey, id} = useParams<{accountKey: string; id: string}>();
+	const {projectERC, id} = useParams<{projectERC: string; id: string}>();
 
 	const {businessEvent, loading} = useGetBusinessEvent(
-		accountKey || '',
-		id || ''
+		id || '',
+		projectERC || ''
 	);
 
 	if (loading) {

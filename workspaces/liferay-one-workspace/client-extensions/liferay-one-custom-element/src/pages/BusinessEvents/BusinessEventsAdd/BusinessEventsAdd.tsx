@@ -20,19 +20,20 @@ import {translate} from '~/i18n';
 import AssociatedTicketsContainer from '~/pages/BusinessEvents/components/AssociatedTicketsContainer/AssociatedTicketsContainer';
 import Input from '~/pages/BusinessEvents/components/Input/Input';
 import Select, {IOption} from '~/pages/BusinessEvents/components/Select/Select';
-import useAccountsTickets from '~/pages/BusinessEvents/hooks/useAccountsTickets';
 import useCanViewTickets from '~/pages/BusinessEvents/hooks/useCanViewTickets';
 import useGetBusinessEventTypesList from '~/pages/BusinessEvents/hooks/useGetBusinessEventTypesList';
 import useGetLiferayVersions from '~/pages/BusinessEvents/hooks/useGetLiferayVersions';
 import useGetUTCTimeZonesList from '~/pages/BusinessEvents/hooks/useGetUTCTimeZonesList';
 import useHasAllEventsPermissions from '~/pages/BusinessEvents/hooks/useHasAllEventsPermissions';
 import useIsSaasOnly from '~/pages/BusinessEvents/hooks/useIsSaasOnly';
-import {IBusinessEvent, ITicket} from '~/pages/BusinessEvents/types';
+import useProjectTickets from '~/pages/BusinessEvents/hooks/useProjectTickets';
+import {IBusinessEvent} from '~/pages/BusinessEvents/types';
 import {containsOption} from '~/pages/BusinessEvents/utils/containsOption';
 import {getFormattedEventDateTime} from '~/pages/BusinessEvents/utils/getFormattedEventDateUtils';
 import getInitialEvent from '~/pages/BusinessEvents/utils/getInitialEvent';
 import {Liferay} from '~/services/liferay/liferay';
 import {createBusinessEvent} from '~/services/spring-boot/Jira';
+import {ITicket} from '~/types/ticket';
 import {isValidDate, requiredTimeInput} from '~/utils/formValidationUtils';
 
 import FormLayout from './components/FormLayout/FormLayout';
@@ -40,7 +41,7 @@ import FormLayout from './components/FormLayout/FormLayout';
 const NAVIGATION_YEARS_RANGE = 2;
 
 const BusinessEventsAddPage: React.FC = () => {
-	const {accountKey} = useParams<{accountKey: string}>();
+	const {projectERC} = useParams<{projectERC: string}>();
 
 	const {
 		control,
@@ -81,7 +82,7 @@ const BusinessEventsAddPage: React.FC = () => {
 	);
 
 	const {hasAllEventsPermissions} = useHasAllEventsPermissions(
-		accountKey || ''
+		projectERC || ''
 	);
 
 	const [hasImpactingEvents, setHasImpactingEvents] = useState<string>('no');
@@ -101,14 +102,14 @@ const BusinessEventsAddPage: React.FC = () => {
 
 	const {isSaasOnly} = useIsSaasOnly();
 
-	const {loading: loadingTickets, tickets} = useAccountsTickets(
+	const {loading: loadingTickets, tickets} = useProjectTickets(
 		undefined,
-		accountKey || '',
+		projectERC || '',
 		hasImpactingEvents === 'no'
 	);
 
 	const {canViewTickets, loading: loadingJiraAccountChecking} =
-		useCanViewTickets(accountKey || '');
+		useCanViewTickets(projectERC || '');
 
 	const {loading: loadingUTCTimeZonesList, utcTimeZonesList} =
 		useGetUTCTimeZonesList();
@@ -198,9 +199,9 @@ const BusinessEventsAddPage: React.FC = () => {
 		try {
 			setIsLoadingSubmitButton(true);
 
-			await createBusinessEvent(accountKey || '', updatedBusinessEvent);
+			await createBusinessEvent(updatedBusinessEvent, projectERC || '');
 
-			navigate(`/${accountKey}/business-events`);
+			navigate(`/${projectERC}/business-events`);
 
 			Liferay.Util.openToast({
 				message: translate('business-event-created-successfully'),
@@ -347,7 +348,7 @@ const BusinessEventsAddPage: React.FC = () => {
 							<Button
 								displayType="secondary"
 								onClick={() => {
-									navigate(`/${accountKey}/business-events`);
+									navigate(`/${projectERC}/business-events`);
 								}}
 							>
 								{translate('cancel')}

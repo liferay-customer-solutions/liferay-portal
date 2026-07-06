@@ -8,8 +8,8 @@ import {IBusinessEventVersion} from '~/pages/BusinessEvents/types';
 import {getBusinessEventVersions} from '~/services/spring-boot/Jira';
 
 export default function useGetBusinessEventVersions(
-	accountKey: string,
-	id: string
+	id: string,
+	projectERC: string
 ): {
 	businessEventVersions: IBusinessEventVersion[];
 	fetchBusinessEventVersions: () => Promise<void>;
@@ -22,14 +22,14 @@ export default function useGetBusinessEventVersions(
 	const [loading, setLoading] = useState(true);
 
 	const fetchBusinessEventVersions = useCallback(async () => {
-		if (!accountKey || !id) {
+		if (!id || !projectERC) {
 			return;
 		}
 
 		setLoading(true);
 
 		try {
-			const response = await getBusinessEventVersions(accountKey, id);
+			const response = await getBusinessEventVersions(id, projectERC);
 
 			setBusinessEventVersions(
 				(response.items || []) as IBusinessEventVersion[]
@@ -41,7 +41,7 @@ export default function useGetBusinessEventVersions(
 		finally {
 			setLoading(false);
 		}
-	}, [accountKey, id]);
+	}, [id, projectERC]);
 
 	useEffect(() => {
 		fetchBusinessEventVersions();

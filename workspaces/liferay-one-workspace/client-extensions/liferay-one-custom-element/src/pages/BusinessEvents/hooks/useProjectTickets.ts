@@ -4,11 +4,12 @@
  */
 
 import {useCallback, useEffect, useState} from 'react';
-import {IBusinessEvent, ITicket} from '~/pages/BusinessEvents/types';
+import {IBusinessEvent} from '~/pages/BusinessEvents/types';
 import parseAssociatedTickets from '~/pages/BusinessEvents/utils/parseAssociatedTickets';
-import {getAccountTickets} from '~/services/spring-boot/Jira';
+import {getProjectTickets} from '~/services/spring-boot/Jira';
+import {ITicket} from '~/types/ticket';
 
-const useAccountsTickets = (
+const useProjectTickets = (
 	businessEvent?: IBusinessEvent,
 	externalReferenceCode?: string,
 	skip?: boolean
@@ -28,7 +29,7 @@ const useAccountsTickets = (
 				? parseAssociatedTickets(businessEvent.associatedTickets)
 				: undefined;
 
-			const response = await getAccountTickets(
+			const response = await getProjectTickets(
 				externalReferenceCode,
 				ticketIds
 			);
@@ -53,4 +54,4 @@ const useAccountsTickets = (
 	return {loading, tickets};
 };
 
-export default useAccountsTickets;
+export default useProjectTickets;

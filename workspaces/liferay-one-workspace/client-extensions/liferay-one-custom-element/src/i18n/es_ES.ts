@@ -13,9 +13,12 @@ export default {
 	'an-unexpected-error-occurred': 'Se produjo un error inesperado.',
 	'are-there-any-support-tickets-impacting-this-event':
 		'¿Hay tickets de soporte que afecten a este evento?',
+	'are-you-sure-you-want-to-delete-this-attachment':
+		'¿Estás seguro de que quieres eliminar este adjunto?',
 	'associated-tickets': 'Tickets Asociados',
 	'attach-file-to-ticket-x': 'Adjunta un Archivo al Ticket #{0}',
 	'attachment': 'Adjunto',
+	'attachment-deleted-successfully': 'Adjunto eliminado con éxito.',
 	'back-to-business-events': 'Volver a Evento de Negocio',
 	'business-event-actual-event-date-recorded-successfully':
 		'Fecha real del evento de negocio registrada con éxito.',
@@ -102,6 +105,8 @@ export default {
 	'select-a-local-file-to-upload-only-one-file-can-be-attached-at-a-time':
 		'Selecciona un archivo local a subir. Solo se puede subir un archivo a la vez.',
 	'select-the-option': 'Selecciona la Opción',
+	'select-the-project-and-ticket-you-want-to-attach-a-file-to':
+		'Selecciona el proyecto y el ticket al que quieres adjuntar un archivo.',
 	'the-changes-were-saved-successfully':
 		'Los cambios se guardaron con éxito.',
 	'the-file-may-have-been-deleted': 'El archivo puede haberse eliminado.',
@@ -116,6 +121,7 @@ export default {
 	'try-again-later': 'Inténtalo de nuevo más tarde.',
 	'unable-to-connect-to-file-server':
 		'No es posible conectarse al servidor de archivos',
+	'unable-to-delete-attachment': 'No se pudo eliminar el adjunto.',
 	'upgrade': 'Actualización',
 	'upload': 'Subir',
 	'user': 'Usuario',

@@ -43,6 +43,7 @@ export const businessEventsRoutes: AppRoute[] = [
 			},
 			{element: <Navigate replace to="." />, path: '*'},
 		],
-		path: ':accountKey/business-events',
+		element: <BusinessEventsRedirect />,
+		path: ':projectERC/business-events',
 	},
 ];

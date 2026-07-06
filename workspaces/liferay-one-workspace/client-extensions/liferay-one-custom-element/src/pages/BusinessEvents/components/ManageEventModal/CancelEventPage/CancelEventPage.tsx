@@ -14,21 +14,21 @@ import {Liferay} from '~/services/liferay/liferay';
 import {updateBusinessEvent} from '~/services/spring-boot/Jira';
 
 interface IProps {
-	accountExternalReferenceCode: string;
 	businessEvent: IBusinessEvent;
 	closeFunction?: (value: boolean) => void;
 	modalType: string;
 	observer: Observer;
 	onCancel: () => void;
+	projectExternalReferenceCode: string;
 }
 
 const CancelEventPage: React.FC<IProps> = ({
-	accountExternalReferenceCode,
 	businessEvent,
 	closeFunction = () => {},
 	modalType,
 	observer,
 	onCancel,
+	projectExternalReferenceCode,
 }) => {
 	const [isLoadingSubmitButton, setIsLoadingSubmitButton] =
 		useState<boolean>(false);
@@ -62,9 +62,9 @@ const CancelEventPage: React.FC<IProps> = ({
 			setIsLoadingSubmitButton(true);
 
 			await updateBusinessEvent(
-				accountExternalReferenceCode,
+				formattedBusinessEvent,
 				businessEventId,
-				formattedBusinessEvent
+				projectExternalReferenceCode
 			);
 
 			closeFunction(false);

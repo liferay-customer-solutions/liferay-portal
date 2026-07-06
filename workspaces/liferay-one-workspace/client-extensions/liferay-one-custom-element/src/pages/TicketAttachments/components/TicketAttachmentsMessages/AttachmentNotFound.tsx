@@ -8,10 +8,10 @@ import AttachmentMessage from '~/pages/TicketAttachments/components/AttachmentMe
 import routerPath from '~/utils/routerPath';
 
 interface IProps {
-	uploadAccountKey?: string;
+	uploadProjectKey?: string;
 }
 
-const AttachmentNotFound = ({uploadAccountKey}: IProps) => {
+const AttachmentNotFound = ({uploadProjectKey}: IProps) => {
 	const pageRoutes = routerPath();
 
 	return (
@@ -20,10 +20,10 @@ const AttachmentNotFound = ({uploadAccountKey}: IProps) => {
 			subtitle="the-file-may-have-been-deleted"
 			title="file-to-download-doesnt-exist-anymore"
 		>
-			{uploadAccountKey && (
+			{uploadProjectKey && (
 				<a
 					className="btn btn-primary"
-					href={`${pageRoutes.project(uploadAccountKey)}/attachments`}
+					href={`${pageRoutes.project(uploadProjectKey)}/attachments`}
 				>
 					{i18n.translate('return-to-attachments')}
 				</a>

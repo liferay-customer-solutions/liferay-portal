@@ -8,38 +8,33 @@ import ClayForm, {ClaySelect} from '@clayui/form';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import ProjectSelector from '~/components/ProjectSelector/ProjectSelector';
 import RestrictedFeatureMessage from '~/components/RestrictedFeatureMessage/RestrictedFeatureMessage';
 import {translate} from '~/i18n';
-import {ITicket} from '~/pages/BusinessEvents/types';
-import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
-import {getAccountTickets} from '~/services/spring-boot/Jira';
-
-import type {AccountBrief} from '~/types/accounts';
+import {
+	useSelectedProject,
+	useUserProjects,
+} from '~/pages/MyAccount/Projects/projects';
+import {getProjectTickets} from '~/services/spring-boot/Jira';
+import {ITicket} from '~/types/ticket';
 
 const TicketAttachmentsAdd = () => {
 	const navigate = useNavigate();
 
-	const [accounts, setAccounts] = useState<AccountBrief[]>([]);
-	const [accountKey, setAccountKey] = useState('');
-	const [loadingAccounts, setLoadingAccounts] = useState(true);
+	const {hasAccountProjects, loading: projectsLoading, projects} =
+		useUserProjects();
+
+	const {projectERC, selectProject} = useSelectedProject(
+		projectsLoading,
+		projects
+	);
+
 	const [loadingTickets, setLoadingTickets] = useState(false);
 	const [ticketId, setTicketId] = useState('');
 	const [tickets, setTickets] = useState<ITicket[]>([]);
 
 	useEffect(() => {
-		HeadlessAdminUser.getMyUserAccount()
-			.then((userAccount) => {
-				const accountBriefs = userAccount?.accountBriefs ?? [];
-
-				setAccounts(accountBriefs);
-				setAccountKey(accountBriefs[0]?.externalReferenceCode ?? '');
-			})
-			.catch(() => setAccounts([]))
-			.finally(() => setLoadingAccounts(false));
-	}, []);
-
-	useEffect(() => {
-		if (!accountKey) {
+		if (!projectERC) {
 			setTickets([]);
 
 			return;
@@ -50,7 +45,7 @@ const TicketAttachmentsAdd = () => {
 		setLoadingTickets(true);
 		setTicketId('');
 
-		getAccountTickets(accountKey)
+		getProjectTickets(projectERC)
 			.then((response) => {
 				if (!controller.signal.aborted) {
 					setTickets((response.items as ITicket[]) ?? []);
@@ -64,9 +59,9 @@ const TicketAttachmentsAdd = () => {
 			});
 
 		return () => controller.abort();
-	}, [accountKey]);
+	}, [projectERC]);
 
-	if (loadingAccounts) {
+	if (projectsLoading) {
 		return (
 			<div className="mx-auto">
 				<ClayLoadingIndicator size="sm" />
@@ -74,10 +69,18 @@ const TicketAttachmentsAdd = () => {
 		);
 	}
 
-	if (!accounts.length) {
+	if (!projects.length) {
 		return (
 			<div className="py-4">
-				<RestrictedFeatureMessage />
+				<RestrictedFeatureMessage
+					message={
+						hasAccountProjects
+							? translate(
+									'login-as-a-user-that-has-access-to-a-project-or-contact-your-project-administrator-to-add-you-to-a-project.'
+								)
+							: undefined
+					}
+				/>
 			</div>
 		);
 	}
@@ -90,34 +93,18 @@ const TicketAttachmentsAdd = () => {
 
 			<h6 className="font-weight-normal text-neutral-7">
 				{translate(
-					'select-the-account-and-ticket-you-want-to-attach-a-file-to'
+					'select-the-project-and-ticket-you-want-to-attach-a-file-to'
 				)}
 			</h6>
 
 			<div className="mt-4" style={{maxWidth: '32rem'}}>
-				{accounts.length > 1 && (
-					<ClayForm.Group>
-						<label htmlFor="newAttachmentAccount">
-							{translate('account')}
-						</label>
-
-						<ClaySelect
-							id="newAttachmentAccount"
-							onChange={(event) =>
-								setAccountKey(event.target.value)
-							}
-							value={accountKey}
-						>
-							{accounts.map((account) => (
-								<ClaySelect.Option
-									key={account.externalReferenceCode}
-									label={account.name}
-									value={account.externalReferenceCode}
-								/>
-							))}
-						</ClaySelect>
-					</ClayForm.Group>
-				)}
+				<ClayForm.Group>
+					<ProjectSelector
+						onSelect={selectProject}
+						projects={projects}
+						selectedProjectERC={projectERC}
+					/>
+				</ClayForm.Group>
 
 				<ClayForm.Group>
 					<label htmlFor="newAttachmentTicket">
@@ -130,9 +117,7 @@ const TicketAttachmentsAdd = () => {
 						<ClaySelect
 							disabled={!tickets.length}
 							id="newAttachmentTicket"
-							onChange={(event) =>
-								setTicketId(event.target.value)
-							}
+							onChange={(event) => setTicketId(event.target.value)}
 							value={ticketId}
 						>
 							<ClaySelect.Option
@@ -158,10 +143,7 @@ const TicketAttachmentsAdd = () => {
 				</ClayForm.Group>
 
 				<div className="d-flex mt-4">
-					<Button
-						displayType="secondary"
-						onClick={() => navigate('/')}
-					>
+					<Button displayType="secondary" onClick={() => navigate('/')}>
 						{translate('cancel')}
 					</Button>
 

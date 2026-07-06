@@ -10,13 +10,13 @@ import routerPath from '~/utils/routerPath';
 interface IProps {
 	attachmentName: string;
 	ticketURL: string;
-	uploadAccountKey: string;
+	uploadProjectKey: string;
 }
 
 const UploadConfirmation = ({
 	attachmentName,
 	ticketURL,
-	uploadAccountKey,
+	uploadProjectKey,
 }: IProps) => {
 	const pageRoutes = routerPath();
 
@@ -26,10 +26,10 @@ const UploadConfirmation = ({
 			subtitle={i18n.sub('x-was-uploaded-successfully', [attachmentName])}
 			title="upload-confirmation"
 		>
-			{uploadAccountKey && (
+			{uploadProjectKey && (
 				<a
 					className="btn btn-secondary mr-2 uploader-secondary-button"
-					href={`${pageRoutes.project(uploadAccountKey)}/attachments`}
+					href={`${pageRoutes.project(uploadProjectKey)}/attachments`}
 				>
 					{i18n.translate('go-to-attachments')}
 				</a>

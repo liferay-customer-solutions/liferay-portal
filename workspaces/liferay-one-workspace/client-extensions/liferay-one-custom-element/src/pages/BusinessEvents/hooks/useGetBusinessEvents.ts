@@ -7,7 +7,7 @@ import {useCallback, useEffect, useState} from 'react';
 import {IBusinessEvent} from '~/pages/BusinessEvents/types';
 import {getBusinessEvents} from '~/services/spring-boot/Jira';
 
-export default function useGetBusinessEvents(accountKey: string): {
+export default function useGetBusinessEvents(projectERC: string): {
 	businessEvents: IBusinessEvent[];
 	fetchBusinessEvents: () => Promise<void>;
 	loading: boolean;
@@ -17,12 +17,12 @@ export default function useGetBusinessEvents(accountKey: string): {
 	const [loading, setLoading] = useState(true);
 
 	const fetchBusinessEvents = useCallback(async () => {
-		if (!accountKey) {
+		if (!projectERC) {
 			return;
 		}
 
 		try {
-			const businessEventsResponse = await getBusinessEvents(accountKey);
+			const businessEventsResponse = await getBusinessEvents(projectERC);
 
 			const items = (businessEventsResponse.items ||
 				[]) as IBusinessEvent[];
@@ -35,7 +35,7 @@ export default function useGetBusinessEvents(accountKey: string): {
 		finally {
 			setLoading(false);
 		}
-	}, [accountKey]);
+	}, [projectERC]);
 
 	useEffect(() => {
 		fetchBusinessEvents();

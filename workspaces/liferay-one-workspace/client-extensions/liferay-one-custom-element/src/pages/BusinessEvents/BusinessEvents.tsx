@@ -14,9 +14,10 @@ import {Link, useNavigate, useParams} from 'react-router-dom';
 import Table, {
 	IRow,
 } from '~/components/BusinessEventsTable/BusinessEventsTable';
+import ProjectSelector from '~/components/ProjectSelector/ProjectSelector';
 import RestrictedFeatureMessage from '~/components/RestrictedFeatureMessage/RestrictedFeatureMessage';
 import {Word, sub, translate} from '~/i18n';
-import {useHasProject} from '~/pages/MyAccount/Projects/projects';
+import {useUserProjects} from '~/pages/MyAccount/Projects/projects';
 import {Liferay} from '~/services/liferay/liferay';
 import getKebabCase from '~/utils/getKebabCase';
 
@@ -31,7 +32,6 @@ import {IBusinessEvent} from './types';
 import {getFormattedDate} from './utils/getFormattedDate';
 import {getFormattedTime} from './utils/getFormattedTime';
 import parseAssociatedTickets from './utils/parseAssociatedTickets';
-import {setLastViewedProjectCookie} from './utils/projectCookieUtils';
 
 const columns = [
 	{
@@ -62,22 +62,22 @@ const columns = [
 ];
 
 const BusinessEvents = () => {
-	const {accountKey} = useParams<{accountKey: string}>();
+	const {projectERC} = useParams<{projectERC: string}>();
 
 	const {filters, handleFilterChange, handleSearchChange} = useFilters();
 
 	const {businessEvents, fetchBusinessEvents, loading} = useGetBusinessEvents(
-		accountKey || ''
+		projectERC || ''
 	);
 	const [modalType, setModalType] = useState('');
 
 	const {hasAllEventsPermissions} = useHasAllEventsPermissions(
-		accountKey || ''
+		projectERC || ''
 	);
 
 	const {isSaasOnly} = useIsSaasOnly();
 
-	const {hasProject, loading: projectsLoading} = useHasProject();
+	const {loading: projectsLoading, projects} = useUserProjects();
 
 	const navigate = useNavigate();
 
@@ -90,15 +90,6 @@ const BusinessEvents = () => {
 			setSelectedBusinessEvent(undefined);
 		},
 	});
-
-	useEffect(() => {
-		if (accountKey) {
-			setLastViewedProjectCookie(
-				Liferay.ThemeDisplay.getUserId(),
-				accountKey
-			);
-		}
-	}, [accountKey]);
 
 	const handleOnCancel = useCallback(() => {
 		fetchBusinessEvents();
@@ -270,7 +261,7 @@ const BusinessEvents = () => {
 						label: translate('view-details'),
 						onClick: () => {
 							navigate(
-								`/${accountKey}/business-events/${businessEvent.id}`
+								`/${projectERC}/business-events/${businessEvent.id}`
 							);
 						},
 					},
@@ -288,7 +279,7 @@ const BusinessEvents = () => {
 							label: translate('edit-event'),
 							onClick: () => {
 								navigate(
-									`/${accountKey}/business-events/${businessEvent.id}/edit`
+									`/${projectERC}/business-events/${businessEvent.id}/edit`
 								);
 							},
 						},
@@ -348,7 +339,7 @@ const BusinessEvents = () => {
 						<div>
 							<div className="be-event-name font-weight-semi-bold text-neutral-10">
 								<Link
-									to={`/${accountKey}/business-events/${businessEvent.id}`}
+									to={`/${projectERC}/business-events/${businessEvent.id}`}
 								>
 									{businessEvent?.name}
 								</Link>
@@ -401,12 +392,12 @@ const BusinessEvents = () => {
 
 		return [];
 	}, [
-		accountKey,
 		filteredBusinessEvents,
 		hasAllEventsPermissions,
 		isSaasOnly,
 		navigate,
 		onOpenChange,
+		projectERC,
 	]);
 
 	if (loading || projectsLoading) {
@@ -418,20 +409,36 @@ const BusinessEvents = () => {
 	}
 
 	const header = (
-		<div>
-			<h1 className="font-weight-bold text-neutral-10">
-				{translate('business-events')}
-			</h1>
+		<div className="align-items-start d-flex justify-content-between">
+			<div>
+				<h1 className="font-weight-bold text-neutral-10">
+					{translate('business-events')}
+				</h1>
 
-			<h6 className="font-weight-normal text-neutral-7">
-				{translate(
-					'this-table-allows-you-to-create-manage-and-track-your-business-events-please-note-that-business-events-closed-for-more-than-a-year-will-not-be-displayed-here'
-				)}
-			</h6>
+				<h6 className="font-weight-normal text-neutral-7">
+					{translate(
+						'this-table-allows-you-to-create-manage-and-track-your-business-events-please-note-that-business-events-closed-for-more-than-a-year-will-not-be-displayed-here'
+					)}
+				</h6>
+			</div>
+
+			{projects.length > 0 && (
+				<div className='w-25'>
+					<ProjectSelector
+						onSelect={(id) => {
+							if (id !== projectERC) {
+								navigate(`/${id}/business-events`);
+							}
+						}}
+						projects={projects}
+						selectedProjectERC={projectERC}
+					/>
+				</div>
+			)}
 		</div>
 	);
 
-	if (!hasProject) {
+	if (!projects.length) {
 		return (
 			<div className="py-4">
 				{header}
@@ -467,13 +474,13 @@ const BusinessEvents = () => {
 
 						{selectedBusinessEvent && open && (
 							<ManageEventModal
-								accountExternalReferenceCode={accountKey || ''}
 								businessEvent={selectedBusinessEvent}
 								closeFunction={onOpenChange}
 								modalType={modalType}
 								observer={observer}
 								onCancel={handleOnCancel}
 								onCompleted={handleOnCompleted}
+								projectExternalReferenceCode={projectERC || ''}
 							/>
 						)}
 					</>

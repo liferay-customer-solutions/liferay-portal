@@ -20,19 +20,25 @@ type ProjectMembershipAPIItem = {
 	r_projectToProjectMembership_c_projectERC: string;
 };
 
-export function useUserProjects(): {loading: boolean; projects: UserProject[]} {
+export function useUserProjects(): {
+	hasAccountProjects: boolean;
+	loading: boolean;
+	projects: UserProject[];
+} {
 	const accountId = Liferay.CommerceContext?.account?.accountId;
 	const userId = Liferay.ThemeDisplay.getUserId();
 
 	const {userAccountModel} = useOneContext();
 
-	const isAdmin = Boolean(userAccountModel?.isAdmin);
+	const showAllAccountProjects = Boolean(
+		userAccountModel?.isAccountAdministrator || userAccountModel?.isAdmin
+	);
 
 	const enabled = Boolean(accountId && userId);
 
 	const {data: membershipData, isLoading: membershipsLoading} = useFetch<
 		APIResponse<ProjectMembershipAPIItem>
-	>(enabled && !isAdmin ? '/o/c/projectmemberships' : null, {
+	>(enabled && !showAllAccountProjects ? '/o/c/projectmemberships' : null, {
 		params: {
 			fields: 'r_projectToProjectMembership_c_projectERC',
 			filter: `r_accountEntryToProjectMembership_accountEntryId eq '${accountId}' and r_userToProjectMembership_userId eq '${userId}'`,
@@ -59,7 +65,7 @@ export function useUserProjects(): {loading: boolean; projects: UserProject[]} {
 	const projects: UserProject[] = (projectData?.items ?? [])
 		.filter(
 			(item) =>
-				isAdmin ||
+				showAllAccountProjects ||
 				memberProjectExternalReferenceCodes.has(
 					item.externalReferenceCode
 				)
@@ -70,5 +76,9 @@ export function useUserProjects(): {loading: boolean; projects: UserProject[]} {
 			name: item.name,
 		}));
 
-	return {loading: membershipsLoading || projectsLoading, projects};
+	return {
+		hasAccountProjects: (projectData?.items ?? []).length > 0,
+		loading: membershipsLoading || projectsLoading,
+		projects,
+	};
 }
