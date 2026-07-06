@@ -14,7 +14,7 @@ import RestrictedFeatureMessage from '~/components/RestrictedFeatureMessage/Rest
 import {useProperties} from '~/context/PropertiesContext';
 import {useFetch} from '~/hooks/useFetch';
 import {translate} from '~/i18n';
-import {useUserProjects} from '~/pages/MyAccount/Projects/projects';
+import {useHasProject} from '~/pages/MyAccount/Projects/projects';
 import formatFileSize from '~/pages/TicketAttachments/utils/formatFileSize';
 
 import type {APIResponse} from '~/types/api';
@@ -56,7 +56,7 @@ const TicketAttachmentsList = () => {
 
 	const {jiraFLSPortalURL, jiraFLSProject, jiraHCPortalURL} = useProperties();
 
-	const {loading: projectsLoading, projects} = useUserProjects();
+	const {hasProject, loading: projectsLoading} = useHasProject();
 
 	const {data, isLoading: loading} = useFetch<APIResponse<ITicketAttachment>>(
 		'/o/c/ticketattachments',
@@ -104,7 +104,7 @@ const TicketAttachmentsList = () => {
 		);
 	}
 
-	if (!projects.length) {
+	if (!hasProject) {
 		return (
 			<div className="py-4">
 				{header}
