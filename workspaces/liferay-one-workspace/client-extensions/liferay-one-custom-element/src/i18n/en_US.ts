@@ -11,6 +11,8 @@ export default {
 		'A license key for the entered domain already exists.',
 	'a-request-will-be-sent-to-deactivate-the-selected-activation-key-from-now-on-it-will-be-hidden-and-no-longer-visible':
 		'A request will be sent to deactivate the selected activation key. From now on, it will be hidden and no longer visible.',
+	'a-role-is-required-for-every-member':
+		'A role is required for every member.',
 	'a-sleek-and-intuitive-admin-dashboard-for-monitoring-key-metrics':
 		'A sleek and intuitive admin dashboard for monitoring key metrics.',
 	'ability-to-publish-dxp-and-cloud-free-or-charged':
@@ -21,6 +23,7 @@ export default {
 	'account-id': 'Account ID',
 	'account-members': 'Account Members',
 	'account-name': 'Account Name',
+	'account-permissions': 'Account Permissions',
 	'account-selected': 'Account Selected',
 	'account-selection': 'Account Selection',
 	'account-type': 'Account Type',
@@ -43,6 +46,7 @@ export default {
 	'add-currency': 'Add Currency',
 	'add-developer-licenses': 'Add Developer Licenses',
 	'add-filter': 'Add Filter',
+	'add-more-people': 'Add More People',
 	'add-new-trial': 'Add New Trial',
 	'add-new-version': 'Add New Version',
 	'add-on': 'Add on',
@@ -130,9 +134,17 @@ export default {
 		'Are you sure you want to delete this common license key?',
 	'are-you-sure-you-want-to-expire-this-trial-this-action-implies-the-permanent-end-of-the-test-environment':
 		'Are you sure you want to expire this trial? This action implies the permanent end of the test environment.',
+	'are-you-sure-you-want-to-remove-x-from-this-account':
+		'Are you sure you want to remove {0} from this account?',
 	'area': 'Area',
 	'areas': 'Areas',
+	'assign-cloud-contact-designations-for-x':
+		'Assign cloud contact designations for {0}.',
+	'assign-or-update-the-account-roles-for-x':
+		'Assign or update the account roles for {0}.',
 	'associated-tickets': 'Associated Tickets',
+	'at-least-one-account-admin-is-required-assign-another-account-admin-before-removing-this-member':
+		'At least one Account Admin is required. Assign another Account Admin before removing this member.',
 	'at-least-one-role-must-be-provided': 'At least one role must be provided.',
 	'attach-file-to-ticket-x': 'Attach File to Ticket #{0}',
 	'attachment': 'Attachment',
@@ -205,6 +217,9 @@ export default {
 	'cloud-apps-must-state-resource-requirements-if-your-app-has-no-additional-cpu-or-ram-requirements-please-enter-0':
 		'Cloud Apps must state resource requirements. If your app has no additional CPU or RAM requirements, please enter 0.',
 	'cloud-compatible': 'Cloud Compatible?',
+	'cloud-contacts': 'Cloud Contacts',
+	'cloud-contacts-successfully-updated':
+		'Cloud contacts successfully updated.',
 	'cloud-license-usage-type': 'Cloud License Usage Type',
 	'cloud-project': 'Cloud Project',
 	'cloud-provisioning': 'Cloud Provisioning',
@@ -336,8 +351,12 @@ export default {
 		'DXP module-based apps are not supported on Liferay SaaS.',
 	'each': 'each',
 	'edit': 'Edit',
+	'edit-account-details': 'Edit Account Details',
+	'edit-cloud-contacts': 'Edit Cloud Contacts',
 	'edit-details': 'Edit Details',
 	'edit-event': 'Edit Event',
+	'edit-permissions': 'Edit Permissions',
+	'edit-project-permissions': 'Edit Project Permissions',
 	'edit-publisher-profile': 'Edit Publisher Profile',
 	'elasticsearch': 'Elasticsearch',
 	'email': 'Email',
@@ -476,6 +495,8 @@ export default {
 	'id': 'ID',
 	'if-the-app-is-compatible-with-different-updates-of-74-please-upload-multiple-packages-for-each-update-or-update-the-compatibility-range':
 		'If the app is compatible with different updates of 7.4, please upload multiple packages for each update or update the compatibility range.',
+	'if-there-is-no-project-admin-on-this-project-to-add-or-manage-team-members-contact-your-account-admin':
+		'There is no Project Admin on this project. To add or manage team members, contact your Account Admin.',
 	'if-you-are-requesting-the-account-on-behalf-of-a-business-,-please-note-the-business-name':
 		'If you are requesting the account on behalf of a business, please note the business name.',
 	'if-you-could-choose-3-top-priorities-for-improvements-what-would-they-be':
@@ -487,6 +508,7 @@ export default {
 		'In the future, you will be able to submit your app directly from Liferay SaaS projects.',
 	'in-the-future-you-will-be-able-to-submit-your-app-source-code-for-additional-support-and-partnership-opportunities-with-liferay':
 		'In the future, you will be able to submit your app source code for additional support and partnership opportunities with Liferay.',
+	'inactive': 'Inactive',
 	'incident-report-contacts': 'Incident Report Contacts',
 	'income': 'Income',
 	'industry': 'Industry',
@@ -507,8 +529,11 @@ export default {
 		'Invalid or non-existent attachment ID.',
 	'invalid-or-non-existent-ticket-number':
 		'Invalid or non-existent ticket number.',
+	'invite-a-new-member-by-email-address-they-will-be-added-to-the-account-once-they-accept-the-invitation':
+		'Invite a new member by email address. They will be added to the account once they accept the invitation.',
 	'invite-manage-roles-designate-incident-contacts':
 		'Invite, manage roles, designate incident contacts.',
+	'invite-member': 'Invite Member',
 	'invoice-status': 'Invoice Status',
 	'ip-addresses': 'IP Addresses',
 	'job-title': 'Job Title',
@@ -593,11 +618,15 @@ export default {
 	'manage-members-and-access-for-ssa-accounts':
 		'Manage members and access for SSA accounts.',
 	'manage-product-users': 'Manage Product Users',
+	'manage-project-options': 'Manage project options',
+	'manage-project-roles-and-cloud-contact-designations':
+		'Manage project roles and cloud contact designations.',
 	'manage-roles': 'Manage Roles',
 	'manage-roles-and-permissions-of-users-within-each-product':
 		'Manage roles and permissions of users within each product.',
 	'manage-the-applications-within-your-project':
 		'Manage the applications within your project',
+	'manage-the-members-of-x': 'Manage the members of {0}.',
 	'manage-the-products-within-your-project':
 		'Manage the products within your project',
 	'manage-the-roles-associated-with-this-user-roles-determine-what-features-permissions-and-areas-of-the-platform-the-user-can-access-so-updating-them-allows-you-to-control-their-level-of-access-and-responsibilities':
@@ -618,6 +647,10 @@ export default {
 	'marketplace-licensor-eula': 'Marketplace Licensor EULA',
 	'marketplace-orders': 'Marketplace Orders',
 	'maximum-number-of-uploads-reached': 'Maximum Number of Uploads Reached',
+	'member': 'Member',
+	'member-successfully-invited': 'Member successfully invited.',
+	'member-successfully-removed': 'Member successfully removed.',
+	'members': 'Members',
 	'migration': 'Migration',
 	'mm-dd-yyyy': 'MM-DD-YYYY',
 	'modified-date': 'Modified Date',
@@ -644,6 +677,7 @@ export default {
 	'my-saas-demos': 'My SaaS Demos',
 	'my-solutions': 'My Solutions',
 	'name': 'Name',
+	'name-example-com': 'name@example.com',
 	'need-help-activating-this-product-check-the':
 		'Need help activating this product? Check the',
 	'need-help-getting-started?': 'Need help getting started?',
@@ -680,16 +714,19 @@ export default {
 	'no-products-yet': 'No Products Yet',
 	'no-project-linked': 'No Project Linked',
 	'no-projects-available-for-x': 'No projects available for {0}',
+	'no-projects-were-found': 'No projects were found.',
 	'no-projects-yet': 'No Projects Yet',
 	'no-publisher-catalog-found': 'No Publisher Catalog Found',
 	'no-publisher-profile-to-update': 'There is no publisher profile to update',
 	'no-results-found': 'No Results Found',
+	'no-role': 'No Role',
 	'no-support-tickets-were-found': 'No support tickets were found.',
 	'no-ticket-attachments-were-found': 'No ticket attachments were found.',
 	'no-trials-yet': 'No Trials Yet',
 	'no-usage-data-yet': 'No Usage Data Yet',
 	'no-versions-yet': 'No Versions Yet',
 	'no-x': 'No {0}',
+	'none': 'None',
 	'not-installed': 'Not Installed',
 	'not-seeing-a-specific-account': 'Not seeing a specific Account?',
 	'not-seeing-a-specific-project': 'Not seeing a specific Project?',
@@ -706,6 +743,7 @@ export default {
 	'of-target': 'of target',
 	'offline-payment': 'Offline Payment',
 	'offline-payments-using-the-invoice': 'Offline payments using the invoice',
+	'ok': 'OK',
 	'okta-sso': 'Okta SSO',
 	'on-hold': 'On Hold',
 	'once-canceled-no-further-edits-can-be-made-to-this-event':
@@ -757,6 +795,7 @@ export default {
 	'paypal': 'PayPal',
 	'paypal-account': 'PayPal Account',
 	'pending': 'Pending',
+	'permissions-successfully-updated': 'Permissions successfully updated.',
 	'perpetual': 'Perpetual',
 	'personal': 'Personal',
 	'personal-account': 'Personal Account',
@@ -774,6 +813,7 @@ export default {
 		'Please check this box if the file you upload does not contain any personal data and therefore can be uploaded to and accessed from any Liferay support location globally.',
 	'please-complete-at-least-one-of-the-following-fields-to-proceed':
 		'Please complete at least one of the following fields to proceed',
+	'please-enter-a-valid-email-address': 'Please enter a valid email address.',
 	'please-fill-in-a-valid-email': 'Please fill in a valid email.',
 	'please-fill-in-a-valid-phone-number':
 		'Please fill in a valid phone number.',
@@ -797,6 +837,7 @@ export default {
 		'Please select the account you wish to link to your Liferay DXP below.',
 	'please-select-the-tickets-that-are-impacting-this-event':
 		'Please select the tickets that are impacting this event.',
+	'postal-code': 'Postal Code',
 	'price': 'Price',
 	'pricing': 'Pricing',
 	'primary': 'Primary',
@@ -812,7 +853,11 @@ export default {
 	'profile': 'Profile',
 	'project': 'Project',
 	'project-id': 'Project ID',
+	'project-members': 'Project Members',
+	'project-members-successfully-updated':
+		'Project members successfully updated.',
 	'project-name': 'Project Name',
+	'project-permissions': 'Project Permissions',
 	'project-selected': 'Project Selected',
 	'project-selection': 'Project Selection',
 	'project-type': 'Project Type',
@@ -882,6 +927,7 @@ export default {
 	'reject-request': 'Reject Request',
 	'remove': 'Remove',
 	'remove-all-roles': 'Remove all roles',
+	'remove-member': 'Remove Member',
 	'remove-user': 'Remove User',
 	'renew': 'Renew',
 	'renewal-will-be-available-3-months-before-your-activation-key-expires':
@@ -932,6 +978,9 @@ export default {
 	'select-a-local-file-to-upload': 'Select a Local File to Upload',
 	'select-a-local-file-to-upload-only-one-file-can-be-attached-at-a-time':
 		'Select a local file to upload. Only one file can be attached at a time.',
+	'select-a-member': 'Select a member',
+	'select-a-member-and-a-role': 'Select a member and a role.',
+	'select-a-role': 'Select a role',
 	'select-a-server-to-store-your-data-this-could-have-implications-to-your-organizations-policy-on-user-data-storage':
 		"Select a server to store your data. This could have implications to your organization's policy on user data storage.",
 	'select-a-ticket': 'Select a Ticket',
@@ -958,6 +1007,7 @@ export default {
 	'select-your-desired-publisher-type': 'Select your desired publisher type',
 	'selected-project': 'Selected Project',
 	'self-managed': 'Self-Managed',
+	'send-invitation': 'Send Invitation',
 	'send-request': 'Send Request',
 	'set-the-users-role-ssa-users-can-create-trials-while-ssa-admins-can-manage-users-roles-and-trials':
 		'Set the user’s role: SSA Users can create trials, while SSA Admins can manage users, roles, and trials.',
@@ -965,6 +1015,7 @@ export default {
 	'settings': 'Settings',
 	'share-beta-feedback': 'Share Beta Feedback',
 	'share-your-feedback': 'Share Your Feedback',
+	'show-less': 'Show Less',
 	'showing-x-to-x-of-x': 'Showing {0} to {1} of {2}',
 	'sign-in-with-a-different-account': 'Sign in with a Different Account',
 	'site-initializer': 'Site Initializer',
@@ -1000,6 +1051,7 @@ export default {
 	'state': 'State',
 	'status': 'Status',
 	'storefront': 'Storefront',
+	'street-address': 'Street Address',
 	'submit': 'Submit',
 	'submit-solution': 'Submit Solution',
 	'submit-your-request-to-join-the-beta-program-all-submissions-will-be-reviewed-and-youll-receive-an-email-with-the-outcome':
@@ -1024,6 +1076,9 @@ export default {
 	'tax-id': 'Tax ID',
 	'tax-vat-id': 'Tax/VAT ID',
 	'tax-vat-number': 'Tax/VAT Number',
+	'team-member': 'Team Member',
+	'team-members-will-receive-an-email-invitation-about-the-permissions-changes':
+		'Team members will receive an email invitation about the permissions changes.',
 	'technology-partnership-with-integrations':
 		'Technology Partnership With Integrations',
 	'term': 'Term',
@@ -1101,6 +1156,8 @@ export default {
 	'this-table-allows-you-to-create-manage-and-track-your-business-events-please-note-that-business-events-closed-for-more-than-a-year-will-not-be-displayed-here':
 		'This table allows you to create, manage, and track your business events. Please note that business events closed for more than a year will not be displayed here.',
 	'this-ticket-has-been-closed': 'This ticket has been closed',
+	'this-user-is-already-a-member-of-the-project':
+		'This user is already a member of the project.',
 	'ticket': 'Ticket',
 	'ticket-attachments': 'Ticket Attachments',
 	'tickets-impacting-this-event': 'Tickets Impacting This Event',
@@ -1148,7 +1205,13 @@ export default {
 	'unable-to-connect-to-file-server': 'Unable to connect to file server.',
 	'unable-to-download-your-license-file-please-try-again-and-or-contact-support-via-the-manage-menu-on-the-dashboard':
 		'Unable to download your license file.  Please try again and/or contact support via the manage menu on the dashboard.',
+	'unable-to-invite-member': 'Unable to invite member.',
+	'unable-to-remove-member': 'Unable to remove member.',
 	'unable-to-remove-roles': 'Unable to remove roles',
+	'unable-to-update-account-details': 'Unable to update account details',
+	'unable-to-update-cloud-contacts': 'Unable to update cloud contacts.',
+	'unable-to-update-permissions': 'Unable to update permissions.',
+	'unable-to-update-project-members': 'Unable to update project members.',
 	'unable-to-update-publisher-profile': 'Unable to update publisher profile',
 	'under-review': 'Under Review',
 	'uninstall': 'Uninstall',
@@ -1231,13 +1294,17 @@ export default {
 	'x-apps-x-solutions': '{0} Apps · {1} Solutions',
 	'x-available-for-you': `{0} available for <b>${Liferay.ThemeDisplay.getUserEmailAddress()}</b> (you)`,
 	'x-in-use': '{0} in use',
+	'x-is-a-member-of-x-on-this-account-removing-them-from-the-account-will-also-remove-their-access-to-these-projects-are-you-sure-you-want-to-proceed':
+		'{0} is a member of {1} on this account. Removing them from the account will also remove their access to these projects. Are you sure you want to proceed?',
 	'x-is-required': '{0} is required',
 	'x-items': '{0} Items',
 	'x-me': '{0} (me)',
+	'x-more': '+{0} more',
 	'x-of-x-available': '{0} of {1} available',
 	'x-result-for-x': '{0} Result for "{1}"',
 	'x-results-for': '{0} Results for',
 	'x-results-for-x': '{0} Results for "{1}"',
+	'x-roles': '{0} Roles',
 	'x-saved-as-a-draft-successfully':
 		'<b>{0}</b> saved as a <b>draft</b> successfully',
 	'x-selected': 'X Selected',

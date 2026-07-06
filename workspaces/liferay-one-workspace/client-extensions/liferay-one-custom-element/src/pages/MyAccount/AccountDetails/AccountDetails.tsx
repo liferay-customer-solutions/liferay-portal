@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {useNavigate} from 'react-router-dom';
 import Button from '~/components/Button/Button';
+import DetailTable, {Orientation} from '~/components/DetailTable/DetailTable';
 import {DetailedCard} from '~/components/DetailedCard/DetailedCard';
 import Page from '~/components/Page/Page';
-import QATable, {Orientation} from '~/components/QATable/QATable';
 import {useOneContext} from '~/context/OneContextProvider';
 import useAccountDetails from '~/hooks/useAccountDetails';
 import i18n from '~/i18n';
@@ -48,6 +49,8 @@ function textWrapper(content?: string | number) {
 }
 
 export default function AccountDetails() {
+	const navigate = useNavigate();
+
 	const {myUserAccount} = useOneContext();
 
 	const {data, error, isLoading} = useAccountDetails();
@@ -73,11 +76,14 @@ export default function AccountDetails() {
 			)}
 			pageRendererProps={{error, isLoading}}
 			rightButton={
-				<Button displayType="secondary" prependIcon="pencil">
+				<Button
+					displayType="secondary"
+					onClick={() => navigate('edit')}
+					prependIcon="pencil"
+				>
 					{i18n.translate('edit')}
 				</Button>
 			}
-			title={i18n.translate('account-details')}
 		>
 			<div className="account-details-grid mt-4">
 				<DetailedCard
@@ -106,16 +112,16 @@ export default function AccountDetails() {
 							<p className="account-details-identity-contact">
 								{[contactName, contactEmail]
 									.filter(Boolean)
-									.join('  ')}
+									.join(' · ')}
 							</p>
 						</div>
 					</div>
 
-					<span className="badge badge-primary mb-4">
+					<p className="account-details-subheading">
 						{i18n.translate('organization')}
-					</span>
+					</p>
 
-					<QATable
+					<DetailTable
 						items={[
 							{
 								title: i18n.translate('company-name'),
@@ -125,16 +131,26 @@ export default function AccountDetails() {
 								title: i18n.translate('company-description'),
 								value: textWrapper(account?.description),
 							},
-							{
-								title: i18n.translate('industry'),
-								value: textWrapper(
-									getCustomFieldValue(account, 'Industry')
-								),
-							},
+						]}
+						orientation={Orientation.VERTICAL}
+					/>
+
+					<p className="account-details-subheading mt-4">
+						{i18n.translate('profile')}
+					</p>
+
+					<DetailTable
+						items={[
 							{
 								title: i18n.translate('address'),
 								value: textWrapper(
 									formatPostalAddress(primaryAddress)
+								),
+							},
+							{
+								title: i18n.translate('industry'),
+								value: textWrapper(
+									getCustomFieldValue(account, 'Industry')
 								),
 							},
 							{
@@ -158,7 +174,7 @@ export default function AccountDetails() {
 							{i18n.translate('primary-contact')}
 						</p>
 
-						<QATable
+						<DetailTable
 							items={[
 								{
 									title: i18n.translate('name'),
@@ -186,7 +202,7 @@ export default function AccountDetails() {
 							{i18n.translate('settings')}
 						</p>
 
-						<QATable
+						<DetailTable
 							items={[
 								{
 									title: i18n.translate('password-policy'),

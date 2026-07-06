@@ -7,7 +7,12 @@ import {lazy} from 'react';
 import {Navigate} from 'react-router-dom';
 import {AppRoute} from '~/utils/routeUtils';
 
+import AccountTabsLayout from './components/AccountTabsLayout/AccountTabsLayout';
+
 const AccountDetails = lazy(() => import('./AccountDetails/AccountDetails'));
+const AccountDetailsEdit = lazy(
+	() => import('./AccountDetails/AccountDetailsEdit/AccountDetailsEdit')
+);
 const AccountMembers = lazy(() => import('./AccountMembers/AccountMembers'));
 const OrderDetails = lazy(() => import('./Orders/OrderDetails/OrderDetails'));
 const OrderHistory = lazy(() => import('./Orders/OrderHistory/OrderHistory'));
@@ -17,6 +22,7 @@ const ProjectItemDetails = lazy(
 	() => import('./Projects/ProjectItemDetails/ProjectItemDetails')
 );
 const Products = lazy(() => import('./Projects/Products/Products'));
+const ProjectMembers = lazy(() => import('./ProjectMembers/ProjectMembers'));
 
 export const projectDetailRoutes: AppRoute[] = [
 	{element: <Navigate replace to="products" />, index: true},
@@ -56,6 +62,18 @@ const orderRoutes: AppRoute[] = [
 
 export const accountRoutes: AppRoute[] = [
 	{children: orderRoutes, path: 'orders'},
-	{element: <AccountDetails />, path: 'account-details'},
-	{element: <AccountMembers />, path: 'account-members'},
+	{
+		children: [
+			{
+				children: [
+					{element: <AccountDetails />, index: true},
+					{element: <AccountDetailsEdit />, path: 'edit'},
+				],
+				path: 'account-details',
+			},
+			{element: <AccountMembers />, path: 'account-members'},
+			{element: <ProjectMembers />, path: 'project-members'},
+		],
+		element: <AccountTabsLayout />,
+	},
 ];

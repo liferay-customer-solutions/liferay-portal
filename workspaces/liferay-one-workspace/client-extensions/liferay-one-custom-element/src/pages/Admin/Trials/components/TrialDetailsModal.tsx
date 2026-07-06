@@ -7,7 +7,7 @@ import ClayLabel from '@clayui/label';
 import {Status} from '@clayui/modal/lib/types';
 import {formatDistance} from 'date-fns';
 import {z} from 'zod';
-import QATable from '~/components/QATable/QATable';
+import DetailTable from '~/components/DetailTable/DetailTable';
 import i18n from '~/i18n';
 import commerceSchemas from '~/schema/commerceSchemas';
 import {OrderCustomFields} from '~/utils/orderUtils';
@@ -48,7 +48,7 @@ const TrialDetailsModal: React.FC<TrialDetailsProps> = ({order}) => {
 	const trialError = customFields[OrderCustomFields.TRIAL_ERROR];
 
 	return (
-		<QATable
+		<DetailTable
 			items={[
 				{
 					title: i18n.translate('order-id'),

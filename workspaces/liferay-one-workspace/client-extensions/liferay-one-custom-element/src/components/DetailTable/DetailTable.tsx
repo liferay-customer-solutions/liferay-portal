@@ -6,14 +6,14 @@
 import classNames from 'classnames';
 import React, {HTMLAttributes, ReactNode} from 'react';
 
-import './QATable.css';
+import './DetailTable.css';
 
 export enum Orientation {
 	HORIZONTAL = 'HORIZONTAL',
 	VERTICAL = 'VERTICAL',
 }
 
-type QAItem = {
+type DetailTableItem = {
 	className?: HTMLAttributes<HTMLTableRowElement>['className'];
 	divider?: boolean;
 	flexHeading?: boolean;
@@ -22,18 +22,18 @@ type QAItem = {
 	visible?: boolean;
 };
 
-type QATableProps = {
+type DetailTableProps = {
 	columns?: number;
-	items: QAItem[];
+	items: DetailTableItem[];
 	orientation?: keyof typeof Orientation;
 };
 
-const QATable: React.FC<QATableProps> = ({
+const DetailTable: React.FC<DetailTableProps> = ({
 	columns = 1,
 	items,
 	orientation = Orientation.HORIZONTAL,
 }) => (
-	<table className="qa-table w-100">
+	<table className="detail-table w-100">
 		<tbody
 			className={classNames({
 				'd-flex flex-wrap': columns > 1,
@@ -57,9 +57,12 @@ const QATable: React.FC<QATableProps> = ({
 							}}
 						>
 							<th
-								className={classNames('tr-qa-table__header', {
-									'd-flex': item.flexHeading,
-								})}
+								className={classNames(
+									'tr-detail-table__header',
+									{
+										'd-flex': item.flexHeading,
+									}
+								)}
 							>
 								{item.title}
 							</th>
@@ -84,4 +87,4 @@ const QATable: React.FC<QATableProps> = ({
 	</table>
 );
 
-export default QATable;
+export default DetailTable;

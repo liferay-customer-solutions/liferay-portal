@@ -136,6 +136,16 @@ export default class HeadlessAdminUser {
 		);
 	}
 
+	static async updateAccountPostalAddress(
+		postalAddressId: number | string,
+		data: Record<string, unknown>
+	) {
+		return fetcher.patch(
+			`/o/headless-admin-user/v1.0/postal-addresses/${postalAddressId}`,
+			data
+		);
+	}
+
 	static async updateUserAccount(data: unknown, accountId: number) {
 		return fetcher.patch(
 			`/o/headless-admin-user/v1.0/user-accounts/${accountId}`,

@@ -30,6 +30,10 @@ function getCurrentLabel(pathname: string): Word {
 		return 'account-members';
 	}
 
+	if (pathname.includes('/project-members')) {
+		return 'project-permissions';
+	}
+
 	return 'project';
 }
 

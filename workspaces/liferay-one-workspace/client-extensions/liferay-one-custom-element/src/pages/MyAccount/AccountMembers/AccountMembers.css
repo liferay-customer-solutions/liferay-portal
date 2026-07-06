@@ -107,6 +107,14 @@
 	width: 8px;
 }
 
+.account-members-status-dot-inactive {
+	background-color: #a7a9bc;
+}
+
+.account-members-invite-button {
+	white-space: nowrap;
+}
+
 .account-members-pagination {
 	border-top: 1px solid #e7e7ed;
 	padding: 8px 24px;
@@ -126,4 +134,25 @@
 .account-members-products-card .btn {
 	border: 1px solid #cdced9;
 	font-weight: 600;
+}
+
+.account-members-roles-label {
+	color: var(--color-neutral-7);
+	display: block;
+	font-size: var(--text-paragraph-sm-font-size, 13px);
+	font-weight: 600;
+	margin-bottom: var(--spacer-2);
+}
+
+.account-members-roles-dropdown {
+	display: block;
+}
+
+.account-members-roles-trigger {
+	text-align: left;
+	width: 100%;
+}
+
+.account-members-roles-menu {
+	width: var(--clay-dropdown-trigger-width, 100%);
 }

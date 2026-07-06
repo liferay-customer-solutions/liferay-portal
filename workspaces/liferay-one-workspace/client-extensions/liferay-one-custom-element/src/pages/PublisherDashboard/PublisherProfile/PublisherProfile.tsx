@@ -6,9 +6,9 @@
 import {ReactNode} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Button from '~/components/Button/Button';
+import DetailTable, {Orientation} from '~/components/DetailTable/DetailTable';
 import {DetailedCard} from '~/components/DetailedCard/DetailedCard';
 import Page from '~/components/Page/Page';
-import QATable, {Orientation} from '~/components/QATable/QATable';
 import {useFetch} from '~/hooks/useFetch';
 import usePublisherCatalog from '~/hooks/usePublisherCatalog';
 import usePublisherDetails from '~/hooks/usePublisherDetails';
@@ -138,7 +138,7 @@ export default function PublisherProfile() {
 
 					<ProfileSection title="profile" />
 
-					<QATable
+					<DetailTable
 						items={[
 							{
 								title: i18n.translate('company-description'),
@@ -150,7 +150,7 @@ export default function PublisherProfile() {
 
 					<ProfileSection title="contacts" />
 
-					<QATable
+					<DetailTable
 						items={[
 							{
 								title: i18n.translate('company-email'),
@@ -184,7 +184,7 @@ export default function PublisherProfile() {
 
 					<ProfileSection title="address" />
 
-					<QATable
+					<DetailTable
 						items={[
 							{
 								title: i18n.translate('company-address'),
@@ -202,7 +202,7 @@ export default function PublisherProfile() {
 				>
 					<ProfileSection title="profile" />
 
-					<QATable
+					<DetailTable
 						items={[
 							{
 								title: i18n.translate('full-name'),
@@ -222,7 +222,7 @@ export default function PublisherProfile() {
 
 					<ProfileSection title="contacts" />
 
-					<QATable
+					<DetailTable
 						items={[
 							{
 								title: i18n.translate('email'),
@@ -238,7 +238,7 @@ export default function PublisherProfile() {
 
 					<ProfileSection title="reimbursement" />
 
-					<QATable
+					<DetailTable
 						items={[
 							{
 								title: i18n.translate('paypal-account'),

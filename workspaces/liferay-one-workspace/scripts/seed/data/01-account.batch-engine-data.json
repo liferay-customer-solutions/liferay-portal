@@ -86,6 +86,14 @@
 			"type": "business"
 		},
 		{
+			"customFields": [
+				{
+					"customValue": {
+						"data": "Strategic Partner"
+					},
+					"name": "AccountType"
+				}
+			],
 			"externalReferenceCode": "ACCNT-016",
 			"name": "Partner Test Account",
 			"type": "business"

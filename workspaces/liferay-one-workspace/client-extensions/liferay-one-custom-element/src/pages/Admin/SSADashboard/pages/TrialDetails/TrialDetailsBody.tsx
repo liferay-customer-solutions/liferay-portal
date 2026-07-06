@@ -4,8 +4,8 @@
  */
 
 import DOMPurify from 'dompurify';
+import DetailTable, {Orientation} from '~/components/DetailTable/DetailTable';
 import {DetailedCard} from '~/components/DetailedCard/DetailedCard';
-import QATable, {Orientation} from '~/components/QATable/QATable';
 import {useOneContext} from '~/context/OneContextProvider';
 import i18n from '~/i18n';
 import DeliveryOrderModel from '~/models/DeliveryOrderModel';
@@ -62,7 +62,7 @@ const TrialDetailsBody: React.FC<TrialDetailsBodyProps> = ({
 
 					<hr className="my-0" />
 
-					<QATable
+					<DetailTable
 						items={[
 							{
 								title: i18n.translate('account-name'),
@@ -100,7 +100,7 @@ const TrialDetailsBody: React.FC<TrialDetailsBodyProps> = ({
 					</span>
 					<hr className="my-0" />
 
-					<QATable
+					<DetailTable
 						items={[
 							{
 								title: i18n.translate('order-id'),
@@ -140,7 +140,7 @@ const TrialDetailsBody: React.FC<TrialDetailsBodyProps> = ({
 
 					<hr className="my-0" />
 
-					<QATable
+					<DetailTable
 						items={[
 							{
 								title: i18n.translate('trial-start-date'),

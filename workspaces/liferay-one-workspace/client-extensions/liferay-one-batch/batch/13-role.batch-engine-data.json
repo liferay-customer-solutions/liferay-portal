@@ -11,6 +11,11 @@
 	},
 	"items": [
 		{
+			"externalReferenceCode": "C_ACCOUNT_BUYER",
+			"name": "Account Buyer",
+			"roleType": "account"
+		},
+		{
 			"externalReferenceCode": "C_ACCOUNT_REQUESTER",
 			"name": "Account Requester",
 			"roleType": "account"
@@ -96,9 +101,19 @@
 			"roleType": "account"
 		},
 		{
+			"externalReferenceCode": "C_PAAS_USER",
+			"name": "PaaS User",
+			"roleType": "account"
+		},
+		{
 			"externalReferenceCode": "C_PARTNER",
 			"name": "Partner",
 			"roleType": "regular"
+		},
+		{
+			"externalReferenceCode": "C_PARTNER_ACCOUNT_ADMIN",
+			"name": "Partner Account Admin",
+			"roleType": "account"
 		},
 		{
 			"externalReferenceCode": "C_PARTNER_MANAGER",
@@ -128,6 +143,11 @@
 		{
 			"externalReferenceCode": "C_PRIMARY_CONTACT",
 			"name": "Primary Contact",
+			"roleType": "account"
+		},
+		{
+			"externalReferenceCode": "C_PRIVACY_BREACH_CONTACT",
+			"name": "Privacy Breach Contact",
 			"roleType": "account"
 		},
 		{
@@ -178,6 +198,11 @@
 		{
 			"externalReferenceCode": "C_SECONDARY_CONTACT",
 			"name": "Secondary Contact",
+			"roleType": "account"
+		},
+		{
+			"externalReferenceCode": "C_SECURITY_BREACH_CONTACT",
+			"name": "Security Breach Contact",
 			"roleType": "account"
 		},
 		{
