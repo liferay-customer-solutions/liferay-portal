@@ -3,9 +3,16 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {getSpecificationValues} from '~/hooks/useProjectCommerce';
+import {
+	getSpecificationValue,
+	getSpecificationValues,
+} from '~/hooks/useProjectCommerce';
 
-import {PROJECT_TAB_ORDER, TAB_VISIBILITY} from './constants';
+import {
+	PROJECT_TAB_ORDER,
+	SUPPORT_SPECIFICATION_KEYS,
+	TAB_VISIBILITY,
+} from './constants';
 
 import type {OrderTypes} from '~/types/orders';
 import type {DeliveryProduct} from '~/types/product';
@@ -68,7 +75,22 @@ export function getVisibleProjectTabKeys({
 		(resolvedOrderType && TAB_VISIBILITY[resolvedOrderType]) ??
 		FALLBACK_TABS[kind];
 
-	return PROJECT_TAB_ORDER.filter((tabKey) => allowedTabs.includes(tabKey));
+	return PROJECT_TAB_ORDER.filter((tabKey) => {
+		if (!allowedTabs.includes(tabKey)) {
+			return false;
+		}
+
+		if (tabKey === 'help-and-support') {
+			return (
+				!!product &&
+				SUPPORT_SPECIFICATION_KEYS.some((specificationKey) =>
+					getSpecificationValue(product, specificationKey)
+				)
+			);
+		}
+
+		return true;
+	});
 }
 
 export default getVisibleProjectTabKeys;

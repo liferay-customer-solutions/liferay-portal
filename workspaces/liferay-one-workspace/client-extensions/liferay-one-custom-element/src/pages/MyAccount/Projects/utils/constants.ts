@@ -40,6 +40,15 @@ export const STATUS_DOT_COLORS: {[key: string]: string} = {
 	processing: 'var(--color-warning)',
 };
 
+export const SUPPORT_SPECIFICATION_KEYS = [
+	'app-documentation-url',
+	'app-usage-terms-url',
+	'publisher-web-site-url',
+	'support-email-address',
+	'support-phone',
+	'support-url',
+];
+
 export const TAB_VISIBILITY: Partial<Record<OrderTypes, ProjectTabKey[]>> = {
 	ADDONS: ['details', 'orders'],
 	AI_HUB: ['details', 'activation', 'orders'],
