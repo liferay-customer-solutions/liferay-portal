@@ -38,7 +38,7 @@ export class UserAccountModel {
 		return this.hasAccountRole('SSA User');
 	}
 
-	private hasAccountRole(roleName: AccountRoleType) {
+	hasAccountRoleName(roleName: string) {
 		return this.accountBriefs.some(
 			(accountBrief) =>
 				accountBrief.id ===
@@ -47,6 +47,10 @@ export class UserAccountModel {
 					(roleBrief) => roleBrief.name === roleName
 				)
 		);
+	}
+
+	private hasAccountRole(roleName: AccountRoleType) {
+		return this.hasAccountRoleName(roleName);
 	}
 
 	private hasRegularRole(roleName: AccountRoleType) {

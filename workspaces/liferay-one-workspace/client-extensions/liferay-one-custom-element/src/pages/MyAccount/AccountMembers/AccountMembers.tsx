@@ -13,18 +13,25 @@ import {useMemo, useState} from 'react';
 import Button from '~/components/Button/Button';
 import Page from '~/components/Page/Page';
 import RestrictedFeatureMessage from '~/components/RestrictedFeatureMessage/RestrictedFeatureMessage';
+import {useOneContext} from '~/context/OneContextProvider';
 import {useFetch} from '~/hooks/useFetch';
 import i18n, {sub, translate} from '~/i18n';
+import {
+	ACCOUNT_ADMINISTRATOR,
+	PARTNER_ACCOUNT_ADMIN,
+	getMembershipRoleNames,
+	hasAdministratorRole,
+} from '~/pages/MyAccount/AccountMembers/accountRoles';
+import {useAccountMemberActions} from '~/pages/MyAccount/AccountMembers/hooks/useAccountMemberActions';
+import {useAccountType} from '~/pages/MyAccount/AccountMembers/hooks/useAccountType';
 import {useHasProject} from '~/pages/MyAccount/Projects/hooks/useHasProject';
 import {Liferay} from '~/services/liferay/liferay';
 
 import './AccountMembers.css';
 
-import type {Account, RoleBrief, UserAccount} from '~/types/accounts';
+import type {AccountMemberRow} from '~/pages/MyAccount/AccountMembers/types';
+import type {Account, UserAccount} from '~/types/accounts';
 import type {APIResponse} from '~/types/api';
-
-const ROLE_ADMINISTRATOR = 'Account Administrator';
-const ROLE_REQUESTER = 'Account Requester';
 
 const AVATAR_COLORS = [
 	'#2e5aac',
@@ -35,39 +42,16 @@ const AVATAR_COLORS = [
 	'#0a7bae',
 ];
 
+const NO_ROLE = '__no_role__';
+
 const PAGE_SIZE_OPTIONS = [10, 20, 30, 50];
 
-type RoleKey = 'administrator' | 'requester' | 'user';
+const STATUS_INACTIVE = 5;
 
-type AccountMemberRow = {
-	email: string;
-	id: number;
-	image?: string;
-	isCurrentUser: boolean;
+type ProjectItem = {
+	externalReferenceCode: string;
 	name: string;
-	roleKey: RoleKey;
-	status: number;
 };
-
-const ROLE_OPTIONS: {key: RoleKey; label: string}[] = [
-	{key: 'administrator', label: translate('administrator')},
-	{key: 'requester', label: translate('requester')},
-	{key: 'user', label: translate('user')},
-];
-
-function getRoleKey(roleBriefs: RoleBrief[] = []): RoleKey {
-	const roleNames = roleBriefs.map(({name}) => name);
-
-	if (roleNames.includes(ROLE_ADMINISTRATOR)) {
-		return 'administrator';
-	}
-
-	if (roleNames.includes(ROLE_REQUESTER)) {
-		return 'requester';
-	}
-
-	return 'user';
-}
 
 function hasImage(image?: string) {
 	return Boolean(image) && !image?.includes('img_id=0');
@@ -103,15 +87,29 @@ export default function AccountMembers() {
 	const accountId = Liferay.CommerceContext?.account?.accountId;
 	const currentUserId = Liferay.ThemeDisplay.getUserId();
 
+	const {userAccountModel} = useOneContext();
+
 	const {hasProject, loading: projectsLoading} = useHasProject();
+
+	const {loading: accountTypeLoading, roleNames} = useAccountType();
 
 	const [keywords, setKeywords] = useState('');
 	const [page, setPage] = useState(1);
 	const [pageSize, setPageSize] = useState(PAGE_SIZE_OPTIONS[0]);
 	const [filterActive, setFilterActive] = useState(false);
-	const [selectedRoles, setSelectedRoles] = useState<RoleKey[]>([]);
+	const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
 
-	const {error: accountError, isLoading: accountLoading} = useFetch<Account>(
+	const canManageMembers = Boolean(
+		userAccountModel?.hasAccountRoleName(ACCOUNT_ADMINISTRATOR) ||
+			userAccountModel?.hasAccountRoleName(PARTNER_ACCOUNT_ADMIN) ||
+			userAccountModel?.isAdmin
+	);
+
+	const {
+		data: account,
+		error: accountError,
+		isLoading: accountLoading,
+	} = useFetch<Account>(
 		accountId ? `/o/headless-admin-user/v1.0/accounts/${accountId}` : null
 	);
 
@@ -119,6 +117,7 @@ export default function AccountMembers() {
 		data,
 		error,
 		isLoading: loading,
+		mutate,
 	} = useFetch<APIResponse<UserAccount>>(
 		accountId
 			? `/o/headless-admin-user/v1.0/accounts/${accountId}/user-accounts`
@@ -126,31 +125,70 @@ export default function AccountMembers() {
 		{params: {pageSize: 100, sort: 'givenName:asc'}}
 	);
 
-	const members = useMemo<AccountMemberRow[]>(() => {
-		return (data?.items ?? []).map((userAccount) => {
-			const roleKey = getRoleKey(userAccount.roleBriefs);
+	const {data: projectData} = useFetch<APIResponse<ProjectItem>>(
+		accountId ? '/o/c/projects' : null,
+		{
+			params: {
+				fields: 'externalReferenceCode,name',
+				filter: `r_accountEntryToProject_accountEntryId eq '${accountId}'`,
+				pageSize: 200,
+			},
+		}
+	);
 
-			return {
-				email: userAccount.emailAddress,
-				id: userAccount.id,
-				image: userAccount.image,
-				isCurrentUser: String(userAccount.id) === currentUserId,
-				name: userAccount.name,
-				roleKey,
-				status: (userAccount as {status?: number}).status ?? 0,
-			};
+	const projectNamesByExternalReferenceCode = useMemo(() => {
+		const map: Record<string, string> = {};
+
+		(projectData?.items ?? []).forEach((project) => {
+			map[project.externalReferenceCode] = project.name;
 		});
+
+		return map;
+	}, [projectData]);
+
+	const members = useMemo<AccountMemberRow[]>(() => {
+		return (data?.items ?? []).map((userAccount) => ({
+			email: userAccount.emailAddress,
+			id: userAccount.id,
+			image: userAccount.image,
+			isAdministrator: hasAdministratorRole(userAccount.roleBriefs),
+			isCurrentUser: String(userAccount.id) === currentUserId,
+			name: userAccount.name,
+			roleBriefs: userAccount.roleBriefs,
+			roleNames: getMembershipRoleNames(userAccount.roleBriefs),
+			status: userAccount.status ?? 0,
+		}));
 	}, [currentUserId, data]);
+
+	const adminCount = useMemo(
+		() => members.filter((member) => member.isAdministrator).length,
+		[members]
+	);
+
+	const {openEditPermissionsModal, openInviteModal, openRemoveMemberModal} =
+		useAccountMemberActions({
+			accountExternalReferenceCode: account?.externalReferenceCode ?? '',
+			accountId: accountId ?? '',
+			adminCount,
+			mutate,
+			projectNamesByExternalReferenceCode,
+			roleNames,
+		});
 
 	const filteredMembers = useMemo(() => {
 		const search = keywords.trim().toLowerCase();
 
 		return members.filter((member) => {
-			if (
-				selectedRoles.length &&
-				!selectedRoles.includes(member.roleKey)
-			) {
-				return false;
+			if (selectedRoles.length) {
+				const matchesRole = selectedRoles.some((selectedRole) =>
+					selectedRole === NO_ROLE
+						? !member.roleNames.length
+						: member.roleNames.includes(selectedRole)
+				);
+
+				if (!matchesRole) {
+					return false;
+				}
 			}
 
 			if (
@@ -171,32 +209,20 @@ export default function AccountMembers() {
 		return filteredMembers.slice(start, start + pageSize);
 	}, [filteredMembers, page, pageSize]);
 
-	const toggleRole = (roleKey: RoleKey) => {
+	const filterOptions = useMemo(() => [...roleNames, NO_ROLE], [roleNames]);
+
+	const toggleRole = (roleName: string) => {
 		setPage(1);
 
 		setSelectedRoles((previous) =>
-			previous.includes(roleKey)
-				? previous.filter((value) => value !== roleKey)
-				: [...previous, roleKey]
+			previous.includes(roleName)
+				? previous.filter((value) => value !== roleName)
+				: [...previous, roleName]
 		);
 	};
 
-	const activeFilters = useMemo(
-		() =>
-			selectedRoles.map((roleKey) => ({
-				label:
-					ROLE_OPTIONS.find((option) => option.key === roleKey)
-						?.label ?? translate(roleKey),
-				onRemove: () => {
-					setPage(1);
-					setSelectedRoles((previous) =>
-						previous.filter((value) => value !== roleKey)
-					);
-				},
-				value: roleKey,
-			})),
-		[selectedRoles]
-	);
+	const getRoleFilterLabel = (roleName: string) =>
+		roleName === NO_ROLE ? translate('no-role') : roleName;
 
 	if (!projectsLoading && !hasProject) {
 		return (
@@ -204,7 +230,6 @@ export default function AccountMembers() {
 				description={i18n.translate(
 					'invite-manage-roles-designate-incident-contacts'
 				)}
-				title={i18n.translate('account-members')}
 			>
 				<RestrictedFeatureMessage />
 			</Page>
@@ -218,9 +243,12 @@ export default function AccountMembers() {
 			)}
 			pageRendererProps={{
 				error: accountError || error,
-				isLoading: accountLoading || loading || projectsLoading,
+				isLoading:
+					accountLoading ||
+					accountTypeLoading ||
+					loading ||
+					projectsLoading,
 			}}
-			title={i18n.translate('account-members')}
 		>
 			<div className="account-members-card mt-3">
 				<div className="account-members-toolbar align-items-center d-flex">
@@ -239,15 +267,17 @@ export default function AccountMembers() {
 						}
 					>
 						<ClayDropDown.ItemList>
-							{ROLE_OPTIONS.map(({key, label}) => (
+							{filterOptions.map((roleName) => (
 								<ClayDropDown.Item
-									key={key}
-									onClick={() => toggleRole(key)}
+									key={roleName}
+									onClick={() => toggleRole(roleName)}
 								>
 									<ClayCheckbox
-										checked={selectedRoles.includes(key)}
-										label={label}
-										onChange={() => toggleRole(key)}
+										checked={selectedRoles.includes(
+											roleName
+										)}
+										label={getRoleFilterLabel(roleName)}
+										onChange={() => toggleRole(roleName)}
 									/>
 								</ClayDropDown.Item>
 							))}
@@ -275,20 +305,30 @@ export default function AccountMembers() {
 							</ClayInput.GroupInsetItem>
 						</ClayInput.GroupItem>
 					</ClayInput.Group>
+
+					{canManageMembers && (
+						<Button
+							className="account-members-invite-button ml-3"
+							onClick={openInviteModal}
+							prependIcon="plus"
+						>
+							{translate('invite-member')}
+						</Button>
+					)}
 				</div>
 
-				{!!activeFilters.length && (
+				{!!selectedRoles.length && (
 					<div className="account-members-active-filters">
-						{activeFilters.map(({label, onRemove, value}) => (
+						{selectedRoles.map((roleName) => (
 							<span
 								className="account-members-filter-tag"
-								key={value}
+								key={roleName}
 							>
-								{label}
+								{getRoleFilterLabel(roleName)}
 
 								<button
 									className="account-members-filter-tag-close"
-									onClick={onRemove}
+									onClick={() => toggleRole(roleName)}
 									type="button"
 								>
 									<ClayIcon symbol="times" />
@@ -324,55 +364,100 @@ export default function AccountMembers() {
 							</ClayTable.Head>
 
 							<ClayTable.Body>
-								{paginatedMembers.map((member) => (
-									<ClayTable.Row key={member.id}>
-										<ClayTable.Cell>
-											<div className="align-items-center d-flex">
-												<UserAvatar
-													image={member.image}
-													name={member.name}
-												/>
+								{paginatedMembers.map((member) => {
+									const isActive =
+										member.status !== STATUS_INACTIVE;
 
-												<span className="account-members-name ml-3">
-													{member.isCurrentUser
-														? sub('x-me', [
-																member.name,
-															])
-														: member.name}
+									return (
+										<ClayTable.Row key={member.id}>
+											<ClayTable.Cell>
+												<div className="align-items-center d-flex">
+													<UserAvatar
+														image={member.image}
+														name={member.name}
+													/>
+
+													<span className="account-members-name ml-3">
+														{member.isCurrentUser
+															? sub('x-me', [
+																	member.name,
+																])
+															: member.name}
+													</span>
+												</div>
+											</ClayTable.Cell>
+
+											<ClayTable.Cell>
+												{member.email}
+											</ClayTable.Cell>
+
+											<ClayTable.Cell>
+												{member.roleNames.join(', ')}
+											</ClayTable.Cell>
+
+											<ClayTable.Cell>
+												<span className="align-items-center d-flex">
+													<span
+														className={`account-members-status-dot${
+															isActive
+																? ''
+																: ' account-members-status-dot-inactive'
+														}`}
+													/>
+
+													{isActive
+														? translate('active')
+														: translate('inactive')}
 												</span>
-											</div>
-										</ClayTable.Cell>
+											</ClayTable.Cell>
 
-										<ClayTable.Cell>
-											{member.email}
-										</ClayTable.Cell>
+											<ClayTable.Cell>
+												{canManageMembers && (
+													<ClayDropDown
+														trigger={
+															<ClayButton
+																aria-label={translate(
+																	'manage-user-options'
+																)}
+																borderless
+																className="text-neutral-7"
+																displayType="unstyled"
+															>
+																<ClayIcon symbol="ellipsis-v" />
+															</ClayButton>
+														}
+													>
+														<ClayDropDown.ItemList>
+															<ClayDropDown.Item
+																onClick={() =>
+																	openEditPermissionsModal(
+																		member
+																	)
+																}
+															>
+																{translate(
+																	'edit-permissions'
+																)}
+															</ClayDropDown.Item>
 
-										<ClayTable.Cell>
-											{translate(member.roleKey)}
-										</ClayTable.Cell>
-
-										<ClayTable.Cell>
-											<span className="align-items-center d-flex">
-												<span className="account-members-status-dot" />
-
-												{translate('active')}
-											</span>
-										</ClayTable.Cell>
-
-										<ClayTable.Cell>
-											<ClayButton
-												aria-label={translate(
-													'manage-user-options'
+															<ClayDropDown.Item
+																onClick={() =>
+																	openRemoveMemberModal(
+																		member
+																	)
+																}
+															>
+																{translate(
+																	'remove'
+																)}
+															</ClayDropDown.Item>
+														</ClayDropDown.ItemList>
+													</ClayDropDown>
 												)}
-												borderless
-												className="text-neutral-7"
-												displayType="unstyled"
-											>
-												<ClayIcon symbol="ellipsis-v" />
-											</ClayButton>
-										</ClayTable.Cell>
-									</ClayTable.Row>
-								))}
+											</ClayTable.Cell>
+										</ClayTable.Row>
+									);
+								})}
 							</ClayTable.Body>
 						</ClayTable>
 

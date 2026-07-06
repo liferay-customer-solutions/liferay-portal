@@ -4,11 +4,11 @@
  */
 
 import {useParams} from 'react-router-dom';
+import DetailTable, {Orientation} from '~/components/DetailTable/DetailTable';
 import {DetailedCard} from '~/components/DetailedCard/DetailedCard';
 import {PageRenderer} from '~/components/Page/Page';
 import PaymentDetailsHeader from '~/components/PaymentDetailsHeader/PaymentDetailsHeader';
 import PaymentStatusBadge from '~/components/PaymentStatusBadge/PaymentStatusBadge';
-import QATable, {Orientation} from '~/components/QATable/QATable';
 import Table from '~/components/Table/Table';
 import useAdminOrderProduct from '~/hooks/useAdminOrderProduct';
 import i18n from '~/i18n';
@@ -105,7 +105,7 @@ const OrderDetails = () => {
 					className="mr-5 w-100"
 					clayIcon="order-form-pencil"
 				>
-					<QATable
+					<DetailTable
 						items={[
 							{
 								title: i18n.translate('account-name'),
@@ -146,7 +146,7 @@ const OrderDetails = () => {
 					className="w-100"
 					clayIcon="change-list"
 				>
-					<QATable
+					<DetailTable
 						items={[
 							{
 								title: i18n.translate('purchase-date'),

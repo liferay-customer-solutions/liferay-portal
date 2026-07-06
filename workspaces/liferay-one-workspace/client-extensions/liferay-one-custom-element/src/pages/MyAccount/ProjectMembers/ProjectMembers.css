@@ -1,0 +1,85 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2026 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+.project-members-card {
+	background-color: #fff;
+	border: 1px solid #e7e7ed;
+	border-radius: 12px;
+}
+
+.project-members-table {
+	margin-bottom: 0;
+}
+
+.project-members-table thead th {
+	border-top: 0;
+	color: #6b6c7e;
+	font-weight: 600;
+	padding: 12px 24px;
+	text-transform: none;
+}
+
+.project-members-table tbody td {
+	border-top: 1px solid #f1f2f5;
+	color: #1b2a3b;
+	padding: 16px 24px;
+	vertical-align: top;
+}
+
+.project-members-more {
+	background-color: transparent;
+	border: 0;
+	color: #0b5fff;
+	cursor: pointer;
+	font-size: 13px;
+	padding: 0;
+}
+
+.project-permissions-grid {
+	align-items: center;
+	display: grid;
+	gap: var(--spacer-3);
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+	margin-bottom: var(--spacer-2);
+}
+
+.project-permissions-grid-header {
+	color: var(--color-neutral-7);
+	font-size: var(--text-paragraph-sm-font-size, 13px);
+	font-weight: 600;
+	margin-bottom: var(--spacer-2);
+}
+
+.project-permissions-member-box {
+	align-items: center;
+	background-color: var(--color-white, #fff);
+	display: flex;
+}
+
+.project-permissions-role-dropdown {
+	display: block;
+}
+
+.project-permissions-role-trigger {
+	text-align: left;
+	width: 100%;
+}
+
+.project-permissions-role-menu {
+	width: var(--clay-dropdown-trigger-width, 100%);
+}
+
+.project-permissions-remove-button.btn {
+	background-color: var(--color-neutral-9, #1c2126);
+	border-color: var(--color-neutral-9, #1c2126);
+	color: var(--color-white, #fff);
+	white-space: nowrap;
+}
+
+.project-permissions-add-button.btn {
+	font-weight: 600;
+	padding-left: 0;
+	padding-right: 0;
+}

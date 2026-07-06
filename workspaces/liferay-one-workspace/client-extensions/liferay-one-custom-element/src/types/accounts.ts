@@ -84,6 +84,7 @@ export type UserAccount = {
 	newsSubscription: boolean;
 	password: string;
 	roleBriefs: RoleBrief[];
+	status?: number;
 	type: string;
 	userAccountContactInformation: {
 		telephones: {

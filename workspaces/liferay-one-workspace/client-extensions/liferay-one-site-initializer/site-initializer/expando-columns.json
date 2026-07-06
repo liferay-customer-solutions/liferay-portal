@@ -79,6 +79,58 @@
 	},
 	{
 		"dataType": 15,
+		"modelResource": "com.liferay.account.model.AccountEntry",
+		"name": "Industry",
+		"properties": {
+			"hidden": false,
+			"indexType": 2,
+			"localizeField": false,
+			"localizeFieldName": true,
+			"secret": false,
+			"visibleWithUpdatePermission": false
+		}
+	},
+	{
+		"dataType": 15,
+		"modelResource": "com.liferay.account.model.AccountEntry",
+		"name": "Okta SSO",
+		"properties": {
+			"hidden": false,
+			"indexType": 2,
+			"localizeField": false,
+			"localizeFieldName": true,
+			"secret": false,
+			"visibleWithUpdatePermission": false
+		}
+	},
+	{
+		"dataType": 15,
+		"modelResource": "com.liferay.account.model.AccountEntry",
+		"name": "Password Policy",
+		"properties": {
+			"hidden": false,
+			"indexType": 2,
+			"localizeField": false,
+			"localizeFieldName": true,
+			"secret": false,
+			"visibleWithUpdatePermission": false
+		}
+	},
+	{
+		"dataType": 15,
+		"modelResource": "com.liferay.account.model.AccountEntry",
+		"name": "Two-Factor Authentication",
+		"properties": {
+			"hidden": false,
+			"indexType": 2,
+			"localizeField": false,
+			"localizeFieldName": true,
+			"secret": false,
+			"visibleWithUpdatePermission": false
+		}
+	},
+	{
+		"dataType": 15,
 		"modelResource": "com.liferay.commerce.model.CommerceOrder",
 		"name": "accountOwnerEmailAddress",
 		"properties": {
