@@ -26,6 +26,40 @@
 	white-space: nowrap;
 }
 
+.account-members-toolbar:has(+ .account-members-active-filters) {
+	border-bottom: 0;
+	padding-bottom: 0;
+}
+
+.account-members-active-filters {
+	border-bottom: 1px solid #e7e7ed;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	padding: 12px 24px 16px;
+}
+
+.account-members-filter-tag {
+	align-items: center;
+	background-color: #f1f2f5;
+	border: 1px solid #cdced9;
+	border-radius: 4px;
+	color: #1b2a3b;
+	display: inline-flex;
+	font-size: 13px;
+	gap: 6px;
+	padding: 2px 8px;
+}
+
+.account-members-filter-tag-close {
+	background-color: transparent;
+	border: 0;
+	color: #6b6c7e;
+	cursor: pointer;
+	display: inline-flex;
+	padding: 0;
+}
+
 .account-members-table {
 	margin-bottom: 0;
 }

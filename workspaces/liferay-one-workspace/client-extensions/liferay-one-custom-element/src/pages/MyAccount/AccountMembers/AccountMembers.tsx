@@ -15,7 +15,7 @@ import Page from '~/components/Page/Page';
 import RestrictedFeatureMessage from '~/components/RestrictedFeatureMessage/RestrictedFeatureMessage';
 import {useFetch} from '~/hooks/useFetch';
 import i18n, {sub, translate} from '~/i18n';
-import {useUserProjects} from '~/pages/MyAccount/Projects/hooks/useUserProjects';
+import {useHasProject} from '~/pages/MyAccount/Projects/hooks/useHasProject';
 import {Liferay} from '~/services/liferay/liferay';
 
 import './AccountMembers.css';
@@ -103,7 +103,7 @@ export default function AccountMembers() {
 	const accountId = Liferay.CommerceContext?.account?.accountId;
 	const currentUserId = Liferay.ThemeDisplay.getUserId();
 
-	const {loading: projectsLoading, projects} = useUserProjects();
+	const {hasProject, loading: projectsLoading} = useHasProject();
 
 	const [keywords, setKeywords] = useState('');
 	const [page, setPage] = useState(1);
@@ -181,7 +181,24 @@ export default function AccountMembers() {
 		);
 	};
 
-	if (!projectsLoading && !projects.length) {
+	const activeFilters = useMemo(
+		() =>
+			selectedRoles.map((roleKey) => ({
+				label:
+					ROLE_OPTIONS.find((option) => option.key === roleKey)
+						?.label ?? translate(roleKey),
+				onRemove: () => {
+					setPage(1);
+					setSelectedRoles((previous) =>
+						previous.filter((value) => value !== roleKey)
+					);
+				},
+				value: roleKey,
+			})),
+		[selectedRoles]
+	);
+
+	if (!projectsLoading && !hasProject) {
 		return (
 			<Page
 				description={i18n.translate(
@@ -259,6 +276,27 @@ export default function AccountMembers() {
 						</ClayInput.GroupItem>
 					</ClayInput.Group>
 				</div>
+
+				{!!activeFilters.length && (
+					<div className="account-members-active-filters">
+						{activeFilters.map(({label, onRemove, value}) => (
+							<span
+								className="account-members-filter-tag"
+								key={value}
+							>
+								{label}
+
+								<button
+									className="account-members-filter-tag-close"
+									onClick={onRemove}
+									type="button"
+								>
+									<ClayIcon symbol="times" />
+								</button>
+							</span>
+						))}
+					</div>
+				)}
 
 				{paginatedMembers.length ? (
 					<>

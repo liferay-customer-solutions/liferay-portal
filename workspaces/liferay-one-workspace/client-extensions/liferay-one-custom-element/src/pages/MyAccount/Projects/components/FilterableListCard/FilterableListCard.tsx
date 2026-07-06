@@ -17,6 +17,8 @@ import './FilterableListCard.css';
 
 const PAGE_SIZE_OPTIONS = [10, 20, 30, 50];
 
+const FILTER_SEARCH_MIN_OPTIONS = 10;
+
 export type FilterOption = {label: string; value: string};
 
 export type ListFilter<T> = {
@@ -60,7 +62,12 @@ function FilterSubPanel({
 	selectedValues,
 	title,
 }: FilterSubPanelProps) {
+	const [keywords, setKeywords] = useState('');
 	const [draftValues, setDraftValues] = useState<string[]>(selectedValues);
+
+	const filteredOptions = options.filter(({label}) =>
+		label.toLowerCase().includes(keywords.trim().toLowerCase())
+	);
 
 	const toggleValue = (value: string) =>
 		setDraftValues((previous) =>
@@ -81,8 +88,18 @@ function FilterSubPanel({
 				<span className="list-card-filter-title">{title}</span>
 			</button>
 
+			{options.length > FILTER_SEARCH_MIN_OPTIONS && (
+				<ClayInput
+					className="list-card-filter-search mt-3"
+					onChange={(event) => setKeywords(event.target.value)}
+					placeholder={translate('search')}
+					type="text"
+					value={keywords}
+				/>
+			)}
+
 			<div className="list-card-filter-options mt-3">
-				{options.map(({label, value}) => (
+				{filteredOptions.map(({label, value}) => (
 					<ClayCheckbox
 						checked={draftValues.includes(value)}
 						key={value}
@@ -144,6 +161,46 @@ export default function FilterableListCard<T>({
 
 		return filteredItems.slice(start, start + pageSize);
 	}, [filteredItems, page, pageSize]);
+
+	const activeFilters = useMemo(() => {
+		const active: {
+			label: string;
+			onRemove: () => void;
+			value: string;
+		}[] = [];
+
+		const hasMultipleCategories = filters.length > 1;
+
+		filters.forEach((filter) => {
+			const values = selectedFilters[filter.key] ?? [];
+
+			values.forEach((value) => {
+				const option = filter.options.find(
+					(current) => current.value === value
+				);
+
+				const optionLabel = option?.label ?? value;
+
+				active.push({
+					label: hasMultipleCategories
+						? `${translate(filter.label)}: ${optionLabel}`
+						: optionLabel,
+					onRemove: () => {
+						setSelectedFilters((previous) => ({
+							...previous,
+							[filter.key]: (previous[filter.key] ?? []).filter(
+								(current) => current !== value
+							),
+						}));
+						setPage(1);
+					},
+					value: `${filter.key}-${value}`,
+				});
+			});
+		});
+
+		return active;
+	}, [filters, selectedFilters]);
 
 	const closeFilter = () => {
 		setFilterActive(false);
@@ -249,6 +306,24 @@ export default function FilterableListCard<T>({
 					<div className="list-card-toolbar-action">{action}</div>
 				)}
 			</div>
+
+			{!!activeFilters.length && (
+				<div className="list-card-active-filters">
+					{activeFilters.map(({label, onRemove, value}) => (
+						<span className="list-card-filter-tag" key={value}>
+							{label}
+
+							<button
+								className="list-card-filter-tag-close"
+								onClick={onRemove}
+								type="button"
+							>
+								<ClayIcon symbol="times" />
+							</button>
+						</span>
+					))}
+				</div>
+			)}
 
 			{paginatedItems.length ? (
 				<>

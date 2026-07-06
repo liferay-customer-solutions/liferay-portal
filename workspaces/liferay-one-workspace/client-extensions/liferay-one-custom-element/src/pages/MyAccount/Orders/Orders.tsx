@@ -32,6 +32,8 @@ import type {PlacedOrder} from '~/types/orders';
 
 const PAGE_SIZE_OPTIONS = [10, 20, 30, 50];
 
+const FILTER_SEARCH_MIN_OPTIONS = 10;
+
 export const STATUS_DOT_COLORS: {[key: string]: string} = {
 	info: '#2e5aac',
 	secondary: '#6b6c7e',
@@ -112,10 +114,6 @@ function FilterSubPanel({
 				: [...previous, value]
 		);
 
-	const selectedOptions = options.filter(({value}) =>
-		draftValues.includes(value)
-	);
-
 	return (
 		<div className="orders-filter-panel">
 			<button
@@ -128,37 +126,22 @@ function FilterSubPanel({
 				<span className="orders-filter-title">{title}</span>
 			</button>
 
-			<ClayInput
-				className="mt-3 orders-filter-search"
-				onChange={(event) => setKeywords(event.target.value)}
-				placeholder={translate('search')}
-				type="text"
-				value={keywords}
-			/>
-
-			{!!selectedOptions.length && (
-				<div className="mt-2 orders-filter-tags">
-					{selectedOptions.map(({label, value}) => (
-						<span className="orders-filter-tag" key={value}>
-							{label}
-
-							<button
-								className="orders-filter-tag-close"
-								onClick={() => toggleValue(value)}
-								type="button"
-							>
-								<ClayIcon symbol="times" />
-							</button>
-						</span>
-					))}
-				</div>
+			{options.length > FILTER_SEARCH_MIN_OPTIONS && (
+				<ClayInput
+					className="mt-3 orders-filter-search"
+					onChange={(event) => setKeywords(event.target.value)}
+					placeholder={translate('search')}
+					type="text"
+					value={keywords}
+				/>
 			)}
 
 			{hasExclude && (
-				<div className="align-items-center d-flex justify-content-between mt-3 orders-filter-exclude">
-					<span>{translate('exclude')}</span>
+				<div className="align-items-center d-flex mt-3 orders-filter-exclude">
+					<span className="mr-2">{translate('exclude')}</span>
 
 					<ClayToggle
+						className="orders-filter-exclude-toggle"
 						onToggle={setDraftExclude}
 						toggled={draftExclude}
 					/>
@@ -280,6 +263,51 @@ export default function Orders() {
 
 		return filteredOrders.slice(start, start + pageSize);
 	}, [filteredOrders, page, pageSize]);
+
+	const activeFilters = useMemo(() => {
+		const filters: {
+			label: string;
+			onRemove: () => void;
+			value: string;
+		}[] = [];
+
+		projectFilter.values.forEach((name) => {
+			filters.push({
+				label: projectFilter.exclude
+					? `${translate('exclude')}: ${name}`
+					: name,
+				onRemove: () => {
+					setProjectFilter((previous) => ({
+						...previous,
+						values: previous.values.filter(
+							(current) => current !== name
+						),
+					}));
+					setPage(1);
+				},
+				value: `project-${name}`,
+			});
+		});
+
+		invoiceStatusFilter.forEach((status) => {
+			const option = INVOICE_STATUS_OPTIONS.find(
+				(current) => current.value === status
+			);
+
+			filters.push({
+				label: option ? translate(option.label) : String(status),
+				onRemove: () => {
+					setInvoiceStatusFilter((previous) =>
+						previous.filter((current) => current !== status)
+					);
+					setPage(1);
+				},
+				value: `invoice-status-${status}`,
+			});
+		});
+
+		return filters;
+	}, [invoiceStatusFilter, projectFilter]);
 
 	const closeFilter = () => {
 		setFilterActive(false);
@@ -403,6 +431,24 @@ export default function Orders() {
 						</ClayInput.GroupItem>
 					</ClayInput.Group>
 				</div>
+
+				{!!activeFilters.length && (
+					<div className="orders-active-filters">
+						{activeFilters.map(({label, onRemove, value}) => (
+							<span className="orders-filter-tag" key={value}>
+								{label}
+
+								<button
+									className="orders-filter-tag-close"
+									onClick={onRemove}
+									type="button"
+								>
+									<ClayIcon symbol="times" />
+								</button>
+							</span>
+						))}
+					</div>
+				)}
 
 				{paginatedOrders.length ? (
 					<>
