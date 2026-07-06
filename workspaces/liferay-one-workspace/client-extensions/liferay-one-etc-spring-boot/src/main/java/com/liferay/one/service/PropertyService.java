@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PropertyService extends OneBaseService {
 
-	public String getAccountPropertyValue(long accountId, String name)
+	public String getPropertyValue(long accountId, String name)
 		throws Exception {
 
 		List<Property> properties = getAllItems(

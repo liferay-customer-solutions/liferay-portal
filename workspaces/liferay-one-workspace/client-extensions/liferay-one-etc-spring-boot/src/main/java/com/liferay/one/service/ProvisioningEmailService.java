@@ -16,6 +16,7 @@ import com.liferay.one.model.ProjectMembership;
 import com.liferay.one.util.LocaleUtil;
 import com.liferay.one.util.UserAccountUtil;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.SetUtil;
@@ -140,7 +141,7 @@ public class ProvisioningEmailService extends OneBaseService {
 		List<Project> projects, Locale locale) {
 
 		if (projects.isEmpty()) {
-			return "";
+			return StringPool.BLANK;
 		}
 
 		if (projects.size() == 1) {
@@ -404,8 +405,8 @@ public class ProvisioningEmailService extends OneBaseService {
 					userAccount, account.getId()));
 		}
 
-		String projectKey = "";
-		String projectNameSuffix = "";
+		String projectKey = StringPool.BLANK;
+		String projectNameSuffix = StringPool.BLANK;
 
 		if (projects.size() == 1) {
 			Project project = projects.get(0);

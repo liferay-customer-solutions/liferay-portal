@@ -48,7 +48,7 @@ public class ProvisioningAssignmentService {
 		if (Objects.equals(
 				accountRoleName, RoleConstants.NAME_CLOUD_NATIVE_CONTACT)) {
 
-			String oktaApplicationId = _propertyService.getAccountPropertyValue(
+			String oktaApplicationId = _propertyService.getPropertyValue(
 				account.getId(), PropertyConstants.NAME_OKTA_APPLICATION);
 
 			if (Validator.isNotNull(oktaApplicationId)) {
@@ -75,7 +75,7 @@ public class ProvisioningAssignmentService {
 		_subscriptionEntryService.deleteAccountLicenseKeySubscriptionEntries(
 			accountId, userId);
 
-		if (!UserAccountUtil.hasAccountMembership(userAccount)) {
+		if (!_isCustomer(userAccount)) {
 			_oktaService.removeMembership(_OKTA_GROUP_CUSTOMERS, emailAddress);
 		}
 
@@ -107,7 +107,7 @@ public class ProvisioningAssignmentService {
 		if (Objects.equals(
 				accountRoleName, RoleConstants.NAME_CLOUD_NATIVE_CONTACT)) {
 
-			String oktaApplicationId = _propertyService.getAccountPropertyValue(
+			String oktaApplicationId = _propertyService.getPropertyValue(
 				account.getId(), PropertyConstants.NAME_OKTA_APPLICATION);
 
 			if (Validator.isNotNull(oktaApplicationId)) {
@@ -133,6 +133,10 @@ public class ProvisioningAssignmentService {
 		else {
 			_oktaService.addMembership(groupName, emailAddress);
 		}
+	}
+
+	private boolean _isCustomer(UserAccount userAccount) {
+		return ArrayUtil.isNotEmpty(userAccount.getAccountBriefs());
 	}
 
 	private boolean _isPartner(UserAccount userAccount) {

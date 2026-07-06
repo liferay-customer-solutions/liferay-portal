@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
@@ -28,6 +29,14 @@ public abstract class OneBaseService extends BaseService {
 
 	protected <T> List<T> getAllItems(
 			String path, String filterString, Function<JSONObject, T> function)
+		throws Exception {
+
+		return getAllItems(path, filterString, function, null);
+	}
+
+	protected <T> List<T> getAllItems(
+			String path, String filterString, Function<JSONObject, T> function,
+			Jwt jwt)
 		throws Exception {
 
 		List<T> items = new ArrayList<>();
@@ -49,7 +58,7 @@ public abstract class OneBaseService extends BaseService {
 			}
 
 			String response = get(
-				getAuthorization(),
+				getAuthorization(jwt),
 				uriComponentsBuilder.build(
 				).toUri());
 
@@ -76,6 +85,14 @@ public abstract class OneBaseService extends BaseService {
 	protected String getAuthorization() {
 		return _liferayOAuth2AccessTokenManager.getAuthorization(
 			"liferay-one-etc-spring-boot-oahs");
+	}
+
+	protected String getAuthorization(Jwt jwt) {
+		if (jwt == null) {
+			return getAuthorization();
+		}
+
+		return "Bearer " + jwt.getTokenValue();
 	}
 
 	protected boolean isNotFound(String status) {

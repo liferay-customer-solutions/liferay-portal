@@ -16,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -27,20 +28,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class ProjectService extends OneBaseService {
 
 	public Project fetchProject(String externalReferenceCode) throws Exception {
-		String response = get(
-			getAuthorization(),
-			UriComponentsBuilder.fromPath(
-				"/o/c/projects/by-external-reference-code" +
-					"/{externalReferenceCode}"
-			).buildAndExpand(
-				externalReferenceCode
-			).toUri());
+		return _fetchProject(getAuthorization(), externalReferenceCode);
+	}
 
-		if (Validator.isNull(response)) {
-			return null;
-		}
+	public Project fetchProject(String externalReferenceCode, Jwt jwt)
+		throws Exception {
 
-		return new Project(new JSONObject(response));
+		return _fetchProject(getAuthorization(jwt), externalReferenceCode);
 	}
 
 	public void upsertProject(
@@ -89,6 +83,26 @@ public class ProjectService extends OneBaseService {
 
 			put(getAuthorization(), jsonObject.toString(), uri);
 		}
+	}
+
+	private Project _fetchProject(
+			String authorization, String externalReferenceCode)
+		throws Exception {
+
+		String response = get(
+			authorization,
+			UriComponentsBuilder.fromPath(
+				"/o/c/projects/by-external-reference-code" +
+					"/{externalReferenceCode}"
+			).buildAndExpand(
+				externalReferenceCode
+			).toUri());
+
+		if (Validator.isNull(response)) {
+			return null;
+		}
+
+		return new Project(new JSONObject(response));
 	}
 
 	private static final Log _log = LogFactory.getLog(ProjectService.class);

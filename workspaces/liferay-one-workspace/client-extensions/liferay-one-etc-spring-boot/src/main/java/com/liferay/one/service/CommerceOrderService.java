@@ -124,6 +124,12 @@ public class CommerceOrderService extends OneBaseService {
 		}
 	}
 
+	public Order getCommerceOrder(long commerceOrderId) throws Exception {
+		OrderResource orderResource = _buildOrderResource();
+
+		return orderResource.getOrder(commerceOrderId);
+	}
+
 	public String getSupportRegion(long accountId, Long defaultBillingAddressId)
 		throws Exception {
 

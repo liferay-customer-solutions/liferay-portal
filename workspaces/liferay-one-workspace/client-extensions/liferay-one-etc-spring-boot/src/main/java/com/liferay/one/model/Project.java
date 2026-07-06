@@ -13,8 +13,14 @@ import org.json.JSONObject;
 public class Project {
 
 	public Project(JSONObject jsonObject) {
+		_accountId = jsonObject.optLong(
+			"r_accountEntryToProject_accountEntryId");
 		_externalReferenceCode = jsonObject.optString("externalReferenceCode");
 		_name = jsonObject.optString("name");
+	}
+
+	public long getAccountId() {
+		return _accountId;
 	}
 
 	public String getExternalReferenceCode() {
@@ -25,6 +31,7 @@ public class Project {
 		return _name;
 	}
 
+	private final long _accountId;
 	private final String _externalReferenceCode;
 	private final String _name;
 

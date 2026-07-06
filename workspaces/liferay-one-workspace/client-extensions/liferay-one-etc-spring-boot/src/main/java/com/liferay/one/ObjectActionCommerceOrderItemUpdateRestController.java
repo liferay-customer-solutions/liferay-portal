@@ -52,14 +52,10 @@ public class ObjectActionCommerceOrderItemUpdateRestController
 			return;
 		}
 
-		Order order = _commerceOrderService.fetchCommerceOrder(
+		Order order = _commerceOrderService.getCommerceOrder(
 			orderItem.getOrderId());
 
-		if (order == null) {
-			return;
-		}
-
-		String oktaApplicationId = _propertyService.getAccountPropertyValue(
+		String oktaApplicationId = _propertyService.getPropertyValue(
 			order.getAccountId(), PropertyConstants.NAME_OKTA_APPLICATION);
 
 		if (Validator.isNotNull(oktaApplicationId)) {

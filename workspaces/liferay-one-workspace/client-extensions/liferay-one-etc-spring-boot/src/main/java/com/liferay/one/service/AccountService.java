@@ -8,7 +8,6 @@ package com.liferay.one.service;
 import com.liferay.headless.admin.user.client.custom.field.CustomField;
 import com.liferay.headless.admin.user.client.custom.field.CustomValue;
 import com.liferay.headless.admin.user.client.dto.v1_0.Account;
-import com.liferay.headless.admin.user.client.dto.v1_0.AccountBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.AccountContactInformation;
 import com.liferay.headless.admin.user.client.dto.v1_0.AccountRole;
 import com.liferay.headless.admin.user.client.dto.v1_0.EmailAddress;
@@ -21,6 +20,7 @@ import com.liferay.headless.admin.user.client.pagination.Pagination;
 import com.liferay.headless.admin.user.client.problem.Problem;
 import com.liferay.headless.admin.user.client.resource.v1_0.AccountResource;
 import com.liferay.headless.admin.user.client.resource.v1_0.AccountRoleResource;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -41,41 +41,45 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Component
 public class AccountService extends OneBaseService {
 
-	public void addAccountUserAccount(
-			long accountId, long userId, Long accountRoleId)
+	public void addAccountUserAccount(long accountId, Jwt jwt, long userId)
 		throws Exception {
 
 		UserAccount userAccount = _userAccountService.getUserAccount(userId);
 
 		post(
-			getAuthorization(), "",
+			getAuthorization(jwt), StringPool.BLANK,
 			UriComponentsBuilder.fromPath(
 				"/o/headless-admin-user/v1.0/accounts/{accountId}" +
 					"/user-accounts/by-email-address/{emailAddress}"
 			).buildAndExpand(
 				accountId, userAccount.getEmailAddress()
 			).toUri());
-
-		if (accountRoleId != null) {
-			post(
-				getAuthorization(), "",
-				UriComponentsBuilder.fromPath(
-					"/o/headless-admin-user/v1.0/accounts/{accountId}" +
-						"/account-roles/{accountRoleId}/user-accounts/{userId}"
-				).buildAndExpand(
-					accountId, accountRoleId, userId
-				).toUri());
-		}
 	}
 
-	public void ensureAccountUserAccount(long accountId, long userId)
+	public void addAccountUserAccount(
+			String externalReferenceCode, Jwt jwt, long userId)
 		throws Exception {
 
-		if (_hasAccountUserAccount(accountId, userId)) {
-			return;
-		}
+		Account account = getAccount(externalReferenceCode, jwt);
 
-		addAccountUserAccount(accountId, userId, null);
+		addAccountUserAccount(account.getId(), jwt, userId);
+	}
+
+	public void addAccountUserAccountRole(
+			long accountRoleId, String externalReferenceCode, Jwt jwt,
+			long userId)
+		throws Exception {
+
+		Account account = getAccount(externalReferenceCode, jwt);
+
+		post(
+			getAuthorization(jwt), StringPool.BLANK,
+			UriComponentsBuilder.fromPath(
+				"/o/headless-admin-user/v1.0/accounts/{accountId}" +
+					"/account-roles/{accountRoleId}/user-accounts/{userId}"
+			).buildAndExpand(
+				account.getId(), accountRoleId, userId
+			).toUri());
 	}
 
 	public Account fetchAccount(long accountId) throws Exception {
@@ -117,12 +121,7 @@ public class AccountService extends OneBaseService {
 	public String getAccountRoleName(long accountId, long accountRoleId)
 		throws Exception {
 
-		AccountRoleResource accountRoleResource = AccountRoleResource.builder(
-		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
-		).header(
-			HttpHeaders.AUTHORIZATION, getAuthorization()
-		).build();
+		AccountRoleResource accountRoleResource = _buildAccountRoleResource();
 
 		Page<AccountRole> accountRolesPage =
 			accountRoleResource.getAccountAccountRolesPage(
@@ -137,44 +136,36 @@ public class AccountService extends OneBaseService {
 		return null;
 	}
 
-	public boolean hasAccountUserAccount(long accountId, long userId)
+	public void removeAccountUserAccount(
+			String externalReferenceCode, Jwt jwt, long userId)
 		throws Exception {
 
-		for (UserAccount userAccount :
-				_userAccountService.getAccountUserAccounts(accountId)) {
-
-			if (Objects.equals(userAccount.getId(), userId)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	public void removeAccountUserAccount(long accountId, long userId)
-		throws Exception {
+		Account account = getAccount(externalReferenceCode, jwt);
 
 		delete(
-			getAuthorization(), "",
+			getAuthorization(jwt), StringPool.BLANK,
 			UriComponentsBuilder.fromPath(
 				"/o/headless-admin-user/v1.0/accounts/{accountId}" +
 					"/user-accounts/{userId}"
 			).buildAndExpand(
-				accountId, userId
+				account.getId(), userId
 			).toUri());
 	}
 
 	public void removeAccountUserAccountRole(
-			long accountId, long userId, long accountRoleId)
+			long accountRoleId, String externalReferenceCode, Jwt jwt,
+			long userId)
 		throws Exception {
 
+		Account account = getAccount(externalReferenceCode, jwt);
+
 		delete(
-			getAuthorization(), "",
+			getAuthorization(jwt), StringPool.BLANK,
 			UriComponentsBuilder.fromPath(
 				"/o/headless-admin-user/v1.0/accounts/{accountId}" +
 					"/account-roles/{accountRoleId}/user-accounts/{userId}"
 			).buildAndExpand(
-				accountId, accountRoleId, userId
+				account.getId(), accountRoleId, userId
 			).toUri());
 	}
 
@@ -230,24 +221,13 @@ public class AccountService extends OneBaseService {
 		}
 	}
 
-	private boolean _hasAccountUserAccount(long accountId, long userId)
-		throws Exception {
-
-		UserAccount userAccount = _userAccountService.getUserAccount(userId);
-
-		AccountBrief[] accountBriefs = userAccount.getAccountBriefs();
-
-		if (accountBriefs == null) {
-			return false;
-		}
-
-		for (AccountBrief accountBrief : accountBriefs) {
-			if (Objects.equals(accountBrief.getId(), accountId)) {
-				return true;
-			}
-		}
-
-		return false;
+	private AccountRoleResource _buildAccountRoleResource() {
+		return AccountRoleResource.builder(
+		).endpoint(
+			lxcDXPMainDomain, lxcDXPServerProtocol
+		).header(
+			HttpHeaders.AUTHORIZATION, getAuthorization()
+		).build();
 	}
 
 	private void _setAccountContactInformation(

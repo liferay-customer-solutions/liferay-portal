@@ -8,6 +8,7 @@ package com.liferay.one.service;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
 import com.liferay.headless.admin.user.client.pagination.Page;
 import com.liferay.headless.admin.user.client.pagination.Pagination;
+import com.liferay.headless.admin.user.client.problem.Problem;
 import com.liferay.headless.admin.user.client.resource.v1_0.UserAccountResource;
 
 import java.util.ArrayList;
@@ -26,14 +27,8 @@ public class UserAccountService extends OneBaseService {
 	public List<UserAccount> getAccountUserAccounts(long accountId)
 		throws Exception {
 
-		UserAccountResource userAccountResource = UserAccountResource.builder(
-		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
-		).header(
-			HttpHeaders.AUTHORIZATION, getAuthorization()
-		).parameter(
-			"nestedFields", "customFields"
-		).build();
+		UserAccountResource userAccountResource = _buildUserAccountResource(
+			"nestedFields", "customFields");
 
 		List<UserAccount> userAccounts = new ArrayList<>();
 
@@ -58,23 +53,14 @@ public class UserAccountService extends OneBaseService {
 	}
 
 	public UserAccount getMyUserAccount(Jwt jwt) throws Exception {
-		UserAccountResource userAccountResource = UserAccountResource.builder(
-		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
-		).header(
-			HttpHeaders.AUTHORIZATION, "Bearer " + jwt.getTokenValue()
-		).build();
+		UserAccountResource userAccountResource = _buildUserAccountResource(
+			jwt);
 
 		return userAccountResource.getMyUserAccount();
 	}
 
 	public UserAccount getUserAccount(long userId) throws Exception {
-		UserAccountResource userAccountResource = UserAccountResource.builder(
-		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
-		).header(
-			HttpHeaders.AUTHORIZATION, getAuthorization()
-		).build();
+		UserAccountResource userAccountResource = _buildUserAccountResource();
 
 		return userAccountResource.getUserAccount(userId);
 	}
@@ -82,14 +68,56 @@ public class UserAccountService extends OneBaseService {
 	public UserAccount getUserAccountByEmailAddress(String emailAddress)
 		throws Exception {
 
-		UserAccountResource userAccountResource = UserAccountResource.builder(
+		UserAccountResource userAccountResource = _buildUserAccountResource();
+
+		return userAccountResource.getUserAccountByEmailAddress(emailAddress);
+	}
+
+	public boolean hasAccountUserAccount(long accountId, long userId)
+		throws Exception {
+
+		UserAccountResource userAccountResource = _buildUserAccountResource();
+
+		try {
+			userAccountResource.getAccountUserAccount(accountId, userId);
+
+			return true;
+		}
+		catch (Problem.ProblemException problemException) {
+			Problem problem = problemException.getProblem();
+
+			if ((problem != null) && isNotFound(problem.getStatus())) {
+				return false;
+			}
+
+			throw problemException;
+		}
+	}
+
+	private UserAccountResource _buildUserAccountResource(
+		Jwt jwt, String... parameters) {
+
+		return UserAccountResource.builder(
+		).endpoint(
+			lxcDXPMainDomain, lxcDXPServerProtocol
+		).header(
+			HttpHeaders.AUTHORIZATION, getAuthorization(jwt)
+		).parameters(
+			parameters
+		).build();
+	}
+
+	private UserAccountResource _buildUserAccountResource(
+		String... parameters) {
+
+		return UserAccountResource.builder(
 		).endpoint(
 			lxcDXPMainDomain, lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
+		).parameters(
+			parameters
 		).build();
-
-		return userAccountResource.getUserAccountByEmailAddress(emailAddress);
 	}
 
 	private static final int _PAGE_SIZE = 500;

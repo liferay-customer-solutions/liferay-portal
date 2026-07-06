@@ -8,6 +8,7 @@ package com.liferay.one;
 import com.liferay.one.permission.AdminPermission;
 import com.liferay.one.pubsub.Message;
 import com.liferay.one.pubsub.subscriber.BasePubsubSubscriber;
+import com.liferay.petra.string.StringPool;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -131,7 +132,7 @@ public class AdminRestControllerTest {
 
 		String json = new JSONObject(
 		).put(
-			"attributes", ""
+			"attributes", StringPool.BLANK
 		).put(
 			"payload", "body"
 		).put(
@@ -195,7 +196,7 @@ public class AdminRestControllerTest {
 
 		String json = new JSONObject(
 		).put(
-			"attributes", ""
+			"attributes", StringPool.BLANK
 		).put(
 			"payload", "body"
 		).put(

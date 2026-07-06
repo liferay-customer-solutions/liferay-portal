@@ -5,14 +5,17 @@
 
 package com.liferay.one.service;
 
+import com.liferay.one.model.Project;
 import com.liferay.one.model.ProjectMembership;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 
 import java.util.List;
 
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -23,23 +26,33 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class ProjectMembershipService extends OneBaseService {
 
 	public void addProjectMembership(
-			long accountId, long userId, String projectExternalReferenceCode,
-			String roleExternalReferenceCode)
+			Jwt jwt, String projectExternalReferenceCode,
+			String roleExternalReferenceCode, long userId)
 		throws Exception {
 
-		_accountService.ensureAccountUserAccount(accountId, userId);
-
 		List<ProjectMembership> projectMemberships = _getProjectMemberships(
-			accountId, userId, projectExternalReferenceCode);
+			jwt, projectExternalReferenceCode, roleExternalReferenceCode,
+			userId);
 
 		if (!projectMemberships.isEmpty()) {
 			return;
 		}
 
+		Project project = _projectService.fetchProject(
+			projectExternalReferenceCode, jwt);
+
+		if (!_userAccountService.hasAccountUserAccount(
+				project.getAccountId(), userId)) {
+
+			_accountService.addAccountUserAccount(
+				project.getAccountId(), jwt, userId);
+		}
+
 		JSONObject jsonObject = new JSONObject();
 
 		jsonObject.put(
-			"r_accountEntryToProjectMembership_accountEntryId", accountId
+			"r_accountEntryToProjectMembership_accountEntryId",
+			project.getAccountId()
 		).put(
 			"r_projectToProjectMembership_c_projectERC",
 			projectExternalReferenceCode
@@ -50,7 +63,7 @@ public class ProjectMembershipService extends OneBaseService {
 		);
 
 		post(
-			getAuthorization(), jsonObject.toString(),
+			getAuthorization(jwt), jsonObject.toString(),
 			UriComponentsBuilder.fromPath(
 				"/o/c/projectmemberships"
 			).build(
@@ -58,15 +71,17 @@ public class ProjectMembershipService extends OneBaseService {
 	}
 
 	public void deleteProjectMembership(
-			long accountId, long userId, String projectExternalReferenceCode)
+			Jwt jwt, String projectExternalReferenceCode,
+			String roleExternalReferenceCode, long userId)
 		throws Exception {
 
 		List<ProjectMembership> projectMemberships = _getProjectMemberships(
-			accountId, userId, projectExternalReferenceCode);
+			jwt, projectExternalReferenceCode, roleExternalReferenceCode,
+			userId);
 
 		for (ProjectMembership projectMembership : projectMemberships) {
 			delete(
-				getAuthorization(), "",
+				getAuthorization(jwt), StringPool.BLANK,
 				UriComponentsBuilder.fromPath(
 					"/o/c/projectmemberships/by-external-reference-code" +
 						"/{externalReferenceCode}"
@@ -90,20 +105,33 @@ public class ProjectMembershipService extends OneBaseService {
 	}
 
 	private List<ProjectMembership> _getProjectMemberships(
-			long accountId, long userId, String projectExternalReferenceCode)
+			Jwt jwt, String projectExternalReferenceCode,
+			String roleExternalReferenceCode, long userId)
 		throws Exception {
 
+		String filterString = StringBundler.concat(
+			"r_userToProjectMembership_userId eq '", userId,
+			"' and r_projectToProjectMembership_c_projectERC eq '",
+			projectExternalReferenceCode, "'");
+
+		if (roleExternalReferenceCode != null) {
+			filterString = StringBundler.concat(
+				filterString, " and roleExternalReferenceCode eq '",
+				roleExternalReferenceCode, "'");
+		}
+
 		return getAllItems(
-			"/o/c/projectmemberships",
-			StringBundler.concat(
-				"r_accountEntryToProjectMembership_accountEntryId eq '",
-				accountId, "' and r_userToProjectMembership_userId eq '",
-				userId, "' and r_projectToProjectMembership_c_projectERC eq '",
-				projectExternalReferenceCode, "'"),
-			ProjectMembership::new);
+			"/o/c/projectmemberships", filterString, ProjectMembership::new,
+			jwt);
 	}
 
 	@Autowired
 	private AccountService _accountService;
+
+	@Autowired
+	private ProjectService _projectService;
+
+	@Autowired
+	private UserAccountService _userAccountService;
 
 }

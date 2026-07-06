@@ -10,7 +10,6 @@ import com.liferay.headless.admin.user.client.custom.field.CustomValue;
 import com.liferay.headless.admin.user.client.dto.v1_0.AccountBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.RoleBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 
 import java.util.HashSet;
@@ -52,10 +51,6 @@ public class UserAccountUtil {
 		}
 
 		return roleNames;
-	}
-
-	public static boolean hasAccountMembership(UserAccount userAccount) {
-		return ArrayUtil.isNotEmpty(userAccount.getAccountBriefs());
 	}
 
 	public static boolean hasAccountMembership(

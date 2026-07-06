@@ -7,6 +7,7 @@ package com.liferay.one.service;
 
 import com.liferay.client.extension.util.spring.boot3.service.BaseService;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 
 import java.time.Duration;
 
@@ -32,7 +33,7 @@ public class ConsoleService extends BaseService {
 
 	public void deleteProject(String projectId) throws Exception {
 		delete(
-			getAuthorization(), "",
+			getAuthorization(), StringPool.BLANK,
 			UriComponentsBuilder.fromUriString(
 				_consoleAuthURL
 			).path(

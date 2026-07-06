@@ -20,6 +20,7 @@ import com.liferay.one.service.NotificationQueueEntryService;
 import com.liferay.one.service.NotificationTemplateService;
 import com.liferay.one.service.UserAccountService;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -611,9 +612,11 @@ public class TrialRestController extends BaseRestController {
 
 		admin.setEmailAddress(() -> emailAddress);
 		admin.setFamilyName(
-			() -> Objects.toString(userAccount.getFamilyName(), ""));
+			() -> Objects.toString(
+				userAccount.getFamilyName(), StringPool.BLANK));
 		admin.setGivenName(
-			() -> Objects.toString(userAccount.getGivenName(), ""));
+			() -> Objects.toString(
+				userAccount.getGivenName(), StringPool.BLANK));
 
 		portalInstance.setAdmin(() -> admin);
 
