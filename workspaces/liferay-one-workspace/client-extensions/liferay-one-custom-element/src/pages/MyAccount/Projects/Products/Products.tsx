@@ -7,6 +7,7 @@ import ClayIcon from '@clayui/icon';
 import {useMemo} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Page from '~/components/Page/Page';
+import RowActionsMenu from '~/components/RowActionsMenu/RowActionsMenu';
 import {useProject} from '~/context/ProjectContext';
 import {ProjectProduct, useProjectProducts} from '~/hooks/useProjectCommerce';
 import i18n, {Word, translate} from '~/i18n';
@@ -14,7 +15,6 @@ import FilterableListCard, {
 	ListColumn,
 	ListFilter,
 } from '~/pages/MyAccount/Projects/components/FilterableListCard/FilterableListCard';
-import RowActionsMenu from '~/pages/MyAccount/Projects/components/RowActionsMenu/RowActionsMenu';
 import {getLogoColor} from '~/pages/MyAccount/Projects/utils/getLogoColor';
 import {getProductIcon} from '~/pages/MyAccount/Projects/utils/getProductIcon';
 import {getStatusColor} from '~/pages/MyAccount/Projects/utils/getStatusColor';

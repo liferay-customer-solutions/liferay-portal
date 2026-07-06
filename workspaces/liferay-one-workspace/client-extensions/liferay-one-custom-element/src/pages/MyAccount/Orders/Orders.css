@@ -157,6 +157,13 @@
 	vertical-align: middle;
 }
 
+.orders-table thead th:last-child,
+.orders-table tbody td:last-child {
+	text-align: right;
+	white-space: nowrap;
+	width: 1%;
+}
+
 .orders-id {
 	font-weight: 600;
 }

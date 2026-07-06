@@ -14,6 +14,7 @@ import {useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Button from '~/components/Button/Button';
 import Page from '~/components/Page/Page';
+import RowActionsMenu from '~/components/RowActionsMenu/RowActionsMenu';
 import {useFetch} from '~/hooks/useFetch';
 import i18n, {Word, translate} from '~/i18n';
 import {Liferay} from '~/services/liferay/liferay';
@@ -274,8 +275,8 @@ export default function Orders() {
 		projectFilter.values.forEach((name) => {
 			filters.push({
 				label: projectFilter.exclude
-					? `${translate('exclude')}: ${name}`
-					: name,
+					? `${translate('project')}: ${translate('exclude')} ${name}`
+					: `${translate('project')}: ${name}`,
 				onRemove: () => {
 					setProjectFilter((previous) => ({
 						...previous,
@@ -295,7 +296,9 @@ export default function Orders() {
 			);
 
 			filters.push({
-				label: option ? translate(option.label) : String(status),
+				label: `${translate('invoice-status')}: ${
+					option ? translate(option.label) : String(status)
+				}`,
 				onRemove: () => {
 					setInvoiceStatusFilter((previous) =>
 						previous.filter((current) => current !== status)
@@ -532,21 +535,19 @@ export default function Orders() {
 											</ClayTable.Cell>
 
 											<ClayTable.Cell>
-												<ClayButton
-													aria-label={translate(
-														'order-details'
-													)}
-													borderless
-													className="text-neutral-7"
-													displayType="unstyled"
-													onClick={() =>
-														navigate(
-															String(order.id)
-														)
-													}
-												>
-													<ClayIcon symbol="shortcut" />
-												</ClayButton>
+												<RowActionsMenu
+													actions={[
+														{
+															label: 'view-details',
+															onClick: () =>
+																navigate(
+																	String(
+																		order.id
+																	)
+																),
+														},
+													]}
+												/>
 											</ClayTable.Cell>
 										</ClayTable.Row>
 									);

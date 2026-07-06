@@ -6,6 +6,7 @@
 import {useMemo} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Page from '~/components/Page/Page';
+import RowActionsMenu from '~/components/RowActionsMenu/RowActionsMenu';
 import {useProject} from '~/context/ProjectContext';
 import {ProjectProduct, useProjectProducts} from '~/hooks/useProjectCommerce';
 import {useProjectOrders} from '~/hooks/useProjectOrders';
@@ -14,7 +15,6 @@ import FilterableListCard, {
 	ListColumn,
 	ListFilter,
 } from '~/pages/MyAccount/Projects/components/FilterableListCard/FilterableListCard';
-import RowActionsMenu from '~/pages/MyAccount/Projects/components/RowActionsMenu/RowActionsMenu';
 import {getLogoColor} from '~/pages/MyAccount/Projects/utils/getLogoColor';
 import {getStatusColor} from '~/pages/MyAccount/Projects/utils/getStatusColor';
 import {isUnassignedProject} from '~/pages/MyAccount/Projects/utils/isUnassignedProject';
