@@ -40,14 +40,52 @@ export const STATUS_DOT_COLORS: {[key: string]: string} = {
 	processing: 'var(--color-warning)',
 };
 
-export const SUPPORT_SPECIFICATION_KEYS = [
-	'app-documentation-url',
-	'app-usage-terms-url',
-	'publisher-web-site-url',
-	'support-email-address',
-	'support-phone',
-	'support-url',
+export type SupportLink = {
+	href: (value: string) => string;
+	label: Word;
+	specificationKey: string;
+};
+
+function withProtocol(value: string): string {
+	return /^https?:\/\//.test(value) ? value : `https://${value}`;
+}
+
+export const SUPPORT_LINKS: SupportLink[] = [
+	{
+		href: withProtocol,
+		label: 'support-url',
+		specificationKey: 'support-url',
+	},
+	{
+		href: withProtocol,
+		label: 'publisher-website',
+		specificationKey: 'publisher-web-site-url',
+	},
+	{
+		href: (value) => `mailto:${value}`,
+		label: 'support-email-address',
+		specificationKey: 'support-email-address',
+	},
+	{
+		href: (value) => `tel:${value.replace(/\s/g, '')}`,
+		label: 'support-phone-number',
+		specificationKey: 'support-phone',
+	},
+	{
+		href: withProtocol,
+		label: 'app-usage-terms-eula-url',
+		specificationKey: 'app-usage-terms-url',
+	},
+	{
+		href: withProtocol,
+		label: 'app-documentation-url',
+		specificationKey: 'app-documentation-url',
+	},
 ];
+
+export const SUPPORT_SPECIFICATION_KEYS = SUPPORT_LINKS.map(
+	(link) => link.specificationKey
+);
 
 export const TAB_VISIBILITY: Partial<Record<OrderTypes, ProjectTabKey[]>> = {
 	ADDONS: ['details', 'orders'],
