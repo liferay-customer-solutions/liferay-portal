@@ -77,6 +77,9 @@ export function useAccountMemberActions({
 			body: (
 				<EditPermissionsModal
 					accountExternalReferenceCode={accountExternalReferenceCode}
+					accountId={accountId}
+					adminCount={adminCount}
+					isAdministrator={member.isAdministrator}
 					memberName={member.name}
 					memberRoleBriefs={member.roleBriefs}
 					mutate={mutate}

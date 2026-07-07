@@ -143,6 +143,8 @@ export default {
 	'assign-or-update-the-account-roles-for-x':
 		'Assign or update the account roles for {0}.',
 	'associated-tickets': 'Associated Tickets',
+	'at-least-one-account-admin-is-required-assign-another-account-admin-before-changing-this-role':
+		'At least one Account Admin is required. Assign another Account Admin before changing this role.',
 	'at-least-one-account-admin-is-required-assign-another-account-admin-before-removing-this-member':
 		'At least one Account Admin is required. Assign another Account Admin before removing this member.',
 	'at-least-one-role-must-be-provided': 'At least one role must be provided.',

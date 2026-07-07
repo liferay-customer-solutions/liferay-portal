@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {Suspense, lazy, useEffect} from 'react';
+import {Suspense, lazy} from 'react';
 import {HashRouter, useRoutes} from 'react-router-dom';
 import EmptyState from '~/components/EmptyState/EmptyState';
 import Loading from '~/components/Loading/Loading';
 import {useDeliveryProduct} from '~/hooks/useDeliveryProduct';
+import useRequireSignIn from '~/hooks/useRequireSignIn';
 import i18n from '~/i18n';
-import {Liferay} from '~/services/liferay/liferay';
 import {getProductPriceModel} from '~/utils/productUtils';
 import {AppRoute, toRouteObjects} from '~/utils/routeUtils';
 
@@ -64,19 +64,9 @@ const ProductPurchaseRouter = () => {
 
 	const productId = searchParams.get('productId') ?? '';
 
-	const isSignedIn = Liferay.ThemeDisplay.isSignedIn();
+	const isSignedIn = useRequireSignIn();
 
 	const {data: product, isLoading} = useDeliveryProduct(productId);
-
-	useEffect(() => {
-		if (!isSignedIn) {
-			Liferay.Util.navigate(
-				`/c/portal/login?redirect=${encodeURIComponent(
-					window.location.pathname + window.location.search
-				)}`
-			);
-		}
-	}, [isSignedIn]);
 
 	if (!isSignedIn) {
 		return null;

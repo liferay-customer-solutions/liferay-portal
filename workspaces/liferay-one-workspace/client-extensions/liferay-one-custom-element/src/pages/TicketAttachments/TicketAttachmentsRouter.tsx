@@ -5,6 +5,7 @@
 
 import {Suspense} from 'react';
 import {HashRouter, useRoutes} from 'react-router-dom';
+import useRequireSignIn from '~/hooks/useRequireSignIn';
 import {toRouteObjects} from '~/utils/routeUtils';
 
 import {ticketAttachmentsRoutes} from './ticketAttachmentsRoutes';
@@ -14,6 +15,12 @@ function TicketAttachmentsRoutes() {
 }
 
 export default function TicketAttachmentsRouter() {
+	const isSignedIn = useRequireSignIn();
+
+	if (!isSignedIn) {
+		return null;
+	}
+
 	return (
 		<HashRouter>
 			<Suspense fallback={null}>

@@ -5,6 +5,7 @@
 
 import {HashRouter, Navigate, useRoutes} from 'react-router-dom';
 import {ProjectProvider} from '~/context/ProjectContext';
+import useRequireSignIn from '~/hooks/useRequireSignIn';
 import {toRouteObjects} from '~/utils/routeUtils';
 
 import MyAccount from './MyAccount';
@@ -62,6 +63,12 @@ function MyAccountRoutes() {
 }
 
 export default function MyAccountRouter() {
+	const isSignedIn = useRequireSignIn();
+
+	if (!isSignedIn) {
+		return null;
+	}
+
 	return (
 		<HashRouter>
 			<MyAccountRoutes />
