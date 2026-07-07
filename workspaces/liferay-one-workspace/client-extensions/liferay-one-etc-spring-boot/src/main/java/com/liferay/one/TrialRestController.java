@@ -52,7 +52,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -236,68 +235,6 @@ public class TrialRestController extends BaseRestController {
 
 		_commerceOrderService.updateOrder(
 			customFields, orderId, order.getOrderStatus());
-	}
-
-	@PostMapping("notify-end/{orderId}")
-	public void postNotifyEnd(@PathVariable long orderId) throws Exception {
-		if (_log.isInfoEnabled()) {
-			_log.info("Notify end " + orderId);
-		}
-
-		Order order = _commerceOrderService.fetchCommerceOrder(orderId);
-
-		if (order == null) {
-			throw new IllegalArgumentException(
-				"No order exists with ID " + orderId);
-		}
-
-		Map<String, String> customFields =
-			(Map<String, String>)order.getCustomFields();
-
-		String trialEndDate = null;
-
-		if (customFields != null) {
-			trialEndDate = customFields.get("trial-end-date");
-		}
-
-		if (Validator.isNull(trialEndDate)) {
-			throw new IllegalStateException(
-				"Order " + orderId + " has no \"trial-end-date\" custom field");
-		}
-
-		UserAccount userAccount =
-			_userAccountService.getUserAccountByEmailAddress(
-				order.getCreatorEmailAddress());
-
-		_postNotification(
-			order.getCreatorEmailAddress(), "TRIAL-EXPIRING-ORDER",
-			HashMapBuilder.put(
-				"TRIAL_CREATOR_FIRST_NAME", userAccount.getGivenName()
-			).put(
-				"TRIAL_END_DATE",
-				ZonedDateTime.parse(
-					trialEndDate
-				).format(
-					DateTimeFormatter.ofPattern("MMMM d, yyyy", LocaleUtil.US)
-				)
-			).build());
-
-		customFields.put(
-			"trial-notify-end-date",
-			ZonedDateTime.now(
-			).format(
-				DateTimeFormatter.ISO_INSTANT
-			));
-
-		_commerceOrderService.updateOrder(
-			customFields, orderId, order.getOrderStatus());
-	}
-
-	@PostMapping("provisioning")
-	public void postProvisioning(@RequestBody String json) throws Exception {
-		JSONObject jsonObject = new JSONObject(json);
-
-		postProvisioningOrder(jsonObject.getLong("classPK"));
 	}
 
 	@PostMapping("provisioning/{orderId}")
@@ -591,6 +528,60 @@ public class TrialRestController extends BaseRestController {
 			customFields.getOrDefault("trial-settings", "{}"));
 	}
 
+	private void _notifyEnd(long orderId) throws Exception {
+		if (_log.isInfoEnabled()) {
+			_log.info("Notify end " + orderId);
+		}
+
+		Order order = _commerceOrderService.fetchCommerceOrder(orderId);
+
+		if (order == null) {
+			throw new IllegalArgumentException(
+				"No order exists with ID " + orderId);
+		}
+
+		Map<String, String> customFields =
+			(Map<String, String>)order.getCustomFields();
+
+		String trialEndDate = null;
+
+		if (customFields != null) {
+			trialEndDate = customFields.get("trial-end-date");
+		}
+
+		if (Validator.isNull(trialEndDate)) {
+			throw new IllegalStateException(
+				"Order " + orderId + " has no \"trial-end-date\" custom field");
+		}
+
+		UserAccount userAccount =
+			_userAccountService.getUserAccountByEmailAddress(
+				order.getCreatorEmailAddress());
+
+		_postNotification(
+			order.getCreatorEmailAddress(), "TRIAL-EXPIRING-ORDER",
+			HashMapBuilder.put(
+				"TRIAL_CREATOR_FIRST_NAME", userAccount.getGivenName()
+			).put(
+				"TRIAL_END_DATE",
+				ZonedDateTime.parse(
+					trialEndDate
+				).format(
+					DateTimeFormatter.ofPattern("MMMM d, yyyy", LocaleUtil.US)
+				)
+			).build());
+
+		customFields.put(
+			"trial-notify-end-date",
+			ZonedDateTime.now(
+			).format(
+				DateTimeFormatter.ISO_INSTANT
+			));
+
+		_commerceOrderService.updateOrder(
+			customFields, orderId, order.getOrderStatus());
+	}
+
 	private void _postNotification(
 		String toEmailAddress, String externalReferenceCode,
 		Map<String, String> placeholders) {
@@ -701,7 +692,7 @@ public class TrialRestController extends BaseRestController {
 					!nowZonedDateTime.isBefore(
 						trialEndDateZonedDateTime.minusDays(1))) {
 
-					postNotifyEnd(orderId);
+					_notifyEnd(orderId);
 				}
 			}
 			catch (Exception exception) {
