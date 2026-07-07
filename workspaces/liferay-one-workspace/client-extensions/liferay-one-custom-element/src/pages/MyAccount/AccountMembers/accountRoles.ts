@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import type {UserAccountModel} from '~/models/UserAccountModel';
 import type {RoleBrief} from '~/types/accounts';
 
 export const ACCOUNT_ADMINISTRATOR = 'Account Administrator';
@@ -63,4 +64,44 @@ export function getMembershipRoleNames(roleBriefs: RoleBrief[] = []) {
 
 export function hasAdministratorRole(roleBriefs: RoleBrief[] = []) {
 	return roleBriefs.some(({name}) => isAdministratorRole(name));
+}
+
+export function hasAnyAccountRole(userAccountModel?: UserAccountModel | null) {
+	return MANAGEABLE_ACCOUNT_ROLES.some((roleName) =>
+		userAccountModel?.hasAccountRoleName(roleName)
+	);
+}
+
+export function isAccountManager(userAccountModel?: UserAccountModel | null) {
+	return Boolean(
+		userAccountModel?.hasAccountRoleName(ACCOUNT_ADMINISTRATOR) ||
+			userAccountModel?.hasAccountRoleName(PARTNER_ACCOUNT_ADMIN) ||
+			userAccountModel?.isAdmin
+	);
+}
+
+export function canEditAccountDetails(
+	userAccountModel?: UserAccountModel | null
+) {
+	return isAccountManager(userAccountModel);
+}
+
+export function canAccessAccountMembers(
+	userAccountModel?: UserAccountModel | null
+) {
+	if (isAccountManager(userAccountModel)) {
+		return true;
+	}
+
+	return !(
+		userAccountModel?.hasAccountRoleName(ACCOUNT_BUYER) &&
+		!userAccountModel?.hasAccountRoleName(ACCOUNT_MEMBER)
+	);
+}
+
+export function canAccessOrders(userAccountModel?: UserAccountModel | null) {
+	return (
+		isAccountManager(userAccountModel) ||
+		hasAnyAccountRole(userAccountModel)
+	);
 }

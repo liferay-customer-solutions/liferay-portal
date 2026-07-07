@@ -7,6 +7,7 @@ import ClayDropDown from '@clayui/drop-down';
 import {ClayCheckbox} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import {useState} from 'react';
+import {useMeasuredWidth} from '~/hooks/useMeasuredWidth';
 import i18n, {translate} from '~/i18n';
 import {getMembershipRoleNames} from '~/pages/MyAccount/AccountMembers/accountRoles';
 import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
@@ -40,6 +41,9 @@ const EditPermissionsModal = ({
 	const [active, setActive] = useState(false);
 	const [selectedRoles, setSelectedRoles] =
 		useState<string[]>(currentRoleNames);
+
+	const {ref: rolesRef, width: menuWidth} =
+		useMeasuredWidth<HTMLDivElement>(active);
 
 	const toggleRole = (roleName: string) =>
 		setSelectedRoles((previous) =>
@@ -123,46 +127,51 @@ const EditPermissionsModal = ({
 				{i18n.sub('x-roles', memberName)}
 			</label>
 
-			<ClayDropDown
-				active={active}
-				className="account-members-roles-dropdown"
-				closeOnClick={false}
-				menuElementAttrs={{className: 'account-members-roles-menu'}}
-				onActiveChange={setActive}
-				trigger={
-					<button
-						className="account-members-roles-trigger align-items-center d-flex form-control justify-content-between"
-						type="button"
-					>
-						<span>{triggerLabel}</span>
-
-						<ClayIcon symbol="caret-bottom" />
-					</button>
-				}
-			>
-				<ClayDropDown.ItemList>
-					{roleNames.map((roleName) => (
-						<ClayDropDown.Item
-							key={roleName}
-							onClick={() => toggleRole(roleName)}
+			<div ref={rolesRef}>
+				<ClayDropDown
+					active={active}
+					className="account-members-roles-dropdown"
+					closeOnClick={false}
+					menuElementAttrs={{
+						className: 'account-members-roles-menu',
+						style: menuWidth ? {width: menuWidth} : undefined,
+					}}
+					onActiveChange={setActive}
+					trigger={
+						<button
+							className="account-members-roles-trigger align-items-center d-flex form-control justify-content-between"
+							type="button"
 						>
+							<span>{triggerLabel}</span>
+
+							<ClayIcon symbol="caret-bottom" />
+						</button>
+					}
+				>
+					<ClayDropDown.ItemList>
+						{roleNames.map((roleName) => (
+							<ClayDropDown.Item
+								key={roleName}
+								onClick={() => toggleRole(roleName)}
+							>
+								<ClayCheckbox
+									checked={selectedRoles.includes(roleName)}
+									label={roleName}
+									onChange={() => toggleRole(roleName)}
+								/>
+							</ClayDropDown.Item>
+						))}
+
+						<ClayDropDown.Item onClick={() => setSelectedRoles([])}>
 							<ClayCheckbox
-								checked={selectedRoles.includes(roleName)}
-								label={roleName}
-								onChange={() => toggleRole(roleName)}
+								checked={!selectedRoles.length}
+								label={translate('none')}
+								onChange={() => setSelectedRoles([])}
 							/>
 						</ClayDropDown.Item>
-					))}
-
-					<ClayDropDown.Item onClick={() => setSelectedRoles([])}>
-						<ClayCheckbox
-							checked={!selectedRoles.length}
-							label={translate('none')}
-							onChange={() => setSelectedRoles([])}
-						/>
-					</ClayDropDown.Item>
-				</ClayDropDown.ItemList>
-			</ClayDropDown>
+					</ClayDropDown.ItemList>
+				</ClayDropDown>
+			</div>
 		</form>
 	);
 };

@@ -14,10 +14,7 @@ import RestrictedFeatureMessage from '~/components/RestrictedFeatureMessage/Rest
 import {useOneContext} from '~/context/OneContextProvider';
 import {useFetch} from '~/hooks/useFetch';
 import i18n, {translate} from '~/i18n';
-import {
-	ACCOUNT_ADMINISTRATOR,
-	PARTNER_ACCOUNT_ADMIN,
-} from '~/pages/MyAccount/AccountMembers/accountRoles';
+import {isAccountManager} from '~/pages/MyAccount/AccountMembers/accountRoles';
 import {useProjectMemberActions} from '~/pages/MyAccount/ProjectMembers/hooks/useProjectMemberActions';
 import {useProjectMembers} from '~/pages/MyAccount/ProjectMembers/hooks/useProjectMembers';
 import {
@@ -52,19 +49,14 @@ export default function ProjectMembers() {
 		new Set()
 	);
 
-	const isAccountAdmin = Boolean(
-		userAccountModel?.hasAccountRoleName(ACCOUNT_ADMINISTRATOR) ||
-			userAccountModel?.hasAccountRoleName(PARTNER_ACCOUNT_ADMIN) ||
-			userAccountModel?.isAdmin
-	);
+	const isAccountAdmin = isAccountManager(userAccountModel);
 
-	const {openEditCloudContacts, openEditProjectPermissions} =
-		useProjectMemberActions({
-			accountExternalReferenceCode: account?.externalReferenceCode ?? '',
-			accountId: accountId ?? '',
-			accountMemberOptions,
-			mutate,
-		});
+	const {openEditProjectPermissions} = useProjectMemberActions({
+		accountExternalReferenceCode: account?.externalReferenceCode ?? '',
+		accountId: accountId ?? '',
+		accountMemberOptions,
+		mutate,
+	});
 
 	const canManageProject = (project: ProjectMembersRow) =>
 		isAccountAdmin ||
@@ -272,18 +264,6 @@ export default function ProjectMembers() {
 														>
 															{translate(
 																'edit-project-permissions'
-															)}
-														</ClayDropDown.Item>
-
-														<ClayDropDown.Item
-															onClick={() =>
-																openEditCloudContacts(
-																	project
-																)
-															}
-														>
-															{translate(
-																'edit-cloud-contacts'
 															)}
 														</ClayDropDown.Item>
 													</ClayDropDown.ItemList>

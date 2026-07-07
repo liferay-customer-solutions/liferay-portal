@@ -11,6 +11,7 @@ import Page from '~/components/Page/Page';
 import {useOneContext} from '~/context/OneContextProvider';
 import useAccountDetails from '~/hooks/useAccountDetails';
 import i18n from '~/i18n';
+import {canEditAccountDetails} from '~/pages/MyAccount/AccountMembers/accountRoles';
 
 import './AccountDetails.css';
 
@@ -51,7 +52,7 @@ function textWrapper(content?: string | number) {
 export default function AccountDetails() {
 	const navigate = useNavigate();
 
-	const {myUserAccount} = useOneContext();
+	const {myUserAccount, userAccountModel} = useOneContext();
 
 	const {data, error, isLoading} = useAccountDetails();
 
@@ -76,13 +77,15 @@ export default function AccountDetails() {
 			)}
 			pageRendererProps={{error, isLoading}}
 			rightButton={
-				<Button
-					displayType="secondary"
-					onClick={() => navigate('edit')}
-					prependIcon="pencil"
-				>
-					{i18n.translate('edit')}
-				</Button>
+				canEditAccountDetails(userAccountModel) ? (
+					<Button
+						displayType="secondary"
+						onClick={() => navigate('edit')}
+						prependIcon="pencil"
+					>
+						{i18n.translate('edit')}
+					</Button>
+				) : undefined
 			}
 		>
 			<div className="account-details-grid mt-4">

@@ -11,16 +11,17 @@ import {ClayPaginationBarWithBasicItems} from '@clayui/pagination-bar';
 import ClayTable from '@clayui/table';
 import {useMemo, useState} from 'react';
 import Button from '~/components/Button/Button';
+import EmptyState from '~/components/EmptyState/EmptyState';
 import Page from '~/components/Page/Page';
 import RestrictedFeatureMessage from '~/components/RestrictedFeatureMessage/RestrictedFeatureMessage';
 import {useOneContext} from '~/context/OneContextProvider';
 import {useFetch} from '~/hooks/useFetch';
 import i18n, {sub, translate} from '~/i18n';
 import {
-	ACCOUNT_ADMINISTRATOR,
-	PARTNER_ACCOUNT_ADMIN,
+	canAccessAccountMembers,
 	getMembershipRoleNames,
 	hasAdministratorRole,
+	isAccountManager,
 } from '~/pages/MyAccount/AccountMembers/accountRoles';
 import {useAccountMemberActions} from '~/pages/MyAccount/AccountMembers/hooks/useAccountMemberActions';
 import {useAccountType} from '~/pages/MyAccount/AccountMembers/hooks/useAccountType';
@@ -87,7 +88,7 @@ export default function AccountMembers() {
 	const accountId = Liferay.CommerceContext?.account?.accountId;
 	const currentUserId = Liferay.ThemeDisplay.getUserId();
 
-	const {userAccountModel} = useOneContext();
+	const {myUserAccount, userAccountModel} = useOneContext();
 
 	const {hasProject, loading: projectsLoading} = useHasProject();
 
@@ -99,11 +100,7 @@ export default function AccountMembers() {
 	const [filterActive, setFilterActive] = useState(false);
 	const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
 
-	const canManageMembers = Boolean(
-		userAccountModel?.hasAccountRoleName(ACCOUNT_ADMINISTRATOR) ||
-			userAccountModel?.hasAccountRoleName(PARTNER_ACCOUNT_ADMIN) ||
-			userAccountModel?.isAdmin
-	);
+	const canManageMembers = isAccountManager(userAccountModel);
 
 	const {
 		data: account,
@@ -223,6 +220,22 @@ export default function AccountMembers() {
 
 	const getRoleFilterLabel = (roleName: string) =>
 		roleName === NO_ROLE ? translate('no-role') : roleName;
+
+	if (myUserAccount && !canAccessAccountMembers(userAccountModel)) {
+		return (
+			<Page
+				description={i18n.translate(
+					'invite-manage-roles-designate-incident-contacts'
+				)}
+			>
+				<EmptyState
+					className="mt-5"
+					title={translate('you-do-not-have-access-to-this-page')}
+					type="NO_ACCESS"
+				/>
+			</Page>
+		);
+	}
 
 	if (!projectsLoading && !hasProject) {
 		return (

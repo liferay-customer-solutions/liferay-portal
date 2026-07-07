@@ -13,10 +13,13 @@ import {format} from 'date-fns';
 import {useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Button from '~/components/Button/Button';
+import EmptyState from '~/components/EmptyState/EmptyState';
 import Page from '~/components/Page/Page';
 import RowActionsMenu from '~/components/RowActionsMenu/RowActionsMenu';
+import {useOneContext} from '~/context/OneContextProvider';
 import {useFetch} from '~/hooks/useFetch';
 import i18n, {Word, translate} from '~/i18n';
+import {canAccessOrders} from '~/pages/MyAccount/AccountMembers/accountRoles';
 import {Liferay} from '~/services/liferay/liferay';
 import {
 	OrderCustomFields,
@@ -176,6 +179,8 @@ export default function Orders() {
 
 	const navigate = useNavigate();
 
+	const {myUserAccount, userAccountModel} = useOneContext();
+
 	const [keywords, setKeywords] = useState('');
 	const [page, setPage] = useState(1);
 	const [pageSize, setPageSize] = useState(PAGE_SIZE_OPTIONS[0]);
@@ -316,6 +321,18 @@ export default function Orders() {
 		setFilterActive(false);
 		setFilterCategory(null);
 	};
+
+	if (myUserAccount && !canAccessOrders(userAccountModel)) {
+		return (
+			<Page>
+				<EmptyState
+					className="mt-5"
+					title={translate('you-do-not-have-access-to-this-page')}
+					type="NO_ACCESS"
+				/>
+			</Page>
+		);
+	}
 
 	return (
 		<Page
