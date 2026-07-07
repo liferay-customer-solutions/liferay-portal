@@ -6,13 +6,20 @@
 
 [#assign hasRequiredRole = false]
 
-[#attempt]
-	[#assign myUserAccount = restClient.get("/headless-admin-user/v1.0/my-user-account?fields=roleBriefs")]
-	[#assign userRoleNames = (myUserAccount.roleBriefs![])?map(roleBrief -> roleBrief.name)]
+[#if themeDisplay.isSignedIn()]
 	[#assign requiredRoleNames = roles?split(",")?map(roleName -> roleName?trim)]
-	[#assign hasRequiredRole = requiredRoleNames?filter(roleName -> userRoleNames?seq_contains(roleName))?has_content]
-[#recover]
-[/#attempt]
+
+	[#if requiredRoleNames?seq_contains("User")]
+		[#assign hasRequiredRole = true]
+	[#else]
+		[#attempt]
+			[#assign myUserAccount = restClient.get("/headless-admin-user/v1.0/my-user-account?fields=roleBriefs")]
+			[#assign userRoleNames = (myUserAccount.roleBriefs![])?map(roleBrief -> roleBrief.name)]
+			[#assign hasRequiredRole = requiredRoleNames?filter(roleName -> userRoleNames?seq_contains(roleName))?has_content]
+		[#recover]
+		[/#attempt]
+	[/#if]
+[/#if]
 
 [#assign
 	showInRole = editMode || hasRequiredRole
