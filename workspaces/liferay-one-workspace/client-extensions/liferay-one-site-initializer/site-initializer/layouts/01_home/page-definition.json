@@ -618,10 +618,10 @@
 																		},
 																		"text": {
 																			"value_i18n": {
-																				"en_US": "Manage your Liferay account, projects, permissions, fast and efficient.",
-																				"es_ES": "Gestiona tu cuenta, proyectos y permisos de Liferay, rápido y eficiente.",
-																				"ja_JP": "Liferayアカウント、プロジェクト、権限を迅速かつ効率的に管理します。",
-																				"pt_BR": "Gerencie sua conta, projetos e permissões Liferay de forma rápida e eficiente."
+																				"en_US": "Manage your Liferay account and project.",
+																				"es_ES": "Gestiona tu cuenta y proyecto de Liferay.",
+																				"ja_JP": "Liferayアカウントとプロジェクトを管理します。",
+																				"pt_BR": "Gerencie sua conta e projeto Liferay."
 																			}
 																		}
 																	}
@@ -1122,10 +1122,10 @@
 																		},
 																		"text": {
 																			"value_i18n": {
-																				"en_US": "Explore courses and learning paths to master Liferay DXP and other products.",
-																				"es_ES": "Explora cursos y rutas de aprendizaje para dominar Liferay DXP y otros productos.",
-																				"ja_JP": "Liferay DXPおよびその他の製品をマスターするためのコースと学習パスをご覧ください。",
-																				"pt_BR": "Explore cursos e trilhas de aprendizagem para dominar o Liferay DXP e outros produtos."
+																				"en_US": "Explore documentation and courses to master Liferay products.",
+																				"es_ES": "Explora documentación y cursos para dominar los productos de Liferay.",
+																				"ja_JP": "Liferay製品をマスターするためのドキュメントとコースをご覧ください。",
+																				"pt_BR": "Explore documentação e cursos para dominar os produtos Liferay."
 																			}
 																		}
 																	}
@@ -1290,10 +1290,10 @@
 																		},
 																		"text": {
 																			"value_i18n": {
-																				"en_US": "Find apps, themes, and other resources to extend your Liferay DXP platform.",
-																				"es_ES": "Encuentra aplicaciones, temas y otros recursos para ampliar tu plataforma Liferay DXP.",
-																				"ja_JP": "Liferay DXPプラットフォームを拡張するためのアプリ、テーマ、その他のリソースをご覧ください。",
-																				"pt_BR": "Encontre aplicativos, temas e outros recursos para estender sua plataforma Liferay DXP."
+																				"en_US": "Find the latest apps, products and other resources to extend your Liferay platform.",
+																				"es_ES": "Encuentra las últimas aplicaciones, productos y otros recursos para ampliar tu plataforma Liferay.",
+																				"ja_JP": "Liferayプラットフォームを拡張するための最新のアプリ、製品、その他のリソースをご覧ください。",
+																				"pt_BR": "Encontre os aplicativos e produtos mais recentes e outros recursos para estender sua plataforma Liferay."
 																			}
 																		}
 																	}
