@@ -1,5 +1,5 @@
 <#--
-	Vertical sidebar for the Customer Portal Help section. Self-fetches the
+	Vertical sidebar for the One Liferay Help section. Self-fetches the
 	"Support Navigation" menu (LO_SUPPORT_NAV) by external reference code, the
 	same pattern the primary and footer navigation templates use, so it renders
 	the curated help topics regardless of which menu the portlet has selected.
@@ -34,11 +34,11 @@
 		"Administration": "users",
 		"Getting Started": "analytics",
 		"Team Members": "list",
-		"Using Customer Portal": "document-text"
+		"Using One Liferay": "document-text"
 	}
 />
 
-<nav aria-label="Customer Portal Help" class="lo-support-nav">
+<nav aria-label="One Liferay Help" class="lo-support-nav">
 	<ul class="list-unstyled mb-0">
 		<#if (navigationMenu.navigationMenuItems)??>
 			<#list navigationMenu.navigationMenuItems as navigationMenuItem>

@@ -38,7 +38,7 @@
 	},
 	{
 		"assetEntrySubtypeId": "[$DATA_DEFINITION_ID:ANNOUNCEMENT$]",
-		"title": "Customer Portal Help",
+		"title": "One Liferay Help",
 		"unicodeProperties": {
 			"anyClassType": "anyClassTypeJournalArticleAssetRendererFactory",
 			"classNameIds": "com.liferay.journal.model.JournalArticle",

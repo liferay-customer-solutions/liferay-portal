@@ -96,10 +96,10 @@
 		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_SUPPORT_CUSTOMER_PORTAL_HELP#]",
 		"columnName": "Menu Item Description",
 		"data": {
-			"en_US": "Get assistance with using the Liferay Customer Portal.",
-			"es_ES": "Obtén ayuda para usar el Liferay Customer Portal.",
-			"ja_JP": "Liferay Customer Portalの利用に関するサポートをご案内します。",
-			"pt_BR": "Obtenha ajuda para usar o Liferay Customer Portal."
+			"en_US": "Get assistance with using One Liferay.",
+			"es_ES": "Obtén ayuda para usar One Liferay.",
+			"ja_JP": "One Liferayの利用に関するサポートをご案内します。",
+			"pt_BR": "Obtenha ajuda para usar One Liferay."
 		}
 	},
 	{

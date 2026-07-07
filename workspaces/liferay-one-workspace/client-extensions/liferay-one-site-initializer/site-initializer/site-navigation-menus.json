@@ -72,7 +72,7 @@
 					{
 						"externalReferenceCode": "LO_NAV_FOOTER_SUPPORT_CUSTOMER_PORTAL_HELP",
 						"name_i18n": {
-							"en_US": "Customer Portal Help"
+							"en_US": "One Liferay Help"
 						},
 						"type": "url",
 						"url": "/support/customer-portal-help",
@@ -341,10 +341,10 @@
 							{
 								"externalReferenceCode": "LO_NAV_SUPPORT_CUSTOMER_PORTAL_HELP",
 								"name_i18n": {
-									"en_US": "Customer Portal Help",
-									"es_ES": "Ayuda del Portal del Cliente",
-									"ja_JP": "カスタマーポータルヘルプ",
-									"pt_BR": "Ajuda do Portal do Cliente"
+									"en_US": "One Liferay Help",
+									"es_ES": "Ayuda de One Liferay",
+									"ja_JP": "One Liferayヘルプ",
+									"pt_BR": "Ajuda do One Liferay"
 								},
 								"type": "url",
 								"url": "/support/customer-portal-help",
@@ -610,10 +610,10 @@
 			{
 				"externalReferenceCode": "LO_SUPPORT_NAV_USING_CUSTOMER_PORTAL",
 				"name_i18n": {
-					"en_US": "Using Customer Portal",
-					"es_ES": "Uso del Portal del Cliente",
-					"ja_JP": "カスタマーポータルの使い方",
-					"pt_BR": "Usando o Portal do Cliente"
+					"en_US": "Using One Liferay",
+					"es_ES": "Uso de One Liferay",
+					"ja_JP": "One Liferayの使い方",
+					"pt_BR": "Usando One Liferay"
 				},
 				"type": "url",
 				"url": "/support/customer-portal-help/using-customer-portal",
