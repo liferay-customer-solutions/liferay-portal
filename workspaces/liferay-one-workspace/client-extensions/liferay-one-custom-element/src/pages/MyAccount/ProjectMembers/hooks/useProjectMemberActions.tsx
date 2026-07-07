@@ -6,7 +6,6 @@
 import Button from '~/components/Button/Button';
 import useModalContext from '~/hooks/useModalContext';
 import {translate} from '~/i18n';
-import EditCloudContactsModal from '~/pages/MyAccount/ProjectMembers/components/EditCloudContactsModal/EditCloudContactsModal';
 import EditProjectPermissionsModal from '~/pages/MyAccount/ProjectMembers/components/EditProjectPermissionsModal/EditProjectPermissionsModal';
 
 import type {
@@ -16,14 +15,12 @@ import type {
 
 type UseProjectMemberActionsProps = {
 	accountExternalReferenceCode: string;
-	accountId: number | string;
 	accountMemberOptions: AccountMemberOption[];
 	mutate: () => Promise<unknown>;
 };
 
 export function useProjectMemberActions({
 	accountExternalReferenceCode,
-	accountId,
 	accountMemberOptions,
 	mutate,
 }: UseProjectMemberActionsProps) {
@@ -43,7 +40,7 @@ export function useProjectMemberActions({
 		modalContext.onOpenModal({
 			body: (
 				<EditProjectPermissionsModal
-					accountId={accountId}
+					accountExternalReferenceCode={accountExternalReferenceCode}
 					accountMemberOptions={accountMemberOptions}
 					mutate={mutate}
 					onClose={modalContext.onClose}
@@ -65,26 +62,5 @@ export function useProjectMemberActions({
 		});
 	};
 
-	const openEditCloudContacts = (project: ProjectMembersRow) => {
-		modalContext.onOpenModal({
-			body: (
-				<EditCloudContactsModal
-					accountExternalReferenceCode={accountExternalReferenceCode}
-					mutate={mutate}
-					onClose={modalContext.onClose}
-					project={project}
-				/>
-			),
-			footer: [
-				cancelButton,
-				null,
-				<Button form="edit-cloud-contacts" key="confirm" type="submit">
-					{translate('save')}
-				</Button>,
-			],
-			header: translate('edit-cloud-contacts'),
-		});
-	};
-
-	return {openEditCloudContacts, openEditProjectPermissions};
+	return {openEditProjectPermissions};
 }

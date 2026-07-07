@@ -8,14 +8,19 @@ import ClayDropDown from '@clayui/drop-down';
 import {ClayCheckbox, ClaySelect} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import {useMemo, useState} from 'react';
+import {useProjectProducts} from '~/hooks/useProjectCommerce';
 import {translate} from '~/i18n';
 import {
 	PROJECT_ROLE_ERCS,
+	getAvailableDesignations,
 	getProjectRoleLabel,
 } from '~/pages/MyAccount/ProjectMembers/projectRoles';
 import fetcher from '~/services/fetcher/fetcher';
+import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
 import {Liferay} from '~/services/liferay/liferay';
-import UserAccounts from '~/services/spring-boot/UserAccounts';
+import Projects from '~/services/spring-boot/Projects';
+import getProductOrderTypes from '~/utils/getProductOrderTypes';
+import {getProductSpecificationValues} from '~/utils/getProductSpecificationValues';
 
 import '../../ProjectMembers.css';
 
@@ -25,10 +30,12 @@ import type {
 } from '~/pages/MyAccount/ProjectMembers/types';
 
 type WorkingMember = {
+	designations: string[];
 	email: string;
 	isNew: boolean;
 	membershipId: number;
 	name: string;
+	originalDesignations: string[];
 	originalRoleExternalReferenceCode: string;
 	removed: boolean;
 	roleExternalReferenceCode: string;
@@ -36,26 +43,27 @@ type WorkingMember = {
 };
 
 type EditProjectPermissionsModalProps = {
-	accountId: number | string;
+	accountExternalReferenceCode: string;
 	accountMemberOptions: AccountMemberOption[];
 	mutate: () => Promise<unknown>;
 	onClose: () => void;
 	project: ProjectMembersRow;
 };
 
-function RoleSelect({
-	onChange,
-	value,
+function PermissionsSelect({
+	availableDesignations,
+	designations,
+	onRoleChange,
+	onToggleDesignation,
+	roleExternalReferenceCode,
 }: {
-	onChange: (roleExternalReferenceCode: string) => void;
-	value: string;
+	availableDesignations: string[];
+	designations: string[];
+	onRoleChange: (roleExternalReferenceCode: string) => void;
+	onToggleDesignation: (designation: string) => void;
+	roleExternalReferenceCode: string;
 }) {
 	const [active, setActive] = useState(false);
-
-	const select = (roleExternalReferenceCode: string) => {
-		onChange(roleExternalReferenceCode);
-		setActive(false);
-	};
 
 	return (
 		<ClayDropDown
@@ -70,8 +78,8 @@ function RoleSelect({
 					type="button"
 				>
 					<span>
-						{value
-							? getProjectRoleLabel(value)
+						{roleExternalReferenceCode
+							? getProjectRoleLabel(roleExternalReferenceCode)
 							: translate('select-a-role')}
 					</span>
 
@@ -80,17 +88,29 @@ function RoleSelect({
 			}
 		>
 			<ClayDropDown.ItemList>
-				{PROJECT_ROLE_ERCS.map((roleExternalReferenceCode) => (
-					<ClayDropDown.Item
-						key={roleExternalReferenceCode}
-						onClick={() => select(roleExternalReferenceCode)}
-					>
+				{PROJECT_ROLE_ERCS.map((projectRoleExternalReferenceCode) => (
+					<ClayDropDown.Item key={projectRoleExternalReferenceCode}>
 						<ClayCheckbox
-							checked={value === roleExternalReferenceCode}
+							checked={
+								roleExternalReferenceCode ===
+								projectRoleExternalReferenceCode
+							}
 							label={getProjectRoleLabel(
-								roleExternalReferenceCode
+								projectRoleExternalReferenceCode
 							)}
-							onChange={() => select(roleExternalReferenceCode)}
+							onChange={() =>
+								onRoleChange(projectRoleExternalReferenceCode)
+							}
+						/>
+					</ClayDropDown.Item>
+				))}
+
+				{availableDesignations.map((designation) => (
+					<ClayDropDown.Item key={designation}>
+						<ClayCheckbox
+							checked={designations.includes(designation)}
+							label={designation}
+							onChange={() => onToggleDesignation(designation)}
 						/>
 					</ClayDropDown.Item>
 				))}
@@ -100,18 +120,36 @@ function RoleSelect({
 }
 
 const EditProjectPermissionsModal = ({
-	accountId,
+	accountExternalReferenceCode,
 	accountMemberOptions,
 	mutate,
 	onClose,
 	project,
 }: EditProjectPermissionsModalProps) => {
+	const {products} = useProjectProducts(project.externalReferenceCode);
+
+	const availableDesignations = useMemo(() => {
+		const productTypeExternalReferenceCodes = products
+			.map((product) =>
+				getProductSpecificationValues(product.specifications ?? [])
+			)
+			.filter(Boolean)
+			.map(
+				(productType) =>
+					getProductOrderTypes(productType).externalReferenceCode
+			);
+
+		return getAvailableDesignations(productTypeExternalReferenceCodes);
+	}, [products]);
+
 	const [members, setMembers] = useState<WorkingMember[]>(
 		project.members.map((member) => ({
+			designations: member.designations,
 			email: member.email,
 			isNew: false,
 			membershipId: member.membershipId,
 			name: member.name,
+			originalDesignations: member.designations,
 			originalRoleExternalReferenceCode: member.roleExternalReferenceCode,
 			removed: false,
 			roleExternalReferenceCode: member.roleExternalReferenceCode,
@@ -136,6 +174,24 @@ const EditProjectPermissionsModal = ({
 		setMembers((previous) =>
 			previous.map((member, memberIndex) =>
 				memberIndex === index ? {...member, ...patch} : member
+			)
+		);
+
+	const toggleDesignation = (index: number, designation: string) =>
+		setMembers((previous) =>
+			previous.map((member, memberIndex) =>
+				memberIndex === index
+					? {
+							...member,
+							designations: member.designations.includes(
+								designation
+							)
+								? member.designations.filter(
+										(value) => value !== designation
+									)
+								: [...member.designations, designation],
+						}
+					: member
 			)
 		);
 
@@ -168,10 +224,12 @@ const EditProjectPermissionsModal = ({
 		setMembers((previous) => [
 			...previous,
 			{
+				designations: [],
 				email: '',
 				isNew: true,
 				membershipId: 0,
 				name: '',
+				originalDesignations: [],
 				originalRoleExternalReferenceCode: '',
 				removed: false,
 				roleExternalReferenceCode: '',
@@ -203,18 +261,11 @@ const EditProjectPermissionsModal = ({
 			members.forEach((member) => {
 				if (member.isNew && !member.removed) {
 					operations.push(
-						UserAccounts.postAssignments({
-							accountId,
-							projects: [
-								{
-									projectExternalReferenceCode:
-										project.externalReferenceCode,
-									roleExternalReferenceCode:
-										member.roleExternalReferenceCode,
-								},
-							],
-							userId: member.userId,
-						})
+						Projects.postProjectMembership(
+							project.externalReferenceCode,
+							member.userId,
+							member.roleExternalReferenceCode
+						)
 					);
 				}
 				else if (!member.isNew && member.removed) {
@@ -240,6 +291,73 @@ const EditProjectPermissionsModal = ({
 					);
 				}
 			});
+
+			const hasDesignationChanges = members.some(
+				(member) =>
+					!member.removed &&
+					member.userId &&
+					availableDesignations.some(
+						(designation) =>
+							member.designations.includes(designation) !==
+							member.originalDesignations.includes(designation)
+					)
+			);
+
+			if (hasDesignationChanges) {
+				const [account, {items: accountRoles}] = await Promise.all([
+					HeadlessAdminUser.getAccountByExternalReferenceCode(
+						accountExternalReferenceCode
+					),
+					HeadlessAdminUser.getAccountRoles(
+						accountExternalReferenceCode
+					),
+				]);
+
+				const accountRoleByName = new Map(
+					accountRoles.map((accountRole) => [
+						accountRole.name,
+						accountRole,
+					])
+				);
+
+				members.forEach((member) => {
+					if (member.removed || !member.userId) {
+						return;
+					}
+
+					availableDesignations.forEach((designation) => {
+						const accountRole = accountRoleByName.get(designation);
+
+						if (!accountRole) {
+							return;
+						}
+
+						const selected =
+							member.designations.includes(designation);
+						const original =
+							member.originalDesignations.includes(designation);
+
+						if (selected && !original) {
+							operations.push(
+								HeadlessAdminUser.sendRoleAccountUser(
+									account.id,
+									accountRole.id,
+									member.userId
+								)
+							);
+						}
+						else if (!selected && original) {
+							operations.push(
+								HeadlessAdminUser.deleteRoleAccountUser(
+									account.id,
+									accountRole.id,
+									member.userId
+								)
+							);
+						}
+					});
+				});
+			}
 
 			await Promise.all(operations);
 
@@ -310,11 +428,18 @@ const EditProjectPermissionsModal = ({
 							</span>
 						)}
 
-						<RoleSelect
-							onChange={(roleExternalReferenceCode) =>
+						<PermissionsSelect
+							availableDesignations={availableDesignations}
+							designations={member.designations}
+							onRoleChange={(roleExternalReferenceCode) =>
 								updateMember(index, {roleExternalReferenceCode})
 							}
-							value={member.roleExternalReferenceCode}
+							onToggleDesignation={(designation) =>
+								toggleDesignation(index, designation)
+							}
+							roleExternalReferenceCode={
+								member.roleExternalReferenceCode
+							}
 						/>
 
 						<ClayButton

@@ -5,25 +5,9 @@
 
 import {CONSENT_TYPE} from '~/services/liferay/MarketplaceStorage';
 
-export type IOAuth2ClientAgentApplication = {
-	authorizeURL: string;
-	clientId: string;
-	encodedRedirectURL: string;
-	fetch: typeof fetch;
-	homePageURL: string;
-	redirectURIs: string[];
-	tokenURL: string;
-};
-
 export type LiferayStorage = Storage & {
 	getItem(key: string, consentType: CONSENT_TYPE): string | null;
 	setItem(key: string, value: string, consentType: CONSENT_TYPE): void;
-};
-
-export type IOAuth2Client = {
-	FromUserAgentApplication: (
-		agentName: string
-	) => IOAuth2ClientAgentApplication;
 };
 
 type ILiferayCookie = {
@@ -54,7 +38,6 @@ type ILiferay = {
 		};
 	};
 	MarketplaceCustomerFlow: {appId: number};
-	OAuth2Client: IOAuth2Client;
 	Service: Function;
 	ThemeDisplay: {
 		getBCP47LanguageId: () => string;

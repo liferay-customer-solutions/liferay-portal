@@ -25,7 +25,9 @@ liferay-one-etc-spring-boot-oaua:
     .serviceScheme: http
     name: Liferay One Etc Spring Boot OAuth Application User Agent
     scopes:
-        -   Liferay.Headless.Admin.User.everything.read
+        -   Liferay.Headless.Admin.User.everything
+        -   c_project.everything.read
+        -   c_projectmembership.everything
         -   c_ticketattachment.everything
     type: oAuthApplicationUserAgent
 liferay-one-etc-spring-boot-object-action-commerce-order-item-entitlement-generation:

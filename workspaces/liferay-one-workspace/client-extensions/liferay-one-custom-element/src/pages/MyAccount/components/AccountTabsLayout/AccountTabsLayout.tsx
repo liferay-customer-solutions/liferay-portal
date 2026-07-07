@@ -7,7 +7,9 @@ import ClayTabs from '@clayui/tabs';
 import {Suspense} from 'react';
 import {Outlet, useLocation, useNavigate, useParams} from 'react-router-dom';
 import {Header} from '~/components/Header/Header';
+import {useOneContext} from '~/context/OneContextProvider';
 import i18n, {Word} from '~/i18n';
+import {canAccessAccountMembers} from '~/pages/MyAccount/AccountMembers/accountRoles';
 
 type AccountTab = {
 	label: Word;
@@ -25,11 +27,21 @@ export default function AccountTabsLayout() {
 	const {pathname} = useLocation();
 	const navigate = useNavigate();
 
-	const showTabs = TABS.some((tab) => pathname.endsWith(`/${tab.path}`));
+	const {userAccountModel} = useOneContext();
+
+	const visibleTabs = TABS.filter(
+		(tab) =>
+			tab.path !== 'account-members' ||
+			canAccessAccountMembers(userAccountModel)
+	);
+
+	const showTabs = visibleTabs.some((tab) =>
+		pathname.endsWith(`/${tab.path}`)
+	);
 
 	const activeTabIndex = Math.max(
 		0,
-		TABS.findIndex((tab) => pathname.includes(`/${tab.path}`))
+		visibleTabs.findIndex((tab) => pathname.includes(`/${tab.path}`))
 	);
 
 	return (
@@ -42,10 +54,12 @@ export default function AccountTabsLayout() {
 						active={activeTabIndex}
 						className="mb-4"
 						onActiveChange={(index) =>
-							navigate(`/${accountERC}/${TABS[index].path}`)
+							navigate(
+								`/${accountERC}/${visibleTabs[index].path}`
+							)
 						}
 					>
-						{TABS.map((tab) => (
+						{visibleTabs.map((tab) => (
 							<ClayTabs.Item key={tab.path}>
 								{i18n.translate(tab.label)}
 							</ClayTabs.Item>

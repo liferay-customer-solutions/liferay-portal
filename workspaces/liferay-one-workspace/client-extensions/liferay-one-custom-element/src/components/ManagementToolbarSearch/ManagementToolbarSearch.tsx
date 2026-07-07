@@ -13,6 +13,8 @@ import {
 } from '~/components/ListView/context/ListViewContextProvider';
 import i18n from '~/i18n';
 
+import './ManagementToolbarSearch.css';
+
 const ManagementToolbarSearch = () => {
 	const [{keywords}, dispatch] = useContext(ListViewContext);
 	const [search, setSearch] = useState(keywords || '');
@@ -42,7 +44,7 @@ const ManagementToolbarSearch = () => {
 	}, [dispatch]);
 
 	return (
-		<div className="w-100">
+		<div className="management-toolbar-search w-100">
 			<ClayManagementToolbar.Search
 				onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
 					event.preventDefault();

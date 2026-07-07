@@ -138,8 +138,6 @@ export default {
 		'Are you sure you want to remove {0} from this account?',
 	'area': 'Area',
 	'areas': 'Areas',
-	'assign-cloud-contact-designations-for-x':
-		'Assign cloud contact designations for {0}.',
 	'assign-or-update-the-account-roles-for-x':
 		'Assign or update the account roles for {0}.',
 	'associated-tickets': 'Associated Tickets',
@@ -220,8 +218,6 @@ export default {
 		'Cloud Apps must state resource requirements. If your app has no additional CPU or RAM requirements, please enter 0.',
 	'cloud-compatible': 'Cloud Compatible?',
 	'cloud-contacts': 'Cloud Contacts',
-	'cloud-contacts-successfully-updated':
-		'Cloud contacts successfully updated.',
 	'cloud-license-usage-type': 'Cloud License Usage Type',
 	'cloud-project': 'Cloud Project',
 	'cloud-provisioning': 'Cloud Provisioning',
@@ -354,7 +350,6 @@ export default {
 	'each': 'each',
 	'edit': 'Edit',
 	'edit-account-details': 'Edit Account Details',
-	'edit-cloud-contacts': 'Edit Cloud Contacts',
 	'edit-details': 'Edit Details',
 	'edit-event': 'Edit Event',
 	'edit-permissions': 'Edit Permissions',
@@ -988,6 +983,8 @@ export default {
 	'select-a-ticket': 'Select a Ticket',
 	'select-a-topic': 'Select a Topic',
 	'select-account': 'Select Account',
+	'select-an-account-to-view-this-page':
+		'Select an account to view this page.',
 	'select-an-option': 'Select an Option',
 	'select-areas': 'Select Areas',
 	'select-categories': 'Select Categories',
@@ -1153,6 +1150,7 @@ export default {
 		'This order must be completed before downloading this app.',
 	'this-product-is-no-longer-available':
 		'This product is no longer available.',
+	'this-project-has-no-members': 'This project has no members yet.',
 	'this-submission-is-currently-under-review-by-liferay-once-the-process-is-complete-it-will-be-published-on-the-marketplace-in-the-meantime-no-information-or-data-from-this-app-submission-can-be-updated':
 		'This submission is currently under review by Liferay. Once the process is complete, it will be published on the Marketplace. In the meantime, no information or data from this app submission can be updated.',
 	'this-table-allows-you-to-create-manage-and-track-your-business-events-please-note-that-business-events-closed-for-more-than-a-year-will-not-be-displayed-here':
@@ -1211,12 +1209,12 @@ export default {
 	'unable-to-remove-member': 'Unable to remove member.',
 	'unable-to-remove-roles': 'Unable to remove roles',
 	'unable-to-update-account-details': 'Unable to update account details',
-	'unable-to-update-cloud-contacts': 'Unable to update cloud contacts.',
 	'unable-to-update-permissions': 'Unable to update permissions.',
 	'unable-to-update-project-members': 'Unable to update project members.',
 	'unable-to-update-publisher-profile': 'Unable to update publisher profile',
 	'under-review': 'Under Review',
 	'uninstall': 'Uninstall',
+	'unknown-member': 'Unknown member',
 	'unlock-exclusive-benefits-with-a-business-account':
 		'Unlock exclusive benefits with a Business Account!',
 	'unpaid': 'Unpaid',
@@ -1337,6 +1335,10 @@ export default {
 	'you-do-not-have-access-to-download-files':
 		'You do not have access to download files.',
 	'you-do-not-have-access-to-pub-sub': 'You do not have access to PubSub.',
+	'you-do-not-have-access-to-this-account':
+		'You do not have access to this account.',
+	'you-do-not-have-access-to-this-page':
+		'You do not have access to this page.',
 	'you-do-not-have-access-to-upload-files':
 		'You do not have access to upload files.',
 	'you-have-reached-the-maximum-number-of-active-trials-allowed-to-start-a-new-trial-please-end-one-of-your-existing-trials-first':

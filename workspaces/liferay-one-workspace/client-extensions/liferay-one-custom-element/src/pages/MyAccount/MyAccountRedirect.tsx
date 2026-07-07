@@ -5,7 +5,9 @@
 
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {Navigate, useLocation} from 'react-router-dom';
+import EmptyState from '~/components/EmptyState/EmptyState';
 import {useFetch} from '~/hooks/useFetch';
+import {translate} from '~/i18n';
 import {Liferay} from '~/services/liferay/liferay';
 
 import type {Account} from '~/types/accounts';
@@ -30,13 +32,19 @@ export default function MyAccountRedirect() {
 		);
 	}
 
-	if (!currentAccountId || !loading) {
-		return null;
+	if (currentAccountId && loading) {
+		return (
+			<div className="mx-auto p-4">
+				<ClayLoadingIndicator size="sm" />
+			</div>
+		);
 	}
 
 	return (
-		<div className="mx-auto p-4">
-			<ClayLoadingIndicator size="sm" />
-		</div>
+		<EmptyState
+			className="mt-5"
+			title={translate('select-an-account-to-view-this-page')}
+			type="EMPTY_STATE"
+		/>
 	);
 }

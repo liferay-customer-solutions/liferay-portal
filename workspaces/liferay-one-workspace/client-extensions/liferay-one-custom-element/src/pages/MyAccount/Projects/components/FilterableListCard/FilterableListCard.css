@@ -33,6 +33,11 @@
 	max-width: none;
 }
 
+.list-card-toolbar .list-card-search .input-group-inset-item {
+	padding-left: var(--spacer-3);
+	padding-right: var(--spacer-3);
+}
+
 .list-card-filter-button {
 	border: 1px solid #cdced9;
 	white-space: nowrap;

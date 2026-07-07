@@ -5,8 +5,13 @@
 
 import {useMemo} from 'react';
 import {useFetch} from '~/hooks/useFetch';
+import {useAccountProjectProductTypes} from '~/hooks/useProjectCommerce';
 import {CLOUD_CONTACT_DESIGNATIONS} from '~/pages/MyAccount/AccountMembers/accountRoles';
-import {PROJECT_ADMIN_ERC} from '~/pages/MyAccount/ProjectMembers/projectRoles';
+import {
+	PROJECT_ADMIN_ERC,
+	PROJECT_ROLE_ERCS,
+	getAvailableDesignations,
+} from '~/pages/MyAccount/ProjectMembers/projectRoles';
 import {Liferay} from '~/services/liferay/liferay';
 
 import type {
@@ -44,7 +49,7 @@ export function useProjectMembers() {
 		params: {
 			fields: 'externalReferenceCode,id,name',
 			filter: `r_accountEntryToProject_accountEntryId eq '${accountId}'`,
-			pageSize: 200,
+			pageSize: -1,
 			sort: 'name:asc',
 		},
 	});
@@ -59,7 +64,7 @@ export function useProjectMembers() {
 			params: {
 				fields: 'id,r_projectToProjectMembership_c_projectERC,r_userToProjectMembership_userId,roleExternalReferenceCode',
 				filter: `r_accountEntryToProjectMembership_accountEntryId eq '${accountId}'`,
-				pageSize: 300,
+				pageSize: -1,
 			},
 		}
 	);
@@ -72,15 +77,25 @@ export function useProjectMembers() {
 		accountId
 			? `/o/headless-admin-user/v1.0/accounts/${accountId}/user-accounts`
 			: null,
-		{params: {pageSize: 100, sort: 'givenName:asc'}}
+		{params: {pageSize: -1, sort: 'givenName:asc'}}
 	);
+
+	const {
+		loading: productTypesLoading,
+		productTypeExternalReferenceCodesByProjectId,
+	} = useAccountProjectProductTypes();
 
 	const userInfoById = useMemo(() => {
 		const map = new Map<number, UserInfo>();
 
 		(userAccountData?.items ?? []).forEach((userAccount) => {
+			const accountRoleBriefs =
+				userAccount.accountBriefs?.find(
+					(accountBrief) => accountBrief.id === accountId
+				)?.roleBriefs ?? [];
+
 			map.set(userAccount.id, {
-				designations: (userAccount.roleBriefs ?? [])
+				designations: accountRoleBriefs
 					.map((roleBrief) => roleBrief.name)
 					.filter((roleName) =>
 						CLOUD_CONTACT_DESIGNATIONS.includes(roleName)
@@ -91,7 +106,7 @@ export function useProjectMembers() {
 		});
 
 		return map;
-	}, [userAccountData]);
+	}, [accountId, userAccountData]);
 
 	const accountMemberOptions = useMemo<AccountMemberOption[]>(
 		() =>
@@ -122,25 +137,46 @@ export function useProjectMembers() {
 			const memberships =
 				membershipsByProject.get(project.externalReferenceCode) ?? [];
 
-			const members = memberships.map((membership) => {
-				const userId = membership.r_userToProjectMembership_userId;
+			const members = memberships
+				.filter((membership) =>
+					PROJECT_ROLE_ERCS.includes(
+						membership.roleExternalReferenceCode
+					)
+				)
+				.map((membership) => {
+					const userId = membership.r_userToProjectMembership_userId;
 
-				const userInfo = userInfoById.get(userId);
+					const userInfo = userInfoById.get(userId);
 
-				return {
-					designations: userInfo?.designations ?? [],
-					email: userInfo?.email ?? '',
-					membershipId: membership.id,
-					name: userInfo?.name ?? '',
-					roleExternalReferenceCode:
-						membership.roleExternalReferenceCode,
-					userId,
-				};
+					return {
+						designations: userInfo?.designations ?? [],
+						email: userInfo?.email ?? '',
+						membershipId: membership.id,
+						name: userInfo?.name ?? '',
+						roleExternalReferenceCode:
+							membership.roleExternalReferenceCode,
+						userId,
+					};
+				});
+
+			members.sort((a, b) => {
+				if (!a.name) {
+					return b.name ? 1 : 0;
+				}
+
+				if (!b.name) {
+					return -1;
+				}
+
+				return a.name.localeCompare(b.name);
 			});
 
-			members.sort((a, b) => a.name.localeCompare(b.name));
-
 			return {
+				availableDesignations: getAvailableDesignations(
+					productTypeExternalReferenceCodesByProjectId.get(
+						project.id
+					) ?? []
+				),
 				externalReferenceCode: project.externalReferenceCode,
 				hasProjectAdmin: members.some(
 					(member) =>
@@ -151,7 +187,12 @@ export function useProjectMembers() {
 				name: project.name,
 			};
 		});
-	}, [membershipData, projectData, userInfoById]);
+	}, [
+		membershipData,
+		productTypeExternalReferenceCodesByProjectId,
+		projectData,
+		userInfoById,
+	]);
 
 	const mutate = async () => {
 		await Promise.all([mutateMemberships(), mutateUserAccounts()]);
@@ -159,7 +200,11 @@ export function useProjectMembers() {
 
 	return {
 		accountMemberOptions,
-		loading: projectsLoading || membershipsLoading || userAccountsLoading,
+		loading:
+			projectsLoading ||
+			membershipsLoading ||
+			productTypesLoading ||
+			userAccountsLoading,
 		mutate,
 		rows,
 	};

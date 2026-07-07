@@ -9,7 +9,11 @@ import ClayIcon from '@clayui/icon';
 import {useState} from 'react';
 import {useMeasuredWidth} from '~/hooks/useMeasuredWidth';
 import i18n, {translate} from '~/i18n';
-import {getMembershipRoleNames} from '~/pages/MyAccount/AccountMembers/accountRoles';
+import {
+	getMembershipRoleNames,
+	hasAdministratorRole,
+	isAdministratorRole,
+} from '~/pages/MyAccount/AccountMembers/accountRoles';
 import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
 import {Liferay} from '~/services/liferay/liferay';
 
@@ -19,6 +23,8 @@ import type {RoleBrief} from '~/types/accounts';
 
 type EditPermissionsModalProps = {
 	accountExternalReferenceCode: string;
+	accountId: number | string;
+	adminCount: number;
 	memberName: string;
 	memberRoleBriefs: RoleBrief[];
 	mutate: () => Promise<unknown>;
@@ -29,6 +35,8 @@ type EditPermissionsModalProps = {
 
 const EditPermissionsModal = ({
 	accountExternalReferenceCode,
+	accountId,
+	adminCount,
 	memberName,
 	memberRoleBriefs,
 	mutate,
@@ -38,6 +46,9 @@ const EditPermissionsModal = ({
 }: EditPermissionsModalProps) => {
 	const currentRoleNames = getMembershipRoleNames(memberRoleBriefs);
 
+	const isLastAdmin =
+		hasAdministratorRole(memberRoleBriefs) && adminCount <= 1;
+
 	const [active, setActive] = useState(false);
 	const [selectedRoles, setSelectedRoles] =
 		useState<string[]>(currentRoleNames);
@@ -45,11 +56,26 @@ const EditPermissionsModal = ({
 	const {ref: rolesRef, width: menuWidth} =
 		useMeasuredWidth<HTMLDivElement>(active);
 
-	const toggleRole = (roleName: string) =>
+	const isRoleLocked = (roleName: string) =>
+		isLastAdmin &&
+		isAdministratorRole(roleName) &&
+		currentRoleNames.includes(roleName);
+
+	const toggleRole = (roleName: string) => {
+		if (isRoleLocked(roleName)) {
+			return;
+		}
+
 		setSelectedRoles((previous) =>
 			previous.includes(roleName)
 				? previous.filter((value) => value !== roleName)
 				: [...previous, roleName]
+		);
+	};
+
+	const clearRoles = () =>
+		setSelectedRoles(
+			selectedRoles.filter((roleName) => isRoleLocked(roleName))
 		);
 
 	const triggerLabel = selectedRoles.length
@@ -58,6 +84,18 @@ const EditPermissionsModal = ({
 
 	const onSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
+
+		if (isLastAdmin && !selectedRoles.some(isAdministratorRole)) {
+			Liferay.Util.openToast({
+				message: i18n.translate(
+					'at-least-one-account-admin-is-required-assign-another-account-admin-before-changing-this-role'
+				),
+				title: i18n.translate('error'),
+				type: 'danger',
+			});
+
+			return;
+		}
 
 		try {
 			const {items: accountRoles} =
@@ -83,14 +121,14 @@ const EditPermissionsModal = ({
 			await Promise.all([
 				...rolesToAdd.map((accountRole) =>
 					HeadlessAdminUser.sendRoleAccountUser(
-						accountRole.accountId,
+						accountId,
 						accountRole.id,
 						userId
 					)
 				),
 				...rolesToRemove.map((accountRole) =>
 					HeadlessAdminUser.deleteRoleAccountUser(
-						accountRole.accountId,
+						accountId,
 						accountRole.id,
 						userId
 					)
@@ -151,27 +189,41 @@ const EditPermissionsModal = ({
 					<ClayDropDown.ItemList>
 						{roleNames.map((roleName) => (
 							<ClayDropDown.Item
+								disabled={isRoleLocked(roleName)}
 								key={roleName}
 								onClick={() => toggleRole(roleName)}
 							>
 								<ClayCheckbox
 									checked={selectedRoles.includes(roleName)}
+									disabled={isRoleLocked(roleName)}
 									label={roleName}
 									onChange={() => toggleRole(roleName)}
 								/>
 							</ClayDropDown.Item>
 						))}
 
-						<ClayDropDown.Item onClick={() => setSelectedRoles([])}>
+						<ClayDropDown.Item
+							disabled={isLastAdmin}
+							onClick={clearRoles}
+						>
 							<ClayCheckbox
 								checked={!selectedRoles.length}
+								disabled={isLastAdmin}
 								label={translate('none')}
-								onChange={() => setSelectedRoles([])}
+								onChange={clearRoles}
 							/>
 						</ClayDropDown.Item>
 					</ClayDropDown.ItemList>
 				</ClayDropDown>
 			</div>
+
+			{isLastAdmin && (
+				<p className="mt-2 text-neutral-7">
+					{translate(
+						'at-least-one-account-admin-is-required-assign-another-account-admin-before-changing-this-role'
+					)}
+				</p>
+			)}
 		</form>
 	);
 };

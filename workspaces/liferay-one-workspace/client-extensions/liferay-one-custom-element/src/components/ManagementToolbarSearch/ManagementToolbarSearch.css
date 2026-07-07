@@ -1,4 +1,4 @@
-.search-bar .input-group-inset-item {
+.management-toolbar-search .input-group .input-group-inset-item {
 	padding-left: var(--spacer-3);
 	padding-right: var(--spacer-3);
 }

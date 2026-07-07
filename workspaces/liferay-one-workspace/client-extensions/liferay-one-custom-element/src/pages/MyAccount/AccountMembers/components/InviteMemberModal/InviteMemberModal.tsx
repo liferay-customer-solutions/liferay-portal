@@ -3,20 +3,23 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {ClayInput} from '@clayui/form';
+import ClayDropDown from '@clayui/drop-down';
+import {ClayCheckbox, ClayInput} from '@clayui/form';
+import ClayIcon from '@clayui/icon';
 import {useState} from 'react';
 import {FieldBase} from '~/components/FieldBase/FieldBase';
-import i18n from '~/i18n';
-import MultiSelect from '~/pages/Admin/SSADashboard/components/MultiSelect/MultiSelect';
+import {useMeasuredWidth} from '~/hooks/useMeasuredWidth';
+import i18n, {translate} from '~/i18n';
 import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
 import {Liferay} from '~/services/liferay/liferay';
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import '../../AccountMembers.css';
 
-type RoleItem = {label: string; value: string};
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type InviteMemberModalProps = {
 	accountExternalReferenceCode: string;
+	accountId: number | string;
 	mutate: () => Promise<unknown>;
 	onClose: () => void;
 	roleNames: string[];
@@ -24,20 +27,29 @@ type InviteMemberModalProps = {
 
 const InviteMemberModal = ({
 	accountExternalReferenceCode,
+	accountId,
 	mutate,
 	onClose,
 	roleNames,
 }: InviteMemberModalProps) => {
+	const [active, setActive] = useState(false);
 	const [emailAddress, setEmailAddress] = useState('');
 	const [emailError, setEmailError] = useState('');
-	const [selectedRoles, setSelectedRoles] = useState<RoleItem[]>([]);
+	const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
 
-	const sourceItems: RoleItem[] = roleNames
-		.filter(
-			(roleName) =>
-				!selectedRoles.some((selected) => selected.value === roleName)
-		)
-		.map((roleName) => ({label: roleName, value: roleName}));
+	const {ref: rolesRef, width: menuWidth} =
+		useMeasuredWidth<HTMLDivElement>(active);
+
+	const toggleRole = (roleName: string) =>
+		setSelectedRoles((previous) =>
+			previous.includes(roleName)
+				? previous.filter((value) => value !== roleName)
+				: [...previous, roleName]
+		);
+
+	const triggerLabel = selectedRoles.length
+		? selectedRoles.join(', ')
+		: translate('none');
 
 	const onSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
@@ -63,9 +75,7 @@ const InviteMemberModal = ({
 						accountExternalReferenceCode
 					);
 
-				const selectedRoleNames = new Set(
-					selectedRoles.map((role) => role.value)
-				);
+				const selectedRoleNames = new Set(selectedRoles);
 
 				await Promise.all(
 					accountRoles
@@ -74,7 +84,7 @@ const InviteMemberModal = ({
 						)
 						.map((accountRole) =>
 							HeadlessAdminUser.sendRoleAccountUser(
-								accountRole.accountId,
+								accountId,
 								accountRole.id,
 								userAccount.id
 							)
@@ -124,14 +134,57 @@ const InviteMemberModal = ({
 				/>
 			</FieldBase>
 
-			<MultiSelect
-				inputName={i18n.translate('roles')}
-				label={i18n.translate('roles')}
-				multiselectKey={`invite-roles-${selectedRoles.length}`}
-				onItemsChange={(roles) => setSelectedRoles(roles as RoleItem[])}
-				selectedItems={selectedRoles}
-				sourceItems={sourceItems}
-			/>
+			<FieldBase label={i18n.translate('roles')}>
+				<div ref={rolesRef}>
+					<ClayDropDown
+						active={active}
+						className="account-members-roles-dropdown"
+						closeOnClick={false}
+						menuElementAttrs={{
+							className: 'account-members-roles-menu',
+							style: menuWidth ? {width: menuWidth} : undefined,
+						}}
+						onActiveChange={setActive}
+						trigger={
+							<button
+								className="account-members-roles-trigger align-items-center d-flex form-control justify-content-between"
+								type="button"
+							>
+								<span>{triggerLabel}</span>
+
+								<ClayIcon symbol="caret-bottom" />
+							</button>
+						}
+					>
+						<ClayDropDown.ItemList>
+							{roleNames.map((roleName) => (
+								<ClayDropDown.Item
+									key={roleName}
+									onClick={() => toggleRole(roleName)}
+								>
+									<ClayCheckbox
+										checked={selectedRoles.includes(
+											roleName
+										)}
+										label={roleName}
+										onChange={() => toggleRole(roleName)}
+									/>
+								</ClayDropDown.Item>
+							))}
+
+							<ClayDropDown.Item
+								onClick={() => setSelectedRoles([])}
+							>
+								<ClayCheckbox
+									checked={!selectedRoles.length}
+									label={translate('none')}
+									onChange={() => setSelectedRoles([])}
+								/>
+							</ClayDropDown.Item>
+						</ClayDropDown.ItemList>
+					</ClayDropDown>
+				</div>
+			</FieldBase>
 		</form>
 	);
 };

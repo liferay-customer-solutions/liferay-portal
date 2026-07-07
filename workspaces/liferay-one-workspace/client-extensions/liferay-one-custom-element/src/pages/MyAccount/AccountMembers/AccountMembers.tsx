@@ -119,7 +119,7 @@ export default function AccountMembers() {
 		accountId
 			? `/o/headless-admin-user/v1.0/accounts/${accountId}/user-accounts`
 			: null,
-		{params: {pageSize: 100, sort: 'givenName:asc'}}
+		{params: {pageSize: -1, sort: 'givenName:asc'}}
 	);
 
 	const {data: projectData} = useFetch<APIResponse<ProjectItem>>(
@@ -128,7 +128,7 @@ export default function AccountMembers() {
 			params: {
 				fields: 'externalReferenceCode,name',
 				filter: `r_accountEntryToProject_accountEntryId eq '${accountId}'`,
-				pageSize: 200,
+				pageSize: -1,
 			},
 		}
 	);
@@ -144,18 +144,25 @@ export default function AccountMembers() {
 	}, [projectData]);
 
 	const members = useMemo<AccountMemberRow[]>(() => {
-		return (data?.items ?? []).map((userAccount) => ({
-			email: userAccount.emailAddress,
-			id: userAccount.id,
-			image: userAccount.image,
-			isAdministrator: hasAdministratorRole(userAccount.roleBriefs),
-			isCurrentUser: String(userAccount.id) === currentUserId,
-			name: userAccount.name,
-			roleBriefs: userAccount.roleBriefs,
-			roleNames: getMembershipRoleNames(userAccount.roleBriefs),
-			status: userAccount.status ?? 0,
-		}));
-	}, [currentUserId, data]);
+		return (data?.items ?? []).map((userAccount) => {
+			const accountRoleBriefs =
+				userAccount.accountBriefs?.find(
+					(accountBrief) => accountBrief.id === accountId
+				)?.roleBriefs ?? [];
+
+			return {
+				email: userAccount.emailAddress,
+				id: userAccount.id,
+				image: userAccount.image,
+				isAdministrator: hasAdministratorRole(accountRoleBriefs),
+				isCurrentUser: String(userAccount.id) === currentUserId,
+				name: userAccount.name,
+				roleBriefs: accountRoleBriefs,
+				roleNames: getMembershipRoleNames(accountRoleBriefs),
+				status: userAccount.status ?? 0,
+			};
+		});
+	}, [accountId, currentUserId, data]);
 
 	const adminCount = useMemo(
 		() => members.filter((member) => member.isAdministrator).length,
@@ -301,6 +308,8 @@ export default function AccountMembers() {
 						<ClayInput.GroupItem>
 							<ClayInput
 								className="input-group-inset input-group-inset-after"
+								id="account-members-search"
+								name="account-members-search"
 								onChange={(event) => {
 									setPage(1);
 									setKeywords(event.target.value);
@@ -502,36 +511,6 @@ export default function AccountMembers() {
 						{translate('no-account-members-were-found')}
 					</div>
 				)}
-			</div>
-
-			<div className="account-members-products-card mt-4">
-				<h3 className="font-weight-bold text-neutral-10">
-					{translate('manage-product-users')}
-				</h3>
-
-				<p className="text-neutral-7">
-					{translate(
-						'manage-roles-and-permissions-of-users-within-each-product'
-					)}
-				</p>
-
-				<div className="d-flex flex-wrap mt-3">
-					<Button
-						appendIcon="shortcut"
-						className="mb-2 mr-3"
-						displayType="secondary"
-					>
-						{translate('manage-lxc-sm-users')}
-					</Button>
-
-					<Button
-						appendIcon="shortcut"
-						className="mb-2"
-						displayType="secondary"
-					>
-						{translate('manage-analytics-cloud-users')}
-					</Button>
-				</div>
 			</div>
 		</Page>
 	);

@@ -62,10 +62,6 @@ export function getAvailableDesignations(
 		);
 	});
 
-	if (!designations.size) {
-		return ALL_DESIGNATIONS;
-	}
-
 	return ALL_DESIGNATIONS.filter((designation) =>
 		designations.has(designation)
 	);

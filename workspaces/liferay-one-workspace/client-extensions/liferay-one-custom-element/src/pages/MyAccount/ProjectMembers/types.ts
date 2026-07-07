@@ -13,6 +13,7 @@ export type ProjectMember = {
 };
 
 export type ProjectMembersRow = {
+	availableDesignations: string[];
 	externalReferenceCode: string;
 	hasProjectAdmin: boolean;
 	id: number;

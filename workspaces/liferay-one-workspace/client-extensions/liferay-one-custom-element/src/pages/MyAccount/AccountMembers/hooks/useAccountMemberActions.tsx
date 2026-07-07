@@ -56,6 +56,7 @@ export function useAccountMemberActions({
 			body: (
 				<InviteMemberModal
 					accountExternalReferenceCode={accountExternalReferenceCode}
+					accountId={accountId}
 					mutate={mutate}
 					onClose={modalContext.onClose}
 					roleNames={roleNames}
@@ -79,7 +80,6 @@ export function useAccountMemberActions({
 					accountExternalReferenceCode={accountExternalReferenceCode}
 					accountId={accountId}
 					adminCount={adminCount}
-					isAdministrator={member.isAdministrator}
 					memberName={member.name}
 					memberRoleBriefs={member.roleBriefs}
 					mutate={mutate}
@@ -135,7 +135,13 @@ export function useAccountMemberActions({
 			memberships = response.items ?? [];
 		}
 		catch {
-			memberships = [];
+			Liferay.Util.openToast({
+				message: translate('unable-to-remove-member'),
+				title: translate('error'),
+				type: 'danger',
+			});
+
+			return;
 		}
 
 		const projectNames = memberships

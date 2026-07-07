@@ -21,7 +21,7 @@
 	max-width: none;
 }
 
-.orders-toolbar .orders-search .input-group .input-group-inset-item {
+.orders-toolbar .orders-search .input-group-inset-item {
 	padding-left: var(--spacer-3);
 	padding-right: var(--spacer-3);
 }
@@ -160,8 +160,6 @@
 .orders-table thead th:last-child,
 .orders-table tbody td:last-child {
 	text-align: right;
-	white-space: nowrap;
-	width: 1%;
 }
 
 .orders-id {

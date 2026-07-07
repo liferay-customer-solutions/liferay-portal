@@ -130,6 +130,12 @@
 					"value": {
 						"en_US": "https://www.liferay.com/support"
 					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "cloud"
+					}
 				}
 			],
 			"productType": "virtual",
@@ -562,6 +568,12 @@
 					"value": {
 						"en_US": "https://www.liferay.com/support"
 					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "ssa-saas"
+					}
 				}
 			],
 			"productType": "virtual",
@@ -697,6 +709,12 @@
 					"value": {
 						"en_US": "https://www.liferay.com/support"
 					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "cloud"
+					}
 				}
 			],
 			"productType": "virtual",
@@ -825,6 +843,12 @@
 					"specificationKey": "support-url",
 					"value": {
 						"en_US": "https://www.liferay.com/support"
+					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "ssa-saas"
 					}
 				}
 			],

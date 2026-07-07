@@ -5,8 +5,10 @@
 
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {useEffect, useState} from 'react';
-import {Navigate, Outlet, useParams} from 'react-router-dom';
+import {Outlet, useParams} from 'react-router-dom';
+import EmptyState from '~/components/EmptyState/EmptyState';
 import {useFetch} from '~/hooks/useFetch';
+import {translate} from '~/i18n';
 import {Liferay} from '~/services/liferay/liferay';
 import {setCurrentAccount} from '~/utils/setCurrentAccount';
 
@@ -47,7 +49,13 @@ export default function AccountGuard() {
 	}, [account, needsSwitch]);
 
 	if (error) {
-		return <Navigate replace to="/" />;
+		return (
+			<EmptyState
+				className="mt-5"
+				title={translate('you-do-not-have-access-to-this-account')}
+				type="NO_ACCESS"
+			/>
+		);
 	}
 
 	if (loading || switching || needsSwitch) {

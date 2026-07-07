@@ -5,8 +5,8 @@
 
 import i18n from '~/i18n';
 
-import DetailsCard from '../DetailsCard/DetailsCard';
 import {SUPPORT_LINKS} from '../../utils/constants';
+import DetailsCard from '../DetailsCard/DetailsCard';
 
 import type {DeliveryProductSpecification} from '~/types/product';
 

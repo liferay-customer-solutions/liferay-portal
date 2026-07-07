@@ -113,6 +113,9 @@
 					"roleBriefs": [
 						{
 							"name": "Account Administrator"
+						},
+						{
+							"name": "Critical Incident Contact"
 						}
 					]
 				},
@@ -301,6 +304,9 @@
 					"roleBriefs": [
 						{
 							"name": "Account Member"
+						},
+						{
+							"name": "Security Breach Contact"
 						}
 					]
 				},

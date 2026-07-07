@@ -4,7 +4,6 @@
  */
 
 .project-members-card {
-	background-color: #fff;
 	border: 1px solid #e7e7ed;
 	border-radius: 12px;
 }
@@ -28,13 +27,49 @@
 	vertical-align: top;
 }
 
+.project-members-table tbody td:last-child,
+.project-members-table thead th:last-child {
+	text-align: right;
+}
+
+.project-members-status {
+	margin-bottom: 6px;
+}
+
+.project-members-chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.project-members-chip {
+	background-color: #f1f2f5;
+	border-radius: 4px;
+	color: #1b2a3b;
+	font-size: 13px;
+	padding: 4px 8px;
+	white-space: nowrap;
+}
+
+.project-members-chip-name {
+	font-weight: 600;
+}
+
+.project-members-chip-detail {
+	color: #6b6c7e;
+}
+
 .project-members-more {
-	background-color: transparent;
+	align-items: center;
+	background-color: #e7f0ff;
 	border: 0;
+	border-radius: 4px;
 	color: #0b5fff;
 	cursor: pointer;
+	display: inline-flex;
 	font-size: 13px;
-	padding: 0;
+	font-weight: 600;
+	padding: 4px 8px;
 }
 
 .project-permissions-grid {

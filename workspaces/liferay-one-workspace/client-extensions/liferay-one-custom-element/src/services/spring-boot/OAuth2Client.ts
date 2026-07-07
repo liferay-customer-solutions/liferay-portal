@@ -3,11 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import * as OAuth2 from '@liferay/oauth2-provider-web/client';
 import FetcherError from '~/services/fetcher/FetcherError';
-import {
-	IOAuth2ClientAgentApplication,
-	Liferay,
-} from '~/services/liferay/liferay';
 
 type Options<T> = RequestInit & {
 	earlyReturn?: boolean;
@@ -16,14 +13,23 @@ type Options<T> = RequestInit & {
 };
 
 class OAuth2Client {
-	public oAuth2Client: IOAuth2ClientAgentApplication;
+	private oAuth2ClientPromise?: ReturnType<
+		typeof OAuth2.FromUserAgentApplication
+	>;
 
 	constructor(
 		protected agentName: string,
 		protected basePath: string
-	) {
-		this.oAuth2Client =
-			Liferay.OAuth2Client?.FromUserAgentApplication(agentName);
+	) {}
+
+	private getOAuth2Client() {
+		if (!this.oAuth2ClientPromise) {
+			this.oAuth2ClientPromise = OAuth2.FromUserAgentApplication(
+				this.agentName
+			);
+		}
+
+		return this.oAuth2ClientPromise;
 	}
 
 	private async parseError(response: Response | Error) {
@@ -41,14 +47,20 @@ class OAuth2Client {
 			throw error;
 		}
 
-		return response;
+		if (response instanceof Response) {
+			return response;
+		}
+
+		throw response;
 	}
 
 	private fetcher = async <T = unknown>(
 		resource: RequestInfo,
 		options?: Options<T>
 	): Promise<T> => {
-		const response = (await this.oAuth2Client
+		const oAuth2Client = await this.getOAuth2Client();
+
+		const response = (await oAuth2Client
 			.fetch(`${this.basePath + resource}`, options)
 			.catch(this.parseError.bind(this))) as Response;
 

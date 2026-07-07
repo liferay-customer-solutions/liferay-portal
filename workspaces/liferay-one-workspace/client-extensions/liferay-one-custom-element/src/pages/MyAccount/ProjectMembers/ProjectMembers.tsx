@@ -29,7 +29,7 @@ import './ProjectMembers.css';
 import type {ProjectMembersRow} from '~/pages/MyAccount/ProjectMembers/types';
 import type {Account} from '~/types/accounts';
 
-const VISIBLE_MEMBERS = 2;
+const VISIBLE_MEMBERS = 3;
 
 export default function ProjectMembers() {
 	const accountId = Liferay.CommerceContext?.account?.accountId;
@@ -53,10 +53,13 @@ export default function ProjectMembers() {
 
 	const {openEditProjectPermissions} = useProjectMemberActions({
 		accountExternalReferenceCode: account?.externalReferenceCode ?? '',
-		accountId: accountId ?? '',
 		accountMemberOptions,
 		mutate,
 	});
+
+	const showCloudContacts = rows.some(
+		(project) => project.availableDesignations.length
+	);
 
 	const canManageProject = (project: ProjectMembersRow) =>
 		isAccountAdmin ||
@@ -106,16 +109,18 @@ export default function ProjectMembers() {
 						<ClayTable.Head>
 							<ClayTable.Row>
 								<ClayTable.Cell headingCell>
-									{translate('project')}
+									{translate('project-name')}
 								</ClayTable.Cell>
 
 								<ClayTable.Cell headingCell>
 									{translate('project-members')}
 								</ClayTable.Cell>
 
-								<ClayTable.Cell headingCell>
-									{translate('cloud-contacts')}
-								</ClayTable.Cell>
+								{showCloudContacts && (
+									<ClayTable.Cell headingCell>
+										{translate('cloud-contacts')}
+									</ClayTable.Cell>
+								)}
 
 								<ClayTable.Cell headingCell />
 							</ClayTable.Row>
@@ -141,36 +146,54 @@ export default function ProjectMembers() {
 								return (
 									<ClayTable.Row key={project.id}>
 										<ClayTable.Cell>
+											<ClayLabel
+												className="project-members-status"
+												displayType="success"
+											>
+												{translate('active')}
+											</ClayLabel>
+
 											<div className="font-weight-bold">
 												{project.name}
 											</div>
-
-											<ClayLabel displayType="success">
-												{translate('active')}
-											</ClayLabel>
 										</ClayTable.Cell>
 
 										<ClayTable.Cell>
 											{project.members.length ? (
-												<>
+												<div className="project-members-chips">
 													{visibleMembers.map(
-														(member) => (
-															<div
-																key={
-																	member.userId
-																}
-															>
-																{member.name}
+														(member) => {
+															const roleLabel =
+																getProjectRoleLabel(
+																	member.roleExternalReferenceCode
+																);
 
-																<span className="text-neutral-7">
-																	{' '}
-																	&middot;{' '}
-																	{getProjectRoleLabel(
-																		member.roleExternalReferenceCode
+															return (
+																<span
+																	className="project-members-chip"
+																	key={
+																		member.userId
+																	}
+																>
+																	<span className="project-members-chip-name">
+																		{member.name ||
+																			translate(
+																				'unknown-member'
+																			)}
+																	</span>
+
+																	{roleLabel && (
+																		<span className="project-members-chip-detail">
+																			{' '}
+																			&middot;{' '}
+																			{
+																				roleLabel
+																			}
+																		</span>
 																	)}
 																</span>
-															</div>
-														)
+															);
+														}
 													)}
 
 													{additionalMembers > 0 && (
@@ -195,18 +218,18 @@ export default function ProjectMembers() {
 																	)}
 														</button>
 													)}
-												</>
+												</div>
 											) : (
 												<span className="text-neutral-7">
 													{translate(
-														'if-there-is-no-project-admin-on-this-project-to-add-or-manage-team-members-contact-your-account-admin'
+														'this-project-has-no-members'
 													)}
 												</span>
 											)}
 
 											{!!project.members.length &&
 												!project.hasProjectAdmin && (
-													<div className="mt-1 text-neutral-7">
+													<div className="mt-2 text-neutral-7">
 														{translate(
 															'if-there-is-no-project-admin-on-this-project-to-add-or-manage-team-members-contact-your-account-admin'
 														)}
@@ -214,29 +237,42 @@ export default function ProjectMembers() {
 												)}
 										</ClayTable.Cell>
 
-										<ClayTable.Cell>
-											{cloudContacts.length
-												? cloudContacts.map(
-														(member) => (
-															<div
-																key={
-																	member.userId
-																}
-															>
-																{member.name}
+										{showCloudContacts && (
+											<ClayTable.Cell>
+												{!!project.availableDesignations
+													.length &&
+												!!cloudContacts.length ? (
+													<div className="project-members-chips">
+														{cloudContacts.map(
+															(member) => (
+																<span
+																	className="project-members-chip"
+																	key={
+																		member.userId
+																	}
+																>
+																	<span className="project-members-chip-name">
+																		{
+																			member.name
+																		}
+																	</span>
 
-																<span className="text-neutral-7">
-																	{' '}
-																	&middot;{' '}
-																	{member.designations.join(
-																		', '
-																	)}
+																	<span className="project-members-chip-detail">
+																		{' '}
+																		&middot;{' '}
+																		{member.designations.join(
+																			', '
+																		)}
+																	</span>
 																</span>
-															</div>
-														)
-													)
-												: '—'}
-										</ClayTable.Cell>
+															)
+														)}
+													</div>
+												) : (
+													'—'
+												)}
+											</ClayTable.Cell>
+										)}
 
 										<ClayTable.Cell>
 											{canManageProject(project) && (

@@ -10,6 +10,8 @@ import {useFetch} from '~/hooks/useFetch';
 import {isUnassignedProject} from '~/pages/MyAccount/Projects/projects';
 import HeadlessCommerceDeliveryCatalog from '~/services/headless/HeadlessCommerceDeliveryCatalog';
 import {Liferay} from '~/services/liferay/liferay';
+import getProductOrderTypes from '~/utils/getProductOrderTypes';
+import {getProductSpecificationValues} from '~/utils/getProductSpecificationValues';
 
 import type {APIResponse} from '~/types/api';
 import type {
@@ -187,6 +189,81 @@ export function useUnassignedCommerce(enabled = true) {
 		.flatMap((contract) => toProductEntitlements(contract));
 
 	return {entitlements, error, loading};
+}
+
+export function useAccountProjectProductTypes() {
+	const accountId = Liferay.CommerceContext?.account?.accountId;
+
+	const {data: contractsData, isLoading: contractsLoading} = useFetch<
+		APIResponse<ContractNode>
+	>(accountId ? '/o/c/contracts' : null, {
+		params: {
+			filter: `r_accountEntryToContract_accountEntryId eq '${accountId}'`,
+			nestedFields:
+				'contractToEntitlement,entitlementDefinitionToEntitlement',
+			nestedFieldsDepth: 5,
+			pageSize: 100,
+		},
+	});
+
+	const {data: productsData, isLoading: productsLoading} =
+		useChannelProducts();
+
+	const productTypeExternalReferenceCodesByProjectId = useMemo(() => {
+		const productsByExternalReferenceCode = new Map(
+			(productsData?.items ?? []).map((product) => [
+				product.externalReferenceCode,
+				product,
+			])
+		);
+
+		const productTypesByProjectId = new Map<number, Set<string>>();
+
+		(contractsData?.items ?? []).forEach((contract) => {
+			const projectId = contract.r_projectToContract_c_projectId;
+
+			if (!projectId) {
+				return;
+			}
+
+			const productTypes =
+				productTypesByProjectId.get(projectId) ?? new Set<string>();
+
+			toProductEntitlements(contract).forEach((entitlement) => {
+				const product = productsByExternalReferenceCode.get(
+					entitlement.productExternalReferenceCode as string
+				);
+
+				if (!product) {
+					return;
+				}
+
+				const productType = getProductSpecificationValues(
+					product.productSpecifications ?? []
+				);
+
+				if (productType) {
+					productTypes.add(
+						getProductOrderTypes(productType).externalReferenceCode
+					);
+				}
+			});
+
+			productTypesByProjectId.set(projectId, productTypes);
+		});
+
+		return new Map(
+			[...productTypesByProjectId].map(([projectId, productTypes]) => [
+				projectId,
+				[...productTypes],
+			])
+		);
+	}, [contractsData, productsData]);
+
+	return {
+		loading: contractsLoading || productsLoading,
+		productTypeExternalReferenceCodesByProjectId,
+	};
 }
 
 export function useProjectProducts(projectExternalReferenceCode: string) {

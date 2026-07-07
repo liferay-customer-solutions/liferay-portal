@@ -21,6 +21,11 @@
 	max-width: none;
 }
 
+.account-members-toolbar .account-members-search .input-group-inset-item {
+	padding-left: var(--spacer-3);
+	padding-right: var(--spacer-3);
+}
+
 .account-members-filter-button {
 	border: 1px solid #cdced9;
 	white-space: nowrap;
@@ -77,6 +82,11 @@
 	color: #1b2a3b;
 	padding: 16px 24px;
 	vertical-align: middle;
+}
+
+.account-members-table tbody td:last-child,
+.account-members-table thead th:last-child {
+	text-align: right;
 }
 
 .account-members-avatar {
@@ -154,5 +164,7 @@
 }
 
 .account-members-roles-menu {
+	max-width: none;
+	min-width: 0;
 	width: var(--clay-dropdown-trigger-width, 100%);
 }
