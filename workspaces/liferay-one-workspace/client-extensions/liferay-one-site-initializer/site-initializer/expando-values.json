@@ -377,19 +377,19 @@
 		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
 		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_PROJECT_AND_ORDERS#]",
 		"columnName": "Submenu Column Span",
-		"data": "6"
+		"data": "3"
 	},
 	{
 		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
 		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_ACCOUNT_AND_MEMBERS#]",
 		"columnName": "Submenu Child Columns",
-		"data": "1"
+		"data": "3"
 	},
 	{
 		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
 		"classPk": "[#SITE_NAVIGATION_MENU_ITEM_ID:LO_NAV_MY_ACCOUNT_ACCOUNT_AND_MEMBERS#]",
 		"columnName": "Submenu Column Span",
-		"data": "6"
+		"data": "9"
 	},
 	{
 		"className": "com.liferay.site.navigation.model.SiteNavigationMenuItem",
