@@ -7,7 +7,7 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig} from 'vite';
 
-export default defineConfig({
+export default defineConfig(({command}) => ({
 	build: {
 		chunkSizeWarningLimit: 2000,
 		cssCodeSplit: false,
@@ -53,11 +53,20 @@ export default defineConfig({
 	},
 	plugins: [react()],
 	resolve: {
-		alias: {
-			'~': path.resolve(__dirname, './src/'),
-		},
+		alias:
+			command === 'serve'
+				? {
+						'@liferay/oauth2-provider-web/client': path.resolve(
+							__dirname,
+							'./dev/oauth2ProviderStub.ts'
+						),
+						'~': path.resolve(__dirname, './src/'),
+					}
+				: {
+						'~': path.resolve(__dirname, './src/'),
+					},
 	},
 	server: {
 		origin: 'http://localhost:5173',
 	},
-});
+}));
