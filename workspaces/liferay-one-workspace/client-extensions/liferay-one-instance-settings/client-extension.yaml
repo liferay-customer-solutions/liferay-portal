@@ -1,3 +1,22 @@
+liferay-one-instance-settings-auth-login:
+    name: Liferay One Instance Settings Auth Login
+    pid: com.liferay.login.web.internal.configuration.AuthLoginConfiguration
+    promptEnabled: true
+    siteExternalReferenceCode: LIFERAY_ONE
+    type: instanceSettings
+liferay-one-instance-settings-consent-manager:
+    active: true
+    enabled: true
+    name: Liferay One Instance Settings Consent Manager
+    pid: com.liferay.cookies.configuration.CookiesPreferenceHandlingConfiguration
+    siteExternalReferenceCode: LIFERAY_ONE
+    type: instanceSettings
+liferay-one-instance-settings-consent-panel:
+    cookiePolicyLink: https://www.liferay.com/privacy-policy
+    name: Liferay One Instance Settings Consent Panel
+    pid: com.liferay.cookies.configuration.consent.CookiesConsentConfiguration
+    siteExternalReferenceCode: LIFERAY_ONE
+    type: instanceSettings
 liferay-one-instance-settings-fragment-service:
     name: Liferay One Instance Settings Fragment Service
     pid: com.liferay.fragment.configuration.FragmentServiceConfiguration
