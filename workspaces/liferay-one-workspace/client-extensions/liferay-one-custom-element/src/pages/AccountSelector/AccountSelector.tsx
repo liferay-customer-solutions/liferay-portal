@@ -18,6 +18,13 @@ import type {APIResponse} from '~/types/api';
 
 const SEARCH_DELAY = 400;
 
+const ACCOUNT_SECTIONS = [
+	'account-details',
+	'account-members',
+	'orders',
+	'project-members',
+];
+
 export default function AccountSelector() {
 	const account = Liferay.CommerceContext?.account;
 	const currentAccountId = account?.accountId;
@@ -86,7 +93,13 @@ export default function AccountSelector() {
 				'liferay-one-custom-element[route="my-account"]'
 			)
 		) {
-			window.location.hash = `#/${externalReferenceCode}`;
+			const [, section] = window.location.hash
+				.replace(/^#\/?/, '')
+				.split('/');
+
+			window.location.hash = ACCOUNT_SECTIONS.includes(section)
+				? `#/${externalReferenceCode}/${section}`
+				: `#/${externalReferenceCode}`;
 		}
 
 		window.location.reload();

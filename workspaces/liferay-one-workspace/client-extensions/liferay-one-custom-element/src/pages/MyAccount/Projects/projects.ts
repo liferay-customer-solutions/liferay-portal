@@ -11,4 +11,5 @@ export {
 	UNASSIGNED_PROJECT_ERC,
 } from './utils/constants';
 export {isUnassignedProject} from './utils/isUnassignedProject';
+export {resolveDefaultProject} from './utils/resolveDefaultProject';
 export {resolveProjectId} from './utils/resolveProjectId';

@@ -38,7 +38,7 @@ function Section({children, first, label}: SectionProps) {
 					? undefined
 					: '1px solid var(--color-neutral-2)',
 				gap: 'var(--spacer-1)',
-				padding: first ? '0 var(--spacer-4) 0 0' : '0 var(--spacer-4)',
+				padding: '0 var(--spacer-4)',
 			}}
 		>
 			<span

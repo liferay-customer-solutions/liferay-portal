@@ -9,6 +9,8 @@ import classNames from 'classnames';
 import {memo, useState} from 'react';
 import {translate} from '~/i18n';
 
+import './SearchBar.css';
+
 interface IProps {
 	isBusinessEvent?: boolean;
 	onSearchSubmit: (term: string) => void;
@@ -33,7 +35,7 @@ const SearchBar = ({isBusinessEvent, onSearchSubmit}: IProps) => {
 
 	return (
 		<ClayInput.Group
-			className={classNames('m-0 mr-2', {
+			className={classNames('m-0 mr-2 search-bar', {
 				'rounded shadow-lg': isBusinessEvent,
 			})}
 		>

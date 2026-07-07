@@ -12,6 +12,7 @@ import MyAccountRedirect from './MyAccountRedirect';
 import AccountGuard from './components/AccountGuard/AccountGuard';
 import AccountLayout from './components/AccountLayout/AccountLayout';
 import ProjectLayout from './components/ProjectLayout/ProjectLayout';
+import ProjectRedirect from './components/ProjectRedirect/ProjectRedirect';
 import {accountRoutes, projectDetailRoutes} from './myAccountRoutes';
 
 function MyAccountRoutes() {
@@ -23,6 +24,7 @@ function MyAccountRoutes() {
 				{element: <MyAccountRedirect />, path: 'account-members'},
 				{element: <MyAccountRedirect />, path: 'project-members'},
 				{element: <MyAccountRedirect />, path: 'orders/*'},
+				{element: <ProjectRedirect />, path: 'project/*'},
 				{
 					children: [
 						{

@@ -11,7 +11,7 @@ import {
 	LAST_PROJECT_STORAGE_KEY,
 	UNASSIGNED_PROJECT_ERC,
 	UserProject,
-	resolveProjectId,
+	resolveDefaultProject,
 	useUserProjects,
 } from '~/pages/MyAccount/Projects/projects';
 
@@ -70,12 +70,11 @@ export function ProjectProvider({children}: {children: ReactNode}) {
 			return;
 		}
 
-		const lastProjectId = resolveProjectId();
+		const target = resolveDefaultProject(projects);
 
-		const target =
-			projects.find(
-				(project) => project.externalReferenceCode === lastProjectId
-			) ?? projects[0];
+		if (!target) {
+			return;
+		}
 
 		navigate(
 			`/${accountERC}/project/${target.externalReferenceCode}/products`,
