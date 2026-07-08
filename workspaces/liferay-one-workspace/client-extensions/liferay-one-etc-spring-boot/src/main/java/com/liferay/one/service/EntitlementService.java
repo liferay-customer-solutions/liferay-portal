@@ -15,6 +15,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,7 +23,9 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
@@ -74,12 +77,43 @@ public class EntitlementService extends OneBaseService {
 				"r_contractToEntitlement_c_contractId", contractId);
 		}
 
-		String response = post(
-			getAuthorization(), entitlementJSONObject.toString(),
-			UriComponentsBuilder.fromPath(
-				"/o/c/entitlements"
-			).build(
-			).toUri());
+		String response = null;
+
+		for (int i = 1; i <= _ADD_ENTITLEMENT_MAX_ATTEMPTS; i++) {
+			try {
+				response = post(
+					getAuthorization(), entitlementJSONObject.toString(),
+					UriComponentsBuilder.fromPath(
+						"/o/c/entitlements"
+					).build(
+					).toUri());
+
+				break;
+			}
+			catch (WebClientResponseException webClientResponseException) {
+				HttpStatusCode httpStatusCode =
+					webClientResponseException.getStatusCode();
+
+				if ((httpStatusCode.value() != 400) ||
+					(i == _ADD_ENTITLEMENT_MAX_ATTEMPTS)) {
+
+					throw webClientResponseException;
+				}
+
+				if (_log.isWarnEnabled()) {
+					_log.warn(
+						StringBundler.concat(
+							"Retrying entitlement creation for order item ",
+							commerceOrderItemId, " and entitlement definition ",
+							entitlementDefinitionId, " after attempt ", i));
+				}
+
+				ThreadLocalRandom threadLocalRandom =
+					ThreadLocalRandom.current();
+
+				Thread.sleep(100 + threadLocalRandom.nextLong(300L * i));
+			}
+		}
 
 		if (_log.isInfoEnabled()) {
 			_log.info(
@@ -204,6 +238,8 @@ public class EntitlementService extends OneBaseService {
 
 		return GetterUtil.getLong(customFields.get("contractId"));
 	}
+
+	private static final int _ADD_ENTITLEMENT_MAX_ATTEMPTS = 5;
 
 	private static final Log _log = LogFactory.getLog(EntitlementService.class);
 
