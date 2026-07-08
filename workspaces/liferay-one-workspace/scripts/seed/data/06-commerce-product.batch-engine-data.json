@@ -1992,6 +1992,12 @@
 					}
 				},
 				{
+					"specificationKey": "product-type",
+					"value": {
+						"en_US": "ssa-saas"
+					}
+				},
+				{
 					"specificationKey": "publisher-name",
 					"value": {
 						"en_US": "Liferay, Inc."
