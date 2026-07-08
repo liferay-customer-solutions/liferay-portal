@@ -6,22 +6,23 @@
 import useSWR from 'swr';
 import HeadlessCommerceDeliveryCatalog from '~/services/headless/HeadlessCommerceDeliveryCatalog';
 import {Liferay} from '~/services/liferay/liferay';
+import SearchBuilder from '~/utils/SearchBuilder';
 
-const useDeliveryProductByExternalReferenceCode = (
-	externalReferenceCode: string
-) => {
+const useSSAProduct = () => {
+	const commerceChannelId = Liferay.CommerceContext.commerceChannelId;
+
 	return useSWR(
-		externalReferenceCode
-			? `/delivery-product-by-external-reference-code/${externalReferenceCode}`
-			: null,
+		commerceChannelId ? `/ssa-product/${commerceChannelId}` : null,
 		async () => {
 			const {items} =
 				await HeadlessCommerceDeliveryCatalog.getProductsPage(
-					Liferay.CommerceContext.commerceChannelId,
+					commerceChannelId,
 					new URLSearchParams({
 						'accountId': '-1',
 						'attachments.accountId': '-1',
-						'filter': `externalReferenceCode eq '${externalReferenceCode}'`,
+						'filter': new SearchBuilder()
+							.lambda('specificationValues', 'ssa-saas')
+							.build(),
 						'images.accountId': '-1',
 						'nestedFields':
 							'attachments,categories,images,productSpecifications,skus',
@@ -37,4 +38,4 @@ const useDeliveryProductByExternalReferenceCode = (
 	);
 };
 
-export {useDeliveryProductByExternalReferenceCode};
+export {useSSAProduct};
