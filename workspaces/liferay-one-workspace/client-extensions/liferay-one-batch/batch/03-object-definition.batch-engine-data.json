@@ -969,6 +969,24 @@
 					"type": "String"
 				},
 				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_CONTRACT_OPPORTUNITY_ID",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "en_US",
+					"label": {
+						"en_US": "Opportunity ID"
+					},
+					"name": "opportunityId",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
 					"DBType": "Integer",
 					"businessType": "Integer",
 					"externalReferenceCode": "C_CONTRACT_OVERAGE_BILLING_CADENCE",
@@ -3927,6 +3945,96 @@
 				{
 					"DBType": "String",
 					"businessType": "Text",
+					"externalReferenceCode": "C_PROJECT_AI_HUB_ACCOUNT_NAME",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "en_US",
+					"label": {
+						"en_US": "AI Hub Account Name"
+					},
+					"name": "aiHubAccountName",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_PROJECT_ALLOWED_EMAIL_DOMAINS",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "en_US",
+					"label": {
+						"en_US": "Allowed Email Domains"
+					},
+					"name": "allowedEmailDomains",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_PROJECT_DATA_CENTER_LOCATION",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "en_US",
+					"label": {
+						"en_US": "Data Center Location"
+					},
+					"name": "dataCenterLocation",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_PROJECT_FRIENDLY_WORKSPACE_URL",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "en_US",
+					"label": {
+						"en_US": "Friendly Workspace URL"
+					},
+					"name": "friendlyWorkspaceURL",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_PROJECT_LIFERAY_VERSION",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "en_US",
+					"label": {
+						"en_US": "Liferay Version"
+					},
+					"name": "liferayVersion",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
 					"externalReferenceCode": "C_PROJECT_NAME",
 					"indexed": true,
 					"indexedAsKeyword": true,
@@ -3938,6 +4046,24 @@
 					"objectFieldSettings": [
 					],
 					"required": true,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_PROJECT_SECURITY_CONTACT_EMAIL_ADDRESS",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "en_US",
+					"label": {
+						"en_US": "Security Contact Email Address"
+					},
+					"name": "securityContactEmailAddress",
+					"objectFieldSettings": [
+					],
+					"required": false,
 					"state": false,
 					"system": false,
 					"type": "String"

@@ -366,6 +366,19 @@
 	{
 		"dataType": 15,
 		"modelResource": "com.liferay.commerce.model.CommerceOrder",
+		"name": "parentOpportunityId",
+		"properties": {
+			"hidden": false,
+			"indexType": 2,
+			"localizeField": false,
+			"localizeFieldName": true,
+			"secret": false,
+			"visibleWithUpdatePermission": false
+		}
+	},
+	{
+		"dataType": 15,
+		"modelResource": "com.liferay.commerce.model.CommerceOrder",
 		"name": "partnerAccount",
 		"properties": {
 			"hidden": false,
@@ -448,6 +461,19 @@
 		"properties": {
 			"hidden": false,
 			"indexType": 0,
+			"localizeField": false,
+			"localizeFieldName": true,
+			"secret": false,
+			"visibleWithUpdatePermission": false
+		}
+	},
+	{
+		"dataType": 15,
+		"modelResource": "com.liferay.commerce.model.CommerceOrder",
+		"name": "salesforceProjectId",
+		"properties": {
+			"hidden": false,
+			"indexType": 2,
 			"localizeField": false,
 			"localizeFieldName": true,
 			"secret": false,

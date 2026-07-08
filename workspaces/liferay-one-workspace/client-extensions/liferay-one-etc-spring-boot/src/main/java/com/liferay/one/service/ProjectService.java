@@ -54,9 +54,23 @@ public class ProjectService extends OneBaseService {
 			com.liferay.one.salesforce.model.Project salesforceProject)
 		throws Exception {
 
+		upsertProject(null, salesforceProject);
+	}
+
+	public void upsertProject(
+			String accountExternalReferenceCode,
+			com.liferay.one.salesforce.model.Project salesforceProject)
+		throws Exception {
+
+		String accountEntryERC = salesforceProject.getAccountId();
+
+		if (Validator.isNull(accountEntryERC)) {
+			accountEntryERC = accountExternalReferenceCode;
+		}
+
 		if (Validator.isNull(salesforceProject.getId()) ||
 			Validator.isNull(salesforceProject.getName()) ||
-			Validator.isNull(salesforceProject.getAccountId())) {
+			Validator.isNull(accountEntryERC)) {
 
 			if (_log.isWarnEnabled()) {
 				_log.warn(
@@ -67,15 +81,51 @@ public class ProjectService extends OneBaseService {
 			return;
 		}
 
-		JSONObject jsonObject = new JSONObject(
-		).put(
-			"externalReferenceCode", salesforceProject.getId()
-		).put(
+		JSONObject jsonObject = new JSONObject();
+
+		if (Validator.isNotNull(salesforceProject.getAIHubAccountName())) {
+			jsonObject.put(
+				"aiHubAccountName", salesforceProject.getAIHubAccountName());
+		}
+
+		if (Validator.isNotNull(salesforceProject.getAllowedEmailDomains())) {
+			jsonObject.put(
+				"allowedEmailDomains",
+				salesforceProject.getAllowedEmailDomains());
+		}
+
+		if (Validator.isNotNull(salesforceProject.getDataCenterLocation())) {
+			jsonObject.put(
+				"dataCenterLocation",
+				salesforceProject.getDataCenterLocation());
+		}
+
+		jsonObject.put("externalReferenceCode", salesforceProject.getId());
+
+		if (Validator.isNotNull(salesforceProject.getFriendlyWorkspaceURL())) {
+			jsonObject.put(
+				"friendlyWorkspaceURL",
+				salesforceProject.getFriendlyWorkspaceURL());
+		}
+
+		if (Validator.isNotNull(salesforceProject.getLiferayVersion())) {
+			jsonObject.put(
+				"liferayVersion", salesforceProject.getLiferayVersion());
+		}
+
+		jsonObject.put(
 			"name", salesforceProject.getName()
 		).put(
-			"r_accountEntryToProject_accountEntryERC",
-			salesforceProject.getAccountId()
+			"r_accountEntryToProject_accountEntryERC", accountEntryERC
 		);
+
+		if (Validator.isNotNull(
+				salesforceProject.getSecurityContactEmailAddress())) {
+
+			jsonObject.put(
+				"securityContactEmailAddress",
+				salesforceProject.getSecurityContactEmailAddress());
+		}
 
 		URI uri = UriComponentsBuilder.fromPath(
 			"/o/c/projects/by-external-reference-code/" +
@@ -102,14 +152,26 @@ public class ProjectService extends OneBaseService {
 			String authorization, String externalReferenceCode)
 		throws Exception {
 
-		String response = get(
-			authorization,
-			UriComponentsBuilder.fromPath(
-				"/o/c/projects/by-external-reference-code" +
-					"/{externalReferenceCode}"
-			).buildAndExpand(
-				externalReferenceCode
-			).toUri());
+		String response = null;
+
+		try {
+			response = get(
+				authorization,
+				UriComponentsBuilder.fromPath(
+					"/o/c/projects/by-external-reference-code" +
+						"/{externalReferenceCode}"
+				).buildAndExpand(
+					externalReferenceCode
+				).toUri());
+		}
+		catch (WebClientResponseException webClientResponseException) {
+			int statusCode = webClientResponseException.getStatusCode(
+			).value();
+
+			if (statusCode != HttpStatus.NOT_FOUND.value()) {
+				throw webClientResponseException;
+			}
+		}
 
 		if (Validator.isNull(response)) {
 			return null;

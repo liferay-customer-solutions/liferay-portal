@@ -57,12 +57,46 @@ public class AccountService extends OneBaseService {
 	}
 
 	public void addAccountUserAccount(
+			long accountId, Long accountRoleId, long userId)
+		throws Exception {
+
+		UserAccount userAccount = _userAccountService.getUserAccount(userId);
+
+		post(
+			getAuthorization(), StringPool.BLANK,
+			UriComponentsBuilder.fromPath(
+				"/o/headless-admin-user/v1.0/accounts/{accountId}" +
+					"/user-accounts/by-email-address/{emailAddress}"
+			).buildAndExpand(
+				accountId, userAccount.getEmailAddress()
+			).toUri());
+
+		if (accountRoleId != null) {
+			addAccountUserAccountRole(accountId, accountRoleId, userId);
+		}
+	}
+
+	public void addAccountUserAccount(
 			String externalReferenceCode, Jwt jwt, long userId)
 		throws Exception {
 
 		Account account = getAccount(externalReferenceCode, jwt);
 
 		addAccountUserAccount(account.getId(), jwt, userId);
+	}
+
+	public void addAccountUserAccountRole(
+			long accountId, long accountRoleId, long userId)
+		throws Exception {
+
+		post(
+			getAuthorization(), StringPool.BLANK,
+			UriComponentsBuilder.fromPath(
+				"/o/headless-admin-user/v1.0/accounts/{accountId}" +
+					"/account-roles/{accountRoleId}/user-accounts/{userId}"
+			).buildAndExpand(
+				accountId, accountRoleId, userId
+			).toUri());
 	}
 
 	public void addAccountUserAccountRole(
@@ -102,6 +136,47 @@ public class AccountService extends OneBaseService {
 
 			throw problemException;
 		}
+	}
+
+	public Account fetchAccountByExternalReferenceCode(
+			String externalReferenceCode)
+		throws Exception {
+
+		AccountResource accountResource = AccountResource.builder(
+		).endpoint(
+			lxcDXPMainDomain, lxcDXPServerProtocol
+		).header(
+			HttpHeaders.AUTHORIZATION, getAuthorization()
+		).build();
+
+		try {
+			return accountResource.getAccountByExternalReferenceCode(
+				externalReferenceCode);
+		}
+		catch (Problem.ProblemException problemException) {
+			Problem problem = problemException.getProblem();
+
+			if ((problem != null) && isNotFound(problem.getStatus())) {
+				return null;
+			}
+
+			throw problemException;
+		}
+	}
+
+	public Long fetchAccountRoleId(long accountId, String name)
+		throws Exception {
+
+		List<Long> accountRoleIds = getAllItems(
+			"/o/headless-admin-user/v1.0/accounts/" + accountId +
+				"/account-roles",
+			"name eq '" + name + "'", jsonObject -> jsonObject.getLong("id"));
+
+		if (accountRoleIds.isEmpty()) {
+			return null;
+		}
+
+		return accountRoleIds.get(0);
 	}
 
 	public Account getAccount(long accountEntryId, Jwt jwt) throws Exception {
@@ -147,6 +222,30 @@ public class AccountService extends OneBaseService {
 		return null;
 	}
 
+	public boolean hasDuplicateAccountName(
+			String name, String externalReferenceCode)
+		throws Exception {
+
+		if (Validator.isNull(name)) {
+			return false;
+		}
+
+		List<String> externalReferenceCodes = getAllItems(
+			"/o/headless-admin-user/v1.0/accounts",
+			"name eq '" + StringUtil.replace(name, '\'', "''") + "'",
+			jsonObject -> jsonObject.optString("externalReferenceCode"));
+
+		for (String otherExternalReferenceCode : externalReferenceCodes) {
+			if (!Objects.equals(
+					otherExternalReferenceCode, externalReferenceCode)) {
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public void removeAccountUserAccount(
 			String externalReferenceCode, Jwt jwt, long userId)
 		throws Exception {
@@ -184,52 +283,22 @@ public class AccountService extends OneBaseService {
 			com.liferay.one.salesforce.model.Account salesforceAccount)
 		throws Exception {
 
-		AccountResource accountResource = AccountResource.builder(
-		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
-		).header(
-			HttpHeaders.AUTHORIZATION, getAuthorization()
-		).build();
+		_upsertAccount(salesforceAccount);
+	}
 
-		Account account = new Account();
+	public void upsertAccount(
+			com.liferay.one.salesforce.model.Account salesforceAccount,
+			String soldBy)
+		throws Exception {
 
-		account.setExternalReferenceCode(salesforceAccount::getId);
-		account.setStatus(() -> WorkflowConstants.STATUS_APPROVED);
-		account.setType(() -> Account.Type.BUSINESS);
+		Account account = _upsertAccount(salesforceAccount);
 
-		if (Validator.isNotNull(salesforceAccount.getName())) {
-			account.setName(salesforceAccount::getName);
+		if (account == null) {
+			return;
 		}
 
-		if (Validator.isNotNull(salesforceAccount.getDescription())) {
-			account.setDescription(salesforceAccount::getDescription);
-		}
-
-		_setAccountContactInformation(account, salesforceAccount);
-
-		_setCustomFields(account, salesforceAccount);
-
-		_setPostalAddresses(account, salesforceAccount);
-
-		try {
-			_upsertAccount(accountResource, account, salesforceAccount.getId());
-		}
-		catch (Problem.ProblemException problemException) {
-			Problem problem = problemException.getProblem();
-
-			if ((problem == null) ||
-				!Objects.equals(problem.getTitle(), "The web URL is invalid")) {
-
-				throw problemException;
-			}
-
-			AccountContactInformation accountContactInformation =
-				account.getAccountContactInformation();
-
-			accountContactInformation.setWebUrls(() -> null);
-
-			_upsertAccount(accountResource, account, salesforceAccount.getId());
-		}
+		_setDefaultLicensingCustomFields(
+			account, salesforceAccount.getBillingCountry(), soldBy);
 	}
 
 	private AccountRoleResource _buildAccountRoleResource() {
@@ -323,21 +392,58 @@ public class AccountService extends OneBaseService {
 		Account account,
 		com.liferay.one.salesforce.model.Account salesforceAccount) {
 
-		if (Validator.isNull(salesforceAccount.getAccountTier())) {
+		List<CustomField> customFields = new ArrayList<>();
+
+		if (Validator.isNotNull(salesforceAccount.getAccountTier())) {
+			customFields.add(
+				_toCustomField(
+					"accountTier", salesforceAccount.getAccountTier()));
+		}
+
+		if (customFields.isEmpty()) {
 			return;
 		}
 
-		CustomField customField = new CustomField();
+		account.setCustomFields(() -> customFields.toArray(new CustomField[0]));
+	}
 
-		customField.setName(() -> "accountTier");
+	private void _setDefaultLicensingCustomFields(
+			Account account, String billingCountry, String soldBy)
+		throws Exception {
 
-		CustomValue customValue = new CustomValue();
+		List<CustomField> customFields = new ArrayList<>();
 
-		customValue.setData(salesforceAccount::getAccountTier);
+		if (Validator.isNull(billingCountry) ||
+			(!billingCountry.equals("Ireland") &&
+			 !billingCountry.equals("United Kingdom"))) {
 
-		customField.setCustomValue(() -> customValue);
+			customFields.add(_toCustomField("allowComplimentary", true));
+		}
 
-		account.setCustomFields(() -> new CustomField[] {customField});
+		if (Objects.equals(soldBy, "Liferay Brazil") ||
+			Objects.equals(soldBy, "Liferay China") ||
+			Objects.equals(soldBy, "Liferay India")) {
+
+			customFields.add(_toCustomField("allowPermanentLicenses", false));
+		}
+
+		if (customFields.isEmpty()) {
+			return;
+		}
+
+		AccountResource accountResource = AccountResource.builder(
+		).endpoint(
+			lxcDXPMainDomain, lxcDXPServerProtocol
+		).header(
+			HttpHeaders.AUTHORIZATION, getAuthorization()
+		).build();
+
+		Account patchAccount = new Account();
+
+		patchAccount.setCustomFields(
+			() -> customFields.toArray(new CustomField[0]));
+
+		accountResource.patchAccount(account.getId(), patchAccount);
 	}
 
 	private void _setPostalAddresses(
@@ -383,6 +489,20 @@ public class AccountService extends OneBaseService {
 		}
 	}
 
+	private CustomField _toCustomField(String name, Object value) {
+		CustomField customField = new CustomField();
+
+		customField.setName(() -> name);
+
+		CustomValue customValue = new CustomValue();
+
+		customValue.setData(() -> value);
+
+		customField.setCustomValue(() -> customValue);
+
+		return customField;
+	}
+
 	private PostalAddress _toPostalAddress(
 		String addressType, String city, String country,
 		String externalReferenceCode, String name, String postalCode,
@@ -394,16 +514,19 @@ public class AccountService extends OneBaseService {
 			return null;
 		}
 
+		String truncatedCity = _truncate(city, _MAX_CITY_LENGTH);
+		String truncatedStreet = _truncate(street, _MAX_STREET_LENGTH);
+
 		PostalAddress postalAddress = new PostalAddress();
 
 		postalAddress.setAddressCountry(() -> country);
-		postalAddress.setAddressLocality(() -> city);
+		postalAddress.setAddressLocality(() -> truncatedCity);
 		postalAddress.setAddressRegion(() -> region);
 		postalAddress.setAddressType(() -> addressType);
 		postalAddress.setExternalReferenceCode(() -> externalReferenceCode);
 		postalAddress.setName(() -> name);
 		postalAddress.setPostalCode(() -> postalCode);
-		postalAddress.setStreetAddressLine1(() -> street);
+		postalAddress.setStreetAddressLine1(() -> truncatedStreet);
 
 		return postalAddress;
 	}
@@ -426,7 +549,69 @@ public class AccountService extends OneBaseService {
 		return "https://" + website;
 	}
 
-	private void _upsertAccount(
+	private String _truncate(String value, int maxLength) {
+		if ((value != null) && (value.length() > maxLength)) {
+			return value.substring(0, maxLength);
+		}
+
+		return value;
+	}
+
+	private Account _upsertAccount(
+			com.liferay.one.salesforce.model.Account salesforceAccount)
+		throws Exception {
+
+		AccountResource accountResource = AccountResource.builder(
+		).endpoint(
+			lxcDXPMainDomain, lxcDXPServerProtocol
+		).header(
+			HttpHeaders.AUTHORIZATION, getAuthorization()
+		).build();
+
+		Account account = new Account();
+
+		account.setExternalReferenceCode(salesforceAccount::getId);
+		account.setStatus(() -> WorkflowConstants.STATUS_APPROVED);
+		account.setType(() -> Account.Type.BUSINESS);
+
+		if (Validator.isNotNull(salesforceAccount.getName())) {
+			account.setName(salesforceAccount::getName);
+		}
+
+		if (Validator.isNotNull(salesforceAccount.getDescription())) {
+			account.setDescription(salesforceAccount::getDescription);
+		}
+
+		_setAccountContactInformation(account, salesforceAccount);
+
+		_setCustomFields(account, salesforceAccount);
+
+		_setPostalAddresses(account, salesforceAccount);
+
+		try {
+			return _upsertAccount(
+				accountResource, account, salesforceAccount.getId());
+		}
+		catch (Problem.ProblemException problemException) {
+			Problem problem = problemException.getProblem();
+
+			if ((problem == null) ||
+				!Objects.equals(problem.getTitle(), "The web URL is invalid")) {
+
+				throw problemException;
+			}
+
+			AccountContactInformation accountContactInformation =
+				account.getAccountContactInformation();
+
+			accountContactInformation.setWebUrls(() -> null);
+
+			return _upsertAccount(
+				accountResource, account, salesforceAccount.getId());
+		}
+	}
+
+	private Account _upsertAccount(
 			AccountResource accountResource, Account account,
 			String externalReferenceCode)
 		throws Exception {
@@ -434,19 +619,24 @@ public class AccountService extends OneBaseService {
 		try {
 			accountResource.patchAccountByExternalReferenceCode(
 				externalReferenceCode, account);
+
+			return null;
 		}
 		catch (Problem.ProblemException problemException) {
 			Problem problem = problemException.getProblem();
 
 			if ((problem != null) && isNotFound(problem.getStatus())) {
-				accountResource.putAccountByExternalReferenceCode(
+				return accountResource.putAccountByExternalReferenceCode(
 					externalReferenceCode, account);
 			}
-			else {
-				throw problemException;
-			}
+
+			throw problemException;
 		}
 	}
+
+	private static final int _MAX_CITY_LENGTH = 75;
+
+	private static final int _MAX_STREET_LENGTH = 255;
 
 	private static final int _PAGE_SIZE = 500;
 

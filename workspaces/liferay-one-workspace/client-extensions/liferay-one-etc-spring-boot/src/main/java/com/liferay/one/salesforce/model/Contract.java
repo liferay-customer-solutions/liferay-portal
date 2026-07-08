@@ -16,6 +16,7 @@ public class Contract {
 		_accountId = jsonObject.optString("AccountId");
 		_endDate = jsonObject.optString("EndDate");
 		_id = jsonObject.optString("Id");
+		_opportunityId = jsonObject.optString("SBQQ__Opportunity__c");
 		_startDate = jsonObject.optString("StartDate");
 
 		if (jsonObject.isNull("ContractTerm")) {
@@ -42,6 +43,10 @@ public class Contract {
 		return _id;
 	}
 
+	public String getOpportunityId() {
+		return _opportunityId;
+	}
+
 	public String getStartDate() {
 		return _startDate;
 	}
@@ -50,6 +55,7 @@ public class Contract {
 	private final Integer _contractTerm;
 	private final String _endDate;
 	private final String _id;
+	private final String _opportunityId;
 	private final String _startDate;
 
 }

@@ -34,6 +34,40 @@ public class Account {
 		_website = jsonObject.optString("Website");
 	}
 
+	public Account(
+		JSONObject accountJSONObject, JSONObject opportunityJSONObject) {
+
+		_accountTier = accountJSONObject.optString("Account_Tier__c");
+		_activeSubscription = false;
+		_billingCity = opportunityJSONObject.optString(
+			"AccountAddress_Billing_Address__r.City__c");
+		_billingCountry = opportunityJSONObject.optString(
+			"AccountAddress_Billing_Address__r.Country__c");
+		_billingPostalCode = opportunityJSONObject.optString(
+			"AccountAddress_Billing_Address__r.Postal_Code__c");
+		_billingState = opportunityJSONObject.optString(
+			"AccountAddress_Billing_Address__r.State__c");
+		_billingStreet = opportunityJSONObject.optString(
+			"AccountAddress_Billing_Address__r.Street__c");
+		_description = accountJSONObject.optString("Description");
+		_fax = accountJSONObject.optString("Fax");
+		_id = accountJSONObject.optString("Id");
+		_name = accountJSONObject.optString("Name");
+		_ownerEmail = accountJSONObject.optString("Owner.Email");
+		_phone = accountJSONObject.optString("Phone");
+		_shippingCity = opportunityJSONObject.optString(
+			"AccountAddress_Shipping_Address__r.City__c");
+		_shippingCountry = opportunityJSONObject.optString(
+			"AccountAddress_Shipping_Address__r.Country__c");
+		_shippingPostalCode = opportunityJSONObject.optString(
+			"AccountAddress_Shipping_Address__r.Postal_Code__c");
+		_shippingState = opportunityJSONObject.optString(
+			"AccountAddress_Shipping_Address__r.State__c");
+		_shippingStreet = opportunityJSONObject.optString(
+			"AccountAddress_Shipping_Address__r.Street__c");
+		_website = accountJSONObject.optString("Website");
+	}
+
 	public String getAccountTier() {
 		return _accountTier;
 	}

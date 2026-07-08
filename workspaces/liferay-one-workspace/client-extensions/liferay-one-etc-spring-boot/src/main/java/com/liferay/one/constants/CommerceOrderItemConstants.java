@@ -10,6 +10,8 @@ package com.liferay.one.constants;
  */
 public class CommerceOrderItemConstants {
 
+	public static final String STATUS_APPROVED = "Approved";
+
 	public static final String STATUS_CANCELED = "Canceled";
 
 }

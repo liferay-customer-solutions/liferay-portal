@@ -43,6 +43,10 @@ public class ProjectMembershipService extends OneBaseService {
 		Project project = _projectService.fetchProject(
 			projectExternalReferenceCode, jwt);
 
+		if (project == null) {
+			return;
+		}
+
 		if (!_userAccountService.hasAccountUserAccount(
 				project.getAccountId(), userId)) {
 
@@ -66,6 +70,53 @@ public class ProjectMembershipService extends OneBaseService {
 
 		post(
 			getAuthorization(jwt), jsonObject.toString(),
+			UriComponentsBuilder.fromPath(
+				"/o/c/projectmemberships"
+			).build(
+			).toUri());
+	}
+
+	public void addProjectMembership(
+			long accountId, String projectExternalReferenceCode, long userId)
+		throws Exception {
+
+		addProjectMembership(
+			accountId, projectExternalReferenceCode,
+			_PROJECT_USER_ROLE_EXTERNAL_REFERENCE_CODE, userId);
+	}
+
+	public void addProjectMembership(
+			long accountId, String projectExternalReferenceCode,
+			String roleExternalReferenceCode, long userId)
+		throws Exception {
+
+		List<ProjectMembership> projectMemberships = getAllItems(
+			"/o/c/projectmemberships",
+			StringBundler.concat(
+				"r_userToProjectMembership_userId eq '", userId,
+				"' and r_projectToProjectMembership_c_projectERC eq '",
+				projectExternalReferenceCode, "'"),
+			ProjectMembership::new);
+
+		if (!projectMemberships.isEmpty()) {
+			return;
+		}
+
+		JSONObject jsonObject = new JSONObject();
+
+		jsonObject.put(
+			"r_accountEntryToProjectMembership_accountEntryId", accountId
+		).put(
+			"r_projectToProjectMembership_c_projectERC",
+			projectExternalReferenceCode
+		).put(
+			"r_userToProjectMembership_userId", userId
+		).put(
+			"roleExternalReferenceCode", roleExternalReferenceCode
+		);
+
+		post(
+			getAuthorization(), jsonObject.toString(),
 			UriComponentsBuilder.fromPath(
 				"/o/c/projectmemberships"
 			).build(
@@ -163,6 +214,9 @@ public class ProjectMembershipService extends OneBaseService {
 			"/o/c/projectmemberships", filterString, ProjectMembership::new,
 			jwt);
 	}
+
+	private static final String _PROJECT_USER_ROLE_EXTERNAL_REFERENCE_CODE =
+		"C_PROJECT_USER";
 
 	@Autowired
 	private AccountService _accountService;

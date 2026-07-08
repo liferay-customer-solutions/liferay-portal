@@ -9,6 +9,7 @@ import com.liferay.headless.admin.user.client.dto.v1_0.Account;
 import com.liferay.headless.admin.user.client.dto.v1_0.AccountBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
 import com.liferay.one.constants.EntitlementConstants;
+import com.liferay.one.constants.OpportunityConstants;
 import com.liferay.one.constants.RoleConstants;
 import com.liferay.one.constants.SupportRegionConstants;
 import com.liferay.one.model.Project;
@@ -20,6 +21,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.SetUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.time.Year;
@@ -29,6 +31,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import org.json.JSONObject;
 
@@ -123,6 +128,43 @@ public class ProvisioningEmailService extends OneBaseService {
 		}
 
 		_sendWelcomeEmail(userAccount, accounts, projects);
+	}
+
+	public void sendWelcomeEmails(
+		Account account, String opportunityType, List<Long> userIds) {
+
+		if (StringUtil.equalsIgnoreCase(
+				opportunityType, OpportunityConstants.TYPE_NEW_BUSINESS) ||
+			StringUtil.equalsIgnoreCase(
+				opportunityType,
+				OpportunityConstants.TYPE_NEW_PROJECT_EXISTING_BUSINESS)) {
+
+			try {
+				sendAutoProvisionedWelcomeEmail(account);
+			}
+			catch (Exception exception) {
+				_log.error(
+					"Unable to send the auto provisioned welcome email for " +
+						"account " + account.getExternalReferenceCode(),
+					exception);
+			}
+		}
+		else if (StringUtil.equalsIgnoreCase(
+					opportunityType,
+					OpportunityConstants.TYPE_EXISTING_BUSINESS)) {
+
+			for (Long userId : userIds) {
+				try {
+					sendAssignedWelcomeEmail(userId, account);
+				}
+				catch (Exception exception) {
+					_log.error(
+						"Unable to send the assigned welcome email to user " +
+							userId,
+						exception);
+				}
+			}
+		}
 	}
 
 	private String _getLanguageId(UserAccount userAccount) {
@@ -442,6 +484,9 @@ public class ProvisioningEmailService extends OneBaseService {
 	}
 
 	private static final String _DEFAULT_LANGUAGE_ID = "en_US";
+
+	private static final Log _log = LogFactory.getLog(
+		ProvisioningEmailService.class);
 
 	private static final Set<String> _supportedLanguageIds = SetUtil.fromArray(
 		"en_US", "es_ES", "ja_JP", "pt_BR");

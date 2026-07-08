@@ -7,6 +7,7 @@ liferay-one-etc-spring-boot-oahs:
     scopes:
         -   Liferay.Headless.Admin.User.everything
         -   Liferay.Headless.Commerce.Admin.Catalog.everything
+        -   Liferay.Headless.Commerce.Admin.Channel.everything.read
         -   Liferay.Headless.Commerce.Admin.Order.everything
         -   Liferay.Headless.Commerce.Admin.Pricing.everything
         -   Liferay.Notification.REST.everything
@@ -16,6 +17,7 @@ liferay-one-etc-spring-boot-oahs:
         -   c_licensekey.everything.read
         -   c_project.everything
         -   c_projectmembership.everything
+        -   c_property.everything
         -   c_subscriptionentry.everything
         -   c_ticketattachment.everything
         -   c_trialextensionrequest.everything

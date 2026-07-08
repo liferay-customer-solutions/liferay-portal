@@ -38,6 +38,8 @@ public class OrderItem {
 		Map<String, Object> customFieldValues = _getCustomFieldValues(
 			orderItem);
 
+		_effectiveEndDate = GetterUtil.getString(
+			customFieldValues.get("effectiveEndDate"));
 		_endDate = GetterUtil.getString(customFieldValues.get("endDate"));
 		_sizing = GetterUtil.getInteger(customFieldValues.get("sizing"));
 		_startDate = GetterUtil.getString(customFieldValues.get("startDate"));
@@ -50,6 +52,10 @@ public class OrderItem {
 
 	public long getCProductId() {
 		return _cProductId;
+	}
+
+	public String getEffectiveEndDate() {
+		return _effectiveEndDate;
 	}
 
 	public String getEndDate() {
@@ -160,6 +166,7 @@ public class OrderItem {
 
 	private final long _commerceOrderItemId;
 	private final long _cProductId;
+	private final String _effectiveEndDate;
 	private final String _endDate;
 	private final String _name;
 	private final long _orderId;

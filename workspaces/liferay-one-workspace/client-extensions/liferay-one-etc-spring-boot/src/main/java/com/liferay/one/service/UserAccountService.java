@@ -10,11 +10,14 @@ import com.liferay.headless.admin.user.client.pagination.Page;
 import com.liferay.headless.admin.user.client.pagination.Pagination;
 import com.liferay.headless.admin.user.client.problem.Problem;
 import com.liferay.headless.admin.user.client.resource.v1_0.UserAccountResource;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +26,62 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class UserAccountService extends OneBaseService {
+
+	public UserAccount addUserAccount(
+			String emailAddress, String familyName, String givenName)
+		throws Exception {
+
+		UserAccountResource userAccountResource = _buildUserAccountResource();
+
+		UserAccount userAccount = new UserAccount();
+
+		userAccount.setEmailAddress(() -> emailAddress);
+
+		if (Validator.isNotNull(familyName)) {
+			userAccount.setFamilyName(() -> familyName);
+		}
+
+		if (Validator.isNotNull(givenName)) {
+			userAccount.setGivenName(() -> givenName);
+		}
+
+		try {
+			return userAccountResource.postUserAccount(null, null, userAccount);
+		}
+		catch (Problem.ProblemException problemException) {
+			Problem problem = problemException.getProblem();
+
+			if ((problem != null) &&
+				Objects.equals(
+					problem.getStatus(), HttpStatus.CONFLICT.name())) {
+
+				return getUserAccountByEmailAddress(emailAddress);
+			}
+
+			throw problemException;
+		}
+	}
+
+	public UserAccount fetchUserAccountByEmailAddress(String emailAddress)
+		throws Exception {
+
+		UserAccountResource userAccountResource = _buildUserAccountResource(
+			"nestedFields", "accountBriefs,customFields,organizationBriefs");
+
+		try {
+			return userAccountResource.getUserAccountByEmailAddress(
+				emailAddress);
+		}
+		catch (Problem.ProblemException problemException) {
+			Problem problem = problemException.getProblem();
+
+			if ((problem != null) && isNotFound(problem.getStatus())) {
+				return null;
+			}
+
+			throw problemException;
+		}
+	}
 
 	public List<UserAccount> getAccountUserAccounts(long accountId)
 		throws Exception {
@@ -92,6 +151,20 @@ public class UserAccountService extends OneBaseService {
 
 			throw problemException;
 		}
+	}
+
+	public boolean hasAccountUserAccounts(long accountId) throws Exception {
+		UserAccountResource userAccountResource = _buildUserAccountResource();
+
+		Page<UserAccount> userAccountsPage =
+			userAccountResource.getAccountUserAccountsPage(
+				accountId, null, null, Pagination.of(1, 1), null);
+
+		if (userAccountsPage.getTotalCount() > 0) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private UserAccountResource _buildUserAccountResource(

@@ -10,6 +10,9 @@ package com.liferay.one.constants;
  */
 public class PropertyConstants {
 
+	public static final String NAME_CLOUD_NATIVE_SUBDOMAIN =
+		"cloud-native:subdomain";
+
 	public static final String NAME_OKTA_APPLICATION = "okta:application";
 
 }

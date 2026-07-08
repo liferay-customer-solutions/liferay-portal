@@ -6,11 +6,13 @@
 package com.liferay.one.service;
 
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Order;
+import com.liferay.one.constants.CommerceOrderItemConstants;
 import com.liferay.one.exception.DuplicateEntitlementException;
 import com.liferay.one.model.Entitlement;
 import com.liferay.one.model.EntitlementDefinition;
 import com.liferay.one.model.OrderItem;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 
 import java.util.List;
@@ -32,7 +34,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class EntitlementService extends OneBaseService {
 
 	public Entitlement addEntitlement(
-			long commerceOrderItemId, long contractId,
+			long accountEntryId, long commerceOrderItemId, long contractId,
 			long entitlementDefinitionId, String endDate, String grantType,
 			Double maxQuantity, String name, Double quantity, String startDate)
 		throws Exception {
@@ -69,6 +71,11 @@ public class EntitlementService extends OneBaseService {
 			"startDate", startDate
 		);
 
+		if (accountEntryId > 0) {
+			entitlementJSONObject.put(
+				"r_accountEntryToEntitlement_accountEntryId", accountEntryId);
+		}
+
 		if (contractId > 0) {
 			entitlementJSONObject.put(
 				"r_contractToEntitlement_c_contractId", contractId);
@@ -81,14 +88,23 @@ public class EntitlementService extends OneBaseService {
 			).build(
 			).toUri());
 
-		if (_log.isInfoEnabled()) {
-			_log.info(
-				StringBundler.concat(
-					"Added entitlement for order item ", commerceOrderItemId,
-					" from entitlement definition ", entitlementDefinitionId));
-		}
-
 		return new Entitlement(new JSONObject(response));
+	}
+
+	public void deleteEntitlements(long commerceOrderItemId) throws Exception {
+		List<Entitlement> entitlements = getEntitlements(
+			StringBundler.concat(
+				"r_commerceOrderItemToEntitlement_commerceOrderItemId eq '",
+				commerceOrderItemId, "'"));
+
+		for (Entitlement entitlement : entitlements) {
+			delete(
+				getAuthorization(), StringPool.BLANK,
+				UriComponentsBuilder.fromPath(
+					"/o/c/entitlements/" + entitlement.getEntitlementId()
+				).build(
+				).toUri());
+		}
 	}
 
 	public Entitlement fetchEntitlement(
@@ -122,6 +138,18 @@ public class EntitlementService extends OneBaseService {
 			return;
 		}
 
+		if (CommerceOrderItemConstants.STATUS_CANCELED.equals(
+				orderItem.getStatus())) {
+
+			if (_log.isInfoEnabled()) {
+				_log.info(
+					"Skipping entitlement generation for canceled order item " +
+						commerceOrderItemId);
+			}
+
+			return;
+		}
+
 		List<EntitlementDefinition> entitlementDefinitions =
 			_entitlementDefinitionService.getEntitlementDefinitions(
 				StringBundler.concat(
@@ -129,14 +157,18 @@ public class EntitlementService extends OneBaseService {
 					orderItem.getCProductId(), "') and (active eq true)"),
 				orderItem.getProductOptions());
 
-		long contractId = _getContractId(orderItem);
+		Order order = _commerceOrderService.fetchCommerceOrder(
+			orderItem.getOrderId());
+
+		long accountEntryId = _getAccountEntryId(order);
+		long contractId = _getContractId(order);
 
 		for (EntitlementDefinition entitlementDefinition :
 				entitlementDefinitions) {
 
 			try {
 				addEntitlement(
-					commerceOrderItemId, contractId,
+					accountEntryId, commerceOrderItemId, contractId,
 					entitlementDefinition.getEntitlementDefinitionId(),
 					orderItem.getEndDate(),
 					entitlementDefinition.getGrantType(), null,
@@ -191,16 +223,25 @@ public class EntitlementService extends OneBaseService {
 		).isEmpty();
 	}
 
-	private long _getContractId(OrderItem orderItem) throws Exception {
-		Order order = _commerceOrderService.fetchCommerceOrder(
-			orderItem.getOrderId());
-
+	private long _getAccountEntryId(Order order) {
 		if (order == null) {
 			return 0;
 		}
 
-		Map<String, String> customFields =
-			(Map<String, String>)order.getCustomFields();
+		return GetterUtil.getLong(order.getAccountId());
+	}
+
+	private long _getContractId(Order order) {
+		if (order == null) {
+			return 0;
+		}
+
+		Map<String, Object> customFields =
+			(Map<String, Object>)order.getCustomFields();
+
+		if (customFields == null) {
+			return 0;
+		}
 
 		return GetterUtil.getLong(customFields.get("contractId"));
 	}

@@ -6,6 +6,8 @@
 package com.liferay.one.service;
 
 import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.Product;
+import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.ProductConfiguration;
+import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.ProductShippingConfiguration;
 import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.Sku;
 import com.liferay.headless.commerce.admin.catalog.client.problem.Problem;
 import com.liferay.headless.commerce.admin.catalog.client.resource.v1_0.ProductResource;
@@ -42,10 +44,26 @@ public class CommerceProductService extends OneBaseService {
 		product.setName(() -> Collections.singletonMap("en_US", name));
 		product.setProductType(() -> CommerceProductConstants.TYPE_SIMPLE);
 
+		ProductShippingConfiguration productShippingConfiguration =
+			new ProductShippingConfiguration();
+
+		productShippingConfiguration.setShippable(() -> Boolean.FALSE);
+
+		ProductConfiguration productConfiguration = new ProductConfiguration();
+
+		productConfiguration.setProductShippingConfiguration(
+			() -> productShippingConfiguration);
+
+		product.setProductConfiguration(() -> productConfiguration);
+
+		product.setShippingConfiguration(() -> productShippingConfiguration);
+
 		Sku sku = new Sku();
 
 		sku.setExternalReferenceCode(() -> externalReferenceCode);
+		sku.setNeverExpire(() -> Boolean.TRUE);
 		sku.setPublished(() -> Boolean.TRUE);
+		sku.setPurchasable(() -> Boolean.TRUE);
 		sku.setSku(() -> externalReferenceCode);
 
 		product.setSkus(() -> new Sku[] {sku});

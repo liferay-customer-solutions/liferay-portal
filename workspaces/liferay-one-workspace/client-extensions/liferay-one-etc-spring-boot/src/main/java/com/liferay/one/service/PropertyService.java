@@ -10,13 +10,43 @@ import com.liferay.petra.string.StringBundler;
 
 import java.util.List;
 
+import org.json.JSONObject;
+
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * @author Felipe Veloso
  */
 @Component
 public class PropertyService extends OneBaseService {
+
+	public Property addAccountProperty(
+			long accountId, String name, String value)
+		throws Exception {
+
+		JSONObject propertyJSONObject = new JSONObject(
+		).put(
+			"name", name
+		).put(
+			"r_accountEntryToProperty_accountEntryId", accountId
+		).put(
+			"value", value
+		);
+
+		String response = post(
+			getAuthorization(), propertyJSONObject.toString(),
+			UriComponentsBuilder.fromPath(
+				"/o/c/properties"
+			).build(
+			).toUri());
+
+		return new Property(new JSONObject(response));
+	}
+
+	public List<Property> getProperties(String filterString) throws Exception {
+		return getAllItems("/o/c/properties", filterString, Property::new);
+	}
 
 	public String getPropertyValue(long accountId, String name)
 		throws Exception {

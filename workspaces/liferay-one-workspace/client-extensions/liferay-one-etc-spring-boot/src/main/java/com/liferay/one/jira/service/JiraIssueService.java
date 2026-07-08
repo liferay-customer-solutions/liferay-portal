@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -52,6 +53,60 @@ public class JiraIssueService extends BaseJiraService {
 					_jiraURL, "/rest/api/3/issue/", issueKey, "/comment")
 			).build(
 			).toUri());
+	}
+
+	public String addIssue(
+			Map<String, Object> customFields, JSONObject descriptionJSONObject,
+			String issueTypeId, String projectKey, String summary)
+		throws Exception {
+
+		JSONObject fieldsJSONObject = new JSONObject(
+		).put(
+			"description", descriptionJSONObject
+		).put(
+			"issuetype",
+			new JSONObject(
+			).put(
+				"id", issueTypeId
+			)
+		).put(
+			"project",
+			new JSONObject(
+			).put(
+				"key", projectKey
+			)
+		).put(
+			"summary", summary
+		);
+
+		for (Map.Entry<String, Object> entry : customFields.entrySet()) {
+			fieldsJSONObject.put(entry.getKey(), entry.getValue());
+		}
+
+		try {
+			JSONObject issueJSONObject = new JSONObject(
+				post(
+					new JSONObject(
+					).put(
+						"fields", fieldsJSONObject
+					).toString(),
+					HashMapBuilder.put(
+						HttpHeaders.AUTHORIZATION, getAuthorization()
+					).put(
+						HttpHeaders.CONTENT_TYPE,
+						MediaType.APPLICATION_JSON_VALUE
+					).build(),
+					UriComponentsBuilder.fromUriString(
+						StringBundler.concat(
+							_jiraURL, _URL_REST_API_3, "/issue")
+					).build(
+					).toUri()));
+
+			return issueJSONObject.getString("key");
+		}
+		catch (Exception exception) {
+			throw new Exception("Unable to add Jira issue", exception);
+		}
 	}
 
 	public SupportIssue getSupportIssue(String issueKey)
