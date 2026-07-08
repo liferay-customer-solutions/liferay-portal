@@ -17,7 +17,7 @@
 			"enableComments": true,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_ACCOUNT_NOTE",
-			"friendlyURLSeparator": "cpan",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Account Note"
 			},
@@ -304,6 +304,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_AI_HUB_BETA_PRIVATE_ACCESS_REQUEST",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "AI Hub Beta Private Access Request"
 			},
@@ -588,6 +589,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_COMMON_LICENSE_KEY",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Common License Key"
 			},
@@ -828,7 +830,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": true,
 			"externalReferenceCode": "C_CONTRACT",
-			"friendlyURLSeparator": "cpct",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Contract"
 			},
@@ -1140,6 +1142,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_DSR_REQUEST",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "DSR Request"
 			},
@@ -1477,6 +1480,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_DXP_FREE_ACTIVATION_KEY_REQUEST",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "DXP Free Activation Key Request"
 			},
@@ -1761,6 +1765,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_ENTITLEMENT",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Entitlement"
 			},
@@ -1963,6 +1968,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_ENTITLEMENT_DEFINITION",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Entitlement Definition"
 			},
@@ -2193,6 +2199,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_GET_APP_INFORMATION",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Get App Information"
 			},
@@ -2369,6 +2376,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_LICENSE_KEY",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "License Key"
 			},
@@ -3022,6 +3030,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_LICENSE_TYPES_DESCRIPTION",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "License Types Description"
 			},
@@ -3122,6 +3131,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_LIFERAY_BUNDLE",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Liferay Bundle"
 			},
@@ -3222,6 +3232,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_OAUTH2_DXP_AUTHORIZATION",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "OAuth2 DXP Authorization"
 			},
@@ -3297,6 +3308,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_PRODUCT_FEEDBACK",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Product Feedback"
 			},
@@ -3599,6 +3611,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_PROJECT",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Project"
 			},
@@ -3675,6 +3688,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_PROJECT_MEMBERSHIP",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Project Membership"
 			},
@@ -3751,6 +3765,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_PROPERTY",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Property"
 			},
@@ -3951,6 +3966,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_PUBLISHER_ACCOUNT_REQUEST",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Publisher Account Request"
 			},
@@ -4817,6 +4833,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_PUBLISHER_SALES_SUMMARY",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Publisher Sales Summary"
 			},
@@ -4993,6 +5010,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_REPORT",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Report"
 			},
@@ -5093,6 +5111,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_SALES_REQUEST",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Sales Request"
 			},
@@ -5255,6 +5274,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_SUBSCRIPTION_ENTRY",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Subscription Entry"
 			},
@@ -5382,7 +5402,7 @@
 			"enableObjectEntryDraft": true,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_TICKET_ATTACHMENT",
-			"friendlyURLSeparator": "cpta",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Ticket Attachment"
 			},
@@ -5648,6 +5668,7 @@
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_TRIAL_EXTENSION_REQUEST",
+			"friendlyURLSeparator": "l",
 			"label": {
 				"en_US": "Trial Extension Request"
 			},
