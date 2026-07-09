@@ -29,7 +29,7 @@ function main {
 
 	license_dir=$(dirname "${license_file}")
 
-	mkdir --parents "${license_dir}"
+	mkdir -p "${license_dir}"
 
 	if [[ ${force} == true ]]
 	then

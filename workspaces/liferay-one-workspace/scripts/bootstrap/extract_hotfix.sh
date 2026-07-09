@@ -17,7 +17,7 @@ function main {
 		exit 0
 	fi
 
-	mkdir --parents ../../build/docker/patching
+	mkdir -p ../../build/docker/patching
 
 	cd ../../build/docker/patching
 
