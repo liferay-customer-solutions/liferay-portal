@@ -217,6 +217,7 @@ export type OrderTypes =
 	| 'DSR'
 	| 'DXP'
 	| 'DXP_APP'
+	| 'LDP'
 	| 'LOW_CODE_CONFIGURATION'
 	| 'OTHER'
 	| 'SOLUTIONS30'

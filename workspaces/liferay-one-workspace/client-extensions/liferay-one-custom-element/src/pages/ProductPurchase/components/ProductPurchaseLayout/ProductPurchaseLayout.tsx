@@ -14,9 +14,16 @@ import AccountAvatar from '~/components/AccountAvatar/AccountAvatar';
 import Loading from '~/components/Loading/Loading';
 import i18n from '~/i18n';
 import ProductPurchaseApp from '~/services/commerce/ProductPurchaseApp';
+import ProductPurchaseLDP, {
+	LDPSettings,
+} from '~/services/commerce/ProductPurchaseLDP';
 import HeadlessCommerceDeliveryCart from '~/services/headless/HeadlessCommerceDeliveryCart';
 import {Liferay} from '~/services/liferay/liferay';
-import {getProductPriceModel} from '~/utils/productUtils';
+import {
+	ProductSpecificationKey,
+	getProductPriceModel,
+	getProductSpecificationValue,
+} from '~/utils/productUtils';
 
 import useAccounts from '../../hooks/useAccounts';
 import useProductPurchaseCart from '../../hooks/useProductPurchaseCart';
@@ -48,6 +55,7 @@ export type ProductPurchaseLayoutContext = {
 	product: DeliveryProduct;
 	productPurchaseCart: ReturnType<typeof useProductPurchaseCart>;
 	selectedAccount: Account;
+	setLDPSettings: React.Dispatch<React.SetStateAction<LDPSettings | null>>;
 	setPayment: React.Dispatch<React.SetStateAction<ProductPurchasePayment>>;
 	setSelectedAccount: React.Dispatch<React.SetStateAction<Account>>;
 };
@@ -57,6 +65,7 @@ const ProductPurchaseLayout = ({
 	steps: stepItems,
 }: ProductPurchaseLayoutProps) => {
 	const [isSubmitting, setSubmitting] = useState(false);
+	const [ldpSettings, setLDPSettings] = useState<LDPSettings | null>(null);
 	const [payment, setPayment] = useState<ProductPurchasePayment>({
 		billingAddress: {} as BillingAddress,
 		invoice: {email: '', purchaseOrderNumber: ''},
@@ -105,10 +114,20 @@ const ProductPurchaseLayout = ({
 		setSubmitting(true);
 
 		try {
-			const productPurchase = new ProductPurchaseApp(
-				selectedAccount,
-				product
-			);
+			const isLDP =
+				getProductSpecificationValue(
+					ProductSpecificationKey.SOLUTION_TYPE,
+					product
+				) === 'liferay-data-platform';
+
+			const productPurchase =
+				isLDP && ldpSettings
+					? new ProductPurchaseLDP(
+							selectedAccount,
+							product,
+							ldpSettings
+						)
+					: new ProductPurchaseApp(selectedAccount, product);
 
 			if (isPaidApp) {
 				const cart = await productPurchase.createOrder({
@@ -173,6 +192,7 @@ const ProductPurchaseLayout = ({
 		product,
 		productPurchaseCart,
 		selectedAccount,
+		setLDPSettings,
 		setPayment,
 		setSelectedAccount,
 	};

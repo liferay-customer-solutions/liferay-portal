@@ -476,6 +476,7 @@ export default {
 	'fragment': 'Fragment',
 	'fragment-collection-of-fragments': 'Fragment/Collection of Fragments',
 	'free': 'Free',
+	'friendly-workspace-url': 'Friendly Workspace URL',
 	'fulfillment-date': 'Fulfillment Date',
 	'full-name': 'Full Name',
 	'general-info': 'General Info',

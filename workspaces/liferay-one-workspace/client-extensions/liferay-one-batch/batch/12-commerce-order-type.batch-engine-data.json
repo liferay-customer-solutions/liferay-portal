@@ -120,6 +120,18 @@
 		{
 			"active": true,
 			"description": {
+				"en_US": "Designates that the order contains a Liferay Data Platform workspace."
+			},
+			"displayOrder": 13,
+			"externalReferenceCode": "LDP",
+			"name": {
+				"en_US": "Liferay Data Platform"
+			},
+			"neverExpire": true
+		},
+		{
+			"active": true,
+			"description": {
 				"en_US": "Designates that the order contains a free or paid low code configuration."
 			},
 			"displayOrder": 9,
