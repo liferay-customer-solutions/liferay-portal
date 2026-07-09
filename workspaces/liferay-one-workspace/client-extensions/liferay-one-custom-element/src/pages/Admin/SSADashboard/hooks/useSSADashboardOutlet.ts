@@ -29,7 +29,7 @@ export function useSSADashboardOutlet(): SSADashboardOutletContext {
 
 	const {data: ssaAccount} = useSWR('/ssa-account', () =>
 		HeadlessAdminUser.getAccountByExternalReferenceCode(
-			properties.accountExternalReferenceCode
+			properties.ssaAccountExternalReferenceCode
 		)
 	);
 

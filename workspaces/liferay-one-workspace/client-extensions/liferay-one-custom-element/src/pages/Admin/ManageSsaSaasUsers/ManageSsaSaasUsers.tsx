@@ -41,7 +41,7 @@ export default function ManageSsaSaasUsers() {
 					searchVisible: true,
 					visible: true,
 				}}
-				resource={`o/headless-admin-user/v1.0/accounts/by-external-reference-code/${properties.accountExternalReferenceCode}/user-accounts?sort=name:asc`}
+				resource={`o/headless-admin-user/v1.0/accounts/by-external-reference-code/${properties.ssaAccountExternalReferenceCode}/user-accounts?sort=name:asc`}
 				tableProps={{
 					actions,
 					columns: [
@@ -61,7 +61,7 @@ export default function ManageSsaSaasUsers() {
 								const ssaAccount = accountBriefs.find(
 									(accountBrief) =>
 										accountBrief.externalReferenceCode ===
-										properties.accountExternalReferenceCode
+										properties.ssaAccountExternalReferenceCode
 								);
 
 								const filteredRoles =

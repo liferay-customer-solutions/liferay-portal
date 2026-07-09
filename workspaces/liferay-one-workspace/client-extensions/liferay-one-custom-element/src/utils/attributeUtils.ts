@@ -4,7 +4,6 @@
  */
 
 export const baseAttributes = [
-	'accountExternalReferenceCode',
 	'accountId',
 	'analyticsCloudURL',
 	'cloudConsoleURL',
@@ -17,6 +16,7 @@ export const baseAttributes = [
 	'marketoFormIdDefault',
 	'marketoFormIdLiferayProduct',
 	'publisherLicenseAgreement',
+	'ssaAccountExternalReferenceCode',
 	'ssaProjectPrefix',
 	'trialAccountCheck',
 	'trialSSAHostPrefix',

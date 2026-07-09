@@ -61,7 +61,7 @@ const useManageUserActions = () => {
 							body: (
 								<ManageUserModal
 									accountERC={
-										properties.accountExternalReferenceCode
+										properties.ssaAccountExternalReferenceCode
 									}
 									mutate={mutate}
 									onClose={modalContext.onClose}
@@ -126,7 +126,7 @@ const useManageUserActions = () => {
 									onClick={async () => {
 										const {items: roles} =
 											await HeadlessAdminUser.getAccountRoles(
-												properties.accountExternalReferenceCode
+												properties.ssaAccountExternalReferenceCode
 											);
 
 										const ssaRoles = roles.filter((role) =>
@@ -168,7 +168,7 @@ const useManageUserActions = () => {
 												usersPage: APIResponse<UserAccount>
 											) => {
 												return mutateUser(
-													properties.accountExternalReferenceCode,
+													properties.ssaAccountExternalReferenceCode,
 													userAccount.id,
 													usersPage
 												);
@@ -188,7 +188,11 @@ const useManageUserActions = () => {
 					},
 				},
 			] as Action[],
-		[modalContext, properties.accountExternalReferenceCode, ssaAccount?.id]
+		[
+			modalContext,
+			properties.ssaAccountExternalReferenceCode,
+			ssaAccount?.id,
+		]
 	);
 };
 
