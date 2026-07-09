@@ -5,15 +5,15 @@
 	"entitlements": [
 		{
 			"endDate": "2027-08-09T00:00:00Z",
-			"externalReferenceCode": "C_ENT_ACT_PORTAL",
+			"externalReferenceCode": "C_ENT_PORTAL",
 			"grantType": "fixed",
 			"maxQuantity": 1,
 			"name": "Portal",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-015",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_ACT_PORTAL",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_PORTAL",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PORTAL",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ACT_PORTAL",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PORTAL",
 			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
@@ -38,10 +38,10 @@
 		"externalReferenceCode": "C_ORDER_PORTAL",
 		"orderItems": [
 			{
-				"externalReferenceCode": "C_ORDER_ITEM_ACT_PORTAL",
+				"externalReferenceCode": "C_ORDER_ITEM_PORTAL",
 				"name": "Portal",
 				"quantity": 1,
-				"skuExternalReferenceCode": "PRDCT-ACT-PORTAL",
+				"skuExternalReferenceCode": "PRDCT-PORTAL",
 				"unitPrice": 0
 			},
 			{

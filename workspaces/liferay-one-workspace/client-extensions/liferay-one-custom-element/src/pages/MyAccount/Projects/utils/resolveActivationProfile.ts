@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {getSpecificationValue} from '~/hooks/useProjectCommerce';
+
 import type {OrderTypes} from '~/types/orders';
 import type {DeliveryProduct} from '~/types/product';
 
@@ -19,25 +21,17 @@ export type ActivationProfile =
 	| 'none'
 	| 'status';
 
-const ACTIVATION_PROFILE_BY_PRODUCT_NAME: {[name: string]: ActivationProfile} = {
-	'AI Hub': 'none',
-	'Add Ons': 'none',
-	'Analytics Cloud': 'status',
-	'Cloud Native': 'cloud-native',
-	'Commerce': 'commerce',
-	'Content Marketing Platform': 'licenses',
-	'DXP': 'dxp-portal',
-	'Digital Sales Room': 'licenses',
-	'Enterprise Search': 'enterprise-search',
-	'Liferay AI Hub': 'none',
-	'Liferay DXP - Free Tier': 'keys-list',
-	'Liferay Data Platform': 'licenses',
-	'Low-code Configuration': 'none',
-	'Other': 'none',
-	'PaaS': 'status',
-	'Portal': 'dxp-portal',
-	'SaaS': 'status',
-};
+const ACTIVATION_PROFILES: ActivationProfile[] = [
+	'app-licenses',
+	'cloud-native',
+	'commerce',
+	'dxp-portal',
+	'enterprise-search',
+	'keys-list',
+	'licenses',
+	'none',
+	'status',
+];
 
 const ACTIVATION_PROFILE_BY_ORDER_TYPE: Partial<
 	Record<OrderTypes, ActivationProfile>
@@ -49,6 +43,10 @@ const ACTIVATION_PROFILE_BY_ORDER_TYPE: Partial<
 	LOW_CODE_CONFIGURATION: 'none',
 	OTHER: 'none',
 };
+
+function isActivationProfile(value: string): value is ActivationProfile {
+	return (ACTIVATION_PROFILES as string[]).includes(value);
+}
 
 export function resolveActivationProfile({
 	kind,
@@ -67,7 +65,12 @@ export function resolveActivationProfile({
 		);
 	}
 
-	return ACTIVATION_PROFILE_BY_PRODUCT_NAME[product.name] ?? 'none';
+	const profile = getSpecificationValue(
+		product,
+		'project-activation-profile'
+	);
+
+	return isActivationProfile(profile) ? profile : 'none';
 }
 
 export default resolveActivationProfile;

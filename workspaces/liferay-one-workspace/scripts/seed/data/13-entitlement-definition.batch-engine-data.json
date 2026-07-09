@@ -14,90 +14,100 @@
 			"active": true,
 			"defaultQuantity": 1,
 			"displayName": "Analytics Cloud",
-			"externalReferenceCode": "C_ENT_DEF_ACT_ANALYTICS_CLOUD",
+			"externalReferenceCode": "C_ENT_DEF_ANALYTICS_CLOUD",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ACT-ANALYTICS-CLOUD",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ANALYTICS-CLOUD",
 			"unit": "boolean"
 		},
 		{
 			"active": true,
 			"defaultQuantity": 1,
 			"displayName": "Test Application",
-			"externalReferenceCode": "C_ENT_DEF_ACT_APP",
+			"externalReferenceCode": "C_ENT_DEF_APP",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ACT-APP",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-APP",
 			"unit": "boolean"
 		},
 		{
 			"active": true,
 			"defaultQuantity": 1,
 			"displayName": "Cloud Native",
-			"externalReferenceCode": "C_ENT_DEF_ACT_CLOUD_NATIVE",
+			"externalReferenceCode": "C_ENT_DEF_CLOUD_NATIVE",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ACT-CLOUD-NATIVE",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-CLOUD-NATIVE",
 			"unit": "boolean"
 		},
 		{
 			"active": true,
 			"defaultQuantity": 1,
 			"displayName": "Commerce",
-			"externalReferenceCode": "C_ENT_DEF_ACT_COMMERCE",
+			"externalReferenceCode": "C_ENT_DEF_COMMERCE",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ACT-COMMERCE",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-COMMERCE",
 			"unit": "boolean"
 		},
 		{
 			"active": true,
 			"defaultQuantity": 1,
-			"displayName": "DXP",
-			"externalReferenceCode": "C_ENT_DEF_ACT_DXP",
+			"displayName": "Commerce Cloud",
+			"externalReferenceCode": "C_ENT_DEF_COMMERCE_CLOUD",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ACT-DXP",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-COMMERCE-CLOUD",
 			"unit": "boolean"
 		},
 		{
 			"active": true,
 			"defaultQuantity": 1,
 			"displayName": "Enterprise Search",
-			"externalReferenceCode": "C_ENT_DEF_ACT_ENTERPRISE_SEARCH",
+			"externalReferenceCode": "C_ENT_DEF_ENTERPRISE_SEARCH",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ACT-ENTERPRISE-SEARCH",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ENTERPRISE-SEARCH",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Enterprise Search Cloud",
+			"externalReferenceCode": "C_ENT_DEF_ENTERPRISE_SEARCH_CLOUD",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ENTERPRISE-SEARCH-CLOUD",
 			"unit": "boolean"
 		},
 		{
 			"active": true,
 			"defaultQuantity": 1,
 			"displayName": "PaaS",
-			"externalReferenceCode": "C_ENT_DEF_ACT_PAAS",
+			"externalReferenceCode": "C_ENT_DEF_PAAS",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ACT-PAAS",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS",
 			"unit": "boolean"
 		},
 		{
 			"active": true,
 			"defaultQuantity": 1,
 			"displayName": "Portal",
-			"externalReferenceCode": "C_ENT_DEF_ACT_PORTAL",
+			"externalReferenceCode": "C_ENT_DEF_PORTAL",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ACT-PORTAL",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PORTAL",
 			"unit": "boolean"
 		},
 		{
 			"active": true,
 			"defaultQuantity": 1,
 			"displayName": "SaaS",
-			"externalReferenceCode": "C_ENT_DEF_ACT_SAAS",
+			"externalReferenceCode": "C_ENT_DEF_SAAS",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ACT-SAAS",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS",
 			"unit": "boolean"
 		},
 		{
@@ -148,6 +158,46 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DXP",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 100,
+			"displayName": "Additional Storage",
+			"externalReferenceCode": "C_ENT_DEF_ADDON_STORAGE",
+			"grantType": "fixed",
+			"name": "storage",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ADDON-STORAGE",
+			"unit": "GB"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 4,
+			"displayName": "Additional vCPU",
+			"externalReferenceCode": "C_ENT_DEF_ADDON_VCPU",
+			"grantType": "fixed",
+			"name": "vcpu",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ADDON-VCPU",
+			"unit": "vCPU"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Disaster Recovery",
+			"externalReferenceCode": "C_ENT_DEF_ADDON_DISASTER_RECOVERY",
+			"grantType": "fixed",
+			"name": "disasterRecovery",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ADDON-DISASTER-RECOVERY",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Product Recommendations",
+			"externalReferenceCode": "C_ENT_DEF_ADDON_COMMERCE_RECOMMENDATIONS",
+			"grantType": "fixed",
+			"name": "productRecommendations",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ADDON-COMMERCE-RECOMMENDATIONS",
 			"unit": "boolean"
 		}
 	]

@@ -5,15 +5,15 @@
 	"entitlements": [
 		{
 			"endDate": "2027-08-09T00:00:00Z",
-			"externalReferenceCode": "C_ENT_ACT_DXP",
+			"externalReferenceCode": "C_ENT_DXP",
 			"grantType": "fixed",
 			"maxQuantity": 1,
 			"name": "DXP",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-006",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_ACT_DXP",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_DXP",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_DXP",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ACT_DXP",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DXP",
 			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
@@ -82,10 +82,10 @@
 		"externalReferenceCode": "C_ORDER_DXP",
 		"orderItems": [
 			{
-				"externalReferenceCode": "C_ORDER_ITEM_ACT_DXP",
+				"externalReferenceCode": "C_ORDER_ITEM_DXP",
 				"name": "DXP",
 				"quantity": 1,
-				"skuExternalReferenceCode": "PRDCT-ACT-DXP",
+				"skuExternalReferenceCode": "PRDCT-DXP",
 				"unitPrice": 0
 			},
 			{

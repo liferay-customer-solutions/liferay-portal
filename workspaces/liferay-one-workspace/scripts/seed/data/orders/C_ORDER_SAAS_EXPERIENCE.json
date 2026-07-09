@@ -5,15 +5,15 @@
 	"entitlements": [
 		{
 			"endDate": "2027-08-09T00:00:00Z",
-			"externalReferenceCode": "C_ENT_ACT_SAAS",
+			"externalReferenceCode": "C_ENT_SAAS",
 			"grantType": "fixed",
 			"maxQuantity": 1,
 			"name": "SaaS",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-002",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_ACT_SAAS",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_SAAS",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_SAAS_EXPERIENCE",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ACT_SAAS",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS",
 			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
@@ -41,6 +41,32 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_SAAS_EXPERIENCE",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DXP",
 			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_SAAS_EXPERIENCE_STORAGE",
+			"grantType": "fixed",
+			"maxQuantity": 100,
+			"name": "storage",
+			"quantity": 100,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-002",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_SAAS_EXPERIENCE_STORAGE",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_SAAS_EXPERIENCE",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ADDON_STORAGE",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_SAAS_EXPERIENCE_DISASTER_RECOVERY",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "disasterRecovery",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-002",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_SAAS_EXPERIENCE_DISASTER_RECOVERY",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_SAAS_EXPERIENCE",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ADDON_DISASTER_RECOVERY",
+			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
 	"order": {
@@ -51,10 +77,10 @@
 		"externalReferenceCode": "C_ORDER_SAAS_EXPERIENCE",
 		"orderItems": [
 			{
-				"externalReferenceCode": "C_ORDER_ITEM_ACT_SAAS",
+				"externalReferenceCode": "C_ORDER_ITEM_SAAS",
 				"name": "SaaS",
 				"quantity": 1,
-				"skuExternalReferenceCode": "PRDCT-ACT-SAAS",
+				"skuExternalReferenceCode": "PRDCT-SAAS",
 				"unitPrice": 0
 			},
 			{
@@ -69,6 +95,20 @@
 				"name": "Liferay DXP",
 				"quantity": 1,
 				"skuExternalReferenceCode": "PRDCT-DXP",
+				"unitPrice": 0
+			},
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_SAAS_EXPERIENCE_STORAGE",
+				"name": "Additional Storage (100 GB)",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-ADDON-STORAGE",
+				"unitPrice": 0
+			},
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_SAAS_EXPERIENCE_DISASTER_RECOVERY",
+				"name": "Disaster Recovery Add-on",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-ADDON-DISASTER-RECOVERY",
 				"unitPrice": 0
 			}
 		],

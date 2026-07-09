@@ -21,7 +21,7 @@
 			"name": "Expired Key",
 			"productName": "Test Application",
 			"r_accountEntryToLicenseKey_accountEntryERC": "ACCNT-006",
-			"r_commerceProductToLicenseKey_CProductERC": "PRDCT-ACT-APP",
+			"r_commerceProductToLicenseKey_CProductERC": "PRDCT-APP",
 			"startDate": "2026-01-05T00:00:00Z"
 		},
 		{
@@ -35,7 +35,7 @@
 			"name": "Production Key",
 			"productName": "Test Application",
 			"r_accountEntryToLicenseKey_accountEntryERC": "ACCNT-006",
-			"r_commerceProductToLicenseKey_CProductERC": "PRDCT-ACT-APP",
+			"r_commerceProductToLicenseKey_CProductERC": "PRDCT-APP",
 			"startDate": "2026-01-05T00:00:00Z"
 		},
 		{

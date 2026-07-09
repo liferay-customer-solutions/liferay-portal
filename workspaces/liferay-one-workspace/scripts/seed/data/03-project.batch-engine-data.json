@@ -119,6 +119,16 @@
 			"externalReferenceCode": "PRJCT-021",
 			"name": "Test Supplier Project",
 			"r_accountEntryToProject_accountEntryERC": "ACCNT-021"
+		},
+		{
+			"externalReferenceCode": "PRJCT-023",
+			"name": "Commerce Cloud Project",
+			"r_accountEntryToProject_accountEntryERC": "ACCNT-023"
+		},
+		{
+			"externalReferenceCode": "PRJCT-024",
+			"name": "Enterprise Search Cloud Project",
+			"r_accountEntryToProject_accountEntryERC": "ACCNT-024"
 		}
 	]
 }

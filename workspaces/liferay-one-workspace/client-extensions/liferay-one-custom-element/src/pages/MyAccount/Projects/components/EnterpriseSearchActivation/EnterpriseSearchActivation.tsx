@@ -7,8 +7,8 @@ import {ClaySelect} from '@clayui/form';
 import {format} from 'date-fns';
 import {useMemo, useState} from 'react';
 import useSWR from 'swr';
-import {DetailedCard} from '~/components/DetailedCard/DetailedCard';
 import Button from '~/components/Button/Button';
+import {DetailedCard} from '~/components/DetailedCard/DetailedCard';
 import {translate} from '~/i18n';
 import CommonLicenseKeys, {
 	CommonLicenseKey,

@@ -9,7 +9,7 @@ import {Word, translate} from '~/i18n';
 import {
 	ACTIVATION_STATUS_MOCK,
 	ActivationStatusState,
-} from '~/pages/MyAccount/Projects/utils/activationMockData';
+} from '~/pages/MyAccount/Projects/utils/activationMockDataConstants';
 
 import './ActivationStatusCard.css';
 

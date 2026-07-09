@@ -61,6 +61,7 @@ function main {
 	fi
 
 	local file
+	local failures=0
 
 	for file in "${ORDERS_DIR}"/*.json
 	do
@@ -71,8 +72,18 @@ function main {
 
 		_acquire_oauth_token
 
-		_populate_order "${file}" "${channel_id}"
+		# One rejected order must not abort the rest of the seed, so a failure is
+		# counted and the loop continues. The count is surfaced at the end.
+
+		_populate_order "${file}" "${channel_id}" || failures=$((failures + 1))
 	done
+
+	if ((failures > 0))
+	then
+		echo "Unable to populate ${failures} order(s)." >&2
+
+		return 1
+	fi
 }
 
 function _build_order_payload {
@@ -210,14 +221,18 @@ function _populate_order {
 	payload=$(_build_order_payload "${file}" "${channel_id}" "${contract_id}")
 
 	# The order placement upserts by external reference code, so re-running is
-	# idempotent. Retry while the products and SKUs the order items reference
-	# are still being imported by the site initializer.
+	# idempotent. A 4xx is a permanent rejection -- bad data such as an
+	# unresolvable SKU -- that retrying cannot fix, so it stops immediately and
+	# surfaces the response body rather than spinning the full retry budget on a
+	# doomed request. Only a transient 5xx or connection failure is retried,
+	# which also covers a product or SKU still settling right after it was
+	# ensured.
 
 	local attempt
 	local response
 	local status
 
-	for ((attempt = 1; attempt <= 60; attempt++))
+	for ((attempt = 1; attempt <= 20; attempt++))
 	do
 		response=$(_curl \
 			--data "${payload}" \
@@ -228,7 +243,7 @@ function _populate_order {
 
 		status=$(echo "${response}" | tail -n 1)
 
-		if [[ ${status} == 2* ]]
+		if [[ ${status} == 2* || ${status} == 4* ]]
 		then
 			break
 		fi
@@ -238,7 +253,7 @@ function _populate_order {
 
 	if [[ ${status} != 2* ]]
 	then
-		echo "Unable to create order ${order_external_reference_code}." >&2
+		echo "Unable to create order ${order_external_reference_code} (HTTP ${status}): $(echo "${response}" | sed '$d')" >&2
 
 		return 1
 	fi

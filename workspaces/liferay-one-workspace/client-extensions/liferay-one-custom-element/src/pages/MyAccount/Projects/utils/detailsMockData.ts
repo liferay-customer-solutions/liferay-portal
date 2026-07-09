@@ -28,7 +28,7 @@ export type DetailsMock = {
 	tierName: string;
 };
 
-export const DETAILS_MOCK: DetailsMock = {
+export const detailsMockData: DetailsMock = {
 	criticalIncidentContacts: 'ops-oncall@acme.com',
 	expirationDate: 'Jan 5, 2027',
 	hasPaasExperience: true,
@@ -58,4 +58,4 @@ export const DETAILS_MOCK: DetailsMock = {
 	tierName: 'Standard',
 };
 
-export default DETAILS_MOCK;
+export default detailsMockData;

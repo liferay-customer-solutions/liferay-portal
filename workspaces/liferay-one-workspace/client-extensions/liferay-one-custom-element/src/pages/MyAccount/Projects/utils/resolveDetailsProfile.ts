@@ -3,7 +3,10 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {getSpecificationValues} from '~/hooks/useProjectCommerce';
+import {
+	getSpecificationValue,
+	getSpecificationValues,
+} from '~/hooks/useProjectCommerce';
 
 import type {DeliveryProduct} from '~/types/product';
 
@@ -19,23 +22,20 @@ export type DetailsProfile =
 	| 'paas'
 	| 'saas';
 
-const DETAILS_PROFILE_BY_PRODUCT_NAME: {[name: string]: DetailsProfile} = {
-	'Add Ons': 'dates-status',
-	'Analytics Cloud': 'analytics',
-	'Cloud Native': 'dates-status',
-	'Commerce': 'env-commerce',
-	'Content Marketing Platform': 'basic',
-	'DXP': 'env-instance',
-	'Digital Sales Room': 'basic',
-	'Enterprise Search': 'dates-status',
-	'Liferay AI Hub': 'basic',
-	'Liferay DXP - Free Tier': 'basic',
-	'Liferay Data Platform': 'basic-incident',
-	'Other': 'dates-status',
-	'PaaS': 'paas',
-	'Portal': 'env-instance',
-	'SaaS': 'saas',
-};
+const DETAILS_PROFILES: DetailsProfile[] = [
+	'analytics',
+	'basic',
+	'basic-incident',
+	'dates-status',
+	'env-commerce',
+	'env-instance',
+	'paas',
+	'saas',
+];
+
+function isDetailsProfile(value: string): value is DetailsProfile {
+	return (DETAILS_PROFILES as string[]).includes(value);
+}
 
 export function resolveDetailsProfile({
 	kind,
@@ -44,15 +44,14 @@ export function resolveDetailsProfile({
 	kind: ProjectItemKind;
 	product: DeliveryProduct;
 }): DetailsProfile {
-
 	if (kind === 'application') {
 		return 'basic';
 	}
 
-	const profileByName = DETAILS_PROFILE_BY_PRODUCT_NAME[product.name];
+	const profile = getSpecificationValue(product, 'project-details-profile');
 
-	if (profileByName) {
-		return profileByName;
+	if (isDetailsProfile(profile)) {
+		return profile;
 	}
 
 	const categories = getSpecificationValues(

@@ -5,15 +5,15 @@
 	"entitlements": [
 		{
 			"endDate": "2027-08-09T00:00:00Z",
-			"externalReferenceCode": "C_ENT_ACT_APP",
+			"externalReferenceCode": "C_ENT_APP",
 			"grantType": "fixed",
 			"maxQuantity": 1,
 			"name": "Test Application",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-006",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_ACT_APP",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_APP",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_DXP",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ACT_APP",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_APP",
 			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
@@ -25,10 +25,10 @@
 		"externalReferenceCode": "C_ORDER_APP_DEMO",
 		"orderItems": [
 			{
-				"externalReferenceCode": "C_ORDER_ITEM_ACT_APP",
+				"externalReferenceCode": "C_ORDER_ITEM_APP",
 				"name": "Test Application",
 				"quantity": 1,
-				"skuExternalReferenceCode": "PRDCT-ACT-APP",
+				"skuExternalReferenceCode": "PRDCT-APP",
 				"unitPrice": 0
 			}
 		],

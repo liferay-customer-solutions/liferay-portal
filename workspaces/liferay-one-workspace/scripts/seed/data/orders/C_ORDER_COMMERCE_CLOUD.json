@@ -1,0 +1,59 @@
+{
+	"customFields": {
+		"projectName": "Commerce Cloud Project"
+	},
+	"entitlements": [
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_COMMERCE_CLOUD",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Commerce Cloud",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-023",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_COMMERCE_CLOUD",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_COMMERCE_CLOUD",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_COMMERCE_CLOUD",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_COMMERCE_CLOUD_DXP",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Liferay DXP",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-023",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_COMMERCE_CLOUD_DXP",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_COMMERCE_CLOUD",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DXP",
+			"startDate": "2026-08-09T00:00:00Z"
+		}
+	],
+	"order": {
+		"accountExternalReferenceCode": "ACCNT-023",
+		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
+		"contractExternalReferenceCode": "C_CONTRACT_COMMERCE_CLOUD",
+		"currencyCode": "USD",
+		"externalReferenceCode": "C_ORDER_COMMERCE_CLOUD",
+		"orderItems": [
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_COMMERCE_CLOUD",
+				"name": "Commerce Cloud",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-COMMERCE-CLOUD",
+				"unitPrice": 0
+			},
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_COMMERCE_CLOUD_DXP",
+				"name": "Liferay DXP",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-DXP",
+				"unitPrice": 0
+			}
+		],
+		"orderStatus": 5,
+		"orderTypeExternalReferenceCode": "DXP"
+	},
+	"purchaseOrderNumber": "PO-COMMERCE-CLOUD"
+}

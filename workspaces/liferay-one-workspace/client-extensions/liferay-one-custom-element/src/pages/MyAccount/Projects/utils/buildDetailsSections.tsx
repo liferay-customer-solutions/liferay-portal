@@ -9,7 +9,7 @@ import {DetailsRow} from '../components/DetailsCard/DetailsCard';
 import {DetailsSection} from '../components/SectionedDetailsCard/SectionedDetailsCard';
 
 import type {DetailsEnvironmentMock, DetailsMock} from './detailsMockData';
-import type {DetailsProfile} from './getDetailsProfile';
+import type {DetailsProfile} from './resolveDetailsProfile';
 
 type DetailsContext = {
 	accountName: string;
@@ -49,7 +49,10 @@ function instanceEnvironmentRows(
 	environment: DetailsEnvironmentMock
 ): DetailsRow[] {
 	return [
-		{label: i18n.translate('instance-size'), value: environment.instanceSize},
+		{
+			label: i18n.translate('instance-size'),
+			value: environment.instanceSize,
+		},
 		{
 			label: i18n.translate('keys-provisioned'),
 			value: environment.keysProvisioned,
@@ -77,115 +80,107 @@ function commerceEnvironmentRows(
 	];
 }
 
+function tierDatesIncidentRows(mock: DetailsMock): DetailsRow[] {
+	return [
+		{label: i18n.translate('tier-name'), value: mock.tierName},
+		...datesStatusRows(mock),
+		{
+			label: i18n.translate('critical-incident-contacts'),
+			value: mock.criticalIncidentContacts,
+		},
+	];
+}
+
+const DETAILS_SECTIONS_BY_PROFILE: Record<
+	DetailsProfile,
+	(context: DetailsContext) => DetailsSection[]
+> = {
+	'analytics': ({mock}) => [
+		{
+			rows: [
+				{label: i18n.translate('tier-name'), value: mock.tierName},
+				{label: i18n.translate('purchased'), value: mock.purchased},
+				...datesStatusRows(mock),
+				{
+					label: i18n.translate('critical-incident-contacts'),
+					value: mock.criticalIncidentContacts,
+				},
+			],
+		},
+	],
+	'basic': (context) => [{rows: orderRows(context)}],
+	'basic-incident': (context) => [
+		{
+			rows: [
+				...orderRows(context),
+				{
+					label: i18n.translate('incident-report-contacts'),
+					value: context.mock.incidentReportContacts,
+				},
+			],
+		},
+	],
+	'dates-status': ({mock}) => [{rows: datesStatusRows(mock)}],
+	'env-commerce': ({mock}) => [
+		{
+			rows: commerceEnvironmentRows(mock.production),
+			title: i18n.translate('production'),
+		},
+		{
+			rows: commerceEnvironmentRows(mock.nonProduction),
+			title: i18n.translate('non-production'),
+		},
+	],
+	'env-instance': ({mock}) => [
+		{
+			rows: instanceEnvironmentRows(mock.production),
+			title: i18n.translate('production'),
+		},
+		{
+			rows: instanceEnvironmentRows(mock.nonProduction),
+			title: i18n.translate('non-production'),
+		},
+	],
+	'paas': ({mock}) => [
+		{
+			rows: [
+				...tierDatesIncidentRows(mock),
+				...(mock.hasPaasExperience
+					? [
+							{
+								label: i18n.translate('paas-users'),
+								value: mock.paasUsers,
+							},
+						]
+					: []),
+			],
+		},
+	],
+	'saas': ({mock}) => [
+		{
+			rows: [
+				...tierDatesIncidentRows(mock),
+				{
+					label: i18n.translate('privacy-breach-contacts'),
+					value: mock.privacyBreachContacts,
+				},
+				{
+					label: i18n.translate('security-breach-contacts'),
+					value: mock.securityBreachContacts,
+				},
+			],
+		},
+	],
+};
+
 export function buildDetailsSections(
 	profile: DetailsProfile,
 	context: DetailsContext
 ): DetailsSection[] {
-	const {mock} = context;
-
-	switch (profile) {
-		case 'analytics':
-			return [
-				{
-					rows: [
-						{label: i18n.translate('tier-name'), value: mock.tierName},
-						{label: i18n.translate('purchased'), value: mock.purchased},
-						...datesStatusRows(mock),
-						{
-							label: i18n.translate('critical-incident-contacts'),
-							value: mock.criticalIncidentContacts,
-						},
-					],
-				},
-			];
-
-		case 'basic-incident':
-			return [
-				{
-					rows: [
-						...orderRows(context),
-						{
-							label: i18n.translate('incident-report-contacts'),
-							value: mock.incidentReportContacts,
-						},
-					],
-				},
-			];
-
-		case 'dates-status':
-			return [{rows: datesStatusRows(mock)}];
-
-		case 'env-commerce':
-			return [
-				{
-					rows: commerceEnvironmentRows(mock.production),
-					title: i18n.translate('production'),
-				},
-				{
-					rows: commerceEnvironmentRows(mock.nonProduction),
-					title: i18n.translate('non-production'),
-				},
-			];
-
-		case 'env-instance':
-			return [
-				{
-					rows: instanceEnvironmentRows(mock.production),
-					title: i18n.translate('production'),
-				},
-				{
-					rows: instanceEnvironmentRows(mock.nonProduction),
-					title: i18n.translate('non-production'),
-				},
-			];
-
-		case 'paas':
-			return [
-				{
-					rows: [
-						{label: i18n.translate('tier-name'), value: mock.tierName},
-						...datesStatusRows(mock),
-						{
-							label: i18n.translate('critical-incident-contacts'),
-							value: mock.criticalIncidentContacts,
-						},
-						...(mock.hasPaasExperience
-							? [
-									{
-										label: i18n.translate('paas-users'),
-										value: mock.paasUsers,
-									},
-								]
-							: []),
-					],
-				},
-			];
-
-		case 'saas':
-			return [
-				{
-					rows: [
-						{label: i18n.translate('tier-name'), value: mock.tierName},
-						...datesStatusRows(mock),
-						{
-							label: i18n.translate('critical-incident-contacts'),
-							value: mock.criticalIncidentContacts,
-						},
-						{
-							label: i18n.translate('privacy-breach-contacts'),
-							value: mock.privacyBreachContacts,
-						},
-						{
-							label: i18n.translate('security-breach-contacts'),
-							value: mock.securityBreachContacts,
-						},
-					],
-				},
-			];
-
-		default:
-			return [{rows: orderRows(context)}];
-	}
+	return (
+		DETAILS_SECTIONS_BY_PROFILE[profile] ??
+		DETAILS_SECTIONS_BY_PROFILE.basic
+	)(context);
 }
 
 export default buildDetailsSections;

@@ -3,11 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {resolveActivationProfile} from '~/pages/MyAccount/Projects/utils/getActivationProfile';
-
-import type {DeliveryProduct} from '~/types/product';
-
-import type {ProjectItemKind} from '../../types';
+import {ReactNode} from 'react';
 
 import ActivationKeysCard from '../ActivationKeysCard/ActivationKeysCard';
 import ActivationKeysTable from '../ActivationKeysTable/ActivationKeysTable';
@@ -17,52 +13,37 @@ import CommerceActivation from '../CommerceActivation/CommerceActivation';
 import EnterpriseSearchActivation from '../EnterpriseSearchActivation/EnterpriseSearchActivation';
 import LicensesTable from '../LicensesTable/LicensesTable';
 
+import type {DeliveryProduct} from '~/types/product';
+
+import type {ActivationProfile} from '../../utils/resolveActivationProfile';
+
 type ActivationPanelProps = {
-	kind: ProjectItemKind;
-	orderType?: string;
 	product: DeliveryProduct;
+	profile: ActivationProfile;
+};
+
+const ACTIVATION_CONTENT_BY_PROFILE: Record<
+	ActivationProfile,
+	(product: DeliveryProduct) => ReactNode
+> = {
+	'app-licenses': (product) => (
+		<LicensesTable productName={product.name} variant="app-licenses" />
+	),
+	'cloud-native': () => <CloudNativeActivation />,
+	'commerce': () => <CommerceActivation />,
+	'dxp-portal': () => <ActivationKeysTable />,
+	'enterprise-search': () => <EnterpriseSearchActivation />,
+	'keys-list': (product) => <ActivationKeysCard productName={product.name} />,
+	'licenses': (product) => (
+		<LicensesTable productName={product.name} variant="licenses" />
+	),
+	'none': () => null,
+	'status': (product) => <ActivationStatusCard productName={product.name} />,
 };
 
 export default function ActivationPanel({
-	kind,
-	orderType,
 	product,
+	profile,
 }: ActivationPanelProps) {
-	const profile = resolveActivationProfile({kind, orderType, product});
-
-	switch (profile) {
-		case 'app-licenses':
-			return (
-				<LicensesTable
-					productName={product.name}
-					variant="app-licenses"
-				/>
-			);
-
-		case 'cloud-native':
-			return <CloudNativeActivation />;
-
-		case 'commerce':
-			return <CommerceActivation />;
-
-		case 'dxp-portal':
-			return <ActivationKeysTable />;
-
-		case 'enterprise-search':
-			return <EnterpriseSearchActivation />;
-
-		case 'keys-list':
-			return <ActivationKeysCard productName={product.name} />;
-
-		case 'licenses':
-			return (
-				<LicensesTable productName={product.name} variant="licenses" />
-			);
-
-		case 'status':
-			return <ActivationStatusCard productName={product.name} />;
-
-		default:
-			return null;
-	}
+	return ACTIVATION_CONTENT_BY_PROFILE[profile](product);
 }

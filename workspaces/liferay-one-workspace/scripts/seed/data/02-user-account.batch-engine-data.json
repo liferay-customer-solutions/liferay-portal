@@ -190,6 +190,22 @@
 							"name": "Account Administrator"
 						}
 					]
+				},
+				{
+					"externalReferenceCode": "ACCNT-023",
+					"roleBriefs": [
+						{
+							"name": "Account Administrator"
+						}
+					]
+				},
+				{
+					"externalReferenceCode": "ACCNT-024",
+					"roleBriefs": [
+						{
+							"name": "Account Administrator"
+						}
+					]
 				}
 			],
 			"alternateName": "customeradmin",
@@ -376,6 +392,22 @@
 				},
 				{
 					"externalReferenceCode": "ACCNT-022",
+					"roleBriefs": [
+						{
+							"name": "Account Member"
+						}
+					]
+				},
+				{
+					"externalReferenceCode": "ACCNT-023",
+					"roleBriefs": [
+						{
+							"name": "Account Member"
+						}
+					]
+				},
+				{
+					"externalReferenceCode": "ACCNT-024",
 					"roleBriefs": [
 						{
 							"name": "Account Member"

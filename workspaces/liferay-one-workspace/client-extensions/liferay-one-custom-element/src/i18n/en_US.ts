@@ -18,6 +18,7 @@ export default {
 	'ability-to-publish-dxp-and-cloud-free-or-charged':
 		'Ability to publish DXP and Cloud - Free or Charged',
 	'access-required': 'Access required.',
+	'access-token': 'Access Token',
 	'account': 'Account',
 	'account-details': 'Account Details',
 	'account-id': 'Account ID',
@@ -82,13 +83,13 @@ export default {
 	'all-progress-and-information-related-to-the-creation-of-the-solution-will-be-lost-unless-you-save-the-solution-as-a-draft-do-you-still-want-to-exit':
 		'All progress and information related to the creation of the solution will be lost unless you save the solution as a draft. Do you still want to exit?',
 	'all-published-apps': 'All Published Apps',
+	'allowed-email-domains': 'Allowed Email Domains',
 	'almost-there-setup-analytics-cloud-by-finishing-the-activation-form':
 		'Almost there! Setup Analytics Cloud by finishing the activation form.',
 	'almost-there-setup-liferay-paas-by-finishing-the-activation-form':
 		'Almost there! Setup Liferay PaaS by finishing the activation form.',
 	'almost-there-setup-liferay-saas-by-finishing-the-activation-form':
 		'Almost there! Setup Liferay SaaS by finishing the activation form.',
-	'allowed-email-domains': 'Allowed Email Domains',
 	'amount': 'Amount',
 	'an-administrator-of-the-marketplace-will-review-your-request-shortly-if-you-have-questions-regarding-your-submission-please-email':
 		'An administrator of the Marketplace will review your request shortly. If you have questions regarding your submission, please email.',
@@ -101,6 +102,7 @@ export default {
 	'and-the': 'and the',
 	'annual': 'Annual',
 	'annual-target': 'Annual Target',
+	'api-requests-per-month': 'API Requests / Month',
 	'app': 'App',
 	'app-awaiting-review': 'App Awaiting Review',
 	'app-build': 'App Build',
@@ -245,8 +247,8 @@ export default {
 	'compatible-versions': 'Compatible Versions',
 	'complete-publisher-account-request': 'Complete Publisher Account Request',
 	'completed': 'Completed',
-	'composite-app': 'Composite App',
 	'complimentary': 'Complimentary',
+	'composite-app': 'Composite App',
 	'confirm': 'Confirm',
 	'confirm-deactivate-keys': 'Confirm & Deactivate Keys',
 	'confirm-deactivation-terms': 'Confirm Deactivation Terms',
@@ -416,6 +418,7 @@ export default {
 	'event-name': 'Event Name',
 	'event-status': 'Event Status',
 	'event-type': 'Event Type',
+	'events-per-month': 'Events / Month',
 	'exact-match': 'Exact Match',
 	'exclude': 'Exclude',
 	'excluding-vat': 'Excluding VAT',
@@ -874,6 +877,8 @@ export default {
 	'pricing': 'Pricing',
 	'primary': 'Primary',
 	'primary-contact': 'Primary Contact',
+	'primary-data-center-region': 'Primary Data Center Region',
+	'primary-region': 'Primary Region',
 	'privacy-breach-contacts': 'Privacy Breach Contacts',
 	'privacy-policy': 'Privacy Policy',
 	'private-information': 'Private Information',
@@ -886,6 +891,8 @@ export default {
 	'products': 'Products',
 	'profile': 'Profile',
 	'project': 'Project',
+	'project-admin-email': 'Project Admin Email',
+	'project-admin-name': 'Project Admin Name',
 	'project-id': 'Project ID',
 	'project-members': 'Project Members',
 	'project-members-successfully-updated':
@@ -1113,6 +1120,9 @@ export default {
 	'support-phone-number': 'Support Phone Number',
 	'support-url': 'Support URL',
 	'supported-version': 'Supported Version',
+	'system-admin-email': 'System Admin Email',
+	'system-admin-first-name': 'System Admin First Name',
+	'system-admin-last-name': 'System Admin Last Name',
 	'tags': 'Tags',
 	'tags-help-to-describe-your-solution-in-the-marketplace-select-the-tags-most-relevant-to-your-solution-they-can-be-changed-if-needed':
 		'Tags help to describe your solution in the Marketplace. Select the tags most relevant to your solution. They can be changed if needed.',
@@ -1276,6 +1286,8 @@ export default {
 	'upload-zip-files': 'Upload ZIP Files',
 	'uploading': 'Uploading…',
 	'usage': 'Usage',
+	'usage-dashboard-is-not-available-yet':
+		'Usage dashboard is not available yet.',
 	'use-any-build-from-any-available-liferay-experience-cloud-account-requires-lxc-account':
 		'Use any build from any available Liferay SaaS account (requires Liferay SaaS account) ',
 	'use-any-build-from-your-computer-connecting-with-a-github-provider':
@@ -1340,11 +1352,11 @@ export default {
 	'x-apps-available': '{0} apps available',
 	'x-apps-x-solutions': '{0} Apps · {1} Solutions',
 	'x-available-for-you': `{0} available for <b>${Liferay.ThemeDisplay.getUserEmailAddress()}</b> (you)`,
+	'x-cluster-nodes-keys': '{0} Cluster Nodes (Keys)',
 	'x-in-use': '{0} in use',
 	'x-is-a-member-of-x-on-this-account-removing-them-from-the-account-will-also-remove-their-access-to-these-projects-are-you-sure-you-want-to-proceed':
 		'{0} is a member of {1} on this account. Removing them from the account will also remove their access to these projects. Are you sure you want to proceed?',
 	'x-is-required': '{0} is required',
-	'x-cluster-nodes-keys': '{0} Cluster Nodes (Keys)',
 	'x-items': '{0} Items',
 	'x-me': '{0} (me)',
 	'x-more': '+{0} more',

@@ -19,6 +19,7 @@ import DetailHeader from '~/pages/MyAccount/Projects/components/DetailHeader/Det
 import DownloadListCard from '~/pages/MyAccount/Projects/components/DownloadListCard/DownloadListCard';
 import EnvironmentCard from '~/pages/MyAccount/Projects/components/EnvironmentCard/EnvironmentCard';
 import HelpSupportCard from '~/pages/MyAccount/Projects/components/HelpSupportCard/HelpSupportCard';
+import LearnLinkCard from '~/pages/MyAccount/Projects/components/LearnLinkCard/LearnLinkCard';
 import OrdersCard from '~/pages/MyAccount/Projects/components/OrdersCard/OrdersCard';
 import ProjectDetailTabs, {
 	DetailTab,
@@ -26,19 +27,17 @@ import ProjectDetailTabs, {
 import SectionedDetailsCard from '~/pages/MyAccount/Projects/components/SectionedDetailsCard/SectionedDetailsCard';
 import UtilizationCard from '~/pages/MyAccount/Projects/components/UtilizationCard/UtilizationCard';
 import {ProjectItemKind, ProjectTabKey} from '~/pages/MyAccount/Projects/types';
-import {resolveActivationProfile} from '~/pages/MyAccount/Projects/utils/getActivationProfile';
 import {buildDetailsSections} from '~/pages/MyAccount/Projects/utils/buildDetailsSections';
-import {
-	PROJECT_TAB_LABELS,
-	PROJECT_TAB_ORDER,
-} from '~/pages/MyAccount/Projects/utils/constants';
-import {DETAILS_MOCK} from '~/pages/MyAccount/Projects/utils/detailsMockData';
-import {resolveDetailsProfile} from '~/pages/MyAccount/Projects/utils/getDetailsProfile';
+import {buildEnvironmentSections} from '~/pages/MyAccount/Projects/utils/buildEnvironmentSections';
+import {buildUtilizationSections} from '~/pages/MyAccount/Projects/utils/buildUtilizationSections';
+import {PROJECT_TAB_LABELS} from '~/pages/MyAccount/Projects/utils/constants';
+import {detailsMockData} from '~/pages/MyAccount/Projects/utils/detailsMockData';
 import {getLogoColor} from '~/pages/MyAccount/Projects/utils/getLogoColor';
 import {getProductIcon} from '~/pages/MyAccount/Projects/utils/getProductIcon';
-import {getVisibleProjectTabKeys} from '~/pages/MyAccount/Projects/utils/getVisibleProjectTabKeys';
 import {isUnassignedProject} from '~/pages/MyAccount/Projects/utils/isUnassignedProject';
+import {resolveProductTabConfig} from '~/pages/MyAccount/Projects/utils/resolveProductTabConfig';
 import {Liferay} from '~/services/liferay/liferay';
+
 import ActivationPanel from '../components/ActivationPanel/ActivationPanel';
 
 type ProjectItemDetailsProps = {
@@ -99,26 +98,30 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 
 	const orderInfo = getProductOrderInfo(placedOrders, product.name);
 
-	const detailsProfile = resolveDetailsProfile({kind, product});
-
-	const detailsSections = buildDetailsSections(detailsProfile, {
-		accountName: Liferay.CommerceContext.account?.accountName ?? '',
-		mock: DETAILS_MOCK,
-		orderInfo,
-	});
-
-	const activationProfile = resolveActivationProfile({
+	const {
+		activationProfile,
+		detailsProfile,
+		environmentProfile,
+		learnUrl,
+		tabKeys,
+		utilizationProfile,
+	} = resolveProductTabConfig({
 		kind,
 		orderType: orderInfo.orderType,
 		product,
 	});
 
+	const detailsSections = buildDetailsSections(detailsProfile, {
+		accountName: Liferay.CommerceContext.account?.accountName ?? '',
+		mock: detailsMockData,
+		orderInfo,
+	});
+
 	const tabContent: Record<ProjectTabKey, ReactNode> = {
 		'activation': (
 			<ActivationPanel
-				kind={kind}
-				orderType={orderInfo.orderType}
 				product={product}
+				profile={activationProfile ?? 'none'}
 			/>
 		),
 		'details': <SectionedDetailsCard sections={detailsSections} />,
@@ -134,29 +137,37 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 				title={kind === 'product' ? 'bundle-list' : 'versions-list'}
 			/>
 		),
-		'environment': <EnvironmentCard environment={orderInfo.environment} />,
-		'help-and-support': (
+		'environment': environmentProfile ? (
+			<SectionedDetailsCard
+				icon="cloud"
+				sections={buildEnvironmentSections(
+					environmentProfile,
+					orderInfo.environment
+				)}
+				title="workspace-info"
+			/>
+		) : (
+			<EnvironmentCard environment={orderInfo.environment} />
+		),
+		'help-and-support': learnUrl ? (
+			<LearnLinkCard url={learnUrl} />
+		) : (
 			<HelpSupportCard specifications={product.productSpecifications} />
 		),
 		'orders': <OrdersCard />,
-		'utilization': <UtilizationCard />,
+		'utilization':
+			utilizationProfile === 'usage-metrics' ? (
+				<SectionedDetailsCard
+					icon="analytics"
+					sections={buildUtilizationSections(utilizationProfile)}
+					title="usage"
+				/>
+			) : (
+				<UtilizationCard />
+			),
 	};
 
-	const tabKeySet = new Set(
-		getVisibleProjectTabKeys({
-			kind,
-			orderType: orderInfo.orderType,
-			product,
-		})
-	);
-
-	if (activationProfile === 'none') {
-		tabKeySet.delete('activation');
-	}
-
-	const tabs: DetailTab[] = PROJECT_TAB_ORDER.filter((tabKey) =>
-		tabKeySet.has(tabKey)
-	).map((tabKey) => ({
+	const tabs: DetailTab[] = tabKeys.map((tabKey) => ({
 		content: tabContent[tabKey],
 		key: tabKey,
 		label: PROJECT_TAB_LABELS[tabKey],

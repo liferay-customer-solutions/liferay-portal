@@ -5,15 +5,15 @@
 	"entitlements": [
 		{
 			"endDate": "2027-08-09T00:00:00Z",
-			"externalReferenceCode": "C_ENT_ACT_ENTERPRISE_SEARCH",
+			"externalReferenceCode": "C_ENT_ENTERPRISE_SEARCH",
 			"grantType": "fixed",
 			"maxQuantity": 1,
 			"name": "Enterprise Search",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-014",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_ACT_ENTERPRISE_SEARCH",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_ENTERPRISE_SEARCH",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_ENTERPRISE_SEARCH",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ACT_ENTERPRISE_SEARCH",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ENTERPRISE_SEARCH",
 			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
@@ -38,10 +38,10 @@
 		"externalReferenceCode": "C_ORDER_ENTERPRISE_SEARCH",
 		"orderItems": [
 			{
-				"externalReferenceCode": "C_ORDER_ITEM_ACT_ENTERPRISE_SEARCH",
+				"externalReferenceCode": "C_ORDER_ITEM_ENTERPRISE_SEARCH",
 				"name": "Enterprise Search",
 				"quantity": 1,
-				"skuExternalReferenceCode": "PRDCT-ACT-ENTERPRISE-SEARCH",
+				"skuExternalReferenceCode": "PRDCT-ENTERPRISE-SEARCH",
 				"unitPrice": 0
 			},
 			{

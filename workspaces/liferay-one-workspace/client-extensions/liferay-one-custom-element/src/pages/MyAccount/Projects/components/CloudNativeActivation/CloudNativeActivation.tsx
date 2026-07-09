@@ -4,10 +4,10 @@
  */
 
 import ClayTable from '@clayui/table';
-import {DetailedCard} from '~/components/DetailedCard/DetailedCard';
 import Button from '~/components/Button/Button';
+import {DetailedCard} from '~/components/DetailedCard/DetailedCard';
 import {Word, translate} from '~/i18n';
-import {CLOUD_NATIVE_ENVIRONMENTS_MOCK} from '~/pages/MyAccount/Projects/utils/activationMockData';
+import {CLOUD_NATIVE_ENVIRONMENTS_MOCK} from '~/pages/MyAccount/Projects/utils/activationMockDataConstants';
 
 import PopoverIcon from '../PopoverIcon/PopoverIcon';
 

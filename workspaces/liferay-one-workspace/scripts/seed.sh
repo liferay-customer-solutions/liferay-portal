@@ -17,6 +17,9 @@ function main {
 	echo "Seeding test data."
 	bash seed/seed_test_data.sh
 
+	echo "Ensuring product SKUs."
+	bash seed/ensure_product_skus.sh
+
 	echo "Seeding journal articles."
 	bash seed/seed_journal_articles.sh
 

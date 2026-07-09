@@ -323,6 +323,84 @@
 		},
 		{
 			"description": {
+				"en_US": "Selects which activation experience the project dashboard renders for this product."
+			},
+			"facetable": false,
+			"key": "project-activation-profile",
+			"optionCategory": {
+				"externalReferenceCode": "PRODUCT_METADATA"
+			},
+			"title": {
+				"en_US": "Project Activation Profile"
+			}
+		},
+		{
+			"description": {
+				"en_US": "Selects which details layout the project dashboard renders for this product."
+			},
+			"facetable": false,
+			"key": "project-details-profile",
+			"optionCategory": {
+				"externalReferenceCode": "PRODUCT_METADATA"
+			},
+			"title": {
+				"en_US": "Project Details Profile"
+			}
+		},
+		{
+			"description": {
+				"en_US": "Selects which download experience the project dashboard renders for this product."
+			},
+			"facetable": false,
+			"key": "project-download-profile",
+			"optionCategory": {
+				"externalReferenceCode": "PRODUCT_METADATA"
+			},
+			"title": {
+				"en_US": "Project Download Profile"
+			}
+		},
+		{
+			"description": {
+				"en_US": "Selects which environment layout the project dashboard renders for this product."
+			},
+			"facetable": false,
+			"key": "project-environment-profile",
+			"optionCategory": {
+				"externalReferenceCode": "PRODUCT_METADATA"
+			},
+			"title": {
+				"en_US": "Project Environment Profile"
+			}
+		},
+		{
+			"description": {
+				"en_US": "The learn page URL shown on the project dashboard help and support tab for this product."
+			},
+			"facetable": false,
+			"key": "project-learn-url",
+			"optionCategory": {
+				"externalReferenceCode": "PRODUCT_METADATA"
+			},
+			"title": {
+				"en_US": "Project Learn URL"
+			}
+		},
+		{
+			"description": {
+				"en_US": "Selects which utilization layout the project dashboard renders for this product."
+			},
+			"facetable": false,
+			"key": "project-utilization-profile",
+			"optionCategory": {
+				"externalReferenceCode": "PRODUCT_METADATA"
+			},
+			"title": {
+				"en_US": "Project Utilization Profile"
+			}
+		},
+		{
+			"description": {
 				"en_US": "This is the name of the primary app publisher."
 			},
 			"facetable": false,

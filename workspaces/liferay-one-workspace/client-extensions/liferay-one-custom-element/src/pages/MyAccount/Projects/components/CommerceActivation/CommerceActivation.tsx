@@ -6,7 +6,7 @@
 import ClayTable from '@clayui/table';
 import {DetailedCard} from '~/components/DetailedCard/DetailedCard';
 import {translate} from '~/i18n';
-import {COMMERCE_INSTRUCTIONS_MOCK} from '~/pages/MyAccount/Projects/utils/activationMockData';
+import {COMMERCE_INSTRUCTIONS_MOCK} from '~/pages/MyAccount/Projects/utils/activationMockDataConstants';
 
 export default function CommerceActivation() {
 	return (
@@ -23,7 +23,7 @@ export default function CommerceActivation() {
 							{translate('version')}
 						</ClayTable.Cell>
 
-						<ClayTable.Cell headingCell expanded>
+						<ClayTable.Cell expanded headingCell>
 							{translate('instructions')}
 						</ClayTable.Cell>
 					</ClayTable.Row>

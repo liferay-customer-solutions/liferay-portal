@@ -125,7 +125,7 @@ Finance/A/R-set hard hold; overrides spend limits.
 | `description` | string | |
 | `isPrimary` | boolean | Default `false` |
 | `licenseKeyProductVersion` | string | Version string in generated keys, e.g. `dxp-7.4`; null for non-key products |
-| `productFamily` | picklist | DXP · Portal · Analytics · Commerce · AIHub · CMP · Partner · Support · Training · Other |
+| `productFamily` | picklist | DXP · Portal · SaaS · PaaS · Commerce · Analytics · EnterpriseSearch · AIHub · CMP · DataPlatform · DSR · Partner · Support · Training · Other. Normalized from SFDC `Product2.Family` (LXC → SaaS, DXP Cloud → PaaS, Commerce/Commerce Cloud → Commerce, Enterprise Search + Cloud → EnterpriseSearch). CMP is the Content Marketing Platform; Data Platform and Digital Sales Room (DSR) are their own families. Seeded as a `family` product specification. |
 | `metricCoverage` | string | Rules from SFDC Product Catalog |
 
 **CPSpecificationOption values (Marketplace app metadata)**

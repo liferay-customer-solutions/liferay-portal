@@ -15,7 +15,7 @@ import {
 	ACTIVATION_KEYS_MOCK,
 	ActivationKeyRow,
 	ActivationKeyStatus,
-} from '~/pages/MyAccount/Projects/utils/activationMockData';
+} from '~/pages/MyAccount/Projects/utils/activationMockDataConstants';
 
 import './ActivationKeysTable.css';
 
@@ -111,7 +111,7 @@ export default function ActivationKeysTable() {
 	}, [filteredRows, page, pageSize]);
 
 	const allChecked =
-		paginatedRows.length > 0 &&
+		!!paginatedRows.length &&
 		paginatedRows.every((row) => checkedIds.includes(row.id));
 
 	const toggleAll = () =>

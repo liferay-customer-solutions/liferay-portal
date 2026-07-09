@@ -129,6 +129,16 @@
 			"type": "business"
 		},
 		{
+			"externalReferenceCode": "ACCNT-023",
+			"name": "Commerce Cloud Test Account",
+			"type": "business"
+		},
+		{
+			"externalReferenceCode": "ACCNT-024",
+			"name": "Enterprise Search Cloud Test Account",
+			"type": "business"
+		},
+		{
 			"externalReferenceCode": "SSA-ACCOUNT",
 			"name": "SSA Account",
 			"type": "business"
