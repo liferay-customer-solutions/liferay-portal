@@ -32,6 +32,7 @@ export type ListColumn<T> = {
 	heading?: Word;
 	key: string;
 	render: (item: T) => ReactNode;
+	width?: string;
 };
 
 type FilterableListCardProps<T> = {
@@ -39,9 +40,10 @@ type FilterableListCardProps<T> = {
 	columns: ListColumn<T>[];
 	defaultPageSize?: number;
 	emptyLabel: Word;
-	filters: ListFilter<T>[];
+	filters?: ListFilter<T>[];
+	hideToolbar?: boolean;
 	items: T[];
-	matchesSearch: (item: T, search: string) => boolean;
+	matchesSearch?: (item: T, search: string) => boolean;
 	onItemClick: (item: T) => void;
 	rowKey: (item: T) => string;
 	title?: Word;
@@ -124,7 +126,8 @@ export default function FilterableListCard<T>({
 	columns,
 	defaultPageSize = PAGE_SIZE_OPTIONS[0],
 	emptyLabel,
-	filters,
+	filters = [],
+	hideToolbar = false,
 	items,
 	matchesSearch,
 	onItemClick,
@@ -144,7 +147,7 @@ export default function FilterableListCard<T>({
 		const search = keywords.trim().toLowerCase();
 
 		return items.filter((item) => {
-			if (search && !matchesSearch(item, search)) {
+			if (search && matchesSearch && !matchesSearch(item, search)) {
 				return false;
 			}
 
@@ -217,9 +220,10 @@ export default function FilterableListCard<T>({
 				<div className="list-card-header">{translate(title)}</div>
 			)}
 
-			<div className="align-items-center d-flex list-card-toolbar">
-				<ClayDropDown
-					active={filterActive}
+			{!hideToolbar && (
+				<div className="align-items-center d-flex list-card-toolbar">
+					<ClayDropDown
+						active={filterActive}
 					className="list-card-filter-dropdown"
 					onActiveChange={(active) => {
 						setFilterActive(active);
@@ -302,10 +306,13 @@ export default function FilterableListCard<T>({
 					</ClayInput.GroupItem>
 				</ClayInput.Group>
 
-				{action && (
-					<div className="list-card-toolbar-action">{action}</div>
-				)}
-			</div>
+					{action && (
+						<div className="list-card-toolbar-action">
+							{action}
+						</div>
+					)}
+				</div>
+			)}
 
 			{!!activeFilters.length && (
 				<div className="list-card-active-filters">
@@ -334,6 +341,7 @@ export default function FilterableListCard<T>({
 									<ClayTable.Cell
 										headingCell
 										key={column.key}
+										style={{width: column.width}}
 									>
 										{column.heading
 											? translate(column.heading)
@@ -350,7 +358,10 @@ export default function FilterableListCard<T>({
 									onClick={() => onItemClick(item)}
 								>
 									{columns.map((column) => (
-										<ClayTable.Cell key={column.key}>
+										<ClayTable.Cell
+											key={column.key}
+											style={{width: column.width}}
+										>
 											{column.render(item)}
 										</ClayTable.Cell>
 									))}

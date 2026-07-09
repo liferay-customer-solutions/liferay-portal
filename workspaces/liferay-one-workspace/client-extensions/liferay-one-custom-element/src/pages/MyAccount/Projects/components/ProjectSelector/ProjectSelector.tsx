@@ -53,7 +53,7 @@ export default function ProjectSelector() {
 					? i18n.translate('no-project-linked')
 					: undefined
 			}
-			emptyLabel="no-projects-yet"
+			emptyLabel={i18n.translate('no-projects-yet')}
 			items={items}
 			label={`${i18n.translate('project')} (${projectCount})`}
 			loading={loading}

@@ -15,11 +15,7 @@ import {
 } from '~/hooks/useProjectCommerce';
 import {getProductOrderInfo, useProjectOrders} from '~/hooks/useProjectOrders';
 import i18n from '~/i18n';
-import ActivationKeysCard from '~/pages/MyAccount/Projects/components/ActivationKeysCard/ActivationKeysCard';
 import DetailHeader from '~/pages/MyAccount/Projects/components/DetailHeader/DetailHeader';
-import DetailsCard, {
-	DetailsRow,
-} from '~/pages/MyAccount/Projects/components/DetailsCard/DetailsCard';
 import DownloadListCard from '~/pages/MyAccount/Projects/components/DownloadListCard/DownloadListCard';
 import EnvironmentCard from '~/pages/MyAccount/Projects/components/EnvironmentCard/EnvironmentCard';
 import HelpSupportCard from '~/pages/MyAccount/Projects/components/HelpSupportCard/HelpSupportCard';
@@ -27,14 +23,23 @@ import OrdersCard from '~/pages/MyAccount/Projects/components/OrdersCard/OrdersC
 import ProjectDetailTabs, {
 	DetailTab,
 } from '~/pages/MyAccount/Projects/components/ProjectDetailTabs/ProjectDetailTabs';
+import SectionedDetailsCard from '~/pages/MyAccount/Projects/components/SectionedDetailsCard/SectionedDetailsCard';
 import UtilizationCard from '~/pages/MyAccount/Projects/components/UtilizationCard/UtilizationCard';
 import {ProjectItemKind, ProjectTabKey} from '~/pages/MyAccount/Projects/types';
-import {PROJECT_TAB_LABELS} from '~/pages/MyAccount/Projects/utils/constants';
+import {resolveActivationProfile} from '~/pages/MyAccount/Projects/utils/getActivationProfile';
+import {buildDetailsSections} from '~/pages/MyAccount/Projects/utils/buildDetailsSections';
+import {
+	PROJECT_TAB_LABELS,
+	PROJECT_TAB_ORDER,
+} from '~/pages/MyAccount/Projects/utils/constants';
+import {DETAILS_MOCK} from '~/pages/MyAccount/Projects/utils/detailsMockData';
+import {resolveDetailsProfile} from '~/pages/MyAccount/Projects/utils/getDetailsProfile';
 import {getLogoColor} from '~/pages/MyAccount/Projects/utils/getLogoColor';
 import {getProductIcon} from '~/pages/MyAccount/Projects/utils/getProductIcon';
 import {getVisibleProjectTabKeys} from '~/pages/MyAccount/Projects/utils/getVisibleProjectTabKeys';
 import {isUnassignedProject} from '~/pages/MyAccount/Projects/utils/isUnassignedProject';
 import {Liferay} from '~/services/liferay/liferay';
+import ActivationPanel from '../components/ActivationPanel/ActivationPanel';
 
 type ProjectItemDetailsProps = {
 	kind: ProjectItemKind;
@@ -94,36 +99,29 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 
 	const orderInfo = getProductOrderInfo(placedOrders, product.name);
 
-	const detailsRows: DetailsRow[] = [
-		...(kind === 'product'
-			? [{label: i18n.translate('type'), value: type}]
-			: []),
-		{label: i18n.translate('order-id'), value: orderInfo.orderId},
-		{label: i18n.translate('order-date'), value: orderInfo.orderDate},
-		{label: i18n.translate('purchased-by'), value: orderInfo.purchasedBy},
-		{
-			label: i18n.translate('purchase-number'),
-			value: orderInfo.purchaseNumber,
-		},
-		...(kind === 'application'
-			? [
-					{
-						label: i18n.translate('project-type'),
-						value:
-							getSpecificationValue(product, 'license-term') ||
-							type,
-					},
-				]
-			: []),
-		{
-			label: i18n.translate('customer-account'),
-			value: Liferay.CommerceContext.account?.accountName ?? '',
-		},
-	];
+	const detailsProfile = resolveDetailsProfile({kind, product});
+
+	const detailsSections = buildDetailsSections(detailsProfile, {
+		accountName: Liferay.CommerceContext.account?.accountName ?? '',
+		mock: DETAILS_MOCK,
+		orderInfo,
+	});
+
+	const activationProfile = resolveActivationProfile({
+		kind,
+		orderType: orderInfo.orderType,
+		product,
+	});
 
 	const tabContent: Record<ProjectTabKey, ReactNode> = {
-		'activation': <ActivationKeysCard productName={product.name} />,
-		'details': <DetailsCard rows={detailsRows} />,
+		'activation': (
+			<ActivationPanel
+				kind={kind}
+				orderType={orderInfo.orderType}
+				product={product}
+			/>
+		),
+		'details': <SectionedDetailsCard sections={detailsSections} />,
 		'download': (
 			<DownloadListCard
 				emptyLabel={
@@ -144,11 +142,21 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 		'utilization': <UtilizationCard />,
 	};
 
-	const tabs: DetailTab[] = getVisibleProjectTabKeys({
-		kind,
-		orderType: orderInfo.orderType,
-		product,
-	}).map((tabKey) => ({
+	const tabKeySet = new Set(
+		getVisibleProjectTabKeys({
+			kind,
+			orderType: orderInfo.orderType,
+			product,
+		})
+	);
+
+	if (activationProfile === 'none') {
+		tabKeySet.delete('activation');
+	}
+
+	const tabs: DetailTab[] = PROJECT_TAB_ORDER.filter((tabKey) =>
+		tabKeySet.has(tabKey)
+	).map((tabKey) => ({
 		content: tabContent[tabKey],
 		key: tabKey,
 		label: PROJECT_TAB_LABELS[tabKey],

@@ -1,0 +1,20 @@
+.activation-status-card {
+	align-items: center;
+	border: 1px solid var(--color-neutral-2);
+	border-radius: var(--border-radius-lg, 0.625rem);
+	display: flex;
+	gap: var(--spacer-3);
+	max-width: 32rem;
+	padding: var(--spacer-3) var(--spacer-4);
+}
+
+.activation-status-card-icon {
+	align-items: center;
+	background: var(--color-neutral-2);
+	border-radius: 50%;
+	display: flex;
+	flex-shrink: 0;
+	height: 40px;
+	justify-content: center;
+	width: 40px;
+}

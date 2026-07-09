@@ -32,12 +32,12 @@ export const PROJECT_TAB_ORDER: ProjectTabKey[] = [
 ];
 
 export const STATUS_DOT_COLORS: {[key: string]: string} = {
-	active: 'var(--color-success)',
-	completed: 'var(--color-success)',
-	expired: 'var(--color-danger)',
-	paid: 'var(--color-success)',
-	pending: 'var(--color-warning)',
-	processing: 'var(--color-warning)',
+	active: 'var(--color-state-success)',
+	completed: 'var(--color-state-success)',
+	expired: 'var(--color-state-error)',
+	paid: 'var(--color-state-success)',
+	pending: 'var(--color-state-warning)',
+	processing: 'var(--color-state-warning)',
 };
 
 export type SupportLink = {
@@ -89,9 +89,9 @@ export const SUPPORT_SPECIFICATION_KEYS = SUPPORT_LINKS.map(
 
 export const TAB_VISIBILITY: Partial<Record<OrderTypes, ProjectTabKey[]>> = {
 	ADDONS: ['details', 'orders'],
-	AI_HUB: ['details', 'activation', 'orders'],
+	AI_HUB: ['details', 'environment', 'orders'],
 	CLIENT_EXTENSION: ['details', 'activation', 'orders', 'help-and-support'],
-	CLOUD_APP: ['details', 'environment', 'orders', 'help-and-support'],
+	CLOUD_APP: ['details', 'activation', 'environment', 'orders', 'help-and-support'],
 	CMP_BETA: ['details', 'activation', 'download', 'orders'],
 	COMPOSITE_APP: [
 		'details',
