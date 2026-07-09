@@ -109,6 +109,7 @@ export const TAB_VISIBILITY: Partial<Record<OrderTypes, ProjectTabKey[]>> = {
 		'orders',
 		'help-and-support',
 	],
+	LDP: ['details', 'environment', 'orders'],
 	LOW_CODE_CONFIGURATION: [
 		'details',
 		'download',

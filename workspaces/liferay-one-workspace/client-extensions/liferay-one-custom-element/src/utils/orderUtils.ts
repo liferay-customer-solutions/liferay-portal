@@ -84,6 +84,7 @@ export const LIFERAY_PRODUCT_ORDER_TYPES: readonly OrderTypes[] = [
 	'AI_HUB',
 	'CMP_BETA',
 	'DXP',
+	'LDP',
 ];
 
 export const orderTypeLabel = {
@@ -96,6 +97,7 @@ export const orderTypeLabel = {
 	DSR: 'Digital Sales Room',
 	DXP: 'DXP Free',
 	DXP_APP: 'DXP',
+	LDP: 'Liferay Data Platform',
 	LOW_CODE_CONFIGURATION: 'Low-Code Configuration',
 	OTHER: 'Other',
 	SOLUTIONS7: 'Solutions 7',

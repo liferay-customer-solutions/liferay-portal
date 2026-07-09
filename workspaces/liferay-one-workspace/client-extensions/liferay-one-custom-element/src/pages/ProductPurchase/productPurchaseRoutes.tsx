@@ -10,6 +10,9 @@ import {AppRoute} from '~/utils/routeUtils';
 const AccountSelection = lazy(
 	() => import('./AccountSelection/AccountSelection')
 );
+const LDPProvisioning = lazy(
+	() => import('./LDPProvisioning/LDPProvisioning')
+);
 const License = lazy(() => import('./License/License'));
 const PaymentMethod = lazy(() => import('./PaymentMethod/PaymentMethod'));
 const Summary = lazy(() => import('./Summary/Summary'));
@@ -17,6 +20,7 @@ const Summary = lazy(() => import('./Summary/Summary'));
 export type ProductPurchaseStep = {
 	element: ReactNode;
 	index?: boolean;
+	isLDPOnly?: boolean;
 	isPaidOnly?: boolean;
 	path?: string;
 	title: string;
@@ -27,9 +31,13 @@ export type ProductPurchaseStepItem = {
 	title: string;
 };
 
-export function getProductPurchaseSteps(
-	isPaidApp: boolean
-): ProductPurchaseStep[] {
+export function getProductPurchaseSteps({
+	isLDP,
+	isPaidApp,
+}: {
+	isLDP: boolean;
+	isPaidApp: boolean;
+}): ProductPurchaseStep[] {
 	const steps: ProductPurchaseStep[] = [
 		{
 			element: <AccountSelection />,
@@ -49,13 +57,21 @@ export function getProductPurchaseSteps(
 			title: i18n.translate('payment-method'),
 		},
 		{
+			element: <LDPProvisioning />,
+			isLDPOnly: true,
+			path: 'provisioning',
+			title: i18n.translate('provisioning'),
+		},
+		{
 			element: <Summary />,
 			path: 'summary',
 			title: i18n.translate('summary'),
 		},
 	];
 
-	return steps.filter((step) => (isPaidApp ? true : !step.isPaidOnly));
+	return steps.filter(
+		(step) => (isPaidApp || !step.isPaidOnly) && (isLDP || !step.isLDPOnly)
+	);
 }
 
 export function getStepKey(step: Pick<ProductPurchaseStep, 'index' | 'path'>) {
