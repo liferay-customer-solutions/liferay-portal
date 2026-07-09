@@ -5,6 +5,19 @@
 	"entitlements": [
 		{
 			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_ACT_CLOUD_NATIVE",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Cloud Native",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-007",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_ACT_CLOUD_NATIVE",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_CLOUD_NATIVE",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ACT_CLOUD_NATIVE",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
 			"externalReferenceCode": "C_ENT_CLOUD_NATIVE_AIHUB",
 			"grantType": "fixed",
 			"maxQuantity": 1,
@@ -37,6 +50,13 @@
 		"currencyCode": "USD",
 		"externalReferenceCode": "C_ORDER_CLOUD_NATIVE",
 		"orderItems": [
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_ACT_CLOUD_NATIVE",
+				"name": "Cloud Native",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-ACT-CLOUD-NATIVE",
+				"unitPrice": 0
+			},
 			{
 				"externalReferenceCode": "C_ORDER_ITEM_CLOUD_NATIVE_AIHUB",
 				"name": "Liferay AI Hub",

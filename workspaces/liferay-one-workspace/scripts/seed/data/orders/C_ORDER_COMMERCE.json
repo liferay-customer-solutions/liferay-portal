@@ -5,6 +5,19 @@
 	"entitlements": [
 		{
 			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_ACT_COMMERCE",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Commerce",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-012",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_ACT_COMMERCE",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_COMMERCE",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ACT_COMMERCE",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
 			"externalReferenceCode": "C_ENT_COMMERCE_DXP",
 			"grantType": "fixed",
 			"maxQuantity": 1,
@@ -24,6 +37,13 @@
 		"currencyCode": "USD",
 		"externalReferenceCode": "C_ORDER_COMMERCE",
 		"orderItems": [
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_ACT_COMMERCE",
+				"name": "Commerce",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-ACT-COMMERCE",
+				"unitPrice": 0
+			},
 			{
 				"externalReferenceCode": "C_ORDER_ITEM_COMMERCE_DXP",
 				"name": "Liferay DXP",
