@@ -5,6 +5,19 @@
 	"entitlements": [
 		{
 			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_ACT_ANALYTICS_CLOUD",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Analytics Cloud",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-013",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_ACT_ANALYTICS_CLOUD",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_ANALYTICS_CLOUD",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ACT_ANALYTICS_CLOUD",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
 			"externalReferenceCode": "C_ENT_ANALYTICS_CLOUD_AIHUB",
 			"grantType": "fixed",
 			"maxQuantity": 1,
@@ -37,6 +50,13 @@
 		"currencyCode": "USD",
 		"externalReferenceCode": "C_ORDER_ANALYTICS_CLOUD",
 		"orderItems": [
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_ACT_ANALYTICS_CLOUD",
+				"name": "Analytics Cloud",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-ACT-ANALYTICS-CLOUD",
+				"unitPrice": 0
+			},
 			{
 				"externalReferenceCode": "C_ORDER_ITEM_ANALYTICS_CLOUD_AIHUB",
 				"name": "Liferay AI Hub",

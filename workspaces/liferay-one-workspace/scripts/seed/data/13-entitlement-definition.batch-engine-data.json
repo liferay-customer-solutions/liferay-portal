@@ -13,6 +13,96 @@
 		{
 			"active": true,
 			"defaultQuantity": 1,
+			"displayName": "Analytics Cloud",
+			"externalReferenceCode": "C_ENT_DEF_ACT_ANALYTICS_CLOUD",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ACT-ANALYTICS-CLOUD",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Test Application",
+			"externalReferenceCode": "C_ENT_DEF_ACT_APP",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ACT-APP",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Cloud Native",
+			"externalReferenceCode": "C_ENT_DEF_ACT_CLOUD_NATIVE",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ACT-CLOUD-NATIVE",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Commerce",
+			"externalReferenceCode": "C_ENT_DEF_ACT_COMMERCE",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ACT-COMMERCE",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "DXP",
+			"externalReferenceCode": "C_ENT_DEF_ACT_DXP",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ACT-DXP",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Enterprise Search",
+			"externalReferenceCode": "C_ENT_DEF_ACT_ENTERPRISE_SEARCH",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ACT-ENTERPRISE-SEARCH",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "PaaS",
+			"externalReferenceCode": "C_ENT_DEF_ACT_PAAS",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ACT-PAAS",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Portal",
+			"externalReferenceCode": "C_ENT_DEF_ACT_PORTAL",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ACT-PORTAL",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "SaaS",
+			"externalReferenceCode": "C_ENT_DEF_ACT_SAAS",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ACT-SAAS",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
 			"displayName": "Liferay AI Hub",
 			"externalReferenceCode": "C_ENT_DEF_AIHUB",
 			"grantType": "fixed",

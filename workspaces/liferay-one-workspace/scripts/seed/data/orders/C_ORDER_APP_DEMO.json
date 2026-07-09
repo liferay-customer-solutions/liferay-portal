@@ -1,0 +1,39 @@
+{
+	"customFields": {
+		"projectName": "DXP Project"
+	},
+	"entitlements": [
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_ACT_APP",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Test Application",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-006",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_ACT_APP",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_DXP",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ACT_APP",
+			"startDate": "2026-08-09T00:00:00Z"
+		}
+	],
+	"order": {
+		"accountExternalReferenceCode": "ACCNT-006",
+		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
+		"contractExternalReferenceCode": "C_CONTRACT_DXP",
+		"currencyCode": "USD",
+		"externalReferenceCode": "C_ORDER_APP_DEMO",
+		"orderItems": [
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_ACT_APP",
+				"name": "Test Application",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-ACT-APP",
+				"unitPrice": 0
+			}
+		],
+		"orderStatus": 5,
+		"orderTypeExternalReferenceCode": "DXP_APP"
+	},
+	"purchaseOrderNumber": "PO-APP-DEMO"
+}
