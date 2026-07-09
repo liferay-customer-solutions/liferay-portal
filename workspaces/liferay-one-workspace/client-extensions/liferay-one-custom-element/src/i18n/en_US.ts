@@ -30,6 +30,7 @@ export default {
 	'accounts': 'Accounts',
 	'accounts-available-for-x-you': 'Accounts available for {0} (you)',
 	'actions': 'Actions',
+	'activated': 'Activated',
 	'activation': 'Activation',
 	'activation-key': 'Activation Key',
 	'activation-key-creation': 'Activation Key Creation',
@@ -68,6 +69,7 @@ export default {
 	'ai-hub-account-details': 'AI Hub Account Details',
 	'ai-hub-account-name': 'AI Hub Account Name',
 	'ai-hub-information': 'AI Hub Information',
+	'all': 'All',
 	'all-orders': 'All Orders',
 	'all-progress-and-information-related-to-the-creation-of-the-app-will-be-lost-do-you-still-want-to-exit':
 		'All progress and information related to the creation of the app will be lost. Do you still want to exit?',
@@ -80,6 +82,12 @@ export default {
 	'all-progress-and-information-related-to-the-creation-of-the-solution-will-be-lost-unless-you-save-the-solution-as-a-draft-do-you-still-want-to-exit':
 		'All progress and information related to the creation of the solution will be lost unless you save the solution as a draft. Do you still want to exit?',
 	'all-published-apps': 'All Published Apps',
+	'almost-there-setup-analytics-cloud-by-finishing-the-activation-form':
+		'Almost there! Setup Analytics Cloud by finishing the activation form.',
+	'almost-there-setup-liferay-paas-by-finishing-the-activation-form':
+		'Almost there! Setup Liferay PaaS by finishing the activation form.',
+	'almost-there-setup-liferay-saas-by-finishing-the-activation-form':
+		'Almost there! Setup Liferay SaaS by finishing the activation form.',
 	'allowed-email-domains': 'Allowed Email Domains',
 	'amount': 'Amount',
 	'an-administrator-of-the-marketplace-will-review-your-request-shortly-if-you-have-questions-regarding-your-submission-please-email':
@@ -87,6 +95,7 @@ export default {
 	'an-app-build-is-your-compiled-or-non-compiled-code-submitted-on-behalf-of-your-account-to-the-marketplace-once-submitted-it-will-be-reviewed-and-tested-by-our-marketplace-administrators-for-approval-in-the-marketplace':
 		'An App Build is your compiled or non-compiled code submitted on behalf of your account to the Marketplace. Once submitted, it will be reviewed and tested by our Marketplace administrators for approval in the Marketplace.',
 	'an-unexpected-error-occurred': 'An unexpected error occurred.',
+	'analytics-cloud-activation': 'Analytics Cloud Activation',
 	'analytics-group-id': 'Analytics Group ID',
 	'and': 'and',
 	'and-the': 'and the',
@@ -219,6 +228,7 @@ export default {
 	'cloud-compatible': 'Cloud Compatible?',
 	'cloud-contacts': 'Cloud Contacts',
 	'cloud-license-usage-type': 'Cloud License Usage Type',
+	'cloud-native-environments': 'Cloud Native Environments',
 	'cloud-project': 'Cloud Project',
 	'cloud-provisioning': 'Cloud Provisioning',
 	'cloud-upload': 'Cloud Upload',
@@ -236,6 +246,7 @@ export default {
 	'complete-publisher-account-request': 'Complete Publisher Account Request',
 	'completed': 'Completed',
 	'composite-app': 'Composite App',
+	'complimentary': 'Complimentary',
 	'confirm': 'Confirm',
 	'confirm-deactivate-keys': 'Confirm & Deactivate Keys',
 	'confirm-deactivation-terms': 'Confirm Deactivation Terms',
@@ -286,6 +297,7 @@ export default {
 	'create-template': 'Create Template',
 	'created-at': 'Created At',
 	'created-by': 'Created By',
+	'critical-incident-contacts': 'Critical Incident Contacts',
 	'currency-code': 'Currency Code',
 	'current-version': 'Current Version',
 	'customer-account': 'Customer Account',
@@ -302,6 +314,7 @@ export default {
 	'date-added': 'Date Added',
 	'date-created': 'Date Created',
 	'deactivate': 'Deactivate',
+	'deactivate-license-key': 'Deactivate License Key',
 	'deactivated': 'Deactivated',
 	'decline': 'Decline',
 	'define-company-profile-information-for-your-solution-this-will-inform-users-about-this-versions-updates-on-the-storefront':
@@ -336,6 +349,7 @@ export default {
 	'download-app': 'Download App',
 	'download-in-progress': 'Download in Progress',
 	'download-key': 'Download Key',
+	'download-license-key': 'Download License Key',
 	'download-your-activation-key-file-below-and-upload-it-to-the-dedicated-portal-within-your-dxp-environment-to-get-started':
 		'Download your activation key file below and upload it to the dedicated portal within your DXP environment to get started.',
 	'draft': 'Draft',
@@ -389,6 +403,7 @@ export default {
 	'entity-type': 'Entity Type',
 	'environment': 'Environment',
 	'environment-details': 'Environment Details',
+	'environment-name': 'Environment Name',
 	'environment-selection': 'Environment Selection',
 	'environment-type': 'Environment Type',
 	'environments': 'Environments',
@@ -414,6 +429,7 @@ export default {
 	'explore-over-800-apps-available-in-the-liferay-marketplace-from-a-variety-of-publishers-apps-allow-you-to-accelerate-your-liferay-development-get-to-market-faster':
 		'Explore over 800 apps available in the Liferay Marketplace from a variety of publishers. Apps allow you to accelerate your Liferay development get to market faster.',
 	'export': 'Export',
+	'export-all-key-details-csv': 'Export All Key Details (CSV)',
 	'export-csv': 'Export CSV',
 	'extend-trial': 'Extend Trial',
 	'extension': 'Extension',
@@ -441,6 +457,8 @@ export default {
 		'For businesses with a VAT/Tax number; this account type support multiple users. It also possible to join an already existing business account',
 	'for-individuals-without-a-vat-tax-number-this-account-support-single-user-only':
 		'For individuals without a VAT/Tax number; this account support single user only.',
+	'for-instructions-on-how-to-setup-your-software-read':
+		'For instructions on how to setup your software, please read the',
 	'form': 'Form',
 	'fragment': 'Fragment',
 	'fragment-collection-of-fragments': 'Fragment/Collection of Fragments',
@@ -448,9 +466,12 @@ export default {
 	'fulfillment-date': 'Fulfillment Date',
 	'full-name': 'Full Name',
 	'general-info': 'General Info',
+	'generate-new': 'Generate New',
 	'get-activation-key': 'Get Activation Key',
 	'get-app': 'Get App',
 	'get-started': 'Get Started',
+	'getting-started-with-liferay-enterprise-search-article':
+		'Getting Started with Liferay Enterprise Search article.',
 	'github-username': 'Github Username',
 	'go-back-to-marketplace': 'Go Back to Marketplace',
 	'go-live': 'Go Live',
@@ -475,6 +496,7 @@ export default {
 		'Hold tight. We’re preparing your environment so you can start using your Liferay Data Platform. This will only take a moment!',
 	'home': 'Home',
 	'host-name': 'Host Name',
+	'host-name-cluster-size': 'Host Name / Cluster Size',
 	'how-easy-to-use-is-the-product': 'How easy to use is the product?',
 	'how-satisfied-are-you-with-the-product':
 		'How satisfied are you with the product?',
@@ -520,6 +542,7 @@ export default {
 	'installation-status': 'Installation Status',
 	'installation-success': 'Installation Success',
 	'instance-size': 'Instance Size',
+	'instructions': 'Instructions',
 	'insufficient-resource-requirements': 'Insufficient Resource Requirements',
 	'intl-code': 'Intl. Code',
 	'invalid-or-non-existent-attachment-id':
@@ -542,6 +565,7 @@ export default {
 	'key-deactivation-requested-succesfully':
 		'Key deactivation requested successfully',
 	'key-type': 'Key Type',
+	'keys-provisioned': 'Keys Provisioned',
 	'last-login': 'Last Login',
 	'last-name': 'Last Name',
 	'last-orders': 'Last Orders',
@@ -562,6 +586,7 @@ export default {
 	'license-selection': 'License Selection',
 	'license-type': 'License Type',
 	'licenses': 'Licenses',
+	'licenses-list': 'Licenses List',
 	'licenses-summary': 'Licenses Summary',
 	'licensing': 'Licensing',
 	'liferay-dsr-eula-disclaimer-prefix':
@@ -575,11 +600,13 @@ export default {
 	'liferay-end-user-agreement': 'Liferay End User Agreement',
 	'liferay-learn': 'Liferay Learn',
 	'liferay-paas': 'Liferay PaaS',
+	'liferay-paas-activation': 'Liferay PaaS Activation',
 	'liferay-publisher-license-agreement':
 		'Liferay Publisher License Agreement',
 	'liferay-s': 'Liferay’s',
 	'liferay-s-privacy-policy': 'Liferay’s Privacy Policy',
 	'liferay-saas': 'Liferay SaaS',
+	'liferay-saas-activation': 'Liferay SaaS Activation',
 	'liferay-self-hosted': 'Liferay Self-Hosted',
 	'liferay-version': 'Liferay Version',
 	'limit-reached': 'Limit Reached',
@@ -643,6 +670,9 @@ export default {
 	'marked-as-paid': 'Marked as paid.',
 	'marketplace-licensor-eula': 'Marketplace Licensor EULA',
 	'marketplace-orders': 'Marketplace Orders',
+	'maximum-cluster-nodes': 'Maximum Cluster Nodes',
+	'maximum-number-of-active-nodes-available-for-this-environment':
+		'Maximum number of active nodes available for this environment. This does not include expired or future nodes.',
 	'maximum-number-of-uploads-reached': 'Maximum Number of Uploads Reached',
 	'member': 'Member',
 	'member-successfully-invited': 'Member successfully invited.',
@@ -723,7 +753,9 @@ export default {
 	'no-usage-data-yet': 'No Usage Data Yet',
 	'no-versions-yet': 'No Versions Yet',
 	'no-x': 'No {0}',
+	'non-production': 'Non-Production',
 	'none': 'None',
+	'not-activated': 'Not Activated',
 	'not-installed': 'Not Installed',
 	'not-seeing-a-specific-account': 'Not seeing a specific Account?',
 	'not-seeing-a-specific-project': 'Not seeing a specific Project?',
@@ -775,6 +807,7 @@ export default {
 	'other-event': 'Other Event',
 	'overall-experience': 'Overall Experience',
 	'overdue': 'Overdue',
+	'paas-users': 'PaaS Users',
 	'package': 'Package',
 	'paid': 'Paid',
 	'paid-by': 'Paid By',
@@ -810,6 +843,8 @@ export default {
 		'Please check this box if the file you upload does not contain any personal data and therefore can be uploaded to and accessed from any Liferay support location globally.',
 	'please-complete-at-least-one-of-the-following-fields-to-proceed':
 		'Please complete at least one of the following fields to proceed',
+	'please-copy-and-paste-this-subscription-id-to-your-cloud-native-instance':
+		'Please copy and paste this Subscription ID to your Cloud Native instance.',
 	'please-enter-a-valid-email-address': 'Please enter a valid email address.',
 	'please-fill-in-a-valid-email': 'Please fill in a valid email.',
 	'please-fill-in-a-valid-phone-number':
@@ -839,6 +874,7 @@ export default {
 	'pricing': 'Pricing',
 	'primary': 'Primary',
 	'primary-contact': 'Primary Contact',
+	'privacy-breach-contacts': 'Privacy Breach Contacts',
 	'privacy-policy': 'Privacy Policy',
 	'private-information': 'Private Information',
 	'processing': 'Processing',
@@ -846,6 +882,7 @@ export default {
 	'product-details': 'Product Details',
 	'product-environment': 'Product Environment',
 	'product-unavailable': 'Product Unavailable',
+	'production': 'Production',
 	'products': 'Products',
 	'profile': 'Profile',
 	'project': 'Project',
@@ -905,6 +942,7 @@ export default {
 	'purchase-failed': 'Purchase Failed',
 	'purchase-number': 'Purchase Number',
 	'purchase-order-number': 'Purchase Order Number',
+	'purchased': 'Purchased',
 	'purchased-by': 'Purchased by',
 	'purpose': 'Purpose',
 	'qty': 'Qty',
@@ -971,6 +1009,7 @@ export default {
 		'Section that shows the latest sales made.',
 	'section-that-shows-the-payments': 'Section that shows the payments.',
 	'security': 'Security',
+	'security-breach-contacts': 'Security Breach Contacts',
 	'select-a-file': 'Select a File',
 	'select-a-local-file-to-upload': 'Select a Local File to Upload',
 	'select-a-local-file-to-upload-only-one-file-can-be-attached-at-a-time':
@@ -985,6 +1024,8 @@ export default {
 	'select-account': 'Select Account',
 	'select-an-account-to-view-this-page':
 		'Select an account to view this page.',
+	'select-an-active-enterprise-search-subscription-to-download-the-activation-key':
+		'Select an active Liferay Enterprise Search subscription to download the activation key.',
 	'select-an-option': 'Select an Option',
 	'select-areas': 'Select Areas',
 	'select-categories': 'Select Categories',
@@ -1055,6 +1096,9 @@ export default {
 	'submit-solution': 'Submit Solution',
 	'submit-your-request-to-join-the-beta-program-all-submissions-will-be-reviewed-and-youll-receive-an-email-with-the-outcome':
 		'Submit your request to join the beta program. All submissions will be reviewed, and you’ll receive an email with the outcome.',
+	'subscription': 'Subscription',
+	'subscription-id': 'Subscription ID',
+	'subscription-term': 'Subscription Term',
 	'subscription-type': 'Subscription Type',
 	'subtotal': 'Subtotal',
 	'subtotal-discount': 'Subtotal Discount',
@@ -1161,6 +1205,7 @@ export default {
 	'ticket': 'Ticket',
 	'ticket-attachments': 'Ticket Attachments',
 	'tickets-impacting-this-event': 'Tickets Impacting This Event',
+	'tier-name': 'Tier Name',
 	'time': 'Time',
 	'time-zone': 'Time Zone',
 	'times-already-extended': 'Times Already Extended',
@@ -1201,6 +1246,7 @@ export default {
 	'try-beta': 'Try Beta',
 	'two-factor-authentication': 'Two-Factor Authentication',
 	'type': 'Type',
+	'uat': 'UAT',
 	'unable-to-assign-roles': 'Unable to assign roles',
 	'unable-to-connect-to-file-server': 'Unable to connect to file server.',
 	'unable-to-download-your-license-file-please-try-again-and-or-contact-support-via-the-manage-menu-on-the-dashboard':
@@ -1263,6 +1309,7 @@ export default {
 	'view-all': 'View All',
 	'view-all-account-orders': 'View All Account Orders',
 	'view-details': 'View Details',
+	'view-license-details': 'View License Details',
 	'view-request': 'View Request',
 	'view-the-documentation': 'View the documentation',
 	'visit': 'Visit',
@@ -1297,6 +1344,7 @@ export default {
 	'x-is-a-member-of-x-on-this-account-removing-them-from-the-account-will-also-remove-their-access-to-these-projects-are-you-sure-you-want-to-proceed':
 		'{0} is a member of {1} on this account. Removing them from the account will also remove their access to these projects. Are you sure you want to proceed?',
 	'x-is-required': '{0} is required',
+	'x-cluster-nodes-keys': '{0} Cluster Nodes (Keys)',
 	'x-items': '{0} Items',
 	'x-me': '{0} (me)',
 	'x-more': '+{0} more',

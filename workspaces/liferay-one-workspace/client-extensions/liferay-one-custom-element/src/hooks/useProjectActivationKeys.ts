@@ -23,15 +23,26 @@ export type ProjectActivationKey = {
 type LicenseKeyNode = {
 	active: boolean;
 	customExpirationDate?: string;
+	dateCreated?: string;
 	domains?: string;
 	externalReferenceCode: string;
 	name: string;
 	startDate?: string;
 };
 
+const NEW_KEY_WINDOW_DAYS = 15;
+
 const RENEWAL_WINDOW_DAYS = 90;
 
 function getBadge(node: LicenseKeyNode): Word | undefined {
+	if (
+		node.dateCreated &&
+		differenceInDays(new Date(), new Date(node.dateCreated)) <=
+			NEW_KEY_WINDOW_DAYS
+	) {
+		return 'new-activation-key';
+	}
+
 	if (!node.active || !node.customExpirationDate) {
 		return undefined;
 	}

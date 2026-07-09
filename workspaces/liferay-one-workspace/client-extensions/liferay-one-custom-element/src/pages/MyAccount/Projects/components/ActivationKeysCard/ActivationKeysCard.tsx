@@ -4,8 +4,9 @@
  */
 
 import ClayButton from '@clayui/button';
-import ClayIcon from '@clayui/icon';
 import {useMemo} from 'react';
+import newKeyIconUrl from '~/assets/icons/new_key_icon.svg';
+import renewedKeyIconUrl from '~/assets/icons/renewed_key_icon.svg';
 import Button from '~/components/Button/Button';
 import {
 	ProjectActivationKey,
@@ -20,8 +21,8 @@ import FilterableListCard, {
 } from '../FilterableListCard/FilterableListCard';
 
 const BADGE_COLORS: {[key: string]: {color: string; icon: string}} = {
-	'new-activation-key': {color: 'var(--color-success)', icon: 'check-circle'},
-	'to-be-renewed': {color: 'var(--color-warning)', icon: 'warning-full'},
+	'new-activation-key': {color: 'var(--color-state-success)', icon: newKeyIconUrl},
+	'to-be-renewed': {color: '#9D4C00', icon: renewedKeyIconUrl},
 };
 
 type ActivationKeysCardProps = {
@@ -79,8 +80,11 @@ export default function ActivationKeysCard({
 								gap: '0.25rem',
 							}}
 						>
-							<ClayIcon
-								symbol={BADGE_COLORS[activationKey.badge].icon}
+							<img
+								alt=""
+								height={16}
+								src={BADGE_COLORS[activationKey.badge].icon}
+								width={16}
 							/>
 
 							{translate(activationKey.badge)}
@@ -107,11 +111,16 @@ export default function ActivationKeysCard({
 			key: 'start-date-exp-date',
 			render: (activationKey) => (
 				<span className="d-flex flex-column">
-					<span>{`${activationKey.startDate} -`}</span>
+					<span style={{whiteSpace: 'nowrap'}}>
+						{`${activationKey.startDate} -`}
+					</span>
 
-					<span>{activationKey.expirationDate}</span>
+					<span style={{whiteSpace: 'nowrap'}}>
+						{activationKey.expirationDate}
+					</span>
 				</span>
 			),
+			width: '180px',
 		},
 		{
 			heading: 'status',
@@ -161,7 +170,7 @@ export default function ActivationKeysCard({
 	return (
 		<FilterableListCard
 			action={
-				<Button displayType="primary" prependIcon="plus">
+				<Button displayType="primary">
 					{translate('new-key')}
 				</Button>
 			}
