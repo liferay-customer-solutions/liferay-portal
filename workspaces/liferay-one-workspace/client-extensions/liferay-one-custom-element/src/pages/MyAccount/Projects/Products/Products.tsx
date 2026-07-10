@@ -6,25 +6,19 @@
 import ClayIcon from '@clayui/icon';
 import {useMemo} from 'react';
 import {useNavigate} from 'react-router-dom';
-import Page from '~/components/Page/Page';
-import RowActionsMenu from '~/components/RowActionsMenu/RowActionsMenu';
 import {useProject} from '~/context/ProjectContext';
 import {ProjectProduct, useProjectProducts} from '~/hooks/useProjectCommerce';
-import i18n, {Word, translate} from '~/i18n';
-import FilterableListCard, {
+import i18n from '~/i18n';
+import {
 	ListColumn,
 	ListFilter,
 } from '~/pages/MyAccount/Projects/components/FilterableListCard/FilterableListCard';
+import ProductListPage, {
+	statusColumn,
+	statusFilter,
+} from '~/pages/MyAccount/Projects/components/ProductListPage/ProductListPage';
 import {getLogoColor} from '~/pages/MyAccount/Projects/utils/getLogoColor';
 import {getProductIcon} from '~/pages/MyAccount/Projects/utils/getProductIcon';
-import {getStatusColor} from '~/pages/MyAccount/Projects/utils/getStatusColor';
-
-function matchesSearch(product: ProjectProduct, search: string): boolean {
-	return (
-		product.name.toLowerCase().includes(search) ||
-		product.publisher.toLowerCase().includes(search)
-	);
-}
 
 export default function Products() {
 	const navigate = useNavigate();
@@ -45,10 +39,6 @@ export default function Products() {
 			new Set(liferayProducts.map((product) => product.type))
 		).sort();
 
-		const statuses = Array.from(
-			new Set(liferayProducts.map((product) => product.status))
-		).sort();
-
 		return [
 			{
 				key: 'type',
@@ -56,15 +46,7 @@ export default function Products() {
 				matches: (product, values) => values.includes(product.type),
 				options: types.map((type) => ({label: type, value: type})),
 			},
-			{
-				key: 'status',
-				label: 'status',
-				matches: (product, values) => values.includes(product.status),
-				options: statuses.map((status) => ({
-					label: translate(status as Word),
-					value: status,
-				})),
-			},
+			statusFilter(liferayProducts),
 		];
 	}, [liferayProducts]);
 
@@ -103,57 +85,20 @@ export default function Products() {
 			key: 'start-date',
 			render: (product) => product.startDate,
 		},
-		{
-			heading: 'status',
-			key: 'status',
-			render: (product) => (
-				<span className="list-card-status">
-					<span
-						className="list-card-status-dot"
-						style={{
-							backgroundColor: getStatusColor(product.status),
-						}}
-					/>
-
-					{translate(product.status as Word)}
-				</span>
-			),
-		},
-		{
-			key: 'actions',
-			render: (product) => (
-				<RowActionsMenu
-					actions={[
-						{
-							label: 'view-details',
-							onClick: () =>
-								navigate(product.externalReferenceCode),
-						},
-					]}
-				/>
-			),
-		},
+		statusColumn(),
 	];
 
 	return (
-		<Page
-			description={i18n.translate(
-				'manage-the-products-within-your-project'
-			)}
-			pageRendererProps={{error, isLoading: loading}}
-			title={i18n.translate('products')}
-		>
-			<FilterableListCard
-				columns={columns}
-				emptyLabel="no-products-yet"
-				filters={filters}
-				items={liferayProducts}
-				matchesSearch={matchesSearch}
-				onItemClick={(product) =>
-					navigate(product.externalReferenceCode)
-				}
-				rowKey={(product) => product.id}
-			/>
-		</Page>
+		<ProductListPage
+			columns={columns}
+			description="manage-the-products-within-your-project"
+			emptyLabel="no-products-yet"
+			error={error}
+			filters={filters}
+			items={liferayProducts}
+			loading={loading}
+			onItemClick={(product) => navigate(product.externalReferenceCode)}
+			title="products"
+		/>
 	);
 }

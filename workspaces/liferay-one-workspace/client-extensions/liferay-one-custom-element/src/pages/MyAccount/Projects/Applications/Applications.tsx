@@ -5,26 +5,19 @@
 
 import {useMemo} from 'react';
 import {useNavigate} from 'react-router-dom';
-import Page from '~/components/Page/Page';
-import RowActionsMenu from '~/components/RowActionsMenu/RowActionsMenu';
 import {useProject} from '~/context/ProjectContext';
 import {ProjectProduct, useProjectProducts} from '~/hooks/useProjectCommerce';
 import {useProjectOrders} from '~/hooks/useProjectOrders';
-import i18n, {Word, translate} from '~/i18n';
-import FilterableListCard, {
+import {
 	ListColumn,
 	ListFilter,
 } from '~/pages/MyAccount/Projects/components/FilterableListCard/FilterableListCard';
+import ProductListPage, {
+	statusColumn,
+	statusFilter,
+} from '~/pages/MyAccount/Projects/components/ProductListPage/ProductListPage';
 import {getLogoColor} from '~/pages/MyAccount/Projects/utils/getLogoColor';
-import {getStatusColor} from '~/pages/MyAccount/Projects/utils/getStatusColor';
 import {isUnassignedProject} from '~/pages/MyAccount/Projects/utils/isUnassignedProject';
-
-function matchesSearch(application: ProjectProduct, search: string): boolean {
-	return (
-		application.name.toLowerCase().includes(search) ||
-		application.publisher.toLowerCase().includes(search)
-	);
-}
 
 export default function Applications() {
 	const navigate = useNavigate();
@@ -64,10 +57,6 @@ export default function Applications() {
 			new Set(applications.map((application) => application.saleType))
 		).sort();
 
-		const statuses = Array.from(
-			new Set(applications.map((application) => application.status))
-		).sort();
-
 		return [
 			{
 				key: 'sale-type',
@@ -79,16 +68,7 @@ export default function Applications() {
 					value: saleType,
 				})),
 			},
-			{
-				key: 'status',
-				label: 'status',
-				matches: (application, values) =>
-					values.includes(application.status),
-				options: statuses.map((status) => ({
-					label: translate(status as Word),
-					value: status,
-				})),
-			},
+			statusFilter(applications),
 		];
 	}, [applications]);
 
@@ -137,57 +117,22 @@ export default function Applications() {
 			render: (application) =>
 				orderIdByProductName.get(application.name) ?? '-',
 		},
-		{
-			heading: 'status',
-			key: 'status',
-			render: (application) => (
-				<span className="list-card-status">
-					<span
-						className="list-card-status-dot"
-						style={{
-							backgroundColor: getStatusColor(application.status),
-						}}
-					/>
-
-					{translate(application.status as Word)}
-				</span>
-			),
-		},
-		{
-			key: 'actions',
-			render: (application) => (
-				<RowActionsMenu
-					actions={[
-						{
-							label: 'view-details',
-							onClick: () =>
-								navigate(application.externalReferenceCode),
-						},
-					]}
-				/>
-			),
-		},
+		statusColumn(),
 	];
 
 	return (
-		<Page
-			description={i18n.translate(
-				'manage-the-applications-within-your-project'
-			)}
-			pageRendererProps={{error, isLoading: loading}}
-			title={i18n.translate('applications')}
-		>
-			<FilterableListCard
-				columns={columns}
-				emptyLabel="no-applications-yet"
-				filters={filters}
-				items={applications}
-				matchesSearch={matchesSearch}
-				onItemClick={(application) =>
-					navigate(application.externalReferenceCode)
-				}
-				rowKey={(application) => application.id}
-			/>
-		</Page>
+		<ProductListPage
+			columns={columns}
+			description="manage-the-applications-within-your-project"
+			emptyLabel="no-applications-yet"
+			error={error}
+			filters={filters}
+			items={applications}
+			loading={loading}
+			onItemClick={(application) =>
+				navigate(application.externalReferenceCode)
+			}
+			title="applications"
+		/>
 	);
 }
