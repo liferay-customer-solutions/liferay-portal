@@ -31,7 +31,9 @@ const ACTIVATION_CONTENT_BY_PROFILE: Record<
 	),
 	'cloud-native': () => <CloudNativeActivation />,
 	'commerce': () => <CommerceActivation />,
-	'dxp-portal': () => <ActivationKeysTable />,
+	'dxp-portal': (product) => (
+		<ActivationKeysTable productName={product.name} />
+	),
 	'enterprise-search': () => <EnterpriseSearchActivation />,
 	'keys-list': (product) => <ActivationKeysCard productName={product.name} />,
 	'licenses': (product) => (

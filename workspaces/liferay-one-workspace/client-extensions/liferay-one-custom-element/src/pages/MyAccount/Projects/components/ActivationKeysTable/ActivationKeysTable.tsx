@@ -4,87 +4,65 @@
  */
 
 import ClayDropDown from '@clayui/drop-down';
-import {ClayCheckbox, ClayInput} from '@clayui/form';
+import {ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import {ClayPaginationBarWithBasicItems} from '@clayui/pagination-bar';
 import ClayTable from '@clayui/table';
 import {useMemo, useState} from 'react';
 import Button from '~/components/Button/Button';
-import {Word, translate} from '~/i18n';
 import {
-	ACTIVATION_KEYS_MOCK,
-	ActivationKeyRow,
-	ActivationKeyStatus,
-} from '~/pages/MyAccount/Projects/utils/activationMockDataConstants';
+	ProjectActivationKey,
+	useProjectActivationKeys,
+} from '~/hooks/useProjectActivationKeys';
+import {Word, translate} from '~/i18n';
+import {getStatusColor} from '~/pages/MyAccount/Projects/utils/getStatusColor';
 
 import './ActivationKeysTable.css';
 
 const PAGE_SIZE_OPTIONS = [5, 10, 20, 30, 50];
 
-const STATUS_TABS: ('activated' | 'all' | 'expired' | 'not-activated')[] = [
+const STATUS_TABS: ('active' | 'all' | 'expired')[] = [
 	'all',
-	'activated',
-	'not-activated',
+	'active',
 	'expired',
 ];
 
-const STATUS_DOT_COLOR: Record<ActivationKeyStatus, string> = {
-	'activated': 'var(--color-state-success)',
-	'expired': 'var(--color-danger-l1)',
-	'not-activated': 'var(--color-state-info)',
+type ActivationKeysTableProps = {
+	productName?: string;
 };
 
-function matchesSearch(row: ActivationKeyRow, search: string): boolean {
+function matchesSearch(row: ProjectActivationKey, search: string): boolean {
 	return (
-		row.environmentName.toLowerCase().includes(search) ||
-		row.description.toLowerCase().includes(search) ||
-		row.hostName.toLowerCase().includes(search)
+		row.name.toLowerCase().includes(search) ||
+		row.domain.toLowerCase().includes(search)
 	);
 }
 
-function keyTypeSubtext(row: ActivationKeyRow): string {
-	if (row.keyType === 'On-Premise') {
-		return row.hostName || '-';
-	}
+export default function ActivationKeysTable({
+	productName,
+}: ActivationKeysTableProps) {
+	const {activationKeys, loading} = useProjectActivationKeys(productName);
 
-	return translate('x-cluster-nodes-keys').replace(
-		'{0}',
-		String(row.clusterNodes ?? 0)
-	);
-}
-
-export default function ActivationKeysTable() {
-	const rows = ACTIVATION_KEYS_MOCK;
-
-	const [statusTab, setStatusTab] = useState<(typeof STATUS_TABS)[number]>(
-		'all'
-	);
+	const [statusTab, setStatusTab] =
+		useState<(typeof STATUS_TABS)[number]>('all');
 	const [keywords, setKeywords] = useState('');
 	const [page, setPage] = useState(1);
 	const [pageSize, setPageSize] = useState(PAGE_SIZE_OPTIONS[0]);
-	const [checkedIds, setCheckedIds] = useState<string[]>([]);
-	const [filterActive, setFilterActive] = useState(false);
-	const [environmentTypes, setEnvironmentTypes] = useState<string[]>([]);
 
 	const statusCounts = useMemo(() => {
-		const counts: Record<string, number> = {all: rows.length};
+		const counts: Record<string, number> = {all: activationKeys.length};
 
-		for (const row of rows) {
+		for (const row of activationKeys) {
 			counts[row.status] = (counts[row.status] ?? 0) + 1;
 		}
 
 		return counts;
-	}, [rows]);
-
-	const environmentTypeOptions = useMemo(
-		() => Array.from(new Set(rows.map((row) => row.environmentType))).sort(),
-		[rows]
-	);
+	}, [activationKeys]);
 
 	const filteredRows = useMemo(() => {
 		const search = keywords.trim().toLowerCase();
 
-		return rows.filter((row) => {
+		return activationKeys.filter((row) => {
 			if (statusTab !== 'all' && row.status !== statusTab) {
 				return false;
 			}
@@ -93,43 +71,15 @@ export default function ActivationKeysTable() {
 				return false;
 			}
 
-			if (
-				environmentTypes.length &&
-				!environmentTypes.includes(row.environmentType)
-			) {
-				return false;
-			}
-
 			return true;
 		});
-	}, [environmentTypes, keywords, rows, statusTab]);
+	}, [activationKeys, keywords, statusTab]);
 
 	const paginatedRows = useMemo(() => {
 		const start = (page - 1) * pageSize;
 
 		return filteredRows.slice(start, start + pageSize);
 	}, [filteredRows, page, pageSize]);
-
-	const allChecked =
-		!!paginatedRows.length &&
-		paginatedRows.every((row) => checkedIds.includes(row.id));
-
-	const toggleAll = () =>
-		setCheckedIds(allChecked ? [] : paginatedRows.map((row) => row.id));
-
-	const toggleRow = (id: string) =>
-		setCheckedIds((previous) =>
-			previous.includes(id)
-				? previous.filter((current) => current !== id)
-				: [...previous, id]
-		);
-
-	const toggleEnvironmentType = (value: string) =>
-		setEnvironmentTypes((previous) =>
-			previous.includes(value)
-				? previous.filter((current) => current !== value)
-				: [...previous, value]
-		);
 
 	return (
 		<div className="activation-keys-table mt-3">
@@ -182,41 +132,13 @@ export default function ActivationKeysTable() {
 					</ClayInput.GroupItem>
 				</ClayInput.Group>
 
-				<ClayDropDown
-					active={filterActive}
-					onActiveChange={setFilterActive}
-					trigger={
-						<Button
-							displayType="secondary"
-							prependIcon="filter"
-						>
-							{translate('filter')}
-						</Button>
-					}
-				>
-					<div className="p-3">
-						<div className="list-card-filter-heading">
-							{translate('environment-type')}
-						</div>
-
-						{environmentTypeOptions.map((option) => (
-							<ClayCheckbox
-								checked={environmentTypes.includes(option)}
-								key={option}
-								label={option}
-								onChange={() => {
-									setPage(1);
-									toggleEnvironmentType(option);
-								}}
-							/>
-						))}
-					</div>
-				</ClayDropDown>
-
 				<div className="ml-auto">
 					<ClayDropDown
 						trigger={
-							<Button appendIcon="caret-bottom" displayType="primary">
+							<Button
+								appendIcon="caret-bottom"
+								displayType="primary"
+							>
 								{translate('actions')}
 							</Button>
 						}
@@ -227,14 +149,6 @@ export default function ActivationKeysTable() {
 							</ClayDropDown.Item>
 
 							<ClayDropDown.Item>
-								{translate('renew')}
-							</ClayDropDown.Item>
-
-							<ClayDropDown.Item>
-								{translate('deactivate')}
-							</ClayDropDown.Item>
-
-							<ClayDropDown.Item>
 								{translate('export-all-key-details-csv')}
 							</ClayDropDown.Item>
 						</ClayDropDown.ItemList>
@@ -242,18 +156,13 @@ export default function ActivationKeysTable() {
 				</div>
 			</div>
 
-			{paginatedRows.length ? (
+			{loading ? (
+				<div className="p-4 text-neutral-7">{translate('loading')}</div>
+			) : paginatedRows.length ? (
 				<>
 					<ClayTable borderless className="list-card-table">
 						<ClayTable.Head>
 							<ClayTable.Row>
-								<ClayTable.Cell headingCell>
-									<ClayCheckbox
-										checked={allChecked}
-										onChange={toggleAll}
-									/>
-								</ClayTable.Cell>
-
 								<ClayTable.Cell headingCell>
 									<span className="d-flex flex-column">
 										<span>
@@ -261,25 +170,9 @@ export default function ActivationKeysTable() {
 										</span>
 
 										<span className="list-card-subtext">
-											{translate('description')}
+											{translate('domain')}
 										</span>
 									</span>
-								</ClayTable.Cell>
-
-								<ClayTable.Cell headingCell>
-									<span className="d-flex flex-column">
-										<span>{translate('key-type')}</span>
-
-										<span className="list-card-subtext">
-											{translate(
-												'host-name-cluster-size'
-											)}
-										</span>
-									</span>
-								</ClayTable.Cell>
-
-								<ClayTable.Cell headingCell>
-									{translate('environment-type')}
 								</ClayTable.Cell>
 
 								<ClayTable.Cell headingCell>
@@ -306,57 +199,20 @@ export default function ActivationKeysTable() {
 							{paginatedRows.map((row) => (
 								<ClayTable.Row key={row.id}>
 									<ClayTable.Cell>
-										<ClayCheckbox
-											checked={checkedIds.includes(
-												row.id
-											)}
-											onChange={() => toggleRow(row.id)}
-										/>
-									</ClayTable.Cell>
-
-									<ClayTable.Cell>
 										<span className="d-flex flex-column">
-											<span className='fw-bold'>
-												{row.environmentName}
+											<span className="fw-bold">
+												{row.name}
 											</span>
 
 											<span className="list-card-subtext">
-												{row.description}
+												{row.domain || '-'}
 											</span>
 										</span>
 									</ClayTable.Cell>
 
 									<ClayTable.Cell>
 										<span className="d-flex flex-column">
-											<span className='fw-bold'>
-												{row.keyType}
-											</span>
-
-											<span className="list-card-subtext">
-												{keyTypeSubtext(row)}
-											</span>
-										</span>
-									</ClayTable.Cell>
-
-									<ClayTable.Cell>
-										<span className="d-flex flex-column">
-											<span className='fw-bold'>
-												{row.environmentType}
-											</span>
-
-											<span className="list-card-subtext">
-												{translate(
-													row.complimentary
-														? 'complimentary'
-														: 'subscription'
-												)}
-											</span>
-										</span>
-									</ClayTable.Cell>
-
-									<ClayTable.Cell>
-										<span className="d-flex flex-column">
-											<span>{`${row.startDate}`}</span>
+											<span>{`${row.startDate} -`}</span>
 
 											<span>{row.expirationDate}</span>
 										</span>
@@ -368,11 +224,13 @@ export default function ActivationKeysTable() {
 												className="list-card-status-dot"
 												style={{
 													backgroundColor:
-														STATUS_DOT_COLOR[
+														getStatusColor(
 															row.status
-														],
+														),
 												}}
 											/>
+
+											{translate(row.status as Word)}
 										</span>
 									</ClayTable.Cell>
 
@@ -381,6 +239,7 @@ export default function ActivationKeysTable() {
 											aria-label={translate('download')}
 											borderless
 											className="text-neutral-7"
+											disabled={row.status === 'expired'}
 											displayType="unstyled"
 											prependIcon="download"
 										/>
