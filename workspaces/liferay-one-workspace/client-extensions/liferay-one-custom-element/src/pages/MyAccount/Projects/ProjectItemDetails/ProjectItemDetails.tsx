@@ -13,7 +13,9 @@ import {
 	getSpecificationValues,
 	useProjectProducts,
 } from '~/hooks/useProjectCommerce';
+import {useProjectEnvironments} from '~/hooks/useProjectEnvironments';
 import {getProductOrderInfo, useProjectOrders} from '~/hooks/useProjectOrders';
+import {useProjectUsage} from '~/hooks/useProjectUsage';
 import i18n from '~/i18n';
 import DetailHeader from '~/pages/MyAccount/Projects/components/DetailHeader/DetailHeader';
 import DownloadListCard from '~/pages/MyAccount/Projects/components/DownloadListCard/DownloadListCard';
@@ -31,7 +33,6 @@ import {buildDetailsSections} from '~/pages/MyAccount/Projects/utils/buildDetail
 import {buildEnvironmentSections} from '~/pages/MyAccount/Projects/utils/buildEnvironmentSections';
 import {buildUtilizationSections} from '~/pages/MyAccount/Projects/utils/buildUtilizationSections';
 import {PROJECT_TAB_LABELS} from '~/pages/MyAccount/Projects/utils/constants';
-import {detailsMockData} from '~/pages/MyAccount/Projects/utils/detailsMockData';
 import {getLogoColor} from '~/pages/MyAccount/Projects/utils/getLogoColor';
 import {getProductIcon} from '~/pages/MyAccount/Projects/utils/getProductIcon';
 import {isUnassignedProject} from '~/pages/MyAccount/Projects/utils/isUnassignedProject';
@@ -56,7 +57,11 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 				(project) => project.externalReferenceCode === projectId
 			)?.name;
 
-	const {loading: productsLoading, products} = useProjectProducts(projectId);
+	const {
+		contract,
+		loading: productsLoading,
+		products,
+	} = useProjectProducts(projectId);
 
 	const productId =
 		products.find((product) => product.externalReferenceCode === itemERC)
@@ -65,6 +70,8 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 	const {data: product, isLoading} = useDeliveryProduct(productId);
 	const {placedOrders} = useProjectOrders(projectName);
 	const {bundles} = useLiferayBundles();
+	const {environments} = useProjectEnvironments();
+	const {usage} = useProjectUsage();
 
 	if (productsLoading || isLoading) {
 		return (
@@ -98,22 +105,16 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 
 	const orderInfo = getProductOrderInfo(placedOrders, product.name);
 
-	const {
-		activationProfile,
-		detailsProfile,
-		environmentProfile,
-		learnUrl,
-		tabKeys,
-		utilizationProfile,
-	} = resolveProductTabConfig({
-		kind,
-		orderType: orderInfo.orderType,
-		product,
-	});
+	const {activationProfile, detailsProfile, learnUrl, tabKeys} =
+		resolveProductTabConfig({
+			kind,
+			orderType: orderInfo.orderType,
+			product,
+		});
 
 	const detailsSections = buildDetailsSections(detailsProfile, {
 		accountName: Liferay.CommerceContext.account?.accountName ?? '',
-		mock: detailsMockData,
+		contract,
 		orderInfo,
 	});
 
@@ -137,13 +138,10 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 				title={kind === 'product' ? 'bundle-list' : 'versions-list'}
 			/>
 		),
-		'environment': environmentProfile ? (
+		'environment': environments.length ? (
 			<SectionedDetailsCard
 				icon="cloud"
-				sections={buildEnvironmentSections(
-					environmentProfile,
-					orderInfo.environment
-				)}
+				sections={buildEnvironmentSections(environments)}
 				title="workspace-info"
 			/>
 		) : (
@@ -155,16 +153,15 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 			<HelpSupportCard specifications={product.productSpecifications} />
 		),
 		'orders': <OrdersCard />,
-		'utilization':
-			utilizationProfile === 'usage-metrics' ? (
-				<SectionedDetailsCard
-					icon="analytics"
-					sections={buildUtilizationSections(utilizationProfile)}
-					title="usage"
-				/>
-			) : (
-				<UtilizationCard />
-			),
+		'utilization': usage.length ? (
+			<SectionedDetailsCard
+				icon="analytics"
+				sections={buildUtilizationSections(usage)}
+				title="usage"
+			/>
+		) : (
+			<UtilizationCard />
+		),
 	};
 
 	const tabs: DetailTab[] = tabKeys.map((tabKey) => ({

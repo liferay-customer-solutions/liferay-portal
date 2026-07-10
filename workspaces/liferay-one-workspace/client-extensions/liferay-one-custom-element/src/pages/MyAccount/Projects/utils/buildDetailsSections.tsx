@@ -3,17 +3,19 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {format} from 'date-fns';
 import i18n from '~/i18n';
 
 import {DetailsRow} from '../components/DetailsCard/DetailsCard';
 import {DetailsSection} from '../components/SectionedDetailsCard/SectionedDetailsCard';
 
-import type {DetailsEnvironmentMock, DetailsMock} from './detailsMockData';
+import type {ProjectContract} from '~/hooks/useProjectCommerce';
+
 import type {DetailsProfile} from './resolveDetailsProfile';
 
 type DetailsContext = {
 	accountName: string;
-	mock: DetailsMock;
+	contract?: ProjectContract;
 	orderInfo: {
 		orderDate: string;
 		orderId: string;
@@ -21,6 +23,10 @@ type DetailsContext = {
 		purchasedBy: string;
 	};
 };
+
+function formatDate(value?: string): string {
+	return value ? format(new Date(value), 'MMM d, yyyy') : '';
+}
 
 function orderRows(context: DetailsContext): DetailsRow[] {
 	const {accountName, orderInfo} = context;
@@ -37,57 +43,17 @@ function orderRows(context: DetailsContext): DetailsRow[] {
 	];
 }
 
-function datesStatusRows(mock: DetailsMock): DetailsRow[] {
-	return [
-		{label: i18n.translate('start-date'), value: mock.startDate},
-		{label: i18n.translate('expiration-date'), value: mock.expirationDate},
-		{label: i18n.translate('status'), value: mock.status},
-	];
-}
-
-function instanceEnvironmentRows(
-	environment: DetailsEnvironmentMock
-): DetailsRow[] {
+function contractRows(contract?: ProjectContract): DetailsRow[] {
 	return [
 		{
-			label: i18n.translate('instance-size'),
-			value: environment.instanceSize,
+			label: i18n.translate('start-date'),
+			value: formatDate(contract?.startDate),
 		},
-		{
-			label: i18n.translate('keys-provisioned'),
-			value: environment.keysProvisioned,
-		},
-		{label: i18n.translate('start-date'), value: environment.startDate},
 		{
 			label: i18n.translate('expiration-date'),
-			value: environment.expirationDate,
+			value: formatDate(contract?.endDate),
 		},
-		{label: i18n.translate('status'), value: environment.status},
-	];
-}
-
-function commerceEnvironmentRows(
-	environment: DetailsEnvironmentMock
-): DetailsRow[] {
-	return [
-		{label: i18n.translate('purchased'), value: environment.purchased},
-		{label: i18n.translate('start-date'), value: environment.startDate},
-		{
-			label: i18n.translate('expiration-date'),
-			value: environment.expirationDate,
-		},
-		{label: i18n.translate('status'), value: environment.status},
-	];
-}
-
-function tierDatesIncidentRows(mock: DetailsMock): DetailsRow[] {
-	return [
-		{label: i18n.translate('tier-name'), value: mock.tierName},
-		...datesStatusRows(mock),
-		{
-			label: i18n.translate('critical-incident-contacts'),
-			value: mock.criticalIncidentContacts,
-		},
+		{label: i18n.translate('status'), value: contract?.status ?? ''},
 	];
 }
 
@@ -95,81 +61,23 @@ const DETAILS_SECTIONS_BY_PROFILE: Record<
 	DetailsProfile,
 	(context: DetailsContext) => DetailsSection[]
 > = {
-	'analytics': ({mock}) => [
-		{
-			rows: [
-				{label: i18n.translate('tier-name'), value: mock.tierName},
-				{label: i18n.translate('purchased'), value: mock.purchased},
-				...datesStatusRows(mock),
-				{
-					label: i18n.translate('critical-incident-contacts'),
-					value: mock.criticalIncidentContacts,
-				},
-			],
-		},
+	'analytics': (context) => [
+		{rows: [...orderRows(context), ...contractRows(context.contract)]},
 	],
 	'basic': (context) => [{rows: orderRows(context)}],
-	'basic-incident': (context) => [
-		{
-			rows: [
-				...orderRows(context),
-				{
-					label: i18n.translate('incident-report-contacts'),
-					value: context.mock.incidentReportContacts,
-				},
-			],
-		},
+	'basic-incident': (context) => [{rows: orderRows(context)}],
+	'dates-status': (context) => [{rows: contractRows(context.contract)}],
+	'env-commerce': (context) => [
+		{rows: [...orderRows(context), ...contractRows(context.contract)]},
 	],
-	'dates-status': ({mock}) => [{rows: datesStatusRows(mock)}],
-	'env-commerce': ({mock}) => [
-		{
-			rows: commerceEnvironmentRows(mock.production),
-			title: i18n.translate('production'),
-		},
-		{
-			rows: commerceEnvironmentRows(mock.nonProduction),
-			title: i18n.translate('non-production'),
-		},
+	'env-instance': (context) => [
+		{rows: [...orderRows(context), ...contractRows(context.contract)]},
 	],
-	'env-instance': ({mock}) => [
-		{
-			rows: instanceEnvironmentRows(mock.production),
-			title: i18n.translate('production'),
-		},
-		{
-			rows: instanceEnvironmentRows(mock.nonProduction),
-			title: i18n.translate('non-production'),
-		},
+	'paas': (context) => [
+		{rows: [...orderRows(context), ...contractRows(context.contract)]},
 	],
-	'paas': ({mock}) => [
-		{
-			rows: [
-				...tierDatesIncidentRows(mock),
-				...(mock.hasPaasExperience
-					? [
-							{
-								label: i18n.translate('paas-users'),
-								value: mock.paasUsers,
-							},
-						]
-					: []),
-			],
-		},
-	],
-	'saas': ({mock}) => [
-		{
-			rows: [
-				...tierDatesIncidentRows(mock),
-				{
-					label: i18n.translate('privacy-breach-contacts'),
-					value: mock.privacyBreachContacts,
-				},
-				{
-					label: i18n.translate('security-breach-contacts'),
-					value: mock.securityBreachContacts,
-				},
-			],
-		},
+	'saas': (context) => [
+		{rows: [...orderRows(context), ...contractRows(context.contract)]},
 	],
 };
 

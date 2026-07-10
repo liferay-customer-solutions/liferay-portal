@@ -5,11 +5,8 @@
 
 import ClayIcon from '@clayui/icon';
 import ClayLabel from '@clayui/label';
+import {useProjectEnvironments} from '~/hooks/useProjectEnvironments';
 import {Word, translate} from '~/i18n';
-import {
-	ACTIVATION_STATUS_MOCK,
-	ActivationStatusState,
-} from '~/pages/MyAccount/Projects/utils/activationMockDataConstants';
 
 import './ActivationStatusCard.css';
 
@@ -17,33 +14,40 @@ type StatusConfig = {
 	icon: string;
 	subtitle: Word;
 	title: Word;
+	type: string;
 };
 
 const CONFIG_BY_PRODUCT_NAME: {[name: string]: StatusConfig} = {
 	'Analytics Cloud': {
 		icon: 'analytics',
-		subtitle: 'almost-there-setup-analytics-cloud-by-finishing-the-activation-form',
+		subtitle:
+			'almost-there-setup-analytics-cloud-by-finishing-the-activation-form',
 		title: 'analytics-cloud-activation',
+		type: 'SaaS',
 	},
 	'PaaS': {
 		icon: 'cloud',
-		subtitle: 'almost-there-setup-liferay-paas-by-finishing-the-activation-form',
+		subtitle:
+			'almost-there-setup-liferay-paas-by-finishing-the-activation-form',
 		title: 'liferay-paas-activation',
+		type: 'PaaS',
 	},
 	'SaaS': {
 		icon: 'cloud',
-		subtitle: 'almost-there-setup-liferay-saas-by-finishing-the-activation-form',
+		subtitle:
+			'almost-there-setup-liferay-saas-by-finishing-the-activation-form',
 		title: 'liferay-saas-activation',
+		type: 'SaaS',
 	},
 };
 
 const STATUS_LABEL: Record<
-	ActivationStatusState,
+	string,
 	{displayType: 'secondary' | 'success' | 'warning'; label: Word}
 > = {
-	'active': {displayType: 'success', label: 'active'},
-	'in-progress': {displayType: 'warning', label: 'in-progress'},
-	'not-activated': {displayType: 'secondary', label: 'not-activated'},
+	active: {displayType: 'success', label: 'active'},
+	deactivated: {displayType: 'secondary', label: 'deactivated'},
+	expired: {displayType: 'warning', label: 'expired'},
 };
 
 type ActivationStatusCardProps = {
@@ -53,11 +57,20 @@ type ActivationStatusCardProps = {
 export default function ActivationStatusCard({
 	productName,
 }: ActivationStatusCardProps) {
+	const {environments} = useProjectEnvironments();
+
 	const config =
 		CONFIG_BY_PRODUCT_NAME[productName] ??
 		CONFIG_BY_PRODUCT_NAME['Analytics Cloud'];
 
-	const status = STATUS_LABEL[ACTIVATION_STATUS_MOCK.status];
+	const environment =
+		environments.find((current) => current.type === config.type) ??
+		environments[0];
+
+	const status = STATUS_LABEL[environment?.status ?? ''] ?? {
+		displayType: 'secondary' as const,
+		label: 'not-activated' as Word,
+	};
 
 	return (
 		<div className="mt-3">
@@ -71,10 +84,16 @@ export default function ActivationStatusCard({
 				</span>
 
 				<div className="flex-grow-1">
-					<span className='fw-bold'>{productName}</span>
+					<span className="fw-bold">{productName}</span>
 
 					<p className="list-card-subtext m-0">
-						{ACTIVATION_STATUS_MOCK.dateRange}
+						{environment
+							? `${environment.type}${
+									environment.region
+										? ` • ${environment.region}`
+										: ''
+								}`
+							: translate('no-environment-yet')}
 					</p>
 				</div>
 

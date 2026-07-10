@@ -3,74 +3,34 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import i18n from '~/i18n';
+import i18n, {Word} from '~/i18n';
 
 import {DetailsSection} from '../components/SectionedDetailsCard/SectionedDetailsCard';
 
-import type {ProductEnvironmentInfo} from '~/hooks/useProjectOrders';
+import type {ProjectEnvironment} from '~/hooks/useProjectEnvironments';
 
-import type {EnvironmentProfile} from './resolveEnvironmentProfile';
-
-const TBD = 'TBD';
-
-const ENVIRONMENT_SECTIONS_BY_PROFILE: Record<
-	EnvironmentProfile,
-	(environment: ProductEnvironmentInfo) => DetailsSection[]
-> = {
-	'ac-token': () => [
-		{rows: [{label: i18n.translate('access-token'), value: TBD}]},
-	],
-	'none': () => [],
-	'paas': () => [
-		{
-			rows: [
-				{label: i18n.translate('project-id'), value: TBD},
-				{
-					label: i18n.translate('primary-data-center-region'),
-					value: TBD,
-				},
-				{label: i18n.translate('system-admin-email'), value: TBD},
-				{label: i18n.translate('system-admin-first-name'), value: TBD},
-				{label: i18n.translate('system-admin-last-name'), value: TBD},
-				{label: i18n.translate('github-username'), value: TBD},
-			],
-		},
-	],
-	'saas': () => [
-		{
-			rows: [
-				{label: i18n.translate('project-id'), value: TBD},
-				{label: i18n.translate('primary-region'), value: TBD},
-				{label: i18n.translate('project-admin-name'), value: TBD},
-				{label: i18n.translate('project-admin-email'), value: TBD},
-			],
-		},
-	],
-	'workspace': (environment) => [
-		{
-			rows: [
-				{
-					label: i18n.translate('workspace-name'),
-					value:
-						environment.cloudProjectName ||
-						environment.projectName ||
-						TBD,
-				},
-				{label: i18n.translate('workspace-owner-email'), value: TBD},
-				{label: i18n.translate('data-center-location'), value: TBD},
-				{label: i18n.translate('time-zone'), value: TBD},
-				{label: i18n.translate('workspace-friendly-url'), value: TBD},
-				{label: i18n.translate('allowed-email-domains'), value: TBD},
-			],
-		},
-	],
-};
+const ENVIRONMENT_FIELDS: {key: keyof ProjectEnvironment; label: Word}[] = [
+	{key: 'type', label: 'type'},
+	{key: 'region', label: 'region'},
+	{key: 'activationMode', label: 'activation-mode'},
+	{key: 'status', label: 'status'},
+	{key: 'hostName', label: 'host-name'},
+	{key: 'domains', label: 'domains'},
+	{key: 'currentEntitlementHash', label: 'identity'},
+];
 
 export function buildEnvironmentSections(
-	profile: EnvironmentProfile,
-	environment: ProductEnvironmentInfo
+	environments: ProjectEnvironment[]
 ): DetailsSection[] {
-	return ENVIRONMENT_SECTIONS_BY_PROFILE[profile](environment);
+	return environments.map((environment) => ({
+		rows: ENVIRONMENT_FIELDS.filter((field) => environment[field.key]).map(
+			(field) => ({
+				label: i18n.translate(field.label),
+				value: environment[field.key],
+			})
+		),
+		title: environment.externalReferenceCode,
+	}));
 }
 
 export default buildEnvironmentSections;

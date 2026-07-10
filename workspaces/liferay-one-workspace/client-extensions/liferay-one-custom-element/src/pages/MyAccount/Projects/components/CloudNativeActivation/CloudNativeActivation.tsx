@@ -6,12 +6,21 @@
 import ClayTable from '@clayui/table';
 import Button from '~/components/Button/Button';
 import {DetailedCard} from '~/components/DetailedCard/DetailedCard';
+import {useProjectEnvironments} from '~/hooks/useProjectEnvironments';
 import {Word, translate} from '~/i18n';
-import {CLOUD_NATIVE_ENVIRONMENTS_MOCK} from '~/pages/MyAccount/Projects/utils/activationMockDataConstants';
+import {getStatusColor} from '~/pages/MyAccount/Projects/utils/getStatusColor';
 
 import PopoverIcon from '../PopoverIcon/PopoverIcon';
 
+const CLOUD_TYPES = ['CNE', 'PaaS', 'SaaS'];
+
 export default function CloudNativeActivation() {
+	const {environments, loading} = useProjectEnvironments();
+
+	const cloudEnvironments = environments.filter((environment) =>
+		CLOUD_TYPES.includes(environment.type)
+	);
+
 	return (
 		<DetailedCard
 			cardIconAltText={translate('cloud-native-environments')}
@@ -19,74 +28,98 @@ export default function CloudNativeActivation() {
 			className="mt-3"
 			clayIcon="cloud"
 		>
-			<div className="d-flex flex-column gap-4 mt-3">
-				{CLOUD_NATIVE_ENVIRONMENTS_MOCK.map((subscription) => (
-					<ClayTable borderless key={subscription.id}>
-						<ClayTable.Head>
-							<ClayTable.Row>
-								<ClayTable.Cell headingCell>
-									{translate('environment')}
+			{loading ? (
+				<div className="p-4 text-neutral-7">{translate('loading')}</div>
+			) : cloudEnvironments.length ? (
+				<ClayTable borderless className="mt-3">
+					<ClayTable.Head>
+						<ClayTable.Row>
+							<ClayTable.Cell headingCell>
+								{translate('environment')}
+							</ClayTable.Cell>
+
+							<ClayTable.Cell headingCell>
+								{translate('region')}
+							</ClayTable.Cell>
+
+							<ClayTable.Cell headingCell>
+								{translate('identity')}
+
+								<PopoverIcon
+									title={translate(
+										'please-copy-and-paste-this-subscription-id-to-your-cloud-native-instance'
+									)}
+								/>
+							</ClayTable.Cell>
+
+							<ClayTable.Cell headingCell>
+								{translate('status')}
+							</ClayTable.Cell>
+
+							<ClayTable.Cell className="text-center" headingCell>
+								{translate('download')}
+							</ClayTable.Cell>
+						</ClayTable.Row>
+					</ClayTable.Head>
+
+					<ClayTable.Body>
+						{cloudEnvironments.map((environment) => (
+							<ClayTable.Row
+								key={environment.externalReferenceCode}
+							>
+								<ClayTable.Cell>
+									<span className="d-flex flex-column">
+										<span className="fw-bold">
+											{environment.externalReferenceCode}
+										</span>
+
+										<span className="list-card-subtext">
+											{environment.type}
+										</span>
+									</span>
 								</ClayTable.Cell>
 
-								<ClayTable.Cell headingCell>
-									{translate('subscription-id')}
+								<ClayTable.Cell>
+									{environment.region || '-'}
+								</ClayTable.Cell>
 
-									<PopoverIcon
-										title={translate(
-											'please-copy-and-paste-this-subscription-id-to-your-cloud-native-instance'
-										)}
+								<ClayTable.Cell>
+									{environment.currentEntitlementHash || '-'}
+								</ClayTable.Cell>
+
+								<ClayTable.Cell>
+									<span className="list-card-status">
+										<span
+											className="list-card-status-dot"
+											style={{
+												backgroundColor: getStatusColor(
+													environment.status
+												),
+											}}
+										/>
+
+										{translate(environment.status as Word)}
+									</span>
+								</ClayTable.Cell>
+
+								<ClayTable.Cell className="text-center">
+									<Button
+										aria-label={translate('download')}
+										borderless
+										className="text-neutral-7"
+										displayType="unstyled"
+										prependIcon="download"
 									/>
-								</ClayTable.Cell>
-
-								<ClayTable.Cell headingCell>
-									{translate('maximum-cluster-nodes')}
-
-									<PopoverIcon
-										title={translate(
-											'maximum-number-of-active-nodes-available-for-this-environment'
-										)}
-									/>
-								</ClayTable.Cell>
-
-								<ClayTable.Cell
-									className="text-center"
-									headingCell
-								>
-									{translate('download')}
 								</ClayTable.Cell>
 							</ClayTable.Row>
-						</ClayTable.Head>
-
-						<ClayTable.Body>
-							{subscription.rows.map((row) => (
-								<ClayTable.Row key={row.environment}>
-									<ClayTable.Cell>
-										{translate(row.environment as Word)}
-									</ClayTable.Cell>
-
-									<ClayTable.Cell>
-										{row.subscriptionId}
-									</ClayTable.Cell>
-
-									<ClayTable.Cell>
-										{row.maxClusterNodes}
-									</ClayTable.Cell>
-
-									<ClayTable.Cell className="text-center">
-										<Button
-											aria-label={translate('download')}
-											borderless
-											className="text-neutral-7"
-											displayType="unstyled"
-											prependIcon="download"
-										/>
-									</ClayTable.Cell>
-								</ClayTable.Row>
-							))}
-						</ClayTable.Body>
-					</ClayTable>
-				))}
-			</div>
+						))}
+					</ClayTable.Body>
+				</ClayTable>
+			) : (
+				<div className="p-4 text-neutral-7">
+					{translate('no-cloud-native-environments-yet')}
+				</div>
+			)}
 		</DetailedCard>
 	);
 }

@@ -5,8 +5,30 @@
 
 import ClayTable from '@clayui/table';
 import {DetailedCard} from '~/components/DetailedCard/DetailedCard';
-import {translate} from '~/i18n';
-import {COMMERCE_INSTRUCTIONS_MOCK} from '~/pages/MyAccount/Projects/utils/activationMockDataConstants';
+import {Word, translate} from '~/i18n';
+
+type CommerceInstructionRow = {
+	detail?: Word;
+	instructions: Word;
+	version: string;
+};
+
+const COMMERCE_INSTRUCTIONS: CommerceInstructionRow[] = [
+	{
+		instructions: 'all-commerce-modules-are-enabled-by-default',
+		version: 'DXP 7.4 GA1+',
+	},
+	{
+		detail: 'commerce-is-activated-using-a-portal-property-see-the-documentation-for-details',
+		instructions: 'commerce-is-activated-using-a-portal-property',
+		version: 'DXP 7.3 FP3/SP2+',
+	},
+	{
+		detail: 'to-request-a-new-or-replacement-activation-key-open-a-support-ticket',
+		instructions: 'commerce-requires-an-activation-key',
+		version: 'DXP 7.3 FP2/SP1',
+	},
+];
 
 export default function CommerceActivation() {
 	return (
@@ -30,7 +52,7 @@ export default function CommerceActivation() {
 				</ClayTable.Head>
 
 				<ClayTable.Body>
-					{COMMERCE_INSTRUCTIONS_MOCK.map((row) => (
+					{COMMERCE_INSTRUCTIONS.map((row) => (
 						<ClayTable.Row key={row.version}>
 							<ClayTable.Cell>
 								<span className="text-neutral-7">
@@ -40,21 +62,11 @@ export default function CommerceActivation() {
 
 							<ClayTable.Cell expanded>
 								<span className="d-flex flex-column">
-									<span>{row.instructions}</span>
+									<span>{translate(row.instructions)}</span>
 
 									{row.detail && (
 										<span className="list-card-subtext">
-											{row.detail}
-
-											{row.detailLink && (
-												<a
-													href={row.detailLink.url}
-													rel="noopener"
-													target="_blank"
-												>
-													{row.detailLink.label}
-												</a>
-											)}
+											{translate(row.detail)}
 										</span>
 									)}
 								</span>

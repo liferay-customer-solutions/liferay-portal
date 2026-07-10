@@ -38,6 +38,7 @@ export default {
 	'activation-key-server-details': 'Activation Key Server Details',
 	'activation-keys': 'Activation Keys',
 	'activation-keys-list': 'Activation Keys List',
+	'activation-mode': 'Activation Mode',
 	'activation-status': 'Activation Status',
 	'active': 'Active',
 	'activity-history': 'Activity History',
@@ -71,6 +72,8 @@ export default {
 	'ai-hub-account-name': 'AI Hub Account Name',
 	'ai-hub-information': 'AI Hub Information',
 	'all': 'All',
+	'all-commerce-modules-are-enabled-by-default':
+		'All Commerce modules are enabled by default.',
 	'all-orders': 'All Orders',
 	'all-progress-and-information-related-to-the-creation-of-the-app-will-be-lost-do-you-still-want-to-exit':
 		'All progress and information related to the creation of the app will be lost. Do you still want to exit?',
@@ -238,6 +241,12 @@ export default {
 	'comment': 'Comment',
 	'comments': 'Comments',
 	'commerce': 'Commerce',
+	'commerce-is-activated-using-a-portal-property':
+		'Commerce is activated using a portal property.',
+	'commerce-is-activated-using-a-portal-property-see-the-documentation-for-details':
+		'Commerce is activated using a portal property. See the documentation for details.',
+	'commerce-requires-an-activation-key':
+		'Commerce requires an activation key.',
 	'company-address': 'Company Address',
 	'company-description': 'Company Description',
 	'company-email': 'Company Email',
@@ -346,6 +355,7 @@ export default {
 	'do-not-close-this-window': 'DO NOT CLOSE THIS WINDOW',
 	'documentation': 'Documentation',
 	'domain': 'Domain',
+	'domains': 'Domains',
 	'done': 'Done',
 	'download': 'Download',
 	'download-app': 'Download App',
@@ -515,6 +525,7 @@ export default {
 	'i-have-read-and-agree-to-the-terms-and-conditions-above':
 		'I have read and agree to the terms and conditions above',
 	'id': 'ID',
+	'identity': 'Identity',
 	'if-the-app-is-compatible-with-different-updates-of-74-please-upload-multiple-packages-for-each-update-or-update-the-compatibility-range':
 		'If the app is compatible with different updates of 7.4, please upload multiple packages for each update or update the compatibility range.',
 	'if-there-is-no-project-admin-on-this-project-to-add-or-manage-team-members-contact-your-account-admin':
@@ -732,9 +743,11 @@ export default {
 	'no-apps-yet': 'No Apps Yet',
 	'no-bundles-yet': 'No Bundles Yet',
 	'no-business-events-were-found': 'No business events were found.',
+	'no-cloud-native-environments-yet': 'No cloud native environments yet.',
 	'no-cloud-projects-available': 'No Cloud Projects Available',
 	'no-data-found': 'No data found.',
 	'no-environment-information-yet': 'No Environment Information Yet',
+	'no-environment-yet': 'No environment yet.',
 	'no-further-edits-can-be-made-when-tickets-are-closed-please-open-a-new-support-ticket-if-assistance-is-needed':
 		'No further edits can be made when tickets are closed. Please open a new support ticket if assistance is needed.',
 	'no-history-of-activity-was-found': 'No history of activity was found.',
@@ -965,6 +978,7 @@ export default {
 	'recent-trials': 'Recent Trials',
 	'recently-published': 'Recently Published',
 	'record-actual-event-date': 'Record Actual Event Date',
+	'region': 'Region',
 	'reimbursement': 'Reimbursement',
 	'reject-request': 'Reject Request',
 	'remove': 'Remove',
@@ -1228,6 +1242,8 @@ export default {
 		'To generate your unique activation key file, please provide the technical specifications required below. These details are used exclusively to configure the software for your environment and ensure hardware compatibility.',
 	'to-join-an-existing-business-account-pleasecontact-your-administrator-who-can-add-you-once-added-you-will-automatically-become-part-of-that-account-and-will-be-able-to-manage-it-and-make-purchases-on-markeplace':
 		'To join an existing business account, please contact your administrator, who can add you. Once added, you will automatically become part of that account and will be able to manage it and make purchases on Markeplace.',
+	'to-request-a-new-or-replacement-activation-key-open-a-support-ticket':
+		'To request a new or replacement activation key, open a support ticket.',
 	'token-unavailable': 'Token Unavailable',
 	'tokens': 'Tokens',
 	'topic': 'Topic',
