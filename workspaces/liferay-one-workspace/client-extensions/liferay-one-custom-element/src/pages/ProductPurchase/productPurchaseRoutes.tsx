@@ -10,9 +10,7 @@ import {AppRoute} from '~/utils/routeUtils';
 const AccountSelection = lazy(
 	() => import('./AccountSelection/AccountSelection')
 );
-const LDPProvisioning = lazy(
-	() => import('./LDPProvisioning/LDPProvisioning')
-);
+const LDPProvisioning = lazy(() => import('./LDPProvisioning/LDPProvisioning'));
 const License = lazy(() => import('./License/License'));
 const PaymentMethod = lazy(() => import('./PaymentMethod/PaymentMethod'));
 const Summary = lazy(() => import('./Summary/Summary'));

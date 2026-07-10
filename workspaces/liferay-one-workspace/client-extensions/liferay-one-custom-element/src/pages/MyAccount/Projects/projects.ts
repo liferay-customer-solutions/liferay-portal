@@ -12,7 +12,10 @@ export {
 	UNASSIGNED_PROJECT_ERC,
 } from './utils/constants';
 export {isUnassignedProject} from './utils/isUnassignedProject';
-export {getCurrentUserId, getSelectedAccountId} from './utils/projectContext';
+export {
+	getCurrentUserId,
+	getSelectedAccountId,
+} from './utils/projectContextUtils';
 export {
 	getLastViewedProjectCookie,
 	setLastViewedProjectCookie,

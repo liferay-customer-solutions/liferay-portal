@@ -87,9 +87,7 @@ export async function getBusinessEventFieldOptions(fieldName: string) {
 	return response.json();
 }
 
-export async function getBusinessEvents(
-	projectExternalReferenceCode: string
-) {
+export async function getBusinessEvents(projectExternalReferenceCode: string) {
 	const response = await jiraFetch(
 		`/projects/${projectExternalReferenceCode}/business-events`
 	);

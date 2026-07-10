@@ -224,92 +224,90 @@ export default function FilterableListCard<T>({
 				<div className="align-items-center d-flex list-card-toolbar">
 					<ClayDropDown
 						active={filterActive}
-					className="list-card-filter-dropdown"
-					onActiveChange={(active) => {
-						setFilterActive(active);
+						className="list-card-filter-dropdown"
+						onActiveChange={(active) => {
+							setFilterActive(active);
 
-						if (!active) {
-							setActiveFilterKey(null);
-						}
-					}}
-					trigger={
-						<Button
-							appendIcon="caret-bottom"
-							className="list-card-filter-button"
-							displayType="secondary"
-							prependIcon="filter"
-						>
-							{translate('filter')}
-						</Button>
-					}
-				>
-					{activeFilter ? (
-						<FilterSubPanel
-							onApply={(values) => {
-								setSelectedFilters((previous) => ({
-									...previous,
-									[activeFilter.key]: values,
-								}));
-								setPage(1);
-								closeFilter();
-							}}
-							onBack={() => setActiveFilterKey(null)}
-							options={activeFilter.options}
-							selectedValues={
-								selectedFilters[activeFilter.key] ?? []
+							if (!active) {
+								setActiveFilterKey(null);
 							}
-							title={translate(activeFilter.label)}
-						/>
-					) : (
-						<div className="list-card-filter-panel">
-							<div className="list-card-filter-heading">
-								{translate('filters')}
-							</div>
-
-							{filters.map((filter) => (
-								<button
-									className="align-items-center d-flex justify-content-between list-card-filter-category"
-									key={filter.key}
-									onClick={() =>
-										setActiveFilterKey(filter.key)
-									}
-									type="button"
-								>
-									<span>{translate(filter.label)}</span>
-
-									<ClayIcon symbol="angle-right" />
-								</button>
-							))}
-						</div>
-					)}
-				</ClayDropDown>
-
-				<ClayInput.Group className="list-card-search">
-					<ClayInput.GroupItem>
-						<ClayInput
-							className="input-group-inset input-group-inset-after"
-							onChange={(event) => {
-								setPage(1);
-								setKeywords(event.target.value);
-							}}
-							placeholder={translate('search')}
-							type="text"
-							value={keywords}
-						/>
-
-						<ClayInput.GroupInsetItem after tag="span">
-							<ClayIcon
-								className="text-neutral-7"
-								symbol="search"
+						}}
+						trigger={
+							<Button
+								appendIcon="caret-bottom"
+								className="list-card-filter-button"
+								displayType="secondary"
+								prependIcon="filter"
+							>
+								{translate('filter')}
+							</Button>
+						}
+					>
+						{activeFilter ? (
+							<FilterSubPanel
+								onApply={(values) => {
+									setSelectedFilters((previous) => ({
+										...previous,
+										[activeFilter.key]: values,
+									}));
+									setPage(1);
+									closeFilter();
+								}}
+								onBack={() => setActiveFilterKey(null)}
+								options={activeFilter.options}
+								selectedValues={
+									selectedFilters[activeFilter.key] ?? []
+								}
+								title={translate(activeFilter.label)}
 							/>
-						</ClayInput.GroupInsetItem>
-					</ClayInput.GroupItem>
-				</ClayInput.Group>
+						) : (
+							<div className="list-card-filter-panel">
+								<div className="list-card-filter-heading">
+									{translate('filters')}
+								</div>
+
+								{filters.map((filter) => (
+									<button
+										className="align-items-center d-flex justify-content-between list-card-filter-category"
+										key={filter.key}
+										onClick={() =>
+											setActiveFilterKey(filter.key)
+										}
+										type="button"
+									>
+										<span>{translate(filter.label)}</span>
+
+										<ClayIcon symbol="angle-right" />
+									</button>
+								))}
+							</div>
+						)}
+					</ClayDropDown>
+
+					<ClayInput.Group className="list-card-search">
+						<ClayInput.GroupItem>
+							<ClayInput
+								className="input-group-inset input-group-inset-after"
+								onChange={(event) => {
+									setPage(1);
+									setKeywords(event.target.value);
+								}}
+								placeholder={translate('search')}
+								type="text"
+								value={keywords}
+							/>
+
+							<ClayInput.GroupInsetItem after tag="span">
+								<ClayIcon
+									className="text-neutral-7"
+									symbol="search"
+								/>
+							</ClayInput.GroupInsetItem>
+						</ClayInput.GroupItem>
+					</ClayInput.Group>
 
 					{action && (
-						<div className="list-card-toolbar-action">
-							{action}
-						</div>
+						<div className="list-card-toolbar-action">{action}</div>
 					)}
 				</div>
 			)}

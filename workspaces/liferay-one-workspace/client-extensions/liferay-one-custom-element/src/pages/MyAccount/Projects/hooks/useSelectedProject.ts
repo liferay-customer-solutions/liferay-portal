@@ -7,7 +7,7 @@ import {useCallback, useEffect, useState} from 'react';
 import {
 	getCurrentUserId,
 	getSelectedAccountId,
-} from '~/pages/MyAccount/Projects/utils/projectContext';
+} from '~/pages/MyAccount/Projects/utils/projectContextUtils';
 import {
 	getLastViewedProjectCookie,
 	setLastViewedProjectCookie,
@@ -16,10 +16,7 @@ import {resolveProjectERC} from '~/pages/MyAccount/Projects/utils/resolveProject
 
 import type {UserProject} from '~/pages/MyAccount/Projects/types';
 
-export function useSelectedProject(
-	loading: boolean,
-	projects: UserProject[]
-) {
+export function useSelectedProject(loading: boolean, projects: UserProject[]) {
 	const [projectERC, setProjectERC] = useState('');
 
 	const userId = getCurrentUserId();

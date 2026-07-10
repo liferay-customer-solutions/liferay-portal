@@ -149,7 +149,9 @@ const LDPProvisioning = () => {
 				name="_refAllowedEmailDomains"
 				render={({field}) => (
 					<ClayForm.Group
-						className={errors.allowedEmailDomains ? 'has-error' : ''}
+						className={
+							errors.allowedEmailDomains ? 'has-error' : ''
+						}
 					>
 						<label>{i18n.translate('allowed-email-domains')}</label>
 

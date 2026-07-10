@@ -103,7 +103,9 @@ export default function LicensesTable({
 					<span
 						className="list-card-status-dot"
 						style={{
-							backgroundColor: getStatusColor(activationKey.status),
+							backgroundColor: getStatusColor(
+								activationKey.status
+							),
 						}}
 					/>
 
@@ -136,7 +138,9 @@ export default function LicensesTable({
 			items={activationKeys}
 			onItemClick={() => {}}
 			rowKey={(activationKey) => activationKey.id}
-			title={variant === 'app-licenses' ? 'licenses-list' : 'activation-keys'}
+			title={
+				variant === 'app-licenses' ? 'licenses-list' : 'activation-keys'
+			}
 		/>
 	);
 }

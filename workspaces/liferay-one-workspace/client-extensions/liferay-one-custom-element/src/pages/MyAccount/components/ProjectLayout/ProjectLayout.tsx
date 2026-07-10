@@ -59,7 +59,6 @@ export default function ProjectLayout() {
 					loading={loading}
 					onSelect={handleSelectProject}
 					projects={projects}
-					readOnly={false}
 					selectedProjectERC={projectId}
 					showProjectCount
 				/>

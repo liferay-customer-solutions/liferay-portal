@@ -920,7 +920,7 @@ const BusinessEventsEditForm: React.FC<IFormProps> = ({
 };
 
 const BusinessEventsEdit: React.FC = () => {
-	const {projectERC, id} = useParams<{projectERC: string; id: string}>();
+	const {id, projectERC} = useParams<{id: string; projectERC: string}>();
 
 	const {businessEvent, loading} = useGetBusinessEvent(
 		id || '',

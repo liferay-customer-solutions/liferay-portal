@@ -12,8 +12,7 @@ export function resolveProjectERC(
 	const isAccessible = (externalReferenceCode?: string) =>
 		Boolean(externalReferenceCode) &&
 		projects.some(
-			(project) =>
-				project.externalReferenceCode === externalReferenceCode
+			(project) => project.externalReferenceCode === externalReferenceCode
 		);
 
 	if (isAccessible(cookieERC)) {
@@ -22,3 +21,5 @@ export function resolveProjectERC(
 
 	return projects[0]?.externalReferenceCode;
 }
+
+export default resolveProjectERC;

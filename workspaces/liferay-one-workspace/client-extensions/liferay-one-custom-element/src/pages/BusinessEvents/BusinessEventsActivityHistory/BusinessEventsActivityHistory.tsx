@@ -24,7 +24,7 @@ import {getFormattedTime} from '~/pages/BusinessEvents/utils/getFormattedTime';
 import {Liferay} from '~/services/liferay/liferay';
 
 const BusinessEventsActivityHistory = () => {
-	const {projectERC, id} = useParams<{projectERC: string; id: string}>();
+	const {id, projectERC} = useParams<{id: string; projectERC: string}>();
 
 	const navigate = useNavigate();
 

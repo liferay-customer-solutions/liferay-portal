@@ -26,7 +26,7 @@ import {ITicket} from '~/types/ticket';
 import getKebabCase from '~/utils/getKebabCase';
 
 const BusinessEventsDetails = () => {
-	const {projectERC, id} = useParams<{projectERC: string; id: string}>();
+	const {id, projectERC} = useParams<{id: string; projectERC: string}>();
 
 	const navigate = useNavigate();
 

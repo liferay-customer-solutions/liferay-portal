@@ -21,7 +21,10 @@ import FilterableListCard, {
 } from '../FilterableListCard/FilterableListCard';
 
 const BADGE_COLORS: {[key: string]: {color: string; icon: string}} = {
-	'new-activation-key': {color: 'var(--color-state-success)', icon: newKeyIconUrl},
+	'new-activation-key': {
+		color: 'var(--color-state-success)',
+		icon: newKeyIconUrl,
+	},
 	'to-be-renewed': {color: '#9D4C00', icon: renewedKeyIconUrl},
 };
 
@@ -170,9 +173,7 @@ export default function ActivationKeysCard({
 	return (
 		<FilterableListCard
 			action={
-				<Button displayType="primary">
-					{translate('new-key')}
-				</Button>
+				<Button displayType="primary">{translate('new-key')}</Button>
 			}
 			columns={columns}
 			emptyLabel="no-activation-keys-yet"

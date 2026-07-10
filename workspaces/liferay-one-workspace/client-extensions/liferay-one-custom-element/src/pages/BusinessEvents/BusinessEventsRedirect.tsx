@@ -29,7 +29,9 @@ const BusinessEventsRedirect = () => {
 
 	const isAccessible =
 		Boolean(projectERC) &&
-		projects.some((project) => project.externalReferenceCode === projectERC);
+		projects.some(
+			(project) => project.externalReferenceCode === projectERC
+		);
 
 	useEffect(() => {
 		if (loading) {
@@ -54,9 +56,17 @@ const BusinessEventsRedirect = () => {
 		if (resolvedProjectERC) {
 			navigate(`/${resolvedProjectERC}/business-events`, {replace: true});
 		}
-	}, [accountId, isAccessible, loading, navigate, projectERC, projects, userId]);
+	}, [
+		accountId,
+		isAccessible,
+		loading,
+		navigate,
+		projectERC,
+		projects,
+		userId,
+	]);
 
-	if (loading || (!isAccessible && projects.length > 0)) {
+	if (loading || (!isAccessible && !!projects.length)) {
 		return (
 			<div className="mx-auto">
 				<ClayLoadingIndicator size="sm" />

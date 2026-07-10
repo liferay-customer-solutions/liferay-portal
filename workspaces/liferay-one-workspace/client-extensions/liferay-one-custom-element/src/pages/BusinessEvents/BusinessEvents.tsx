@@ -9,7 +9,7 @@ import Button from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {useModal} from '@clayui/modal';
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import Table, {
 	IRow,
@@ -422,8 +422,8 @@ const BusinessEvents = () => {
 				</h6>
 			</div>
 
-			{projects.length > 0 && (
-				<div className='w-25'>
+			{!!projects.length && (
+				<div className="w-25">
 					<ProjectSelector
 						onSelect={(id) => {
 							if (id !== projectERC) {

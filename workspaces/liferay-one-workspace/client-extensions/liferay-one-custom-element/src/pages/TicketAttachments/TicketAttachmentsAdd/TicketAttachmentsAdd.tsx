@@ -21,8 +21,11 @@ import {ITicket} from '~/types/ticket';
 const TicketAttachmentsAdd = () => {
 	const navigate = useNavigate();
 
-	const {hasAccountProjects, loading: projectsLoading, projects} =
-		useUserProjects();
+	const {
+		hasAccountProjects,
+		loading: projectsLoading,
+		projects,
+	} = useUserProjects();
 
 	const {projectERC, selectProject} = useSelectedProject(
 		projectsLoading,
@@ -117,7 +120,9 @@ const TicketAttachmentsAdd = () => {
 						<ClaySelect
 							disabled={!tickets.length}
 							id="newAttachmentTicket"
-							onChange={(event) => setTicketId(event.target.value)}
+							onChange={(event) =>
+								setTicketId(event.target.value)
+							}
 							value={ticketId}
 						>
 							<ClaySelect.Option
@@ -143,7 +148,10 @@ const TicketAttachmentsAdd = () => {
 				</ClayForm.Group>
 
 				<div className="d-flex mt-4">
-					<Button displayType="secondary" onClick={() => navigate('/')}>
+					<Button
+						displayType="secondary"
+						onClick={() => navigate('/')}
+					>
 						{translate('cancel')}
 					</Button>
 

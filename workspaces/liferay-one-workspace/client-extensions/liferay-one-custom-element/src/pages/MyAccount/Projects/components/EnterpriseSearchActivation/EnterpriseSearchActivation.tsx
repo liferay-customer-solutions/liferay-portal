@@ -151,7 +151,9 @@ export default function EnterpriseSearchActivation() {
 			</Button>
 
 			<p className="mt-4 text-neutral-7">
-				{translate('for-instructions-on-how-to-setup-your-software-read')}{' '}
+				{translate(
+					'for-instructions-on-how-to-setup-your-software-read'
+				)}{' '}
 				<a href={GETTING_STARTED_URL} rel="noopener" target="_blank">
 					{translate(
 						'getting-started-with-liferay-enterprise-search-article'

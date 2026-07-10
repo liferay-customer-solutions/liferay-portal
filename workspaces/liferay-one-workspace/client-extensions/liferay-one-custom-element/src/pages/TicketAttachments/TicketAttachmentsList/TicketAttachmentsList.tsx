@@ -78,8 +78,11 @@ const TicketAttachmentsList = () => {
 
 	const {jiraFLSPortalURL, jiraFLSProject, jiraHCPortalURL} = useProperties();
 
-	const {hasAccountProjects, loading: projectsLoading, projects} =
-		useUserProjects();
+	const {
+		hasAccountProjects,
+		loading: projectsLoading,
+		projects,
+	} = useUserProjects();
 
 	const {projectERC, selectProject} = useSelectedProject(
 		projectsLoading,
@@ -101,7 +104,8 @@ const TicketAttachmentsList = () => {
 		}
 	);
 
-	const {deleteAttachment} = useDeleteTicketAttachment(revalidate);
+	const {deleteAttachment, loading: deletingAttachment} =
+		useDeleteTicketAttachment(revalidate);
 
 	const getTicketURL = (jiraIssueKey: string) => {
 		if (jiraFLSProject && jiraIssueKey.startsWith(jiraFLSProject)) {
@@ -129,7 +133,7 @@ const TicketAttachmentsList = () => {
 				className="align-items-center d-flex"
 				style={{gap: 'var(--spacer-3)'}}
 			>
-				{projects.length > 0 && (
+				{!!projects.length && (
 					<ProjectSelector
 						onSelect={selectProject}
 						projects={projects}
@@ -176,7 +180,9 @@ const TicketAttachmentsList = () => {
 		confirmationModal.openModal({
 			body: (
 				<p>
-					{translate('are-you-sure-you-want-to-delete-this-attachment')}
+					{translate(
+						'are-you-sure-you-want-to-delete-this-attachment'
+					)}
 				</p>
 			),
 			header: translate('confirm-deletion'),
@@ -197,9 +203,14 @@ const TicketAttachmentsList = () => {
 				{(canManageAttachments ||
 					String(attachment.creator?.id) === currentUserId) && (
 					<ClayLink
+						aria-disabled={deletingAttachment}
 						className="ml-3"
 						displayType="danger"
-						onClick={() => handleDeleteClick(attachment)}
+						onClick={() => {
+							if (!deletingAttachment) {
+								handleDeleteClick(attachment);
+							}
+						}}
 						title={translate('delete')}
 					>
 						{translate('delete')}

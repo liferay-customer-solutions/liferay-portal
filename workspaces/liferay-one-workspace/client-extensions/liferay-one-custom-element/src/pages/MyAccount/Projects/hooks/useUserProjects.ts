@@ -77,7 +77,7 @@ export function useUserProjects(): {
 		}));
 
 	return {
-		hasAccountProjects: (projectData?.items ?? []).length > 0,
+		hasAccountProjects: !!(projectData?.items ?? []).length,
 		loading: membershipsLoading || projectsLoading,
 		projects,
 	};
