@@ -17,6 +17,7 @@ import ProductListPage, {
 	statusColumn,
 	statusFilter,
 } from '~/pages/MyAccount/Projects/components/ProductListPage/ProductListPage';
+import {PRODUCT_CATEGORY} from '~/pages/MyAccount/Projects/utils/constants';
 import {getLogoColor} from '~/pages/MyAccount/Projects/utils/getLogoColor';
 import {getProductIcon} from '~/pages/MyAccount/Projects/utils/getProductIcon';
 
@@ -29,7 +30,7 @@ export default function Products() {
 	const liferayProducts = useMemo(
 		() =>
 			products.filter((product) =>
-				product.categoryNames.includes('liferay-product')
+				product.categoryNames.includes(PRODUCT_CATEGORY.LIFERAY_PRODUCT)
 			),
 		[products]
 	);

@@ -5,14 +5,17 @@
 
 export type ProjectItemKind = 'application' | 'product';
 
-export type ProjectTabKey =
-	| 'activation'
-	| 'details'
-	| 'download'
-	| 'environment'
-	| 'help-and-support'
-	| 'orders'
-	| 'utilization';
+export const PROJECT_TAB_KEYS = [
+	'details',
+	'activation',
+	'download',
+	'utilization',
+	'environment',
+	'orders',
+	'help-and-support',
+] as const;
+
+export type ProjectTabKey = (typeof PROJECT_TAB_KEYS)[number];
 
 export type UserProject = {
 	externalReferenceCode: string;

@@ -5,6 +5,8 @@
 
 import {getSpecificationValue} from '~/hooks/useProjectCommerce';
 
+import {resolveProfile} from './resolveProfile';
+
 import type {DeliveryProduct} from '~/types/product';
 
 export type UtilizationProfile =
@@ -20,19 +22,14 @@ const UTILIZATION_PROFILES: UtilizationProfile[] = [
 	'usage-metrics',
 ];
 
-function isUtilizationProfile(value: string): value is UtilizationProfile {
-	return (UTILIZATION_PROFILES as string[]).includes(value);
-}
-
 export function resolveUtilizationProfile(
 	product: DeliveryProduct
 ): UtilizationProfile {
-	const profile = getSpecificationValue(
-		product,
-		'project-utilization-profile'
+	return resolveProfile(
+		getSpecificationValue(product, 'project-utilization-profile'),
+		UTILIZATION_PROFILES,
+		'none'
 	);
-
-	return isUtilizationProfile(profile) ? profile : 'none';
 }
 
 export default resolveUtilizationProfile;

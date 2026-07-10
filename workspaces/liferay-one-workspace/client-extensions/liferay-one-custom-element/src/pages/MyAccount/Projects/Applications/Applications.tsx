@@ -16,6 +16,7 @@ import ProductListPage, {
 	statusColumn,
 	statusFilter,
 } from '~/pages/MyAccount/Projects/components/ProductListPage/ProductListPage';
+import {PRODUCT_CATEGORY} from '~/pages/MyAccount/Projects/utils/constants';
 import {getLogoColor} from '~/pages/MyAccount/Projects/utils/getLogoColor';
 import {isUnassignedProject} from '~/pages/MyAccount/Projects/utils/isUnassignedProject';
 
@@ -34,7 +35,9 @@ export default function Applications() {
 
 	const applications = useMemo(
 		() =>
-			products.filter((product) => product.categoryNames.includes('app')),
+			products.filter((product) =>
+				product.categoryNames.includes(PRODUCT_CATEGORY.APP)
+			),
 		[products]
 	);
 

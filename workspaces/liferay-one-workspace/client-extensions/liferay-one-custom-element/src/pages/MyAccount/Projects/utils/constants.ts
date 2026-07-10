@@ -5,11 +5,18 @@
 
 import {Word} from '~/i18n';
 
+import {PROJECT_TAB_KEYS} from '../types';
+
 import type {OrderTypes} from '~/types/orders';
 
 import type {ProjectTabKey} from '../types';
 
 export const LAST_PROJECT_STORAGE_KEY = 'liferay-one:last-project';
+
+export const PRODUCT_CATEGORY = {
+	APP: 'app',
+	LIFERAY_PRODUCT: 'liferay-product',
+} as const;
 
 export const PROJECT_TAB_LABELS: Record<ProjectTabKey, Word> = {
 	'activation': 'activation',
@@ -21,15 +28,7 @@ export const PROJECT_TAB_LABELS: Record<ProjectTabKey, Word> = {
 	'utilization': 'utilization',
 };
 
-export const PROJECT_TAB_ORDER: ProjectTabKey[] = [
-	'details',
-	'activation',
-	'download',
-	'utilization',
-	'environment',
-	'orders',
-	'help-and-support',
-];
+export const PROJECT_TAB_ORDER: ProjectTabKey[] = [...PROJECT_TAB_KEYS];
 
 export const STATUS_DOT_COLORS: {[key: string]: string} = {
 	active: 'var(--color-state-success)',
@@ -91,7 +90,13 @@ export const TAB_VISIBILITY: Partial<Record<OrderTypes, ProjectTabKey[]>> = {
 	ADDONS: ['details', 'orders'],
 	AI_HUB: ['details', 'environment', 'orders'],
 	CLIENT_EXTENSION: ['details', 'activation', 'orders', 'help-and-support'],
-	CLOUD_APP: ['details', 'activation', 'environment', 'orders', 'help-and-support'],
+	CLOUD_APP: [
+		'details',
+		'activation',
+		'environment',
+		'orders',
+		'help-and-support',
+	],
 	CMP_BETA: ['details', 'activation', 'download', 'orders'],
 	COMPOSITE_APP: [
 		'details',

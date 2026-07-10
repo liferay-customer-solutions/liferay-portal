@@ -5,22 +5,22 @@
 
 import {getSpecificationValue} from '~/hooks/useProjectCommerce';
 
+import {resolveProfile} from './resolveProfile';
+
 import type {DeliveryProduct} from '~/types/product';
 
 export type DownloadProfile = 'app' | 'bundle' | 'none';
 
 const DOWNLOAD_PROFILES: DownloadProfile[] = ['app', 'bundle', 'none'];
 
-function isDownloadProfile(value: string): value is DownloadProfile {
-	return (DOWNLOAD_PROFILES as string[]).includes(value);
-}
-
 export function resolveDownloadProfile(
 	product: DeliveryProduct
 ): DownloadProfile {
-	const profile = getSpecificationValue(product, 'project-download-profile');
-
-	return isDownloadProfile(profile) ? profile : 'none';
+	return resolveProfile(
+		getSpecificationValue(product, 'project-download-profile'),
+		DOWNLOAD_PROFILES,
+		'none'
+	);
 }
 
 export default resolveDownloadProfile;

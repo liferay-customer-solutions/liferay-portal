@@ -5,6 +5,8 @@
 
 import {getSpecificationValue} from '~/hooks/useProjectCommerce';
 
+import {resolveProfile} from './resolveProfile';
+
 import type {DeliveryProduct} from '~/types/product';
 
 export type EnvironmentProfile =
@@ -22,19 +24,14 @@ const ENVIRONMENT_PROFILES: EnvironmentProfile[] = [
 	'workspace',
 ];
 
-function isEnvironmentProfile(value: string): value is EnvironmentProfile {
-	return (ENVIRONMENT_PROFILES as string[]).includes(value);
-}
-
 export function resolveEnvironmentProfile(
 	product: DeliveryProduct
 ): EnvironmentProfile {
-	const profile = getSpecificationValue(
-		product,
-		'project-environment-profile'
+	return resolveProfile(
+		getSpecificationValue(product, 'project-environment-profile'),
+		ENVIRONMENT_PROFILES,
+		'none'
 	);
-
-	return isEnvironmentProfile(profile) ? profile : 'none';
 }
 
 export default resolveEnvironmentProfile;
