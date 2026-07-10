@@ -1132,3 +1132,8 @@ html body:not(.has-edit-mode-menu) .content #main-content.layout-content {
 	}
 }
 
+/* ---------- The Clay autocomplete dropdown is portaled to the body with z-index 1000 ($zindex-dropdown), so it renders behind Clay modals (z-index 1050). Raise it above the modal so dropdowns opened inside a modal, such as the new trial modal cloud app field, are visible. ---------- */
+
+.dropdown-menu.dropdown-menu-select {
+	z-index: 1060;
+}
