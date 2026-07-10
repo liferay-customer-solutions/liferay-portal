@@ -137,7 +137,7 @@ const NewTrialModal: React.FC<NewTrialModalProps> = ({onClose, revalidate}) => {
 		<div className="pb-8">
 			<BaseWrapper boldLabel label="Cloud App" required>
 				<Autocomplete
-					filterKey="productName"
+					filterKey="name"
 					items={apps?.items || []}
 					loadingState={isValidating ? 1 : 4}
 					messages={{
@@ -150,7 +150,6 @@ const NewTrialModal: React.FC<NewTrialModalProps> = ({onClose, revalidate}) => {
 				>
 					{(product) => (
 						<Autocomplete.Item
-							disabled
 							key={product.productId}
 							onClick={() => {
 								setValue('product', product as never);
@@ -158,7 +157,7 @@ const NewTrialModal: React.FC<NewTrialModalProps> = ({onClose, revalidate}) => {
 								trigger();
 							}}
 						>
-							{product.name.en_US}
+							{product.name as unknown as string}
 						</Autocomplete.Item>
 					)}
 				</Autocomplete>
