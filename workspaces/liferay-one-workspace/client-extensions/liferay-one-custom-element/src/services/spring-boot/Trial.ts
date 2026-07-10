@@ -31,7 +31,7 @@ class TrialOAuth2 extends OneSpringBootOAuth2 {
 
 	async getAvailability(): Promise<Availability> {
 		try {
-			return this.get('/availability');
+			return await this.get('/availability');
 		}
 		catch {
 			return {
