@@ -1,0 +1,98 @@
+{
+	"configuration": {
+		"className": "com.liferay.object.model.ObjectDefinition#C_ENVIRONMENT",
+		"parameters": {
+			"containsHeaders": "true",
+			"createStrategy": "UPSERT",
+			"onErrorFail": "false",
+			"taskItemDelegateName": "DEFAULT",
+			"updateStrategy": "UPDATE"
+		}
+	},
+	"items": [
+		{
+			"activationMode": "heartbeat",
+			"externalReferenceCode": "ENV-ANALYTICS-PROD",
+			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-013",
+			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_ANALYTICS_CLOUD",
+			"status": "active",
+			"type": "SaaS",
+			"region": "us-central1"
+		},
+		{
+			"activationMode": "heartbeat",
+			"externalReferenceCode": "ENV-CLOUD-NATIVE-NONPROD",
+			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-007",
+			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_CLOUD_NATIVE",
+			"status": "active",
+			"type": "CNE",
+			"region": "us-central1"
+		},
+		{
+			"activationMode": "heartbeat",
+			"externalReferenceCode": "ENV-CLOUD-NATIVE-PROD",
+			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-007",
+			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_CLOUD_NATIVE",
+			"status": "active",
+			"type": "CNE",
+			"region": "us-central1"
+		},
+		{
+			"activationMode": "heartbeat",
+			"externalReferenceCode": "ENV-COMMERCE-CLOUD-PROD",
+			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-023",
+			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_COMMERCE_CLOUD",
+			"status": "active",
+			"type": "CNE",
+			"region": "us-east1"
+		},
+		{
+			"activationMode": "license-key",
+			"externalReferenceCode": "ENV-DXP-NONPROD",
+			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-006",
+			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_DXP",
+			"status": "active",
+			"type": "On-Prem",
+			"hostName": "staging.omni.example.com",
+			"domains": "staging.omni.example.com"
+		},
+		{
+			"activationMode": "license-key",
+			"externalReferenceCode": "ENV-DXP-PROD",
+			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-006",
+			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_DXP",
+			"status": "active",
+			"type": "On-Prem",
+			"hostName": "prod.omni.example.com",
+			"domains": "omni.example.com,www.omni.example.com"
+		},
+		{
+			"activationMode": "heartbeat",
+			"externalReferenceCode": "ENV-PAAS-PROD",
+			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-004",
+			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
+			"status": "active",
+			"type": "PaaS",
+			"region": "us-east1"
+		},
+		{
+			"activationMode": "license-key",
+			"externalReferenceCode": "ENV-PORTAL-PROD",
+			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-015",
+			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_PORTAL",
+			"status": "deactivated",
+			"type": "On-Prem",
+			"hostName": "portal.example.com",
+			"domains": "portal.example.com"
+		},
+		{
+			"activationMode": "heartbeat",
+			"externalReferenceCode": "ENV-SAAS-PROD",
+			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-002",
+			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_SAAS_EXPERIENCE",
+			"status": "active",
+			"type": "SaaS",
+			"region": "eu-west1"
+		}
+	]
+}

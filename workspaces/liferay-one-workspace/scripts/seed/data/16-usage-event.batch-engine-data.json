@@ -1,0 +1,62 @@
+{
+	"configuration": {
+		"className": "com.liferay.object.model.ObjectDefinition#C_USAGE_EVENT",
+		"parameters": {
+			"containsHeaders": "true",
+			"createStrategy": "UPSERT",
+			"onErrorFail": "false",
+			"taskItemDelegateName": "DEFAULT",
+			"updateStrategy": "UPDATE"
+		}
+	},
+	"items": [
+		{
+			"dedupeKey": "UEV-ANALYTICS-PV-202605",
+			"eventTimestamp": "2026-05-01T00:00:00Z",
+			"externalReferenceCode": "UEV-ANALYTICS-PV-202605",
+			"quantity": 820000,
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-ANALYTICS-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "page-views-monthly"
+		},
+		{
+			"dedupeKey": "UEV-ANALYTICS-PV-202606",
+			"eventTimestamp": "2026-06-01T00:00:00Z",
+			"externalReferenceCode": "UEV-ANALYTICS-PV-202606",
+			"quantity": 910000,
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-ANALYTICS-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "page-views-monthly"
+		},
+		{
+			"dedupeKey": "UEV-ANALYTICS-PV-202607",
+			"eventTimestamp": "2026-07-01T00:00:00Z",
+			"externalReferenceCode": "UEV-ANALYTICS-PV-202607",
+			"quantity": 1040000,
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-ANALYTICS-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "page-views-monthly"
+		},
+		{
+			"dedupeKey": "UEV-ANALYTICS-STORAGE-202607",
+			"eventTimestamp": "2026-07-01T00:00:00Z",
+			"externalReferenceCode": "UEV-ANALYTICS-STORAGE-202607",
+			"quantity": 62,
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-ANALYTICS-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		},
+		{
+			"dedupeKey": "UEV-SAAS-API-202607",
+			"eventTimestamp": "2026-07-01T00:00:00Z",
+			"externalReferenceCode": "UEV-SAAS-API-202607",
+			"quantity": 3200000,
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-SAAS-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "api-requests-monthly"
+		},
+		{
+			"dedupeKey": "UEV-SAAS-STORAGE-202607",
+			"eventTimestamp": "2026-07-01T00:00:00Z",
+			"externalReferenceCode": "UEV-SAAS-STORAGE-202607",
+			"quantity": 48,
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-SAAS-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		}
+	]
+}

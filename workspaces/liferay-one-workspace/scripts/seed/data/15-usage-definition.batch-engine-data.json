@@ -1,0 +1,50 @@
+{
+	"configuration": {
+		"className": "com.liferay.object.model.ObjectDefinition#C_USAGE_DEFINITION",
+		"parameters": {
+			"containsHeaders": "true",
+			"createStrategy": "UPSERT",
+			"onErrorFail": "false",
+			"taskItemDelegateName": "DEFAULT",
+			"updateStrategy": "UPDATE"
+		}
+	},
+	"items": [
+		{
+			"aggregation": "sum",
+			"externalReferenceCode": "ai-tokens-monthly",
+			"overageCurrency": "USD",
+			"overageRate": 2e-05,
+			"period": "per month",
+			"quantity": 1000000,
+			"unit": "AI tokens"
+		},
+		{
+			"aggregation": "count",
+			"externalReferenceCode": "api-requests-monthly",
+			"overageCurrency": "USD",
+			"overageRate": 0.0005,
+			"period": "per month",
+			"quantity": 5000000,
+			"unit": "API requests"
+		},
+		{
+			"aggregation": "count",
+			"externalReferenceCode": "page-views-monthly",
+			"overageCurrency": "USD",
+			"overageRate": 0.001,
+			"period": "per month",
+			"quantity": 1000000,
+			"unit": "page views"
+		},
+		{
+			"aggregation": "sum",
+			"externalReferenceCode": "storage-gb",
+			"overageCurrency": "USD",
+			"overageRate": 1.0,
+			"period": "per month",
+			"quantity": 100,
+			"unit": "GB"
+		}
+	]
+}
