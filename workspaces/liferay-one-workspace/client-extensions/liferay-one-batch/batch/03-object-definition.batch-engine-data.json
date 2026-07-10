@@ -2227,6 +2227,24 @@
 				{
 					"DBType": "String",
 					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_ACTIVATION_STATUS",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Activation Status"
+					},
+					"name": "activationStatus",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
 					"externalReferenceCode": "C_ENVIRONMENT_CURRENT_ENTITLEMENT_HASH",
 					"indexed": true,
 					"indexedAsKeyword": true,
@@ -2375,24 +2393,6 @@
 				{
 					"DBType": "String",
 					"businessType": "Text",
-					"externalReferenceCode": "C_ENVIRONMENT_STATUS",
-					"indexed": true,
-					"indexedAsKeyword": true,
-					"indexedLanguageId": "",
-					"label": {
-						"en_US": "Status"
-					},
-					"name": "status",
-					"objectFieldSettings": [
-					],
-					"required": false,
-					"state": false,
-					"system": false,
-					"type": "String"
-				},
-				{
-					"DBType": "String",
-					"businessType": "Text",
 					"externalReferenceCode": "C_ENVIRONMENT_TYPE",
 					"indexed": true,
 					"indexedAsKeyword": true,
@@ -2445,9 +2445,9 @@
 						},
 						{
 							"label": {
-								"en_US": "Status"
+								"en_US": "Activation Status"
 							},
-							"objectFieldName": "status",
+							"objectFieldName": "activationStatus",
 							"priority": 3
 						},
 						{

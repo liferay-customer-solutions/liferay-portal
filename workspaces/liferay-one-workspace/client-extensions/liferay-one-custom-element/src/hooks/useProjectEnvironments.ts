@@ -22,13 +22,13 @@ export type ProjectEnvironment = {
 
 type EnvironmentNode = {
 	activationMode?: string;
+	activationStatus?: string;
 	currentEntitlementHash?: string;
 	domains?: string;
 	externalReferenceCode: string;
 	hostName?: string;
 	id: number;
 	region?: string;
-	status?: string;
 	type?: string;
 };
 
@@ -59,7 +59,7 @@ export function useProjectEnvironments() {
 			hostName: node.hostName ?? '',
 			id: String(node.id),
 			region: node.region ?? '',
-			status: node.status ?? '',
+			status: node.activationStatus ?? '',
 			type: node.type ?? '',
 		})
 	);
