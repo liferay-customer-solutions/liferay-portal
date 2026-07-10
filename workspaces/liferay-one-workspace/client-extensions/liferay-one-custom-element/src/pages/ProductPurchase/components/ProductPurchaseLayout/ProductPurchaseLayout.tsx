@@ -19,11 +19,7 @@ import ProductPurchaseLDP, {
 } from '~/services/commerce/ProductPurchaseLDP';
 import HeadlessCommerceDeliveryCart from '~/services/headless/HeadlessCommerceDeliveryCart';
 import {Liferay} from '~/services/liferay/liferay';
-import {
-	ProductSpecificationKey,
-	getProductPriceModel,
-	getProductSpecificationValue,
-} from '~/utils/productUtils';
+import {getProductPriceModel, isLDPProduct} from '~/utils/productUtils';
 
 import useAccounts from '../../hooks/useAccounts';
 import useProductPurchaseCart from '../../hooks/useProductPurchaseCart';
@@ -114,14 +110,8 @@ const ProductPurchaseLayout = ({
 		setSubmitting(true);
 
 		try {
-			const isLDP =
-				getProductSpecificationValue(
-					ProductSpecificationKey.SOLUTION_TYPE,
-					product
-				) === 'liferay-data-platform';
-
 			const productPurchase =
-				isLDP && ldpSettings
+				isLDPProduct(product) && ldpSettings
 					? new ProductPurchaseLDP(
 							selectedAccount,
 							product,

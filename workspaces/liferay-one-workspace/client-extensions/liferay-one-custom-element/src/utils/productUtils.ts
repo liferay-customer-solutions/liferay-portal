@@ -248,3 +248,12 @@ export function getProductPriceModel(product: DeliveryProduct) {
 		priceModel,
 	};
 }
+
+export function isLDPProduct(product: DeliveryProduct) {
+	return (
+		getProductSpecificationValue(
+			ProductSpecificationKey.SOLUTION_TYPE,
+			product
+		) === 'liferay-data-platform'
+	);
+}

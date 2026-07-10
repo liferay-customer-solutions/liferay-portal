@@ -10,11 +10,7 @@ import Loading from '~/components/Loading/Loading';
 import {useDeliveryProduct} from '~/hooks/useDeliveryProduct';
 import useRequireSignIn from '~/hooks/useRequireSignIn';
 import i18n from '~/i18n';
-import {
-	ProductSpecificationKey,
-	getProductPriceModel,
-	getProductSpecificationValue,
-} from '~/utils/productUtils';
+import {getProductPriceModel, isLDPProduct} from '~/utils/productUtils';
 import {AppRoute, toRouteObjects} from '~/utils/routeUtils';
 
 import ProductPurchaseLayout from './components/ProductPurchaseLayout/ProductPurchaseLayout';
@@ -38,13 +34,10 @@ const PurchaseCompleted = lazy(
 const ProductPurchaseRoutes = ({product}: {product: DeliveryProduct}) => {
 	const {isPaidApp} = getProductPriceModel(product);
 
-	const isLDP =
-		getProductSpecificationValue(
-			ProductSpecificationKey.SOLUTION_TYPE,
-			product
-		) === 'liferay-data-platform';
-
-	const steps = getProductPurchaseSteps({isLDP, isPaidApp});
+	const steps = getProductPurchaseSteps({
+		isLDP: isLDPProduct(product),
+		isPaidApp,
+	});
 
 	const routes: AppRoute[] = [
 		{
