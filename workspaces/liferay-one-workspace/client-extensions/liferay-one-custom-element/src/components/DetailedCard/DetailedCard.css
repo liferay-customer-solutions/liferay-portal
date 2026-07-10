@@ -4,6 +4,10 @@
 	padding: 2.125rem var(--spacer-4);
 }
 
+.detailed-card-fit {
+	width: fit-content;
+}
+
 .detailed-card-container-larger {
 	width: 700px !important;
 }

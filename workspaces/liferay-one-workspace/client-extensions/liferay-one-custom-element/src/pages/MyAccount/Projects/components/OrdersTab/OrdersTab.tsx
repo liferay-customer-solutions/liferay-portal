@@ -21,7 +21,7 @@ function matchesSearch(order: ProjectOrder, search: string): boolean {
 	return order.orderId.toLowerCase().includes(search);
 }
 
-export default function OrdersCard() {
+export default function OrdersTab() {
 	const {projectId, projects} = useProject();
 	const {accountERC} = useParams();
 

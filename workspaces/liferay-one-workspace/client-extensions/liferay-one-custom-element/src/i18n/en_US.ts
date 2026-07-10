@@ -996,6 +996,7 @@ export default {
 	'request-description': 'Request Description',
 	'request-details': 'Request Details',
 	'request-sent-successfully': 'Request Sent Successfully',
+	'requested': 'Requested',
 	'requester': 'Requester',
 	'resource-requirements': 'Resource Requirements',
 	'resources': 'Resources',

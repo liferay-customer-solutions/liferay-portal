@@ -5,8 +5,7 @@
 
 import {getSpecificationValue} from '~/hooks/useProjectCommerce';
 
-import {PROJECT_TAB_ORDER} from './constants';
-import {getVisibleProjectTabKeys} from './getVisibleProjectTabKeys';
+import {PROJECT_TAB_ORDER, SUPPORT_SPECIFICATION_KEYS} from './constants';
 import {resolveActivationProfile} from './resolveActivationProfile';
 import {resolveDetailsProfile} from './resolveDetailsProfile';
 import {resolveDownloadProfile} from './resolveDownloadProfile';
@@ -48,34 +47,23 @@ export function resolveProductTabConfig({
 	});
 
 	const detailsProfile = resolveDetailsProfile({kind, product});
-
-	if (kind === 'application') {
-		const tabKeys = getVisibleProjectTabKeys({
-			kind,
-			orderType,
-			product,
-		}).filter(
-			(tabKey) => tabKey !== 'activation' || activationProfile !== 'none'
-		);
-
-		return {
-			...(activationProfile !== 'none' && {activationProfile}),
-			detailsProfile,
-			tabKeys,
-		};
-	}
-
 	const downloadProfile = resolveDownloadProfile(product);
 	const environmentProfile = resolveEnvironmentProfile(product);
 	const utilizationProfile = resolveUtilizationProfile(product);
 	const learnUrl = getSpecificationValue(product, 'project-learn-url');
+
+	const hasSupportInfo =
+		Boolean(learnUrl) ||
+		SUPPORT_SPECIFICATION_KEYS.some((specificationKey) =>
+			getSpecificationValue(product, specificationKey)
+		);
 
 	const tabPresent: Record<ProjectTabKey, boolean> = {
 		'activation': activationProfile !== 'none',
 		'details': true,
 		'download': downloadProfile !== 'none',
 		'environment': environmentProfile !== 'none',
-		'help-and-support': Boolean(learnUrl),
+		'help-and-support': hasSupportInfo,
 		'orders': true,
 		'utilization': utilizationProfile !== 'none',
 	};

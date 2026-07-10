@@ -17,9 +17,9 @@ import type {DeliveryProduct} from '~/types/product';
 
 import type {ActivationProfile} from '../../utils/resolveActivationProfile';
 
-type ActivationPanelProps = {
+type ActivationTabProps = {
 	product: DeliveryProduct;
-	profile: ActivationProfile;
+	profile?: ActivationProfile;
 };
 
 const ACTIVATION_CONTENT_BY_PROFILE: Record<
@@ -43,9 +43,6 @@ const ACTIVATION_CONTENT_BY_PROFILE: Record<
 	'status': (product) => <ActivationStatusCard productName={product.name} />,
 };
 
-export default function ActivationPanel({
-	product,
-	profile,
-}: ActivationPanelProps) {
-	return ACTIVATION_CONTENT_BY_PROFILE[profile](product);
+export default function ActivationTab({product, profile}: ActivationTabProps) {
+	return ACTIVATION_CONTENT_BY_PROFILE[profile ?? 'none'](product);
 }

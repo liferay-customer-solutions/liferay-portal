@@ -28,6 +28,7 @@ export type ProductOrderInfo = {
 	orderType: string;
 	purchaseNumber: string;
 	purchasedBy: string;
+	status: string;
 };
 
 export type ProductEnvironmentInfo = {
@@ -63,6 +64,16 @@ function getOrderTotal(order: PlacedOrder): string {
 
 function formatDate(value?: string): string {
 	return value ? format(new Date(value), 'MMM d, yyyy') : '';
+}
+
+const STATUS_TOKEN_ALIASES: {[key: string]: string} = {
+	cancelled: 'canceled',
+};
+
+function toStatusToken(label: string): string {
+	const token = label.toLowerCase().replace(/\s+/g, '-');
+
+	return STATUS_TOKEN_ALIASES[token] ?? token;
 }
 
 export function useProjectOrders(projectName?: string) {
@@ -119,6 +130,7 @@ export function getProductOrderInfo(
 			orderType: '',
 			purchaseNumber: '',
 			purchasedBy: '',
+			status: '',
 		};
 	}
 
@@ -135,5 +147,6 @@ export function getProductOrderInfo(
 		orderType: order.orderTypeExternalReferenceCode ?? '',
 		purchaseNumber: order.purchaseOrderNumber ?? '',
 		purchasedBy: order.author ?? '',
+		status: toStatusToken(getOrderStatusLabel(order)),
 	};
 }

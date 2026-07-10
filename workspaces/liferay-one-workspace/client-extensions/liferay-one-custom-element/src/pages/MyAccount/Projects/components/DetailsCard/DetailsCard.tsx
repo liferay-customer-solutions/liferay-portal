@@ -29,6 +29,7 @@ export default function DetailsCard({
 			cardTitle={i18n.translate(title)}
 			className="mt-3"
 			clayIcon={icon}
+			fitContent
 		>
 			<div
 				className="d-flex flex-column mt-3"

@@ -32,15 +32,12 @@ export default function SectionedDetailsCard({
 			cardTitle={i18n.translate(title)}
 			className="mt-3"
 			clayIcon={icon}
+			fitContent
 		>
 			<div className="sectioned-details-card">
 				{sections.map((section, index) => (
 					<div
-						className={
-							section.title
-								? 'sectioned-details-card-section'
-								: 'sectioned-details-card-section sectioned-details-card-section--plain'
-						}
+						className="sectioned-details-card-section"
 						key={section.title ?? String(index)}
 					>
 						{section.title && (

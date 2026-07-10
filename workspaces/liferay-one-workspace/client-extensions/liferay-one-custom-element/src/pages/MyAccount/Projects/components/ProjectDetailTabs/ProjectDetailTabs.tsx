@@ -10,7 +10,7 @@ import {Link, useLocation, useSearchParams} from 'react-router-dom';
 import i18n, {Word} from '~/i18n';
 
 export type DetailTab = {
-	content: ReactNode;
+	content: () => ReactNode;
 	key: string;
 	label: Word;
 };
@@ -70,7 +70,7 @@ export default function ProjectDetailTabs({
 				))}
 			</ClayTabs>
 
-			{tabs[activeTabIndex]?.content}
+			{tabs[activeTabIndex]?.content()}
 		</div>
 	);
 }

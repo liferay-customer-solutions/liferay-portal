@@ -7,8 +7,6 @@ import {Word} from '~/i18n';
 
 import {PROJECT_TAB_KEYS} from '../types';
 
-import type {OrderTypes} from '~/types/orders';
-
 import type {ProjectTabKey} from '../types';
 
 export const LAST_PROJECT_STORAGE_KEY = 'liferay-one:last-project';
@@ -85,46 +83,6 @@ export const SUPPORT_LINKS: SupportLink[] = [
 export const SUPPORT_SPECIFICATION_KEYS = SUPPORT_LINKS.map(
 	(link) => link.specificationKey
 );
-
-export const TAB_VISIBILITY: Partial<Record<OrderTypes, ProjectTabKey[]>> = {
-	ADDONS: ['details', 'orders'],
-	AI_HUB: ['details', 'environment', 'orders'],
-	CLIENT_EXTENSION: ['details', 'activation', 'orders', 'help-and-support'],
-	CLOUD_APP: [
-		'details',
-		'activation',
-		'environment',
-		'orders',
-		'help-and-support',
-	],
-	CMP_BETA: ['details', 'activation', 'download', 'orders'],
-	COMPOSITE_APP: [
-		'details',
-		'activation',
-		'download',
-		'orders',
-		'help-and-support',
-	],
-	DSR: ['details', 'activation', 'download', 'environment', 'orders'],
-	DXP: ['details', 'activation', 'download', 'orders'],
-	DXP_APP: [
-		'details',
-		'activation',
-		'download',
-		'orders',
-		'help-and-support',
-	],
-	LOW_CODE_CONFIGURATION: [
-		'details',
-		'download',
-		'orders',
-		'help-and-support',
-	],
-	OTHER: ['details', 'orders', 'help-and-support'],
-	SOLUTIONS7: ['details', 'orders'],
-	SOLUTIONS30: ['details', 'orders'],
-	SSA_SAAS: ['details', 'activation', 'utilization', 'environment', 'orders'],
-};
 
 export const UNASSIGNED_PROJECT_ERC = 'one-time-purchases';
 
