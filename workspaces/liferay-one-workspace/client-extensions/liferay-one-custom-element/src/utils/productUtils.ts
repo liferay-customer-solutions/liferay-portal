@@ -260,12 +260,7 @@ export function isLDPProduct(product: DeliveryProduct) {
 
 export function isDXPFreeTierProduct(product: DeliveryProduct) {
 	const {isFreeApp} = getProductPriceModel(product);
+	const {isDXP} = getProductType(product);
 
-	return (
-		isFreeApp &&
-		getProductSpecificationValue(
-			ProductSpecificationKey.SOLUTION_TYPE,
-			product
-		) === 'dxp'
-	);
+	return isFreeApp && isDXP;
 }
