@@ -7,10 +7,14 @@ package com.liferay.one;
 
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
 import com.liferay.headless.admin.user.client.problem.Problem;
+import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Account;
+import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Order;
 import com.liferay.one.constants.ClassNameConstants;
+import com.liferay.one.constants.CommerceOrderConstants;
 import com.liferay.one.model.LicenseKey;
 import com.liferay.one.model.SubscriptionEntry;
 import com.liferay.one.service.AccountService;
+import com.liferay.one.service.CommerceOrderService;
 import com.liferay.one.service.LicenseKeyService;
 import com.liferay.one.service.SubscriptionEntryService;
 import com.liferay.one.service.UserAccountService;
@@ -23,6 +27,7 @@ import org.mockito.Mockito;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * @author Amos Fong
@@ -84,6 +89,101 @@ public class LicenseKeysRestControllerTest {
 
 		Assertions.assertTrue(
 			licenseKeysRestController.getSubscriptions(null, 5L));
+	}
+
+	@Test
+	public void testPostLicenseKeysTypeFree() throws Exception {
+		LicenseKeysRestController licenseKeysRestController =
+			_createController();
+
+		Mockito.when(
+			_licenseKeyService.hasLicenseKeyTypeFree(
+				"example.com", "owner@example.com")
+		).thenReturn(
+			false
+		);
+
+		Account account = Mockito.mock(Account.class);
+
+		Mockito.when(
+			account.getId()
+		).thenReturn(
+			_ACCOUNT_ID
+		);
+
+		Order order = Mockito.mock(Order.class);
+
+		Mockito.when(
+			order.getAccount()
+		).thenReturn(
+			account
+		);
+
+		Mockito.when(
+			order.getId()
+		).thenReturn(
+			999L
+		);
+
+		Mockito.when(
+			order.getOrderStatus()
+		).thenReturn(
+			CommerceOrderConstants.ORDER_STATUS_OPEN
+		);
+
+		Mockito.when(
+			_commerceOrderService.getCommerceOrder(999L)
+		).thenReturn(
+			order
+		);
+
+		LicenseKey licenseKey = Mockito.mock(LicenseKey.class);
+
+		Mockito.when(
+			_licenseKeyService.addLicenseKeyTypeFree(
+				_ACCOUNT_ID, "example.com", "999", "owner@example.com")
+		).thenReturn(
+			licenseKey
+		);
+
+		Assertions.assertSame(
+			licenseKey,
+			licenseKeysRestController.postLicenseKeysTypeFree(
+				"{\"domains\": \"example.com\", \"orderId\": \"999\", " +
+					"\"owner\": \"owner@example.com\"}"));
+
+		Mockito.verify(
+			_commerceOrderService
+		).completeOrder(
+			999L, CommerceOrderConstants.ORDER_PAYMENT_STATUS_NOT_REQUIRED
+		);
+	}
+
+	@Test
+	public void testPostLicenseKeysTypeFreeDomainsCheckThrowsConflictWhenDomainExists()
+		throws Exception {
+
+		LicenseKeysRestController licenseKeysRestController =
+			_createController();
+
+		Mockito.when(
+			_licenseKeyService.hasLicenseKeyTypeFree(
+				"example.com", "owner@example.com")
+		).thenReturn(
+			true
+		);
+
+		ResponseStatusException responseStatusException =
+			Assertions.assertThrows(
+				ResponseStatusException.class,
+				() ->
+					licenseKeysRestController.
+						postLicenseKeysTypeFreeDomainsCheck(
+							"{\"domains\": \"example.com\", \"owner\": " +
+								"\"owner@example.com\"}"));
+
+		Assertions.assertEquals(
+			HttpStatus.CONFLICT, responseStatusException.getStatusCode());
 	}
 
 	@Test
@@ -207,6 +307,10 @@ public class LicenseKeysRestControllerTest {
 			licenseKeysRestController, "_accountService", _accountService);
 
 		ReflectionTestUtils.setField(
+			licenseKeysRestController, "_commerceOrderService",
+			_commerceOrderService);
+
+		ReflectionTestUtils.setField(
 			licenseKeysRestController, "_licenseKeyService",
 			_licenseKeyService);
 
@@ -227,6 +331,8 @@ public class LicenseKeysRestControllerTest {
 
 	private final AccountService _accountService = Mockito.mock(
 		AccountService.class);
+	private final CommerceOrderService _commerceOrderService = Mockito.mock(
+		CommerceOrderService.class);
 	private final LicenseKeyService _licenseKeyService = Mockito.mock(
 		LicenseKeyService.class);
 	private final SubscriptionEntryService _subscriptionEntryService =

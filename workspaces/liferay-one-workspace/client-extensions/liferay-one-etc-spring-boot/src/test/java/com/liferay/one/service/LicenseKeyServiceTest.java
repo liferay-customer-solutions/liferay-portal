@@ -110,6 +110,18 @@ public class LicenseKeyServiceTest {
 	}
 
 	@Test
+	public void testHasLicenseKeyTypeFreeFilter() throws Exception {
+		Assertions.assertFalse(
+			_licenseKeyService.hasLicenseKeyTypeFree(
+				"example.com", "owner@example.com"));
+
+		Assertions.assertEquals(
+			"(domains eq 'example.com') and (licenseType eq 'free') and " +
+				"(owner eq 'owner@example.com')",
+			_filterCaptor.getValue());
+	}
+
+	@Test
 	public void testSearchBuildsFilterAndSkipsNulls() throws Exception {
 		_licenseKeyService.search(
 			Boolean.TRUE, null, null, null, "enterprise", null, null, null,
