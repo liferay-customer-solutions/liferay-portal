@@ -11,7 +11,13 @@ import i18n from '~/i18n';
 import {useProductPurchaseLayoutContext} from '~/pages/ProductPurchase/components/ProductPurchaseLayout/ProductPurchaseLayout';
 import {PaymentMethodType} from '~/pages/ProductPurchase/types';
 
-const PaymentTypeSelector = () => {
+interface PaymentTypeSelectorProps {
+	allowedPaymentMethodTypes?: PaymentMethodType[];
+}
+
+const PaymentTypeSelector = ({
+	allowedPaymentMethodTypes,
+}: PaymentTypeSelectorProps) => {
 	const {myUserAccount} = useOneContext();
 	const {payment, productPurchaseCart, setPayment} =
 		useProductPurchaseLayoutContext();
@@ -47,9 +53,17 @@ const PaymentTypeSelector = () => {
 		},
 	];
 
+	const filteredPaymentModes = paymentModes.filter((paymentMode) => {
+		if (!allowedPaymentMethodTypes) {
+			return true;
+		}
+
+		return allowedPaymentMethodTypes.includes(paymentMode.type);
+	});
+
 	return (
 		<Section label={i18n.translate('payment-method')} required>
-			{paymentModes.map((paymentMode) => (
+			{filteredPaymentModes.map((paymentMode) => (
 				<RadioCard
 					className="mb-3"
 					content={

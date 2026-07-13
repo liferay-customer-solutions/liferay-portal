@@ -19,7 +19,6 @@ import {
 	getProductImageFallback,
 	getProductPriceModel,
 	getProductSpecificationValue,
-	isDXPFreeTierProduct,
 } from '~/utils/productUtils';
 import {normalizeURLProtocol} from '~/utils/stringUtils';
 
@@ -40,29 +39,29 @@ const AccountSelection = () => {
 
 	const {isPaidApp} = getProductPriceModel(product);
 
-	const isDXPFree = isDXPFreeTierProduct(product);
-
 	useEffect(() => {
-		if (isSingleAccount) {
-			setSelectedAccount(accounts[0]);
-
-			navigate(
-				isPaidApp
-					? '/license'
-					: isDXPFree
-						? '/activation-key-form'
-						: '/summary',
-				{replace: true}
-			);
+		if (!product) {
+			return;
 		}
-	}, [
-		accounts,
-		isDXPFree,
-		isPaidApp,
-		isSingleAccount,
-		navigate,
-		setSelectedAccount,
-	]);
+
+		if (isSingleAccount) {
+			if (selectedAccount?.id !== accounts[0]?.id) {
+				setSelectedAccount(accounts[0]);
+			}
+
+			let solutionType = getProductSpecificationValue(
+				ProductSpecificationKey.SOLUTION_TYPE,
+				product
+			);
+
+			if (solutionType === 'ai-hub-open-beta') {
+				navigate('/project', {replace: true});
+			}
+			else {
+				navigate(isPaidApp ? '/license' : '/summary', {replace: true});
+			}
+		}
+	}, [accounts, isPaidApp, isSingleAccount, navigate, setSelectedAccount, product, selectedAccount]);
 
 	if (isLoadingAccounts || isSingleAccount) {
 		return (

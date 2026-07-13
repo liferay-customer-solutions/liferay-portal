@@ -3,17 +3,17 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import type {AccountPostalAddresses} from '~/types/accounts';
+import type {BillingAddress} from '~/types/orders';
 
-export default function getPostalAddressDescription(
-	address: AccountPostalAddresses
-) {
-	const streetAddressLine2 = address.streetAddressLine2
-		? `${address.streetAddressLine2}, `
-		: '';
+export default function getPostalAddressDescription(address: BillingAddress) {
+	const description = `${address.street1}, ${
+		address.street2 ? address.street2 + ',' : ''
+	} ${address.city}, ${address.regionISOCode}, ${address.countryISOCode} ${
+		address.zip
+	} `;
 
 	return {
-		description: `${address.streetAddressLine1}, ${streetAddressLine2}${address.addressLocality}, ${address.addressRegion}, ${address.addressCountry} ${address.postalCode}`,
+		description,
 		title: address.name,
 	};
 }

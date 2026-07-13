@@ -84,7 +84,10 @@ const LicenseCard = ({sku}: LicenseCardProps) => {
 						disabled={quantity === MAX_QUANTITY}
 						displayType="primary"
 						onClick={() =>
-							addCart(Number(product.productId), sku.id)
+							addCart(
+								Number(product.productId ?? product.id),
+								sku.id
+							)
 						}
 						size="sm"
 						symbol="plus"

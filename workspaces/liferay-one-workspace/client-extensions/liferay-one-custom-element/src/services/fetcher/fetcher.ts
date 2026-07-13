@@ -14,7 +14,11 @@ function changeResource(resource: RequestInfo) {
 		return resource;
 	}
 
-	return `${liferayHost}/${resource}`;
+	const path = resource.toString().startsWith('/')
+		? resource.toString().slice(1)
+		: resource;
+
+	return `${liferayHost}/${path}`;
 }
 
 function getHeaders(options?: RequestInit): Record<string, string> {

@@ -3,11 +3,12 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {Word} from '~/i18n';
+import { Word } from '~/i18n';
 
-import {PROJECT_TAB_KEYS} from '../types';
+import { PROJECT_TAB_KEYS } from '../types';
+import type { OrderTypes } from '~/types/orders';
 
-import type {ProjectTabKey} from '../types';
+import type { ProjectTabKey } from '../types';
 
 export const LAST_PROJECT_STORAGE_KEY = 'liferay-one:last-project';
 
@@ -41,6 +42,40 @@ export type SupportLink = {
 	href: (value: string) => string;
 	label: Word;
 	specificationKey: string;
+};
+
+export const TAB_VISIBILITY: Partial<Record<OrderTypes, ProjectTabKey[]>> = {
+	ADDONS: ['details', 'orders'],
+	AI_HUB: ['details', 'activation', 'orders', 'environment'],
+	CLIENT_EXTENSION: ['details', 'activation', 'orders', 'help-and-support'],
+	CLOUD_APP: ['details', 'environment', 'orders', 'help-and-support'],
+	CMP_BETA: ['details', 'activation', 'download', 'orders'],
+	COMPOSITE_APP: [
+		'details',
+		'activation',
+		'download',
+		'orders',
+		'help-and-support',
+	],
+	DSR: ['details', 'activation', 'download', 'environment', 'orders'],
+	DXP: ['details', 'activation', 'download', 'orders'],
+	DXP_APP: [
+		'details',
+		'activation',
+		'download',
+		'orders',
+		'help-and-support',
+	],
+	LOW_CODE_CONFIGURATION: [
+		'details',
+		'download',
+		'orders',
+		'help-and-support',
+	],
+	OTHER: ['details', 'orders', 'help-and-support'],
+	SOLUTIONS7: ['details', 'orders'],
+	SOLUTIONS30: ['details', 'orders'],
+	SSA_SAAS: ['details', 'activation', 'utilization', 'environment', 'orders'],
 };
 
 function withProtocol(value: string): string {
@@ -86,7 +121,7 @@ export const SUPPORT_SPECIFICATION_KEYS = SUPPORT_LINKS.map(
 
 export const UNASSIGNED_PROJECT_ERC = 'one-time-purchases';
 
-export const ICON_BY_CATEGORY: {[key: string]: string} = {
+export const ICON_BY_CATEGORY: { [key: string]: string } = {
 	'Analytics': 'analytics',
 	'Artificial Intelligence': 'magic',
 	'Commerce': 'shopping-cart',

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import RadioCard from '~/components/RadioCard/RadioCard';
 import Section from '~/components/Section/Section';
 import i18n from '~/i18n';
@@ -15,10 +15,31 @@ import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
 import BillingAddressForm from '../BillingAddressForm/BillingAddressForm';
 import getPostalAddressDescription from './utils/getPostalAddressDescription';
 
-import type {AccountPostalAddresses} from '~/types/accounts';
 import type {BillingAddress as BillingAddressType} from '~/types/orders';
 
-const BillingAddress = () => {
+const mapPostalAddressToBillingAddress = (
+	postalAddress?: BillingAddressType
+): BillingAddressType => ({
+	city: postalAddress?.city || '',
+	country: postalAddress?.countryISOCode || '',
+	countryISOCode: postalAddress?.countryISOCode || 'US',
+	name: postalAddress?.name || '',
+	phoneNumber: postalAddress?.phoneNumber || '',
+	regionISOCode: postalAddress?.regionISOCode || '',
+	street1: postalAddress?.street1 || '',
+	street2: postalAddress?.street2 || '',
+	zip: postalAddress?.zip || '',
+});
+
+type BillingAddressProps = {
+	hideNewAddressButton?: boolean;
+	sectionName?: string;
+};
+
+const BillingAddress = ({
+	hideNewAddressButton = false,
+	sectionName = i18n.translate('billing-address'),
+}: BillingAddressProps) => {
 	const {payment, selectedAccount, setPayment} =
 		useProductPurchaseLayoutContext();
 
@@ -41,31 +62,28 @@ const BillingAddress = () => {
 			billingAddress,
 		}));
 
-	const onSelectAddress = (address: AccountPostalAddresses) => {
-		setSelectedAddress(address.name);
+	useEffect(() => {
+		if (
+			hideNewAddressButton &&
+			!!addresses.length &&
+			!payment.billingAddress?.name
+		) {
+			const address = addresses[0];
+			const newBillingAddress = mapPostalAddressToBillingAddress(address);
+
+			setSelectedAddress(address.name || '');
+
+			setBillingAddress(newBillingAddress);
+		}
+	}, [addresses, payment.billingAddress?.name, hideNewAddressButton]);
+
+	const onSelectAddress = (address: BillingAddressType) => {
+		setSelectedAddress(address.name || '');
 		setShowNewAddressForm(false);
 
-		const country = countries.find(
-			(commerceCountry) =>
-				(commerceCountry.title_i18n?.en_US || commerceCountry.name) ===
-				address.addressCountry
-		);
+		const newBillingAddress = mapPostalAddressToBillingAddress(address);
 
-		const region = country?.regions.find(
-			(commerceRegion) => commerceRegion.name === address.addressRegion
-		);
-
-		setBillingAddress({
-			city: address.addressLocality || '',
-			country: country?.a2 || address.addressCountry || '',
-			countryISOCode: country?.a2 || '',
-			name: address.name || '',
-			phoneNumber: address.phoneNumber || '',
-			regionISOCode: region?.regionCode || '',
-			street1: address.streetAddressLine1 || '',
-			street2: address.streetAddressLine2 || '',
-			zip: address.postalCode ? String(address.postalCode) : '',
-		});
+		setBillingAddress(newBillingAddress);
 	};
 
 	const saveAddress = async (billingAddress: BillingAddressType) => {
@@ -100,8 +118,8 @@ const BillingAddress = () => {
 	};
 
 	return (
-		<Section label={i18n.translate('billing-address')} required>
-			{addresses.map((address) => {
+		<Section label={sectionName} required>
+			{addresses.map((address, index) => {
 				const {description, title} =
 					getPostalAddressDescription(address);
 
@@ -109,7 +127,7 @@ const BillingAddress = () => {
 					<RadioCard
 						className="mb-3"
 						description={description}
-						key={address.id}
+						key={index}
 						onChange={() => onSelectAddress(address)}
 						selected={selectedAddress === address.name}
 						title={title}
@@ -117,13 +135,15 @@ const BillingAddress = () => {
 				);
 			})}
 
-			<BillingAddressForm
-				saveAddress={saveAddress}
-				setBillingAddress={setBillingAddress}
-				setSelectedAddress={setSelectedAddress}
-				setShowNewAddressForm={setShowNewAddressForm}
-				showNewAddressForm={showNewAddressForm}
-			/>
+			{!hideNewAddressButton && (
+				<BillingAddressForm
+					saveAddress={saveAddress}
+					setBillingAddress={setBillingAddress}
+					setSelectedAddress={setSelectedAddress}
+					setShowNewAddressForm={setShowNewAddressForm}
+					showNewAddressForm={showNewAddressForm}
+				/>
+			)}
 		</Section>
 	);
 };

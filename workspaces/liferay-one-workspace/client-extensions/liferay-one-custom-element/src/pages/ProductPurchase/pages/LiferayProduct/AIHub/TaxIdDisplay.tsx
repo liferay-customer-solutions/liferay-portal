@@ -1,0 +1,41 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+import {useSelector} from '@xstate/store/react';
+
+import {Input} from '~/components/Input/Input';
+import Section from '~/components/Section/Section';
+import i18n from '~/i18n';
+import {useProductPurchaseLayoutContext as useProductPurchaseOutletContext} from '~/pages/ProductPurchase/components/ProductPurchaseLayout/ProductPurchaseLayout';
+import {productPurchaseStore} from '../../../store';
+
+const TaxIdDisplay = () => {
+	const {selectedAccount} = useProductPurchaseOutletContext();
+
+	const taxId = useSelector(
+		productPurchaseStore,
+		({context}) => context.payment.taxId
+	);
+
+	return (
+		<Section label={i18n.translate('tax-vat-id')}>
+			<Input
+				defaultValue={selectedAccount.taxId}
+				disabled={!!selectedAccount?.taxId}
+				onChange={({target: {value}}) => {
+					productPurchaseStore.send({
+						taxId: value,
+						type: 'setAccountTaxId',
+					});
+				}}
+				placeholder={i18n.translate('enter-your-vat-id')}
+				required
+				value={taxId}
+			/>
+		</Section>
+	);
+};
+
+export default TaxIdDisplay;

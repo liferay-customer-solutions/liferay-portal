@@ -34,7 +34,7 @@ export default class HeadlessCommerceDeliveryCart {
 		channelId: string
 	) {
 		return fetcher<APIResponse<Cart>>(
-			`o/headless-commerce-delivery-cart/v1.0/channels/${channelId}/account/${accountId}/carts`
+			`/o/headless-commerce-delivery-cart/v1.0/channels/${channelId}/account/${accountId}/carts?nestedFields=cartItems`
 		);
 	}
 
@@ -46,7 +46,7 @@ export default class HeadlessCommerceDeliveryCart {
 
 	static async getCartItems(cartId: number) {
 		return fetcher<APIResponse<CartItem>>(
-			`o/headless-commerce-delivery-cart/v1.0/carts/${cartId}/items`
+			`/o/headless-commerce-delivery-cart/v1.0/carts/${cartId}/items`
 		);
 	}
 

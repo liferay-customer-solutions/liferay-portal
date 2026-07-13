@@ -160,11 +160,22 @@ export type PlacedOrder = {
 	};
 	orderType: String;
 	orderTypeExternalReferenceCode: string;
+	paymentMethod?: string;
 	paymentStatus: number;
+	paymentStatusInfo?: {
+		code: number;
+		label: string;
+		label_i18n: string;
+	};
 	placedOrderBillingAddress: BillingAddress;
 	placedOrderBillingAddressId: number;
 	placedOrderItems: PlacedOrderItems[];
 	purchaseOrderNumber?: string;
+	summary?: {
+		subtotalFormatted: string;
+		taxValueFormatted: string;
+		totalFormatted: string;
+	};
 	workflowStatusInfo: {
 		code: number;
 		label: string;
@@ -210,6 +221,7 @@ export type OrderStatus =
 export type OrderTypes =
 	| 'ADDONS'
 	| 'AI_HUB'
+	| 'AI_HUB_TOKEN'
 	| 'CLIENT_EXTENSION'
 	| 'CLOUD_APP'
 	| 'CMP_BETA'

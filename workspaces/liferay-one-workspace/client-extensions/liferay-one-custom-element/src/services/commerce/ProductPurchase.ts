@@ -7,6 +7,7 @@ import CommerceUI from '~/services/headless/CommerceUI';
 import HeadlessCommerceDeliveryCart from '~/services/headless/HeadlessCommerceDeliveryCart';
 import {Analytics} from '~/services/liferay/Analytics';
 import {Liferay} from '~/services/liferay/liferay';
+import {getSiteURL} from '~/utils/siteUtils';
 
 import type {Account} from '~/types/accounts';
 import type {Cart, OrderTypes} from '~/types/orders';
@@ -34,6 +35,17 @@ export default class ProductPurchase {
 		return `/next-steps?orderId=${cart.id}`;
 	}
 
+	public async getPaymentNextStepsLink(cart: Cart) {
+		const callback = `${window.location.origin}${getSiteURL()}/next-steps?orderId=${cart.id}`;
+
+		const url = await HeadlessCommerceDeliveryCart.getPaymentMethodURL(
+			cart.id,
+			callback
+		);
+
+		return url || callback;
+	}
+
 	protected getCartItems(skuId = this.product.skus[0]?.id) {
 		return [
 			{
@@ -41,7 +53,7 @@ export default class ProductPurchase {
 					currency: Liferay.CommerceContext.currency.currencyCode,
 					discount: 0,
 				},
-				productId: this.product.productId,
+				productId: this.product.productId ?? this.product.id,
 				quantity: 1,
 				settings: {
 					maxQuantity: 1,
@@ -49,6 +61,10 @@ export default class ProductPurchase {
 				skuId,
 			},
 		];
+	}
+
+	public get calculateTax() {
+		return false;
 	}
 
 	protected analyticsTrack() {
@@ -64,6 +80,10 @@ export default class ProductPurchase {
 			...this.getCart(),
 			...cart,
 		};
+
+		if (this.orderTypeExternalReferenceCode) {
+			body.orderTypeExternalReferenceCode = this.orderTypeExternalReferenceCode;
+		}
 
 		const newCart = await (cart?.id
 			? HeadlessCommerceDeliveryCart.updateCart(cart.id, body)

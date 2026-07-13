@@ -3,9 +3,11 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {useCallback, useEffect, useState} from 'react';
+import {useSelector} from '@xstate/store/react';
+import {useCallback, useEffect} from 'react';
 import HeadlessCommerceDeliveryCart from '~/services/headless/HeadlessCommerceDeliveryCart';
 import {Liferay} from '~/services/liferay/liferay';
+import {cartStore} from '../store';
 
 import type {Cart, CartItem} from '~/types/orders';
 import type {DeliveryProduct} from '~/types/product';
@@ -17,18 +19,20 @@ const useProductPurchaseCart = (
 ) => {
 	const channelId = Liferay.CommerceContext.commerceChannelId;
 
-	const [cart, setCart] = useState<Cart>({} as Cart);
-	const [cartItems, setCartItems] = useState<CartItem[]>([]);
+	const {cart, cartItems} = useSelector(cartStore, (state) => state.context);
 
 	const cartId = cart?.id;
 
-	const syncCartItems = useCallback(async (id: number, items: CartItem[]) => {
-		const updatedCart = await HeadlessCommerceDeliveryCart.updateCart(id, {
-			cartItems: items,
-		});
+	const setCart = useCallback(
+		(cart: Cart) => cartStore.send({cart, type: 'setCart'}),
+		[]
+	);
 
-		setCart(updatedCart);
-	}, []);
+	const setCartItems = useCallback(
+		(cartItems: CartItem[]) =>
+			cartStore.send({cartItems, type: 'setCartItems'}),
+		[]
+	);
 
 	const addCart = async (productId: number, skuId: number) => {
 		let currentCart = cart;
@@ -58,7 +62,10 @@ const useProductPurchaseCart = (
 
 		setCartItems(newCartItems);
 
-		await syncCartItems(currentCart.id, newCartItems);
+		return {
+			...currentCart,
+			cartItems: newCartItems,
+		};
 	};
 
 	const removeFromCart = async (skuId: number) => {
@@ -71,10 +78,6 @@ const useProductPurchaseCart = (
 			.filter((item) => item.quantity > 0);
 
 		setCartItems(newCartItems);
-
-		if (cartId) {
-			await syncCartItems(cartId, newCartItems);
-		}
 	};
 
 	const removeCart = useCallback(
@@ -100,7 +103,13 @@ const useProductPurchaseCart = (
 					channelId
 				);
 
-			const [openCart] = carts ?? [];
+			const openCart = carts?.find(
+				(cart) =>
+					cart.orderTypeExternalReferenceCode ===
+						orderTypeExternalReferenceCode &&
+					(!cart.author ||
+						cart.author === Liferay.ThemeDisplay.getUserName())
+			);
 
 			if (openCart?.orderStatusInfo?.label !== 'open') {
 				return;
@@ -109,18 +118,27 @@ const useProductPurchaseCart = (
 			const {items: openCartItems} =
 				await HeadlessCommerceDeliveryCart.getCartItems(openCart.id);
 
-			const hasProduct = openCartItems.some(
-				(cartItem) => cartItem.productId === product.productId
+			const hasOtherProduct = openCartItems.some(
+				(cartItem) =>
+					cartItem.productId !== (product.productId ?? product.id)
 			);
 
-			if (!hasProduct) {
+			if (hasOtherProduct) {
 				return removeCart(openCart.id);
 			}
 
 			setCart(openCart);
 			setCartItems(openCartItems);
 		})();
-	}, [accountId, channelId, product, removeCart]);
+	}, [
+		accountId,
+		channelId,
+		orderTypeExternalReferenceCode,
+		product,
+		removeCart,
+		setCart,
+		setCartItems,
+	]);
 
 	return {
 		addCart,

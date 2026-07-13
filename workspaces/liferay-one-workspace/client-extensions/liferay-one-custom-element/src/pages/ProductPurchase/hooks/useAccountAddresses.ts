@@ -4,11 +4,14 @@
  */
 
 import useSWR from 'swr';
-import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
+import fetcher from '~/services/fetcher/fetcher';
+import type {BillingAddress} from '~/types/orders';
 
 const useAccountAddresses = (accountId?: number) =>
-	useSWR(accountId ? `/account-postal-addresses/${accountId}` : null, () =>
-		HeadlessAdminUser.getAccountPostalAddresses(accountId as number)
+	useSWR(accountId ? `/account-addresses/${accountId}` : null, () =>
+		fetcher<{items: BillingAddress[]}>(
+			`/o/headless-commerce-admin-account/v1.0/accounts/${accountId}/accountAddresses`
+		)
 	);
 
 export default useAccountAddresses;

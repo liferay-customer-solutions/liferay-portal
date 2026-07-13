@@ -150,7 +150,8 @@ const NewTrialModal: React.FC<NewTrialModalProps> = ({onClose, revalidate}) => {
 				>
 					{(product) => (
 						<Autocomplete.Item
-							key={product.productId}
+							disabled
+							key={product.productId ?? product.id}
 							onClick={() => {
 								setValue('product', product as never);
 

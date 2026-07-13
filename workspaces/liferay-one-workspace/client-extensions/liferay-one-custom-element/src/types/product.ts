@@ -72,6 +72,7 @@ export type DeliverySKU = {
 export type DeliverySKUOption = {
 	skuOptionKey: string;
 	skuOptionValueKey: string;
+	skuOptionValueNames?: string[];
 };
 
 export type OptionCategory = {

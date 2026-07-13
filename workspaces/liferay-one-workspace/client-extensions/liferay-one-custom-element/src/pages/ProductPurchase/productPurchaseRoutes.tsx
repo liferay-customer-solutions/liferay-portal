@@ -6,6 +6,8 @@
 import {ReactNode, lazy} from 'react';
 import i18n from '~/i18n';
 import {AppRoute} from '~/utils/routeUtils';
+import type {DeliveryProduct} from '~/types/product';
+import {getSpecificationValue} from '~/hooks/useProjectCommerce';
 
 const AccountSelection = lazy(
 	() => import('./AccountSelection/AccountSelection')
@@ -17,6 +19,30 @@ const LDPProvisioning = lazy(() => import('./LDPProvisioning/LDPProvisioning'));
 const License = lazy(() => import('./License/License'));
 const PaymentMethod = lazy(() => import('./PaymentMethod/PaymentMethod'));
 const Summary = lazy(() => import('./Summary/Summary'));
+
+// AI Hub Pages
+const AIHubForm = lazy(
+	() => import('./pages/LiferayProduct/AIHub/AIHubForm')
+);
+const AIHubOpenBetaForm = lazy(
+	() => import('./pages/LiferayProduct/AIHub/AIHubOpenBetaForm')
+);
+const AIHubOrderSummary = lazy(
+	() => import('./pages/LiferayProduct/AIHub/AIHubOrderSummary')
+);
+const AIHubPaymentMethod = lazy(
+	() => import('./pages/LiferayProduct/AIHub/AIHubPaymentMethod')
+);
+const AIHubTokenOrderSummary = lazy(
+	() => import('./pages/LiferayProduct/AIHub/AIHubTokenOrderSummary')
+);
+const AIHubTokenSelection = lazy(
+	() => import('./pages/LiferayProduct/AIHub/AIHubTokenSelection')
+);
+const ProjectSelection = lazy(
+	() => import('./pages/LiferayProduct/Project')
+);
+
 
 export type ProductPurchaseStep = {
 	element: ReactNode;
@@ -35,14 +61,79 @@ export type ProductPurchaseStepItem = {
 };
 
 export function getProductPurchaseSteps({
-	isDXPFree,
-	isLDP,
+	isLDP = false,
 	isPaidApp,
+	product,
+	searchParams = new URLSearchParams(),
 }: {
-	isDXPFree: boolean;
-	isLDP: boolean;
+	isLDP?: boolean;
 	isPaidApp: boolean;
+	product?: DeliveryProduct;
+	searchParams?: URLSearchParams;
 }): ProductPurchaseStep[] {
+	if (product) {
+		const solutionType = getSpecificationValue(product, 'solution-type');
+
+		if (solutionType === 'ai-hub') {
+			return [
+				{
+					element: <AccountSelection />,
+					index: true,
+					title: i18n.translate('account'),
+				},
+				{
+					element: <AIHubForm />,
+					path: 'ai-hub-form',
+					title: i18n.translate('ai-hub'),
+				},
+			];
+		}
+
+		if (solutionType === 'ai-hub-open-beta') {
+			if (searchParams.has('aiHubTokens')) {
+				return [
+					{
+						element: <AIHubTokenSelection />,
+						index: true,
+						title: i18n.translate('tokens-amount'),
+					},
+					{
+						element: <AIHubPaymentMethod />,
+						path: 'payment-method',
+						title: i18n.translate('payment-method'),
+					},
+					{
+						element: <AIHubTokenOrderSummary />,
+						path: 'summary',
+						title: i18n.translate('summary'),
+					},
+				];
+			}
+
+			return [
+				{
+					element: <AccountSelection />,
+					index: true,
+					title: i18n.translate('account'),
+				},
+				{
+					element: <ProjectSelection />,
+					path: 'project',
+					title: i18n.translate('project'),
+				},
+				{
+					element: <AIHubOpenBetaForm />,
+					path: 'ai-hub-open-beta-form',
+					title: i18n.translate('account-details'),
+				},
+				{
+					element: <AIHubOrderSummary />,
+					path: 'summary',
+					title: i18n.translate('summary'),
+				},
+			];
+		}
+	}
 	const steps: ProductPurchaseStep[] = [
 		{
 			element: <AccountSelection />,

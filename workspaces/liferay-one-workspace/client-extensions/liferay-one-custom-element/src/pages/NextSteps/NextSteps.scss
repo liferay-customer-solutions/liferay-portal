@@ -1,0 +1,156 @@
+.next-step-page {
+	&-cards {
+		align-items: center;
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 2rem;
+		margin-top: 1.25rem;
+
+		.card-container {
+			justify-content: left;
+		}
+	}
+
+	&-container {
+		align-items: center;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+		&-larger {
+			width: 100%;
+		}
+	}
+
+	&-content {
+		margin-bottom: 12rem;
+		margin-top: 10rem;
+		width: 37.5rem;
+	}
+
+	&-description {
+		margin: 0 auto;
+		max-width: 650px;
+	}
+
+	&-icon {
+		color: #0b5fff;
+	}
+
+	&-learn-more {
+		font-size: 13px;
+		font-weight: 600;
+		line-height: 16px;
+
+		a {
+			text-decoration: underline;
+		}
+	}
+
+	&-link {
+		display: flex;
+		font-size: 16px;
+		font-weight: 600;
+		justify-content: flex-end;
+		line-height: 24px;
+		margin-top: -2rem;
+		text-decoration: underline;
+
+		a {
+			cursor: pointer;
+		}
+	}
+
+	&-order {
+		font-size: 23px;
+	}
+
+	&-text {
+		color: #6c6c75;
+		margin-bottom: 2rem;
+	}
+
+	&-text-bold {
+		font-weight: 600;
+	}
+
+	&-text-highlight {
+		color: #072252;
+		font-size: 23px;
+		font-weight: 600 !important;
+	}
+
+	&-title {
+		color: #282934;
+		font-weight: 700 !important;
+		line-height: 40px;
+	}
+}
+
+.next-step-page-footer-button {
+	&-container {
+		align-items: center;
+		border-top: 1px solid #e2e2e4;
+		display: flex;
+		gap: 1rem;
+		margin-bottom: 16px;
+		padding-top: 2rem;
+		width: 37.5rem;
+	}
+
+	&-back {
+		border: 1.5px solid #2b3a4b;
+		border-radius: 0.5rem;
+		color: #2b3a4b;
+		height: 2.5rem;
+		padding: 0.5rem 1rem;
+
+		&:hover {
+			background: #2b3a4b;
+			color: #fff;
+		}
+	}
+
+	&-continue {
+		border: none;
+		border-radius: 0.5rem;
+		height: 2.5rem;
+		padding: 0.5rem 1rem;
+
+		&:hover {
+			background: #0053f0;
+		}
+
+		&:disabled {
+			background-color: #6d9fff;
+			cursor: not-allowed;
+		}
+	}
+
+	&-primary {
+		background-color: #0b5fff;
+		border: none;
+		border-radius: 0.5rem;
+		color: #fff;
+		height: 2.5rem;
+		padding: 0.5rem 1rem;
+
+		&:hover {
+			background-color: #0053f0;
+			color: #fff !important;
+		}
+	}
+
+	&-secondary {
+		border: 1px solid #2b3a4b;
+		border-radius: 0.5rem;
+		color: #2b3a4b;
+		height: 2.5rem;
+		padding: 0.5rem 1rem;
+
+		&:hover {
+			background-color: color-mix(in srgb, #2b3a4b, transparent 95%);
+			border: 1px solid #2b3a4b;
+		}
+	}
+}

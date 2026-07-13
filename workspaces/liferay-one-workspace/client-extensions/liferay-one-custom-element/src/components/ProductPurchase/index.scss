@@ -1,0 +1,28 @@
+.product-purchase {
+	&--multi-step-nav {
+		.multi-step-item:last-of-type {
+			.multi-step-divider {
+				display: none;
+			}
+		}
+	}
+
+	&-shell {
+		&-heading h1 {
+			font-size: 32px !important;
+			font-weight: 700 !important;
+			line-height: 40px !important;
+		}
+	}
+}
+
+.price-text {
+	&-label {
+		font-size: 13px;
+	}
+
+	&-value {
+		font-size: 16px;
+		font-weight: 600;
+	}
+}

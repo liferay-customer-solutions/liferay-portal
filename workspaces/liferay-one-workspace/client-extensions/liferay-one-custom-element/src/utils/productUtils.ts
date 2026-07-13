@@ -7,11 +7,12 @@ import productIconFallback from '~/assets/icons/purchased_app_icon.svg';
 import productImageFallback from '~/assets/images/app_placeholder.png';
 import i18n from '~/i18n';
 
-import {getValueFromDeliverySpecifications} from './getValueFromDeliverySpecifications';
+import { getValueFromDeliverySpecifications } from './getValueFromDeliverySpecifications';
 
 import type {
 	DeliveryProduct,
 	DeliverySKUOption,
+	ProductCategories,
 	ProductImageFallbackCategories,
 	ProductLicense,
 	ProductLicenseTier,
@@ -20,6 +21,21 @@ import type {
 	SKU,
 	SkuOptions,
 } from '~/types/product';
+
+export function getProductCategoriesByVocabularyName(
+	categories: ProductCategories[],
+	vocabulary: string
+) {
+	return categories
+		.filter((category) =>
+			vocabulary
+				.toLowerCase()
+				.includes(
+					category.vocabulary.replaceAll(' ', '-').toLowerCase()
+				)
+		)
+		.map(({ name }) => name);
+}
 
 export const ProductSpecificationKey = {
 	APP_BETA: 'app-beta',
@@ -138,7 +154,7 @@ export function getProductFallback(): DeliveryProduct {
 		shortDescription: i18n.translate('this-product-is-no-longer-available'),
 		skus: [],
 		urlImage: '',
-		urls: {en_US: ''},
+		urls: { en_US: '' },
 	};
 }
 
@@ -156,7 +172,7 @@ export function getProductSpecification(
 	product: DeliveryProduct
 ) {
 	return product?.productSpecifications?.find(
-		({specificationKey}) => specificationKey === key
+		({ specificationKey }) => specificationKey === key
 	);
 }
 
@@ -202,7 +218,7 @@ export function getSkuByOptionValueKey(
 	skuOptionValueKey: SkuOptions
 ) {
 	return product.skus.find(
-		({purchasable, skuOptions}) =>
+		({ purchasable, skuOptions }) =>
 			purchasable &&
 			skuOptions?.find(
 				(skuOption) =>
@@ -263,4 +279,21 @@ export function isDXPFreeTierProduct(product: DeliveryProduct) {
 	const {isDXP} = getProductType(product);
 
 	return isFreeApp && isDXP;
+}
+
+export function getAiHubTokenSKUs(product: DeliveryProduct) {
+	return (product.skus ?? [])
+		.filter(
+			({purchasable, skuOptions}) =>
+				purchasable &&
+				skuOptions &&
+				skuOptions.some((skuOption) =>
+					skuOption.skuOptionValueKey.includes('tokens')
+				)
+		)
+		.sort(
+			(a, b) =>
+				parseInt(a?.sku?.replace(/[^\d]/g, ''), 10) -
+				parseInt(b?.sku?.replace(/[^\d]/g, ''), 10)
+		);
 }

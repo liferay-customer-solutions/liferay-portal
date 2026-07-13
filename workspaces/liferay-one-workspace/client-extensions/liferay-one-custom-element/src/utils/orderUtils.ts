@@ -36,6 +36,7 @@ export function getTotalByOrderKey(
 export const OrderCustomFields = {
 	CLOUD_PROJECT_NAME: 'cloudProjectName',
 	KORONEIKI_PROJECT: 'koroneiki-project',
+	ORDER_METADATA: 'order-metadata',
 	PROJECT_NAME: 'projectName',
 	TRIAL_END_DATE: 'trial-end-date',
 	TRIAL_ERROR: 'trial-error',
@@ -91,6 +92,7 @@ export const LIFERAY_PRODUCT_ORDER_TYPES: readonly OrderTypes[] = [
 export const orderTypeLabel = {
 	ADDONS: 'Add-Ons',
 	AI_HUB: 'AI Hub',
+	AI_HUB_TOKEN: 'AI Hub Token',
 	CLIENT_EXTENSION: 'Client Extension',
 	CLOUD_APP: 'Cloud',
 	CMP_BETA: 'Content Marketing Platform',

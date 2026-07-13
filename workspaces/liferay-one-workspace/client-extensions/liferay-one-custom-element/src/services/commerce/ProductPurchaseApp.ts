@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {productPurchaseStore} from '~/pages/ProductPurchase/store/AppPurchaseStore';
+import {OrderCustomFields} from '~/utils/orderUtils';
 import {Analytics} from '~/services/liferay/Analytics';
 import GetAppInformations from '~/services/objects/GetAppInformations';
 import {getProductOrderTypes} from '~/utils/getProductOrderTypes';
@@ -50,8 +52,22 @@ export default class ProductPurchaseApp extends ProductPurchase {
 	}
 
 	private getAppPurchaseCart(cart?: Cart) {
+		const snapshot = productPurchaseStore.getSnapshot();
+		const salesforceProject = snapshot.context.salesforceProject;
+
 		const baseCart = {
 			...cart,
+			customFields: {
+				...cart?.customFields,
+				...(salesforceProject
+					? {
+							[OrderCustomFields.ORDER_METADATA]: JSON.stringify({
+								salesforceProjectId:
+									salesforceProject.externalReferenceCode,
+							}),
+					  }
+					: {}),
+			},
 			orderTypeExternalReferenceCode:
 				ProductPurchaseApp.getOrderTypeExternalReferenceCode(
 					this.product
