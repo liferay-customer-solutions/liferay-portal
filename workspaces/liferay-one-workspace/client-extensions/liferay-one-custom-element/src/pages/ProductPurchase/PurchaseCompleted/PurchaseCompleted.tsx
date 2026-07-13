@@ -17,7 +17,10 @@ import ProductPurchaseHeaderCards from '~/pages/ProductPurchase/components/Produ
 import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
 import {Liferay} from '~/services/liferay/liferay';
 import {PaymentStatus} from '~/utils/orderUtils';
-import {getProductPriceModel} from '~/utils/productUtils';
+import {
+	getProductPriceModel,
+	isDXPFreeTierProduct,
+} from '~/utils/productUtils';
 import {getSiteURL} from '~/utils/siteUtils';
 
 import type {Account} from '~/types/accounts';
@@ -135,6 +138,16 @@ const PurchaseCompleted = ({product}: PurchaseCompletedProps) => {
 
 	const installTab = isPaidApp ? 'activation' : 'download';
 
+	const isDXPFree = isDXPFreeTierProduct(product);
+
+	const myItemsURL = isDXPFree
+		? `${getSiteURL()}/my-account#/project/products`
+		: `${getSiteURL()}/my-account#/project/applications`;
+
+	const itemDetailURL = isDXPFree
+		? `${getSiteURL()}/my-account#/project/products/${product.externalReferenceCode}?tab=activation`
+		: `${getSiteURL()}/my-account#/project/applications/${orderId}?tab=${installTab}`;
+
 	const showCardIcon = !isFreeApp && hasVatId;
 
 	return (
@@ -155,7 +168,11 @@ const PurchaseCompleted = ({product}: PurchaseCompletedProps) => {
 			</div>
 
 			<h1 className="mt-4 product-purchase-shell-title text-center">
-				{i18n.translate('purchase-completed')}
+				{isDXPFree
+					? i18n.translate(
+							'your-free-activation-key-has-been-generated'
+						)
+					: i18n.translate('purchase-completed')}
 			</h1>
 
 			<p className="mt-3 text-center text-muted">
@@ -176,24 +193,18 @@ const PurchaseCompleted = ({product}: PurchaseCompletedProps) => {
 			<div className="d-flex justify-content-center">
 				<ClayButton
 					displayType="secondary"
-					onClick={() =>
-						Liferay.Util.navigate(
-							`${getSiteURL()}/my-account#/project/applications`
-						)
-					}
+					onClick={() => Liferay.Util.navigate(myItemsURL)}
 				>
-					{i18n.translate('go-to-my-apps')}
+					{i18n.translate(isDXPFree ? 'products' : 'go-to-my-apps')}
 				</ClayButton>
 
 				<ClayButton
 					className="ml-3"
-					onClick={() =>
-						Liferay.Util.navigate(
-							`${getSiteURL()}/my-account#/project/applications/${orderId}?tab=${installTab}`
-						)
-					}
+					onClick={() => Liferay.Util.navigate(itemDetailURL)}
 				>
-					{i18n.translate('continue-to-install')}
+					{i18n.translate(
+						isDXPFree ? 'activation-key' : 'continue-to-install'
+					)}
 				</ClayButton>
 			</div>
 		</div>
