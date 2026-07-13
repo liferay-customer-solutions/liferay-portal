@@ -392,6 +392,10 @@ export const filterSchema: FilterSchemas = {
 						value: `${PaymentStatus.FAILED}`,
 					},
 					{
+						label: i18n.translate('not-required'),
+						value: `${PaymentStatus.NOT_REQUIRED}`,
+					},
+					{
 						label: i18n.translate('paid'),
 						value: `${PaymentStatus.PAID}`,
 					},

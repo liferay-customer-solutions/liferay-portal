@@ -13,6 +13,7 @@ import './PaymentStatusBadge.css';
 const paymentStatusLabel = {
 	[PaymentStatusCode.CANCELED]: i18n.translate('canceled'),
 	[PaymentStatusCode.FAILED]: i18n.translate('failed'),
+	[PaymentStatusCode.NOT_REQUIRED]: i18n.translate('not-required'),
 	[PaymentStatusCode.PAID]: i18n.translate('paid'),
 	[PaymentStatusCode.PAYMENT_PENDING]: i18n.translate('unpaid'),
 	[PaymentStatusCode.PENDING]: i18n.translate('unpaid'),
@@ -26,7 +27,10 @@ const PaymentStatusBadge = ({paymentStatus}: {paymentStatus: number}) => (
 					PaymentStatusCode.CANCELED,
 					PaymentStatusCode.FAILED,
 				].includes(paymentStatus),
-				'text-success': paymentStatus === PaymentStatusCode.PAID,
+				'text-success': [
+					PaymentStatusCode.NOT_REQUIRED,
+					PaymentStatusCode.PAID,
+				].includes(paymentStatus),
 				'text-warning': [
 					PaymentStatusCode.PAYMENT_PENDING,
 					PaymentStatusCode.PENDING,

@@ -47,6 +47,7 @@ export const STATUS_DOT_COLORS: {[key: string]: string} = {
 
 const INVOICE_STATUS_OPTIONS: {label: Word; value: number}[] = [
 	{label: 'paid', value: PaymentStatus.PAID},
+	{label: 'not-required', value: PaymentStatus.NOT_REQUIRED},
 	{label: 'unpaid', value: PaymentStatus.PENDING},
 	{label: 'pending', value: PaymentStatus.PAYMENT_PENDING},
 	{label: 'failed', value: PaymentStatus.FAILED},

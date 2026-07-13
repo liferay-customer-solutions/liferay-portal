@@ -67,6 +67,7 @@ const MPFinanceOrders = () => {
 							disabled(order) {
 								return [
 									PaymentStatus.CANCELED,
+									PaymentStatus.NOT_REQUIRED,
 									PaymentStatus.PAID,
 								].includes(order.paymentStatus);
 							},

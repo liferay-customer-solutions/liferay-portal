@@ -777,6 +777,7 @@ export default {
 	'none': 'None',
 	'not-activated': 'Not Activated',
 	'not-installed': 'Not Installed',
+	'not-required': 'Not Required',
 	'not-seeing-a-specific-account': 'Not seeing a specific Account?',
 	'not-seeing-a-specific-project': 'Not seeing a specific Project?',
 	'notes': 'Notes',

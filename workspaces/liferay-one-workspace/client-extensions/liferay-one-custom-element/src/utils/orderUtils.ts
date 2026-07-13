@@ -63,6 +63,7 @@ export type OrderWorkflowStatusCode =
 export const PaymentStatus = {
 	CANCELED: 8,
 	FAILED: 4,
+	NOT_REQUIRED: 23,
 	PAID: 0,
 	PAYMENT_PENDING: 2,
 	PENDING: 1,
@@ -127,12 +128,14 @@ export const orderWorkflowStatusCodeLabels = {
 export const paymentStatusLabels = {
 	[PaymentStatus.CANCELED]: 'canceled',
 	[PaymentStatus.FAILED]: 'failed',
+	[PaymentStatus.NOT_REQUIRED]: 'not-required',
 	[PaymentStatus.PAID]: 'paid',
 	[PaymentStatus.PAYMENT_PENDING]: 'pending',
 	[PaymentStatus.PENDING]: 'unpaid',
 } as const;
 
 export const paymentWorkflowDisplayType = {
+	[PaymentStatus.NOT_REQUIRED]: 'success',
 	[PaymentStatus.PAID]: 'success',
 	[PaymentStatus.PAYMENT_PENDING]: 'warning',
 	[PaymentStatus.PENDING]: 'secondary',
