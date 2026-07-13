@@ -9,7 +9,7 @@ import SearchBuilder from '~/utils/SearchBuilder';
 
 export function useTrialProducts(channelId: number, name: string) {
 	return useSWR(`administrator-dashboard/trial/products/${name}`, () =>
-		HeadlessCommerceDeliveryCatalog.getProductsByChannelId(
+		HeadlessCommerceDeliveryCatalog.getProductsPage(
 			channelId,
 			new URLSearchParams({
 				'accountId': '-1',

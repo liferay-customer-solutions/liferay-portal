@@ -7,7 +7,7 @@ import fetcher from '~/services/fetcher/fetcher';
 
 import type {APIResponse} from '~/types/api';
 import type {Channel} from '~/types/commerce';
-import type {DeliveryProduct, Product} from '~/types/product';
+import type {DeliveryProduct} from '~/types/product';
 
 export default class HeadlessCommerceDeliveryCatalog {
 	static async getProduct(
@@ -25,15 +25,6 @@ export default class HeadlessCommerceDeliveryCatalog {
 		searchParams = new URLSearchParams()
 	) {
 		return fetcher<APIResponse<DeliveryProduct>>(
-			`o/headless-commerce-delivery-catalog/v1.0/channels/${channelId}/products?${searchParams.toString()}`
-		);
-	}
-
-	static async getProductsByChannelId(
-		channelId: number,
-		searchParams = new URLSearchParams()
-	) {
-		return fetcher<APIResponse<Product>>(
 			`o/headless-commerce-delivery-catalog/v1.0/channels/${channelId}/products?${searchParams.toString()}`
 		);
 	}

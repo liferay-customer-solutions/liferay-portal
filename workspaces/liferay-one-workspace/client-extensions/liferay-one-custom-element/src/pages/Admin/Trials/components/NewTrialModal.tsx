@@ -157,7 +157,7 @@ const NewTrialModal: React.FC<NewTrialModalProps> = ({onClose, revalidate}) => {
 								trigger();
 							}}
 						>
-							{product.name as unknown as string}
+							{product.name}
 						</Autocomplete.Item>
 					)}
 				</Autocomplete>
