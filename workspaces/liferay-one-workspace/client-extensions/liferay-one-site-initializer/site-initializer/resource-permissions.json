@@ -522,6 +522,15 @@
 			"ADD_OBJECT_ENTRY"
 		],
 		"primKey": "0",
+		"resourceName": "com.liferay.object#[$OBJECT_DEFINITION_ID:DXPFreeActivationKeyRequest$]",
+		"roleName": "User",
+		"scope": "1"
+	},
+	{
+		"actionIds": [
+			"ADD_OBJECT_ENTRY"
+		],
+		"primKey": "0",
 		"resourceName": "com.liferay.object#[$OBJECT_DEFINITION_ID:TicketAttachment$]",
 		"roleName": "Account Administrator",
 		"scope": "3"
