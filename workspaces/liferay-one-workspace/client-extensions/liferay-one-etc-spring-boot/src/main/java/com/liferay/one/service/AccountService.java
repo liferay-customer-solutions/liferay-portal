@@ -90,6 +90,20 @@ public class AccountService extends OneBaseService {
 		addAccountUserAccount(account.getId(), jwt, userId);
 	}
 
+	public void addAccountUserAccountByEmailAddress(
+			long accountId, String emailAddress, Jwt jwt)
+		throws Exception {
+
+		post(
+			getAuthorization(jwt), StringPool.BLANK,
+			UriComponentsBuilder.fromPath(
+				"/o/headless-admin-user/v1.0/accounts/{accountId}" +
+					"/user-accounts/by-email-address/{emailAddress}"
+			).buildAndExpand(
+				accountId, emailAddress
+			).toUri());
+	}
+
 	public void addAccountUserAccountRole(
 			long accountId, long accountRoleId, long userId)
 		throws Exception {
