@@ -13,11 +13,27 @@
 		{
 			"activationMode": "heartbeat",
 			"activationStatus": "active",
+			"aiHubURL": "liferay.betaaihub.com",
+			"externalReferenceCode": "ENV-AI-HUB-PROD",
+			"ownerEmailAddress": "jon@pandora.com",
+			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-013",
+			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_ANALYTICS_CLOUD",
+			"tokenMonthlyAllowance": "1000",
+			"type": "AI Hub"
+		},
+		{
+			"activationMode": "heartbeat",
+			"activationStatus": "active",
+			"allowedEmailDomains": "omni.example.com",
 			"externalReferenceCode": "ENV-ANALYTICS-PROD",
+			"friendlyURL": "/analytics-omni",
+			"ownerEmailAddress": "owner@omni.example.com",
 			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-013",
 			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_ANALYTICS_CLOUD",
 			"region": "us-central1",
-			"type": "SaaS"
+			"timeZone": "UTC-06:00",
+			"type": "SaaS",
+			"workspaceName": "analytics-omni"
 		},
 		{
 			"activationMode": "heartbeat",
@@ -47,6 +63,18 @@
 			"type": "CNE"
 		},
 		{
+			"activationMode": "heartbeat",
+			"activationStatus": "active",
+			"currentEntitlementHash": "eyJkYXRhIjoiZHNyLW9tbmktdG9rZW4tZm9yLWRlbW8ifQ==",
+			"externalReferenceCode": "ENV-DSR-PROD",
+			"ownerEmailAddress": "keanureeves@owner.com",
+			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-001",
+			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_OMNI",
+			"region": "Internal",
+			"type": "DSR",
+			"workspaceName": "DSRWS-01"
+		},
+		{
 			"activationMode": "license-key",
 			"activationStatus": "active",
 			"domains": "staging.omni.example.com",
@@ -69,7 +97,26 @@
 		{
 			"activationMode": "heartbeat",
 			"activationStatus": "active",
+			"allowedEmailDomains": "enterprise.example.com",
+			"externalReferenceCode": "ENV-LDP-PROD",
+			"friendlyURL": "/enterprise-ldp",
+			"ownerEmailAddress": "owner@enterprise.example.com",
+			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-010",
+			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_ENTERPRISE_PLAN",
+			"region": "us-east1",
+			"timeZone": "UTC-05:00",
+			"type": "LDP",
+			"workspaceName": "enterprise-ldp"
+		},
+		{
+			"activationMode": "heartbeat",
+			"activationStatus": "active",
+			"adminEmailAddress": "admin@paas.example.com",
+			"adminFirstName": "Ada",
+			"adminLastName": "Lovelace",
 			"externalReferenceCode": "ENV-PAAS-PROD",
+			"githubUsername": "adalovelace",
+			"projectId": "paas-omni",
 			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-004",
 			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
 			"region": "us-east1",
@@ -88,7 +135,11 @@
 		{
 			"activationMode": "heartbeat",
 			"activationStatus": "active",
+			"adminEmailAddress": "admin@saas.example.com",
+			"adminFirstName": "Grace",
+			"adminLastName": "Hopper",
 			"externalReferenceCode": "ENV-SAAS-PROD",
+			"projectId": "saas-omni",
 			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-002",
 			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_SAAS_EXPERIENCE",
 			"region": "eu-west1",

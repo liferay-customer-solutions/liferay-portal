@@ -582,7 +582,7 @@
 				}
 			],
 			"description": {
-				"en_US": "Bring generative AI to your digital experiences with prebuilt assistants, search, and content tools."
+				"en_US": "Manage your Liferay AI Hub from this dashboard. Access your hub via the URL below, monitor your monthly token usage, and purchase additional tokens whenever you need more capacity."
 			},
 			"externalReferenceCode": "PRDCT-AI-HUB",
 			"images": [
@@ -698,6 +698,12 @@
 					"specificationKey": "type",
 					"value": {
 						"en_US": "cloud"
+					}
+				},
+				{
+					"specificationKey": "project-environment-profile",
+					"value": {
+						"en_US": "ai-hub"
 					}
 				},
 				{
@@ -838,7 +844,7 @@
 				{
 					"specificationKey": "project-environment-profile",
 					"value": {
-						"en_US": "workspace"
+						"en_US": "analytics-cloud"
 					}
 				},
 				{

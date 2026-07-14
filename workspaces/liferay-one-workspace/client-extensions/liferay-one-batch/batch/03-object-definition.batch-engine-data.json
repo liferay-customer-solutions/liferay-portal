@@ -2245,6 +2245,96 @@
 				{
 					"DBType": "String",
 					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_ADMIN_EMAIL_ADDRESS",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Admin Email Address"
+					},
+					"name": "adminEmailAddress",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_ADMIN_FIRST_NAME",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Admin First Name"
+					},
+					"name": "adminFirstName",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_ADMIN_LAST_NAME",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Admin Last Name"
+					},
+					"name": "adminLastName",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_AI_HUB_URL",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "AI Hub URL"
+					},
+					"name": "aiHubURL",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_ALLOWED_EMAIL_DOMAINS",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Allowed Email Domains"
+					},
+					"name": "allowedEmailDomains",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
 					"externalReferenceCode": "C_ENVIRONMENT_CURRENT_ENTITLEMENT_HASH",
 					"indexed": true,
 					"indexedAsKeyword": true,
@@ -2271,6 +2361,42 @@
 						"en_US": "Domains"
 					},
 					"name": "domains",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_FRIENDLY_URL",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Friendly URL"
+					},
+					"name": "friendlyURL",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_GITHUB_USERNAME",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Github Username"
+					},
+					"name": "githubUsername",
 					"objectFieldSettings": [
 					],
 					"required": false,
@@ -2357,6 +2483,42 @@
 				{
 					"DBType": "String",
 					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_OWNER_EMAIL_ADDRESS",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Owner Email Address"
+					},
+					"name": "ownerEmailAddress",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_PROJECT_ID",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Project ID"
+					},
+					"name": "projectId",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
 					"externalReferenceCode": "C_ENVIRONMENT_REGION",
 					"indexed": true,
 					"indexedAsKeyword": true,
@@ -2393,6 +2555,42 @@
 				{
 					"DBType": "String",
 					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_TIME_ZONE",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Time Zone"
+					},
+					"name": "timeZone",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_TOKEN_MONTHLY_ALLOWANCE",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Token Monthly Allowance"
+					},
+					"name": "tokenMonthlyAllowance",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
 					"externalReferenceCode": "C_ENVIRONMENT_TYPE",
 					"indexed": true,
 					"indexedAsKeyword": true,
@@ -2401,6 +2599,24 @@
 						"en_US": "Type"
 					},
 					"name": "type",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_WORKSPACE_NAME",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Workspace Name"
+					},
+					"name": "workspaceName",
 					"objectFieldSettings": [
 					],
 					"required": false,

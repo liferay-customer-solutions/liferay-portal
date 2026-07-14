@@ -18,6 +18,19 @@
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_OMNI_DSR",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Digital Sales Room",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_DSR",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DSR",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
 			"externalReferenceCode": "C_ENT_OMNI_DATA_PLATFORM",
 			"grantType": "fixed",
 			"maxQuantity": 1,
@@ -68,6 +81,13 @@
 				"name": "Liferay AI Hub",
 				"quantity": 1,
 				"skuExternalReferenceCode": "PRDCT-AI-HUB",
+				"unitPrice": 0
+			},
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_OMNI_DSR",
+				"name": "Digital Sales Room",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-DSR",
 				"unitPrice": 0
 			},
 			{
