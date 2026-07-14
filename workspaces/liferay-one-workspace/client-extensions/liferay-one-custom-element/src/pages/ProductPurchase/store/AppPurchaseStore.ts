@@ -74,14 +74,20 @@ export const productPurchaseStore = createStore({
 		},
 
 		setInvoice: {
-			payment: (context: AppPurchaseContext, event: {invoice: Invoice}) => ({
+			payment: (
+				context: AppPurchaseContext,
+				event: {invoice: Invoice}
+			) => ({
 				...context.payment,
 				invoice: event.invoice,
 			}),
 		},
 
 		setLicenseType: {
-			licenseType: (context: AppPurchaseContext, event: {licenseType: LicenseType}) => {
+			licenseType: (
+				context: AppPurchaseContext,
+				event: {licenseType: LicenseType}
+			) => {
 				if (event.licenseType === 'PAID') {
 					context.payment.type = PaymentMethodType.PAY_NOW;
 				}
@@ -101,7 +107,10 @@ export const productPurchaseStore = createStore({
 		},
 
 		setProject: {
-			project: (_: AppPurchaseContext, event: {project: ConsoleUserProject}) => event.project,
+			project: (
+				_: AppPurchaseContext,
+				event: {project: ConsoleUserProject}
+			) => event.project,
 		},
 
 		setSalesforceProject: {

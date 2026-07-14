@@ -18,11 +18,7 @@ export default function AlertBox({
 			{...props}
 			className={classNames('alert-box-container', className)}
 		>
-			<ClayIcon
-				color="#B95000"
-				fontSize={32}
-				symbol="warning-full"
-			/>
+			<ClayIcon color="#B95000" fontSize={32} symbol="warning-full" />
 		</div>
 	);
 }

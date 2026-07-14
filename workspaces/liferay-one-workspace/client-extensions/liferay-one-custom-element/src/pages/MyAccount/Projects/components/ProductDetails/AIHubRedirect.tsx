@@ -7,10 +7,11 @@ import {useEffect, useState} from 'react';
 import {Navigate, useNavigate, useParams} from 'react-router-dom';
 
 import {useOneContext} from '~/context/OneContextProvider';
-import SearchBuilder from '~/core/SearchBuilder';
 import {Liferay} from '~/services/liferay/liferay';
-import HeadlessAdminUser from '~/services/rest/HeadlessAdminUser';
-import HeadlessCommerceDeliveryOrder from '~/services/rest/HeadlessCommerceDeliveryOrder';
+import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
+import HeadlessCommerceDeliveryOrder from '~/services/headless/HeadlessCommerceDeliveryOrder';
+import {OrderTypes} from '~/types/orders';
+import SearchBuilder from '~/utils/SearchBuilder';
 
 import type {AccountBrief} from '~/types/accounts';
 
@@ -47,7 +48,7 @@ export default function AiHubRedirect() {
 				new URLSearchParams({
 					filter: SearchBuilder.eq(
 						'orderTypeExternalReferenceCode',
-						'ai-hub'
+						OrderTypes.AI_HUB
 					),
 				})
 			);

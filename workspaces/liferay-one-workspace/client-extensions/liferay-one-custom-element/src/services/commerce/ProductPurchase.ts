@@ -82,7 +82,8 @@ export default class ProductPurchase {
 		};
 
 		if (this.orderTypeExternalReferenceCode) {
-			body.orderTypeExternalReferenceCode = this.orderTypeExternalReferenceCode;
+			body.orderTypeExternalReferenceCode =
+				this.orderTypeExternalReferenceCode;
 		}
 
 		const newCart = await (cart?.id

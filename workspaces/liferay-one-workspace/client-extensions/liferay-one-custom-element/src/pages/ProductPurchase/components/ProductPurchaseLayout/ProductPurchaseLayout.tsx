@@ -168,7 +168,10 @@ const ProductPurchaseLayout = ({
 				return;
 			}
 
-			const order = await productPurchase.createOrder(options?.cart || options, options?.cartOptions || options);
+			const order = await productPurchase.createOrder(
+				options?.cart || options,
+				options?.cartOptions || options
+			);
 
 			const nextLink = await productPurchase.getNextStepsLink(order);
 

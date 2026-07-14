@@ -33,10 +33,7 @@ const AIHubTokenOrderSummary = () => {
 		(state) => state.context
 	);
 
-	const {cart, cartItems} = useSelector(
-		cartStore,
-		(state) => state.context
-	);
+	const {cart, cartItems} = useSelector(cartStore, (state) => state.context);
 
 	const {data: addressResponse} = useAccountAddresses(selectedAccount?.id);
 	const addresses = addressResponse?.items;
@@ -79,11 +76,12 @@ const AIHubTokenOrderSummary = () => {
 
 	const tokens = getAiHubTokenSKUs(product);
 
-	const selectedSku = tokens.find((token) => token.id === selectedSkuId) as any;
+	const selectedSku = tokens.find(
+		(token) => token.id === selectedSkuId
+	) as any;
 
 	const summary = cart.summary;
-	const currencyCode =
-		cartItems[0]?.price?.currency || 'USD';
+	const currencyCode = cartItems[0]?.price?.currency || 'USD';
 
 	const valueFallBack = (value: string) => {
 		if (!value) {

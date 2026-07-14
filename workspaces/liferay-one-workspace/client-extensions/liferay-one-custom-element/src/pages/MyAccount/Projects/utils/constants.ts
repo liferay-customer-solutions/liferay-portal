@@ -3,12 +3,11 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import { Word } from '~/i18n';
+import {Word} from '~/i18n';
 
 import { PROJECT_TAB_KEYS } from '../types';
 import type { OrderTypes } from '~/types/orders';
-
-import type { ProjectTabKey } from '../types';
+import type {ProjectTabKey} from '../types';
 
 export const LAST_PROJECT_STORAGE_KEY = 'liferay-one:last-project';
 
@@ -121,7 +120,7 @@ export const SUPPORT_SPECIFICATION_KEYS = SUPPORT_LINKS.map(
 
 export const UNASSIGNED_PROJECT_ERC = 'one-time-purchases';
 
-export const ICON_BY_CATEGORY: { [key: string]: string } = {
+export const ICON_BY_CATEGORY: {[key: string]: string} = {
 	'Analytics': 'analytics',
 	'Artificial Intelligence': 'magic',
 	'Commerce': 'shopping-cart',

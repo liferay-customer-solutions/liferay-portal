@@ -101,14 +101,16 @@ const AIHubTokenSelection = () => {
 
 		const getOrdersItems = async () => {
 			try {
-				const response = await HeadlessCommerceDeliveryCart.getAccountCarts(
-					selectedAccount.id,
-					Liferay.CommerceContext.commerceChannelId
-				);
+				const response =
+					await HeadlessCommerceDeliveryCart.getAccountCarts(
+						selectedAccount.id,
+						Liferay.CommerceContext.commerceChannelId
+					);
 
 				const cart = response.items.find(
 					(item) =>
-						item.orderTypeExternalReferenceCode === 'AI_HUB_TOKEN' &&
+						item.orderTypeExternalReferenceCode ===
+							'AI_HUB_TOKEN' &&
 						item.orderStatusInfo?.label === 'open' &&
 						(!item.author ||
 							item.author === Liferay.ThemeDisplay.getUserName())
@@ -121,9 +123,11 @@ const AIHubTokenSelection = () => {
 						type: 'setCartItems',
 					});
 				}
-			} catch (error) {
+			}
+			catch (error) {
 				console.error(error);
-			} finally {
+			}
+			finally {
 				setIsCartLoading(false);
 			}
 		};
@@ -191,7 +195,10 @@ const AIHubTokenSelection = () => {
 		let activeCart = productPurchaseCart.cart;
 
 		if (!activeCart.id) {
-			const createdCart = await productPurchaseCart.addCart(product.productId ?? product.id, newSkuId);
+			const createdCart = await productPurchaseCart.addCart(
+				product.productId ?? product.id,
+				newSkuId
+			);
 
 			if (createdCart) {
 				activeCart = createdCart as any;
@@ -201,13 +208,17 @@ const AIHubTokenSelection = () => {
 		}
 
 		const tokenSkuIds = aiHubTokens.map((token: any) => token.id);
-		const filteredItems = (activeCart.cartItems || productPurchaseCart.cartItems).filter(
-			(item) => !tokenSkuIds.includes(item.skuId)
-		);
+		const filteredItems = (
+			activeCart.cartItems || productPurchaseCart.cartItems
+		).filter((item) => !tokenSkuIds.includes(item.skuId));
 
 		const newCartItems = [
 			...filteredItems,
-			{productId: product.productId ?? product.id, quantity: 1, skuId: newSkuId} as CartItem,
+			{
+				productId: product.productId ?? product.id,
+				quantity: 1,
+				skuId: newSkuId,
+			} as CartItem,
 		];
 
 		cartStore.send({cartItems: newCartItems, type: 'setCartItems'});

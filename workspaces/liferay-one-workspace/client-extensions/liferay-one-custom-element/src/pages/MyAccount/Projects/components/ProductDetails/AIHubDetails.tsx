@@ -63,7 +63,8 @@ const AIHubDetails = ({
 	}>() as any;
 
 	const placedOrder = propPlacedOrder || outletContext?.placedOrder;
-	const selectedAccount = propSelectedAccount || outletContext?.selectedAccount;
+	const selectedAccount =
+		propSelectedAccount || outletContext?.selectedAccount;
 	const [searchParams, setSearchParams] = useSearchParams();
 
 	const orderStatusCode = placedOrder?.orderStatusInfo
@@ -155,9 +156,12 @@ const AIHubDetails = ({
 	const aiHubForm = orderMetadata?.aiHubForm || {};
 	const aiHubURL = aiHubForm?.aiHubURL ?? 'https://ai.hub.liferay.com';
 
-	const aiHubItem = placedOrder?.placedOrderItems?.find(
-		(item: any) => item.sku === 'PRDCT-AI-HUB' || item.name?.toLowerCase().includes('ai hub')
-	) || placedOrder?.placedOrderItems?.[0];
+	const aiHubItem =
+		placedOrder?.placedOrderItems?.find(
+			(item: any) =>
+				item.sku === 'PRDCT-AI-HUB' ||
+				item.name?.toLowerCase().includes('ai hub')
+		) || placedOrder?.placedOrderItems?.[0];
 	const productId = aiHubItem?.productId;
 	const isCompleted =
 		orderStatusCode === OrderWorkflowStatusCode.COMPLETED ||

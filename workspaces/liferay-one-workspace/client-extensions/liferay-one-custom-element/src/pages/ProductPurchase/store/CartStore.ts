@@ -30,7 +30,11 @@ export const cartStore = createStore({
 			};
 		},
 
-		setCartItems: (context: CartContext, event: {cartItems: CartItem[]}, {emit}: any) => {
+		setCartItems: (
+			context: CartContext,
+			event: {cartItems: CartItem[]},
+			{emit}: any
+		) => {
 			emit({
 				cartId: context.cart.id,
 				cartItems: event.cartItems,

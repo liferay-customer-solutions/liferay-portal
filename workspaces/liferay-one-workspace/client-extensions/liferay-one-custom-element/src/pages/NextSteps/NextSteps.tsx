@@ -73,7 +73,8 @@ const ProductTypeVocabulary = {
 	SOLUTION: 'Solution',
 } as const;
 
-type ProductTypeVocabulary = (typeof ProductTypeVocabulary)[keyof typeof ProductTypeVocabulary];
+type ProductTypeVocabulary =
+	(typeof ProductTypeVocabulary)[keyof typeof ProductTypeVocabulary];
 
 type NextStepsBodyProps = ReturnType<typeof useGetProductByOrderId>['data'];
 
@@ -221,10 +222,7 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 			<div className="next-step-page-cards">
 				<AccountAndAppCard
 					category="Application"
-					logo={
-						props!.orderModel?.productThumbnail ||
-						'catalog'
-					}
+					logo={props!.orderModel?.productThumbnail || 'catalog'}
 					title={productName as string}
 				/>
 
@@ -251,9 +249,7 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 					className="mr-3 next-step-page-footer-button-back"
 					displayType="secondary"
 					onClick={() => {
-						Liferay.Util.navigate(
-							`${getSiteURL()}/my-account`
-						);
+						Liferay.Util.navigate(`${getSiteURL()}/my-account`);
 					}}
 				>
 					{i18n.translate('go-to-dashboard')}

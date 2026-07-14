@@ -13,7 +13,8 @@ export default class HeadlessAIHub {
 			return await fetcher(
 				`o/c/aihubapplications/by-external-reference-code/AI-HUB-${externalReferenceCode}`
 			);
-		} catch (error) {
+		}
+		catch (error) {
 			return null;
 		}
 	}

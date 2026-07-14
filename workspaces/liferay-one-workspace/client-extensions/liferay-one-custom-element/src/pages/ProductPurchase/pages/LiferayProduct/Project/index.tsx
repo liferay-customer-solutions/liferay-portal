@@ -7,7 +7,9 @@ import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {useSelector} from '@xstate/store/react';
 
 import ProductPurchase from '~/components/ProductPurchase';
-import RadioCardList, {RadioOption} from '~/components/RadioCardList/RadioCardList';
+import RadioCardList, {
+	RadioOption,
+} from '~/components/RadioCardList/RadioCardList';
 import {useProperties} from '~/context/PropertiesContext';
 import {useFetch} from '~/hooks/useFetch';
 import i18n from '~/i18n';
@@ -37,16 +39,15 @@ const ProjectSelection = () => {
 		selectedAccount,
 	} = useProductPurchaseLayoutContext();
 
-	const {data: projectsData, isLoading} = useFetch<APIResponse<ProjectAPIItem>>(
-		selectedAccount?.id ? '/o/c/projects' : null,
-		{
-			params: {
-				filter: `r_accountEntryToProject_accountEntryId eq '${selectedAccount.id}'`,
-				pageSize: 200,
-				sort: 'name:asc',
-			},
-		}
-	);
+	const {data: projectsData, isLoading} = useFetch<
+		APIResponse<ProjectAPIItem>
+	>(selectedAccount?.id ? '/o/c/projects' : null, {
+		params: {
+			filter: `r_accountEntryToProject_accountEntryId eq '${selectedAccount.id}'`,
+			pageSize: 200,
+			sort: 'name:asc',
+		},
+	});
 
 	if (isLoading) {
 		return <ClayLoadingIndicator />;
@@ -85,26 +86,25 @@ const ProjectSelection = () => {
 				}}
 			/>
 			<RadioCardList<ProjectAPIItem>
-				contentList={projects.map(
-					(proj, index) => ({
-						fullTitle: true,
-						id: index,
-						selected:
-							proj.externalReferenceCode ===
-							salesforceProject?.externalReferenceCode,
-						title: (
-							<span className="font-weight-semi-bold">
-								{proj.name}
-							</span>
-						),
-						value: proj,
-					})
-				)}
+				contentList={projects.map((proj, index) => ({
+					fullTitle: true,
+					id: index,
+					selected:
+						proj.externalReferenceCode ===
+						salesforceProject?.externalReferenceCode,
+					title: (
+						<span className="font-weight-semi-bold">
+							{proj.name}
+						</span>
+					),
+					value: proj,
+				}))}
 				leftRadio
 				onSelect={(radioOption: RadioOption<ProjectAPIItem>) =>
 					productPurchaseStore.send({
 						salesforceProject: {
-							externalReferenceCode: radioOption.value.externalReferenceCode,
+							externalReferenceCode:
+								radioOption.value.externalReferenceCode,
 							id: radioOption.value.id,
 							name: radioOption.value.name,
 						} as SalesforceProject,

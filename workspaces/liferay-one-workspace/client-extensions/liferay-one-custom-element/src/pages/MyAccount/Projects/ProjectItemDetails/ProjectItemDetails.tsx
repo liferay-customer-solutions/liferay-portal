@@ -24,7 +24,6 @@ import DownloadTab from '~/pages/MyAccount/Projects/components/DownloadTab/Downl
 import EnvironmentTab from '~/pages/MyAccount/Projects/components/EnvironmentTab/EnvironmentTab';
 import HelpSupportTab from '~/pages/MyAccount/Projects/components/HelpSupportTab/HelpSupportTab';
 import OrdersTab from '~/pages/MyAccount/Projects/components/OrdersTab/OrdersTab';
-import AIHubDetails from '~/pages/MyAccount/Projects/components/ProductDetails/AIHubDetails';
 import ProjectDetailTabs, {
 	DetailTab,
 } from '~/pages/MyAccount/Projects/components/ProjectDetailTabs/ProjectDetailTabs';
@@ -98,14 +97,6 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 		product,
 	});
 
-	const placedOrder = placedOrders.find((order) =>
-		(order.placedOrderItems ?? []).some(
-			(item) => item.name === product.name
-		)
-	);
-
-	const solutionType = getSpecificationValue(product, 'solution-type');
-
 	const tabContent: Record<ProjectTabKey, () => ReactNode> = {
 		'activation': () => (
 			<ActivationTab product={product} profile={activationProfile} />
@@ -118,19 +109,9 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 			/>
 		),
 		'download': () => <DownloadTab kind={kind} />,
-		'environment': () => {
-			if (solutionType === 'ai-hub' || solutionType === 'ai-hub-open-beta') {
-				return (
-					<AIHubDetails
-						placedOrder={placedOrder}
-						selectedAccount={{
-							externalReferenceCode: accountERC ?? '',
-						}}
-					/>
-				);
-			}
-			return <EnvironmentTab environment={orderInfo.environment} />;
-		},
+		'environment': () => (
+			<EnvironmentTab environment={orderInfo.environment} />
+		),
 		'help-and-support': () => (
 			<HelpSupportTab learnUrl={learnUrl} product={product} />
 		),

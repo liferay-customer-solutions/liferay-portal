@@ -21,9 +21,8 @@ const PaymentMethod = lazy(() => import('./PaymentMethod/PaymentMethod'));
 const Summary = lazy(() => import('./Summary/Summary'));
 
 // AI Hub Pages
-const AIHubForm = lazy(
-	() => import('./pages/LiferayProduct/AIHub/AIHubForm')
-);
+
+const AIHubForm = lazy(() => import('./pages/LiferayProduct/AIHub/AIHubForm'));
 const AIHubOpenBetaForm = lazy(
 	() => import('./pages/LiferayProduct/AIHub/AIHubOpenBetaForm')
 );
@@ -39,10 +38,7 @@ const AIHubTokenOrderSummary = lazy(
 const AIHubTokenSelection = lazy(
 	() => import('./pages/LiferayProduct/AIHub/AIHubTokenSelection')
 );
-const ProjectSelection = lazy(
-	() => import('./pages/LiferayProduct/Project')
-);
-
+const ProjectSelection = lazy(() => import('./pages/LiferayProduct/Project'));
 
 export type ProductPurchaseStep = {
 	element: ReactNode;

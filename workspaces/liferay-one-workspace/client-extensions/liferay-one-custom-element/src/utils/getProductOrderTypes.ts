@@ -7,6 +7,7 @@ import type {OrderType} from '~/types/orders';
 import type {ProductType} from '~/types/product';
 
 const productTypeERC = {
+	'ai-hub': 'AI_HUB',
 	'client-extension': 'CLIENT_EXTENSION',
 	'cloud': 'CLOUD_APP',
 	'composite-app': 'COMPOSITE_APP',

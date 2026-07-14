@@ -40,7 +40,7 @@ export class ProductPurchaseAIHub extends ProductPurchase {
 						? {
 								salesforceProjectId:
 									salesforceProject.externalReferenceCode,
-						  }
+							}
 						: {}),
 				}),
 			},

@@ -101,6 +101,7 @@ const offeringTypes: Record<string, ProductOfferingTypes[]> = {
 };
 
 export const ProductTypeLabels = {
+	'ai-hub': 'AI Hub',
 	'client-extension': 'Client Extension',
 	'cloud': 'Cloud',
 	'composite-app': 'Composite App',
@@ -111,6 +112,7 @@ export const ProductTypeLabels = {
 } as const;
 
 export const ProductTypeLicenseOptions: Record<string, ProductLicenseTier[]> = {
+	'ai-hub': ['standard'],
 	'client-extension': ['standard'],
 	'cloud': ['standard'],
 	'composite-app': ['standard'],

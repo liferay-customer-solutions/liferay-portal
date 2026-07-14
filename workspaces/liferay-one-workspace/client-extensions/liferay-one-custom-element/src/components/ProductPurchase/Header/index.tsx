@@ -22,7 +22,10 @@ type ProductPurchaseHeaderProps = {
 	rightNode?: ReactNode;
 };
 
-const AccountEmailInfo: React.FC<{image?: string; name?: string}> = ({image, name}) => (
+const AccountEmailInfo: React.FC<{image?: string; name?: string}> = ({
+	image,
+	name,
+}) => (
 	<div className="align-items-center d-flex">
 		<div className="account-banner-name-text align-items-end d-flex flex-column mx-2">
 			<strong>{name}</strong>

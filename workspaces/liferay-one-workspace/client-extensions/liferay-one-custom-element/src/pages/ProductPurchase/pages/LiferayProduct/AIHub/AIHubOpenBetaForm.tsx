@@ -101,7 +101,8 @@ const AIHubOpenBetaForm = () => {
 		form: z.infer<typeof zodSchema.aiHubOpenBetaForm>
 	) => {
 		const sku = product.skus.find(
-			({externalReferenceCode}) => externalReferenceCode === skuRef.current
+			({externalReferenceCode}) =>
+				externalReferenceCode === skuRef.current
 		);
 
 		const skuId = sku?.id;

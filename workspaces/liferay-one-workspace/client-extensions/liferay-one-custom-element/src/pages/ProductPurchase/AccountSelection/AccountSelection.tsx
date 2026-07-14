@@ -61,7 +61,15 @@ const AccountSelection = () => {
 				navigate(isPaidApp ? '/license' : '/summary', {replace: true});
 			}
 		}
-	}, [accounts, isPaidApp, isSingleAccount, navigate, setSelectedAccount, product, selectedAccount]);
+	}, [
+		accounts,
+		isPaidApp,
+		isSingleAccount,
+		navigate,
+		setSelectedAccount,
+		product,
+		selectedAccount,
+	]);
 
 	if (isLoadingAccounts || isSingleAccount) {
 		return (

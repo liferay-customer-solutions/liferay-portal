@@ -65,7 +65,7 @@ export default class ProductPurchaseApp extends ProductPurchase {
 								salesforceProjectId:
 									salesforceProject.externalReferenceCode,
 							}),
-					  }
+						}
 					: {}),
 			},
 			orderTypeExternalReferenceCode:

@@ -273,6 +273,7 @@ export type ProductTags =
 	| 'solution-profile-app-icon';
 
 export type ProductType =
+	| 'ai-hub'
 	| 'client-extension'
 	| 'cloud'
 	| 'composite-app'
