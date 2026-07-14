@@ -10,26 +10,50 @@ import type {APIResponse} from '~/types/api';
 
 export type ProjectEnvironment = {
 	activationMode: string;
+	adminEmailAddress: string;
+	adminFirstName: string;
+	adminLastName: string;
+	aiHubURL: string;
+	allowedEmailDomains: string;
 	currentEntitlementHash: string;
 	domains: string;
 	externalReferenceCode: string;
+	friendlyURL: string;
+	githubUsername: string;
 	hostName: string;
 	id: string;
+	ownerEmailAddress: string;
+	projectId: string;
 	region: string;
 	status: string;
+	timeZone: string;
+	tokenMonthlyAllowance: string;
 	type: string;
+	workspaceName: string;
 };
 
 type EnvironmentNode = {
 	activationMode?: string;
 	activationStatus?: string;
+	adminEmailAddress?: string;
+	adminFirstName?: string;
+	adminLastName?: string;
+	aiHubURL?: string;
+	allowedEmailDomains?: string;
 	currentEntitlementHash?: string;
 	domains?: string;
 	externalReferenceCode: string;
+	friendlyURL?: string;
+	githubUsername?: string;
 	hostName?: string;
 	id: number;
+	ownerEmailAddress?: string;
+	projectId?: string;
 	region?: string;
+	timeZone?: string;
+	tokenMonthlyAllowance?: string;
 	type?: string;
+	workspaceName?: string;
 };
 
 export function useProjectEnvironments() {
@@ -53,14 +77,26 @@ export function useProjectEnvironments() {
 	const environments: ProjectEnvironment[] = (data?.items ?? []).map(
 		(node) => ({
 			activationMode: node.activationMode ?? '',
+			adminEmailAddress: node.adminEmailAddress ?? '',
+			adminFirstName: node.adminFirstName ?? '',
+			adminLastName: node.adminLastName ?? '',
+			aiHubURL: node.aiHubURL ?? '',
+			allowedEmailDomains: node.allowedEmailDomains ?? '',
 			currentEntitlementHash: node.currentEntitlementHash ?? '',
 			domains: node.domains ?? '',
 			externalReferenceCode: node.externalReferenceCode,
+			friendlyURL: node.friendlyURL ?? '',
+			githubUsername: node.githubUsername ?? '',
 			hostName: node.hostName ?? '',
 			id: String(node.id),
+			ownerEmailAddress: node.ownerEmailAddress ?? '',
+			projectId: node.projectId ?? '',
 			region: node.region ?? '',
 			status: node.activationStatus ?? '',
+			timeZone: node.timeZone ?? '',
+			tokenMonthlyAllowance: node.tokenMonthlyAllowance ?? '',
 			type: node.type ?? '',
+			workspaceName: node.workspaceName ?? '',
 		})
 	);
 

@@ -70,7 +70,9 @@ export default {
 	'ai-hub': 'AI Hub',
 	'ai-hub-account-details': 'AI Hub Account Details',
 	'ai-hub-account-name': 'AI Hub Account Name',
+	'ai-hub-details': 'AI Hub Details',
 	'ai-hub-information': 'AI Hub Information',
+	'ai-hub-url': 'AI Hub URL',
 	'all': 'All',
 	'all-commerce-modules-are-enabled-by-default':
 		'All Commerce modules are enabled by default.',
@@ -168,6 +170,7 @@ export default {
 	'attachment-deleted-successfully': 'Attachment deleted successfully.',
 	'attributes': 'Attributes',
 	'available': 'Available',
+	'awaiting-signature': 'Awaiting Signature',
 	'back': 'Back',
 	'back-to-apps': 'Back to Apps',
 	'back-to-business-events': 'Back to Business Events',
@@ -202,6 +205,7 @@ export default {
 	'business-event-created-successfully':
 		'Business event created successfully.',
 	'business-events': 'Business Events',
+	'buy-liferay-tokens': 'Buy Liferay Tokens',
 	'by': 'by',
 	'by-requesting-a-publisher-account-you-agree-to-the':
 		'By requesting a Publisher account, you agree to the',
@@ -827,6 +831,7 @@ export default {
 	'other-event': 'Other Event',
 	'overall-experience': 'Overall Experience',
 	'overdue': 'Overdue',
+	'owner-email': 'Owner Email',
 	'paas-users': 'PaaS Users',
 	'package': 'Package',
 	'paid': 'Paid',
@@ -928,6 +933,8 @@ export default {
 	'provide-version-details': 'Provide Version Details',
 	'provided-by': 'Provided By',
 	'provisioning': 'Provisioning',
+	'provisioning-is-complete-and-your-subscription-is-now-active-access-your-hub-via-the-url-below-to-start-using-your-monthly-token-allowance':
+		'Provisioning is complete and your subscription is now active. Access your hub via the URL below to start using your monthly token allowance.',
 	'provisioning-details': 'Provisioning Details',
 	'pub-sub': 'Pub/Sub',
 	'public-information': 'Public Information',
@@ -1249,6 +1256,7 @@ export default {
 		'To join an existing business account, please contact your administrator, who can add you. Once added, you will automatically become part of that account and will be able to manage it and make purchases on Markeplace.',
 	'to-request-a-new-or-replacement-activation-key-open-a-support-ticket':
 		'To request a new or replacement activation key, open a support ticket.',
+	'token-monthly-allowance': 'Token Monthly Allowance',
 	'token-unavailable': 'Token Unavailable',
 	'tokens': 'Tokens',
 	'topic': 'Topic',
@@ -1360,6 +1368,8 @@ export default {
 	'we-were-unable-to-process-the-payment-for':
 		'We were unable to process the payment for',
 	'website': 'Website',
+	'weve-sent-the-order-form-to-your-email-via-docusign-please-review-sign-and-return-it-to-confirm-your-subscription-once-received-well-provision-your-ai-hub-and-notify-you-by-email':
+		'We’ve sent the order form to your email via DocuSign. Please review, sign, and return it to confirm your subscription — once received, we’ll provision your AI Hub and notify you by email.',
 	'what-features-would-you-like-in-the-final-release':
 		'What features would you like in the final release?',
 	'when-adding-app-versions-you-can-use-your-own-numbering-system-but-be-sure-it-is-consistent-and-understandable-by-the-customer':
@@ -1392,6 +1402,7 @@ export default {
 	'x-selected': 'X Selected',
 	'x-solutions-available': '{0} solutions available',
 	'x-tickets': '{0} Tickets',
+	'x-tokens': '{0} tokens',
 	'x-was-uploaded-successfully': '{0} was uploaded successfully.',
 	'x-will-be-deleted-and-this-action-cant-be-undone-are-you-sure-you-want-to-delete-it':
 		'{0} will be deleted and this action can’t be undone. Are you sure you want to delete it?',
@@ -1438,6 +1449,7 @@ export default {
 		'You will receive an invoice via email with all the details needed to complete your payment. After you complete the payment, you can activate your license from the customer dashboard.',
 	'you-will-receive-an-invoice-via-email-with-the-instructions-to-complete-your-bank-transfer-payment':
 		'You will receive an invoice via email with the instructions to complete your bank transfer payment.',
+	'your-ai-hub-is-ready': 'Your AI Hub is Ready',
 	'your-attachment-is-uploaded-however-we-encountered-a-problem-posting-your-comment-the-system-is-automatically-retrying-to-send-it':
 		'Your attachment is uploaded, however we encountered a problem posting your comment. The system is automatically retrying to send it.',
 	'your-current-liferay-version': 'Your Current Liferay Version',

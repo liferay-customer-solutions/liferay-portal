@@ -39,7 +39,7 @@ export function DetailedCard({
 			}
 		>
 			<div className="detailed-card-container">
-				<div className="align-items-center d-flex detailed-card-header flex-row justify-content-between">
+				<div className="align-items-center d-flex detailed-card-header flex-row justify-content-between pr-2">
 					<h2>{cardTitle}</h2>
 
 					{headerActions && (

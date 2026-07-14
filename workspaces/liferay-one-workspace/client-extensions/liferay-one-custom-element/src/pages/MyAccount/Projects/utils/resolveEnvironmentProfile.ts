@@ -11,6 +11,8 @@ import type {DeliveryProduct} from '~/types/product';
 
 export type EnvironmentProfile =
 	| 'ac-token'
+	| 'ai-hub'
+	| 'analytics-cloud'
 	| 'none'
 	| 'paas'
 	| 'saas'
@@ -18,6 +20,8 @@ export type EnvironmentProfile =
 
 const ENVIRONMENT_PROFILES: EnvironmentProfile[] = [
 	'ac-token',
+	'ai-hub',
+	'analytics-cloud',
 	'none',
 	'paas',
 	'saas',

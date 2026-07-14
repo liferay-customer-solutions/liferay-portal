@@ -6,26 +6,59 @@
 import {useProjectEnvironments} from '~/hooks/useProjectEnvironments';
 import {buildEnvironmentSections} from '~/pages/MyAccount/Projects/utils/buildEnvironmentSections';
 
+import AIHubEnvironment from '../AIHubEnvironment/AIHubEnvironment';
+import DSREnvironment from '../DSREnvironment/DSREnvironment';
 import EnvironmentCard from '../EnvironmentCard/EnvironmentCard';
 import SectionedDetailsCard from '../SectionedDetailsCard/SectionedDetailsCard';
 
 import type {ProductEnvironmentInfo} from '~/hooks/useProjectOrders';
+import type {EnvironmentProfile} from '~/pages/MyAccount/Projects/utils/resolveEnvironmentProfile';
 
 type EnvironmentTabProps = {
 	environment: ProductEnvironmentInfo;
+	profile?: EnvironmentProfile;
 };
 
-export default function EnvironmentTab({environment}: EnvironmentTabProps) {
+const ENVIRONMENT_TYPE_BY_PROFILE: Record<EnvironmentProfile, string> = {
+	'ac-token': 'DSR',
+	'ai-hub': 'AI Hub',
+	'analytics-cloud': 'SaaS',
+	'none': '',
+	'paas': 'PaaS',
+	'saas': 'SaaS',
+	'workspace': 'LDP',
+};
+
+export default function EnvironmentTab({
+	environment,
+	profile,
+}: EnvironmentTabProps) {
 	const {environments} = useProjectEnvironments();
 
-	if (!environments.length) {
+	const expectedType = profile ? ENVIRONMENT_TYPE_BY_PROFILE[profile] : '';
+
+	const matchingEnvironments = environments.filter(
+		(item) => item.type === expectedType
+	);
+
+	const [environmentEntry] = matchingEnvironments;
+
+	if (!profile || !environmentEntry) {
 		return <EnvironmentCard environment={environment} />;
+	}
+
+	if (profile === 'ai-hub') {
+		return <AIHubEnvironment environment={environmentEntry} />;
+	}
+
+	if (profile === 'ac-token') {
+		return <DSREnvironment environment={environmentEntry} />;
 	}
 
 	return (
 		<SectionedDetailsCard
 			icon="cloud"
-			sections={buildEnvironmentSections(environments)}
+			sections={buildEnvironmentSections(matchingEnvironments, profile)}
 			title="workspace-info"
 		/>
 	);

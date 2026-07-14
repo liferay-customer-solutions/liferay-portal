@@ -13,12 +13,14 @@ export type DetailsRow = {
 };
 
 type DetailsCardProps = {
+	headerActions?: ReactNode;
 	icon?: string;
 	rows: DetailsRow[];
 	title?: Word;
 };
 
 export default function DetailsCard({
+	headerActions,
 	icon = 'catalog',
 	rows,
 	title = 'details',
@@ -30,6 +32,7 @@ export default function DetailsCard({
 			className="mt-3"
 			clayIcon={icon}
 			fitContent
+			headerActions={headerActions}
 		>
 			<div
 				className="d-flex flex-column mt-3"

@@ -1,0 +1,28 @@
+.ai-hub-environment-grid {
+	display: grid;
+	gap: var(--spacer-4, 1.5rem) var(--spacer-5, 2rem);
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	margin-top: var(--spacer-3, 1rem);
+}
+
+.ai-hub-environment-cell {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.ai-hub-environment-cell-label {
+	color: var(--color-neutral-10);
+	font-weight: 600;
+}
+
+.ai-hub-environment-cell-value {
+	color: var(--color-neutral-8);
+	overflow-wrap: anywhere;
+}
+
+@media (max-width: 576px) {
+	.ai-hub-environment-grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}

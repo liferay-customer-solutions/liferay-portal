@@ -5,6 +5,8 @@
 
 import {ReactNode} from 'react';
 import {useParams} from 'react-router-dom';
+import aiHubIconUrl from '~/assets/icons/ai_hub_icon.svg';
+import Button from '~/components/Button/Button';
 import {useProject} from '~/context/ProjectContext';
 import {useDeliveryProduct} from '~/hooks/useDeliveryProduct';
 import {
@@ -15,6 +17,7 @@ import {
 import {getProductOrderInfo, useProjectOrders} from '~/hooks/useProjectOrders';
 import i18n, {Word} from '~/i18n';
 import ActivationTab from '~/pages/MyAccount/Projects/components/ActivationTab/ActivationTab';
+import AIHubAlert from '~/pages/MyAccount/Projects/components/AIHubAlert/AIHubAlert';
 import DetailHeader from '~/pages/MyAccount/Projects/components/DetailHeader/DetailHeader';
 import DetailsTab from '~/pages/MyAccount/Projects/components/DetailsTab/DetailsTab';
 import DownloadTab from '~/pages/MyAccount/Projects/components/DownloadTab/DownloadTab';
@@ -82,12 +85,17 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 
 	const orderInfo = getProductOrderInfo(placedOrders, product.name);
 
-	const {activationProfile, detailsProfile, learnUrl, tabKeys} =
-		resolveProductTabConfig({
-			kind,
-			orderType: orderInfo.orderType,
-			product,
-		});
+	const {
+		activationProfile,
+		detailsProfile,
+		environmentProfile,
+		learnUrl,
+		tabKeys,
+	} = resolveProductTabConfig({
+		kind,
+		orderType: orderInfo.orderType,
+		product,
+	});
 
 	const tabContent: Record<ProjectTabKey, () => ReactNode> = {
 		'activation': () => (
@@ -102,7 +110,10 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 		),
 		'download': () => <DownloadTab kind={kind} />,
 		'environment': () => (
-			<EnvironmentTab environment={orderInfo.environment} />
+			<EnvironmentTab
+				environment={orderInfo.environment}
+				profile={environmentProfile}
+			/>
 		),
 		'help-and-support': () => (
 			<HelpSupportTab learnUrl={learnUrl} product={product} />
@@ -117,10 +128,20 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 		label: PROJECT_TAB_LABELS[tabKey],
 	}));
 
+	const isAIHub = environmentProfile === 'ai-hub';
+
 	return (
 		<ProjectDetailTabs
 			header={
 				<DetailHeader
+					actions={
+						isAIHub ? (
+							<Button displayType="primary">
+								{i18n.translate('buy-liferay-tokens')}
+							</Button>
+						) : undefined
+					}
+					banner={isAIHub ? <AIHubAlert /> : undefined}
 					description={
 						kind === 'product' ? product.description : undefined
 					}
@@ -130,6 +151,7 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 							: undefined
 					}
 					logoColor={getLogoColor(product.name)}
+					logoSrc={isAIHub ? aiHubIconUrl : undefined}
 					name={product.name}
 					publisher={getSpecificationValue(product, 'publisher-name')}
 					showByPrefix={kind === 'product'}
