@@ -7,15 +7,22 @@ package com.liferay.one;
 
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
 import com.liferay.headless.admin.user.client.problem.Problem;
+import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Account;
+import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Order;
 import com.liferay.one.constants.ClassNameConstants;
+import com.liferay.one.constants.CommerceOrderConstants;
 import com.liferay.one.model.LicenseKey;
 import com.liferay.one.model.SubscriptionEntry;
 import com.liferay.one.service.AccountService;
+import com.liferay.one.service.CommerceOrderService;
 import com.liferay.one.service.LicenseKeyService;
 import com.liferay.one.service.SubscriptionEntryService;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.util.GetterUtil;
 
 import java.util.Objects;
+
+import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,10 +30,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * @author Amos Fong
@@ -68,6 +78,61 @@ public class LicenseKeysRestController extends OneBaseRestController {
 		}
 
 		return false;
+	}
+
+	@PostMapping("/type-free")
+	public LicenseKey postLicenseKeysTypeFree(@RequestBody String json)
+		throws Exception {
+
+		JSONObject jsonObject = new JSONObject(json);
+
+		String domains = jsonObject.optString("domains");
+		String orderId = jsonObject.optString("orderId");
+		String owner = jsonObject.optString("owner");
+
+		if (_licenseKeyService.hasLicenseKeyTypeFree(domains, owner)) {
+			throw new ResponseStatusException(
+				HttpStatus.CONFLICT,
+				"A license key was already provisioned for the owner with " +
+					"this domain");
+		}
+
+		Order order = _commerceOrderService.getCommerceOrder(
+			GetterUtil.getLong(orderId));
+
+		Account account = order.getAccount();
+
+		LicenseKey licenseKey = _licenseKeyService.addLicenseKeyTypeFree(
+			account.getId(), domains, orderId, owner);
+
+		Integer orderStatus = order.getOrderStatus();
+
+		if ((orderStatus == null) ||
+			(orderStatus != CommerceOrderConstants.ORDER_STATUS_COMPLETED)) {
+
+			_commerceOrderService.completeOrder(
+				order.getId(),
+				CommerceOrderConstants.ORDER_PAYMENT_STATUS_NOT_REQUIRED);
+		}
+
+		return licenseKey;
+	}
+
+	@PostMapping("/type-free-domains-check")
+	public void postLicenseKeysTypeFreeDomainsCheck(@RequestBody String json)
+		throws Exception {
+
+		JSONObject jsonObject = new JSONObject(json);
+
+		if (_licenseKeyService.hasLicenseKeyTypeFree(
+				jsonObject.optString("domains"),
+				jsonObject.optString("owner"))) {
+
+			throw new ResponseStatusException(
+				HttpStatus.CONFLICT,
+				"A license key was already provisioned for the owner with " +
+					"this domain");
+		}
 	}
 
 	@PutMapping("/subscriptions")
@@ -116,6 +181,9 @@ public class LicenseKeysRestController extends OneBaseRestController {
 
 	@Autowired
 	private AccountService _accountService;
+
+	@Autowired
+	private CommerceOrderService _commerceOrderService;
 
 	@Autowired
 	private LicenseKeyService _licenseKeyService;

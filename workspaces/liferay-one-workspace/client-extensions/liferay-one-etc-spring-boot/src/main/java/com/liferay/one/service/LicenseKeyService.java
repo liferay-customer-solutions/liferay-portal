@@ -13,6 +13,8 @@ import com.liferay.one.license.LicenseKeyValidator;
 import com.liferay.one.model.LicenseKey;
 import com.liferay.one.model.SubscriptionEntry;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.ee.license.shared.LicenseConstants;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -20,6 +22,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -123,6 +126,78 @@ public class LicenseKeyService extends OneBaseService {
 			"serverId", serverId
 		).put(
 			"sizing", sizing
+		).put(
+			"startDate", _toISO8601(startDate)
+		);
+
+		String response = post(
+			getAuthorization(), jsonObject.toString(),
+			UriComponentsBuilder.fromPath(
+				"/o/c/licensekeys"
+			).build(
+			).toUri());
+
+		return new LicenseKey(new JSONObject(response));
+	}
+
+	public LicenseKey addLicenseKeyTypeFree(
+			long accountEntryId, String domains, String orderId, String owner)
+		throws Exception {
+
+		Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		Date startDate = calendar.getTime();
+
+		calendar.add(Calendar.MONTH, _FREE_TIER_DURATION_MONTHS);
+
+		Date expirationDate = calendar.getTime();
+
+		String key = _licenseKeyGenerator.generateKey(
+			StringPool.BLANK, _FREE_TIER_LICENSE_NAME,
+			LicenseConstants.TYPE_FREE, _FREE_TIER_LICENSE_VERSION,
+			_FREE_TIER_PRODUCT_NAME, LicenseConstants.PRODUCT_ID_PORTAL,
+			_FREE_TIER_PRODUCT_VERSION, owner, _FREE_TIER_MAX_CLUSTER_NODES, 0,
+			0, 0L, 0L, StringPool.BLANK, StringPool.BLANK, domains,
+			StringPool.BLANK, StringPool.BLANK, StringPool.BLANK,
+			StringPool.BLANK, startDate, expirationDate, new Date());
+
+		JSONObject jsonObject = new JSONObject(
+		).put(
+			"active", true
+		).put(
+			"complimentary", false
+		).put(
+			"customExpirationDate", _toISO8601(expirationDate)
+		).put(
+			"domains", domains
+		).put(
+			"key", key
+		).put(
+			"licenseName", _FREE_TIER_LICENSE_NAME
+		).put(
+			"licenseType", LicenseConstants.TYPE_FREE
+		).put(
+			"licenseVersion", _FREE_TIER_LICENSE_VERSION
+		).put(
+			"maxClusterNodes", _FREE_TIER_MAX_CLUSTER_NODES
+		).put(
+			"name", _FREE_TIER_LICENSE_NAME
+		).put(
+			"orderId", orderId
+		).put(
+			"owner", owner
+		).put(
+			"productExternalId", LicenseConstants.PRODUCT_ID_PORTAL
+		).put(
+			"productName", _FREE_TIER_PRODUCT_NAME
+		).put(
+			"productVersion", _FREE_TIER_PRODUCT_VERSION
+		).put(
+			"r_accountEntryToLicenseKey_accountEntryId", accountEntryId
+		).put(
+			"r_commerceProductToLicenseKey_CProductERC", _FREE_TIER_PRODUCT_ERC
 		).put(
 			"startDate", _toISO8601(startDate)
 		);
@@ -299,6 +374,15 @@ public class LicenseKeyService extends OneBaseService {
 				"(active eq ", active, ") and (productName eq '",
 				_escapeODataString(productName), "') and (serverId eq '",
 				_escapeODataString(serverId), "')"));
+	}
+
+	public boolean hasLicenseKeyTypeFree(String domains, String owner)
+		throws Exception {
+
+		List<LicenseKey> licenseKeys = getLicenseKeys(
+			domains, LicenseConstants.TYPE_FREE, owner);
+
+		return !licenseKeys.isEmpty();
 	}
 
 	public LicenseKey replaceLicenseKey(
@@ -512,6 +596,22 @@ public class LicenseKeyService extends OneBaseService {
 
 		return dateFormat.format(date);
 	}
+
+	private static final int _FREE_TIER_DURATION_MONTHS = 12;
+
+	private static final String _FREE_TIER_LICENSE_NAME =
+		"Liferay DXP - Free Tier";
+
+	private static final int _FREE_TIER_LICENSE_VERSION = 3;
+
+	private static final int _FREE_TIER_MAX_CLUSTER_NODES = 1;
+
+	private static final String _FREE_TIER_PRODUCT_ERC = "PRDCT-DXP";
+
+	private static final String _FREE_TIER_PRODUCT_NAME =
+		"Liferay DXP - Free Tier";
+
+	private static final String _FREE_TIER_PRODUCT_VERSION = "7.4";
 
 	@Autowired
 	private LicenseKeyGenerator _licenseKeyGenerator;
