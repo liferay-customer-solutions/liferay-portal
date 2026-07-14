@@ -44,6 +44,25 @@ export const commerceSchemas = {
 			.string()
 			.min(1, {message: 'Please enter a Tax/VAT number to continue'}),
 	}),
+	activationKey: z.object({
+		businessEmailAddress: z
+			.string()
+			.email(i18n.translate('please-fill-in-a-valid-email')),
+		companyName: z.string().optional().or(z.literal('')),
+		country: z
+			.string()
+			.min(2, {message: 'Please select the country to continue'}),
+		domain: z.string().min(3, {message: 'Domain is required'}),
+		extension: z.string().optional(),
+		fullName: z.string().min(3, {message: 'Full name is required'}),
+		intlCode: z.object({code: z.string(), flag: z.string()}).optional(),
+		jobTitle: z.string().optional().or(z.literal('')),
+		notifyMeAboutProducts: z.boolean().optional(),
+		phoneNumber: z.string().optional(),
+		purpose: z.string().min(3, {message: 'Purpose is required'}),
+		termsAndConditions: z.boolean().refine((value) => value === true),
+		userAgreement: z.boolean().refine((value) => value === true),
+	}),
 	billingAddress,
 	contactSales: z.object({
 		accountName: z

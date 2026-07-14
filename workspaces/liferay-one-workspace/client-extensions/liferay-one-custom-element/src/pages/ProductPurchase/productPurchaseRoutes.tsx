@@ -10,6 +10,9 @@ import {AppRoute} from '~/utils/routeUtils';
 const AccountSelection = lazy(
 	() => import('./AccountSelection/AccountSelection')
 );
+const ActivationKeyForm = lazy(
+	() => import('./ActivationKeyForm/ActivationKeyForm')
+);
 const LDPProvisioning = lazy(() => import('./LDPProvisioning/LDPProvisioning'));
 const License = lazy(() => import('./License/License'));
 const PaymentMethod = lazy(() => import('./PaymentMethod/PaymentMethod'));
@@ -17,7 +20,9 @@ const Summary = lazy(() => import('./Summary/Summary'));
 
 export type ProductPurchaseStep = {
 	element: ReactNode;
+	excludeForDXPFree?: boolean;
 	index?: boolean;
+	isDXPFreeOnly?: boolean;
 	isLDPOnly?: boolean;
 	isPaidOnly?: boolean;
 	path?: string;
@@ -30,9 +35,11 @@ export type ProductPurchaseStepItem = {
 };
 
 export function getProductPurchaseSteps({
+	isDXPFree,
 	isLDP,
 	isPaidApp,
 }: {
+	isDXPFree: boolean;
 	isLDP: boolean;
 	isPaidApp: boolean;
 }): ProductPurchaseStep[] {
@@ -49,6 +56,12 @@ export function getProductPurchaseSteps({
 			title: i18n.translate('license-selection'),
 		},
 		{
+			element: <ActivationKeyForm />,
+			isDXPFreeOnly: true,
+			path: 'activation-key-form',
+			title: i18n.translate('activation-key'),
+		},
+		{
 			element: <PaymentMethod />,
 			isPaidOnly: true,
 			path: 'payment-method',
@@ -62,13 +75,18 @@ export function getProductPurchaseSteps({
 		},
 		{
 			element: <Summary />,
+			excludeForDXPFree: true,
 			path: 'summary',
 			title: i18n.translate('summary'),
 		},
 	];
 
 	return steps.filter(
-		(step) => (isPaidApp || !step.isPaidOnly) && (isLDP || !step.isLDPOnly)
+		(step) =>
+			(isPaidApp || !step.isPaidOnly) &&
+			(isLDP || !step.isLDPOnly) &&
+			(isDXPFree || !step.isDXPFreeOnly) &&
+			(!isDXPFree || !step.excludeForDXPFree)
 	);
 }
 

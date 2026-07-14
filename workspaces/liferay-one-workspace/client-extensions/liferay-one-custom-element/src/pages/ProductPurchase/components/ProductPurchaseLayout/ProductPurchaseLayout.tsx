@@ -14,12 +14,19 @@ import AccountAvatar from '~/components/AccountAvatar/AccountAvatar';
 import Loading from '~/components/Loading/Loading';
 import i18n from '~/i18n';
 import ProductPurchaseApp from '~/services/commerce/ProductPurchaseApp';
+import ProductPurchaseDXPFree, {
+	ActivationKeyFormData,
+} from '~/services/commerce/ProductPurchaseDXPFree';
 import ProductPurchaseLDP, {
 	LDPSettings,
 } from '~/services/commerce/ProductPurchaseLDP';
 import HeadlessCommerceDeliveryCart from '~/services/headless/HeadlessCommerceDeliveryCart';
 import {Liferay} from '~/services/liferay/liferay';
-import {getProductPriceModel, isLDPProduct} from '~/utils/productUtils';
+import {
+	getProductPriceModel,
+	isDXPFreeTierProduct,
+	isLDPProduct,
+} from '~/utils/productUtils';
 
 import useAccounts from '../../hooks/useAccounts';
 import useProductPurchaseCart from '../../hooks/useProductPurchaseCart';
@@ -43,7 +50,7 @@ export type ProductPurchaseLayoutContext = {
 		nextStep: () => void;
 		previousStep: () => void;
 	};
-	handlePurchase: () => Promise<void>;
+	handlePurchase: (dxpFreeForm?: ActivationKeyFormData) => Promise<void>;
 	isLoadingAccounts: boolean;
 	isSingleAccount: boolean;
 	isSubmitting: boolean;
@@ -106,18 +113,32 @@ const ProductPurchaseLayout = ({
 		}
 	};
 
-	const handlePurchase = async () => {
+	const handlePurchase = async (dxpFreeForm?: ActivationKeyFormData) => {
 		setSubmitting(true);
 
 		try {
-			const productPurchase =
-				isLDPProduct(product) && ldpSettings
-					? new ProductPurchaseLDP(
-							selectedAccount,
-							product,
-							ldpSettings
-						)
-					: new ProductPurchaseApp(selectedAccount, product);
+			let productPurchase;
+
+			if (isDXPFreeTierProduct(product) && dxpFreeForm) {
+				productPurchase = new ProductPurchaseDXPFree(
+					selectedAccount,
+					product,
+					dxpFreeForm
+				);
+			}
+			else if (isLDPProduct(product) && ldpSettings) {
+				productPurchase = new ProductPurchaseLDP(
+					selectedAccount,
+					product,
+					ldpSettings
+				);
+			}
+			else {
+				productPurchase = new ProductPurchaseApp(
+					selectedAccount,
+					product
+				);
+			}
 
 			if (isPaidApp) {
 				const cart = await productPurchase.createOrder({

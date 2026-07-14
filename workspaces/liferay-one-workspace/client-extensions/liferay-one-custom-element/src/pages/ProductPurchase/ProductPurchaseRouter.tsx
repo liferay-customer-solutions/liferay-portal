@@ -10,7 +10,11 @@ import Loading from '~/components/Loading/Loading';
 import {useDeliveryProduct} from '~/hooks/useDeliveryProduct';
 import useRequireSignIn from '~/hooks/useRequireSignIn';
 import i18n from '~/i18n';
-import {getProductPriceModel, isLDPProduct} from '~/utils/productUtils';
+import {
+	getProductPriceModel,
+	isDXPFreeTierProduct,
+	isLDPProduct,
+} from '~/utils/productUtils';
 import {AppRoute, toRouteObjects} from '~/utils/routeUtils';
 
 import ProductPurchaseLayout from './components/ProductPurchaseLayout/ProductPurchaseLayout';
@@ -35,6 +39,7 @@ const ProductPurchaseRoutes = ({product}: {product: DeliveryProduct}) => {
 	const {isPaidApp} = getProductPriceModel(product);
 
 	const steps = getProductPurchaseSteps({
+		isDXPFree: isDXPFreeTierProduct(product),
 		isLDP: isLDPProduct(product),
 		isPaidApp,
 	});

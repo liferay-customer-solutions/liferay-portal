@@ -257,3 +257,15 @@ export function isLDPProduct(product: DeliveryProduct) {
 		) === 'liferay-data-platform'
 	);
 }
+
+export function isDXPFreeTierProduct(product: DeliveryProduct) {
+	const {isFreeApp} = getProductPriceModel(product);
+
+	return (
+		isFreeApp &&
+		getProductSpecificationValue(
+			ProductSpecificationKey.SOLUTION_TYPE,
+			product
+		) === 'dxp'
+	);
+}

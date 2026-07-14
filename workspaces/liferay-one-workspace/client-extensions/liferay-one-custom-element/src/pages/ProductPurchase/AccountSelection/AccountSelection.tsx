@@ -19,6 +19,7 @@ import {
 	getProductImageFallback,
 	getProductPriceModel,
 	getProductSpecificationValue,
+	isDXPFreeTierProduct,
 } from '~/utils/productUtils';
 import {normalizeURLProtocol} from '~/utils/stringUtils';
 
@@ -39,13 +40,29 @@ const AccountSelection = () => {
 
 	const {isPaidApp} = getProductPriceModel(product);
 
+	const isDXPFree = isDXPFreeTierProduct(product);
+
 	useEffect(() => {
 		if (isSingleAccount) {
 			setSelectedAccount(accounts[0]);
 
-			navigate(isPaidApp ? '/license' : '/summary', {replace: true});
+			navigate(
+				isPaidApp
+					? '/license'
+					: isDXPFree
+						? '/activation-key-form'
+						: '/summary',
+				{replace: true}
+			);
 		}
-	}, [accounts, isPaidApp, isSingleAccount, navigate, setSelectedAccount]);
+	}, [
+		accounts,
+		isDXPFree,
+		isPaidApp,
+		isSingleAccount,
+		navigate,
+		setSelectedAccount,
+	]);
 
 	if (isLoadingAccounts || isSingleAccount) {
 		return (
