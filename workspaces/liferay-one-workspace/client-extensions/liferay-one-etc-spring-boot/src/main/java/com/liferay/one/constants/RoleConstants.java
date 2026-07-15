@@ -37,6 +37,8 @@ public class RoleConstants {
 	public static final String NAME_CLOUD_NATIVE_CONTACT =
 		"Cloud Native Contact";
 
+	public static final String NAME_LIFERAY_SALES = "Liferay Sales";
+
 	public static final String NAME_LIFERAY_STAFF = "Liferay Staff";
 
 	public static final String NAME_PARTNER_MANAGER = "Partner Manager";
@@ -62,6 +64,10 @@ public class RoleConstants {
 	public static final String[] NAMES_CUSTOMER_ACCOUNT_ROLES = {
 		NAME_ACCOUNT_ADMINISTRATOR, NAME_ACCOUNT_MEMBER, NAME_ACCOUNT_REQUESTER,
 		NAME_SUPPORT_ADMINISTRATOR
+	};
+
+	public static final String[] NAMES_MANAGE_LICENSE_KEYS = {
+		NAME_LIFERAY_SALES, NAME_PARTNER_MANAGER, NAME_SUPPORT_ADMINISTRATOR
 	};
 
 	public static final String[] NAMES_PARTNER_ACCOUNT_ROLES = {
