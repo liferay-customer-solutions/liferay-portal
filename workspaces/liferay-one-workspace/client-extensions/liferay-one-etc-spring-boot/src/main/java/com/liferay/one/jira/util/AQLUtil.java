@@ -5,9 +5,12 @@
 
 package com.liferay.one.jira.util;
 
+import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+
+import java.util.Collection;
 
 /**
  * @author Drew Brokke
@@ -40,6 +43,24 @@ public class AQLUtil {
 			_sb.append(_field(fieldNames));
 			_sb.append(" = ");
 			_sb.append(objectId);
+
+			return this;
+		}
+
+		public Builder andIn(Collection<String> values, String... fieldNames) {
+			if (values.isEmpty()) {
+				throw new IllegalArgumentException(
+					"An IN clause requires at least one value");
+			}
+
+			_sb.append(" AND ");
+			_sb.append(_field(fieldNames));
+			_sb.append(" IN (");
+			_sb.append(
+				StringUtil.merge(
+					TransformUtil.transform(values, AQLUtil::_quote),
+					StringPool.COMMA_AND_SPACE));
+			_sb.append(")");
 
 			return this;
 		}

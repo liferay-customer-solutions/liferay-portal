@@ -139,7 +139,8 @@ public class BusinessEventService {
 		allEntries = true,
 		value = {
 			"assetObjectFieldOptions", "assetObjectTypeAttributeIds",
-			"assetObjectTypeIds", "productVersions"
+			"assetObjectTypeAttributeOptions", "assetObjectTypeIds",
+			"productVersions"
 		}
 	)
 	@Scheduled(cron = "0 0 0 * * *")

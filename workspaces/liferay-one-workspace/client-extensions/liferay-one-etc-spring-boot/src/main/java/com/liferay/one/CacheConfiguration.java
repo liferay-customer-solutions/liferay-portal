@@ -21,8 +21,9 @@ public class CacheConfiguration {
 	@Bean
 	public CacheManager cacheManager() {
 		CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager(
-			"assetObjectFieldOptions", "assetObjectTypeIds",
-			"assetObjectTypeAttributeIds", "productVersions");
+			"assetObjectFieldOptions", "assetObjectTypeAttributeIds",
+			"assetObjectTypeAttributeOptions", "assetObjectTypeIds",
+			"productVersions");
 
 		caffeineCacheManager.setCaffeine(
 			Caffeine.newBuilder(

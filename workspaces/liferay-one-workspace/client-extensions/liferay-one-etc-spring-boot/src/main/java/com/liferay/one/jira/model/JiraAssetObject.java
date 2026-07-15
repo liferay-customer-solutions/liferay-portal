@@ -5,10 +5,13 @@
 
 package com.liferay.one.jira.model;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,15 +25,21 @@ import org.json.JSONObject;
 public class JiraAssetObject {
 
 	public JiraAssetObject(
-		JSONObject jsonObject, Map<String, String> attributeNameToIdsMap) {
+		JSONObject jsonObject, Map<String, String> attributeNameToIdsMap,
+		Map<String, Set<String>> attributeNameToOptionsMap) {
 
 		_jsonObject = jsonObject;
 
 		_attributeIds = attributeNameToIdsMap;
+		_attributeOptions = attributeNameToOptionsMap;
 	}
 
-	public JiraAssetObject(Map<String, String> attributeNameToIdsMap) {
-		this(new JSONObject(), attributeNameToIdsMap);
+	public JiraAssetObject(
+		Map<String, String> attributeNameToIdsMap,
+		Map<String, Set<String>> attributeNameToOptionsMap) {
+
+		this(
+			new JSONObject(), attributeNameToIdsMap, attributeNameToOptionsMap);
 	}
 
 	/**
@@ -89,34 +98,73 @@ public class JiraAssetObject {
 			return;
 		}
 
+		if (value instanceof Collection<?> collection) {
+			for (Object object : collection) {
+				_checkOption(attributeName, object);
+			}
+		}
+		else {
+			_checkOption(attributeName, value);
+		}
+
 		_values.put(attributeId, value);
 	}
 
 	/**
 	 * Serializes this object into the JSM's {@code attributes} JSON shape.
-	 * This method is used by the {@link JiraAssetService}.
+	 * This method is used by the {@link com.liferay.one.jira.service.JiraAssetService}.
 	 */
 	public JSONArray toAttributesJSONArray() {
 		JSONArray attributesJSONArray = new JSONArray();
 
 		for (Map.Entry<String, Object> entry : _values.entrySet()) {
+			JSONArray objectAttributeValuesJSONArray = new JSONArray();
+
+			Object value = entry.getValue();
+
+			if (value instanceof Collection<?> collection) {
+				for (Object object : collection) {
+					if (object == null) {
+						continue;
+					}
+
+					objectAttributeValuesJSONArray.put(
+						_toAttrbuteValueJSONObject(object));
+				}
+			}
+			else {
+				objectAttributeValuesJSONArray.put(
+					_toAttrbuteValueJSONObject(value));
+			}
+
 			attributesJSONArray.put(
 				new JSONObject(
 				).put(
-					"objectAttributeValues",
-					new JSONArray(
-					).put(
-						new JSONObject(
-						).put(
-							"value", entry.getValue()
-						)
-					)
+					"objectAttributeValues", objectAttributeValuesJSONArray
 				).put(
 					"objectTypeAttributeId", entry.getKey()
 				));
 		}
 
 		return attributesJSONArray;
+	}
+
+	private void _checkOption(String attributeName, Object value) {
+		Set<String> options = _attributeOptions.get(attributeName);
+
+		if ((options == null) || (value == null) ||
+			options.contains(String.valueOf(value))) {
+
+			return;
+		}
+
+		if (_log.isWarnEnabled()) {
+			_log.warn(
+				StringBundler.concat(
+					"Value \"", value, "\" for attribute \"", attributeName,
+					"\" does not match any of the schema's options ", options,
+					"; the option list has likely drifted"));
+		}
 	}
 
 	private String _getAttributeId(String attributeName) {
@@ -187,9 +235,18 @@ public class JiraAssetObject {
 		return value;
 	}
 
+	private JSONObject _toAttrbuteValueJSONObject(Object attributeValue) {
+		JSONObject jsonObject = new JSONObject();
+
+		jsonObject.put("value", attributeValue);
+
+		return jsonObject;
+	}
+
 	private static final Log _log = LogFactory.getLog(JiraAssetObject.class);
 
 	private final Map<String, String> _attributeIds;
+	private final Map<String, Set<String>> _attributeOptions;
 	private final JSONObject _jsonObject;
 	private final Map<String, Object> _values = new LinkedHashMap<>();
 

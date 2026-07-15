@@ -19,11 +19,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class BusinessEventVersionConverter extends BaseAssetObjectConverter {
 
+	@Override
+	public String getObjectTypeName() {
+		return BusinessEventConstants.OBJECT_TYPE_BUSINESS_EVENT_VERSION;
+	}
+
 	public BusinessEventVersion toBusinessEventVersion(
 		JSONObject jiraAssetObjectJSONObject) {
 
-		JiraAssetObject jiraAssetObject = new JiraAssetObject(
-			jiraAssetObjectJSONObject, getAttributeIds());
+		JiraAssetObject jiraAssetObject = toJiraAssetObject(
+			jiraAssetObjectJSONObject);
 
 		return new BusinessEventVersion(
 			jiraAssetObject.getAttributeDisplayValue(
@@ -39,11 +44,6 @@ public class BusinessEventVersionConverter extends BaseAssetObjectConverter {
 	@Override
 	protected String getObjectSchemaName() {
 		return BusinessEventConstants.OBJECT_SCHEMA_BUSINESS_EVENTS;
-	}
-
-	@Override
-	protected String getObjectTypeName() {
-		return BusinessEventConstants.OBJECT_TYPE_BUSINESS_EVENT_VERSION;
 	}
 
 }

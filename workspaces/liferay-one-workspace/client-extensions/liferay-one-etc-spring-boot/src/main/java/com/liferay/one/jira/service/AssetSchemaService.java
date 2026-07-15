@@ -9,6 +9,7 @@ import com.liferay.one.jira.exception.JiraAssetSchemaException;
 import com.liferay.petra.string.StringBundler;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,13 @@ public class AssetSchemaService {
 		String schemaName, String objectTypeName) {
 
 		return _assetSchemaLoader.getAttributeIds(
+			getObjectTypeId(schemaName, objectTypeName));
+	}
+
+	public Map<String, Set<String>> getAttributeOptions(
+		String schemaName, String objectTypeName) {
+
+		return _assetSchemaLoader.getAttributeOptions(
 			getObjectTypeId(schemaName, objectTypeName));
 	}
 

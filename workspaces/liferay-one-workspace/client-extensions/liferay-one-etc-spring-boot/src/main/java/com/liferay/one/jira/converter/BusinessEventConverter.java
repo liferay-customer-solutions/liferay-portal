@@ -20,11 +20,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class BusinessEventConverter extends BaseAssetObjectConverter {
 
+	@Override
+	public String getObjectTypeName() {
+		return BusinessEventConstants.OBJECT_TYPE_BUSINESS_EVENT;
+	}
+
 	public JiraAssetObject toAssetObject(
 		String accountObjectKey, BusinessEvent businessEvent) {
 
-		JiraAssetObject jiraAssetObject = new JiraAssetObject(
-			getAttributeIds());
+		JiraAssetObject jiraAssetObject = createJiraAssetObject();
 
 		jiraAssetObject.setAttributeValue(
 			BusinessEventConstants.ATTRIBUTE_NAME_ACTUAL_EVENT_DATE,
@@ -79,8 +83,8 @@ public class BusinessEventConverter extends BaseAssetObjectConverter {
 		JSONObject jiraAssetObjectJSONObject,
 		String projectExternalReferenceCode) {
 
-		JiraAssetObject jiraAssetObject = new JiraAssetObject(
-			jiraAssetObjectJSONObject, getAttributeIds());
+		JiraAssetObject jiraAssetObject = toJiraAssetObject(
+			jiraAssetObjectJSONObject);
 
 		return new BusinessEvent(
 			jiraAssetObject.getAttributeValue(
@@ -143,11 +147,6 @@ public class BusinessEventConverter extends BaseAssetObjectConverter {
 	@Override
 	protected String getObjectSchemaName() {
 		return BusinessEventConstants.OBJECT_SCHEMA_BUSINESS_EVENTS;
-	}
-
-	@Override
-	protected String getObjectTypeName() {
-		return BusinessEventConstants.OBJECT_TYPE_BUSINESS_EVENT;
 	}
 
 }

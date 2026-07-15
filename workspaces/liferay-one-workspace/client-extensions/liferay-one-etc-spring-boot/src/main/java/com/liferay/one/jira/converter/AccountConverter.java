@@ -17,13 +17,13 @@ import org.springframework.stereotype.Component;
 public class AccountConverter extends BaseAssetObjectConverter {
 
 	@Override
-	protected String getObjectSchemaName() {
-		return _schemaName;
+	public String getObjectTypeName() {
+		return AccountConstants.OBJECT_TYPE_NAME;
 	}
 
 	@Override
-	protected String getObjectTypeName() {
-		return AccountConstants.OBJECT_TYPE_NAME;
+	protected String getObjectSchemaName() {
+		return _schemaName;
 	}
 
 	@Value("${liferay.one.jira.asset.schema.name}")
