@@ -76,15 +76,23 @@ const BusinessEventsRedirect = () => {
 
 	if (!projects.length) {
 		return (
-			<RestrictedFeatureMessage
-				message={
-					hasAccountProjects
-						? translate(
-								'login-as-a-user-that-has-access-to-a-project-or-contact-your-project-administrator-to-add-you-to-a-project.'
-							)
-						: undefined
-				}
-			/>
+			<div className="py-4">
+				<div>
+					<h1 className="font-weight-bold text-neutral-10">
+						{translate('business-events')}
+					</h1>
+				</div>
+
+				<RestrictedFeatureMessage
+					message={
+						hasAccountProjects
+							? translate(
+									'login-as-a-user-that-has-access-to-a-project-or-contact-your-project-administrator-to-add-you-to-a-project.'
+								)
+							: undefined
+					}
+				/>
+			</div>
 		);
 	}
 

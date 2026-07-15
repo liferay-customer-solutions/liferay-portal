@@ -54,20 +54,22 @@ const BusinessEventsAddPage: React.FC = () => {
 	const businessEvent = values.businessEvent as unknown as IBusinessEvent;
 
 	const setFieldValue = useCallback(
-		(field: string, value: unknown) =>
+		(
+			field: string,
+			value: unknown,
+			options: Parameters<typeof setValue>[2] = {
+				shouldDirty: true,
+				shouldTouch: true,
+				shouldValidate: true,
+			}
+		) =>
 			setValue(
 				field as Parameters<typeof setValue>[0],
 				value as Parameters<typeof setValue>[1],
-				{
-					shouldDirty: true,
-					shouldTouch: true,
-					shouldValidate: true,
-				}
+				options
 			),
 		[setValue]
 	);
-
-	const [baseButtonDisabled, setBaseButtonDisabled] = useState<boolean>(true);
 
 	const {businessEventTypesList, loading: loadingBusinessEventTypesList} =
 		useGetBusinessEventTypesList();
@@ -89,7 +91,7 @@ const BusinessEventsAddPage: React.FC = () => {
 
 	const isDescriptionRequired = useMemo(
 		() => businessEvent.eventType?.key === 'Other Event',
-		[businessEvent.eventType]
+		[businessEvent.eventType?.key]
 	);
 
 	const [isLoadingSubmitButton, setIsLoadingSubmitButton] =
@@ -97,7 +99,7 @@ const BusinessEventsAddPage: React.FC = () => {
 
 	const isNewLiferayVersionRequired = useMemo(
 		() => ['Migration', 'Upgrade'].includes(businessEvent.eventType?.key!),
-		[businessEvent.eventType]
+		[businessEvent.eventType?.key]
 	);
 
 	const {isSaasOnly} = useIsSaasOnly();
@@ -233,54 +235,44 @@ const BusinessEventsAddPage: React.FC = () => {
 		);
 	}, [hasImpactingEvents, selectedTickets, setFieldValue]);
 
-	useEffect(() => {
-		const hasCurrentLiferayVersion =
-			values.businessEvent.currentLiferayVersion.key;
+	const hasCurrentLiferayVersion =
+		values.businessEvent.currentLiferayVersion.key;
 
-		const hasDescription = values.businessEvent.description;
-		const hasError = errors && Object.keys(errors).length;
-		const hasEventName = values.businessEvent.name;
-		const hasEventType = values.businessEvent.eventType.key;
-		const hasNewLiferayVersion = values.businessEvent.newLiferayVersion.key;
-		const hasPlannedEventDate = values.businessEvent.plannedEventDate;
-		const hasTouched = Boolean(Object.keys(touched).length);
+	const hasDescription = values.businessEvent.description;
+	const hasError = errors && Object.keys(errors).length;
+	const hasEventName = values.businessEvent.name;
+	const hasEventType = values.businessEvent.eventType.key;
+	const hasNewLiferayVersion = values.businessEvent.newLiferayVersion.key;
+	const hasPlannedEventDate = values.businessEvent.plannedEventDate;
+	const hasPlannedEventTime = !requiredTimeInput(
+		values.businessEvent.plannedEventTime
+	);
+	const hasTimeZone = values.businessEvent.timeZone.key;
+	const hasTouched = Boolean(Object.keys(touched).length);
 
-		let hasAllRequiredFieldsFilled =
-			Boolean(hasEventName) &&
-			Boolean(hasEventType) &&
-			Boolean(hasPlannedEventDate);
+	let hasAllRequiredFieldsFilled =
+		Boolean(hasEventName) &&
+		Boolean(hasEventType) &&
+		Boolean(hasPlannedEventDate) &&
+		Boolean(hasPlannedEventTime) &&
+		Boolean(hasTimeZone);
 
-		if (isDescriptionRequired) {
-			hasAllRequiredFieldsFilled =
-				hasAllRequiredFieldsFilled && hasDescription;
-		}
+	if (isDescriptionRequired) {
+		hasAllRequiredFieldsFilled = hasAllRequiredFieldsFilled && hasDescription;
+	}
 
-		if (isNewLiferayVersionRequired) {
-			hasAllRequiredFieldsFilled =
-				hasAllRequiredFieldsFilled && hasNewLiferayVersion;
-		}
+	if (isNewLiferayVersionRequired) {
+		hasAllRequiredFieldsFilled =
+			hasAllRequiredFieldsFilled && hasNewLiferayVersion;
+	}
 
-		if (!isSaasOnly) {
-			hasAllRequiredFieldsFilled =
-				hasAllRequiredFieldsFilled && hasCurrentLiferayVersion;
-		}
+	if (!isSaasOnly) {
+		hasAllRequiredFieldsFilled =
+			hasAllRequiredFieldsFilled && hasCurrentLiferayVersion;
+	}
 
-		setBaseButtonDisabled(
-			!hasAllRequiredFieldsFilled || Boolean(hasError) || !hasTouched
-		);
-	}, [
-		errors,
-		isDescriptionRequired,
-		isNewLiferayVersionRequired,
-		isSaasOnly,
-		touched,
-		values.businessEvent.currentLiferayVersion,
-		values.businessEvent.description,
-		values.businessEvent.eventType,
-		values.businessEvent.name,
-		values.businessEvent.newLiferayVersion,
-		values.businessEvent.plannedEventDate,
-	]);
+	const baseButtonDisabled =
+		!hasAllRequiredFieldsFilled || Boolean(hasError) || !hasTouched;
 
 	useEffect(() => {
 		if (productVersions?.length) {
@@ -310,7 +302,11 @@ const BusinessEventsAddPage: React.FC = () => {
 
 	useEffect(() => {
 		if (!isDescriptionRequired) {
-			setFieldValue('businessEvent.description', '');
+			setFieldValue('businessEvent.description', '', {
+				shouldDirty: false,
+				shouldTouch: false,
+				shouldValidate: false,
+			});
 		}
 	}, [isDescriptionRequired, setFieldValue]);
 
@@ -322,7 +318,11 @@ const BusinessEventsAddPage: React.FC = () => {
 				businessEvent.newLiferayVersion?.key
 			)
 		) {
-			setFieldValue('businessEvent.newLiferayVersion.key', '');
+			setFieldValue('businessEvent.newLiferayVersion.key', '', {
+				shouldDirty: false,
+				shouldTouch: false,
+				shouldValidate: false,
+			});
 		}
 	}, [
 		businessEvent.newLiferayVersion?.key,
@@ -551,10 +551,7 @@ const BusinessEventsAddPage: React.FC = () => {
 											);
 										}}
 										options={[
-											{
-												...emptyOption,
-												disabled: false,
-											},
+											emptyOption,
 											...utcTimeZonesList,
 										]}
 										required

@@ -141,9 +141,14 @@ const TicketAttachmentsList = () => {
 					/>
 				)}
 
-				<Button displayType="primary" onClick={() => navigate('/new')}>
-					{translate('new-attachment')}
-				</Button>
+				{!!projects.length && (
+					<Button
+						displayType="primary"
+						onClick={() => navigate('/new')}
+					>
+						{translate('new-attachment')}
+					</Button>
+				)}
 			</div>
 		</div>
 	);

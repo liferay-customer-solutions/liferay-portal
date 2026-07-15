@@ -64,6 +64,22 @@ const TicketAttachmentsAdd = () => {
 		return () => controller.abort();
 	}, [projectERC]);
 
+	const header = (
+		<>
+			<h1 className="font-weight-bold text-neutral-10">
+				{translate('new-attachment')}
+			</h1>
+
+			{!!projects.length && (
+				<h6 className="font-weight-normal text-neutral-7">
+					{translate(
+						'select-the-project-and-ticket-you-want-to-attach-a-file-to'
+					)}
+				</h6>
+			)}
+		</>
+	);
+
 	if (projectsLoading) {
 		return (
 			<div className="mx-auto">
@@ -75,6 +91,8 @@ const TicketAttachmentsAdd = () => {
 	if (!projects.length) {
 		return (
 			<div className="py-4">
+				{header}
+
 				<RestrictedFeatureMessage
 					message={
 						hasAccountProjects
@@ -90,15 +108,7 @@ const TicketAttachmentsAdd = () => {
 
 	return (
 		<div className="py-4">
-			<h1 className="font-weight-bold text-neutral-10">
-				{translate('new-attachment')}
-			</h1>
-
-			<h6 className="font-weight-normal text-neutral-7">
-				{translate(
-					'select-the-project-and-ticket-you-want-to-attach-a-file-to'
-				)}
-			</h6>
+			{header}
 
 			<div className="mt-4" style={{maxWidth: '32rem'}}>
 				<ClayForm.Group>
