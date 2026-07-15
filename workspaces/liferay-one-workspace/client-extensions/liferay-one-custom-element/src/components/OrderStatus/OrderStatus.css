@@ -1,18 +1,18 @@
 .order-status-icon {
 	height: 0.5rem;
 	width: 0.5rem;
-}
 
-.order-status-icon-completed {
-	color: #4aab3b;
-}
+	&.order-status-icon-completed {
+		color: #4aab3b;
+	}
 
-.order-status-icon-processing {
-	color: #2e5aac;
-}
+	&.order-status-icon-processing {
+		color: #2e5aac;
+	}
 
-.order-status-icon-pending {
-	color: #b95000;
+	&.order-status-icon-pending {
+		color: #b95000;
+	}
 }
 
 .order-status-text {

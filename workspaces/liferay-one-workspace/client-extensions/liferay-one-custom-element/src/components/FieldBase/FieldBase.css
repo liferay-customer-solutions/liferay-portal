@@ -21,22 +21,24 @@
 	margin-top: 8px;
 }
 
-.field-base-localized-field .arrow-down-icon {
-	height: 16px;
-	width: 16px;
-	filter: invert(26%) sepia(83%) saturate(5507%) hue-rotate(220deg)
-		brightness(104%) contrast(97%);
-}
+.field-base-localized-field {
+	& .arrow-down-icon {
+		height: 16px;
+		width: 16px;
+		filter: invert(26%) sepia(83%) saturate(5507%) hue-rotate(220deg)
+			brightness(104%) contrast(97%);
 
-.field-base-localized-field .arrow-down-icon:hover {
-	filter: invert(20%) sepia(92%) saturate(5175%) hue-rotate(214deg)
-		brightness(86%) contrast(110%);
-}
+		&:hover {
+			filter: invert(20%) sepia(92%) saturate(5175%) hue-rotate(214deg)
+				brightness(86%) contrast(110%);
+		}
+	}
 
-.field-base-localized-field button {
-	color: var(--color-brand-primary);
-}
+	& button {
+		color: var(--color-brand-primary);
 
-.field-base-localized-field button:hover {
-	color: var(--color-action-primary-hover);
+		&:hover {
+			color: var(--color-action-primary-hover);
+		}
+	}
 }

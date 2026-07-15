@@ -5,17 +5,17 @@
 	display: flex;
 	height: 28px;
 	justify-content: center;
-}
 
-.tooltip-base-auto {
-	font-weight: 600;
-	padding-left: 8px;
-	padding-right: 8px;
-	width: auto;
-}
+	&.tooltip-base-auto {
+		font-weight: 600;
+		padding-left: 8px;
+		padding-right: 8px;
+		width: auto;
+	}
 
-.tooltip-base-container {
-	width: 28px;
+	&.tooltip-base-container {
+		width: 28px;
+	}
 }
 
 .tooltip-optional-text {

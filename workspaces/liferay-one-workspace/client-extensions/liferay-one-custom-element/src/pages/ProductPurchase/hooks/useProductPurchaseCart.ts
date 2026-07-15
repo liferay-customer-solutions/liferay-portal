@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {useSelector} from '@xstate/store/react';
 import {useCallback, useEffect} from 'react';
 import HeadlessCommerceDeliveryCart from '~/services/headless/HeadlessCommerceDeliveryCart';
 import {Liferay} from '~/services/liferay/liferay';
-import {cartStore} from '../store';
+
+import {useCartContext} from '../context/CartContext';
 
 import type {Cart, CartItem} from '~/types/orders';
 import type {DeliveryProduct} from '~/types/product';
@@ -19,20 +19,9 @@ const useProductPurchaseCart = (
 ) => {
 	const channelId = Liferay.CommerceContext.commerceChannelId;
 
-	const {cart, cartItems} = useSelector(cartStore, (state) => state.context);
+	const {cart, cartItems, setCart, setCartItems} = useCartContext();
 
 	const cartId = cart?.id;
-
-	const setCart = useCallback(
-		(cart: Cart) => cartStore.send({cart, type: 'setCart'}),
-		[]
-	);
-
-	const setCartItems = useCallback(
-		(cartItems: CartItem[]) =>
-			cartStore.send({cartItems, type: 'setCartItems'}),
-		[]
-	);
 
 	const addCart = async (productId: number, skuId: number) => {
 		let currentCart = cart;
@@ -88,7 +77,7 @@ const useProductPurchaseCart = (
 					setCartItems([]);
 				})
 				.catch(console.error),
-		[]
+		[setCart, setCartItems]
 	);
 
 	useEffect(() => {
@@ -118,12 +107,12 @@ const useProductPurchaseCart = (
 			const {items: openCartItems} =
 				await HeadlessCommerceDeliveryCart.getCartItems(openCart.id);
 
-			const hasOtherProduct = openCartItems.some(
+			const hasCorrectProduct = openCartItems.some(
 				(cartItem) =>
-					cartItem.productId !== (product.productId ?? product.id)
+					cartItem.productId === (product.productId ?? product.id)
 			);
 
-			if (hasOtherProduct) {
+			if (!hasCorrectProduct) {
 				return removeCart(openCart.id);
 			}
 

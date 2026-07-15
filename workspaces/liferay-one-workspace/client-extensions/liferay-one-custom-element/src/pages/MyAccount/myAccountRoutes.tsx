@@ -10,9 +10,6 @@ import {AppRoute} from '~/utils/routeUtils';
 import AccountTabsLayout from './components/AccountTabsLayout/AccountTabsLayout';
 
 const AccountDetails = lazy(() => import('./AccountDetails/AccountDetails'));
-const AccountDetailsEdit = lazy(
-	() => import('./AccountDetails/AccountDetailsEdit/AccountDetailsEdit')
-);
 const AccountMembers = lazy(() => import('./AccountMembers/AccountMembers'));
 const OrderDetails = lazy(() => import('./Orders/OrderDetails/OrderDetails'));
 const OrderHistory = lazy(() => import('./Orders/OrderHistory/OrderHistory'));
@@ -65,10 +62,7 @@ export const accountRoutes: AppRoute[] = [
 	{
 		children: [
 			{
-				children: [
-					{element: <AccountDetails />, index: true},
-					{element: <AccountDetailsEdit />, path: 'edit'},
-				],
+				children: [{element: <AccountDetails />, index: true}],
 				path: 'account-details',
 			},
 			{element: <AccountMembers />, path: 'account-members'},

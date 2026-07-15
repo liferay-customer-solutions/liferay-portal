@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import { Liferay } from '~/services/liferay/liferay';
+import {Liferay} from '~/services/liferay/liferay';
 
 export default {
 	'1-ticket': '1 Ticket',
@@ -76,7 +76,6 @@ export default {
 	'all': 'All',
 	'all-commerce-modules-are-enabled-by-default':
 		'All Commerce modules are enabled by default.',
-	'ai-hub-url': 'AI Hub URL',
 	'all-orders': 'All Orders',
 	'all-progress-and-information-related-to-the-creation-of-the-app-will-be-lost-do-you-still-want-to-exit':
 		'All progress and information related to the creation of the app will be lost. Do you still want to exit?',
@@ -200,7 +199,6 @@ export default {
 	'business-account': 'Business Account',
 	'business-address': 'Business Address',
 	'business-email-address': 'Business Email Address',
-	'buy-liferay-tokens': 'Buy Liferay Tokens',
 	'business-event-actual-event-date-recorded-successfully':
 		'Business event actual event date recorded successfully.',
 	'business-event-canceled-successfully':
@@ -943,9 +941,9 @@ export default {
 	'provide-version-details': 'Provide Version Details',
 	'provided-by': 'Provided By',
 	'provisioning': 'Provisioning',
+	'provisioning-details': 'Provisioning Details',
 	'provisioning-is-complete-and-your-subscription-is-now-active-access-your-hub-via-the-url-below-to-start-using-your-monthly-token-allowance':
 		'Provisioning is complete and your subscription is now active. Access your hub via the URL below to start using your monthly token allowance.',
-	'provisioning-details': 'Provisioning Details',
 	'pub-sub': 'Pub/Sub',
 	'public-information': 'Public Information',
 	'publish-apps-and-they-will-show-up-here':
@@ -975,9 +973,9 @@ export default {
 	'publisher-with-apps-supporting-quarterly-release':
 		'Publisher With Apps Supporting Quarterly Release',
 	'publishers': 'Publishers',
+	'purchase': 'Purchase',
 	'purchase-and-install-new-apps-and-they-will-show-up-here':
 		'Purchase and install new apps and they will show up here.',
-	'purchase': 'Purchase',
 	'purchase-app': 'Purchase App',
 	'purchase-completed': 'Purchase Completed',
 	'purchase-date': 'Purchase Date',
@@ -1070,12 +1068,12 @@ export default {
 		'Select an account to view this page.',
 	'select-an-active-enterprise-search-subscription-to-download-the-activation-key':
 		'Select an active Liferay Enterprise Search subscription to download the activation key.',
-	'select-desired-amount-of-tokens': 'Select Desired Amount of Tokens',
 	'select-an-option': 'Select an Option',
 	'select-areas': 'Select Areas',
 	'select-categories': 'Select Categories',
 	'select-category': 'Select Category',
 	'select-compatible-versions': 'Select Compatible Versions',
+	'select-desired-amount-of-tokens': 'Select Desired Amount of Tokens',
 	'select-licensing-terms': 'Select Licensing Terms',
 	'select-project': 'Select Project',
 	'select-purpose': 'Select Purpose',

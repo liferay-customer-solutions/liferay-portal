@@ -3,12 +3,14 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import SearchBuilder from '~/utils/SearchBuilder';
-import type {Cart, OrderTypes} from '~/types/orders';
-import {Liferay} from '~/services/liferay/liferay';
 import HeadlessCommerceDeliveryOrder from '~/services/headless/HeadlessCommerceDeliveryOrder';
+import {Liferay} from '~/services/liferay/liferay';
+import SearchBuilder from '~/utils/SearchBuilder';
 import {getSiteURL} from '~/utils/siteUtils';
+
 import ProductPurchase from './ProductPurchase';
+
+import type {Cart, OrderTypes} from '~/types/orders';
 
 export class ProductPurchaseAIHubToken extends ProductPurchase {
 	protected orderTypeExternalReferenceCode: OrderTypes = 'AI_HUB_TOKEN';

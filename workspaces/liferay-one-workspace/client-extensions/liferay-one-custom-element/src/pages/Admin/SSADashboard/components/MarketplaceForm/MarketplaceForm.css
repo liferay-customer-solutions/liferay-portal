@@ -20,20 +20,20 @@
 .marketplace-form-section {
 	border: 1px solid var(--color-neutral-2);
 	border-radius: var(--border-radius-sm, 4px);
-}
 
-.marketplace-form-section .arrow-container {
-	border: 1px solid var(--color-neutral-2);
-	border-radius: var(--border-radius-lg, 8px);
-}
+	& .arrow-container {
+		border: 1px solid var(--color-neutral-2);
+		border-radius: var(--border-radius-lg, 8px);
+	}
 
-.marketplace-form-section .children-container {
-	border-top: 1px solid var(--color-neutral-2);
-}
+	& .children-container {
+		border-top: 1px solid var(--color-neutral-2);
+	}
 
-.marketplace-form-section .controllers {
-	background-color: var(--color-neutral-1);
-	height: 48px;
+	& .controllers {
+		background-color: var(--color-neutral-1);
+		height: 48px;
+	}
 }
 
 .info-bg {
@@ -41,14 +41,14 @@
 	border-radius: var(--border-radius-sm, 4px);
 	height: 22px;
 	width: 22px;
-}
 
-.info-bg .info-icon {
-	background-color: var(--color-state-info-lighten-2);
-	color: var(--color-state-info-darken-1);
-	font-size: var(--text-paragraph-xs-font-size, 11px);
-	margin-left: 5px;
-	margin-top: 0.5px;
+	& .info-icon {
+		background-color: var(--color-state-info-lighten-2);
+		color: var(--color-state-info-darken-1);
+		font-size: var(--text-paragraph-xs-font-size, 11px);
+		margin-left: 5px;
+		margin-top: 0.5px;
+	}
 }
 
 .required-icon {

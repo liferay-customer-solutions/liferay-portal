@@ -19,20 +19,20 @@
 	top: 0;
 	width: 100%;
 	z-index: 100;
-}
 
-.loading-overlay:before {
-	-webkit-backdrop-filter: blur(3px);
-	backdrop-filter: blur(3px);
-	background: rgba(255, 255, 255, 0.7);
-	content: '';
-	height: 100%;
-	left: 0;
-	pointer-events: none;
-	position: fixed;
-	top: 0;
-	width: 100%;
-	z-index: 2;
+	&:before {
+		-webkit-backdrop-filter: blur(3px);
+		backdrop-filter: blur(3px);
+		background: rgba(255, 255, 255, 0.7);
+		content: '';
+		height: 100%;
+		left: 0;
+		pointer-events: none;
+		position: fixed;
+		top: 0;
+		width: 100%;
+		z-index: 2;
+	}
 }
 
 .loading-text {

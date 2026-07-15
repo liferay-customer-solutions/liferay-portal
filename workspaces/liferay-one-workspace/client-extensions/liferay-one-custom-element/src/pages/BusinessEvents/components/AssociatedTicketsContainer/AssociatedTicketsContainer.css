@@ -3,7 +3,7 @@
 	border-radius: var(--border-radius-lg, 8px);
 	font-family: var(--font-family-sans-serif, 'Source Sans 3');
 
-	.associated-tickets-options {
+	& .associated-tickets-options {
 		&:focus-within .associated-tickets-icon {
 			color: var(
 				--color-action-primary-hover,
@@ -11,12 +11,12 @@
 			);
 		}
 
-		.associated-tickets-icon {
+		& .associated-tickets-icon {
 			color: var(--color-neutral-5, var(--color-neutral-5));
 			right: 20px;
 		}
 
-		.associated-tickets-input {
+		& .associated-tickets-input {
 			border-color: var(
 				--color-brand-primary-lighten-5,
 				var(--color-brand-primary-lighten-5)

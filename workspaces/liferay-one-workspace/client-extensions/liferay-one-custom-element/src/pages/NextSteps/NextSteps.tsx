@@ -6,29 +6,30 @@
 import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
+import {ReactElement} from 'react';
 import {HashRouter} from 'react-router-dom';
 import useSWR from 'swr';
-
 import checkCircleIcon from '~/assets/icons/check_circle_icon.svg';
 import paymentPendingIcon from '~/assets/icons/payment_pending_icon.svg';
 import timesCircleIcon from '~/assets/icons/times_circle_icon.svg';
-import {AccountAndAppCard} from '~/components/Card/AccountAndAppCard';
+import {AccountAndAppCard} from '~/components/AccountAndAppCard/AccountAndAppCard';
 import {Header} from '~/components/Header/Header';
 import {PageRenderer} from '~/components/Page/Page';
 import useGetProductByOrderId from '~/hooks/useGetProductByOrderId';
 import i18n from '~/i18n';
-import {Liferay} from '~/services/liferay/liferay';
 import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
+import {Liferay} from '~/services/liferay/liferay';
+import {getAccountImage} from '~/utils/getAccountImage';
 import {
 	getProductCategoriesByVocabularyName,
 	getProductSpecification,
 } from '~/utils/productUtils';
 import {getSiteURL} from '~/utils/siteUtils';
-import {getAccountImage} from '~/utils/util';
-import AIHubNextSteps from '../ProductPurchase/pages/LiferayProduct/AIHub/AIHubNextSteps';
-import AIHubOpenBetaNextSteps from '../ProductPurchase/pages/LiferayProduct/AIHub/AIHubOpenBetaNextSteps';
 
-import './NextSteps.scss';
+import AIHubNextSteps from '../ProductPurchase/LiferayProduct/AIHub/AIHubNextSteps';
+import AIHubOpenBetaNextSteps from '../ProductPurchase/LiferayProduct/AIHub/AIHubOpenBetaNextSteps';
+
+import './NextSteps.css';
 
 import type {DeliveryProduct} from '~/types/product';
 
@@ -45,8 +46,8 @@ const OrderTypes = {
 	DXP_APP: 'DXP_APP',
 	LOW_CODE_CONFIGURATION: 'LOW_CODE_CONFIGURATION',
 	OTHER: 'OTHER',
-	SOLUTIONS30: 'SOLUTIONS30',
 	SOLUTIONS7: 'SOLUTIONS7',
+	SOLUTIONS30: 'SOLUTIONS30',
 	SSA_SAAS: 'SSA_SAAS',
 } as const;
 
@@ -103,7 +104,7 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 				: 'continue-to-download'
 			: 'go-to-the-catalog';
 
-	const nextStepBody = {
+	const nextStepBody: Record<number, ReactElement> = {
 		[PaymentStatus.FAILED]: (
 			<Header
 				description={
@@ -240,7 +241,7 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 
 			<div className="next-step-page-text">
 				<div className="next-step-page-text">
-					{(nextStepBody as any)[String(paymentStatus) || '']}
+					{paymentStatus !== undefined && nextStepBody[paymentStatus]}
 				</div>
 			</div>
 
@@ -286,7 +287,7 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 	);
 }
 
-export function NextSteps() {
+function NextStepsPage() {
 	const urlParams = new URLSearchParams(window.location.search);
 	const orderId = urlParams.get('orderId');
 
@@ -346,10 +347,10 @@ export function NextSteps() {
 	);
 }
 
-export default function NextStepsRouter() {
+export default function NextSteps() {
 	return (
 		<HashRouter>
-			<NextSteps />
+			<NextStepsPage />
 		</HashRouter>
 	);
 }

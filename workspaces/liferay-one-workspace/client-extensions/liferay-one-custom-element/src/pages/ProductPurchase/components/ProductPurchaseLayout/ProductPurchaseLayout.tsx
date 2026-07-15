@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {useState, useRef} from 'react';
+import {useRef, useState} from 'react';
 import {
 	Outlet,
 	useLocation,
@@ -13,17 +13,16 @@ import {
 import AccountAvatar from '~/components/AccountAvatar/AccountAvatar';
 import Loading from '~/components/Loading/Loading';
 import i18n from '~/i18n';
+import BasePurchase from '~/services/commerce/ProductPurchase';
 import ProductPurchaseApp from '~/services/commerce/ProductPurchaseApp';
 import ProductPurchaseLDP, {
 	LDPSettings,
 } from '~/services/commerce/ProductPurchaseLDP';
 import HeadlessCommerceDeliveryCart from '~/services/headless/HeadlessCommerceDeliveryCart';
 import {Liferay} from '~/services/liferay/liferay';
-import {
-	getProductPriceModel,
-	isLDPProduct,
-} from '~/utils/productUtils';
+import {getProductPriceModel, isLDPProduct} from '~/utils/productUtils';
 
+import {useAppPurchaseContext} from '../../context/AppPurchaseContext';
 import useAccounts from '../../hooks/useAccounts';
 import useProductPurchaseCart from '../../hooks/useProductPurchaseCart';
 import {ProductPurchaseStepItem} from '../../productPurchaseRoutes';
@@ -32,7 +31,7 @@ import ProductPurchaseHeader from '../ProductPurchaseHeader/ProductPurchaseHeade
 import ProductPurchaseSteps from '../ProductPurchaseSteps/ProductPurchaseSteps';
 
 import type {Account} from '~/types/accounts';
-import type {BillingAddress} from '~/types/orders';
+import type {BillingAddress, Cart} from '~/types/orders';
 import type {DeliveryProduct} from '~/types/product';
 
 type ProductPurchaseLayoutProps = {
@@ -46,10 +45,11 @@ export type ProductPurchaseLayoutContext = {
 		nextStep: () => void;
 		previousStep: () => void;
 	};
-	form: Record<string, any>;
-	setForm: React.Dispatch<React.SetStateAction<Record<string, any>>>;
-	skuRef: React.MutableRefObject<any>;
-	handlePurchase: (customService?: any, options?: any) => Promise<void>;
+	form: Record<string, unknown>;
+	handlePurchase: (
+		customService?: BasePurchase,
+		options?: unknown
+	) => Promise<void>;
 	isLoadingAccounts: boolean;
 	isSingleAccount: boolean;
 	isSubmitting: boolean;
@@ -57,9 +57,11 @@ export type ProductPurchaseLayoutContext = {
 	product: DeliveryProduct;
 	productPurchaseCart: ReturnType<typeof useProductPurchaseCart>;
 	selectedAccount: Account;
+	setForm: React.Dispatch<React.SetStateAction<Record<string, unknown>>>;
 	setLDPSettings: React.Dispatch<React.SetStateAction<LDPSettings | null>>;
 	setPayment: React.Dispatch<React.SetStateAction<ProductPurchasePayment>>;
 	setSelectedAccount: React.Dispatch<React.SetStateAction<Account>>;
+	skuRef: React.MutableRefObject<string | undefined>;
 };
 
 const ProductPurchaseLayout = ({
@@ -77,6 +79,8 @@ const ProductPurchaseLayout = ({
 
 	const {accounts, isLoading, selectedAccount, setSelectedAccount} =
 		useAccounts();
+
+	const {salesforceProject} = useAppPurchaseContext();
 
 	const searchParams = new URLSearchParams(window.location.search);
 	const isAiHubTokens = searchParams.has('aiHubTokens');
@@ -101,8 +105,8 @@ const ProductPurchaseLayout = ({
 	const {pathname} = useLocation();
 	const navigate = useNavigate();
 
-	const [form, setForm] = useState<Record<string, any>>({});
-	const skuRef = useRef<any>(
+	const [form, setForm] = useState<Record<string, unknown>>({});
+	const skuRef = useRef<string | undefined>(
 		new URLSearchParams(window.location.search).get('skuRef') ??
 			product.skus?.[0]?.externalReferenceCode
 	);
@@ -123,7 +127,10 @@ const ProductPurchaseLayout = ({
 		}
 	};
 
-	const handlePurchase = async (customService?: any, options?: any) => {
+	const handlePurchase = async (
+		customService?: BasePurchase,
+		options?: unknown
+	) => {
 		setSubmitting(true);
 
 		try {
@@ -134,8 +141,12 @@ const ProductPurchaseLayout = ({
 							selectedAccount,
 							product,
 							ldpSettings
-					  )
-					: new ProductPurchaseApp(selectedAccount, product));
+						)
+					: new ProductPurchaseApp(
+							selectedAccount,
+							product,
+							salesforceProject
+						));
 
 			if (isPaidApp && !customService) {
 				const cart = await productPurchase.createOrder({
@@ -168,15 +179,17 @@ const ProductPurchaseLayout = ({
 				return;
 			}
 
+			const cartOptions = options as Record<string, unknown> | undefined;
 			const order = await productPurchase.createOrder(
-				options?.cart || options,
-				options?.cartOptions || options
+				cartOptions as Cart,
+				cartOptions?.cartOptions ?? options
 			);
 
 			const nextLink = await productPurchase.getNextStepsLink(order);
 
 			if (nextLink.startsWith('http')) {
 				window.location.href = nextLink;
+
 				return;
 			}
 
@@ -203,8 +216,6 @@ const ProductPurchaseLayout = ({
 			previousStep: () => stepNavigate(-1),
 		},
 		form,
-		setForm,
-		skuRef,
 		handlePurchase,
 		isLoadingAccounts: isLoading,
 		isSingleAccount: accounts.length === 1,
@@ -213,9 +224,11 @@ const ProductPurchaseLayout = ({
 		product,
 		productPurchaseCart,
 		selectedAccount,
+		setForm,
 		setLDPSettings,
 		setPayment,
 		setSelectedAccount,
+		skuRef,
 	};
 
 	return (

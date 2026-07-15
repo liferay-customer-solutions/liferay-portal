@@ -4,11 +4,12 @@
  */
 
 import {z} from 'zod';
-
-import {OrderCustomFields} from '~/utils/orderUtils';
-import type {Cart, OrderTypes} from '~/types/orders';
 import {adminSchemas as zodSchema} from '~/schema/adminSchemas';
+import {OrderCustomFields} from '~/utils/orderUtils';
+
 import ProductPurchase from './ProductPurchase';
+
+import type {Cart, OrderTypes} from '~/types/orders';
 
 type AIHubOpenBetaForm = z.infer<typeof zodSchema.aiHubOpenBetaForm> & {
 	salesforceProjectId: string;
@@ -37,7 +38,7 @@ export class ProductPurchaseAIHubOpenBeta extends ProductPurchase {
 		} as Cart;
 	}
 
-	public async createOrder(cart: Cart, cartOptions: any) {
+	public async createOrder(cart: Cart, cartOptions: unknown) {
 		if (!this.form) {
 			throw new Error('Form is missing.');
 		}

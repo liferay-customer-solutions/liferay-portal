@@ -10,26 +10,26 @@
 
 .project-members-table {
 	margin-bottom: 0;
-}
 
-.project-members-table thead th {
-	border-top: 0;
-	color: #6b6c7e;
-	font-weight: 600;
-	padding: 12px 24px;
-	text-transform: none;
-}
+	& thead th {
+		border-top: 0;
+		color: #6b6c7e;
+		font-weight: 600;
+		padding: 12px 24px;
+		text-transform: none;
+	}
 
-.project-members-table tbody td {
-	border-top: 1px solid #f1f2f5;
-	color: #1b2a3b;
-	padding: 16px 24px;
-	vertical-align: top;
-}
+	& tbody td {
+		border-top: 1px solid #f1f2f5;
+		color: #1b2a3b;
+		padding: 16px 24px;
+		vertical-align: top;
+	}
 
-.project-members-table tbody td:last-child,
-.project-members-table thead th:last-child {
-	text-align: right;
+	& tbody td:last-child,
+	& thead th:last-child {
+		text-align: right;
+	}
 }
 
 .project-members-status {

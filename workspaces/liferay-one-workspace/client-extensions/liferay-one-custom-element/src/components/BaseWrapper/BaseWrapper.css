@@ -7,7 +7,7 @@
 	padding: 4px;
 	text-transform: none;
 
-	.text-paragraph {
+	& .text-paragraph {
 		font-size: var(--text-paragraph-font-size, 16px);
 	}
 }
@@ -18,7 +18,7 @@
 }
 
 .form-group {
-	.required {
+	& .required {
 		&::after {
 			color: var(--color-state-error);
 			content: '*';

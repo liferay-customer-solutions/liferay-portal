@@ -3,28 +3,27 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import ClayButton from '@clayui/button';
 import {useEffect, useMemo} from 'react';
 import {useOutletContext, useSearchParams} from 'react-router-dom';
 import useSWR from 'swr';
-
-import ClayButton from '@clayui/button';
-
+import DetailTable, {Orientation} from '~/components/DetailTable/DetailTable';
 import {DetailedCard} from '~/components/DetailedCard/DetailedCard';
 import ListView from '~/components/ListView/ListView';
-import OrderStatus from '~/components/OrderStatus';
-import DetailTable, {Orientation} from '~/components/DetailTable/DetailTable';
+import OrderStatus from '~/components/OrderStatus/OrderStatus';
+import {useFetch} from '~/hooks/useFetch';
+import i18n from '~/i18n';
+import HeadlessAIHub from '~/services/headless/HeadlessAIHub';
+import {Liferay} from '~/services/liferay/liferay';
 import SearchBuilder from '~/utils/SearchBuilder';
 import {
 	OrderCustomFields,
 	OrderWorkflowStatusCode,
 	PaymentStatus,
 } from '~/utils/orderUtils';
-import {useFetch} from '~/hooks/useFetch';
-import i18n from '~/i18n';
-import {Liferay} from '~/services/liferay/liferay';
-import HeadlessAIHub from '~/services/headless/HeadlessAIHub';
 import {safeJSONParse} from '~/utils/safeJSONParse';
 import {getSiteURL} from '~/utils/siteUtils';
+
 import ActivationKeyAlert from '../Licenses/LicenseAlert';
 
 import type {Account} from '~/types/accounts';
@@ -49,7 +48,7 @@ type AIHubDetailsProps = {
 	placedOrder?: PlacedOrder;
 	selectedAccount?: {
 		externalReferenceCode: string;
-		[key: string]: any;
+		[key: string]: unknown;
 	};
 };
 
@@ -60,7 +59,7 @@ const AIHubDetails = ({
 	const outletContext = useOutletContext<{
 		placedOrder: PlacedOrder;
 		selectedAccount: Account;
-	}>() as any;
+	}>();
 
 	const placedOrder = propPlacedOrder || outletContext?.placedOrder;
 	const selectedAccount =
@@ -70,15 +69,20 @@ const AIHubDetails = ({
 	const orderStatusCode = placedOrder?.orderStatusInfo
 		?.code as OrderWorkflowStatusCode;
 
-	const {data: aiHubApplication} = useSWR<any>(
+	const {data: aiHubApplication} = useSWR<{
+		accountName?: string;
+		administratorEmailAddress?: string;
+	} | null>(
 		selectedAccount?.externalReferenceCode
 			? `/ai-hub-application/${selectedAccount.externalReferenceCode}`
 			: null,
-		() => {
-			return HeadlessAIHub.getAIHubApplicationByExternalReferenceCode(
+		() =>
+			HeadlessAIHub.getAIHubApplicationByExternalReferenceCode(
 				selectedAccount!.externalReferenceCode
-			);
-		}
+			) as Promise<{
+				accountName?: string;
+				administratorEmailAddress?: string;
+			} | null>
 	);
 
 	const {data: tokenOrdersData} = useFetch<APIResponse<PlacedOrder>>(
@@ -150,15 +154,19 @@ const AIHubDetails = ({
 	}, [searchParams, tokenOrdersData, setSearchParams]);
 
 	const orderMetadata = placedOrder
-		? JSON.parse(placedOrder.customFields[OrderCustomFields.ORDER_METADATA])
+		? safeJSONParse<Record<string, unknown>>(
+				placedOrder.customFields?.[OrderCustomFields.ORDER_METADATA],
+				{}
+			)
 		: {};
 
-	const aiHubForm = orderMetadata?.aiHubForm || {};
+	const aiHubForm =
+		(orderMetadata?.aiHubForm as Record<string, string>) || {};
 	const aiHubURL = aiHubForm?.aiHubURL ?? 'https://ai.hub.liferay.com';
 
 	const aiHubItem =
 		placedOrder?.placedOrderItems?.find(
-			(item: any) =>
+			(item) =>
 				item.sku === 'PRDCT-AI-HUB' ||
 				item.name?.toLowerCase().includes('ai hub')
 		) || placedOrder?.placedOrderItems?.[0];
@@ -292,10 +300,14 @@ const AIHubDetails = ({
 											return '-';
 										}
 
-										const options = safeJSONParse<any[]>(
-											item.options,
-											[]
-										);
+										type SkuOption = {
+											skuOptionValueName?: string;
+											skuOptionValueNames?: string[];
+										};
+
+										const options = safeJSONParse<
+											SkuOption[]
+										>(item.options, []);
 
 										const optionValue =
 											options[0]
@@ -304,9 +316,11 @@ const AIHubDetails = ({
 											'';
 
 										return Intl.NumberFormat().format(
-											optionValue
-												.replace(/[^\d]/g, '')
-												.trim() || '-'
+											Number(
+												optionValue
+													.replace(/[^\d]/g, '')
+													.trim() || 0
+											)
 										);
 									},
 								},

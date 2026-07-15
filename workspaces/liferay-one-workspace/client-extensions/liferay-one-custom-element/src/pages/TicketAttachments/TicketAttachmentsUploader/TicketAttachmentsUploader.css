@@ -4,18 +4,18 @@
 	flex-direction: column;
 	min-height: 80vh;
 
-	.attachment-input ::placeholder {
+	& .attachment-input ::placeholder {
 		color: var(--color-neutral-4);
 	}
 
-	.attachment-uploader-container {
+	& .attachment-uploader-container {
 		width: var(--container-max-md);
 	}
 
-	.attachment-uploader-support-text {
+	& .attachment-uploader-support-text {
 		font-size: var(--font-size-sm);
 
-		.custom-control-label {
+		& .custom-control-label {
 			color: var(--color-neutral-10);
 			font-size: var(--font-size-sm);
 			font-weight: var(--font-weight-normal);

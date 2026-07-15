@@ -4,19 +4,30 @@
  */
 
 import {z} from 'zod';
-
-import {productPurchaseStore} from '~/pages/ProductPurchase/store/AppPurchaseStore';
-import {OrderCustomFields} from '~/utils/orderUtils';
-import type {Cart, OrderTypes} from '~/types/orders';
 import {adminSchemas as zodSchema} from '~/schema/adminSchemas';
+import {OrderCustomFields} from '~/utils/orderUtils';
 import {getSiteURL} from '~/utils/siteUtils';
+
 import ProductPurchase from './ProductPurchase';
+
+import type {Account} from '~/types/accounts';
+import type {Cart, OrderTypes} from '~/types/orders';
+import type {DeliveryProduct} from '~/types/product';
+import type {SalesforceProject} from '~/types/salesforceProject';
 
 type AIHubForm = z.infer<typeof zodSchema.aiHubForm>;
 
 export class ProductPurchaseAIHub extends ProductPurchase {
 	private form?: AIHubForm;
 	protected orderTypeExternalReferenceCode: OrderTypes = 'AI_HUB';
+
+	constructor(
+		account: Account,
+		product: DeliveryProduct,
+		private salesforceProject?: SalesforceProject | null
+	) {
+		super(account, product);
+	}
 
 	setForm(form: AIHubForm) {
 		this.form = form;
@@ -26,9 +37,6 @@ export class ProductPurchaseAIHub extends ProductPurchase {
 		const baseCart = super.getCart();
 		const cartItems = super.getCartItems();
 
-		const snapshot = productPurchaseStore.getSnapshot();
-		const salesforceProject = snapshot.context.salesforceProject;
-
 		return {
 			...baseCart,
 			cartItems,
@@ -36,10 +44,11 @@ export class ProductPurchaseAIHub extends ProductPurchase {
 				...baseCart?.customFields,
 				[OrderCustomFields.ORDER_METADATA]: JSON.stringify({
 					aiHubForm: this.form,
-					...(salesforceProject
+					...(this.salesforceProject
 						? {
 								salesforceProjectId:
-									salesforceProject.externalReferenceCode,
+									this.salesforceProject
+										.externalReferenceCode,
 							}
 						: {}),
 				}),

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import RadioCard from '~/components/RadioCard/RadioCard';
 import Section from '~/components/Section/Section';
 import i18n from '~/i18n';
@@ -53,14 +53,20 @@ const BillingAddress = ({
 	);
 	const [showNewAddressForm, setShowNewAddressForm] = useState(false);
 
-	const addresses = addressesResponse?.items ?? [];
+	const addresses = useMemo(
+		() => addressesResponse?.items ?? [],
+		[addressesResponse?.items]
+	);
 	const countries = countriesResponse?.items ?? [];
 
-	const setBillingAddress = (billingAddress: BillingAddressType) =>
-		setPayment((previousPayment) => ({
-			...previousPayment,
-			billingAddress,
-		}));
+	const setBillingAddress = useCallback(
+		(billingAddress: BillingAddressType) =>
+			setPayment((previousPayment) => ({
+				...previousPayment,
+				billingAddress,
+			})),
+		[setPayment]
+	);
 
 	useEffect(() => {
 		if (
@@ -75,7 +81,12 @@ const BillingAddress = ({
 
 			setBillingAddress(newBillingAddress);
 		}
-	}, [addresses, payment.billingAddress?.name, hideNewAddressButton]);
+	}, [
+		addresses,
+		hideNewAddressButton,
+		payment.billingAddress?.name,
+		setBillingAddress,
+	]);
 
 	const onSelectAddress = (address: BillingAddressType) => {
 		setSelectedAddress(address.name || '');

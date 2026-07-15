@@ -8,6 +8,7 @@ import i18n, {Word} from '~/i18n';
 import {DetailsSection} from '../components/SectionedDetailsCard/SectionedDetailsCard';
 
 import type {ProjectEnvironment} from '~/hooks/useProjectEnvironments';
+
 import type {EnvironmentProfile} from './resolveEnvironmentProfile';
 
 type EnvironmentField = {

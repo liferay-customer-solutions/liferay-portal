@@ -3,15 +3,12 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {useNavigate} from 'react-router-dom';
-import Button from '~/components/Button/Button';
 import DetailTable, {Orientation} from '~/components/DetailTable/DetailTable';
 import {DetailedCard} from '~/components/DetailedCard/DetailedCard';
 import Page from '~/components/Page/Page';
 import {useOneContext} from '~/context/OneContextProvider';
 import useAccountDetails from '~/hooks/useAccountDetails';
 import i18n from '~/i18n';
-import {canEditAccountDetails} from '~/pages/MyAccount/AccountMembers/accountRoles';
 
 import './AccountDetails.css';
 
@@ -50,9 +47,7 @@ function textWrapper(content?: string | number) {
 }
 
 export default function AccountDetails() {
-	const navigate = useNavigate();
-
-	const {myUserAccount, userAccountModel} = useOneContext();
+	const {myUserAccount} = useOneContext();
 
 	const {data, error, isLoading} = useAccountDetails();
 
@@ -76,17 +71,6 @@ export default function AccountDetails() {
 				'manage-your-account-and-organization-details'
 			)}
 			pageRendererProps={{error, isLoading}}
-			rightButton={
-				canEditAccountDetails(userAccountModel) ? (
-					<Button
-						displayType="secondary"
-						onClick={() => navigate('edit')}
-						prependIcon="pencil"
-					>
-						{i18n.translate('edit')}
-					</Button>
-				) : undefined
-			}
 		>
 			<div className="account-details-grid mt-4">
 				<DetailedCard

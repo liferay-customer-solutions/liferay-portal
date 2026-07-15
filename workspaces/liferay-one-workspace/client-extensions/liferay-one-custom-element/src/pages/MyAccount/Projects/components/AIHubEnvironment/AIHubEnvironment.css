@@ -3,6 +3,10 @@
 	gap: var(--spacer-4, 1.5rem) var(--spacer-5, 2rem);
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	margin-top: var(--spacer-3, 1rem);
+
+	@media (max-width: 576px) {
+		grid-template-columns: minmax(0, 1fr);
+	}
 }
 
 .ai-hub-environment-cell {
@@ -19,10 +23,4 @@
 .ai-hub-environment-cell-value {
 	color: var(--color-neutral-8);
 	overflow-wrap: anywhere;
-}
-
-@media (max-width: 576px) {
-	.ai-hub-environment-grid {
-		grid-template-columns: minmax(0, 1fr);
-	}
 }

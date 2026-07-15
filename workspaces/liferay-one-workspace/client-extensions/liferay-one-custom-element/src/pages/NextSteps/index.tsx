@@ -6,4 +6,3 @@
 import NextStepsRouter from './NextSteps';
 
 export default NextStepsRouter;
-export {NextSteps} from './NextSteps';

@@ -21,6 +21,22 @@
 	border-bottom: 1px solid #e7e7ed;
 	gap: 16px;
 	padding: 16px 24px;
+
+	& .list-card-search {
+		flex: 1 1 auto;
+		margin: 0;
+		max-width: none;
+
+		& .input-group-inset-item {
+			padding-left: var(--spacer-3);
+			padding-right: var(--spacer-3);
+		}
+	}
+
+	&:has(+ .list-card-active-filters) {
+		border-bottom: 0;
+		padding-bottom: 0;
+	}
 }
 
 .list-card-toolbar-action {
@@ -28,25 +44,16 @@
 	margin-left: auto;
 }
 
-.list-card-toolbar .list-card-search {
-	flex: 1 1 auto;
-	margin: 0;
-	max-width: none;
-}
-
-.list-card-toolbar .list-card-search .input-group-inset-item {
-	padding-left: var(--spacer-3);
-	padding-right: var(--spacer-3);
-}
-
 .list-card-filter-button {
 	border: 1px solid #cdced9;
 	white-space: nowrap;
 }
 
-.list-card-filter-dropdown .dropdown-menu {
-	min-width: 280px;
-	padding: 8px;
+.list-card-filter-dropdown {
+	& .dropdown-menu {
+		min-width: 280px;
+		padding: 8px;
+	}
 }
 
 .list-card-filter-heading {
@@ -68,10 +75,10 @@
 	padding: 10px 12px;
 	text-align: left;
 	width: 100%;
-}
 
-.list-card-filter-category:hover {
-	background-color: #f1f2f5;
+	&:hover {
+		background-color: #f1f2f5;
+	}
 }
 
 .list-card-filter-panel {
@@ -102,19 +109,14 @@
 	gap: 4px;
 	max-height: 200px;
 	overflow-y: auto;
-}
 
-.list-card-filter-options .custom-control {
-	margin-bottom: 0;
+	& .custom-control {
+		margin-bottom: 0;
+	}
 }
 
 .list-card-filter-apply {
 	margin-top: 12px;
-}
-
-.list-card-toolbar:has(+ .list-card-active-filters) {
-	border-bottom: 0;
-	padding-bottom: 0;
 }
 
 .list-card-active-filters {
@@ -148,29 +150,29 @@
 
 .list-card-table {
 	margin-bottom: 0;
-}
 
-.list-card-table thead th {
-	border-top: 0;
-	color: #6b6c7e;
-	font-weight: 600;
-	padding: 12px 24px;
-	text-transform: none;
-}
+	& thead th {
+		border-top: 0;
+		color: #6b6c7e;
+		font-weight: 600;
+		padding: 12px 24px;
+		text-transform: none;
+	}
 
-.list-card-table tbody td {
-	border-top: 1px solid #f1f2f5;
-	color: #1b2a3b;
-	padding: 16px 24px;
-	vertical-align: middle;
-}
+	& tbody td {
+		border-top: 1px solid #f1f2f5;
+		color: #1b2a3b;
+		padding: 16px 24px;
+		vertical-align: middle;
+	}
 
-.list-card-table tbody tr {
-	cursor: pointer;
-}
+	& tbody tr {
+		cursor: pointer;
 
-.list-card-table tbody tr:hover {
-	background-color: #f7f8f9;
+		&:hover {
+			background-color: #f7f8f9;
+		}
+	}
 }
 
 .list-card-name {
@@ -225,8 +227,8 @@
 .list-card-pagination {
 	border-top: 1px solid #e7e7ed;
 	padding: 8px 24px;
-}
 
-.list-card-pagination .pagination-bar {
-	margin: 0;
+	& .pagination-bar {
+		margin: 0;
+	}
 }

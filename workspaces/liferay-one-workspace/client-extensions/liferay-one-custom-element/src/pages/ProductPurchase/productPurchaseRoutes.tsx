@@ -4,10 +4,11 @@
  */
 
 import {ReactNode, lazy} from 'react';
+import {getSpecificationValue} from '~/hooks/useProjectCommerce';
 import i18n from '~/i18n';
 import {AppRoute} from '~/utils/routeUtils';
+
 import type {DeliveryProduct} from '~/types/product';
-import {getSpecificationValue} from '~/hooks/useProjectCommerce';
 
 const AccountSelection = lazy(
 	() => import('./AccountSelection/AccountSelection')
@@ -20,25 +21,29 @@ const License = lazy(() => import('./License/License'));
 const PaymentMethod = lazy(() => import('./PaymentMethod/PaymentMethod'));
 const Summary = lazy(() => import('./Summary/Summary'));
 
-// AI Hub Pages
-
-const AIHubForm = lazy(() => import('./pages/LiferayProduct/AIHub/AIHubForm'));
+const AIHubForm = lazy(
+	() => import('./LiferayProduct/AIHub/AIHubForm/AIHubForm')
+);
 const AIHubOpenBetaForm = lazy(
-	() => import('./pages/LiferayProduct/AIHub/AIHubOpenBetaForm')
+	() => import('./LiferayProduct/AIHub/AIHubOpenBetaForm/AIHubOpenBetaForm')
 );
 const AIHubOrderSummary = lazy(
-	() => import('./pages/LiferayProduct/AIHub/AIHubOrderSummary')
+	() => import('./LiferayProduct/AIHub/AIHubOrderSummary/AIHubOrderSummary')
 );
 const AIHubPaymentMethod = lazy(
-	() => import('./pages/LiferayProduct/AIHub/AIHubPaymentMethod')
+	() => import('./LiferayProduct/AIHub/AIHubPaymentMethod/AIHubPaymentMethod')
 );
 const AIHubTokenOrderSummary = lazy(
-	() => import('./pages/LiferayProduct/AIHub/AIHubTokenOrderSummary')
+	() =>
+		import(
+			'./LiferayProduct/AIHub/AIHubTokenOrderSummary/AIHubTokenOrderSummary'
+		)
 );
 const AIHubTokenSelection = lazy(
-	() => import('./pages/LiferayProduct/AIHub/AIHubTokenSelection')
+	() =>
+		import('./LiferayProduct/AIHub/AIHubTokenSelection/AIHubTokenSelection')
 );
-const ProjectSelection = lazy(() => import('./pages/LiferayProduct/Project'));
+const ProjectSelection = lazy(() => import('./LiferayProduct/Project'));
 
 export type ProductPurchaseStep = {
 	element: ReactNode;
@@ -57,11 +62,13 @@ export type ProductPurchaseStepItem = {
 };
 
 export function getProductPurchaseSteps({
+	isDXPFreeOnly = false,
 	isLDP = false,
 	isPaidApp,
 	product,
 	searchParams = new URLSearchParams(),
 }: {
+	isDXPFreeOnly?: boolean;
 	isLDP?: boolean;
 	isPaidApp: boolean;
 	product?: DeliveryProduct;
@@ -172,8 +179,8 @@ export function getProductPurchaseSteps({
 		(step) =>
 			(isPaidApp || !step.isPaidOnly) &&
 			(isLDP || !step.isLDPOnly) &&
-			(isDXPFree || !step.isDXPFreeOnly) &&
-			(!isDXPFree || !step.excludeForDXPFree)
+			(isDXPFreeOnly || !step.isDXPFreeOnly) &&
+			(!isDXPFreeOnly || !step.excludeForDXPFree)
 	);
 }
 

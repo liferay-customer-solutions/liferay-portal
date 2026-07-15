@@ -18,6 +18,7 @@
 
 <#assign totalCount = filteredProductImages?size />
 
+<#if filteredProductImages?has_content>
 <div class = "carousel-container">
 	<div class = "main-image-wrapper">
 		<button class = "nav-button prev" aria-label = "Previous Image">
@@ -201,3 +202,4 @@
 	main();
 })();
 </script>
+</#if>

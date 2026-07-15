@@ -1,5 +1,5 @@
 .dropzone-upload {
-	.dropzone-upload-button {
+	& .dropzone-upload-button {
 		background-color: var(--color-neutral-0);
 		font-size: 0.875rem;
 		padding: 0.5rem 0.75rem;
@@ -9,7 +9,7 @@
 		}
 	}
 
-	.dropzone-upload-container {
+	& .dropzone-upload-container {
 		align-items: center;
 		border: 0.095rem dashed var(--color-neutral-4);
 		border-radius: 0.5rem;
@@ -23,14 +23,14 @@
 			background-color: var(--color-action-primary-hover-lighten);
 			border-color: var(--color-action-primary-default);
 
-			.dropzone-upload-document-container {
+			& .dropzone-upload-document-container {
 				background-color: var(--color-neutral-0);
 			}
 		}
 	}
 
-	.dropzone-upload-document {
-		.dropzone-upload-document-container {
+	& .dropzone-upload-document {
+		& .dropzone-upload-document-container {
 			align-items: center;
 			background-color: var(--color-action-primary-active-lighten);
 			border-radius: 0.563rem;
@@ -41,7 +41,7 @@
 			width: 8.125rem;
 		}
 
-		.dropzone-upload-document-icon {
+		& .dropzone-upload-document-icon {
 			height: 2rem;
 			width: 2rem;
 			filter: invert(23%) sepia(90%) saturate(3736%) hue-rotate(217deg)
@@ -49,13 +49,13 @@
 		}
 	}
 
-	.dropzone-upload-text {
+	& .dropzone-upload-text {
 		color: var(--color-neutral-10);
 		font-size: 1rem;
 		font-weight: 400;
 		line-height: 1.5rem;
 
-		.dropzone-upload-text-container {
+		& .dropzone-upload-text-container {
 			align-items: center;
 			margin-bottom: 0.813rem;
 		}

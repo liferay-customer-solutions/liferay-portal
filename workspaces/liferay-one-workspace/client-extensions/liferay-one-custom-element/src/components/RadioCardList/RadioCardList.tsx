@@ -4,15 +4,14 @@
  */
 
 import {ReactNode} from 'react';
-
-import RadioCard from './components/RadioCard';
+import RadioCardListItem from '~/components/RadioCardListItem/RadioCardListItem';
 
 export type RadioOption<T> = {
 	index: number;
 	value: T;
 };
 
-type RadioCardContent<T = any> = {
+type RadioCardContent<T = unknown> = {
 	children?: ReactNode;
 	description?: ReactNode;
 	disabled?: boolean;
@@ -45,7 +44,7 @@ const RadioCardList = <T extends unknown>({
 	return (
 		<div className="mb-0 w-100">
 			{contentList.map((content, index) => (
-				<RadioCard
+				<RadioCardListItem
 					activeRadio={content.selected}
 					description={content.description}
 					disabled={content.disabled}

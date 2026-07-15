@@ -49,7 +49,7 @@ const AccountSelection = () => {
 				setSelectedAccount(accounts[0]);
 			}
 
-			let solutionType = getProductSpecificationValue(
+			const solutionType = getProductSpecificationValue(
 				ProductSpecificationKey.SOLUTION_TYPE,
 				product
 			);

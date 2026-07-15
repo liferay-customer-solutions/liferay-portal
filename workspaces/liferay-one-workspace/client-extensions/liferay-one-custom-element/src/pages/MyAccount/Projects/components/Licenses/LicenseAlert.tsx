@@ -18,7 +18,7 @@ export type LiferayProductLicenseAlertProps = {
 	type?: 'success' | 'info';
 };
 
-export default function LiferayProductLicenseAlert({
+export default function LicenseAlert({
 	children,
 	className,
 	dismissible = true,

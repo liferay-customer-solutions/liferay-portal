@@ -8,31 +8,25 @@ import ClayLink from '@clayui/link';
 
 import './GateCard.css';
 
-type GateCardLink = {
+interface ILink {
 	href: string;
 	label: string;
-};
+}
 
-type GateCardImage = {
+interface IImage {
 	description: string;
 	svg: string;
-};
+}
 
-type GateCardProps = {
+interface IGateCard {
 	description: string;
-	image: GateCardImage;
+	image: IImage;
 	label?: string;
-	link?: GateCardLink;
+	link?: ILink;
 	title: string;
-};
+}
 
-export function GateCard({
-	description,
-	image,
-	label,
-	link,
-	title,
-}: GateCardProps) {
+export function GateCard({description, image, label, link, title}: IGateCard) {
 	return (
 		<div className="gate-card-container">
 			<div>

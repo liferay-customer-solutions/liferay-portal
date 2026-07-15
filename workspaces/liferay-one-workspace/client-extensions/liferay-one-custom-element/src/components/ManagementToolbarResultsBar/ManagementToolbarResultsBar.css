@@ -1,5 +1,5 @@
 .toolbar-results-container {
-	.subnav-tbar-primary {
+	& .subnav-tbar-primary {
 		background-color: white !important;
 	}
 }

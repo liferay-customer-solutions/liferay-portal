@@ -5,17 +5,16 @@
 
 import {useEffect, useState} from 'react';
 import {Navigate, useNavigate, useParams} from 'react-router-dom';
-
 import {useOneContext} from '~/context/OneContextProvider';
-import {Liferay} from '~/services/liferay/liferay';
 import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
 import HeadlessCommerceDeliveryOrder from '~/services/headless/HeadlessCommerceDeliveryOrder';
+import {Liferay} from '~/services/liferay/liferay';
 import {OrderTypes} from '~/types/orders';
 import SearchBuilder from '~/utils/SearchBuilder';
 
 import type {AccountBrief} from '~/types/accounts';
 
-export default function AiHubRedirect() {
+export default function AIHubRedirect() {
 	const [loading, setLoading] = useState(false);
 	const {accountErc, tokens} = useParams();
 	const navigate = useNavigate();
@@ -64,9 +63,9 @@ export default function AiHubRedirect() {
 
 		setLoading(true);
 
-		fetchAIHub();
-
-		setLoading(false);
+		fetchAIHub()
+			.catch(console.error)
+			.finally(() => setLoading(false));
 	}, [accountErc, myUserAccount, navigate, tokens]);
 
 	if (loading) {

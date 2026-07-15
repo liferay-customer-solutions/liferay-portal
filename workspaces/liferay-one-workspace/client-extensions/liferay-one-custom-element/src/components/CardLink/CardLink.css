@@ -1,0 +1,70 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+.card-link-container {
+	border: 1px solid #e2e2e4;
+	border-radius: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	margin-top: 20px;
+	max-width: 37.5rem;
+	padding: 1rem;
+	transition: background-color 0.5s;
+	transition: border 0.5s;
+	width: 100%;
+}
+
+.card-link-main-info {
+	align-items: center;
+	display: flex;
+}
+
+.card-link-icon {
+	align-items: center;
+	background-color: #e2e2e4;
+	border-radius: 99px;
+	display: flex;
+	height: 40px;
+	justify-content: center;
+	min-width: 40px;
+	width: 40px;
+}
+
+.card-link-icon-image {
+	filter: invert(20%) sepia(24%) saturate(334%) hue-rotate(196deg)
+		brightness(92%) contrast(82%);
+	height: 16px;
+	margin-top: 2px;
+	transition: filter 0.5s;
+	width: 16px;
+}
+
+.card-link-info {
+	display: flex;
+	flex-direction: column;
+	margin-left: 24px;
+	overflow: hidden;
+}
+
+.card-link-info-text {
+	font-size: 13px;
+	font-weight: 400;
+	line-height: 16px;
+}
+
+.card-link-info-description {
+	color: #0b5fff;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 24px;
+}
+
+.card-link-description {
+	color: #54555f;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 24px;
+	word-break: break-word;
+}

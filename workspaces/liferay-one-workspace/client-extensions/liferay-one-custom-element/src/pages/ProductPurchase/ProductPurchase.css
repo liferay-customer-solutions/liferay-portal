@@ -2,7 +2,7 @@
 	margin: 0 auto;
 	max-width: 600px;
 
-	.product-purchase-account-card {
+	& .product-purchase-account-card {
 		cursor: pointer;
 
 		&.selected {
@@ -11,37 +11,37 @@
 		}
 	}
 
-	.product-purchase-account-card-summary {
+	& .product-purchase-account-card-summary {
 		border-top: 1px solid #e7e7ed;
 	}
 
-	.product-purchase-banner {
+	& .product-purchase-banner {
 		background-color: #fff;
 		border: 1px solid #e7e7ed;
 		border-radius: 16px;
 	}
 
-	.product-purchase-banner-title {
+	& .product-purchase-banner-title {
 		font-size: 20px;
 		font-weight: 600;
 		margin-bottom: 4px;
 	}
 
-	.product-purchase-header-banner {
+	& .product-purchase-header-banner {
 		background-color: #f7f7f8;
 		border-radius: 16px;
 	}
 
-	.product-purchase-shell-title {
+	& .product-purchase-shell-title {
 		font-size: 32px;
 		font-weight: 700;
 		line-height: 40px;
 	}
 
-	.product-purchase-steps {
+	& .product-purchase-steps {
 		gap: 8px;
 
-		.step {
+		& .step {
 			color: #999aa3;
 			font-size: 14px;
 			font-weight: 600;
@@ -56,20 +56,20 @@
 		}
 	}
 
-	.product-purchase-summary-label {
+	& .product-purchase-summary-label {
 		min-width: 80px;
 	}
 
-	.product-purchase-license-card {
+	& .product-purchase-license-card {
 		border-color: #e2e2e4;
 		border-radius: 10px;
 
-		.product-purchase-license-card-icon {
+		& .product-purchase-license-card-icon {
 			color: #377cff;
 		}
 	}
 
-	.product-purchase-license-card-stepper {
+	& .product-purchase-license-card-stepper {
 		height: 40px;
 
 		:is(span) {
@@ -78,18 +78,18 @@
 		}
 	}
 
-	.product-purchase-license-card-tier {
+	& .product-purchase-license-card-tier {
 		background-color: #f7f7f8;
 		border-radius: 8px;
 
-		.product-purchase-license-tier-text {
+		& .product-purchase-license-tier-text {
 			color: #6c6c75;
 			font-size: 13px;
 			line-height: 16px;
 		}
 	}
 
-	.product-purchase-radio-card {
+	& .product-purchase-radio-card {
 		cursor: pointer;
 
 		&.selected {
@@ -98,7 +98,7 @@
 		}
 	}
 
-	.product-purchase-new-address {
+	& .product-purchase-new-address {
 		background-color: #fff;
 		border-color: #0b60ff !important;
 

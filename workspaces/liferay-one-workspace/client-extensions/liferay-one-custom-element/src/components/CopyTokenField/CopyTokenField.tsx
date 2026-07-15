@@ -5,7 +5,6 @@
 
 import {ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
-
 import i18n from '~/i18n';
 import {Liferay} from '~/services/liferay/liferay';
 

@@ -18,6 +18,8 @@ import {
 import {AppRoute, toRouteObjects} from '~/utils/routeUtils';
 
 import ProductPurchaseLayout from './components/ProductPurchaseLayout/ProductPurchaseLayout';
+import {AppPurchaseProvider} from './context/AppPurchaseContext';
+import {CartProvider} from './context/CartContext';
 import {
 	getProductPurchaseSteps,
 	toStepItems,
@@ -40,7 +42,7 @@ const ProductPurchaseRoutes = ({product}: {product: DeliveryProduct}) => {
 	const searchParams = new URLSearchParams(window.location.search);
 
 	const steps = getProductPurchaseSteps({
-		isDXPFree: isDXPFreeTierProduct(product),
+		isDXPFreeOnly: isDXPFreeTierProduct(product),
 		isLDP: isLDPProduct(product),
 		isPaidApp,
 		product,
@@ -107,11 +109,15 @@ const ProductPurchaseRouter = () => {
 
 	return (
 		<HashRouter>
-			<div className="my-7 product-purchase">
-				<Suspense fallback={null}>
-					<ProductPurchaseRoutes product={product} />
-				</Suspense>
-			</div>
+			<AppPurchaseProvider>
+				<CartProvider>
+					<div className="my-7 product-purchase">
+						<Suspense fallback={null}>
+							<ProductPurchaseRoutes product={product} />
+						</Suspense>
+					</div>
+				</CartProvider>
+			</AppPurchaseProvider>
 		</HashRouter>
 	);
 };

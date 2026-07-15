@@ -14,6 +14,7 @@ import LicenseTermsCheckbox from '~/pages/ProductPurchase/components/LicenseTerm
 import {useProductPurchaseLayoutContext} from '~/pages/ProductPurchase/components/ProductPurchaseLayout/ProductPurchaseLayout';
 import ProductPurchaseShell from '~/pages/ProductPurchase/components/ProductPurchaseShell/ProductPurchaseShell';
 import commerceSchemas from '~/schema/commerceSchemas';
+import ProductPurchaseDXPFree from '~/services/commerce/ProductPurchaseDXPFree';
 import FetcherError from '~/services/fetcher/FetcherError';
 import {Liferay} from '~/services/liferay/liferay';
 import LicenseKeys from '~/services/spring-boot/LicenseKeys';
@@ -93,7 +94,9 @@ const ActivationKeyForm = () => {
 			throw error;
 		}
 
-		await handlePurchase(formFields);
+		await handlePurchase(
+			new ProductPurchaseDXPFree(selectedAccount, product, formFields)
+		);
 	};
 
 	return (
@@ -165,7 +168,9 @@ const ActivationKeyForm = () => {
 			<Input
 				{...register('domain')}
 				errorMessage={errors.domain?.message}
-				helpMessage={i18n.translate('input-one-domain-name-per-instance')}
+				helpMessage={i18n.translate(
+					'input-one-domain-name-per-instance'
+				)}
 				label={i18n.translate('domain')}
 				required
 			/>

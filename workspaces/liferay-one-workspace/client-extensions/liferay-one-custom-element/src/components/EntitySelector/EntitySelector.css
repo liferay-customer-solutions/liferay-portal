@@ -1,10 +1,10 @@
 .entity-selector-menu {
-	.input-group-item-focusable:focus-within {
+	& .input-group-item-focusable:focus-within {
 		box-shadow: none;
 		outline: 0;
 	}
 
-	.form-control {
+	& .form-control {
 		&:active,
 		&:focus {
 			border-color: var(--color-brand-primary);

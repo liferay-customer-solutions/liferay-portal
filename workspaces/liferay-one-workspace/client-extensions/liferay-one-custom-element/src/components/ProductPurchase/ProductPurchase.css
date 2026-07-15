@@ -1,0 +1,27 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+.product-purchase--multi-step-nav {
+	& .multi-step-item:last-of-type .multi-step-divider {
+		display: none;
+	}
+}
+
+.product-purchase-shell-heading {
+	& h1 {
+		font-size: 32px !important;
+		font-weight: 700 !important;
+		line-height: 40px !important;
+	}
+}
+
+.price-text-label {
+	font-size: 13px;
+}
+
+.price-text-value {
+	font-size: 16px;
+	font-weight: 600;
+}

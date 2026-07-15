@@ -16,8 +16,8 @@ import {
 } from '~/hooks/useProjectCommerce';
 import {getProductOrderInfo, useProjectOrders} from '~/hooks/useProjectOrders';
 import i18n, {Word} from '~/i18n';
-import ActivationTab from '~/pages/MyAccount/Projects/components/ActivationTab/ActivationTab';
 import AIHubAlert from '~/pages/MyAccount/Projects/components/AIHubAlert/AIHubAlert';
+import ActivationTab from '~/pages/MyAccount/Projects/components/ActivationTab/ActivationTab';
 import DetailHeader from '~/pages/MyAccount/Projects/components/DetailHeader/DetailHeader';
 import DetailsTab from '~/pages/MyAccount/Projects/components/DetailsTab/DetailsTab';
 import DownloadTab from '~/pages/MyAccount/Projects/components/DownloadTab/DownloadTab';
@@ -40,7 +40,7 @@ type ProjectItemDetailsProps = {
 };
 
 export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
-	const {accountERC, applicationERC, productERC} = useParams();
+	const {applicationERC, productERC} = useParams();
 	const {projectId, projects} = useProject();
 
 	const itemERC = productERC ?? applicationERC ?? '';
@@ -110,7 +110,10 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 		),
 		'download': () => <DownloadTab kind={kind} />,
 		'environment': () => (
-			<EnvironmentTab environment={orderInfo.environment} />
+			<EnvironmentTab
+				environment={orderInfo.environment}
+				profile={environmentProfile}
+			/>
 		),
 		'help-and-support': () => (
 			<HelpSupportTab learnUrl={learnUrl} product={product} />

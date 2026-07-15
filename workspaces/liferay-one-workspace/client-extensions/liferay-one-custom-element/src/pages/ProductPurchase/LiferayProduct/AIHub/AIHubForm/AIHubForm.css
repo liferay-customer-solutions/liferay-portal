@@ -1,0 +1,63 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+.liferay-ai-hub-form-aggreements-text {
+	font-size: 11px;
+	text-align: justify;
+}
+
+.liferay-ai-hub-form-aggreements-check-box,
+.liferay-ai-hub-form-label-check-box,
+.liferay-ai-hub-form-purpose-helper-text {
+	font-size: 11px;
+}
+
+.liferay-ai-hub-form-fail {
+	border: solid 1px red !important;
+}
+
+.liferay-ai-hub-form-select-input {
+	height: 40px;
+}
+
+.liferay-ai-hub-form {
+	& .loading-animation {
+		margin: 0px !important;
+	}
+}
+
+.liferay-ai-hub-form-container {
+	max-width: 610px;
+}
+
+.liferay-ai-hub-form-next-step-page-icon {
+	height: 40px !important;
+	margin: 20px !important;
+	width: 40px !important;
+}
+
+.liferay-ai-hub-form-token-name {
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 24px;
+}
+
+.liferay-ai-hub-form-token-description {
+	font-size: 13px;
+	font-weight: 400;
+	line-height: 16px;
+}
+
+.liferay-ai-hub-form-token-price {
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 20px;
+	text-align: right;
+	vertical-align: middle;
+}
+
+.liferay-ai-hub-form-info {
+	font-size: 14px;
+}

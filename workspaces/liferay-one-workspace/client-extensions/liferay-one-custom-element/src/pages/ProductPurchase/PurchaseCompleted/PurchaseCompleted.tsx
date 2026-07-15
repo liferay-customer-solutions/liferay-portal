@@ -17,10 +17,7 @@ import ProductPurchaseHeaderCards from '~/pages/ProductPurchase/components/Produ
 import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
 import {Liferay} from '~/services/liferay/liferay';
 import {PaymentStatus} from '~/utils/orderUtils';
-import {
-	getProductPriceModel,
-	isDXPFreeTierProduct,
-} from '~/utils/productUtils';
+import {getProductPriceModel, isDXPFreeTierProduct} from '~/utils/productUtils';
 import {getSiteURL} from '~/utils/siteUtils';
 
 import type {Account} from '~/types/accounts';

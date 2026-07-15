@@ -13,10 +13,10 @@
 	justify-content: center;
 	padding: 3rem 1.5rem;
 	text-align: center;
-}
 
-.restricted-feature-message-icon {
-	color: var(--color-brand-primary, #0b5fff);
-	font-size: 2rem;
-	margin-bottom: 1rem;
+	.restricted-feature-message-icon {
+		color: var(--color-brand-primary, #0b5fff);
+		font-size: 2rem;
+		margin-bottom: 1rem;
+	}
 }

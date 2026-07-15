@@ -13,27 +13,27 @@
 	border-bottom: 1px solid #e7e7ed;
 	gap: 16px;
 	padding: 16px 24px;
-}
 
-.account-members-toolbar .account-members-search {
-	flex: 1 1 auto;
-	margin: 0;
-	max-width: none;
-}
+	& .account-members-search {
+		flex: 1 1 auto;
+		margin: 0;
+		max-width: none;
 
-.account-members-toolbar .account-members-search .input-group-inset-item {
-	padding-left: var(--spacer-3);
-	padding-right: var(--spacer-3);
+		& .input-group-inset-item {
+			padding-left: var(--spacer-3);
+			padding-right: var(--spacer-3);
+		}
+	}
+
+	&:has(+ .account-members-active-filters) {
+		border-bottom: 0;
+		padding-bottom: 0;
+	}
 }
 
 .account-members-filter-button {
 	border: 1px solid #cdced9;
 	white-space: nowrap;
-}
-
-.account-members-toolbar:has(+ .account-members-active-filters) {
-	border-bottom: 0;
-	padding-bottom: 0;
 }
 
 .account-members-active-filters {
@@ -67,26 +67,26 @@
 
 .account-members-table {
 	margin-bottom: 0;
-}
 
-.account-members-table thead th {
-	border-top: 0;
-	color: #6b6c7e;
-	font-weight: 600;
-	padding: 12px 24px;
-	text-transform: none;
-}
+	& thead th {
+		border-top: 0;
+		color: #6b6c7e;
+		font-weight: 600;
+		padding: 12px 24px;
+		text-transform: none;
+	}
 
-.account-members-table tbody td {
-	border-top: 1px solid #f1f2f5;
-	color: #1b2a3b;
-	padding: 16px 24px;
-	vertical-align: middle;
-}
+	& tbody td {
+		border-top: 1px solid #f1f2f5;
+		color: #1b2a3b;
+		padding: 16px 24px;
+		vertical-align: middle;
+	}
 
-.account-members-table tbody td:last-child,
-.account-members-table thead th:last-child {
-	text-align: right;
+	& tbody td:last-child,
+	& thead th:last-child {
+		text-align: right;
+	}
 }
 
 .account-members-avatar {
@@ -115,10 +115,10 @@
 	height: 8px;
 	margin-right: 8px;
 	width: 8px;
-}
 
-.account-members-status-dot-inactive {
-	background-color: #a7a9bc;
+	&.account-members-status-dot-inactive {
+		background-color: #a7a9bc;
+	}
 }
 
 .account-members-invite-button {
@@ -128,10 +128,10 @@
 .account-members-pagination {
 	border-top: 1px solid #e7e7ed;
 	padding: 8px 24px;
-}
 
-.account-members-pagination .pagination-bar {
-	margin: 0;
+	& .pagination-bar {
+		margin: 0;
+	}
 }
 
 .account-members-products-card {
@@ -139,11 +139,11 @@
 	border: 1px solid #e7e7ed;
 	border-radius: 12px;
 	padding: 24px 32px;
-}
 
-.account-members-products-card .btn {
-	border: 1px solid #cdced9;
-	font-weight: 600;
+	& .btn {
+		border: 1px solid #cdced9;
+		font-weight: 600;
+	}
 }
 
 .account-members-roles-label {

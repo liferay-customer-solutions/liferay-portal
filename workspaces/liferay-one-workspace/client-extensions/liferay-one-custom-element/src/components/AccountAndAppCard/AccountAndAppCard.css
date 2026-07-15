@@ -1,0 +1,44 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+.card-container {
+	align-items: center;
+	border: 1px solid #e2e2e4;
+	border-radius: 0.5rem;
+	display: flex;
+	max-width: 16.75rem;
+	padding: 1rem;
+	width: 100%;
+}
+
+.card-logo {
+	margin-right: 1rem;
+}
+
+.card-logo-image {
+	border-radius: 8px;
+	max-height: 3.5rem;
+	object-fit: contain;
+	width: 3.5rem;
+}
+
+.card-info {
+	display: flex;
+	flex-direction: column;
+}
+
+.card-info-text {
+	color: #282934;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 20px;
+}
+
+.card-info-description {
+	color: #54555f;
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 20px;
+}

@@ -16,17 +16,17 @@
 	&:hover {
 		cursor: pointer;
 
-		.ticket-button-option,
-		.ticket-button-selected {
+		& .ticket-button-option,
+		& .ticket-button-selected {
 			display: flex !important;
 		}
 
-		.ticket-status {
+		& .ticket-status {
 			display: none !important;
 		}
 	}
 
-	.ticket-label {
+	& .ticket-label {
 		border-color: transparent;
 		border-radius: var(--border-radius-lg, 10px) 0px 0px
 			var(--border-radius-lg, 10px);
@@ -47,20 +47,20 @@
 				var(--color-action-primary-hover)
 			);
 
-			.ticket-text-container {
+			& .ticket-text-container {
 				color: var(
 					--color-action-primary-hover,
 					var(--color-action-primary-hover)
 				);
 
-				.ticket-link-icon-exhibit,
-				.ticket-link-icon-selected {
+				& .ticket-link-icon-exhibit,
+				& .ticket-link-icon-selected {
 					display: block !important;
 				}
 			}
 		}
 
-		.ticket-status {
+		& .ticket-status {
 			background-color: var(
 				--color-state-info-lighten-2,
 				var(--color-state-info-lighten-2)
@@ -78,26 +78,26 @@
 			width: 12rem;
 		}
 
-		.ticket-status-text {
+		& .ticket-status-text {
 			max-width: 100%;
 			text-overflow: ellipsis;
 			white-space: nowrap;
 		}
 
-		.ticket-text-container {
+		& .ticket-text-container {
 			color: var(--color-neutral-8, var(--color-neutral-8));
 			font-size: var(--text-paragraph-sm-font-size, 13px);
 			font-weight: 600;
 			line-height: var(--text-small-caps-line-height, 16px);
 
-			.ticket-text {
+			& .ticket-text {
 				text-overflow: ellipsis;
 				white-space: nowrap;
 			}
 		}
 	}
 
-	.ticket-button {
+	& .ticket-button {
 		border-color: transparent;
 		border-radius: 0px var(--border-radius-lg, 10px)
 			var(--border-radius-lg, 10px) 0px;
@@ -118,7 +118,7 @@
 				var(--color-action-primary-hover)
 			);
 
-			.ticket-button-icon {
+			& .ticket-button-icon {
 				color: var(
 					--color-action-primary-hover,
 					var(--color-action-primary-hover)
@@ -126,7 +126,7 @@
 			}
 		}
 
-		.ticket-button-icon {
+		& .ticket-button-icon {
 			color: var(--color-neutral-8, var(--color-neutral-8));
 		}
 	}
