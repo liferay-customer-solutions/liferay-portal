@@ -6,20 +6,17 @@
 package com.liferay.one;
 
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
-import com.liferay.headless.admin.user.client.problem.Problem;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Account;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Order;
 import com.liferay.one.constants.ClassNameConstants;
 import com.liferay.one.constants.CommerceOrderConstants;
 import com.liferay.one.model.LicenseKey;
 import com.liferay.one.model.SubscriptionEntry;
-import com.liferay.one.service.AccountService;
+import com.liferay.one.permission.LicenseKeyPermission;
 import com.liferay.one.service.CommerceOrderService;
 import com.liferay.one.service.LicenseKeyService;
 import com.liferay.one.service.SubscriptionEntryService;
-import com.liferay.portal.kernel.security.auth.PrincipalException;
-
-import java.util.Objects;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
 
 import org.json.JSONObject;
 
@@ -175,7 +172,8 @@ public class LicenseKeysRestController extends OneBaseRestController {
 			LicenseKey licenseKey = _licenseKeyService.getLicenseKey(
 				jwt, licenseKeyId);
 
-			_checkAccountViewPermission(licenseKey.getAccountEntryId(), jwt);
+			_licenseKeyPermission.check(
+				licenseKey.getAccountEntryId(), ActionKeys.VIEW, jwt);
 		}
 
 		UserAccount userAccount = getMyUserAccount(jwt);
@@ -187,33 +185,11 @@ public class LicenseKeysRestController extends OneBaseRestController {
 		}
 	}
 
-	private void _checkAccountViewPermission(long accountEntryId, Jwt jwt)
-		throws Exception {
-
-		try {
-			_accountService.getAccount(accountEntryId, jwt);
-		}
-		catch (Problem.ProblemException problemException) {
-			Problem problem = problemException.getProblem();
-
-			if ((problem != null) &&
-				(Objects.equals(
-					HttpStatus.FORBIDDEN.name(), problem.getStatus()) ||
-				 Objects.equals(
-					 HttpStatus.NOT_FOUND.name(), problem.getStatus()))) {
-
-				throw new PrincipalException();
-			}
-
-			throw problemException;
-		}
-	}
-
-	@Autowired
-	private AccountService _accountService;
-
 	@Autowired
 	private CommerceOrderService _commerceOrderService;
+
+	@Autowired
+	private LicenseKeyPermission _licenseKeyPermission;
 
 	@Autowired
 	private LicenseKeyService _licenseKeyService;

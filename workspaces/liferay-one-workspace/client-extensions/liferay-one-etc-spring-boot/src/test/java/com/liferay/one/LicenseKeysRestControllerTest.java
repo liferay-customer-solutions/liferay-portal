@@ -6,19 +6,19 @@
 package com.liferay.one;
 
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
-import com.liferay.headless.admin.user.client.problem.Problem;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Account;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Order;
 import com.liferay.one.constants.ClassNameConstants;
 import com.liferay.one.constants.CommerceOrderConstants;
 import com.liferay.one.model.LicenseKey;
 import com.liferay.one.model.SubscriptionEntry;
-import com.liferay.one.service.AccountService;
+import com.liferay.one.permission.LicenseKeyPermission;
 import com.liferay.one.service.CommerceOrderService;
 import com.liferay.one.service.LicenseKeyService;
 import com.liferay.one.service.SubscriptionEntryService;
 import com.liferay.one.service.UserAccountService;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -311,9 +311,9 @@ public class LicenseKeysRestControllerTest {
 		);
 
 		Mockito.verify(
-			_accountService, Mockito.times(2)
-		).getAccount(
-			_ACCOUNT_ID, null
+			_licenseKeyPermission, Mockito.times(2)
+		).check(
+			_ACCOUNT_ID, ActionKeys.VIEW, null
 		);
 
 		Mockito.verify(
@@ -350,14 +350,12 @@ public class LicenseKeysRestControllerTest {
 			licenseKey
 		);
 
-		Problem problem = new Problem();
-
-		problem.setStatus(HttpStatus.FORBIDDEN.name());
-
-		Mockito.when(
-			_accountService.getAccount(Mockito.anyLong(), Mockito.any())
-		).thenThrow(
-			new Problem.ProblemException(problem)
+		Mockito.doThrow(
+			new PrincipalException()
+		).when(
+			_licenseKeyPermission
+		).check(
+			_ACCOUNT_ID, ActionKeys.VIEW, null
 		);
 
 		Assertions.assertThrows(
@@ -395,11 +393,12 @@ public class LicenseKeysRestControllerTest {
 		);
 
 		ReflectionTestUtils.setField(
-			licenseKeysRestController, "_accountService", _accountService);
-
-		ReflectionTestUtils.setField(
 			licenseKeysRestController, "_commerceOrderService",
 			_commerceOrderService);
+
+		ReflectionTestUtils.setField(
+			licenseKeysRestController, "_licenseKeyPermission",
+			_licenseKeyPermission);
 
 		ReflectionTestUtils.setField(
 			licenseKeysRestController, "_licenseKeyService",
@@ -420,10 +419,10 @@ public class LicenseKeysRestControllerTest {
 
 	private static final long _USER_ID = 123L;
 
-	private final AccountService _accountService = Mockito.mock(
-		AccountService.class);
 	private final CommerceOrderService _commerceOrderService = Mockito.mock(
 		CommerceOrderService.class);
+	private final LicenseKeyPermission _licenseKeyPermission = Mockito.mock(
+		LicenseKeyPermission.class);
 	private final LicenseKeyService _licenseKeyService = Mockito.mock(
 		LicenseKeyService.class);
 	private final SubscriptionEntryService _subscriptionEntryService =
