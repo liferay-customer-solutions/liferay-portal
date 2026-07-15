@@ -53,10 +53,11 @@ export function resolveProductTabConfig({
 	const learnUrl = getSpecificationValue(product, 'project-learn-url');
 
 	const hasSupportInfo =
-		Boolean(learnUrl) ||
-		SUPPORT_SPECIFICATION_KEYS.some((specificationKey) =>
-			getSpecificationValue(product, specificationKey)
-		);
+		kind === 'application' &&
+		(Boolean(learnUrl) ||
+			SUPPORT_SPECIFICATION_KEYS.some((specificationKey) =>
+				getSpecificationValue(product, specificationKey)
+			));
 
 	const tabPresent: Record<ProjectTabKey, boolean> = {
 		'activation': activationProfile !== 'none',
