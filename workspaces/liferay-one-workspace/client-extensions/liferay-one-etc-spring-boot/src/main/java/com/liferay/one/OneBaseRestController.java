@@ -11,6 +11,7 @@ import com.liferay.one.exception.LicenseKeyActiveException;
 import com.liferay.one.exception.LicenseKeyValidationException;
 import com.liferay.one.exception.NoSuchLicenseKeyException;
 import com.liferay.one.jira.exception.AccountNotFoundException;
+import com.liferay.one.jira.exception.JiraAssetObjectException;
 import com.liferay.one.service.UserAccountService;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 
@@ -55,6 +56,16 @@ public abstract class OneBaseRestController extends BaseRestController {
 
 		return _toResponseEntity(
 			HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");
+	}
+
+	@ExceptionHandler(JiraAssetObjectException.class)
+	public ResponseEntity<?> handleException(
+		JiraAssetObjectException jiraAssetObjectException) {
+
+		_log.error("The asset object was not found", jiraAssetObjectException);
+
+		return _toResponseEntity(
+			HttpStatus.NOT_FOUND, jiraAssetObjectException.getMessage());
 	}
 
 	@ExceptionHandler(LicenseKeyActiveException.class)

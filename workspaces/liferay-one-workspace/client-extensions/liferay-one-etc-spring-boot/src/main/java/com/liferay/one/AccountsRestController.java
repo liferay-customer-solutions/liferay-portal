@@ -6,6 +6,7 @@
 package com.liferay.one;
 
 import com.liferay.one.jira.service.AccountAssetService;
+import com.liferay.one.jira.service.AccountSyncService;
 import com.liferay.one.permission.AccountPermission;
 import com.liferay.one.service.AccountService;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * @author Jenny Chen
@@ -70,6 +72,24 @@ public class AccountsRestController extends OneBaseRestController {
 			HttpStatus.OK);
 	}
 
+	@PostMapping("/{externalReferenceCode}/sync-to-jsm")
+	public ResponseEntity<Void> postSyncToJSM(
+		@PathVariable("externalReferenceCode") String externalReferenceCode) {
+
+		try {
+			_accountSyncService.syncAccount(
+				_accountService.getAccount(externalReferenceCode));
+		}
+		catch (Exception exception) {
+			throw new ResponseStatusException(
+				HttpStatus.INTERNAL_SERVER_ERROR,
+				"There was a problem synchronizing the JIRA object keys",
+				exception);
+		}
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
 	@PostMapping("/{externalReferenceCode}/user-accounts/{userId}")
 	public void postUserAccounts(
 			@AuthenticationPrincipal Jwt jwt,
@@ -104,5 +124,8 @@ public class AccountsRestController extends OneBaseRestController {
 
 	@Autowired
 	private AccountService _accountService;
+
+	@Autowired
+	private AccountSyncService _accountSyncService;
 
 }

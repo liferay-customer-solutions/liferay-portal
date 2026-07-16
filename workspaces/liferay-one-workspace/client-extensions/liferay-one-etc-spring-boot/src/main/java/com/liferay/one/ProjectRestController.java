@@ -6,8 +6,10 @@
 package com.liferay.one;
 
 import com.liferay.one.jira.service.AccountAssetService;
+import com.liferay.one.jira.service.AccountSyncService;
 import com.liferay.one.permission.BusinessEventPermission;
 import com.liferay.one.service.ProjectMembershipService;
+import com.liferay.one.service.ProjectService;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * @author Amos Fong
@@ -71,13 +74,37 @@ public class ProjectRestController extends OneBaseRestController {
 			jwt, projectId, accountRoleExternalReferenceCode, userId);
 	}
 
+	@PostMapping("/{externalReferenceCode}/sync-to-jsm")
+	public ResponseEntity<Void> postSyncToJSM(
+		@PathVariable("externalReferenceCode") String externalReferenceCode) {
+
+		try {
+			_accountSyncService.syncProject(
+				_projectService.getProject(externalReferenceCode));
+		}
+		catch (Exception exception) {
+			throw new ResponseStatusException(
+				HttpStatus.INTERNAL_SERVER_ERROR,
+				"There was a problem synchronizing the JIRA object keys",
+				exception);
+		}
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
 	@Autowired
 	private AccountAssetService _accountAssetService;
+
+	@Autowired
+	private AccountSyncService _accountSyncService;
 
 	@Autowired
 	private BusinessEventPermission _businessEventPermission;
 
 	@Autowired
 	private ProjectMembershipService _projectMembershipService;
+
+	@Autowired
+	private ProjectService _projectService;
 
 }
