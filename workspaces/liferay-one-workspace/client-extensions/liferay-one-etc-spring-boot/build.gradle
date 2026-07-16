@@ -80,6 +80,15 @@ dependencies {
 	testImplementation group: "org.springframework.boot", name: "spring-boot-starter-test", version: "2.7.18"
 }
 
+configurations.all {
+	resolutionStrategy {
+		force "com.google.api:gax:2.50.0"
+		force "com.google.api:gax-httpjson:2.50.0"
+		force "io.grpc:grpc-api:1.62.2"
+		force "io.grpc:grpc-context:1.62.2"
+	}
+}
+
 repositories {
 	maven {
 		url new File(rootProject.projectDir, "../../.m2-tmp")
