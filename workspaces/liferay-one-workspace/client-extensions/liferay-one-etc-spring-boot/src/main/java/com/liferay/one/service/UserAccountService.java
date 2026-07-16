@@ -111,6 +111,35 @@ public class UserAccountService extends OneBaseService {
 		return userAccounts;
 	}
 
+	public List<UserAccount> getAllUserAccounts() throws Exception {
+		UserAccountResource userAccountResource = UserAccountResource.builder(
+		).endpoint(
+			lxcDXPMainDomain, lxcDXPServerProtocol
+		).header(
+			HttpHeaders.AUTHORIZATION, getAuthorization()
+		).build();
+
+		List<UserAccount> userAccounts = new ArrayList<>();
+
+		int page = 1;
+
+		while (true) {
+			Page<UserAccount> userAccountsPage =
+				userAccountResource.getUserAccountsPage(
+					null, null, Pagination.of(page, _PAGE_SIZE), null);
+
+			userAccounts.addAll(userAccountsPage.getItems());
+
+			if (page >= userAccountsPage.getLastPage()) {
+				break;
+			}
+
+			page++;
+		}
+
+		return userAccounts;
+	}
+
 	public UserAccount getMyUserAccount(Jwt jwt) throws Exception {
 		UserAccountResource userAccountResource = _buildUserAccountResource(
 			jwt);

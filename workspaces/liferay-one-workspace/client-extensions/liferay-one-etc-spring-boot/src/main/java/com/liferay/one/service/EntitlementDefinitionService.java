@@ -20,12 +20,20 @@ import org.springframework.stereotype.Component;
 public class EntitlementDefinitionService extends OneBaseService {
 
 	public List<EntitlementDefinition> getEntitlementDefinitions(
+			String filterString)
+		throws Exception {
+
+		return getAllItems(
+			"/o/c/entitlementdefinitions", filterString,
+			EntitlementDefinition::new);
+	}
+
+	public List<EntitlementDefinition> getEntitlementDefinitions(
 			String filterString, Map<String, String> productOptions)
 		throws Exception {
 
-		List<EntitlementDefinition> entitlementDefinitions = getAllItems(
-			"/o/c/entitlementdefinitions", filterString,
-			EntitlementDefinition::new);
+		List<EntitlementDefinition> entitlementDefinitions =
+			getEntitlementDefinitions(filterString);
 
 		Iterator<EntitlementDefinition> iterator =
 			entitlementDefinitions.iterator();

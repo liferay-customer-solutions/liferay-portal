@@ -16,23 +16,35 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author Amos Fong
+ * @author Drew Brokke
  */
 @Component
 public class AccountAssetService {
 
-	public String getAccountObjectKey(String externalKey) throws Exception {
-		List<JiraAssetObject> jiraAssetObjects =
-			_jiraAssetService.searchObjects(
-				_accountConverter.getAQLWithBuilder(
-					aqlBuilder -> aqlBuilder.andEquals(
-						externalKey, "External Key")),
-				_accountConverter::toJiraAssetObject);
+	public JiraAssetObject fetchAccountJiraAssetObjectByExternalKey(
+		String externalKey) {
 
-		if (jiraAssetObjects.isEmpty()) {
-			throw new AccountNotFoundException();
+		List<JiraAssetObject> objects = _jiraAssetService.searchObjects(
+			_accountConverter.getAQLWithBuilder(
+				aqlBuilder -> aqlBuilder.andEquals(
+					externalKey,
+					_accountConverter.getExternalKeyAttributeName())),
+			_accountConverter::toJiraAssetObject);
+
+		if (objects.isEmpty()) {
+			return null;
 		}
 
-		JiraAssetObject jiraAssetObject = jiraAssetObjects.get(0);
+		return objects.get(0);
+	}
+
+	public String getAccountObjectKey(String externalKey) throws Exception {
+		JiraAssetObject jiraAssetObject =
+			fetchAccountJiraAssetObjectByExternalKey(externalKey);
+
+		if (jiraAssetObject == null) {
+			throw new AccountNotFoundException();
+		}
 
 		return jiraAssetObject.getObjectKey();
 	}

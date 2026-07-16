@@ -15,6 +15,12 @@ public class Property {
 	public Property(JSONObject jsonObject) {
 		_accountEntryId = jsonObject.optLong(
 			"r_accountEntryToProperty_accountEntryId");
+		_className = jsonObject.optString("className");
+		_classNameId = jsonObject.optLong("classNameId");
+		_classPK = jsonObject.optLong("classPK");
+		_externalReferenceCode = jsonObject.optString("externalReferenceCode");
+		_metadataJSONObject = new JSONObject(
+			jsonObject.optString("metadataJson"));
 		_name = jsonObject.optString("name");
 		_propertyId = jsonObject.getLong("id");
 		_value = jsonObject.optString("value");
@@ -22,6 +28,26 @@ public class Property {
 
 	public long getAccountEntryId() {
 		return _accountEntryId;
+	}
+
+	public String getClassName() {
+		return _className;
+	}
+
+	public long getClassNameId() {
+		return _classNameId;
+	}
+
+	public long getClassPK() {
+		return _classPK;
+	}
+
+	public String getExternalReferenceCode() {
+		return _externalReferenceCode;
+	}
+
+	public JSONObject getMetadataJSONObject() {
+		return _metadataJSONObject;
 	}
 
 	public String getName() {
@@ -37,6 +63,11 @@ public class Property {
 	}
 
 	private final long _accountEntryId;
+	private final String _className;
+	private final long _classNameId;
+	private final long _classPK;
+	private final String _externalReferenceCode;
+	private final JSONObject _metadataJSONObject;
 	private final String _name;
 	private final long _propertyId;
 	private final String _value;

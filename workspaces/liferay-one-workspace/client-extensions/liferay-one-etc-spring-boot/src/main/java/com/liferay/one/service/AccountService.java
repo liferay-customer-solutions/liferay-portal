@@ -194,6 +194,18 @@ public class AccountService extends OneBaseService {
 		return accountResource.getAccount(accountEntryId);
 	}
 
+	public Account getAccount(String externalReferenceCode) throws Exception {
+		AccountResource accountResource = AccountResource.builder(
+		).endpoint(
+			lxcDXPMainDomain, lxcDXPServerProtocol
+		).header(
+			HttpHeaders.AUTHORIZATION, getAuthorization()
+		).build();
+
+		return accountResource.getAccountByExternalReferenceCode(
+			externalReferenceCode);
+	}
+
 	public Account getAccount(String externalReferenceCode, Jwt jwt)
 		throws Exception {
 
