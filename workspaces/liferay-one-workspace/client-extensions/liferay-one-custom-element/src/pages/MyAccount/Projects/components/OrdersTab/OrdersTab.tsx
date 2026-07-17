@@ -5,7 +5,7 @@
 
 import ClayIcon from '@clayui/icon';
 import {useMemo} from 'react';
-import {Link, useParams} from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import RowActionsMenu from '~/components/RowActionsMenu/RowActionsMenu';
 import {useProject} from '~/context/ProjectContext';
 import {ProjectOrder, useProjectOrders} from '~/hooks/useProjectOrders';
@@ -24,6 +24,7 @@ function matchesSearch(order: ProjectOrder, search: string): boolean {
 export default function OrdersTab() {
 	const {projectId, projects} = useProject();
 	const {accountERC} = useParams();
+	const navigate = useNavigate();
 
 	const projectName = projects.find(
 		(project) => project.externalReferenceCode === projectId
@@ -91,8 +92,16 @@ export default function OrdersTab() {
 		},
 		{
 			key: 'actions',
-			render: () => (
-				<RowActionsMenu actions={[{label: 'view-details'}]} />
+			render: (order) => (
+				<RowActionsMenu
+					actions={[
+						{
+							label: 'view-details',
+							onClick: () =>
+								navigate(`/${accountERC}/orders/${order.id}`),
+						},
+					]}
+				/>
 			),
 			width: '1%',
 		},
@@ -102,12 +111,12 @@ export default function OrdersTab() {
 		<FilterableListCard
 			action={
 				<Link
-					className="align-items-center d-flex gap-2 text-decoration-none"
+					className="align-items-center d-flex font-weight-bold mr-2 text-dark text-decoration-none"
 					to={`/${accountERC}/orders`}
 				>
 					{translate('view-all-account-orders')}
 
-					<ClayIcon symbol="shortcut" />
+					<ClayIcon className="ml-1" symbol="shortcut" />
 				</Link>
 			}
 			columns={columns}

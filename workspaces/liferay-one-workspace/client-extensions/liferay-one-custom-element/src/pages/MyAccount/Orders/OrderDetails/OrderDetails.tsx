@@ -14,14 +14,14 @@ import i18n, {translate} from '~/i18n';
 import DetailsCard, {
 	DetailsRow,
 } from '~/pages/MyAccount/Projects/components/DetailsCard/DetailsCard';
+import {getStatusColor} from '~/pages/MyAccount/Projects/utils/getStatusColor';
 import {
 	PaymentStatus,
 	getOrderStatusLabel,
-	orderWorkflowDisplayType,
 	paymentStatusLabels,
 } from '~/utils/orderUtils';
 
-import {STATUS_DOT_COLORS, getOrderTotal, getProjectName} from '../Orders';
+import {getOrderTotal, getProjectName} from '../Orders';
 
 import '../Orders.css';
 
@@ -44,11 +44,6 @@ export default function OrderDetails() {
 }
 
 function OrderDetailsContent({order}: {order: PlacedOrder}) {
-	const statusDisplayType =
-		orderWorkflowDisplayType[
-			order.orderStatusInfo?.code as keyof typeof orderWorkflowDisplayType
-		];
-
 	const paymentStatusLabel =
 		paymentStatusLabels[order.paymentStatus as PaymentStatus];
 
@@ -70,9 +65,9 @@ function OrderDetailsContent({order}: {order: PlacedOrder}) {
 					<span
 						className="orders-status-dot"
 						style={{
-							backgroundColor:
-								STATUS_DOT_COLORS[statusDisplayType] ??
-								STATUS_DOT_COLORS.secondary,
+							backgroundColor: getStatusColor(
+								getOrderStatusLabel(order).toLowerCase()
+							),
 						}}
 					/>
 

@@ -31,12 +31,16 @@ export const PROJECT_TAB_LABELS: Record<ProjectTabKey, Word> = {
 export const PROJECT_TAB_ORDER: ProjectTabKey[] = [...PROJECT_TAB_KEYS];
 
 export const STATUS_DOT_COLORS: {[key: string]: string} = {
-	active: 'var(--color-state-success)',
-	completed: 'var(--color-state-success)',
-	expired: 'var(--color-state-error)',
-	paid: 'var(--color-state-success)',
-	pending: 'var(--color-state-warning)',
-	processing: 'var(--color-state-warning)',
+	'active': 'var(--color-state-success)',
+	'approved': 'var(--color-state-success)',
+	'cancelled': 'var(--color-state-error)',
+	'completed': 'var(--color-state-success)',
+	'expired': 'var(--color-state-error)',
+	'in-progress': 'var(--color-state-info)',
+	'on-hold': 'var(--color-state-warning)',
+	'paid': 'var(--color-state-success)',
+	'pending': 'var(--color-state-warning)',
+	'processing': 'var(--color-state-warning)',
 };
 
 export type SupportLink = {

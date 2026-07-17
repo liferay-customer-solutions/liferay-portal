@@ -20,12 +20,12 @@ import {useOneContext} from '~/context/OneContextProvider';
 import {useFetch} from '~/hooks/useFetch';
 import i18n, {Word, translate} from '~/i18n';
 import {canAccessOrders} from '~/pages/MyAccount/AccountMembers/accountRoles';
+import {getStatusColor} from '~/pages/MyAccount/Projects/utils/getStatusColor';
 import {Liferay} from '~/services/liferay/liferay';
 import {
 	OrderCustomFields,
 	PaymentStatus,
 	getOrderStatusLabel,
-	orderWorkflowDisplayType,
 } from '~/utils/orderUtils';
 import {safeJSONParse} from '~/utils/safeJSONParse';
 
@@ -37,13 +37,6 @@ import type {PlacedOrder} from '~/types/orders';
 const PAGE_SIZE_OPTIONS = [10, 20, 30, 50];
 
 const FILTER_SEARCH_MIN_OPTIONS = 10;
-
-export const STATUS_DOT_COLORS: {[key: string]: string} = {
-	info: '#2e5aac',
-	secondary: '#6b6c7e',
-	success: '#287d3c',
-	warning: '#b95000',
-};
 
 const INVOICE_STATUS_OPTIONS: {label: Word; value: number}[] = [
 	{label: 'paid', value: PaymentStatus.PAID},
@@ -502,12 +495,6 @@ export default function Orders() {
 
 							<ClayTable.Body>
 								{paginatedOrders.map((order) => {
-									const displayType =
-										orderWorkflowDisplayType[
-											order.orderStatusInfo
-												?.code as keyof typeof orderWorkflowDisplayType
-										];
-
 									return (
 										<ClayTable.Row key={order.id}>
 											<ClayTable.Cell>
@@ -541,10 +528,11 @@ export default function Orders() {
 														className="orders-status-dot"
 														style={{
 															backgroundColor:
-																STATUS_DOT_COLORS[
-																	displayType
-																] ??
-																STATUS_DOT_COLORS.secondary,
+																getStatusColor(
+																	getOrderStatusLabel(
+																		order
+																	).toLowerCase()
+																),
 														}}
 													/>
 
