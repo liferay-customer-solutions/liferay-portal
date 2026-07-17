@@ -66,4 +66,23 @@ public class PropertyService extends OneBaseService {
 		return property.getValue();
 	}
 
+	public String getPropertyValue(String className, long classPK, String name)
+		throws Exception {
+
+		List<Property> properties = getAllItems(
+			"/o/c/properties",
+			StringBundler.concat(
+				"(className eq '", className, "') and (classPK eq '", classPK,
+				"') and (name eq '", name, "')"),
+			Property::new);
+
+		if (properties.isEmpty()) {
+			return null;
+		}
+
+		Property property = properties.get(0);
+
+		return property.getValue();
+	}
+
 }

@@ -120,6 +120,33 @@ public class UserAccountService extends OneBaseService {
 		return userAccountResource.getMyUserAccount();
 	}
 
+	public List<UserAccount> getOrganizationUserAccounts(long organizationId)
+		throws Exception {
+
+		UserAccountResource userAccountResource = _buildUserAccountResource();
+
+		List<UserAccount> userAccounts = new ArrayList<>();
+
+		int page = 1;
+
+		while (true) {
+			Page<UserAccount> userAccountsPage =
+				userAccountResource.getOrganizationUserAccountsPage(
+					String.valueOf(organizationId), null, null,
+					Pagination.of(page, _PAGE_SIZE), null);
+
+			userAccounts.addAll(userAccountsPage.getItems());
+
+			if (page >= userAccountsPage.getLastPage()) {
+				break;
+			}
+
+			page++;
+		}
+
+		return userAccounts;
+	}
+
 	public UserAccount getUserAccount(long userId) throws Exception {
 		UserAccountResource userAccountResource = _buildUserAccountResource();
 
