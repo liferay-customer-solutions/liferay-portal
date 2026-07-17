@@ -12,7 +12,7 @@ export default defineConfig(({command}) => ({
 		chunkSizeWarningLimit: 2000,
 		cssCodeSplit: false,
 		outDir: 'build/vite',
-		rollupOptions: {
+		rolldownOptions: {
 			external: ['@liferay/oauth2-provider-web/client'],
 			onwarn(warning, warn) {
 				if (
@@ -33,8 +33,8 @@ export default defineConfig(({command}) => ({
 						: 'assets/[name].[hash][extname]';
 				},
 				chunkFileNames: '[name].[hash].js',
+				codeSplitting: false,
 				entryFileNames: 'index.[hash].js',
-				inlineDynamicImports: true,
 			},
 		},
 	},
@@ -44,12 +44,14 @@ export default defineConfig(({command}) => ({
 		},
 	},
 	optimizeDeps: {
-		esbuildOptions: {
-			define: {
-				global: 'globalThis',
+		exclude: ['@liferay/oauth2-provider-web/client'],
+		rolldownOptions: {
+			transform: {
+				define: {
+					global: 'globalThis',
+				},
 			},
 		},
-		exclude: ['@liferay/oauth2-provider-web/client'],
 	},
 	plugins: [react()],
 	resolve: {

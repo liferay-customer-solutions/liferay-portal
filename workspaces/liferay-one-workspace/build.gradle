@@ -15,3 +15,20 @@ subprojects {
 		}
 	}
 }
+
+// Vite 8 (and its Rolldown bundler) requires Node ">=22.12.0 || ^20.19.0". The
+// Liferay workspace's default Node is 20.12.2, and the root and client
+// extension projects resolve it through different plugin application orders, so
+// they can disagree and clobber the shared build/node install. Pin every
+// project to the same Node 22 LTS to keep the shared install consistent and
+// above Vite's floor.
+allprojects {
+	afterEvaluate {
+		def nodeExtension = extensions.findByName("node")
+
+		if (nodeExtension != null) {
+			nodeExtension.nodeVersion = "22.23.1"
+			nodeExtension.npmVersion = "10.9.8"
+		}
+	}
+}
