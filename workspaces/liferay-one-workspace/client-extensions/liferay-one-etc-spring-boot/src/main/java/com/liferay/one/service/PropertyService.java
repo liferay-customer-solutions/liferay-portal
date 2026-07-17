@@ -72,8 +72,8 @@ public class PropertyService extends OneBaseService {
 		List<Property> properties = getAllItems(
 			"/o/c/properties",
 			StringBundler.concat(
-				"(className eq '", className, "') and (classPK eq '", classPK,
-				"') and (name eq '", name, "')"),
+				"(className eq '", className, "') and (classPK eq ", classPK,
+				") and (name eq '", name, "')"),
 			Property::new);
 
 		if (properties.isEmpty()) {

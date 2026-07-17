@@ -72,8 +72,12 @@ public class OrganizationsRestController extends OneBaseRestController {
 				_userAccountService.getOrganizationUserAccounts(
 					organizationId)) {
 
-			organizationEmailAddresses.add(
-				StringUtil.toLowerCase(userAccount.getEmailAddress()));
+			String emailAddress = userAccount.getEmailAddress();
+
+			if (Validator.isNotNull(emailAddress)) {
+				organizationEmailAddresses.add(
+					StringUtil.toLowerCase(emailAddress));
+			}
 		}
 
 		for (String emailAddress : oktaEmailAddresses) {

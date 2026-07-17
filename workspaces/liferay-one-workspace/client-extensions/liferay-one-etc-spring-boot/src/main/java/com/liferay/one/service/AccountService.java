@@ -27,7 +27,9 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -239,6 +241,24 @@ public class AccountService extends OneBaseService {
 		}
 
 		return null;
+	}
+
+	public Map<Long, String> getAccountRoleNames(long accountId)
+		throws Exception {
+
+		Map<Long, String> accountRoleNames = new HashMap<>();
+
+		AccountRoleResource accountRoleResource = _buildAccountRoleResource();
+
+		Page<AccountRole> accountRolesPage =
+			accountRoleResource.getAccountAccountRolesPage(
+				accountId, null, null, Pagination.of(1, _PAGE_SIZE), null);
+
+		for (AccountRole accountRole : accountRolesPage.getItems()) {
+			accountRoleNames.put(accountRole.getId(), accountRole.getName());
+		}
+
+		return accountRoleNames;
 	}
 
 	public boolean hasDuplicateAccountName(

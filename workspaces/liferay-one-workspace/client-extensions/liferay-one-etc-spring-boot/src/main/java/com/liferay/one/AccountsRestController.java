@@ -20,6 +20,7 @@ import com.liferay.one.service.UserAccountService;
 import com.liferay.one.util.UserAccountUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.LinkedHashMap;
@@ -27,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,7 +180,7 @@ public class AccountsRestController extends OneBaseRestController {
 		Account account = _accountService.getAccount(
 			externalReferenceCode, jwt);
 
-		JSONObject jsonObject = new JSONObject(json);
+		JSONObject jsonObject = _getJSONObject(json);
 
 		Map<Long, String> accountRoleNames = _getAccountRoleNames(
 			account.getId(), jsonObject.optJSONArray("accountRoleIds"));
@@ -207,9 +209,11 @@ public class AccountsRestController extends OneBaseRestController {
 
 		boolean wasMember = false;
 
-		if (userAccount != null) {
-			wasMember = UserAccountUtil.hasAccountMembership(
-				userAccount, account.getId());
+		if ((userAccount != null) &&
+			UserAccountUtil.hasAccountMembership(
+				userAccount, account.getId())) {
+
+			wasMember = true;
 		}
 
 		if (!wasMember) {
@@ -246,9 +250,10 @@ public class AccountsRestController extends OneBaseRestController {
 		throws Exception {
 
 		if (!_entitlementService.hasEntitlement(
-				account.getId(), EntitlementConstants.NAMES_SLAS) &&
-			!_entitlementService.hasEntitlement(
-				account.getId(), EntitlementConstants.NAME_PARTNER)) {
+				account.getId(),
+				ArrayUtil.append(
+					EntitlementConstants.NAMES_SLAS,
+					EntitlementConstants.NAME_PARTNER))) {
 
 			throw new ResponseStatusException(
 				HttpStatus.UNPROCESSABLE_ENTITY,
@@ -270,6 +275,19 @@ public class AccountsRestController extends OneBaseRestController {
 			emailAddress, firstName, StringPool.BLANK, lastName);
 	}
 
+	private long _getAccountRoleId(
+		JSONArray accountRoleIdsJSONArray, int index) {
+
+		try {
+			return accountRoleIdsJSONArray.getLong(index);
+		}
+		catch (JSONException jsonException) {
+			throw new ResponseStatusException(
+				HttpStatus.BAD_REQUEST, "Unable to parse \"accountRoleIds\"",
+				jsonException);
+		}
+	}
+
 	private Map<Long, String> _getAccountRoleNames(
 			long accountId, JSONArray accountRoleIdsJSONArray)
 		throws Exception {
@@ -280,11 +298,13 @@ public class AccountsRestController extends OneBaseRestController {
 			return accountRoleNames;
 		}
 
-		for (int i = 0; i < accountRoleIdsJSONArray.length(); i++) {
-			long accountRoleId = accountRoleIdsJSONArray.getLong(i);
+		Map<Long, String> allAccountRoleNames =
+			_accountService.getAccountRoleNames(accountId);
 
-			String accountRoleName = _accountService.getAccountRoleName(
-				accountId, accountRoleId);
+		for (int i = 0; i < accountRoleIdsJSONArray.length(); i++) {
+			long accountRoleId = _getAccountRoleId(accountRoleIdsJSONArray, i);
+
+			String accountRoleName = allAccountRoleNames.get(accountRoleId);
 
 			if (accountRoleName == null) {
 				throw new ResponseStatusException(
@@ -296,6 +316,17 @@ public class AccountsRestController extends OneBaseRestController {
 		}
 
 		return accountRoleNames;
+	}
+
+	private JSONObject _getJSONObject(String json) {
+		try {
+			return new JSONObject(json);
+		}
+		catch (JSONException jsonException) {
+			throw new ResponseStatusException(
+				HttpStatus.BAD_REQUEST, "Unable to parse the request body",
+				jsonException);
+		}
 	}
 
 	@Autowired

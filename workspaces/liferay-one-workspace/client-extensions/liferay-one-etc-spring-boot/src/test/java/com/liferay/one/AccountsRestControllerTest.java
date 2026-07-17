@@ -21,6 +21,8 @@ import com.liferay.one.service.ProvisioningEmailService;
 import com.liferay.one.service.UserAccountService;
 import com.liferay.petra.string.StringPool;
 
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -173,6 +175,54 @@ public class AccountsRestControllerTest {
 	}
 
 	@Test
+	public void testPostUserAccountsByEmailAddressAccountRolesAssignsCustomerGroup()
+		throws Exception {
+
+		AccountsRestController accountsRestController = _createController();
+
+		Account account = _createAccount();
+
+		Mockito.when(
+			_accountService.getAccount(_EXTERNAL_REFERENCE_CODE, null)
+		).thenReturn(
+			account
+		);
+
+		Mockito.when(
+			_userAccountService.fetchUserAccountByEmailAddress(_EMAIL_ADDRESS)
+		).thenReturn(
+			_createUserAccount()
+		);
+
+		Mockito.when(
+			_oktaService.fetchContactByEmailAddress(_EMAIL_ADDRESS)
+		).thenReturn(
+			Mockito.mock(OktaUser.class)
+		);
+
+		accountsRestController.postUserAccountsByEmailAddressAccountRoles(
+			null, _EXTERNAL_REFERENCE_CODE, _EMAIL_ADDRESS, "{}");
+
+		Mockito.verify(
+			_accountService
+		).addAccountUserAccountByEmailAddress(
+			_ACCOUNT_ID, _EMAIL_ADDRESS, null
+		);
+
+		Mockito.verify(
+			_provisioningAssignmentService
+		).assignCustomerGroup(
+			_USER_ID
+		);
+
+		Mockito.verify(
+			_provisioningEmailService
+		).sendAssignedWelcomeEmail(
+			_USER_ID, account
+		);
+	}
+
+	@Test
 	public void testPostUserAccountsByEmailAddressAccountRolesCreatesOktaUser()
 		throws Exception {
 
@@ -187,9 +237,9 @@ public class AccountsRestControllerTest {
 		);
 
 		Mockito.when(
-			_accountService.getAccountRoleName(_ACCOUNT_ID, _ACCOUNT_ROLE_ID)
+			_accountService.getAccountRoleNames(_ACCOUNT_ID)
 		).thenReturn(
-			"Support Administrator"
+			Map.of(_ACCOUNT_ROLE_ID, "Support Administrator")
 		);
 
 		UserAccount userAccount = _createUserAccount();
@@ -255,9 +305,9 @@ public class AccountsRestControllerTest {
 		);
 
 		Mockito.when(
-			_accountService.getAccountRoleName(_ACCOUNT_ID, _ACCOUNT_ROLE_ID)
+			_accountService.getAccountRoleNames(_ACCOUNT_ID)
 		).thenReturn(
-			"Account Member"
+			Map.of(_ACCOUNT_ROLE_ID, "Account Member")
 		);
 
 		Mockito.when(
@@ -277,6 +327,33 @@ public class AccountsRestControllerTest {
 
 		Assertions.assertEquals(
 			HttpStatus.CONFLICT, responseStatusException.getStatusCode());
+
+		Mockito.verifyNoInteractions(_oktaService);
+	}
+
+	@Test
+	public void testPostUserAccountsByEmailAddressAccountRolesRejectsMalformedBody()
+		throws Exception {
+
+		AccountsRestController accountsRestController = _createController();
+
+		Mockito.when(
+			_accountService.getAccount(_EXTERNAL_REFERENCE_CODE, null)
+		).thenReturn(
+			_createAccount()
+		);
+
+		ResponseStatusException responseStatusException =
+			Assertions.assertThrows(
+				ResponseStatusException.class,
+				() ->
+					accountsRestController.
+						postUserAccountsByEmailAddressAccountRoles(
+							null, _EXTERNAL_REFERENCE_CODE, _EMAIL_ADDRESS,
+							"not json"));
+
+		Assertions.assertEquals(
+			HttpStatus.BAD_REQUEST, responseStatusException.getStatusCode());
 
 		Mockito.verifyNoInteractions(_oktaService);
 	}
@@ -356,9 +433,9 @@ public class AccountsRestControllerTest {
 		);
 
 		Mockito.when(
-			_accountService.getAccountRoleName(_ACCOUNT_ID, _ACCOUNT_ROLE_ID)
+			_accountService.getAccountRoleNames(_ACCOUNT_ID)
 		).thenReturn(
-			"Support Administrator"
+			Map.of(_ACCOUNT_ROLE_ID, "Support Administrator")
 		);
 
 		Mockito.when(
