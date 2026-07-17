@@ -8,7 +8,13 @@ package com.liferay.one.service;
 import com.liferay.one.exception.NoSuchLicenseKeyException;
 import com.liferay.one.model.LicenseKey;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 import java.util.Collections;
+import java.util.List;
+
+import org.json.JSONObject;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,6 +53,46 @@ public class LicenseKeyServiceTest {
 			"(active eq true) and (complimentary eq false) and (orderId eq " +
 				"'order-1')",
 			_filterCaptor.getValue());
+	}
+
+	@Test
+	public void testGetFreeTierProductVersionFallsBackToDefault()
+		throws Exception {
+
+		Mockito.doReturn(
+			null
+		).when(
+			_licenseKeyService
+		).getLatestSupportedProductVersion();
+
+		Assertions.assertEquals(
+			"7.4", _licenseKeyService.getFreeTierProductVersion());
+	}
+
+	@Test
+	public void testGetFreeTierProductVersionFallsBackWhenLookupFails()
+		throws Exception {
+
+		Mockito.doThrow(
+			new RuntimeException()
+		).when(
+			_licenseKeyService
+		).getLatestSupportedProductVersion();
+
+		Assertions.assertEquals(
+			"7.4", _licenseKeyService.getFreeTierProductVersion());
+	}
+
+	@Test
+	public void testGetFreeTierProductVersionUsesLatest() throws Exception {
+		Mockito.doReturn(
+			"2025.q3.9"
+		).when(
+			_licenseKeyService
+		).getLatestSupportedProductVersion();
+
+		Assertions.assertEquals(
+			"2025.q3.9", _licenseKeyService.getFreeTierProductVersion());
 	}
 
 	@Test
@@ -110,15 +156,61 @@ public class LicenseKeyServiceTest {
 	}
 
 	@Test
-	public void testHasLicenseKeyTypeFreeFilter() throws Exception {
+	public void testHasValidLicenseKeyTypeFreeFilter() throws Exception {
 		Assertions.assertFalse(
-			_licenseKeyService.hasLicenseKeyTypeFree(
+			_licenseKeyService.hasValidLicenseKeyTypeFree(
 				"example.com", "owner@example.com"));
 
 		Assertions.assertEquals(
 			"(domains eq 'example.com') and (licenseType eq 'free') and " +
 				"(owner eq 'owner@example.com')",
 			_filterCaptor.getValue());
+	}
+
+	@Test
+	public void testHasValidLicenseKeyTypeFreeReturnsFalseWithinRenewalWindow()
+		throws Exception {
+
+		LicenseKey licenseKey = _freeLicenseKey(
+			Instant.now(
+			).plus(
+				10, ChronoUnit.DAYS
+			));
+
+		Mockito.doReturn(
+			List.of(licenseKey)
+		).when(
+			_licenseKeyService
+		).getAllItems(
+			Mockito.eq("/o/c/licensekeys"), Mockito.anyString(), Mockito.any()
+		);
+
+		Assertions.assertFalse(
+			_licenseKeyService.hasValidLicenseKeyTypeFree(
+				"example.com", "owner@example.com"));
+	}
+
+	@Test
+	public void testHasValidLicenseKeyTypeFreeReturnsTrueBeyondRenewalWindow()
+		throws Exception {
+
+		LicenseKey licenseKey = _freeLicenseKey(
+			Instant.now(
+			).plus(
+				200, ChronoUnit.DAYS
+			));
+
+		Mockito.doReturn(
+			List.of(licenseKey)
+		).when(
+			_licenseKeyService
+		).getAllItems(
+			Mockito.eq("/o/c/licensekeys"), Mockito.anyString(), Mockito.any()
+		);
+
+		Assertions.assertTrue(
+			_licenseKeyService.hasValidLicenseKeyTypeFree(
+				"example.com", "owner@example.com"));
 	}
 
 	@Test
@@ -148,6 +240,20 @@ public class LicenseKeyServiceTest {
 			null, null, null, null, null, null, null, null, null, null);
 
 		Assertions.assertNull(_filterCaptor.getValue());
+	}
+
+	private LicenseKey _freeLicenseKey(Instant customExpirationDateInstant) {
+		return new LicenseKey(
+			new JSONObject(
+			).put(
+				"customExpirationDate", customExpirationDateInstant.toString()
+			).put(
+				"id", 1L
+			).put(
+				"startDate",
+				Instant.now(
+				).toString()
+			));
 	}
 
 	private ArgumentCaptor<String> _filterCaptor;

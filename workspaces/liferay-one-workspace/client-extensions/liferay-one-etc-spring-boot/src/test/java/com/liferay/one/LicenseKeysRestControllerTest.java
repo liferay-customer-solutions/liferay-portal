@@ -97,7 +97,7 @@ public class LicenseKeysRestControllerTest {
 			_createController();
 
 		Mockito.when(
-			_licenseKeyService.hasLicenseKeyTypeFree(
+			_licenseKeyService.hasValidLicenseKeyTypeFree(
 				"example.com", "owner@example.com")
 		).thenReturn(
 			false
@@ -167,7 +167,7 @@ public class LicenseKeysRestControllerTest {
 			_createController();
 
 		Mockito.when(
-			_licenseKeyService.hasLicenseKeyTypeFree(
+			_licenseKeyService.hasValidLicenseKeyTypeFree(
 				"example.com", "owner@example.com")
 		).thenReturn(
 			true

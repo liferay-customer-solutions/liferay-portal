@@ -89,7 +89,7 @@ public class LicenseKeysRestController extends OneBaseRestController {
 		long orderId = jsonObject.optLong("orderId");
 		String owner = jsonObject.optString("owner");
 
-		if (_licenseKeyService.hasLicenseKeyTypeFree(domains, owner)) {
+		if (_licenseKeyService.hasValidLicenseKeyTypeFree(domains, owner)) {
 			throw new ResponseStatusException(
 				HttpStatus.CONFLICT,
 				"A license key was already provisioned for the owner with " +
@@ -122,7 +122,7 @@ public class LicenseKeysRestController extends OneBaseRestController {
 
 		JSONObject jsonObject = new JSONObject(json);
 
-		if (_licenseKeyService.hasLicenseKeyTypeFree(
+		if (_licenseKeyService.hasValidLicenseKeyTypeFree(
 				jsonObject.optString("domains"),
 				jsonObject.optString("owner"))) {
 
