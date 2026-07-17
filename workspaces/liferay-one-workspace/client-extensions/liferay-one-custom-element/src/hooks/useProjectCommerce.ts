@@ -7,11 +7,10 @@ import {format} from 'date-fns';
 import {useMemo} from 'react';
 import useSWR from 'swr';
 import {useFetch} from '~/hooks/useFetch';
+import {getProductContactRoleExternalReferenceCodes} from '~/pages/MyAccount/ProjectMembers/projectRoles';
 import {isUnassignedProject} from '~/pages/MyAccount/Projects/projects';
 import HeadlessCommerceDeliveryCatalog from '~/services/headless/HeadlessCommerceDeliveryCatalog';
 import {Liferay} from '~/services/liferay/liferay';
-import getProductOrderTypes from '~/utils/getProductOrderTypes';
-import {getProductSpecificationValues} from '~/utils/getProductSpecificationValues';
 
 import type {APIResponse} from '~/types/api';
 import type {
@@ -244,7 +243,7 @@ export function useUnassignedCommerce(enabled = true) {
 	return {entitlements, error, loading};
 }
 
-export function useAccountProjectProductTypes() {
+export function useAccountProjectContactRoles() {
 	const accountId = Liferay.CommerceContext?.account?.accountId;
 
 	const {data: contractsData, isLoading: contractsLoading} = useFetch<
@@ -262,7 +261,7 @@ export function useAccountProjectProductTypes() {
 	const {data: productsData, isLoading: productsLoading} =
 		useChannelProducts();
 
-	const productTypeExternalReferenceCodesByProjectId = useMemo(() => {
+	const contactRoleExternalReferenceCodesByProjectId = useMemo(() => {
 		const productsByExternalReferenceCode = new Map(
 			(productsData?.items ?? []).map((product) => [
 				product.externalReferenceCode,
@@ -270,7 +269,10 @@ export function useAccountProjectProductTypes() {
 			])
 		);
 
-		const productTypesByProjectId = new Map<number, Set<string>>();
+		const externalReferenceCodesByProjectId = new Map<
+			number,
+			Set<string>
+		>();
 
 		(contractsData?.items ?? []).forEach((contract) => {
 			const projectId = contract.r_projectToContract_c_projectId;
@@ -279,8 +281,9 @@ export function useAccountProjectProductTypes() {
 				return;
 			}
 
-			const productTypes =
-				productTypesByProjectId.get(projectId) ?? new Set<string>();
+			const externalReferenceCodes =
+				externalReferenceCodesByProjectId.get(projectId) ??
+				new Set<string>();
 
 			toProductEntitlements(contract).forEach((entitlement) => {
 				const product = productsByExternalReferenceCode.get(
@@ -291,31 +294,32 @@ export function useAccountProjectProductTypes() {
 					return;
 				}
 
-				const productType = getProductSpecificationValues(
+				getProductContactRoleExternalReferenceCodes(
 					product.productSpecifications ?? []
+				).forEach((externalReferenceCode) =>
+					externalReferenceCodes.add(externalReferenceCode)
 				);
-
-				if (productType) {
-					productTypes.add(
-						getProductOrderTypes(productType).externalReferenceCode
-					);
-				}
 			});
 
-			productTypesByProjectId.set(projectId, productTypes);
+			externalReferenceCodesByProjectId.set(
+				projectId,
+				externalReferenceCodes
+			);
 		});
 
 		return new Map(
-			[...productTypesByProjectId].map(([projectId, productTypes]) => [
-				projectId,
-				[...productTypes],
-			])
+			[...externalReferenceCodesByProjectId].map(
+				([projectId, externalReferenceCodes]) => [
+					projectId,
+					[...externalReferenceCodes],
+				]
+			)
 		);
 	}, [contractsData, productsData]);
 
 	return {
+		contactRoleExternalReferenceCodesByProjectId,
 		loading: contractsLoading || productsLoading,
-		productTypeExternalReferenceCodesByProjectId,
 	};
 }
 

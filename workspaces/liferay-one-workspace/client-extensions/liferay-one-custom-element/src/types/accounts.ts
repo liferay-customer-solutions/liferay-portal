@@ -55,6 +55,7 @@ export type AccountRole = {
 	accountId: number;
 	description: string;
 	displayName: string;
+	externalReferenceCode: string;
 	id: number;
 	name: string;
 	roleId: number;

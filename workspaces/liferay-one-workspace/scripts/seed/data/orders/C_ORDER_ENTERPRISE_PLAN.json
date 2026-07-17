@@ -5,28 +5,15 @@
 	"entitlements": [
 		{
 			"endDate": "2027-08-09T00:00:00Z",
-			"externalReferenceCode": "C_ENT_ENTERPRISE_PLAN_DATA_PLATFORM",
-			"grantType": "fixed",
-			"maxQuantity": 1,
-			"name": "Liferay Data Platform",
-			"quantity": 1,
-			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-010",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_ENTERPRISE_PLAN_DATA_PLATFORM",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_ENTERPRISE_PLAN",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DATA_PLATFORM",
-			"startDate": "2026-08-09T00:00:00Z"
-		},
-		{
-			"endDate": "2027-08-09T00:00:00Z",
 			"externalReferenceCode": "C_ENT_ENTERPRISE_PLAN_DXP",
 			"grantType": "fixed",
 			"maxQuantity": 1,
-			"name": "Liferay DXP",
+			"name": "Liferay SaaS - Enterprise Plan",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-010",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_ENTERPRISE_PLAN_DXP",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_ENTERPRISE_PLAN",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DXP",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_ENTERPRISE_PLAN",
 			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
@@ -44,17 +31,10 @@
 		"externalReferenceCode": "C_ORDER_ENTERPRISE_PLAN",
 		"orderItems": [
 			{
-				"externalReferenceCode": "C_ORDER_ITEM_ENTERPRISE_PLAN_DATA_PLATFORM",
-				"name": "Liferay Data Platform",
-				"quantity": 1,
-				"skuExternalReferenceCode": "PRDCT-DATA-PLATFORM",
-				"unitPrice": 0
-			},
-			{
 				"externalReferenceCode": "C_ORDER_ITEM_ENTERPRISE_PLAN_DXP",
-				"name": "Liferay DXP",
+				"name": "Liferay SaaS - Enterprise Plan",
 				"quantity": 1,
-				"skuExternalReferenceCode": "PRDCT-DXP",
+				"skuExternalReferenceCode": "PRDCT-SAAS-ENTERPRISE-PLAN",
 				"unitPrice": 0
 			}
 		],

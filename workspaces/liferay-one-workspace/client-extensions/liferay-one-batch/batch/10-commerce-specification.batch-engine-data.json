@@ -285,6 +285,19 @@
 		},
 		{
 			"description": {
+				"en_US": ""
+			},
+			"facetable": true,
+			"key": "product-family",
+			"optionCategory": {
+				"externalReferenceCode": "PRODUCT_METADATA"
+			},
+			"title": {
+				"en_US": "Product Family"
+			}
+		},
+		{
+			"description": {
 				"en_US": "This is the file name (without extension) of the product card icon served from the site documents."
 			},
 			"facetable": false,

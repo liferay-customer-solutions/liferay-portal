@@ -6,17 +6,13 @@
 import ClayButton from '@clayui/button';
 import ClayDropDown from '@clayui/drop-down';
 import ClayIcon from '@clayui/icon';
-import {useMemo, useState} from 'react';
-import {useProjectProducts} from '~/hooks/useProjectCommerce';
+import {useState} from 'react';
 import {translate} from '~/i18n';
 import PermissionsSelect from '~/pages/MyAccount/ProjectMembers/components/PermissionsSelect/PermissionsSelect';
-import {getAvailableDesignations} from '~/pages/MyAccount/ProjectMembers/projectRoles';
 import fetcher from '~/services/fetcher/fetcher';
 import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
 import {Liferay} from '~/services/liferay/liferay';
 import Projects from '~/services/spring-boot/Projects';
-import getProductOrderTypes from '~/utils/getProductOrderTypes';
-import {getProductSpecificationValues} from '~/utils/getProductSpecificationValues';
 
 import '../../ProjectMembers.css';
 
@@ -97,21 +93,7 @@ const EditProjectPermissionsModal = ({
 	onClose,
 	project,
 }: EditProjectPermissionsModalProps) => {
-	const {products} = useProjectProducts(project.externalReferenceCode);
-
-	const availableDesignations = useMemo(() => {
-		const productTypeExternalReferenceCodes = products
-			.map((product) =>
-				getProductSpecificationValues(product.specifications ?? [])
-			)
-			.filter(Boolean)
-			.map(
-				(productType) =>
-					getProductOrderTypes(productType).externalReferenceCode
-			);
-
-		return getAvailableDesignations(productTypeExternalReferenceCodes);
-	}, [products]);
+	const {availableDesignations} = project;
 
 	const [members, setMembers] = useState<WorkingMember[]>(
 		project.members.map((member) => ({

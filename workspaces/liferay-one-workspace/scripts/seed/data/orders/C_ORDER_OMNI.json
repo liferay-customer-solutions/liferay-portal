@@ -5,41 +5,67 @@
 	"entitlements": [
 		{
 			"endDate": "2027-08-09T00:00:00Z",
-			"externalReferenceCode": "C_ENT_OMNI_AIHUB",
+			"externalReferenceCode": "C_ENT_OMNI_AI_HUB",
 			"grantType": "fixed",
 			"maxQuantity": 1,
 			"name": "Liferay AI Hub",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_AIHUB",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_AI_HUB",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_AIHUB",
 			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
-			"externalReferenceCode": "C_ENT_OMNI_DSR",
+			"externalReferenceCode": "C_ENT_OMNI_ANALYTICS_CLOUD",
 			"grantType": "fixed",
 			"maxQuantity": 1,
-			"name": "Digital Sales Room",
+			"name": "Liferay Analytics Cloud Subscription - Basic Plan",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_DSR",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_ANALYTICS_CLOUD",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DSR",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ANALYTICS_CLOUD",
 			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
-			"externalReferenceCode": "C_ENT_OMNI_DATA_PLATFORM",
+			"externalReferenceCode": "C_ENT_OMNI_CLOUD_NATIVE",
 			"grantType": "fixed",
 			"maxQuantity": 1,
-			"name": "Liferay Data Platform",
+			"name": "Liferay Cloud Native - Standard Operations Bundle",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_DATA_PLATFORM",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_CLOUD_NATIVE",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DATA_PLATFORM",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_CLOUD_NATIVE",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_OMNI_COMMERCE",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Liferay Commerce Subscription - Prod Sizing 1",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_COMMERCE",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_COMMERCE",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_OMNI_COMMERCE_CLOUD",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Commerce Cloud Business Solution Bundle",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_COMMERCE_CLOUD",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_COMMERCE_CLOUD",
 			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
@@ -57,15 +83,145 @@
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_OMNI_DATA_PLATFORM",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Liferay Data Platform",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_DATA_PLATFORM",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DATA_PLATFORM",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_OMNI_DSR",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Digital Sales Room",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_DSR",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DSR",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
 			"externalReferenceCode": "C_ENT_OMNI_DXP",
 			"grantType": "fixed",
 			"maxQuantity": 1,
-			"name": "Liferay DXP",
+			"name": "Liferay DXP - Free Tier",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_DXP",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DXP",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_OMNI_ENTERPRISE_SEARCH",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Liferay Enterprise Search - Production",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_ENTERPRISE_SEARCH",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ENTERPRISE_SEARCH",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_OMNI_PAAS",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "PaaS Experience",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_PAAS",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_OMNI_PAAS_LEGACY",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Liferay PaaS Subscription - HA Prod Env",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_PAAS_LEGACY",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_LEGACY",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_OMNI_PORTAL",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Portal EE 6.x License (Production)",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_PORTAL",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PORTAL",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_OMNI_PORTAL_EWSA",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Portal Enterprise-Wide License",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_PORTAL_EWSA",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PORTAL_EWSA",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_OMNI_SAAS",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "SaaS Experience",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_SAAS",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_OMNI_SAAS_BUSINESS_PLAN",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Liferay SaaS - Business Plan",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_SAAS_BUSINESS_PLAN",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_PLAN",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_OMNI_SAAS_ENTERPRISE_PLAN",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Liferay SaaS - Enterprise Plan",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_SAAS_ENTERPRISE_PLAN",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_ENTERPRISE_PLAN",
 			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
@@ -77,24 +233,38 @@
 		"externalReferenceCode": "C_ORDER_OMNI",
 		"orderItems": [
 			{
-				"externalReferenceCode": "C_ORDER_ITEM_OMNI_AIHUB",
+				"externalReferenceCode": "C_ORDER_ITEM_OMNI_AI_HUB",
 				"name": "Liferay AI Hub",
 				"quantity": 1,
 				"skuExternalReferenceCode": "PRDCT-AI-HUB",
 				"unitPrice": 0
 			},
 			{
-				"externalReferenceCode": "C_ORDER_ITEM_OMNI_DSR",
-				"name": "Digital Sales Room",
+				"externalReferenceCode": "C_ORDER_ITEM_OMNI_ANALYTICS_CLOUD",
+				"name": "Liferay Analytics Cloud Subscription - Basic Plan",
 				"quantity": 1,
-				"skuExternalReferenceCode": "PRDCT-DSR",
+				"skuExternalReferenceCode": "PRDCT-ANALYTICS-CLOUD",
 				"unitPrice": 0
 			},
 			{
-				"externalReferenceCode": "C_ORDER_ITEM_OMNI_DATA_PLATFORM",
-				"name": "Liferay Data Platform",
+				"externalReferenceCode": "C_ORDER_ITEM_OMNI_CLOUD_NATIVE",
+				"name": "Liferay Cloud Native - Standard Operations Bundle",
 				"quantity": 1,
-				"skuExternalReferenceCode": "PRDCT-DATA-PLATFORM",
+				"skuExternalReferenceCode": "PRDCT-CLOUD-NATIVE",
+				"unitPrice": 0
+			},
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_OMNI_COMMERCE",
+				"name": "Liferay Commerce Subscription - Prod Sizing 1",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-COMMERCE",
+				"unitPrice": 0
+			},
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_OMNI_COMMERCE_CLOUD",
+				"name": "Commerce Cloud Business Solution Bundle",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-COMMERCE-CLOUD",
 				"unitPrice": 0
 			},
 			{
@@ -105,10 +275,80 @@
 				"unitPrice": 0
 			},
 			{
+				"externalReferenceCode": "C_ORDER_ITEM_OMNI_DATA_PLATFORM",
+				"name": "Liferay Data Platform",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-DATA-PLATFORM",
+				"unitPrice": 0
+			},
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_OMNI_DSR",
+				"name": "Digital Sales Room",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-DSR",
+				"unitPrice": 0
+			},
+			{
 				"externalReferenceCode": "C_ORDER_ITEM_OMNI_DXP",
-				"name": "Liferay DXP",
+				"name": "Liferay DXP - Free Tier",
 				"quantity": 1,
 				"skuExternalReferenceCode": "PRDCT-DXP",
+				"unitPrice": 0
+			},
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_OMNI_ENTERPRISE_SEARCH",
+				"name": "Liferay Enterprise Search - Production",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-ENTERPRISE-SEARCH",
+				"unitPrice": 0
+			},
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_OMNI_PAAS",
+				"name": "PaaS Experience",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-PAAS",
+				"unitPrice": 0
+			},
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_OMNI_PAAS_LEGACY",
+				"name": "Liferay PaaS Subscription - HA Prod Env",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-PAAS-LEGACY",
+				"unitPrice": 0
+			},
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_OMNI_PORTAL",
+				"name": "Portal EE 6.x License (Production)",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-PORTAL",
+				"unitPrice": 0
+			},
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_OMNI_PORTAL_EWSA",
+				"name": "Portal Enterprise-Wide License",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-PORTAL-EWSA",
+				"unitPrice": 0
+			},
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_OMNI_SAAS",
+				"name": "SaaS Experience",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-SAAS",
+				"unitPrice": 0
+			},
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_OMNI_SAAS_BUSINESS_PLAN",
+				"name": "Liferay SaaS - Business Plan",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-SAAS-BUSINESS-PLAN",
+				"unitPrice": 0
+			},
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_OMNI_SAAS_ENTERPRISE_PLAN",
+				"name": "Liferay SaaS - Enterprise Plan",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-SAAS-ENTERPRISE-PLAN",
 				"unitPrice": 0
 			}
 		],

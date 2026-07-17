@@ -8,38 +8,12 @@
 			"externalReferenceCode": "C_ENT_COMMERCE",
 			"grantType": "fixed",
 			"maxQuantity": 1,
-			"name": "Commerce",
+			"name": "Liferay Commerce Subscription - Prod Sizing 1",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-012",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_COMMERCE",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_COMMERCE",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_COMMERCE",
-			"startDate": "2026-08-09T00:00:00Z"
-		},
-		{
-			"endDate": "2027-08-09T00:00:00Z",
-			"externalReferenceCode": "C_ENT_COMMERCE_DXP",
-			"grantType": "fixed",
-			"maxQuantity": 1,
-			"name": "Liferay DXP",
-			"quantity": 1,
-			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-012",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_COMMERCE_DXP",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_COMMERCE",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DXP",
-			"startDate": "2026-08-09T00:00:00Z"
-		},
-		{
-			"endDate": "2027-08-09T00:00:00Z",
-			"externalReferenceCode": "C_ENT_COMMERCE_RECOMMENDATIONS",
-			"grantType": "fixed",
-			"maxQuantity": 1,
-			"name": "productRecommendations",
-			"quantity": 1,
-			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-012",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_COMMERCE_RECOMMENDATIONS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_COMMERCE",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ADDON_COMMERCE_RECOMMENDATIONS",
 			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
@@ -52,23 +26,9 @@
 		"orderItems": [
 			{
 				"externalReferenceCode": "C_ORDER_ITEM_COMMERCE",
-				"name": "Commerce",
+				"name": "Liferay Commerce Subscription - Prod Sizing 1",
 				"quantity": 1,
 				"skuExternalReferenceCode": "PRDCT-COMMERCE",
-				"unitPrice": 0
-			},
-			{
-				"externalReferenceCode": "C_ORDER_ITEM_COMMERCE_DXP",
-				"name": "Liferay DXP",
-				"quantity": 1,
-				"skuExternalReferenceCode": "PRDCT-DXP",
-				"unitPrice": 0
-			},
-			{
-				"externalReferenceCode": "C_ORDER_ITEM_COMMERCE_RECOMMENDATIONS",
-				"name": "Commerce Product Recommendations",
-				"quantity": 1,
-				"skuExternalReferenceCode": "PRDCT-ADDON-COMMERCE-RECOMMENDATIONS",
 				"unitPrice": 0
 			}
 		],

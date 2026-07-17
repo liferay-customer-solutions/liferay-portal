@@ -15,74 +15,15 @@
 			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
 			"categories": [
 				{
-					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_APP"
-				}
-			],
-			"description": {
-				"en_US": "Sample marketplace application for testing the application licenses table."
-			},
-			"externalReferenceCode": "PRDCT-APP",
-			"name": {
-				"en_US": "Test Application"
-			},
-			"productSpecifications": [
-				{
-					"specificationKey": "publisher-name",
-					"value": {
-						"en_US": "Liferay, Inc."
-					}
-				},
-				{
-					"specificationKey": "price-model",
-					"value": {
-						"en_US": "Paid"
-					}
-				},
-				{
-					"specificationKey": "liferay-products-categories",
-					"value": {
-						"en_US": "Platform"
-					}
-				},
-				{
-					"specificationKey": "product-icon",
-					"value": {
-						"en_US": "app"
-					}
-				},
-				{
-					"specificationKey": "type",
-					"value": {
-						"en_US": "app"
-					}
-				}
-			],
-			"productType": "virtual",
-			"skus": [
-				{
-					"externalReferenceCode": "PRDCT-APP",
-					"neverExpire": true,
-					"price": 0,
-					"published": true,
-					"purchasable": true,
-					"sku": "PRDCT-APP"
-				}
-			]
-		},
-		{
-			"active": true,
-			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
-			"categories": [
-				{
 					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
 				}
 			],
 			"description": {
-				"en_US": "Liferay Cloud Native subscription for testing the cloud native environments card."
+				"en_US": "Commerce product recommendations add-on for testing boolean capability entitlements."
 			},
-			"externalReferenceCode": "PRDCT-CLOUD-NATIVE",
+			"externalReferenceCode": "PRDCT-ADDON-COMMERCE-RECOMMENDATIONS",
 			"name": {
-				"en_US": "Cloud Native"
+				"en_US": "Commerce Product Recommendations"
 			},
 			"productSpecifications": [
 				{
@@ -95,54 +36,24 @@
 					"specificationKey": "price-model",
 					"value": {
 						"en_US": "Paid"
-					}
-				},
-				{
-					"specificationKey": "liferay-products-categories",
-					"value": {
-						"en_US": "Platform"
-					}
-				},
-				{
-					"specificationKey": "product-icon",
-					"value": {
-						"en_US": "cloud"
-					}
-				},
-				{
-					"specificationKey": "type",
-					"value": {
-						"en_US": "cloud"
-					}
-				},
-				{
-					"specificationKey": "project-activation-profile",
-					"value": {
-						"en_US": "cloud-native"
-					}
-				},
-				{
-					"specificationKey": "project-details-profile",
-					"value": {
-						"en_US": "dates-status"
 					}
 				},
 				{
 					"specificationKey": "family",
 					"value": {
-						"en_US": "PaaS"
+						"en_US": "Commerce"
 					}
 				}
 			],
 			"productType": "virtual",
 			"skus": [
 				{
-					"externalReferenceCode": "PRDCT-CLOUD-NATIVE",
+					"externalReferenceCode": "PRDCT-ADDON-COMMERCE-RECOMMENDATIONS",
 					"neverExpire": true,
 					"price": 0,
 					"published": true,
 					"purchasable": true,
-					"sku": "PRDCT-CLOUD-NATIVE"
+					"sku": "PRDCT-ADDON-COMMERCE-RECOMMENDATIONS"
 				}
 			]
 		},
@@ -155,11 +66,11 @@
 				}
 			],
 			"description": {
-				"en_US": "Liferay Enterprise Search subscription for testing the enterprise search activation."
+				"en_US": "Disaster recovery add-on for testing boolean capability entitlements."
 			},
-			"externalReferenceCode": "PRDCT-ENTERPRISE-SEARCH",
+			"externalReferenceCode": "PRDCT-ADDON-DISASTER-RECOVERY",
 			"name": {
-				"en_US": "Enterprise Search"
+				"en_US": "Disaster Recovery Add-on"
 			},
 			"productSpecifications": [
 				{
@@ -172,386 +83,6 @@
 					"specificationKey": "price-model",
 					"value": {
 						"en_US": "Paid"
-					}
-				},
-				{
-					"specificationKey": "liferay-products-categories",
-					"value": {
-						"en_US": "Platform"
-					}
-				},
-				{
-					"specificationKey": "product-icon",
-					"value": {
-						"en_US": "search"
-					}
-				},
-				{
-					"specificationKey": "type",
-					"value": {
-						"en_US": "search"
-					}
-				},
-				{
-					"specificationKey": "project-activation-profile",
-					"value": {
-						"en_US": "enterprise-search"
-					}
-				},
-				{
-					"specificationKey": "project-details-profile",
-					"value": {
-						"en_US": "dates-status"
-					}
-				},
-				{
-					"specificationKey": "project-learn-url",
-					"value": {
-						"en_US": "https://learn.liferay.com"
-					}
-				},
-				{
-					"specificationKey": "family",
-					"value": {
-						"en_US": "EnterpriseSearch"
-					}
-				}
-			],
-			"productType": "virtual",
-			"skus": [
-				{
-					"externalReferenceCode": "PRDCT-ENTERPRISE-SEARCH",
-					"neverExpire": true,
-					"price": 0,
-					"published": true,
-					"purchasable": true,
-					"sku": "PRDCT-ENTERPRISE-SEARCH"
-				}
-			]
-		},
-		{
-			"active": true,
-			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
-			"categories": [
-				{
-					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
-				}
-			],
-			"description": {
-				"en_US": "Liferay Enterprise Search Cloud subscription for testing the cloud-hosted enterprise search activation."
-			},
-			"externalReferenceCode": "PRDCT-ENTERPRISE-SEARCH-CLOUD",
-			"name": {
-				"en_US": "Enterprise Search Cloud"
-			},
-			"productSpecifications": [
-				{
-					"specificationKey": "publisher-name",
-					"value": {
-						"en_US": "Liferay, Inc."
-					}
-				},
-				{
-					"specificationKey": "price-model",
-					"value": {
-						"en_US": "Paid"
-					}
-				},
-				{
-					"specificationKey": "liferay-products-categories",
-					"value": {
-						"en_US": "Platform"
-					}
-				},
-				{
-					"specificationKey": "product-icon",
-					"value": {
-						"en_US": "search"
-					}
-				},
-				{
-					"specificationKey": "type",
-					"value": {
-						"en_US": "search"
-					}
-				},
-				{
-					"specificationKey": "project-activation-profile",
-					"value": {
-						"en_US": "enterprise-search"
-					}
-				},
-				{
-					"specificationKey": "project-details-profile",
-					"value": {
-						"en_US": "dates-status"
-					}
-				},
-				{
-					"specificationKey": "project-learn-url",
-					"value": {
-						"en_US": "https://learn.liferay.com"
-					}
-				},
-				{
-					"specificationKey": "family",
-					"value": {
-						"en_US": "EnterpriseSearch"
-					}
-				}
-			],
-			"productType": "virtual",
-			"skus": [
-				{
-					"externalReferenceCode": "PRDCT-ENTERPRISE-SEARCH-CLOUD",
-					"neverExpire": true,
-					"price": 0,
-					"published": true,
-					"purchasable": true,
-					"sku": "PRDCT-ENTERPRISE-SEARCH-CLOUD"
-				}
-			]
-		},
-		{
-			"active": true,
-			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
-			"categories": [
-				{
-					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
-				}
-			],
-			"description": {
-				"en_US": "Liferay PaaS subscription for testing the activation status card."
-			},
-			"externalReferenceCode": "PRDCT-PAAS",
-			"name": {
-				"en_US": "PaaS"
-			},
-			"productSpecifications": [
-				{
-					"specificationKey": "publisher-name",
-					"value": {
-						"en_US": "Liferay, Inc."
-					}
-				},
-				{
-					"specificationKey": "price-model",
-					"value": {
-						"en_US": "Paid"
-					}
-				},
-				{
-					"specificationKey": "liferay-products-categories",
-					"value": {
-						"en_US": "Platform"
-					}
-				},
-				{
-					"specificationKey": "product-icon",
-					"value": {
-						"en_US": "cloud"
-					}
-				},
-				{
-					"specificationKey": "type",
-					"value": {
-						"en_US": "cloud"
-					}
-				},
-				{
-					"specificationKey": "project-activation-profile",
-					"value": {
-						"en_US": "status"
-					}
-				},
-				{
-					"specificationKey": "project-details-profile",
-					"value": {
-						"en_US": "paas"
-					}
-				},
-				{
-					"specificationKey": "project-environment-profile",
-					"value": {
-						"en_US": "paas"
-					}
-				},
-				{
-					"specificationKey": "project-utilization-profile",
-					"value": {
-						"en_US": "paas-dashboard"
-					}
-				},
-				{
-					"specificationKey": "family",
-					"value": {
-						"en_US": "PaaS"
-					}
-				}
-			],
-			"productType": "virtual",
-			"skus": [
-				{
-					"externalReferenceCode": "PRDCT-PAAS",
-					"neverExpire": true,
-					"price": 0,
-					"published": true,
-					"purchasable": true,
-					"sku": "PRDCT-PAAS"
-				}
-			]
-		},
-		{
-			"active": true,
-			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
-			"categories": [
-				{
-					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
-				}
-			],
-			"description": {
-				"en_US": "Liferay Portal self-hosted subscription for testing the DXP/Portal activation keys table."
-			},
-			"externalReferenceCode": "PRDCT-PORTAL",
-			"name": {
-				"en_US": "Portal"
-			},
-			"productSpecifications": [
-				{
-					"specificationKey": "publisher-name",
-					"value": {
-						"en_US": "Liferay, Inc."
-					}
-				},
-				{
-					"specificationKey": "price-model",
-					"value": {
-						"en_US": "Paid"
-					}
-				},
-				{
-					"specificationKey": "liferay-products-categories",
-					"value": {
-						"en_US": "Platform"
-					}
-				},
-				{
-					"specificationKey": "product-icon",
-					"value": {
-						"en_US": "dxp"
-					}
-				},
-				{
-					"specificationKey": "type",
-					"value": {
-						"en_US": "dxp"
-					}
-				},
-				{
-					"specificationKey": "project-activation-profile",
-					"value": {
-						"en_US": "dxp-portal"
-					}
-				},
-				{
-					"specificationKey": "project-details-profile",
-					"value": {
-						"en_US": "env-instance"
-					}
-				},
-				{
-					"specificationKey": "project-learn-url",
-					"value": {
-						"en_US": "https://learn.liferay.com"
-					}
-				},
-				{
-					"specificationKey": "family",
-					"value": {
-						"en_US": "Portal"
-					}
-				}
-			],
-			"productType": "virtual",
-			"skus": [
-				{
-					"externalReferenceCode": "PRDCT-PORTAL",
-					"neverExpire": true,
-					"price": 0,
-					"published": true,
-					"purchasable": true,
-					"sku": "PRDCT-PORTAL"
-				}
-			]
-		},
-		{
-			"active": true,
-			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
-			"categories": [
-				{
-					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
-				}
-			],
-			"description": {
-				"en_US": "Liferay SaaS subscription for testing the activation status card."
-			},
-			"externalReferenceCode": "PRDCT-SAAS",
-			"name": {
-				"en_US": "SaaS"
-			},
-			"productSpecifications": [
-				{
-					"specificationKey": "publisher-name",
-					"value": {
-						"en_US": "Liferay, Inc."
-					}
-				},
-				{
-					"specificationKey": "price-model",
-					"value": {
-						"en_US": "Paid"
-					}
-				},
-				{
-					"specificationKey": "liferay-products-categories",
-					"value": {
-						"en_US": "Platform"
-					}
-				},
-				{
-					"specificationKey": "product-icon",
-					"value": {
-						"en_US": "cloud"
-					}
-				},
-				{
-					"specificationKey": "type",
-					"value": {
-						"en_US": "cloud"
-					}
-				},
-				{
-					"specificationKey": "project-activation-profile",
-					"value": {
-						"en_US": "status"
-					}
-				},
-				{
-					"specificationKey": "project-details-profile",
-					"value": {
-						"en_US": "saas"
-					}
-				},
-				{
-					"specificationKey": "project-environment-profile",
-					"value": {
-						"en_US": "saas"
-					}
-				},
-				{
-					"specificationKey": "project-utilization-profile",
-					"value": {
-						"en_US": "saas-dashboard"
 					}
 				},
 				{
@@ -564,12 +95,106 @@
 			"productType": "virtual",
 			"skus": [
 				{
-					"externalReferenceCode": "PRDCT-SAAS",
+					"externalReferenceCode": "PRDCT-ADDON-DISASTER-RECOVERY",
 					"neverExpire": true,
 					"price": 0,
 					"published": true,
 					"purchasable": true,
-					"sku": "PRDCT-SAAS"
+					"sku": "PRDCT-ADDON-DISASTER-RECOVERY"
+				}
+			]
+		},
+		{
+			"active": true,
+			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
+			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
+				}
+			],
+			"description": {
+				"en_US": "Additional storage capacity add-on for testing quantity-based entitlements."
+			},
+			"externalReferenceCode": "PRDCT-ADDON-STORAGE",
+			"name": {
+				"en_US": "Additional Storage (100 GB)"
+			},
+			"productSpecifications": [
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "price-model",
+					"value": {
+						"en_US": "Paid"
+					}
+				},
+				{
+					"specificationKey": "family",
+					"value": {
+						"en_US": "SaaS"
+					}
+				}
+			],
+			"productType": "virtual",
+			"skus": [
+				{
+					"externalReferenceCode": "PRDCT-ADDON-STORAGE",
+					"neverExpire": true,
+					"price": 0,
+					"published": true,
+					"purchasable": true,
+					"sku": "PRDCT-ADDON-STORAGE"
+				}
+			]
+		},
+		{
+			"active": true,
+			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
+			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
+				}
+			],
+			"description": {
+				"en_US": "Additional vCPU capacity add-on for testing quantity-based entitlements."
+			},
+			"externalReferenceCode": "PRDCT-ADDON-VCPU",
+			"name": {
+				"en_US": "Additional vCPU"
+			},
+			"productSpecifications": [
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "price-model",
+					"value": {
+						"en_US": "Paid"
+					}
+				},
+				{
+					"specificationKey": "family",
+					"value": {
+						"en_US": "PaaS"
+					}
+				}
+			],
+			"productType": "virtual",
+			"skus": [
+				{
+					"externalReferenceCode": "PRDCT-ADDON-VCPU",
+					"neverExpire": true,
+					"price": 0,
+					"published": true,
+					"purchasable": true,
+					"sku": "PRDCT-ADDON-VCPU"
 				}
 			]
 		},
@@ -743,7 +368,7 @@
 			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
 			"categories": [
 				{
-					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
 				}
 			],
 			"description": {
@@ -761,7 +386,7 @@
 				}
 			],
 			"name": {
-				"en_US": "Liferay Analytics Cloud"
+				"en_US": "Liferay Analytics Cloud Subscription - Basic Plan"
 			},
 			"productConfiguration": {
 				"allowBackOrder": true,
@@ -852,6 +477,18 @@
 					"value": {
 						"en_US": "Analytics"
 					}
+				},
+				{
+					"specificationKey": "project-contacts-role-ercs",
+					"value": {
+						"en_US": "C_CRITICAL_INCIDENT_CONTACT"
+					}
+				},
+				{
+					"specificationKey": "product-family",
+					"value": {
+						"en_US": "Analytics Cloud (Subscription)"
+					}
 				}
 			],
 			"productType": "virtual",
@@ -878,7 +515,149 @@
 			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
 			"categories": [
 				{
-					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_APP"
+				}
+			],
+			"description": {
+				"en_US": "Sample marketplace application for testing the application licenses table."
+			},
+			"externalReferenceCode": "PRDCT-APP",
+			"name": {
+				"en_US": "Test Application"
+			},
+			"productSpecifications": [
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "price-model",
+					"value": {
+						"en_US": "Paid"
+					}
+				},
+				{
+					"specificationKey": "liferay-products-categories",
+					"value": {
+						"en_US": "Platform"
+					}
+				},
+				{
+					"specificationKey": "product-icon",
+					"value": {
+						"en_US": "app"
+					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "app"
+					}
+				}
+			],
+			"productType": "virtual",
+			"skus": [
+				{
+					"externalReferenceCode": "PRDCT-APP",
+					"neverExpire": true,
+					"price": 0,
+					"published": true,
+					"purchasable": true,
+					"sku": "PRDCT-APP"
+				}
+			]
+		},
+		{
+			"active": true,
+			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
+			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
+				}
+			],
+			"description": {
+				"en_US": "Liferay Cloud Native subscription for testing the cloud native environments card."
+			},
+			"externalReferenceCode": "PRDCT-CLOUD-NATIVE",
+			"name": {
+				"en_US": "Liferay Cloud Native - Standard Operations Bundle"
+			},
+			"productSpecifications": [
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "price-model",
+					"value": {
+						"en_US": "Paid"
+					}
+				},
+				{
+					"specificationKey": "liferay-products-categories",
+					"value": {
+						"en_US": "Platform"
+					}
+				},
+				{
+					"specificationKey": "product-icon",
+					"value": {
+						"en_US": "cloud"
+					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "cloud"
+					}
+				},
+				{
+					"specificationKey": "project-activation-profile",
+					"value": {
+						"en_US": "cloud-native"
+					}
+				},
+				{
+					"specificationKey": "project-details-profile",
+					"value": {
+						"en_US": "dates-status"
+					}
+				},
+				{
+					"specificationKey": "family",
+					"value": {
+						"en_US": "PaaS"
+					}
+				},
+				{
+					"specificationKey": "product-family",
+					"value": {
+						"en_US": "Software (Subscription)"
+					}
+				}
+			],
+			"productType": "virtual",
+			"skus": [
+				{
+					"externalReferenceCode": "PRDCT-CLOUD-NATIVE",
+					"neverExpire": true,
+					"price": 0,
+					"published": true,
+					"purchasable": true,
+					"sku": "PRDCT-CLOUD-NATIVE"
+				}
+			]
+		},
+		{
+			"active": true,
+			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
+			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
 				}
 			],
 			"description": {
@@ -896,7 +675,7 @@
 				}
 			],
 			"name": {
-				"en_US": "Liferay Commerce"
+				"en_US": "Liferay Commerce Subscription - Prod Sizing 1"
 			},
 			"productConfiguration": {
 				"allowBackOrder": true,
@@ -980,6 +759,12 @@
 					"specificationKey": "family",
 					"value": {
 						"en_US": "Commerce"
+					}
+				},
+				{
+					"specificationKey": "product-family",
+					"value": {
+						"en_US": "Commerce (Subscription)"
 					}
 				}
 			],
@@ -1007,7 +792,7 @@
 			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
 			"categories": [
 				{
-					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
 				}
 			],
 			"description": {
@@ -1025,7 +810,7 @@
 				}
 			],
 			"name": {
-				"en_US": "Commerce Cloud"
+				"en_US": "Commerce Cloud Business Solution Bundle"
 			},
 			"productConfiguration": {
 				"allowBackOrder": true,
@@ -1109,6 +894,12 @@
 					"specificationKey": "family",
 					"value": {
 						"en_US": "Commerce"
+					}
+				},
+				{
+					"specificationKey": "product-family",
+					"value": {
+						"en_US": "DXP Cloud (Subscription)"
 					}
 				}
 			],
@@ -1820,6 +1611,178 @@
 			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
 			"categories": [
 				{
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
+				}
+			],
+			"description": {
+				"en_US": "Liferay Enterprise Search subscription for testing the enterprise search activation."
+			},
+			"externalReferenceCode": "PRDCT-ENTERPRISE-SEARCH",
+			"name": {
+				"en_US": "Liferay Enterprise Search - Production"
+			},
+			"productSpecifications": [
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "price-model",
+					"value": {
+						"en_US": "Paid"
+					}
+				},
+				{
+					"specificationKey": "liferay-products-categories",
+					"value": {
+						"en_US": "Platform"
+					}
+				},
+				{
+					"specificationKey": "product-icon",
+					"value": {
+						"en_US": "search"
+					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "search"
+					}
+				},
+				{
+					"specificationKey": "project-activation-profile",
+					"value": {
+						"en_US": "enterprise-search"
+					}
+				},
+				{
+					"specificationKey": "project-details-profile",
+					"value": {
+						"en_US": "dates-status"
+					}
+				},
+				{
+					"specificationKey": "project-learn-url",
+					"value": {
+						"en_US": "https://learn.liferay.com"
+					}
+				},
+				{
+					"specificationKey": "family",
+					"value": {
+						"en_US": "EnterpriseSearch"
+					}
+				},
+				{
+					"specificationKey": "product-family",
+					"value": {
+						"en_US": "Enterprise Search (Subscription)"
+					}
+				}
+			],
+			"productType": "virtual",
+			"skus": [
+				{
+					"externalReferenceCode": "PRDCT-ENTERPRISE-SEARCH",
+					"neverExpire": true,
+					"price": 0,
+					"published": true,
+					"purchasable": true,
+					"sku": "PRDCT-ENTERPRISE-SEARCH"
+				}
+			]
+		},
+		{
+			"active": true,
+			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
+			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
+				}
+			],
+			"description": {
+				"en_US": "Liferay Enterprise Search Cloud subscription for testing the cloud-hosted enterprise search activation."
+			},
+			"externalReferenceCode": "PRDCT-ENTERPRISE-SEARCH-CLOUD",
+			"name": {
+				"en_US": "Enterprise Search Cloud"
+			},
+			"productSpecifications": [
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "price-model",
+					"value": {
+						"en_US": "Paid"
+					}
+				},
+				{
+					"specificationKey": "liferay-products-categories",
+					"value": {
+						"en_US": "Platform"
+					}
+				},
+				{
+					"specificationKey": "product-icon",
+					"value": {
+						"en_US": "search"
+					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "search"
+					}
+				},
+				{
+					"specificationKey": "project-activation-profile",
+					"value": {
+						"en_US": "enterprise-search"
+					}
+				},
+				{
+					"specificationKey": "project-details-profile",
+					"value": {
+						"en_US": "dates-status"
+					}
+				},
+				{
+					"specificationKey": "project-learn-url",
+					"value": {
+						"en_US": "https://learn.liferay.com"
+					}
+				},
+				{
+					"specificationKey": "family",
+					"value": {
+						"en_US": "EnterpriseSearch"
+					}
+				}
+			],
+			"productType": "virtual",
+			"skus": [
+				{
+					"externalReferenceCode": "PRDCT-ENTERPRISE-SEARCH-CLOUD",
+					"neverExpire": true,
+					"price": 0,
+					"published": true,
+					"purchasable": true,
+					"sku": "PRDCT-ENTERPRISE-SEARCH-CLOUD"
+				}
+			]
+		},
+		{
+			"active": true,
+			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
+			"categories": [
+				{
 					"externalReferenceCode": "MARKETPLACE_APP_CATEGORY_EXTENSIBILITY_AND_INTEGRATION"
 				},
 				{
@@ -1949,6 +1912,386 @@
 			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
 			"categories": [
 				{
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
+				}
+			],
+			"description": {
+				"en_US": "Liferay PaaS subscription for testing the activation status card."
+			},
+			"externalReferenceCode": "PRDCT-PAAS",
+			"name": {
+				"en_US": "PaaS Experience"
+			},
+			"productSpecifications": [
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "price-model",
+					"value": {
+						"en_US": "Paid"
+					}
+				},
+				{
+					"specificationKey": "liferay-products-categories",
+					"value": {
+						"en_US": "Platform"
+					}
+				},
+				{
+					"specificationKey": "product-icon",
+					"value": {
+						"en_US": "cloud"
+					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "cloud"
+					}
+				},
+				{
+					"specificationKey": "project-activation-profile",
+					"value": {
+						"en_US": "status"
+					}
+				},
+				{
+					"specificationKey": "project-details-profile",
+					"value": {
+						"en_US": "paas"
+					}
+				},
+				{
+					"specificationKey": "project-environment-profile",
+					"value": {
+						"en_US": "paas"
+					}
+				},
+				{
+					"specificationKey": "project-utilization-profile",
+					"value": {
+						"en_US": "paas-dashboard"
+					}
+				},
+				{
+					"specificationKey": "family",
+					"value": {
+						"en_US": "PaaS"
+					}
+				},
+				{
+					"specificationKey": "project-contacts-role-ercs",
+					"value": {
+						"en_US": "C_CRITICAL_INCIDENT_CONTACT,C_PAAS_USER"
+					}
+				},
+				{
+					"specificationKey": "product-family",
+					"value": {
+						"en_US": "Liferay PaaS (Subscription)"
+					}
+				}
+			],
+			"productType": "virtual",
+			"skus": [
+				{
+					"externalReferenceCode": "PRDCT-PAAS",
+					"neverExpire": true,
+					"price": 0,
+					"published": true,
+					"purchasable": true,
+					"sku": "PRDCT-PAAS"
+				}
+			]
+		},
+		{
+			"active": true,
+			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
+			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
+				}
+			],
+			"description": {
+				"en_US": "Liferay PaaS legacy subscription for testing the activation status card."
+			},
+			"externalReferenceCode": "PRDCT-PAAS-LEGACY",
+			"name": {
+				"en_US": "Liferay PaaS Subscription - HA Prod Env"
+			},
+			"productSpecifications": [
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "price-model",
+					"value": {
+						"en_US": "Paid"
+					}
+				},
+				{
+					"specificationKey": "liferay-products-categories",
+					"value": {
+						"en_US": "Platform"
+					}
+				},
+				{
+					"specificationKey": "product-icon",
+					"value": {
+						"en_US": "cloud"
+					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "cloud"
+					}
+				},
+				{
+					"specificationKey": "project-activation-profile",
+					"value": {
+						"en_US": "status"
+					}
+				},
+				{
+					"specificationKey": "project-details-profile",
+					"value": {
+						"en_US": "paas"
+					}
+				},
+				{
+					"specificationKey": "project-environment-profile",
+					"value": {
+						"en_US": "paas"
+					}
+				},
+				{
+					"specificationKey": "project-utilization-profile",
+					"value": {
+						"en_US": "paas-dashboard"
+					}
+				},
+				{
+					"specificationKey": "family",
+					"value": {
+						"en_US": "PaaS"
+					}
+				},
+				{
+					"specificationKey": "project-contacts-role-ercs",
+					"value": {
+						"en_US": "C_CRITICAL_INCIDENT_CONTACT"
+					}
+				},
+				{
+					"specificationKey": "product-family",
+					"value": {
+						"en_US": "DXP Cloud (Subscription)"
+					}
+				}
+			],
+			"productType": "virtual",
+			"skus": [
+				{
+					"externalReferenceCode": "PRDCT-PAAS-LEGACY",
+					"neverExpire": true,
+					"price": 0,
+					"published": true,
+					"purchasable": true,
+					"sku": "PRDCT-PAAS-LEGACY"
+				}
+			]
+		},
+		{
+			"active": true,
+			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
+			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
+				}
+			],
+			"description": {
+				"en_US": "Liferay Portal self-hosted subscription for testing the DXP/Portal activation keys table."
+			},
+			"externalReferenceCode": "PRDCT-PORTAL",
+			"name": {
+				"en_US": "Portal EE 6.x License (Production)"
+			},
+			"productSpecifications": [
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "price-model",
+					"value": {
+						"en_US": "Paid"
+					}
+				},
+				{
+					"specificationKey": "liferay-products-categories",
+					"value": {
+						"en_US": "Platform"
+					}
+				},
+				{
+					"specificationKey": "product-icon",
+					"value": {
+						"en_US": "dxp"
+					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "dxp"
+					}
+				},
+				{
+					"specificationKey": "project-activation-profile",
+					"value": {
+						"en_US": "dxp-portal"
+					}
+				},
+				{
+					"specificationKey": "project-details-profile",
+					"value": {
+						"en_US": "env-instance"
+					}
+				},
+				{
+					"specificationKey": "project-learn-url",
+					"value": {
+						"en_US": "https://learn.liferay.com"
+					}
+				},
+				{
+					"specificationKey": "family",
+					"value": {
+						"en_US": "Portal"
+					}
+				},
+				{
+					"specificationKey": "product-family",
+					"value": {
+						"en_US": "Portal (License)"
+					}
+				}
+			],
+			"productType": "virtual",
+			"skus": [
+				{
+					"externalReferenceCode": "PRDCT-PORTAL",
+					"neverExpire": true,
+					"price": 0,
+					"published": true,
+					"purchasable": true,
+					"sku": "PRDCT-PORTAL"
+				}
+			]
+		},
+		{
+			"active": true,
+			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
+			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
+				}
+			],
+			"description": {
+				"en_US": "Liferay Portal self-hosted subscription for testing the DXP/Portal activation keys table."
+			},
+			"externalReferenceCode": "PRDCT-PORTAL-EWSA",
+			"name": {
+				"en_US": "Portal Enterprise-Wide License"
+			},
+			"productSpecifications": [
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "price-model",
+					"value": {
+						"en_US": "Paid"
+					}
+				},
+				{
+					"specificationKey": "liferay-products-categories",
+					"value": {
+						"en_US": "Platform"
+					}
+				},
+				{
+					"specificationKey": "product-icon",
+					"value": {
+						"en_US": "dxp"
+					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "dxp"
+					}
+				},
+				{
+					"specificationKey": "project-activation-profile",
+					"value": {
+						"en_US": "dxp-portal"
+					}
+				},
+				{
+					"specificationKey": "project-details-profile",
+					"value": {
+						"en_US": "env-instance"
+					}
+				},
+				{
+					"specificationKey": "project-learn-url",
+					"value": {
+						"en_US": "https://learn.liferay.com"
+					}
+				},
+				{
+					"specificationKey": "family",
+					"value": {
+						"en_US": "Portal"
+					}
+				},
+				{
+					"specificationKey": "product-family",
+					"value": {
+						"en_US": "Portal (License)"
+					}
+				}
+			],
+			"productType": "virtual",
+			"skus": [
+				{
+					"externalReferenceCode": "PRDCT-PORTAL-EWSA",
+					"neverExpire": true,
+					"price": 0,
+					"published": true,
+					"purchasable": true,
+					"sku": "PRDCT-PORTAL-EWSA"
+				}
+			]
+		},
+		{
+			"active": true,
+			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
+			"categories": [
+				{
 					"externalReferenceCode": "MARKETPLACE_APP_CATEGORY_E_COMMERCE"
 				},
 				{
@@ -2064,6 +2407,404 @@
 					"published": true,
 					"purchasable": true,
 					"sku": "PRDCT-PUNCHOUT"
+				}
+			]
+		},
+		{
+			"active": true,
+			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
+			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
+				}
+			],
+			"description": {
+				"en_US": "Liferay SaaS subscription for testing the activation status card."
+			},
+			"externalReferenceCode": "PRDCT-SAAS",
+			"name": {
+				"en_US": "SaaS Experience"
+			},
+			"productSpecifications": [
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "price-model",
+					"value": {
+						"en_US": "Paid"
+					}
+				},
+				{
+					"specificationKey": "liferay-products-categories",
+					"value": {
+						"en_US": "Platform"
+					}
+				},
+				{
+					"specificationKey": "product-icon",
+					"value": {
+						"en_US": "cloud"
+					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "cloud"
+					}
+				},
+				{
+					"specificationKey": "project-activation-profile",
+					"value": {
+						"en_US": "status"
+					}
+				},
+				{
+					"specificationKey": "project-details-profile",
+					"value": {
+						"en_US": "saas"
+					}
+				},
+				{
+					"specificationKey": "project-environment-profile",
+					"value": {
+						"en_US": "saas"
+					}
+				},
+				{
+					"specificationKey": "project-utilization-profile",
+					"value": {
+						"en_US": "saas-dashboard"
+					}
+				},
+				{
+					"specificationKey": "family",
+					"value": {
+						"en_US": "SaaS"
+					}
+				},
+				{
+					"specificationKey": "project-contacts-role-ercs",
+					"value": {
+						"en_US": "C_CRITICAL_INCIDENT_CONTACT,C_PRIVACY_BREACH_CONTACT,C_SECURITY_BREACH_CONTACT"
+					}
+				},
+				{
+					"specificationKey": "product-family",
+					"value": {
+						"en_US": "Liferay SaaS (Subscription)"
+					}
+				}
+			],
+			"productType": "virtual",
+			"skus": [
+				{
+					"externalReferenceCode": "PRDCT-SAAS",
+					"neverExpire": true,
+					"price": 0,
+					"published": true,
+					"purchasable": true,
+					"sku": "PRDCT-SAAS"
+				}
+			]
+		},
+		{
+			"active": true,
+			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
+			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
+				}
+			],
+			"description": {
+				"en_US": "Liferay SaaS subscription for testing the activation status card."
+			},
+			"externalReferenceCode": "PRDCT-SAAS-BUSINESS-PLAN",
+			"name": {
+				"en_US": "Liferay SaaS - Business Plan"
+			},
+			"productSpecifications": [
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "price-model",
+					"value": {
+						"en_US": "Paid"
+					}
+				},
+				{
+					"specificationKey": "liferay-products-categories",
+					"value": {
+						"en_US": "Platform"
+					}
+				},
+				{
+					"specificationKey": "product-icon",
+					"value": {
+						"en_US": "cloud"
+					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "cloud"
+					}
+				},
+				{
+					"specificationKey": "project-activation-profile",
+					"value": {
+						"en_US": "status"
+					}
+				},
+				{
+					"specificationKey": "project-details-profile",
+					"value": {
+						"en_US": "saas"
+					}
+				},
+				{
+					"specificationKey": "project-environment-profile",
+					"value": {
+						"en_US": "saas"
+					}
+				},
+				{
+					"specificationKey": "project-utilization-profile",
+					"value": {
+						"en_US": "saas-dashboard"
+					}
+				},
+				{
+					"specificationKey": "family",
+					"value": {
+						"en_US": "SaaS"
+					}
+				},
+				{
+					"specificationKey": "project-contacts-role-ercs",
+					"value": {
+						"en_US": "C_CRITICAL_INCIDENT_CONTACT,C_PRIVACY_BREACH_CONTACT,C_SECURITY_BREACH_CONTACT"
+					}
+				},
+				{
+					"specificationKey": "product-family",
+					"value": {
+						"en_US": "LXC (Subscription)"
+					}
+				}
+			],
+			"productType": "virtual",
+			"skus": [
+				{
+					"externalReferenceCode": "PRDCT-SAAS-BUSINESS-PLAN",
+					"neverExpire": true,
+					"price": 0,
+					"published": true,
+					"purchasable": true,
+					"sku": "PRDCT-SAAS-BUSINESS-PLAN"
+				}
+			]
+		},
+		{
+			"active": true,
+			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
+			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
+				}
+			],
+			"description": {
+				"en_US": "Liferay SaaS subscription for testing the activation status card."
+			},
+			"externalReferenceCode": "PRDCT-SAAS-ENTERPRISE-PLAN",
+			"name": {
+				"en_US": "Liferay SaaS - Enterprise Plan"
+			},
+			"productSpecifications": [
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "price-model",
+					"value": {
+						"en_US": "Paid"
+					}
+				},
+				{
+					"specificationKey": "liferay-products-categories",
+					"value": {
+						"en_US": "Platform"
+					}
+				},
+				{
+					"specificationKey": "product-icon",
+					"value": {
+						"en_US": "cloud"
+					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "cloud"
+					}
+				},
+				{
+					"specificationKey": "project-activation-profile",
+					"value": {
+						"en_US": "status"
+					}
+				},
+				{
+					"specificationKey": "project-details-profile",
+					"value": {
+						"en_US": "saas"
+					}
+				},
+				{
+					"specificationKey": "project-environment-profile",
+					"value": {
+						"en_US": "saas"
+					}
+				},
+				{
+					"specificationKey": "project-utilization-profile",
+					"value": {
+						"en_US": "saas-dashboard"
+					}
+				},
+				{
+					"specificationKey": "family",
+					"value": {
+						"en_US": "SaaS"
+					}
+				},
+				{
+					"specificationKey": "project-contacts-role-ercs",
+					"value": {
+						"en_US": "C_CRITICAL_INCIDENT_CONTACT,C_PRIVACY_BREACH_CONTACT,C_SECURITY_BREACH_CONTACT"
+					}
+				},
+				{
+					"specificationKey": "product-family",
+					"value": {
+						"en_US": "LXC (Subscription)"
+					}
+				}
+			],
+			"productType": "virtual",
+			"skus": [
+				{
+					"externalReferenceCode": "PRDCT-SAAS-ENTERPRISE-PLAN",
+					"neverExpire": true,
+					"price": 0,
+					"published": true,
+					"purchasable": true,
+					"sku": "PRDCT-SAAS-ENTERPRISE-PLAN"
+				}
+			]
+		},
+		{
+			"active": true,
+			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
+			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
+				}
+			],
+			"description": {
+				"en_US": "Liferay SaaS legacy subscription for testing the activation status card."
+			},
+			"externalReferenceCode": "PRDCT-SAAS-LEGACY",
+			"name": {
+				"en_US": "SaaS (Legacy)"
+			},
+			"productSpecifications": [
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "price-model",
+					"value": {
+						"en_US": "Paid"
+					}
+				},
+				{
+					"specificationKey": "liferay-products-categories",
+					"value": {
+						"en_US": "Platform"
+					}
+				},
+				{
+					"specificationKey": "product-icon",
+					"value": {
+						"en_US": "cloud"
+					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "cloud"
+					}
+				},
+				{
+					"specificationKey": "project-activation-profile",
+					"value": {
+						"en_US": "status"
+					}
+				},
+				{
+					"specificationKey": "project-details-profile",
+					"value": {
+						"en_US": "saas"
+					}
+				},
+				{
+					"specificationKey": "project-environment-profile",
+					"value": {
+						"en_US": "saas"
+					}
+				},
+				{
+					"specificationKey": "project-utilization-profile",
+					"value": {
+						"en_US": "saas-dashboard"
+					}
+				},
+				{
+					"specificationKey": "family",
+					"value": {
+						"en_US": "SaaS"
+					}
+				},
+				{
+					"specificationKey": "project-contacts-role-ercs",
+					"value": {
+						"en_US": "C_CRITICAL_INCIDENT_CONTACT,C_PRIVACY_BREACH_CONTACT,C_SECURITY_BREACH_CONTACT"
+					}
+				}
+			],
+			"productType": "virtual",
+			"skus": [
+				{
+					"externalReferenceCode": "PRDCT-SAAS-LEGACY",
+					"neverExpire": true,
+					"price": 0,
+					"published": true,
+					"purchasable": true,
+					"sku": "PRDCT-SAAS-LEGACY"
 				}
 			]
 		},
@@ -3000,194 +3741,6 @@
 					"published": true,
 					"purchasable": true,
 					"sku": "PRDCT-ZENDESK"
-				}
-			]
-		},
-		{
-			"active": true,
-			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
-			"categories": [
-				{
-					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
-				}
-			],
-			"description": {
-				"en_US": "Additional storage capacity add-on for testing quantity-based entitlements."
-			},
-			"externalReferenceCode": "PRDCT-ADDON-STORAGE",
-			"name": {
-				"en_US": "Additional Storage (100 GB)"
-			},
-			"productSpecifications": [
-				{
-					"specificationKey": "publisher-name",
-					"value": {
-						"en_US": "Liferay, Inc."
-					}
-				},
-				{
-					"specificationKey": "price-model",
-					"value": {
-						"en_US": "Paid"
-					}
-				},
-				{
-					"specificationKey": "family",
-					"value": {
-						"en_US": "SaaS"
-					}
-				}
-			],
-			"productType": "virtual",
-			"skus": [
-				{
-					"externalReferenceCode": "PRDCT-ADDON-STORAGE",
-					"neverExpire": true,
-					"price": 0,
-					"published": true,
-					"purchasable": true,
-					"sku": "PRDCT-ADDON-STORAGE"
-				}
-			]
-		},
-		{
-			"active": true,
-			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
-			"categories": [
-				{
-					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
-				}
-			],
-			"description": {
-				"en_US": "Additional vCPU capacity add-on for testing quantity-based entitlements."
-			},
-			"externalReferenceCode": "PRDCT-ADDON-VCPU",
-			"name": {
-				"en_US": "Additional vCPU"
-			},
-			"productSpecifications": [
-				{
-					"specificationKey": "publisher-name",
-					"value": {
-						"en_US": "Liferay, Inc."
-					}
-				},
-				{
-					"specificationKey": "price-model",
-					"value": {
-						"en_US": "Paid"
-					}
-				},
-				{
-					"specificationKey": "family",
-					"value": {
-						"en_US": "PaaS"
-					}
-				}
-			],
-			"productType": "virtual",
-			"skus": [
-				{
-					"externalReferenceCode": "PRDCT-ADDON-VCPU",
-					"neverExpire": true,
-					"price": 0,
-					"published": true,
-					"purchasable": true,
-					"sku": "PRDCT-ADDON-VCPU"
-				}
-			]
-		},
-		{
-			"active": true,
-			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
-			"categories": [
-				{
-					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
-				}
-			],
-			"description": {
-				"en_US": "Disaster recovery add-on for testing boolean capability entitlements."
-			},
-			"externalReferenceCode": "PRDCT-ADDON-DISASTER-RECOVERY",
-			"name": {
-				"en_US": "Disaster Recovery Add-on"
-			},
-			"productSpecifications": [
-				{
-					"specificationKey": "publisher-name",
-					"value": {
-						"en_US": "Liferay, Inc."
-					}
-				},
-				{
-					"specificationKey": "price-model",
-					"value": {
-						"en_US": "Paid"
-					}
-				},
-				{
-					"specificationKey": "family",
-					"value": {
-						"en_US": "SaaS"
-					}
-				}
-			],
-			"productType": "virtual",
-			"skus": [
-				{
-					"externalReferenceCode": "PRDCT-ADDON-DISASTER-RECOVERY",
-					"neverExpire": true,
-					"price": 0,
-					"published": true,
-					"purchasable": true,
-					"sku": "PRDCT-ADDON-DISASTER-RECOVERY"
-				}
-			]
-		},
-		{
-			"active": true,
-			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
-			"categories": [
-				{
-					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
-				}
-			],
-			"description": {
-				"en_US": "Commerce product recommendations add-on for testing boolean capability entitlements."
-			},
-			"externalReferenceCode": "PRDCT-ADDON-COMMERCE-RECOMMENDATIONS",
-			"name": {
-				"en_US": "Commerce Product Recommendations"
-			},
-			"productSpecifications": [
-				{
-					"specificationKey": "publisher-name",
-					"value": {
-						"en_US": "Liferay, Inc."
-					}
-				},
-				{
-					"specificationKey": "price-model",
-					"value": {
-						"en_US": "Paid"
-					}
-				},
-				{
-					"specificationKey": "family",
-					"value": {
-						"en_US": "Commerce"
-					}
-				}
-			],
-			"productType": "virtual",
-			"skus": [
-				{
-					"externalReferenceCode": "PRDCT-ADDON-COMMERCE-RECOMMENDATIONS",
-					"neverExpire": true,
-					"price": 0,
-					"published": true,
-					"purchasable": true,
-					"sku": "PRDCT-ADDON-COMMERCE-RECOMMENDATIONS"
 				}
 			]
 		}

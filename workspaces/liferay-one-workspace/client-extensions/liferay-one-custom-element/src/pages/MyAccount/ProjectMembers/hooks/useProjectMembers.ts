@@ -5,12 +5,10 @@
 
 import {useMemo} from 'react';
 import {useFetch} from '~/hooks/useFetch';
-import {useAccountProjectProductTypes} from '~/hooks/useProjectCommerce';
-import {CLOUD_CONTACT_DESIGNATIONS} from '~/pages/MyAccount/AccountMembers/accountRoles';
+import {useAccountProjectContactRoles} from '~/hooks/useProjectCommerce';
 import {
 	PROJECT_ADMIN_ERC,
 	PROJECT_ROLE_ERCS,
-	getAvailableDesignations,
 } from '~/pages/MyAccount/ProjectMembers/projectRoles';
 import {Liferay} from '~/services/liferay/liferay';
 
@@ -18,7 +16,7 @@ import type {
 	AccountMemberOption,
 	ProjectMembersRow,
 } from '~/pages/MyAccount/ProjectMembers/types';
-import type {UserAccount} from '~/types/accounts';
+import type {AccountRole, UserAccount} from '~/types/accounts';
 import type {APIResponse} from '~/types/api';
 
 type ProjectItem = {
@@ -81,9 +79,52 @@ export function useProjectMembers() {
 	);
 
 	const {
-		loading: productTypesLoading,
-		productTypeExternalReferenceCodesByProjectId,
-	} = useAccountProjectProductTypes();
+		contactRoleExternalReferenceCodesByProjectId,
+		loading: contactRolesLoading,
+	} = useAccountProjectContactRoles();
+
+	const {data: accountRoleData, isLoading: accountRolesLoading} = useFetch<
+		APIResponse<AccountRole>
+	>(
+		accountId
+			? `/o/headless-admin-user/v1.0/accounts/${accountId}/account-roles`
+			: null,
+		{params: {pageSize: -1}}
+	);
+
+	const contactRoleNameByExternalReferenceCode = useMemo(() => {
+		const map = new Map<string, string>();
+
+		(accountRoleData?.items ?? []).forEach((accountRole) => {
+			if (accountRole.externalReferenceCode) {
+				map.set(accountRole.externalReferenceCode, accountRole.name);
+			}
+		});
+
+		return map;
+	}, [accountRoleData]);
+
+	const contactDesignationNames = useMemo(() => {
+		const names = new Set<string>();
+
+		contactRoleExternalReferenceCodesByProjectId.forEach(
+			(externalReferenceCodes) =>
+				externalReferenceCodes.forEach((externalReferenceCode) => {
+					const name = contactRoleNameByExternalReferenceCode.get(
+						externalReferenceCode
+					);
+
+					if (name) {
+						names.add(name);
+					}
+				})
+		);
+
+		return names;
+	}, [
+		contactRoleExternalReferenceCodesByProjectId,
+		contactRoleNameByExternalReferenceCode,
+	]);
 
 	const userInfoById = useMemo(() => {
 		const map = new Map<number, UserInfo>();
@@ -98,7 +139,7 @@ export function useProjectMembers() {
 				designations: accountRoleBriefs
 					.map((roleBrief) => roleBrief.name)
 					.filter((roleName) =>
-						CLOUD_CONTACT_DESIGNATIONS.includes(roleName)
+						contactDesignationNames.has(roleName)
 					),
 				email: userAccount.emailAddress,
 				name: userAccount.name,
@@ -106,7 +147,7 @@ export function useProjectMembers() {
 		});
 
 		return map;
-	}, [accountId, userAccountData]);
+	}, [accountId, contactDesignationNames, userAccountData]);
 
 	const accountMemberOptions = useMemo<AccountMemberOption[]>(
 		() =>
@@ -172,11 +213,17 @@ export function useProjectMembers() {
 			});
 
 			return {
-				availableDesignations: getAvailableDesignations(
-					productTypeExternalReferenceCodesByProjectId.get(
+				availableDesignations: (
+					contactRoleExternalReferenceCodesByProjectId.get(
 						project.id
 					) ?? []
-				),
+				)
+					.map((externalReferenceCode) =>
+						contactRoleNameByExternalReferenceCode.get(
+							externalReferenceCode
+						)
+					)
+					.filter((name): name is string => Boolean(name)),
 				externalReferenceCode: project.externalReferenceCode,
 				hasProjectAdmin: members.some(
 					(member) =>
@@ -188,8 +235,9 @@ export function useProjectMembers() {
 			};
 		});
 	}, [
+		contactRoleExternalReferenceCodesByProjectId,
+		contactRoleNameByExternalReferenceCode,
 		membershipData,
-		productTypeExternalReferenceCodesByProjectId,
 		projectData,
 		userInfoById,
 	]);
@@ -201,9 +249,10 @@ export function useProjectMembers() {
 	return {
 		accountMemberOptions,
 		loading:
-			projectsLoading ||
+			accountRolesLoading ||
+			contactRolesLoading ||
 			membershipsLoading ||
-			productTypesLoading ||
+			projectsLoading ||
 			userAccountsLoading,
 		mutate,
 		rows,

@@ -5,15 +5,15 @@
 	"entitlements": [
 		{
 			"endDate": "2027-08-09T00:00:00Z",
-			"externalReferenceCode": "C_ENT_PAAS_LEGACY_DXP",
+			"externalReferenceCode": "C_ENT_PAAS_LEGACY",
 			"grantType": "fixed",
 			"maxQuantity": 1,
-			"name": "Liferay DXP",
+			"name": "Liferay PaaS Subscription - HA Prod Env",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-005",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_PAAS_LEGACY_DXP",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_PAAS_LEGACY",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_LEGACY",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DXP",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_LEGACY",
 			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
@@ -25,10 +25,10 @@
 		"externalReferenceCode": "C_ORDER_PAAS_LEGACY",
 		"orderItems": [
 			{
-				"externalReferenceCode": "C_ORDER_ITEM_PAAS_LEGACY_DXP",
-				"name": "Liferay DXP",
+				"externalReferenceCode": "C_ORDER_ITEM_PAAS_LEGACY",
+				"name": "Liferay PaaS Subscription - HA Prod Env",
 				"quantity": 1,
-				"skuExternalReferenceCode": "PRDCT-DXP",
+				"skuExternalReferenceCode": "PRDCT-PAAS-LEGACY",
 				"unitPrice": 0
 			}
 		],

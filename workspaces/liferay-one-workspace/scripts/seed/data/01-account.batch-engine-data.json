@@ -45,7 +45,7 @@
 		},
 		{
 			"externalReferenceCode": "ACCNT-006",
-			"name": "DXP Test Account",
+			"name": "DXP Free Tier Test Account",
 			"type": "business"
 		},
 		{
@@ -142,13 +142,28 @@
 			"type": "business"
 		},
 		{
-			"externalReferenceCode": "ACCNT-024",
-			"name": "Enterprise Search Cloud Test Account",
+			"externalReferenceCode": "ACCNT-025",
+			"name": "Multi Contract Test Account",
 			"type": "business"
 		},
 		{
-			"externalReferenceCode": "ACCNT-025",
-			"name": "Multi Contract Test Account",
+			"externalReferenceCode": "ACCNT-026",
+			"name": "Liferay AI Hub Test Account",
+			"type": "business"
+		},
+		{
+			"externalReferenceCode": "ACCNT-027",
+			"name": "Content Marketing Platform Test Account",
+			"type": "business"
+		},
+		{
+			"externalReferenceCode": "ACCNT-028",
+			"name": "Liferay Data Platform Test Account",
+			"type": "business"
+		},
+		{
+			"externalReferenceCode": "ACCNT-029",
+			"name": "Digital Sales Room Test Account",
 			"type": "business"
 		},
 		{

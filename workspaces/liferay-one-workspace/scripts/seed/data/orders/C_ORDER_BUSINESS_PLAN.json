@@ -8,12 +8,12 @@
 			"externalReferenceCode": "C_ENT_BUSINESS_PLAN_DXP",
 			"grantType": "fixed",
 			"maxQuantity": 1,
-			"name": "Liferay DXP",
+			"name": "Liferay SaaS - Business Plan",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-008",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_BUSINESS_PLAN_DXP",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DXP",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_PLAN",
 			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
@@ -26,9 +26,9 @@
 		"orderItems": [
 			{
 				"externalReferenceCode": "C_ORDER_ITEM_BUSINESS_PLAN_DXP",
-				"name": "Liferay DXP",
+				"name": "Liferay SaaS - Business Plan",
 				"quantity": 1,
-				"skuExternalReferenceCode": "PRDCT-DXP",
+				"skuExternalReferenceCode": "PRDCT-SAAS-BUSINESS-PLAN",
 				"unitPrice": 0
 			}
 		],

@@ -36,18 +36,6 @@ export const MANAGEABLE_ACCOUNT_ROLES = [
 	...PARTNER_ACCOUNT_ROLES,
 ];
 
-export const CRITICAL_INCIDENT_CONTACT = 'Critical Incident Contact';
-export const PAAS_USER = 'PaaS User';
-export const PRIVACY_BREACH_CONTACT = 'Privacy Breach Contact';
-export const SECURITY_BREACH_CONTACT = 'Security Breach Contact';
-
-export const CLOUD_CONTACT_DESIGNATIONS = [
-	CRITICAL_INCIDENT_CONTACT,
-	PAAS_USER,
-	PRIVACY_BREACH_CONTACT,
-	SECURITY_BREACH_CONTACT,
-];
-
 export function isAdministratorRole(roleName: string) {
 	return (
 		roleName === ACCOUNT_ADMINISTRATOR || roleName === PARTNER_ACCOUNT_ADMIN

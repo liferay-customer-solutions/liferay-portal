@@ -5,15 +5,15 @@
 	"entitlements": [
 		{
 			"endDate": "2027-08-09T00:00:00Z",
-			"externalReferenceCode": "C_ENT_SAAS_LEGACY_DXP",
+			"externalReferenceCode": "C_ENT_SAAS_LEGACY",
 			"grantType": "fixed",
 			"maxQuantity": 1,
-			"name": "Liferay DXP",
+			"name": "Liferay SaaS - Enterprise Plan",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-003",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_SAAS_LEGACY_DXP",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_SAAS_LEGACY",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_SAAS_LEGACY",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DXP",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_ENTERPRISE_PLAN",
 			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
@@ -25,10 +25,10 @@
 		"externalReferenceCode": "C_ORDER_SAAS_LEGACY",
 		"orderItems": [
 			{
-				"externalReferenceCode": "C_ORDER_ITEM_SAAS_LEGACY_DXP",
-				"name": "Liferay DXP",
+				"externalReferenceCode": "C_ORDER_ITEM_SAAS_LEGACY",
+				"name": "Liferay SaaS - Enterprise Plan",
 				"quantity": 1,
-				"skuExternalReferenceCode": "PRDCT-DXP",
+				"skuExternalReferenceCode": "PRDCT-SAAS-ENTERPRISE-PLAN",
 				"unitPrice": 0
 			}
 		],

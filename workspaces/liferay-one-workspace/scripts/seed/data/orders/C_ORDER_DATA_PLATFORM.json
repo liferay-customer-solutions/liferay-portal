@@ -1,0 +1,39 @@
+{
+	"customFields": {
+		"projectName": "Data Platform Project"
+	},
+	"entitlements": [
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_DATA_PLATFORM",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Liferay Data Platform",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-028",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_DATA_PLATFORM",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_DATA_PLATFORM",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DATA_PLATFORM",
+			"startDate": "2026-08-09T00:00:00Z"
+		}
+	],
+	"order": {
+		"accountExternalReferenceCode": "ACCNT-028",
+		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
+		"contractExternalReferenceCode": "C_CONTRACT_DATA_PLATFORM",
+		"currencyCode": "USD",
+		"externalReferenceCode": "C_ORDER_DATA_PLATFORM",
+		"orderItems": [
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_DATA_PLATFORM",
+				"name": "Liferay Data Platform",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-DATA-PLATFORM",
+				"unitPrice": 0
+			}
+		],
+		"orderStatus": 5,
+		"orderTypeExternalReferenceCode": "DXP"
+	},
+	"purchaseOrderNumber": "PO-DATA-PLATFORM"
+}

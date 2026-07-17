@@ -8,38 +8,12 @@
 			"externalReferenceCode": "C_ENT_CLOUD_NATIVE",
 			"grantType": "fixed",
 			"maxQuantity": 1,
-			"name": "Cloud Native",
+			"name": "Liferay Cloud Native - Standard Operations Bundle",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-007",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_CLOUD_NATIVE",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_CLOUD_NATIVE",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_CLOUD_NATIVE",
-			"startDate": "2026-08-09T00:00:00Z"
-		},
-		{
-			"endDate": "2027-08-09T00:00:00Z",
-			"externalReferenceCode": "C_ENT_CLOUD_NATIVE_AIHUB",
-			"grantType": "fixed",
-			"maxQuantity": 1,
-			"name": "Liferay AI Hub",
-			"quantity": 1,
-			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-007",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_CLOUD_NATIVE_AIHUB",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_CLOUD_NATIVE",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_AIHUB",
-			"startDate": "2026-08-09T00:00:00Z"
-		},
-		{
-			"endDate": "2027-08-09T00:00:00Z",
-			"externalReferenceCode": "C_ENT_CLOUD_NATIVE_DXP",
-			"grantType": "fixed",
-			"maxQuantity": 1,
-			"name": "Liferay DXP",
-			"quantity": 1,
-			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-007",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_CLOUD_NATIVE_DXP",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_CLOUD_NATIVE",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DXP",
 			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
@@ -52,23 +26,9 @@
 		"orderItems": [
 			{
 				"externalReferenceCode": "C_ORDER_ITEM_CLOUD_NATIVE",
-				"name": "Cloud Native",
+				"name": "Liferay Cloud Native - Standard Operations Bundle",
 				"quantity": 1,
 				"skuExternalReferenceCode": "PRDCT-CLOUD-NATIVE",
-				"unitPrice": 0
-			},
-			{
-				"externalReferenceCode": "C_ORDER_ITEM_CLOUD_NATIVE_AIHUB",
-				"name": "Liferay AI Hub",
-				"quantity": 1,
-				"skuExternalReferenceCode": "PRDCT-AI-HUB",
-				"unitPrice": 0
-			},
-			{
-				"externalReferenceCode": "C_ORDER_ITEM_CLOUD_NATIVE_DXP",
-				"name": "Liferay DXP",
-				"quantity": 1,
-				"skuExternalReferenceCode": "PRDCT-DXP",
 				"unitPrice": 0
 			}
 		],

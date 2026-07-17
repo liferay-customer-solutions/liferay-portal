@@ -1,0 +1,39 @@
+{
+	"customFields": {
+		"projectName": "AI Hub Project"
+	},
+	"entitlements": [
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_AI_HUB",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Liferay AI Hub",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-026",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_AI_HUB",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_AI_HUB",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_AIHUB",
+			"startDate": "2026-08-09T00:00:00Z"
+		}
+	],
+	"order": {
+		"accountExternalReferenceCode": "ACCNT-026",
+		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
+		"contractExternalReferenceCode": "C_CONTRACT_AI_HUB",
+		"currencyCode": "USD",
+		"externalReferenceCode": "C_ORDER_AI_HUB",
+		"orderItems": [
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_AI_HUB",
+				"name": "Liferay AI Hub",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-AI-HUB",
+				"unitPrice": 0
+			}
+		],
+		"orderStatus": 5,
+		"orderTypeExternalReferenceCode": "DXP"
+	},
+	"purchaseOrderNumber": "PO-AI-HUB"
+}

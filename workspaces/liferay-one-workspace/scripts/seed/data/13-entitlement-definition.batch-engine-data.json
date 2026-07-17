@@ -13,6 +13,56 @@
 		{
 			"active": true,
 			"defaultQuantity": 1,
+			"displayName": "Product Recommendations",
+			"externalReferenceCode": "C_ENT_DEF_ADDON_COMMERCE_RECOMMENDATIONS",
+			"grantType": "fixed",
+			"name": "productRecommendations",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ADDON-COMMERCE-RECOMMENDATIONS",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Disaster Recovery",
+			"externalReferenceCode": "C_ENT_DEF_ADDON_DISASTER_RECOVERY",
+			"grantType": "fixed",
+			"name": "disasterRecovery",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ADDON-DISASTER-RECOVERY",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 100,
+			"displayName": "Additional Storage",
+			"externalReferenceCode": "C_ENT_DEF_ADDON_STORAGE",
+			"grantType": "fixed",
+			"name": "storage",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ADDON-STORAGE",
+			"unit": "GB"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 4,
+			"displayName": "Additional vCPU",
+			"externalReferenceCode": "C_ENT_DEF_ADDON_VCPU",
+			"grantType": "fixed",
+			"name": "vcpu",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ADDON-VCPU",
+			"unit": "vCPU"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Liferay AI Hub",
+			"externalReferenceCode": "C_ENT_DEF_AIHUB",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-AI-HUB",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
 			"displayName": "Analytics Cloud",
 			"externalReferenceCode": "C_ENT_DEF_ANALYTICS_CLOUD",
 			"grantType": "fixed",
@@ -63,66 +113,6 @@
 		{
 			"active": true,
 			"defaultQuantity": 1,
-			"displayName": "Enterprise Search",
-			"externalReferenceCode": "C_ENT_DEF_ENTERPRISE_SEARCH",
-			"grantType": "fixed",
-			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ENTERPRISE-SEARCH",
-			"unit": "boolean"
-		},
-		{
-			"active": true,
-			"defaultQuantity": 1,
-			"displayName": "Enterprise Search Cloud",
-			"externalReferenceCode": "C_ENT_DEF_ENTERPRISE_SEARCH_CLOUD",
-			"grantType": "fixed",
-			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ENTERPRISE-SEARCH-CLOUD",
-			"unit": "boolean"
-		},
-		{
-			"active": true,
-			"defaultQuantity": 1,
-			"displayName": "PaaS",
-			"externalReferenceCode": "C_ENT_DEF_PAAS",
-			"grantType": "fixed",
-			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS",
-			"unit": "boolean"
-		},
-		{
-			"active": true,
-			"defaultQuantity": 1,
-			"displayName": "Portal",
-			"externalReferenceCode": "C_ENT_DEF_PORTAL",
-			"grantType": "fixed",
-			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PORTAL",
-			"unit": "boolean"
-		},
-		{
-			"active": true,
-			"defaultQuantity": 1,
-			"displayName": "SaaS",
-			"externalReferenceCode": "C_ENT_DEF_SAAS",
-			"grantType": "fixed",
-			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS",
-			"unit": "boolean"
-		},
-		{
-			"active": true,
-			"defaultQuantity": 1,
-			"displayName": "Liferay AI Hub",
-			"externalReferenceCode": "C_ENT_DEF_AIHUB",
-			"grantType": "fixed",
-			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-AI-HUB",
-			"unit": "boolean"
-		},
-		{
-			"active": true,
-			"defaultQuantity": 1,
 			"displayName": "Content Marketing Platform",
 			"externalReferenceCode": "C_ENT_DEF_CONTENT_MARKETING",
 			"grantType": "fixed",
@@ -162,42 +152,102 @@
 		},
 		{
 			"active": true,
-			"defaultQuantity": 100,
-			"displayName": "Additional Storage",
-			"externalReferenceCode": "C_ENT_DEF_ADDON_STORAGE",
-			"grantType": "fixed",
-			"name": "storage",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ADDON-STORAGE",
-			"unit": "GB"
-		},
-		{
-			"active": true,
-			"defaultQuantity": 4,
-			"displayName": "Additional vCPU",
-			"externalReferenceCode": "C_ENT_DEF_ADDON_VCPU",
-			"grantType": "fixed",
-			"name": "vcpu",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ADDON-VCPU",
-			"unit": "vCPU"
-		},
-		{
-			"active": true,
 			"defaultQuantity": 1,
-			"displayName": "Disaster Recovery",
-			"externalReferenceCode": "C_ENT_DEF_ADDON_DISASTER_RECOVERY",
+			"displayName": "Enterprise Search",
+			"externalReferenceCode": "C_ENT_DEF_ENTERPRISE_SEARCH",
 			"grantType": "fixed",
-			"name": "disasterRecovery",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ADDON-DISASTER-RECOVERY",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ENTERPRISE-SEARCH",
 			"unit": "boolean"
 		},
 		{
 			"active": true,
 			"defaultQuantity": 1,
-			"displayName": "Product Recommendations",
-			"externalReferenceCode": "C_ENT_DEF_ADDON_COMMERCE_RECOMMENDATIONS",
+			"displayName": "Enterprise Search Cloud",
+			"externalReferenceCode": "C_ENT_DEF_ENTERPRISE_SEARCH_CLOUD",
 			"grantType": "fixed",
-			"name": "productRecommendations",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ADDON-COMMERCE-RECOMMENDATIONS",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ENTERPRISE-SEARCH-CLOUD",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "PaaS",
+			"externalReferenceCode": "C_ENT_DEF_PAAS",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "PaaS (Legacy)",
+			"externalReferenceCode": "C_ENT_DEF_PAAS_LEGACY",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS-LEGACY",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Portal",
+			"externalReferenceCode": "C_ENT_DEF_PORTAL",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PORTAL",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Portal Enterprise-Wide License",
+			"externalReferenceCode": "C_ENT_DEF_PORTAL_EWSA",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PORTAL-EWSA",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "SaaS",
+			"externalReferenceCode": "C_ENT_DEF_SAAS",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Liferay SaaS - Business Plan",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_BUSINESS_PLAN",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-BUSINESS-PLAN",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Liferay SaaS - Enterprise Plan",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_ENTERPRISE_PLAN",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-ENTERPRISE-PLAN",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "SaaS (Legacy)",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_LEGACY",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-LEGACY",
 			"unit": "boolean"
 		}
 	]

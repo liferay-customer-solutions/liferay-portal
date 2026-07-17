@@ -126,14 +126,29 @@
 			"r_accountEntryToProject_accountEntryERC": "ACCNT-023"
 		},
 		{
-			"externalReferenceCode": "PRJCT-024",
-			"name": "Enterprise Search Cloud Project",
-			"r_accountEntryToProject_accountEntryERC": "ACCNT-024"
-		},
-		{
 			"externalReferenceCode": "PRJCT-025",
 			"name": "Multi Contract Project",
 			"r_accountEntryToProject_accountEntryERC": "ACCNT-025"
+		},
+		{
+			"externalReferenceCode": "PRJCT-026",
+			"name": "AI Hub Project",
+			"r_accountEntryToProject_accountEntryERC": "ACCNT-026"
+		},
+		{
+			"externalReferenceCode": "PRJCT-027",
+			"name": "Content Marketing Platform Project",
+			"r_accountEntryToProject_accountEntryERC": "ACCNT-027"
+		},
+		{
+			"externalReferenceCode": "PRJCT-028",
+			"name": "Data Platform Project",
+			"r_accountEntryToProject_accountEntryERC": "ACCNT-028"
+		},
+		{
+			"externalReferenceCode": "PRJCT-029",
+			"name": "Digital Sales Room Project",
+			"r_accountEntryToProject_accountEntryERC": "ACCNT-029"
 		}
 	]
 }

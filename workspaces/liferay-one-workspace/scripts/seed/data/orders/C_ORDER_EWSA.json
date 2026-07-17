@@ -8,12 +8,12 @@
 			"externalReferenceCode": "C_ENT_EWSA_DXP",
 			"grantType": "fixed",
 			"maxQuantity": 1,
-			"name": "Liferay DXP",
+			"name": "Portal Enterprise-Wide License",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-019",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_EWSA_DXP",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_EWSA",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DXP",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PORTAL_EWSA",
 			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
@@ -26,9 +26,9 @@
 		"orderItems": [
 			{
 				"externalReferenceCode": "C_ORDER_ITEM_EWSA_DXP",
-				"name": "Liferay DXP",
+				"name": "Portal Enterprise-Wide License",
 				"quantity": 1,
-				"skuExternalReferenceCode": "PRDCT-DXP",
+				"skuExternalReferenceCode": "PRDCT-PORTAL-EWSA",
 				"unitPrice": 0
 			}
 		],
