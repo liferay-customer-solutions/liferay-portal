@@ -10,6 +10,7 @@ Lists, arrays, and JSON entries must always be in sorted order. This applies to:
 - `[#assign ... /]` variable blocks in FreeMarker templates (logical dependency order, then alphabetical)
 - Java `import` statements (already handled by source formatter)
 - Entries in configuration files
+- Method and constructor parameter lists — alphabetical by parameter name. When you reorder a signature, update every call site to match. Example: `_getResponseEntity(boolean allowClosedTicket, String actionId, ...)` → `_getResponseEntity(String actionId, boolean allowClosedTicket, ...)`.
 
 When Brian sees items out of order, he comments `"sort"` and bounces the PR back.
 
