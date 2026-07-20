@@ -18,6 +18,8 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 
+import java.security.Principal;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -46,7 +48,7 @@ public class TicketsTicketAttachmentsRestController
 			@PathVariable("ticketId") String ticketId)
 		throws Exception {
 
-		return _getResponseEntity(true, jwt, ticketId);
+		return _getResponseEntity(ActionKeys.VIEW, true, jwt, ticketId);
 	}
 
 	@GetMapping("/upload-access-check")
@@ -55,7 +57,7 @@ public class TicketsTicketAttachmentsRestController
 			@PathVariable("ticketId") String ticketId)
 		throws Exception {
 
-		return _getResponseEntity(false, jwt, ticketId);
+		return _getResponseEntity(ActionKeys.UPDATE, false, jwt, ticketId);
 	}
 
 	@ExceptionHandler(Exception.class)
@@ -78,15 +80,15 @@ public class TicketsTicketAttachmentsRestController
 
 	@ExceptionHandler(PrincipalException.class)
 	public ResponseEntity<String> handleException(
-		PrincipalException principalException) {
+		Principal principal, PrincipalException principalException) {
 
 		_log.error(principalException);
 
 		return new ResponseEntity<>("FORBIDDEN_ACCESS", HttpStatus.FORBIDDEN);
 	}
 
-	private void _checkViewPermission(
-			Jwt jwt, String projectExternalReferenceCode)
+	private void _checkPermission(
+			String actionId, Jwt jwt, String projectExternalReferenceCode)
 		throws Exception {
 
 		UserAccount userAccount = _userAccountService.getMyUserAccount(jwt);
@@ -100,11 +102,12 @@ public class TicketsTicketAttachmentsRestController
 		}
 
 		_projectMembershipPermission.check(
-			ActionKeys.UPDATE, jwt, projectExternalReferenceCode);
+			actionId, jwt, projectExternalReferenceCode);
 	}
 
 	private ResponseEntity<String> _getResponseEntity(
-			boolean allowClosedTicket, Jwt jwt, String ticketId)
+			String actionId, boolean allowClosedTicket, Jwt jwt,
+			String ticketId)
 		throws Exception {
 
 		JiraSupportIssue jiraSupportIssue =
@@ -123,7 +126,7 @@ public class TicketsTicketAttachmentsRestController
 		JiraOrganization jiraOrganization =
 			jiraSupportIssue.getJiraOrganization();
 
-		_checkViewPermission(jwt, jiraOrganization.getExternalKey());
+		_checkPermission(actionId, jwt, jiraOrganization.getExternalKey());
 
 		return new ResponseEntity<>(StringPool.BLANK, HttpStatus.OK);
 	}

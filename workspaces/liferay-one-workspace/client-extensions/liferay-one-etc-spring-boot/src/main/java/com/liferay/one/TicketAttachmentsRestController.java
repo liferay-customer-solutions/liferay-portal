@@ -8,6 +8,9 @@ package com.liferay.one;
 import com.google.cloud.storage.StorageException;
 
 import com.liferay.client.extension.util.spring.boot3.client.LiferayOAuth2AccessTokenManager;
+import com.liferay.headless.admin.user.client.dto.v1_0.RoleBrief;
+import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
+import com.liferay.one.constants.RoleConstants;
 import com.liferay.one.exception.FileServerUnavailableException;
 import com.liferay.one.exception.TicketAttachmentAlreadyApprovedException;
 import com.liferay.one.exception.TicketAttachmentNotFoundException;
@@ -18,17 +21,23 @@ import com.liferay.one.jira.model.JiraSupportIssue;
 import com.liferay.one.jira.service.JiraIssueService;
 import com.liferay.one.model.Project;
 import com.liferay.one.model.TicketAttachment;
+import com.liferay.one.permission.ProjectMembershipPermission;
 import com.liferay.one.service.GoogleCloudStorageService;
 import com.liferay.one.service.NotificationQueueEntryService;
 import com.liferay.one.service.ProjectService;
 import com.liferay.one.service.TicketAttachmentService;
+import com.liferay.one.service.UserAccountService;
 import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.util.StackTraceUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+
+import java.security.Principal;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -76,6 +85,9 @@ public class TicketAttachmentsRestController extends OneBaseRestController {
 		TicketAttachment ticketAttachment =
 			_ticketAttachmentService.getTicketAttachment(
 				"Bearer " + jwt.getTokenValue(), ticketAttachmentId);
+
+		_checkPermission(
+			ActionKeys.UPDATE, jwt, ticketAttachment.getProjectKey());
 
 		_ticketAttachmentService.updateTicketAttachmentState(
 			"Bearer " + jwt.getTokenValue(), WorkflowConstants.STATUS_IN_TRASH,
@@ -149,6 +161,15 @@ public class TicketAttachmentsRestController extends OneBaseRestController {
 			"JIRA_ORGANIZATION_ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+	@ExceptionHandler(PrincipalException.class)
+	public ResponseEntity<String> handleException(
+		Principal principal, PrincipalException principalException) {
+
+		_log.error(principalException);
+
+		return new ResponseEntity<>("FORBIDDEN_ACCESS", HttpStatus.FORBIDDEN);
+	}
+
 	@ExceptionHandler(StorageException.class)
 	public ResponseEntity<String> handleException(
 		StorageException storageException) {
@@ -215,8 +236,14 @@ public class TicketAttachmentsRestController extends OneBaseRestController {
 		throws Exception {
 
 		TicketAttachment ticketAttachment =
-			_ticketAttachmentService.approveTicketAttachment(
+			_ticketAttachmentService.getTicketAttachment(
 				"Bearer " + jwt.getTokenValue(), ticketAttachmentId);
+
+		_checkPermission(
+			ActionKeys.UPDATE, jwt, ticketAttachment.getProjectKey());
+
+		ticketAttachment = _ticketAttachmentService.approveTicketAttachment(
+			"Bearer " + jwt.getTokenValue(), ticketAttachmentId);
 
 		JSONObject jsonObject = new JSONObject(json);
 
@@ -273,6 +300,8 @@ public class TicketAttachmentsRestController extends OneBaseRestController {
 			jiraSupportIssue.getJiraOrganization();
 
 		String projectERC = jiraOrganization.getExternalKey();
+
+		_checkPermission(ActionKeys.UPDATE, jwt, projectERC);
 
 		Project project = _projectService.getProject(projectERC);
 
@@ -505,6 +534,24 @@ public class TicketAttachmentsRestController extends OneBaseRestController {
 		).toString();
 	}
 
+	private void _checkPermission(
+			String actionId, Jwt jwt, String projectExternalReferenceCode)
+		throws Exception {
+
+		UserAccount userAccount = _userAccountService.getMyUserAccount(jwt);
+
+		for (RoleBrief roleBrief : userAccount.getRoleBriefs()) {
+			String roleBriefName = roleBrief.getName();
+
+			if (roleBriefName.equals(RoleConstants.NAME_PROVISIONING_MEMBER)) {
+				return;
+			}
+		}
+
+		_projectMembershipPermission.check(
+			actionId, jwt, projectExternalReferenceCode);
+	}
+
 	private void _deleteTicketAttachments(String jiraIssueKey)
 		throws Exception {
 
@@ -627,6 +674,9 @@ public class TicketAttachmentsRestController extends OneBaseRestController {
 
 		TicketAttachment ticketAttachment = unsafeFunction.apply(authorization);
 
+		_checkPermission(
+			ActionKeys.VIEW, jwt, ticketAttachment.getProjectKey());
+
 		return new ResponseEntity<>(
 			_googleCloudStorageService.getDownloadURL(
 				ticketAttachment.getGCSBucketName(),
@@ -664,9 +714,15 @@ public class TicketAttachmentsRestController extends OneBaseRestController {
 	private String _onePortalURL;
 
 	@Autowired
+	private ProjectMembershipPermission _projectMembershipPermission;
+
+	@Autowired
 	private ProjectService _projectService;
 
 	@Autowired
 	private TicketAttachmentService _ticketAttachmentService;
+
+	@Autowired
+	private UserAccountService _userAccountService;
 
 }
