@@ -141,6 +141,18 @@ public class EntitlementService extends OneBaseService {
 					orderItem.getProductId(), "') and (active eq true)"),
 				OrderItemUtil.getProductOptions(orderItem));
 
+		if (entitlementDefinitions.isEmpty()) {
+			if (_log.isInfoEnabled()) {
+				_log.info(
+					StringBundler.concat(
+						"Skipping order item ", commerceOrderItemId,
+						": no active entitlement definitions matched product ",
+						orderItem.getProductId()));
+			}
+
+			return;
+		}
+
 		Order order = _commerceOrderService.fetchCommerceOrder(
 			orderItem.getOrderId());
 
