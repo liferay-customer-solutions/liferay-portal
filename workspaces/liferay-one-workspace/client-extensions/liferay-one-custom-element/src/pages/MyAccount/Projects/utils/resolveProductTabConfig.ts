@@ -47,7 +47,7 @@ export function resolveProductTabConfig({
 	});
 
 	const detailsProfile = resolveDetailsProfile({kind, product});
-	const downloadProfile = resolveDownloadProfile(product);
+	const downloadProfile = resolveDownloadProfile({kind, orderType, product});
 	const environmentProfile = resolveEnvironmentProfile(product);
 	const utilizationProfile = resolveUtilizationProfile(product);
 	const learnUrl = getSpecificationValue(product, 'project-learn-url');

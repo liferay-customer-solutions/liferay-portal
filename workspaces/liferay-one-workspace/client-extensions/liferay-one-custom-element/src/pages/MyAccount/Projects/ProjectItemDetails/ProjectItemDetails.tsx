@@ -14,7 +14,11 @@ import {
 	getSpecificationValues,
 	useProjectProducts,
 } from '~/hooks/useProjectCommerce';
-import {getProductOrderInfo, useProjectOrders} from '~/hooks/useProjectOrders';
+import {
+	getProductOrderInfo,
+	getProductVirtualItems,
+	useProjectOrders,
+} from '~/hooks/useProjectOrders';
 import i18n, {Word} from '~/i18n';
 import AIHubAlert from '~/pages/MyAccount/Projects/components/AIHubAlert/AIHubAlert';
 import ActivationTab from '~/pages/MyAccount/Projects/components/ActivationTab/ActivationTab';
@@ -84,6 +88,7 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 		getSpecificationValue(product, 'price-model');
 
 	const orderInfo = getProductOrderInfo(placedOrders, product.name);
+	const virtualItems = getProductVirtualItems(placedOrders, product.name);
 
 	const {
 		activationProfile,
@@ -108,7 +113,9 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 				profile={detailsProfile}
 			/>
 		),
-		'download': () => <DownloadTab kind={kind} />,
+		'download': () => (
+			<DownloadTab kind={kind} virtualItems={virtualItems} />
+		),
 		'environment': () => (
 			<EnvironmentTab
 				environment={orderInfo.environment}
