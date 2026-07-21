@@ -11,7 +11,7 @@ import {safeJSONParse} from '~/utils/safeJSONParse';
 
 import {usePlacedOrders} from './usePlacedOrder';
 
-import type {PlacedOrder} from '~/types/orders';
+import type {PlacedOrder, VirtualItem} from '~/types/orders';
 
 export type ProjectOrder = {
 	date: string;
@@ -149,4 +149,21 @@ export function getProductOrderInfo(
 		purchasedBy: order.author ?? '',
 		status: toStatusToken(getOrderStatusLabel(order)),
 	};
+}
+
+export function getProductVirtualItems(
+	placedOrders: PlacedOrder[],
+	productName: string
+): VirtualItem[] {
+	for (const placedOrder of placedOrders) {
+		const placedOrderItem = (placedOrder.placedOrderItems ?? []).find(
+			(item) => item.name === productName
+		);
+
+		if (placedOrderItem) {
+			return placedOrderItem.virtualItems ?? [];
+		}
+	}
+
+	return [];
 }

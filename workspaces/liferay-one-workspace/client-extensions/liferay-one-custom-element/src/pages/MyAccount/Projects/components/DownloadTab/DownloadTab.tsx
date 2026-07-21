@@ -5,24 +5,40 @@
 
 import {useLiferayBundles} from '~/hooks/useLiferayBundles';
 
-import DownloadListCard from '../DownloadListCard/DownloadListCard';
+import DownloadListCard, {
+	DownloadItem,
+} from '../DownloadListCard/DownloadListCard';
+
+import type {VirtualItem} from '~/types/orders';
 
 import type {ProjectItemKind} from '../../types';
 
 type DownloadTabProps = {
 	kind: ProjectItemKind;
+	virtualItems?: VirtualItem[];
 };
 
-export default function DownloadTab({kind}: DownloadTabProps) {
+export default function DownloadTab({
+	kind,
+	virtualItems = [],
+}: DownloadTabProps) {
 	const {bundles} = useLiferayBundles();
 
 	const isProduct = kind === 'product';
+
+	const items: DownloadItem[] = isProduct
+		? bundles
+		: virtualItems.map((virtualItem, index) => ({
+				id: `${index}-${virtualItem.version}`,
+				link: virtualItem.url,
+				name: virtualItem.version,
+			}));
 
 	return (
 		<DownloadListCard
 			emptyLabel={isProduct ? 'no-bundles-yet' : 'no-versions-yet'}
 			heading={isProduct ? 'bundle-name' : 'supported-version'}
-			items={bundles}
+			items={items}
 			title={isProduct ? 'bundle-list' : 'versions-list'}
 		/>
 	);
