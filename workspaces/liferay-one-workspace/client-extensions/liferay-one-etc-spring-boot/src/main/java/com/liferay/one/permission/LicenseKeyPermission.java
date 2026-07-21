@@ -30,32 +30,26 @@ public class LicenseKeyPermission {
 	public void check(long accountEntryId, String actionId, Jwt jwt)
 		throws Exception {
 
-		if (!_contains(accountEntryId, actionId, jwt)) {
+		check(
+			_userAccountService.getMyUserAccount(jwt), accountEntryId,
+			actionId);
+	}
+
+	public void check(
+			UserAccount userAccount, long accountEntryId, String actionId)
+		throws Exception {
+
+		if (!_contains(userAccount, accountEntryId, actionId)) {
 			throw new PrincipalException();
 		}
 	}
 
-	private boolean _contains(long accountEntryId, String actionId, Jwt jwt)
+	private boolean _contains(
+			UserAccount userAccount, long accountEntryId, String actionId)
 		throws Exception {
 
-		UserAccount userAccount = _userAccountService.getMyUserAccount(jwt);
-
-		for (RoleBrief roleBrief : userAccount.getRoleBriefs()) {
-			String roleBriefName = roleBrief.getName();
-
-			if (roleBriefName.equals(RoleConstants.NAME_ADMINISTRATOR) ||
-				roleBriefName.equals(
-					RoleConstants.NAME_PROVISIONING_ADMINISTRATOR) ||
-				roleBriefName.equals(RoleConstants.NAME_PROVISIONING_MEMBER)) {
-
-				return true;
-			}
-
-			if (roleBriefName.equals(RoleConstants.NAME_LIFERAY_STAFF) &&
-				actionId.equals(ActionKeys.VIEW)) {
-
-				return true;
-			}
+		if (_hasGlobalRole(userAccount, actionId)) {
+			return true;
 		}
 
 		if (actionId.equals(ActionKeys.UPDATE)) {
@@ -78,11 +72,44 @@ public class LicenseKeyPermission {
 			return false;
 		}
 
-		for (OrganizationBrief organizationBrief :
-				userAccount.getOrganizationBriefs()) {
+		OrganizationBrief[] organizationBriefs =
+			userAccount.getOrganizationBriefs();
 
+		if (organizationBriefs == null) {
+			return false;
+		}
+
+		for (OrganizationBrief organizationBrief : organizationBriefs) {
 			if (ArrayUtil.contains(
 					account.getOrganizationIds(), organizationBrief.getId())) {
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private boolean _hasGlobalRole(UserAccount userAccount, String actionId) {
+		RoleBrief[] roleBriefs = userAccount.getRoleBriefs();
+
+		if (roleBriefs == null) {
+			return false;
+		}
+
+		for (RoleBrief roleBrief : roleBriefs) {
+			String roleBriefName = roleBrief.getName();
+
+			if (roleBriefName.equals(RoleConstants.NAME_ADMINISTRATOR) ||
+				roleBriefName.equals(
+					RoleConstants.NAME_PROVISIONING_ADMINISTRATOR) ||
+				roleBriefName.equals(RoleConstants.NAME_PROVISIONING_MEMBER)) {
+
+				return true;
+			}
+
+			if (roleBriefName.equals(RoleConstants.NAME_LIFERAY_STAFF) &&
+				actionId.equals(ActionKeys.VIEW)) {
 
 				return true;
 			}

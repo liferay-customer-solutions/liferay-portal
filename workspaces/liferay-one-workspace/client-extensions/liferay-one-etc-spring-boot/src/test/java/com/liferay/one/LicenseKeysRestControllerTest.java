@@ -107,6 +107,52 @@ public class LicenseKeysRestControllerTest {
 			httpHeaders.getFirst(HttpHeaders.CONTENT_DISPOSITION));
 		Assertions.assertEquals(
 			MediaType.APPLICATION_XML, httpHeaders.getContentType());
+
+		Mockito.verify(
+			_licenseKeyPermission
+		).check(
+			_ACCOUNT_ID, ActionKeys.VIEW, null
+		);
+	}
+
+	@Test
+	public void testGetLicenseKeysDownloadThrowsForbiddenWhenAccountNotViewable()
+		throws Exception {
+
+		LicenseKeysRestController licenseKeysRestController =
+			_createController();
+
+		LicenseKey licenseKey = Mockito.mock(LicenseKey.class);
+
+		Mockito.when(
+			licenseKey.getAccountEntryId()
+		).thenReturn(
+			_ACCOUNT_ID
+		);
+
+		Mockito.when(
+			_licenseKeyService.getLicenseKey(Mockito.any(), Mockito.anyLong())
+		).thenReturn(
+			licenseKey
+		);
+
+		Mockito.doThrow(
+			new PrincipalException()
+		).when(
+			_licenseKeyPermission
+		).check(
+			_ACCOUNT_ID, ActionKeys.VIEW, null
+		);
+
+		Assertions.assertThrows(
+			PrincipalException.class,
+			() -> licenseKeysRestController.getLicenseKeysDownload(null, 1L));
+
+		Mockito.verify(
+			_licenseKeyService, Mockito.never()
+		).getLicenseKeyDownloadXML(
+			Mockito.any()
+		);
 	}
 
 	@Test
@@ -313,7 +359,8 @@ public class LicenseKeysRestControllerTest {
 		Mockito.verify(
 			_licenseKeyPermission, Mockito.times(2)
 		).check(
-			_ACCOUNT_ID, ActionKeys.VIEW, null
+			Mockito.any(UserAccount.class), Mockito.eq(_ACCOUNT_ID),
+			Mockito.eq(ActionKeys.VIEW)
 		);
 
 		Mockito.verify(
@@ -355,7 +402,8 @@ public class LicenseKeysRestControllerTest {
 		).when(
 			_licenseKeyPermission
 		).check(
-			_ACCOUNT_ID, ActionKeys.VIEW, null
+			Mockito.any(UserAccount.class), Mockito.eq(_ACCOUNT_ID),
+			Mockito.eq(ActionKeys.VIEW)
 		);
 
 		Assertions.assertThrows(

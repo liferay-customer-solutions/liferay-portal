@@ -68,7 +68,8 @@ public class LicenseKeysRestController extends OneBaseRestController {
 		LicenseKey licenseKey = _licenseKeyService.getLicenseKey(
 			jwt, licenseKeyId);
 
-		_checkAccountViewPermission(licenseKey.getAccountEntryId(), jwt);
+		_licenseKeyPermission.check(
+			licenseKey.getAccountEntryId(), ActionKeys.VIEW, jwt);
 
 		if (licenseKey.getLicenseVersion() < 2) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -168,15 +169,15 @@ public class LicenseKeysRestController extends OneBaseRestController {
 			@RequestParam("licenseKeyIds") long[] licenseKeyIds)
 		throws Exception {
 
+		UserAccount userAccount = getMyUserAccount(jwt);
+
 		for (long licenseKeyId : licenseKeyIds) {
 			LicenseKey licenseKey = _licenseKeyService.getLicenseKey(
 				jwt, licenseKeyId);
 
 			_licenseKeyPermission.check(
-				licenseKey.getAccountEntryId(), ActionKeys.VIEW, jwt);
+				userAccount, licenseKey.getAccountEntryId(), ActionKeys.VIEW);
 		}
-
-		UserAccount userAccount = getMyUserAccount(jwt);
 
 		for (long licenseKeyId : licenseKeyIds) {
 			_subscriptionEntryService.addSubscriptionEntry(
