@@ -1,0 +1,40 @@
+{
+	"customFields": {
+		"projectName": "DXP Project"
+	},
+	"entitlements": [
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_TEST_LOW_CODE_CONFIGURATION",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Test Low-Code Configuration",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-006",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_TEST_LOW_CODE_CONFIGURATION",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_DXP",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_TEST_LOW_CODE_CONFIGURATION",
+			"startDate": "2026-08-09T00:00:00Z"
+		}
+	],
+	"order": {
+		"accountExternalReferenceCode": "ACCNT-006",
+		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
+		"contractExternalReferenceCode": "C_CONTRACT_DXP",
+		"currencyCode": "USD",
+		"externalReferenceCode": "C_ORDER_TEST_LOW_CODE_CONFIGURATION",
+		"orderItems": [
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_TEST_LOW_CODE_CONFIGURATION",
+				"name": "Test Low-Code Configuration",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-TEST-LOW-CODE-CONFIGURATION",
+				"unitPrice": 0
+			}
+		],
+		"orderStatus": 0,
+		"orderTypeExternalReferenceCode": "LOW_CODE_CONFIGURATION"
+	},
+	"paymentStatus": 23,
+	"purchaseOrderNumber": "PO-TEST-LOW-CODE-CONFIGURATION"
+}

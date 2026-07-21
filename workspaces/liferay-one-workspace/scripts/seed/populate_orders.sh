@@ -222,6 +222,34 @@ print(json.dumps(patch))
 	fi
 }
 
+function _complete_payment {
+	local file="${1}"
+	local order_id="${2}"
+
+	local payment_status
+
+	payment_status=$(_read_field "paymentStatus" < "${file}")
+
+	[[ -z ${payment_status} ]] && return 0
+
+	local status
+
+	status=$(_curl \
+		--data "{\"paymentStatus\": ${payment_status}}" \
+		--header "Content-Type: application/json" \
+		--output /dev/null \
+		--request PATCH \
+		--write-out "%{http_code}" \
+		"${LIFERAY_URL}/o/headless-commerce-admin-order/v1.0/orders/${order_id}" || true)
+
+	if [[ ${status} == 2* ]]
+	then
+		echo "Completed payment for order ${order_id}."
+	else
+		echo "Unable to complete payment for order ${order_id}." >&2
+	fi
+}
+
 function _populate_order {
 	local file="${1}"
 	local channel_id="${2}"
@@ -304,6 +332,7 @@ function _populate_order {
 
 	_set_order_fields "${file}" "${order_id}" "${project_name}"
 	_upsert_entitlements "${file}"
+	_complete_payment "${file}" "${order_id}"
 	_link_license_keys "${file}"
 }
 

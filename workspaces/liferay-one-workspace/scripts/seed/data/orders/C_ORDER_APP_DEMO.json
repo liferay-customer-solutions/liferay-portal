@@ -29,9 +29,10 @@
 				"unitPrice": 0
 			}
 		],
-		"orderStatus": 5,
+		"orderStatus": 0,
 		"orderTypeExternalReferenceCode": "DXP_APP",
 		"projectExternalReferenceCode": "PRJCT-006"
 	},
+	"paymentStatus": 23,
 	"purchaseOrderNumber": "PO-APP-DEMO"
 }
