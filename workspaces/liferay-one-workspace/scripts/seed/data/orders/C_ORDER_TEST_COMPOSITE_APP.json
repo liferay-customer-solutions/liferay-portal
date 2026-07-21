@@ -1,0 +1,40 @@
+{
+	"customFields": {
+		"projectName": "DXP Project"
+	},
+	"entitlements": [
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_TEST_COMPOSITE_APP",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Test Composite App",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-006",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_TEST_COMPOSITE_APP",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_DXP",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_TEST_COMPOSITE_APP",
+			"startDate": "2026-08-09T00:00:00Z"
+		}
+	],
+	"order": {
+		"accountExternalReferenceCode": "ACCNT-006",
+		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
+		"contractExternalReferenceCode": "C_CONTRACT_DXP",
+		"currencyCode": "USD",
+		"externalReferenceCode": "C_ORDER_TEST_COMPOSITE_APP",
+		"orderItems": [
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_TEST_COMPOSITE_APP",
+				"name": "Test Composite App",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-TEST-COMPOSITE-APP",
+				"unitPrice": 0
+			}
+		],
+		"orderStatus": 0,
+		"orderTypeExternalReferenceCode": "COMPOSITE_APP"
+	},
+	"paymentStatus": 23,
+	"purchaseOrderNumber": "PO-TEST-COMPOSITE-APP"
+}

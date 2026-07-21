@@ -353,11 +353,41 @@
 		{
 			"active": true,
 			"defaultQuantity": 1,
+			"displayName": "Test Client Extension",
+			"externalReferenceCode": "C_ENT_DEF_TEST_CLIENT_EXTENSION",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-CLIENT-EXTENSION",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Test Composite App",
+			"externalReferenceCode": "C_ENT_DEF_TEST_COMPOSITE_APP",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-COMPOSITE-APP",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
 			"displayName": "Test Supplier CRM Accelerator",
 			"externalReferenceCode": "C_ENT_DEF_TEST_CRM_ACCELERATOR",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-CRM-ACCELERATOR",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Test Low-Code Configuration",
+			"externalReferenceCode": "C_ENT_DEF_TEST_LOW_CODE_CONFIGURATION",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-LOW-CODE-CONFIGURATION",
 			"unit": "boolean"
 		},
 		{
