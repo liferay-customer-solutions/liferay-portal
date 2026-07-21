@@ -129,7 +129,7 @@ export function AdministratorOrdersListView({
 					{
 						id: 'orderStatusInfo',
 						name: i18n.translate('order-status'),
-						render: (orderStatusInfo) => (
+						render: (orderStatusInfo, order) => (
 							<ClayLabel
 								className="text-nowrap"
 								displayType={
@@ -138,7 +138,10 @@ export function AdministratorOrdersListView({
 									] as Status
 								}
 							>
-								{orderStatusInfo.label_i18n}
+								{orderStatusInfo.label_i18n ||
+									orderStatusInfo.label ||
+									order.workflowStatusInfo?.label_i18n ||
+									order.workflowStatusInfo?.label}
 							</ClayLabel>
 						),
 					},

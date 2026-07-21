@@ -121,6 +121,11 @@ export type Order = {
 	totalFormatted: string;
 	totalWithTaxAmountFormatted: string;
 	transactionId: string;
+	workflowStatusInfo?: {
+		code: number;
+		label: string;
+		label_i18n: string;
+	};
 };
 
 export type OrderItem = {
