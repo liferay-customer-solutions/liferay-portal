@@ -9,6 +9,17 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(({command}) => ({
 	build: {
+		// Keep SVG spritemaps as emitted files instead of inlined data URIs.
+		// ClayIcon renders a custom spritemap with
+		// <use href="${spritemap}#${symbol}">, and Chrome and Safari do not
+		// resolve <use> against a data: URI, so an inlined spritemap renders
+		// nothing. Serving it as a same-origin file makes <use> resolve
+		// everywhere. This targets only spritemap SVGs (those with a <symbol>);
+		// other SVGs, rendered via <img>, keep the default inlining.
+		assetsInlineLimit: (filePath: string, content: Buffer) =>
+			filePath.endsWith('.svg') && content.toString().includes('<symbol')
+				? false
+				: undefined,
 		chunkSizeWarningLimit: 2000,
 		cssCodeSplit: false,
 		outDir: 'build/vite',
