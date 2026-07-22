@@ -4,12 +4,12 @@
  */
 
 import ClayAlert from '@clayui/alert';
-import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import ClayLabel from '@clayui/label';
 import DOMPurify from 'dompurify';
 import {ComponentProps, ReactNode} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
+import BackLink from '~/components/BackLink/BackLink';
 import {PageRenderer} from '~/components/Page/Page';
 import useAdminApp from '~/hooks/useAdminApp';
 import i18n from '~/i18n';
@@ -94,8 +94,6 @@ function TagsSection({labels, title}: TagsSectionProps) {
 }
 
 function AppDetailContent({product}: {product: Product}) {
-	const navigate = useNavigate();
-
 	const {code} = product.workflowStatusInfo;
 
 	const appVersion = getSpecificationValue(
@@ -195,17 +193,11 @@ function AppDetailContent({product}: {product: Product}) {
 
 	return (
 		<div className="w-100">
-			<ClayButton
-				className="align-items-center d-flex mb-4"
-				displayType="unstyled"
-				onClick={() => navigate('/mp-apps')}
-			>
-				<ClayIcon className="mr-2" symbol="order-arrow-left" />
-
-				<span className="h5 mb-0">
+			<div className="mb-4">
+				<BackLink path="/mp-apps">
 					{i18n.translate('back-to-apps')}
-				</span>
-			</ClayButton>
+				</BackLink>
+			</div>
 
 			{code === ProductWorkflowStatusCode.DRAFT && (
 				<ClayAlert displayType="info">

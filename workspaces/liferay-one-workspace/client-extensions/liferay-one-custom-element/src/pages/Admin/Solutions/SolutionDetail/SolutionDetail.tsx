@@ -4,12 +4,12 @@
  */
 
 import ClayAlert from '@clayui/alert';
-import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import ClayLabel from '@clayui/label';
 import DOMPurify from 'dompurify';
 import {ComponentProps, ReactNode} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
+import BackLink from '~/components/BackLink/BackLink';
 import {PageRenderer} from '~/components/Page/Page';
 import useAdminSolution from '~/hooks/useAdminSolution';
 import i18n from '~/i18n';
@@ -149,8 +149,6 @@ function SupportLink({href, label, symbol, type}: SupportLinkProps) {
 }
 
 function SolutionDetailContent({product}: {product: Product}) {
-	const navigate = useNavigate();
-
 	const {code} = product.workflowStatusInfo;
 
 	const solution = parseSolutionDetail(product);
@@ -162,17 +160,11 @@ function SolutionDetailContent({product}: {product: Product}) {
 
 	return (
 		<div className="w-100">
-			<ClayButton
-				className="align-items-center d-flex mb-4"
-				displayType="unstyled"
-				onClick={() => navigate('/mp-solutions')}
-			>
-				<ClayIcon className="mr-2" symbol="order-arrow-left" />
-
-				<span className="h5 mb-0">
+			<div className="mb-4">
+				<BackLink path="/mp-solutions">
 					{i18n.translate('back-to-solutions')}
-				</span>
-			</ClayButton>
+				</BackLink>
+			</div>
 
 			{code === ProductWorkflowStatusCode.PENDING && (
 				<ClayAlert displayType="info">
