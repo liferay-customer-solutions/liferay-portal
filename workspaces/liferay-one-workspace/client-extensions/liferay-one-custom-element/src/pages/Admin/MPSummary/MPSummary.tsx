@@ -101,7 +101,7 @@ export default function MPSummary() {
 							userAccountModel?.isAdmin && (
 								<Link
 									className="font-weight-bold"
-									to="/admin/mp-orders"
+									to="/mp-orders"
 								>
 									{i18n.translate('view-all')}
 									<ClayIcon symbol="order-arrow-right" />
@@ -129,10 +129,7 @@ export default function MPSummary() {
 							className: 'border py-2 rounded-lg',
 						}}
 						rightButton={
-							<Link
-								className="font-weight-bold"
-								to="/admin/mp-apps"
-							>
+							<Link className="font-weight-bold" to="/mp-apps">
 								{i18n.translate('view-all')}
 								<ClayIcon symbol="order-arrow-right" />
 							</Link>

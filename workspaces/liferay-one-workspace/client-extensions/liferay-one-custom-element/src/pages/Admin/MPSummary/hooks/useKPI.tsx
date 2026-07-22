@@ -286,7 +286,7 @@ const useKPI = () => {
 				{
 					onClick: () =>
 						navigate(
-							`/admin/publishers?filter={"customFields/AccountType":["${'Technology Partner'}"]}&filterSchema=administratorPublishers`
+							`/publishers?filter={"customFields/AccountType":["${'Technology Partner'}"]}&filterSchema=administratorPublishers`
 						),
 					...getAnnualTargetValues(
 						kpiPartnershipIntegration,
@@ -358,7 +358,7 @@ const useKPI = () => {
 					lastYearLabel,
 					onClick: () =>
 						navigate(
-							`/admin/mp-apps?filter=${liferayQuarterlyVersionsAndConnectors}&filterSchema=administratorApps`
+							`/mp-apps?filter=${liferayQuarterlyVersionsAndConnectors}&filterSchema=administratorApps`
 						),
 					title: i18n.translate(
 						'apps-and-connectors-supporting-quarterly-release'
@@ -376,7 +376,7 @@ const useKPI = () => {
 					lastYearLabel,
 					onClick: () =>
 						navigate(
-							`/admin/mp-apps?filter={"specificationValues|appType":"${'low-code-configuration'}"}&filterSchema=administratorApps`
+							`/mp-apps?filter={"specificationValues|appType":"${'low-code-configuration'}"}&filterSchema=administratorApps`
 						),
 					title: i18n.translate('low-code-configurations-published'),
 				},
