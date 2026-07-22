@@ -7,6 +7,7 @@ import {lazy} from 'react';
 import {Navigate} from 'react-router-dom';
 import {AppRoute} from '~/utils/routeUtils';
 
+const AppDetail = lazy(() => import('./Apps/AppDetail/AppDetail'));
 const Apps = lazy(() => import('./Apps/Apps'));
 const Environments = lazy(() => import('./Environments/Environments'));
 const LicenseKeyUploads = lazy(
@@ -50,6 +51,10 @@ export const adminRoutes: AppRoute[] = [
 		element: <Apps />,
 		nav: {icon: 'grid', label: 'Marketplace Apps'},
 		path: 'mp-apps',
+	},
+	{
+		element: <AppDetail />,
+		path: 'mp-apps/:productId',
 	},
 	{
 		element: <Solutions />,

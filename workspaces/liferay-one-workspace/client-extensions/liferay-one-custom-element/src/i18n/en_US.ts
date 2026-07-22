@@ -546,6 +546,7 @@ export default {
 		'If you are requesting the account on behalf of a business, please note the business name.',
 	'if-you-could-choose-3-top-priorities-for-improvements-what-would-they-be':
 		'If you could choose 3 top priorities for improvements, what would they be?',
+	'images': 'Images',
 	'important-images-will-be-displayed-following-the-numerical-order-above':
 		'Important: Images will be displayed following the numerical order above.',
 	'in-progress': 'In Progress',
@@ -1377,6 +1378,7 @@ export default {
 	'via-liferay-experience-cloud-integration': 'Via Liferay SaaS Integration',
 	'via-liferay-plugin-packages': 'Via Liferay Plugin Packages',
 	'via-zip-upload': 'Via ZIP Upload',
+	'video': 'Video',
 	'video-description': 'Video description',
 	'video-url': 'Video URL',
 	'view': 'View',
