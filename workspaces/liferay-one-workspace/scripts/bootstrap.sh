@@ -69,11 +69,11 @@ function main {
 	echo "Deploying artifacts to Liferay container."
 	bash scripts/bootstrap/deploy_client_extensions.sh
 
-	echo "Seeding data."
-	bash scripts/seed.sh
-
 	echo "Setting virtual hosts."
 	bash scripts/bootstrap/set_virtual_hosts.sh
+
+	echo "Seeding data."
+	bash scripts/seed.sh
 
 	echo "Done. Liferay is running at http://localhost."
 }

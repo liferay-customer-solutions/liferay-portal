@@ -72,11 +72,11 @@ function main {
 
 	_wait_for_site_initializer
 
-	echo "Seeding data."
-	bash scripts/seed.sh
-
 	echo "Setting virtual hosts."
 	bash scripts/bootstrap/set_virtual_hosts.sh
+
+	echo "Seeding data."
+	bash scripts/seed.sh
 
 	echo "Done. The Liferay instance data has been reset."
 }
