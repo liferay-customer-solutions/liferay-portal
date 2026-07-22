@@ -491,9 +491,9 @@
 			},
 			"productSpecifications": [
 				{
-					"specificationKey": "publisher-name",
+					"specificationKey": "liferay-products-categories",
 					"value": {
-						"en_US": "Liferay, Inc."
+						"en_US": "Platform"
 					}
 				},
 				{
@@ -503,15 +503,15 @@
 					}
 				},
 				{
-					"specificationKey": "liferay-products-categories",
-					"value": {
-						"en_US": "Platform"
-					}
-				},
-				{
 					"specificationKey": "product-icon",
 					"value": {
 						"en_US": "app"
+					}
+				},
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
 					}
 				},
 				{
@@ -3589,9 +3589,9 @@
 			},
 			"productSpecifications": [
 				{
-					"specificationKey": "publisher-name",
+					"specificationKey": "liferay-products-categories",
 					"value": {
-						"en_US": "Liferay, Inc."
+						"en_US": "Platform"
 					}
 				},
 				{
@@ -3601,15 +3601,15 @@
 					}
 				},
 				{
-					"specificationKey": "liferay-products-categories",
-					"value": {
-						"en_US": "Platform"
-					}
-				},
-				{
 					"specificationKey": "product-icon",
 					"value": {
 						"en_US": "app"
+					}
+				},
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
 					}
 				},
 				{
@@ -3662,9 +3662,9 @@
 			},
 			"productSpecifications": [
 				{
-					"specificationKey": "publisher-name",
+					"specificationKey": "liferay-products-categories",
 					"value": {
-						"en_US": "Liferay, Inc."
+						"en_US": "Platform"
 					}
 				},
 				{
@@ -3674,15 +3674,15 @@
 					}
 				},
 				{
-					"specificationKey": "liferay-products-categories",
-					"value": {
-						"en_US": "Platform"
-					}
-				},
-				{
 					"specificationKey": "product-icon",
 					"value": {
 						"en_US": "app"
+					}
+				},
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
 					}
 				},
 				{
@@ -3867,9 +3867,9 @@
 			},
 			"productSpecifications": [
 				{
-					"specificationKey": "publisher-name",
+					"specificationKey": "liferay-products-categories",
 					"value": {
-						"en_US": "Liferay, Inc."
+						"en_US": "Platform"
 					}
 				},
 				{
@@ -3879,15 +3879,15 @@
 					}
 				},
 				{
-					"specificationKey": "liferay-products-categories",
-					"value": {
-						"en_US": "Platform"
-					}
-				},
-				{
 					"specificationKey": "product-icon",
 					"value": {
 						"en_US": "app"
+					}
+				},
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
 					}
 				},
 				{

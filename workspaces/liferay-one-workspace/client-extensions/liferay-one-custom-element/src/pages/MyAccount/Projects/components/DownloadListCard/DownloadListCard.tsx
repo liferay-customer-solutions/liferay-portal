@@ -24,7 +24,7 @@ type DownloadListCardProps = {
 };
 
 function matchesSearch(item: DownloadItem, search: string): boolean {
-	return item.name.toLowerCase().includes(search);
+	return (item.name ?? '').toLowerCase().includes(search);
 }
 
 export default function DownloadListCard({
