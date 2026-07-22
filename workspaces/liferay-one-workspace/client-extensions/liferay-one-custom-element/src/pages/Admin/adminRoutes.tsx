@@ -28,6 +28,9 @@ const PublisherRequests = lazy(
 );
 const Publishers = lazy(() => import('./Publishers/Publishers'));
 const PubSub = lazy(() => import('./PubSub/PubSub'));
+const SolutionDetail = lazy(
+	() => import('./Solutions/SolutionDetail/SolutionDetail')
+);
 const Solutions = lazy(() => import('./Solutions/Solutions'));
 const TrialDetails = lazy(
 	() => import('./SSADashboard/pages/TrialDetails/TrialDetails')
@@ -60,6 +63,10 @@ export const adminRoutes: AppRoute[] = [
 		element: <Solutions />,
 		nav: {icon: 'union', label: 'Marketplace Solutions'},
 		path: 'mp-solutions',
+	},
+	{
+		element: <SolutionDetail />,
+		path: 'mp-solutions/:productId',
 	},
 	{
 		element: <MPFinanceOrders />,
