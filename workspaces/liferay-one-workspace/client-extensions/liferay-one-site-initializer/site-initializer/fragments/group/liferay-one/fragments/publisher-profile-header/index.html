@@ -1,0 +1,106 @@
+[#assign
+	email = ""
+	publisherName = ""
+	publisherProfileImageURL = ""
+	showContactForm = false
+/]
+
+[#assign infoItem = request.getAttribute("INFO_ITEM")! /]
+
+[#if infoItem?has_content]
+	[#attempt]
+		[#assign values = infoItem.getValues() /]
+
+		[#assign
+			email = (values["email"])!""
+			publisherName = (values["publisherName"])!""
+			publisherProfileImageURL = (values["publisherProfileImageURL"])!""
+			showContactForm = (values["showContactForm"])!false
+		/]
+	[#recover]
+	[/#attempt]
+[/#if]
+
+[#assign channelId = "" /]
+
+[#if configuration.channelId?has_content]
+	[#assign channelId = configuration.channelId /]
+[#else]
+	[#attempt]
+		[#assign channel = restClient.get("/headless-commerce-delivery-catalog/v1.0/channels") /]
+
+		[#if channel?has_content && (channel.items)?has_content]
+			[#assign siteChannels = channel.items?filter(siteChannel -> siteChannel.siteGroupId == themeDisplay.getSiteGroupId()) /]
+
+			[#if siteChannels?has_content]
+				[#assign channelId = siteChannels[0].id /]
+			[/#if]
+		[/#if]
+	[#recover]
+	[/#attempt]
+[/#if]
+
+[#function getPublisherName product]
+	[#if product.productSpecifications?has_content]
+		[#local specification = product.productSpecifications?filter(productSpecification ->
+			stringUtil.equals(productSpecification.specificationKey, "publisher-name")) /]
+
+		[#if specification?has_content]
+			[#return specification?first.value!"" /]
+		[/#if]
+	[/#if]
+
+	[#return "" /]
+[/#function]
+
+[#assign appsCount = 0 /]
+
+[#if publisherName?has_content && channelId?has_content]
+	[#attempt]
+		[#assign response = restClient.get("/headless-commerce-delivery-catalog/v1.0/channels/${channelId}/products?accountId=-1&nestedFields=productSpecifications&pageSize=100") /]
+
+		[#assign appsCount = ((response.items![])?filter(product -> getPublisherName(product) == publisherName))?size /]
+	[#recover]
+	[/#attempt]
+[/#if]
+
+<div class="publisher-profile-header">
+	<div class="align-items-center d-flex flex-wrap justify-content-between">
+		<div class="align-items-center d-flex">
+			[#if publisherProfileImageURL?has_content]
+				<div class="align-items-center bg-white d-flex image-container justify-content-center mr-3 publisher-profile-header-avatar">
+					<img alt="${publisherName}" class="publisher-profile-header-image" draggable="false" height="48" src="${(publisherProfileImageURL?replace('https://', 'http://'))?js_string}" width="48" />
+				</div>
+			[/#if]
+
+			<div class="d-flex flex-column">
+				<h1 class="mb-1 publisher-profile-header-name">${publisherName}</h1>
+
+				<div class="align-items-center d-flex publisher-profile-header-stats">
+					<span>${appsCount} ${languageUtil.get(locale, "apps", "Apps")}</span>
+
+					[#if configuration.hideRatingInfo == false]
+						<span class="mx-2">&bull;</span>
+
+						<span class="stars">
+							[@clay["icon"] symbol="star" /]
+						</span>
+						<span class="ml-1">4.9 ${languageUtil.get(locale, "average-rating", "Average Rating")}</span>
+
+						<span class="mx-2">&bull;</span>
+
+						[@clay["icon"] symbol="download" /]
+
+						<span class="ml-1">8.5k ${languageUtil.get(locale, "total-download", "Total Download")}</span>
+					[/#if]
+				</div>
+			</div>
+		</div>
+
+		[#if showContactForm && email?has_content]
+			<a class="btn btn-primary publisher-profile-header-contact" href="mailto:${email}">
+				${languageUtil.get(locale, "contact", "Contact")}
+			</a>
+		[/#if]
+	</div>
+</div>

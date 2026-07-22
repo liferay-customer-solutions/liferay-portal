@@ -41,28 +41,152 @@
 	[#return "" /]
 [/#function]
 
+[#function langKey label]
+	[#return label?lower_case?replace(" ", "-", "r")?replace("&", "and", "r")?replace(",", "", "r")?replace("/", "-", "r") /]
+[/#function]
+
 <div class="publisher-profile-apps-fragment">
 	[#if publisherName?has_content && channelId?has_content]
-		[#assign response = restClient.get("/headless-commerce-delivery-catalog/v1.0/channels/${channelId}/products?accountId=-1&nestedFields=productSpecifications&pageSize=100") /]
+		[#assign response = restClient.get("/headless-commerce-delivery-catalog/v1.0/channels/${channelId}/products?accountId=-1&nestedFields=categories,productSpecifications&pageSize=100") /]
 		[#assign publisherProducts = (response.items![])?filter(product -> getPublisherName(product) == publisherName) /]
 
 		[#if publisherProducts?has_content]
-			<h4 class="font-weight-semi-bold mb-3 mt-5">
-				${languageUtil.get(locale, "apps", "Apps")} (${publisherProducts?size})
+			<h4 class="font-weight-semi-bold mb-3 publisher-profile-apps-title">
+				${languageUtil.get(locale, "applications", "Applications")}
 			</h4>
 
 			<div class="d-flex flex-row flex-wrap publisher-profile-apps">
 				[#list publisherProducts as product]
-					<a class="d-flex flex-column mb-0 one-card position-relative publisher-profile-app-card text-dark text-decoration-none" href="/p/${product.slug}" target="_self">
-						<div class="align-items-center d-flex flex-row">
-							<div class="image-container mr-3 rounded">
-								<img alt="${product.name}" class="publisher-profile-app-image" draggable="false" height="48" src="${((product.urlImage!'')?replace('https://', 'http://'))?js_string}" width="48" />
+					[#assign remainingCategoriesText = [] /]
+
+					[#if product.categories?has_content]
+						[#assign productCategories = product.categories?filter(productCategory -> productCategory.vocabulary?replace(" ", "-") == "marketplace-app-category")![] categoriesListSize = productCategories?size-1 productTypes = product.categories?filter(productCategory -> productCategory.vocabulary?replace(" ", "-") == "marketplace-category")![] /]
+					[/#if]
+
+					[#assign productType = productTypes[0]!"" /]
+
+					[#if product.productSpecifications?has_content]
+						[#assign productSpecifications = product.productSpecifications![] /]
+
+						[#function getSpecificationValue key defaultValue=""]
+							[#local specification = productSpecifications?filter(productSpecification ->
+								stringUtil.equals(productSpecification.specificationKey, key)) /]
+
+							[#return (specification?first.value)!defaultValue /]
+						[/#function]
+					[/#if]
+
+					[#assign productDescription = stringUtil.shorten(htmlUtil.stripHtml(product.description!""), 140, "...") /]
+
+					[#assign productIcon = getSpecificationValue("product-icon", "liferay_waffle") /]
+
+					<a class="app-card d-flex flex-column mb-0 one-card position-relative publisher-profile-app-card text-dark text-decoration-none" href="/p/${product.slug}" target="_self">
+						<div class="card-image-title-container d-flex">
+							<div class="image-container mr-2 rounded">
+								<img alt="${product.name}" class="app-search-image" draggable="false" height="48" lazy="true" src="/documents/d${themeDisplay.getScopeGroup().getFriendlyURL()}/${productIcon}-svg" width="48" />
 							</div>
 
-							<div class="font-weight-semi-bold publisher-profile-app-name">${product.name}</div>
+							<div class="d-flex flex-column w-100">
+								[#if productType?has_content]
+									<span class="d-flex justify-content-end">
+										[#if productType.title == 'Other']
+											<div class="app-type-badge"></div>
+										[#else]
+											[#assign badgeType = productType.name?lower_case?replace(" ", "-", "r")?replace("/", "-", "r")]
+
+											<div class="app-type-badge ${badgeType} font-weight-semi-bold">
+												${languageUtil.get(locale, langKey(productType.title), productType.title)}
+											</div>
+										[/#if]
+									</span>
+								[/#if]
+
+								<div class="app-name font-weight-semi-bold mb-1">
+									${product.name}
+								</div>
+
+								<div class="catalog-name font-weight-normal mt-0 text-black-50">
+									${getSpecificationValue("developer-name")}
+								</div>
+							</div>
+						</div>
+
+						<div class="d-flex flex-column font-size-paragraph-small h-100 justify-content-between">
+							<div class="app-card-description font-weight-normal my-3">
+								${productDescription}
+							</div>
+
+							<div class="d-flex flex-column">
+								<div class="font-weight-semi-bold mb-3 text-capitalize">
+									${getSpecificationValue("price-model")}
+								</div>
+
+								[#if productCategories?has_content]
+									[#assign principalCategory = productCategories[0] remainingCategories = productCategories?filter(category -> category.name != principalCategory.name) /]
+
+									[#list remainingCategories as category]
+										[#assign remainingCategoriesText = remainingCategoriesText + [languageUtil.get(locale, langKey(category.title), category.title)] /]
+									[/#list]
+								[/#if]
+
+								[#if principalCategory?has_content]
+									[#assign principalCategoryTitle = languageUtil.get(locale, langKey(principalCategory.title), principalCategory.title) tagName = stringUtil.shorten(htmlUtil.stripHtml(principalCategoryTitle!""), 100, "...") /]
+
+									<div class="my-1 tags-container">
+										<span class="font-weight-normal mb-3 mr-3 product-tag px-2 py-1 rounded text-nowrap" title="${principalCategoryTitle}">
+											${tagName}
+										</span>
+
+										[#if categoriesListSize?has_content && remainingCategoriesText?has_content]
+											<span class="font-weight-normal mb-1 product-tag px-2 py-1 rounded text-nowrap" title="${remainingCategoriesText?join('\n')}">
+												+ ${categoriesListSize}
+											</span>
+										[/#if]
+									</div>
+								[/#if]
+
+								[#if configuration.hideRatingInfo == false]
+									<div class="d-flex flex-row justify-content-between mt-2">
+										<div class="align-items-center d-flex justify-content-center">
+											<span class="stars">
+												[@clay["icon"] symbol="star" /]
+												[@clay["icon"] symbol="star" /]
+												[@clay["icon"] symbol="star" /]
+												[@clay["icon"] symbol="star-half" /]
+												[@clay["icon"] symbol="star-o" /]
+											</span>
+
+											<p class="m-0 ml-1">4.85 (200)</p>
+										</div>
+
+										<div class="align-items-center d-flex justify-content-center">
+											[@clay["icon"] symbol="download" /]
+
+											<span class="m-0 ml-1">85k</span>
+										</div>
+									</div>
+								[/#if]
+							</div>
 						</div>
 					</a>
 				[/#list]
+			</div>
+
+			<div class="align-items-center d-flex flex-wrap justify-content-between mt-4 publisher-profile-apps-pagination-bar">
+				<div class="align-items-center d-flex">
+					<select aria-label="${languageUtil.get(locale, "entries-per-page", "Entries per Page")}" class="mr-3 publisher-profile-apps-page-size">
+						[#list [4, 8, 12, 24, 48] as delta]
+							<option [#if delta?string == (configuration.pageSize!8)?string]selected [/#if]value="${delta}">${delta} ${languageUtil.get(locale, "entries", "entries")?lower_case}</option>
+						[/#list]
+					</select>
+
+					<span class="publisher-profile-apps-results">
+						<span class="publisher-profile-apps-results-range" data-template="${languageUtil.get(locale, "showing-x-to-x", "Showing {0} to {1}")}"></span>
+						<span class="publisher-profile-apps-results-total" data-template="${languageUtil.get(locale, "of-x-entries", "of {0} entries")?lower_case}"></span>
+					</span>
+				</div>
+
+				<ul aria-label="${languageUtil.get(locale, "pagination", "Pagination")}" class="mb-0 pagination publisher-profile-apps-pagination" data-spritemap="${themeDisplay.getPathThemeSpritemap()}"></ul>
 			</div>
 		[/#if]
 	[/#if]

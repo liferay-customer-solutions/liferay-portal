@@ -1,0 +1,8 @@
+{
+	"cssPath": "index.css",
+	"htmlPath": "index.html",
+	"icon": "info-circle",
+	"jsPath": "index.js",
+	"name": "Publisher Profile Details",
+	"type": "component"
+}

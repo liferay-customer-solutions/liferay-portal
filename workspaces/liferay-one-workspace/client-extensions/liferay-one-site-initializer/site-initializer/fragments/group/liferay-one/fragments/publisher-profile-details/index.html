@@ -1,0 +1,58 @@
+[#assign
+	email = ""
+	location = ""
+	websiteURL = ""
+/]
+
+[#assign infoItem = request.getAttribute("INFO_ITEM")! /]
+
+[#if infoItem?has_content]
+	[#attempt]
+		[#assign values = infoItem.getValues() /]
+
+		[#assign
+			email = (values["email"])!""
+			location = (values["location"])!""
+			websiteURL = (values["websiteURL"])!""
+		/]
+	[#recover]
+	[/#attempt]
+[/#if]
+
+<div class="publisher-profile-details">
+	[#if websiteURL?has_content]
+		<div class="publisher-profile-details-section">
+			<div class="publisher-profile-details-label">${languageUtil.get(locale, "website", "Website")}</div>
+
+			<div class="align-items-center d-flex">
+				[@clay["icon"] symbol="globe" /]
+
+				<a class="ml-2" href="${websiteURL}" target="_blank">${websiteURL?replace("https://", "")?replace("http://", "")}</a>
+			</div>
+		</div>
+	[/#if]
+
+	[#if email?has_content]
+		<div class="publisher-profile-details-section">
+			<div class="publisher-profile-details-label">${languageUtil.get(locale, "mail", "Mail")}</div>
+
+			<div class="align-items-center d-flex">
+				[@clay["icon"] symbol="envelope-closed" /]
+
+				<a class="ml-2" href="mailto:${email}">${email}</a>
+			</div>
+		</div>
+	[/#if]
+
+	[#if location?has_content]
+		<div class="publisher-profile-details-section">
+			<div class="publisher-profile-details-label">${languageUtil.get(locale, "location", "Location")}</div>
+
+			<div class="d-flex">
+				[@clay["icon"] symbol="geolocation" /]
+
+				<span class="ml-2">${location}</span>
+			</div>
+		</div>
+	[/#if]
+</div>

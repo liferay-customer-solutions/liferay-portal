@@ -1,0 +1,9 @@
+{
+	"configurationPath": "configuration.json",
+	"cssPath": "index.css",
+	"htmlPath": "index.html",
+	"icon": "user",
+	"jsPath": "index.js",
+	"name": "Publisher Profile Header",
+	"type": "component"
+}

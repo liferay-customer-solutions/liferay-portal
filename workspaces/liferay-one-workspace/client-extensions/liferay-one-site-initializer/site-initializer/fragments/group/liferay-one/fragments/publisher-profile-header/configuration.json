@@ -13,13 +13,6 @@
 					"label": "Hide Rating Info",
 					"name": "hideRatingInfo",
 					"type": "checkbox"
-				},
-				{
-					"dataType": "int",
-					"defaultValue": "8",
-					"label": "Page Size",
-					"name": "pageSize",
-					"type": "text"
 				}
 			]
 		}

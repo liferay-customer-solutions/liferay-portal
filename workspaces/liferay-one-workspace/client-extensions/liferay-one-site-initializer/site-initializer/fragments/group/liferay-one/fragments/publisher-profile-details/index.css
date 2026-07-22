@@ -1,0 +1,31 @@
+.publisher-profile-details {
+	border: 1px solid #e2e2e4;
+	border-radius: 10px;
+	padding: 8px 16px;
+}
+
+.publisher-profile-details .lexicon-icon {
+	color: #54555f;
+	height: 16px;
+	margin-top: 0;
+	width: 16px;
+}
+
+.publisher-profile-details .publisher-profile-details-label {
+	color: #282934;
+	font-size: 13px;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	line-height: 16px;
+	margin-bottom: 12px;
+	text-transform: uppercase;
+}
+
+.publisher-profile-details .publisher-profile-details-section {
+	border-bottom: 1px solid #e2e2e4;
+	padding: 16px 0;
+}
+
+.publisher-profile-details .publisher-profile-details-section:last-child {
+	border-bottom: 0;
+}

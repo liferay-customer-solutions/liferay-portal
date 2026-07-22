@@ -8,15 +8,58 @@
 	padding: var(--spacer-3);
 }
 
-.publisher-profile-apps-fragment .publisher-profile-app-image {
-	border-radius: 8px;
-	object-fit: cover;
+.publisher-profile-apps-fragment .publisher-profile-app-card-hidden {
+	display: none !important;
 }
 
-.publisher-profile-apps-fragment .publisher-profile-app-name {
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 2;
-	display: -webkit-box;
-	overflow: hidden;
-	text-overflow: ellipsis;
+
+.publisher-profile-apps-fragment .publisher-profile-apps-page-size {
+	background-color: transparent;
+	border: 0;
+	color: #2b3a4b;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.publisher-profile-apps-fragment .publisher-profile-apps-pagination .lexicon-icon {
+	height: 16px;
+	margin-top: 0;
+	width: 16px;
+}
+
+.publisher-profile-apps-fragment .publisher-profile-apps-pagination .page-item.active .page-link {
+	background-color: #d5d8db;
+	color: #3d536b;
+}
+
+.publisher-profile-apps-fragment .publisher-profile-apps-pagination .page-item.disabled .page-link {
+	opacity: 0.5;
+}
+
+.publisher-profile-apps-fragment .publisher-profile-apps-pagination .page-link {
+	background-color: transparent;
+	border: 0;
+	border-radius: 6px;
+	color: #2b3a4b;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 16px;
+	padding: 8px 12px;
+}
+
+.publisher-profile-apps-fragment .publisher-profile-apps-results {
+	font-size: 13px;
+	line-height: 16px;
+}
+
+.publisher-profile-apps-fragment .publisher-profile-apps-results-range {
+	color: #282934;
+}
+
+.publisher-profile-apps-fragment .publisher-profile-apps-results-total {
+	color: #54555f;
+}
+
+.publisher-profile-apps-fragment .stars {
+	color: var(--color-accent-6);
 }
