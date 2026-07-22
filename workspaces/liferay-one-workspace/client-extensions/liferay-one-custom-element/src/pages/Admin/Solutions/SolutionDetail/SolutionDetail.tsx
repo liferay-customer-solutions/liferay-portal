@@ -165,7 +165,7 @@ function SolutionDetailContent({product}: {product: Product}) {
 			<ClayButton
 				className="align-items-center d-flex mb-4"
 				displayType="unstyled"
-				onClick={() => navigate('/admin/mp-solutions')}
+				onClick={() => navigate('/mp-solutions')}
 			>
 				<ClayIcon className="mr-2" symbol="order-arrow-left" />
 

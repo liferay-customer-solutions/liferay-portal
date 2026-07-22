@@ -198,7 +198,7 @@ function AppDetailContent({product}: {product: Product}) {
 			<ClayButton
 				className="align-items-center d-flex mb-4"
 				displayType="unstyled"
-				onClick={() => navigate('/admin/mp-apps')}
+				onClick={() => navigate('/mp-apps')}
 			>
 				<ClayIcon className="mr-2" symbol="order-arrow-left" />
 

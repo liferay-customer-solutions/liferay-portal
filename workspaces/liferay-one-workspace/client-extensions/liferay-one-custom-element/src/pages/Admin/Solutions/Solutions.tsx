@@ -48,9 +48,7 @@ export default function Solutions() {
 						{
 							name: i18n.translate('view-details'),
 							onClick: (row) =>
-								navigate(
-									`/admin/mp-solutions/${row.productId}`
-								),
+								navigate(`/mp-solutions/${row.productId}`),
 						},
 					],
 					columns: [
@@ -99,8 +97,7 @@ export default function Solutions() {
 							),
 						},
 					],
-					navigateTo: ({productId}) =>
-						`/admin/mp-solutions/${productId}`,
+					navigateTo: ({productId}) => `/mp-solutions/${productId}`,
 				}}
 			/>
 		</Page>

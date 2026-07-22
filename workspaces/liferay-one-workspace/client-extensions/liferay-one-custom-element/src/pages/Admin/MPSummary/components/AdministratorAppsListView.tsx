@@ -140,7 +140,7 @@ const AdministratorAppsListView: React.FC<AdministratorAppsListViewProps> = ({
 					),
 				},
 			],
-			navigateTo: ({productId}) => `/admin/mp-apps/${productId}`,
+			navigateTo: ({productId}) => `/mp-apps/${productId}`,
 		}}
 		{...listViewProps}
 	/>
