@@ -15,15 +15,36 @@ import useAdminApp from '~/hooks/useAdminApp';
 import i18n from '~/i18n';
 import {
 	ProductSpecificationKey,
+	ProductTypeLabels,
 	ProductWorkflowDisplayType,
 	ProductWorkflowStatusCode,
 	ProductWorkflowStatusLabel,
 	getProductCategoriesByVocabularyName,
 } from '~/utils/productUtils';
 
+import type {Word} from '~/i18n';
 import type {Product} from '~/types/product';
 
 const APP_ICON_TAG = 'app-icon';
+
+const PRICE_MODEL_DESCRIPTIONS: Record<string, string> = {
+	free: 'The app is offered in the Marketplace with no charge.',
+	paid: 'To enable paid apps, you must be a business and enter payment information in your Marketplace account profile.',
+};
+
+const PRODUCT_TYPE_DESCRIPTIONS: Record<string, string> = {
+	'client-extension':
+		'Modular, decoupled components that allow developers to customize and extend Liferay DXP’s functionality without altering its core code. They interact with Liferay via headless APIs, providing flexibility and maintainability.',
+	'cloud':
+		'Backend client extensions delivered as deployed services (only available to SaaS and PaaS clients).',
+	'composite-app':
+		'Complex app with multiple parts like i.e. OSGI extensions + CX + low-code applications.',
+	'dxp': 'Module-based apps delivered as .lpkg files that the user can install to modify native Liferay behavior.',
+	'low-code-configuration':
+		'Methods for building business applications faster without needing in-depth coding knowledge (i.e.: fragments, data set, object definitions, etc).',
+	'other':
+		'Apps that do not fit into the standard categories. This may include external integrations, legacy solutions, prototypes, or custom deployments.',
+};
 
 function getSpecificationValue(product: Product, key: string) {
 	return product.productSpecifications.find(
@@ -96,10 +117,20 @@ function TagsSection({labels, title}: TagsSectionProps) {
 function AppDetailContent({product}: {product: Product}) {
 	const {code} = product.workflowStatusInfo;
 
+	const appType = getSpecificationValue(
+		product,
+		ProductSpecificationKey.APP_TYPE
+	);
+
 	const appVersion = getSpecificationValue(
 		product,
 		ProductSpecificationKey.APP_VERSION
 	);
+
+	const priceModel = getSpecificationValue(
+		product,
+		ProductSpecificationKey.APP_PRICING_MODEL
+	)?.toLowerCase();
 
 	const areas = getProductCategoriesByVocabularyName(
 		product.categories,
@@ -276,6 +307,45 @@ function AppDetailContent({product}: {product: Product}) {
 
 				{!!tags.length && (
 					<TagsSection labels={tags} title={i18n.translate('tags')} />
+				)}
+
+				{appType &&
+					ProductTypeLabels[
+						appType as keyof typeof ProductTypeLabels
+					] && (
+						<Section title={i18n.translate('build')}>
+							<div className="border p-4 rounded-lg">
+								<span className="d-block font-weight-semi-bold">
+									{
+										ProductTypeLabels[
+											appType as keyof typeof ProductTypeLabels
+										]
+									}
+								</span>
+
+								{PRODUCT_TYPE_DESCRIPTIONS[appType] && (
+									<span>
+										{PRODUCT_TYPE_DESCRIPTIONS[appType]}
+									</span>
+								)}
+							</div>
+						</Section>
+					)}
+
+				{priceModel && (
+					<Section title={i18n.translate('pricing')}>
+						<div className="border p-4 rounded-lg">
+							<span className="d-block font-weight-semi-bold">
+								{i18n.translate(priceModel as Word)}
+							</span>
+
+							{PRICE_MODEL_DESCRIPTIONS[priceModel] && (
+								<span>
+									{PRICE_MODEL_DESCRIPTIONS[priceModel]}
+								</span>
+							)}
+						</div>
+					</Section>
 				)}
 
 				<Section title={i18n.translate('storefront')}>
