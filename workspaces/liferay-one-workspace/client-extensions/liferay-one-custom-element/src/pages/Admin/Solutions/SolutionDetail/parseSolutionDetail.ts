@@ -135,16 +135,19 @@ export function parseSolutionDetail(product: Product): SolutionDetail {
 			description: block.content?.description ?? '',
 			images:
 				block.type === 'text-images-block'
-					? (block.content?.files ?? []).map(
-							(externalReferenceCode) =>
-								toSolutionImage(
-									detailImages.find(
-										(image) =>
-											image.externalReferenceCode ===
-											externalReferenceCode
-									) ?? ({title: {}} as ProductImages)
+					? (block.content?.files ?? [])
+							.map((externalReferenceCode) =>
+								detailImages.find(
+									(image) =>
+										image.externalReferenceCode ===
+										externalReferenceCode
 								)
-						)
+							)
+							.filter(
+								(image): image is ProductImages =>
+									image !== undefined
+							)
+							.map(toSolutionImage)
 					: undefined,
 			title: block.content?.title ?? '',
 			type: block.type,

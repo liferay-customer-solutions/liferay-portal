@@ -47,7 +47,7 @@ const PRODUCT_TYPE_DESCRIPTIONS: Record<string, string> = {
 };
 
 function getSpecificationValue(product: Product, key: string) {
-	return product.productSpecifications.find(
+	return (product.productSpecifications ?? []).find(
 		({specificationKey}) => specificationKey === key
 	)?.value?.en_US;
 }
@@ -88,7 +88,13 @@ function SupportContent({symbol, title, url, urlPrefix}: SupportItem) {
 				<span className="font-weight-semi-bold">{title}</span>
 
 				{url && (
-					<a href={urlPrefix ? `${urlPrefix}:${url}` : url}>{url}</a>
+					<a
+						href={urlPrefix ? `${urlPrefix}:${url}` : url}
+						rel="noopener noreferrer"
+						target="_blank"
+					>
+						{url}
+					</a>
 				)}
 			</div>
 		</div>
@@ -133,21 +139,21 @@ function AppDetailContent({product}: {product: Product}) {
 	)?.toLowerCase();
 
 	const areas = getProductCategoriesByVocabularyName(
-		product.categories,
+		product.categories ?? [],
 		'marketplace-app-category'
 	);
 
 	const category = getProductCategoriesByVocabularyName(
-		product.categories,
+		product.categories ?? [],
 		'marketplace-category'
 	);
 
 	const tags = getProductCategoriesByVocabularyName(
-		product.categories,
+		product.categories ?? [],
 		'marketplace-app-tags'
 	);
 
-	const storefrontImages = product.images.filter(
+	const storefrontImages = (product.images ?? []).filter(
 		(image) => !image.tags?.includes(APP_ICON_TAG)
 	);
 
