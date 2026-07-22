@@ -1,12 +1,8 @@
-.publisher-profile-header .publisher-profile-header-avatar {
+.publisher-profile-header .publisher-image {
 	border-radius: 50%;
 	height: 72px;
-	overflow: hidden;
+	object-fit: cover;
 	width: 72px;
-}
-
-.publisher-profile-header .publisher-profile-header-image {
-	object-fit: contain;
 }
 
 .publisher-profile-header .publisher-profile-header-name {

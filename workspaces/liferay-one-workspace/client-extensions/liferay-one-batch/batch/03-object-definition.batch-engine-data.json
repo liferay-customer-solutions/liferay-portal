@@ -6,7 +6,7 @@
 			"createStrategy": "UPSERT",
 			"onErrorFail": "false",
 			"taskItemDelegateName": "DEFAULT",
-			"updateStrategy": "UPDATE"
+			"updateStrategy": "PARTIAL_UPDATE"
 		}
 	},
 	"items": [
@@ -5244,6 +5244,24 @@
 					"type": "Long"
 				},
 				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_PUBLISHER_DETAILS_CATALOG_EXTERNAL_ID",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "en_US",
+					"label": {
+						"en_US": "Catalog External Id"
+					},
+					"name": "catalogExternalId",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
 					"DBType": "Clob",
 					"businessType": "RichText",
 					"externalReferenceCode": "C_PUBLISHER_DETAILS_DESCRIPTION",
@@ -5593,7 +5611,7 @@
 				"label_i18n": "Approved"
 			},
 			"system": false,
-			"titleObjectFieldName": "publisherName"
+			"titleObjectFieldName": "catalogExternalId"
 		},
 		{
 			"active": true,

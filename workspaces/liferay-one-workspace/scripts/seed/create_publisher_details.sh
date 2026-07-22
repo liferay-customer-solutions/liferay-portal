@@ -17,6 +17,7 @@ source ../_common.sh
 # Each entry below is "publisherDetailsERC catalogERC jsonFile". Keep sorted.
 
 PUBLISHER_DETAILS=(
+	"PUBDET-LIFERAY-INC LIFERAY_INC_CATALOG data/11-publisher-details.batch-engine-data.json"
 	"PUBDET-TEST-SUPPLIER TEST_SUPPLIER_CATALOG data/publisher-details/test-supplier.json"
 )
 
@@ -98,7 +99,12 @@ import json
 with open('${json_file}') as file:
 	data = json.load(file)
 
+if 'items' in data:
+	data = data['items'][0]
+
 data['catalogId'] = ${catalog_id}
+data['catalogExternalId'] = str(${catalog_id})
+data['friendlyUrlPath'] = str(${catalog_id})
 
 print(json.dumps(data))
 "

@@ -67,14 +67,14 @@
 <div class="publisher-profile-header">
 	<div class="align-items-center d-flex flex-wrap justify-content-between">
 		<div class="align-items-center d-flex">
-			[#if publisherProfileImageURL?has_content]
-				<div class="align-items-center bg-white d-flex image-container justify-content-center mr-3 publisher-profile-header-avatar">
-					<img alt="${publisherName}" class="publisher-profile-header-image" draggable="false" height="48" src="${(publisherProfileImageURL?replace('https://', 'http://'))?js_string}" width="48" />
-				</div>
-			[/#if]
-
 			<div class="d-flex flex-column">
-				<h1 class="mb-1 publisher-profile-header-name">${publisherName}</h1>
+				<div class="align-items-center d-flex">
+					[#if publisherProfileImageURL?has_content]
+						<img alt="${publisherName}" class="mr-3 publisher-image" draggable="false" src="${(publisherProfileImageURL?replace('https://', 'http://'))?js_string}" />
+					[/#if]
+
+					<h1 class="mb-1 publisher-profile-header-name">${publisherName}</h1>
+				</div>
 
 				<div class="align-items-center d-flex publisher-profile-header-stats">
 					<span>${appsCount} ${languageUtil.get(locale, "apps", "Apps")}</span>
