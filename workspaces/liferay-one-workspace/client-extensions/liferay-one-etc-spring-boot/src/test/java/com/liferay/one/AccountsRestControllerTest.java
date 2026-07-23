@@ -13,13 +13,17 @@ import com.liferay.one.jira.service.AccountAssetService;
 import com.liferay.one.okta.model.OktaUser;
 import com.liferay.one.okta.service.OktaService;
 import com.liferay.one.permission.AccountPermission;
+import com.liferay.one.permission.LicenseKeyPermission;
 import com.liferay.one.service.AccountService;
+import com.liferay.one.service.CommonLicenseKeyService;
 import com.liferay.one.service.EmailAddressValidatorService;
 import com.liferay.one.service.EntitlementService;
 import com.liferay.one.service.ProvisioningAssignmentService;
 import com.liferay.one.service.ProvisioningEmailService;
 import com.liferay.one.service.UserAccountService;
 import com.liferay.petra.string.StringPool;
+
+import java.time.Instant;
 
 import java.util.Map;
 
@@ -33,7 +37,9 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -136,6 +142,87 @@ public class AccountsRestControllerTest {
 		).unassignAccountMembership(
 			_ACCOUNT_ID, _USER_ID
 		);
+	}
+
+	@Test
+	public void testGetProductGroupsProductEnvironmentsCommonLicenseKey()
+		throws Exception {
+
+		AccountsRestController accountsRestController = _createController();
+
+		Mockito.when(
+			_accountService.getAccount(_EXTERNAL_REFERENCE_CODE, null)
+		).thenReturn(
+			_createAccount()
+		);
+
+		Mockito.when(
+			_commonLicenseKeyService.getCommonLicenseKey(
+				"commerce", "production")
+		).thenReturn(
+			_createCommonLicenseKeyJSONObject()
+		);
+
+		Mockito.when(
+			_entitlementService.hasEntitlementCoveringDateRange(
+				_ACCOUNT_ID, Instant.parse("2026-01-01T00:00:00Z"),
+				Instant.parse("2027-01-01T00:00:00Z"))
+		).thenReturn(
+			true
+		);
+
+		ResponseEntity<String> responseEntity =
+			accountsRestController.
+				getProductGroupsProductEnvironmentsCommonLicenseKey(
+					null, _EXTERNAL_REFERENCE_CODE, "production", "commerce");
+
+		Assertions.assertEquals("<license/>", responseEntity.getBody());
+
+		HttpHeaders httpHeaders = responseEntity.getHeaders();
+
+		Assertions.assertEquals(
+			"attachment; filename=\"commerce-prod.xml\"",
+			httpHeaders.getFirst(HttpHeaders.CONTENT_DISPOSITION));
+	}
+
+	@Test
+	public void testGetProductGroupsProductEnvironmentsCommonLicenseKeyRejectsWithoutEntitlement()
+		throws Exception {
+
+		AccountsRestController accountsRestController = _createController();
+
+		Mockito.when(
+			_accountService.getAccount(_EXTERNAL_REFERENCE_CODE, null)
+		).thenReturn(
+			_createAccount()
+		);
+
+		Mockito.when(
+			_commonLicenseKeyService.getCommonLicenseKey(
+				"commerce", "production")
+		).thenReturn(
+			_createCommonLicenseKeyJSONObject()
+		);
+
+		Mockito.when(
+			_entitlementService.hasEntitlementCoveringDateRange(
+				Mockito.anyLong(), ArgumentMatchers.any(),
+				ArgumentMatchers.any())
+		).thenReturn(
+			false
+		);
+
+		ResponseStatusException responseStatusException =
+			Assertions.assertThrows(
+				ResponseStatusException.class,
+				() ->
+					accountsRestController.
+						getProductGroupsProductEnvironmentsCommonLicenseKey(
+							null, _EXTERNAL_REFERENCE_CODE, "production",
+							"commerce"));
+
+		Assertions.assertEquals(
+			HttpStatus.FORBIDDEN, responseStatusException.getStatusCode());
 	}
 
 	@Test
@@ -566,6 +653,19 @@ public class AccountsRestControllerTest {
 		return jsonObject.toString();
 	}
 
+	private JSONObject _createCommonLicenseKeyJSONObject() {
+		return new JSONObject(
+		).put(
+			"endDate", "2027-01-01T00:00:00Z"
+		).put(
+			"fileContent", "<license/>"
+		).put(
+			"fileName", "commerce-prod.xml"
+		).put(
+			"startDate", "2026-01-01T00:00:00Z"
+		);
+	}
+
 	private AccountsRestController _createController() {
 		AccountsRestController accountsRestController =
 			new AccountsRestController();
@@ -578,10 +678,16 @@ public class AccountsRestControllerTest {
 		ReflectionTestUtils.setField(
 			accountsRestController, "_accountService", _accountService);
 		ReflectionTestUtils.setField(
+			accountsRestController, "_commonLicenseKeyService",
+			_commonLicenseKeyService);
+		ReflectionTestUtils.setField(
 			accountsRestController, "_emailAddressValidatorService",
 			_emailAddressValidatorService);
 		ReflectionTestUtils.setField(
 			accountsRestController, "_entitlementService", _entitlementService);
+		ReflectionTestUtils.setField(
+			accountsRestController, "_licenseKeyPermission",
+			_licenseKeyPermission);
 		ReflectionTestUtils.setField(
 			accountsRestController, "_oktaService", _oktaService);
 		ReflectionTestUtils.setField(
@@ -639,10 +745,14 @@ public class AccountsRestControllerTest {
 		AccountPermission.class);
 	private final AccountService _accountService = Mockito.mock(
 		AccountService.class);
+	private final CommonLicenseKeyService _commonLicenseKeyService =
+		Mockito.mock(CommonLicenseKeyService.class);
 	private final EmailAddressValidatorService _emailAddressValidatorService =
 		Mockito.mock(EmailAddressValidatorService.class);
 	private final EntitlementService _entitlementService = Mockito.mock(
 		EntitlementService.class);
+	private final LicenseKeyPermission _licenseKeyPermission = Mockito.mock(
+		LicenseKeyPermission.class);
 	private final OktaService _oktaService = Mockito.mock(OktaService.class);
 	private final ProvisioningAssignmentService _provisioningAssignmentService =
 		Mockito.mock(ProvisioningAssignmentService.class);

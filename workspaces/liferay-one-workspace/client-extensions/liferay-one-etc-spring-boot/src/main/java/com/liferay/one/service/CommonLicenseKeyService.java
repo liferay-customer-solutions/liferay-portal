@@ -9,6 +9,7 @@ import com.liferay.one.constants.UploadProductEnvironmentConstants;
 import com.liferay.one.constants.UploadProductGroupConstants;
 import com.liferay.one.license.CommonLicenseKeyData;
 import com.liferay.one.license.CommonLicenseKeyParser;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.List;
@@ -78,6 +79,24 @@ public class CommonLicenseKeyService extends OneBaseService {
 		);
 
 		postCommonLicenseKey(jsonObject);
+	}
+
+	public JSONObject getCommonLicenseKey(
+			String productFamily, String environmentType)
+		throws Exception {
+
+		List<JSONObject> commonLicenseKeys = getAllItems(
+			"/o/c/commonlicensekeys",
+			StringBundler.concat(
+				"(environmentType eq '", environmentType,
+				"') and (productFamily eq '", productFamily, "')"),
+			jsonObject -> jsonObject);
+
+		if (commonLicenseKeys.isEmpty()) {
+			return null;
+		}
+
+		return commonLicenseKeys.get(0);
 	}
 
 	public boolean hasCommonLicenseKey(String fileName) throws Exception {

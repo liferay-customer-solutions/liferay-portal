@@ -123,6 +123,32 @@ public class CommonLicenseKeyServiceTest {
 	}
 
 	@Test
+	public void testGetCommonLicenseKey() throws Exception {
+		Assertions.assertNull(
+			_commonLicenseKeyService.getCommonLicenseKey(
+				"commerce", "production"));
+
+		JSONObject commonLicenseKeyJSONObject = new JSONObject(
+		).put(
+			"fileName", "commerce-prod.xml"
+		);
+
+		Mockito.doReturn(
+			List.of(commonLicenseKeyJSONObject)
+		).when(
+			_commonLicenseKeyService
+		).getAllItems(
+			Mockito.eq("/o/c/commonlicensekeys"), Mockito.anyString(),
+			Mockito.any()
+		);
+
+		Assertions.assertSame(
+			commonLicenseKeyJSONObject,
+			_commonLicenseKeyService.getCommonLicenseKey(
+				"commerce", "production"));
+	}
+
+	@Test
 	public void testHasCommonLicenseKey() throws Exception {
 		Assertions.assertFalse(
 			_commonLicenseKeyService.hasCommonLicenseKey("new.xml"));

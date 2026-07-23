@@ -288,6 +288,21 @@ public class EntitlementService extends OneBaseService {
 			entitlementNames);
 	}
 
+	public boolean hasEntitlementCoveringDateRange(
+			long accountEntryId, Instant startDateInstant,
+			Instant endDateInstant)
+		throws Exception {
+
+		List<Entitlement> entitlements = getEntitlements(
+			StringBundler.concat(
+				"(r_accountEntryToEntitlement_accountEntryId eq '",
+				accountEntryId, "') and (startDate eq null or startDate le ",
+				startDateInstant, ") and (endDate eq null or endDate ge ",
+				endDateInstant, ")"));
+
+		return !entitlements.isEmpty();
+	}
+
 	public void trimEntitlements(long commerceOrderItemId, String endDate)
 		throws Exception {
 

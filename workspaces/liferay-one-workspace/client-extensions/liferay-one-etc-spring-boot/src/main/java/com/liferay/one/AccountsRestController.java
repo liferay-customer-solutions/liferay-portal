@@ -14,7 +14,9 @@ import com.liferay.one.jira.synchronizer.AccountUserAccountRoleSynchronizer;
 import com.liferay.one.okta.service.OktaService;
 import com.liferay.one.permission.AccountPermission;
 import com.liferay.one.permission.AdminPermission;
+import com.liferay.one.permission.LicenseKeyPermission;
 import com.liferay.one.service.AccountService;
+import com.liferay.one.service.CommonLicenseKeyService;
 import com.liferay.one.service.EmailAddressValidatorService;
 import com.liferay.one.service.EntitlementService;
 import com.liferay.one.service.ProvisioningAssignmentService;
@@ -25,6 +27,8 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Validator;
+
+import java.time.Instant;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -38,6 +42,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -116,6 +121,45 @@ public class AccountsRestController extends OneBaseRestController {
 		return new ResponseEntity<>(
 			_accountAssetService.getAccountObjectKey(externalReferenceCode),
 			HttpStatus.OK);
+	}
+
+	@GetMapping(
+		"/{accountKey}/product-groups/{productGroup}/product-environments/{productEnvironment}/common-license-key"
+	)
+	public ResponseEntity<String>
+			getProductGroupsProductEnvironmentsCommonLicenseKey(
+				@AuthenticationPrincipal Jwt jwt,
+				@PathVariable("accountKey") String accountKey,
+				@PathVariable("productEnvironment") String productEnvironment,
+				@PathVariable("productGroup") String productGroup)
+		throws Exception {
+
+		Account account = _accountService.getAccount(accountKey, jwt);
+
+		_licenseKeyPermission.check(account.getId(), ActionKeys.VIEW, jwt);
+
+		JSONObject jsonObject = _commonLicenseKeyService.getCommonLicenseKey(
+			productGroup, productEnvironment);
+
+		if (jsonObject == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+
+		if (!_entitlementService.hasEntitlementCoveringDateRange(
+				account.getId(),
+				Instant.parse(jsonObject.getString("startDate")),
+				Instant.parse(jsonObject.getString("endDate")))) {
+
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+		}
+
+		return ResponseEntity.ok(
+		).header(
+			HttpHeaders.CONTENT_DISPOSITION,
+			"attachment; filename=\"" + jsonObject.getString("fileName") + "\""
+		).body(
+			jsonObject.getString("fileContent")
+		);
 	}
 
 	@PostMapping("/{externalReferenceCode}/sync-to-jsm")
@@ -421,10 +465,16 @@ public class AccountsRestController extends OneBaseRestController {
 	private AdminPermission _adminPermission;
 
 	@Autowired
+	private CommonLicenseKeyService _commonLicenseKeyService;
+
+	@Autowired
 	private EmailAddressValidatorService _emailAddressValidatorService;
 
 	@Autowired
 	private EntitlementService _entitlementService;
+
+	@Autowired
+	private LicenseKeyPermission _licenseKeyPermission;
 
 	@Autowired
 	private OktaService _oktaService;
