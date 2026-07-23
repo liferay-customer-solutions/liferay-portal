@@ -917,6 +917,10 @@ export default {
 		'Please select the tickets that are impacting this event.',
 	'postal-code': 'Postal Code',
 	'price': 'Price',
+	'price-model-free-description':
+		'The app is offered in the Marketplace with no charge.',
+	'price-model-paid-description':
+		'To enable paid apps, you must be a business and enter payment information in your Marketplace account profile.',
 	'pricing': 'Pricing',
 	'primary': 'Primary',
 	'primary-contact': 'Primary Contact',
@@ -929,6 +933,18 @@ export default {
 	'product': 'Product',
 	'product-details': 'Product Details',
 	'product-environment': 'Product Environment',
+	'product-type-client-extension-description':
+		'Modular, decoupled components that allow developers to customize and extend Liferay DXP’s functionality without altering its core code. They interact with Liferay via headless APIs, providing flexibility and maintainability.',
+	'product-type-cloud-description':
+		'Backend client extensions delivered as deployed services (only available to SaaS and PaaS clients).',
+	'product-type-composite-app-description':
+		'Complex app with multiple parts like i.e. OSGI extensions + CX + low-code applications.',
+	'product-type-dxp-description':
+		'Module-based apps delivered as .lpkg files that the user can install to modify native Liferay behavior.',
+	'product-type-low-code-configuration-description':
+		'Methods for building business applications faster without needing in-depth coding knowledge (i.e.: fragments, data set, object definitions, etc).',
+	'product-type-other-description':
+		'Apps that do not fit into the standard categories. This may include external integrations, legacy solutions, prototypes, or custom deployments.',
 	'product-unavailable': 'Product Unavailable',
 	'production': 'Production',
 	'products': 'Products',

@@ -134,12 +134,12 @@ export function AdministratorOrdersListView({
 								className="text-nowrap"
 								displayType={
 									orderWorkflowDisplayType[
-										orderStatusInfo.code as keyof typeof orderWorkflowDisplayType
+										orderStatusInfo?.code as keyof typeof orderWorkflowDisplayType
 									] as Status
 								}
 							>
-								{orderStatusInfo.label_i18n ||
-									orderStatusInfo.label ||
+								{orderStatusInfo?.label_i18n ||
+									orderStatusInfo?.label ||
 									order.workflowStatusInfo?.label_i18n ||
 									order.workflowStatusInfo?.label}
 							</ClayLabel>

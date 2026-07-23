@@ -7,11 +7,12 @@ import ClayAlert from '@clayui/alert';
 import ClayIcon from '@clayui/icon';
 import ClayLabel from '@clayui/label';
 import DOMPurify from 'dompurify';
-import {ComponentProps, ReactNode} from 'react';
+import {ComponentProps} from 'react';
 import {useParams} from 'react-router-dom';
 import BackLink from '~/components/BackLink/BackLink';
+import DetailSection from '~/components/DetailSection/DetailSection';
 import {PageRenderer} from '~/components/Page/Page';
-import useAdminApp from '~/hooks/useAdminApp';
+import useAdminProduct from '~/hooks/useAdminProduct';
 import i18n from '~/i18n';
 import {
 	ProductSpecificationKey,
@@ -27,49 +28,24 @@ import type {Product} from '~/types/product';
 
 const APP_ICON_TAG = 'app-icon';
 
-const PRICE_MODEL_DESCRIPTIONS: Record<string, string> = {
-	free: 'The app is offered in the Marketplace with no charge.',
-	paid: 'To enable paid apps, you must be a business and enter payment information in your Marketplace account profile.',
+const PRICE_MODEL_DESCRIPTIONS: Record<string, Word> = {
+	free: 'price-model-free-description',
+	paid: 'price-model-paid-description',
 };
 
-const PRODUCT_TYPE_DESCRIPTIONS: Record<string, string> = {
-	'client-extension':
-		'Modular, decoupled components that allow developers to customize and extend Liferay DXP’s functionality without altering its core code. They interact with Liferay via headless APIs, providing flexibility and maintainability.',
-	'cloud':
-		'Backend client extensions delivered as deployed services (only available to SaaS and PaaS clients).',
-	'composite-app':
-		'Complex app with multiple parts like i.e. OSGI extensions + CX + low-code applications.',
-	'dxp': 'Module-based apps delivered as .lpkg files that the user can install to modify native Liferay behavior.',
-	'low-code-configuration':
-		'Methods for building business applications faster without needing in-depth coding knowledge (i.e.: fragments, data set, object definitions, etc).',
-	'other':
-		'Apps that do not fit into the standard categories. This may include external integrations, legacy solutions, prototypes, or custom deployments.',
+const PRODUCT_TYPE_DESCRIPTIONS: Record<string, Word> = {
+	'client-extension': 'product-type-client-extension-description',
+	'cloud': 'product-type-cloud-description',
+	'composite-app': 'product-type-composite-app-description',
+	'dxp': 'product-type-dxp-description',
+	'low-code-configuration': 'product-type-low-code-configuration-description',
+	'other': 'product-type-other-description',
 };
 
 function getSpecificationValue(product: Product, key: string) {
 	return (product.productSpecifications ?? []).find(
 		({specificationKey}) => specificationKey === key
 	)?.value?.en_US;
-}
-
-type SectionProps = {
-	children: ReactNode;
-	isLastSection?: boolean;
-	title: string;
-};
-
-function Section({children, isLastSection = false, title}: SectionProps) {
-	return (
-		<>
-			<div className="mb-4">
-				<h3 className="mb-3">{title}</h3>
-
-				{children}
-			</div>
-
-			{!isLastSection && <hr />}
-		</>
-	);
 }
 
 type SupportItem = {
@@ -108,7 +84,7 @@ type TagsSectionProps = {
 
 function TagsSection({labels, title}: TagsSectionProps) {
 	return (
-		<Section title={title}>
+		<DetailSection title={title}>
 			<div className="d-flex flex-wrap">
 				{labels.map((label, index) => (
 					<ClayLabel className="mr-2" key={index}>
@@ -116,12 +92,12 @@ function TagsSection({labels, title}: TagsSectionProps) {
 					</ClayLabel>
 				))}
 			</div>
-		</Section>
+		</DetailSection>
 	);
 }
 
 function AppDetailContent({product}: {product: Product}) {
-	const {code} = product.workflowStatusInfo;
+	const code = product.workflowStatusInfo?.code;
 
 	const appType = getSpecificationValue(
 		product,
@@ -236,7 +212,7 @@ function AppDetailContent({product}: {product: Product}) {
 				</BackLink>
 			</div>
 
-			{code === ProductWorkflowStatusCode.DRAFT && (
+			{code === ProductWorkflowStatusCode.PENDING && (
 				<ClayAlert displayType="info">
 					{i18n.translate(
 						'this-submission-is-currently-under-review-by-liferay-once-the-process-is-complete-it-will-be-published-on-the-marketplace-in-the-meantime-no-information-or-data-from-this-app-submission-can-be-updated'
@@ -287,7 +263,7 @@ function AppDetailContent({product}: {product: Product}) {
 			</div>
 
 			<div className="border p-5 rounded-lg">
-				<Section title={i18n.translate('description')}>
+				<DetailSection title={i18n.translate('description')}>
 					<div
 						dangerouslySetInnerHTML={{
 							__html: DOMPurify.sanitize(
@@ -295,7 +271,7 @@ function AppDetailContent({product}: {product: Product}) {
 							),
 						}}
 					/>
-				</Section>
+				</DetailSection>
 
 				{category[0] && (
 					<TagsSection
@@ -319,7 +295,7 @@ function AppDetailContent({product}: {product: Product}) {
 					ProductTypeLabels[
 						appType as keyof typeof ProductTypeLabels
 					] && (
-						<Section title={i18n.translate('build')}>
+						<DetailSection title={i18n.translate('build')}>
 							<div className="border p-4 rounded-lg">
 								<span className="d-block font-weight-semi-bold">
 									{
@@ -331,15 +307,17 @@ function AppDetailContent({product}: {product: Product}) {
 
 								{PRODUCT_TYPE_DESCRIPTIONS[appType] && (
 									<span>
-										{PRODUCT_TYPE_DESCRIPTIONS[appType]}
+										{i18n.translate(
+											PRODUCT_TYPE_DESCRIPTIONS[appType]
+										)}
 									</span>
 								)}
 							</div>
-						</Section>
+						</DetailSection>
 					)}
 
 				{priceModel && (
-					<Section title={i18n.translate('pricing')}>
+					<DetailSection title={i18n.translate('pricing')}>
 						<div className="border p-4 rounded-lg">
 							<span className="d-block font-weight-semi-bold">
 								{i18n.translate(priceModel as Word)}
@@ -347,14 +325,16 @@ function AppDetailContent({product}: {product: Product}) {
 
 							{PRICE_MODEL_DESCRIPTIONS[priceModel] && (
 								<span>
-									{PRICE_MODEL_DESCRIPTIONS[priceModel]}
+									{i18n.translate(
+										PRICE_MODEL_DESCRIPTIONS[priceModel]
+									)}
 								</span>
 							)}
 						</div>
-					</Section>
+					</DetailSection>
 				)}
 
-				<Section title={i18n.translate('storefront')}>
+				<DetailSection title={i18n.translate('storefront')}>
 					{!!storefrontImages.length && (
 						<>
 							<span className="font-weight-semi-bold">
@@ -396,16 +376,16 @@ function AppDetailContent({product}: {product: Product}) {
 							)}
 						</div>
 					)}
-				</Section>
+				</DetailSection>
 
-				<Section
+				<DetailSection
 					isLastSection
 					title={i18n.translate('support-and-help')}
 				>
 					{supportItems.map((supportItem, index) => (
 						<SupportContent key={index} {...supportItem} />
 					))}
-				</Section>
+				</DetailSection>
 			</div>
 		</div>
 	);
@@ -414,7 +394,7 @@ function AppDetailContent({product}: {product: Product}) {
 export default function AppDetail() {
 	const {productId} = useParams();
 
-	const {data: product, error, isLoading} = useAdminApp(productId!);
+	const {data: product, error, isLoading} = useAdminProduct(productId!);
 
 	return (
 		<PageRenderer error={error} isLoading={isLoading}>

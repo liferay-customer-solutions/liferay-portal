@@ -10,7 +10,8 @@ import {defineConfig} from 'vite';
 export default defineConfig(({command}) => ({
 	build: {
 		assetsInlineLimit: (filePath: string, content: Buffer) =>
-			filePath.endsWith('.svg') && content.toString().includes('<symbol')
+			filePath.endsWith('.svg') &&
+			/<(?:[\w-]+:)?symbol[\s>]/.test(content.toString())
 				? false
 				: undefined,
 		chunkSizeWarningLimit: 2000,

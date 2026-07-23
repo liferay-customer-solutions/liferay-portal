@@ -10,8 +10,9 @@ import DOMPurify from 'dompurify';
 import {ComponentProps, ReactNode} from 'react';
 import {useParams} from 'react-router-dom';
 import BackLink from '~/components/BackLink/BackLink';
+import DetailSection from '~/components/DetailSection/DetailSection';
 import {PageRenderer} from '~/components/Page/Page';
-import useAdminSolution from '~/hooks/useAdminSolution';
+import useAdminProduct from '~/hooks/useAdminProduct';
 import i18n from '~/i18n';
 import {
 	ProductSpecificationKey,
@@ -32,26 +33,6 @@ const SUPPORT_LINK_PREFIX = {
 	phone: 'tel:',
 	url: '',
 };
-
-type SectionProps = {
-	children: ReactNode;
-	isLastSection?: boolean;
-	title: string;
-};
-
-function Section({children, isLastSection = false, title}: SectionProps) {
-	return (
-		<>
-			<div className="mb-4">
-				<h3 className="mb-3">{title}</h3>
-
-				{children}
-			</div>
-
-			{!isLastSection && <hr />}
-		</>
-	);
-}
 
 type ParagraphProps = {
 	children: ReactNode;
@@ -149,11 +130,11 @@ function SupportLink({href, label, symbol, type}: SupportLinkProps) {
 }
 
 function SolutionDetailContent({product}: {product: Product}) {
-	const {code} = product.workflowStatusInfo;
+	const code = product.workflowStatusInfo?.code;
 
 	const solution = parseSolutionDetail(product);
 
-	const version = product.productSpecifications.find(
+	const version = (product.productSpecifications ?? []).find(
 		({specificationKey}) =>
 			specificationKey === ProductSpecificationKey.APP_VERSION
 	)?.value?.en_US;
@@ -214,7 +195,7 @@ function SolutionDetailContent({product}: {product: Product}) {
 			</div>
 
 			<div className="border p-5 rounded-lg">
-				<Section title={i18n.translate('description')}>
+				<DetailSection title={i18n.translate('description')}>
 					<Html value={solution.description} />
 
 					{!!solution.categories.length && (
@@ -240,9 +221,9 @@ function SolutionDetailContent({product}: {product: Product}) {
 							</div>
 						</Paragraph>
 					)}
-				</Section>
+				</DetailSection>
 
-				<Section title={i18n.translate('header')}>
+				<DetailSection title={i18n.translate('header')}>
 					<Paragraph title={solution.header.title}>
 						<Html value={solution.header.description} />
 					</Paragraph>
@@ -261,10 +242,10 @@ function SolutionDetailContent({product}: {product: Product}) {
 							videoURL={solution.header.videoURL}
 						/>
 					)}
-				</Section>
+				</DetailSection>
 
 				{!!solution.details.length && (
-					<Section title={i18n.translate('solution-details')}>
+					<DetailSection title={i18n.translate('solution-details')}>
 						{solution.details.map((block, index) => (
 							<div
 								className="border mb-3 overflow-hidden rounded-lg"
@@ -278,7 +259,7 @@ function SolutionDetailContent({product}: {product: Product}) {
 
 								<div className="p-4">
 									<Paragraph title={i18n.translate('title')}>
-										{i18n.translate(block.title as Word)}
+										{block.title}
 									</Paragraph>
 
 									<Paragraph
@@ -306,11 +287,11 @@ function SolutionDetailContent({product}: {product: Product}) {
 								</div>
 							</div>
 						))}
-					</Section>
+					</DetailSection>
 				)}
 
 				{solution.company && (
-					<Section title={i18n.translate('company-profile')}>
+					<DetailSection title={i18n.translate('company-profile')}>
 						<Html value={solution.company.description} />
 
 						{solution.company.website && (
@@ -339,10 +320,13 @@ function SolutionDetailContent({product}: {product: Product}) {
 								type="phone"
 							/>
 						)}
-					</Section>
+					</DetailSection>
 				)}
 
-				<Section isLastSection title={i18n.translate('contact-us')}>
+				<DetailSection
+					isLastSection
+					title={i18n.translate('contact-us')}
+				>
 					{solution.contactEmail && (
 						<SupportLink
 							href={solution.contactEmail}
@@ -351,7 +335,7 @@ function SolutionDetailContent({product}: {product: Product}) {
 							type="email"
 						/>
 					)}
-				</Section>
+				</DetailSection>
 			</div>
 		</div>
 	);
@@ -360,7 +344,7 @@ function SolutionDetailContent({product}: {product: Product}) {
 export default function SolutionDetail() {
 	const {productId} = useParams();
 
-	const {data: product, error, isLoading} = useAdminSolution(productId!);
+	const {data: product, error, isLoading} = useAdminProduct(productId!);
 
 	return (
 		<PageRenderer error={error} isLoading={isLoading}>

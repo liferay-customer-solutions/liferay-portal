@@ -6,18 +6,19 @@
 import useSWR, {SWRConfiguration} from 'swr';
 import HeadlessCommerceAdminCatalog from '~/services/headless/HeadlessCommerceAdminCatalog';
 
-const useAdminApp = (productId: string, swrOptions?: SWRConfiguration) => {
+const useAdminProduct = (productId: string, swrOptions?: SWRConfiguration) => {
 	return useSWR(
-		`/admin-app/${productId}`,
+		`/admin-product/${productId}`,
 		() =>
 			HeadlessCommerceAdminCatalog.getProduct(
 				productId,
 				new URLSearchParams({
-					nestedFields: 'attachments,images,productSpecifications',
+					nestedFields:
+						'attachments,categories,images,productSpecifications',
 				})
 			),
 		swrOptions
 	);
 };
 
-export default useAdminApp;
+export default useAdminProduct;

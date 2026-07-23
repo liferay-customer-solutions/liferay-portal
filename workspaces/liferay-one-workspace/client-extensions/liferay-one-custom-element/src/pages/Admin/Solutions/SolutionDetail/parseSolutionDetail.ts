@@ -106,7 +106,7 @@ export function parseSolutionDetail(product: Product): SolutionDetail {
 
 	return {
 		categories: getProductCategoriesByVocabularyName(
-			product.categories,
+			product.categories ?? [],
 			'marketplace-solution-category'
 		),
 		company: companyEmail
@@ -177,7 +177,7 @@ export function parseSolutionDetail(product: Product): SolutionDetail {
 		},
 		name: product.name?.en_US ?? '',
 		tags: getProductCategoriesByVocabularyName(
-			product.categories,
+			product.categories ?? [],
 			'marketplace-solution-tags'
 		),
 	};
