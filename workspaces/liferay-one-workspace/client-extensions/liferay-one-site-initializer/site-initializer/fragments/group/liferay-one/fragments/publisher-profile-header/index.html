@@ -70,7 +70,7 @@
 			<div class="d-flex flex-column">
 				<div class="align-items-center d-flex">
 					[#if publisherProfileImageURL?has_content]
-						<img alt="${publisherName}" class="mr-3 publisher-image" draggable="false" src="${(publisherProfileImageURL?replace('https://', 'http://'))?js_string}" />
+						<img alt="${publisherName}" class="mr-3 publisher-image" draggable="false" src="${publisherProfileImageURL?js_string}" />
 					[/#if]
 
 					<h1 class="mb-1 publisher-profile-header-name">${publisherName}</h1>

@@ -35,7 +35,7 @@ _log.error("Unable to update business event " + id);
 
 ## User-Facing Text
 
-- Use "IDs" (not "Id", "id", "codes", or other terms) when referring to identifier values shown to users
+- Use "IDs" (not "Id", "id", "codes", or other terms) when referring to identifier values shown to users. This includes object field `label` values in batch definitions — write `"Catalog External ID"`, not `"Catalog External Id"`.
 - Semantic precision matters: "Email" and "Email Address" are different — don't add "Address" if the field is just an email
 
 ## FreeMarker Variable Blocks
@@ -50,6 +50,33 @@ In FreeMarker templates (`.ftl`, `index.html`), group all `[#assign ... /]` stat
 ```
 
 → Both should be in one logical block, with `currentFriendlyURL` before `currentURL` since `currentURL` may depend on it.
+
+### Reset per-iteration state inside `[#list]`
+
+`[#assign]` variables are template-scoped, not iteration-scoped — a value assigned in one `[#list]` pass persists into the next. When a variable is assigned only inside a guard (`[#if x?has_content]`), a later iteration whose guard is false still reads the *previous* iteration's value, so the wrong data renders. Reset every such variable to a neutral default at the top of the loop body, before the guards.
+
+```freemarker
+[#-- Wrong: principalCategory leaks from the previous product --]
+[#list products as product]
+    [#if product.categories?has_content]
+        [#assign principalCategory = product.categories[0] /]
+    [/#if]
+    [#if principalCategory?has_content]...[/#if]
+[/#list]
+
+[#-- Correct: reset before the guard --]
+[#list products as product]
+    [#assign principalCategory = "" /]
+    [#if product.categories?has_content]
+        [#assign principalCategory = product.categories[0] /]
+    [/#if]
+    [#if principalCategory?has_content]...[/#if]
+[/#list]
+```
+
+## Image URLs in Fragments
+
+Never string-replace `https://` to `http://` on an image or document URL in shipped fragment markup (`src="${imageURL?replace('https://', 'http://')}"`). This is a local-dev bandaid: on any HTTPS environment (UAT/prod) it forces the asset to `http://`, which the browser blocks as mixed content, and the image silently fails to load. Serve the asset over the current scheme instead of rewriting the protocol.
 
 ## Java Code Ordering
 

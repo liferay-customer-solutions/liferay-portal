@@ -5226,24 +5226,6 @@
 			"name": "PublisherDetails",
 			"objectFields": [
 				{
-					"DBType": "Long",
-					"businessType": "LongInteger",
-					"externalReferenceCode": "C_PUBLISHER_DETAILS_CATALOG_ID",
-					"indexed": true,
-					"indexedAsKeyword": false,
-					"indexedLanguageId": "",
-					"label": {
-						"en_US": "Catalog Id"
-					},
-					"name": "catalogId",
-					"objectFieldSettings": [
-					],
-					"required": false,
-					"state": false,
-					"system": false,
-					"type": "Long"
-				},
-				{
 					"DBType": "String",
 					"businessType": "Text",
 					"externalReferenceCode": "C_PUBLISHER_DETAILS_CATALOG_EXTERNAL_ID",
@@ -5260,6 +5242,24 @@
 					"state": false,
 					"system": false,
 					"type": "String"
+				},
+				{
+					"DBType": "Long",
+					"businessType": "LongInteger",
+					"externalReferenceCode": "C_PUBLISHER_DETAILS_CATALOG_ID",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Catalog Id"
+					},
+					"name": "catalogId",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Long"
 				},
 				{
 					"DBType": "Clob",
