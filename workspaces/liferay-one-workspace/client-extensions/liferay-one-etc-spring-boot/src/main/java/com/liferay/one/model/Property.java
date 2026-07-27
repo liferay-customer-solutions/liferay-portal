@@ -5,6 +5,8 @@
 
 package com.liferay.one.model;
 
+import com.liferay.petra.string.CharPool;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
 import org.json.JSONObject;
@@ -70,6 +72,28 @@ public class Property {
 
 	public String getValue() {
 		return _value;
+	}
+
+	public JSONObject toExternalLinkJSONObject() {
+		int index = _name.indexOf(CharPool.COLON);
+
+		String domain = _name;
+
+		String entityName = StringPool.BLANK;
+
+		if (index >= 0) {
+			domain = _name.substring(0, index);
+			entityName = _name.substring(index + 1);
+		}
+
+		return new JSONObject(
+		).put(
+			"domain", domain
+		).put(
+			"entityId", _value
+		).put(
+			"entityName", entityName
+		);
 	}
 
 	private final long _accountEntryId;

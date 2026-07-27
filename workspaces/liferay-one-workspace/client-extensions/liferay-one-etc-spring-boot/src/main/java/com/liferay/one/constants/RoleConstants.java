@@ -34,6 +34,9 @@ public class RoleConstants {
 
 	public static final String NAME_ADMINISTRATOR = "Administrator";
 
+	public static final String NAME_CLOUD_CONSOLE_SERVICE =
+		"Cloud Console Service";
+
 	public static final String NAME_CLOUD_NATIVE_CONTACT =
 		"Cloud Native Contact";
 

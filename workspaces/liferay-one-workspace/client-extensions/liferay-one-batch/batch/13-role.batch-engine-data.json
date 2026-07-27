@@ -36,6 +36,11 @@
 			"roleType": "site"
 		},
 		{
+			"externalReferenceCode": "C_CLOUD_CONSOLE_SERVICE",
+			"name": "Cloud Console Service",
+			"roleType": "regular"
+		},
+		{
 			"externalReferenceCode": "C_CLOUD_NATIVE_CONTACT",
 			"name": "Cloud Native Contact",
 			"roleType": "account"

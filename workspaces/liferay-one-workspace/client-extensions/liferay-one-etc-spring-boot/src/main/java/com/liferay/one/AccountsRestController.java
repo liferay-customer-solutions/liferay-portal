@@ -8,14 +8,17 @@ package com.liferay.one;
 import com.liferay.headless.admin.user.client.dto.v1_0.Account;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
 import com.liferay.one.constants.EntitlementConstants;
+import com.liferay.one.jira.exception.AccountNotFoundException;
 import com.liferay.one.jira.service.AccountAssetService;
 import com.liferay.one.jira.synchronizer.AccountSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountRoleSynchronizer;
+import com.liferay.one.model.Property;
 import com.liferay.one.okta.service.OktaService;
 import com.liferay.one.permission.AccountPermission;
 import com.liferay.one.service.AccountService;
 import com.liferay.one.service.EmailAddressValidatorService;
 import com.liferay.one.service.EntitlementService;
+import com.liferay.one.service.PropertyService;
 import com.liferay.one.service.ProvisioningAssignmentService;
 import com.liferay.one.service.ProvisioningEmailService;
 import com.liferay.one.service.UserAccountService;
@@ -26,6 +29,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -101,6 +105,38 @@ public class AccountsRestController extends OneBaseRestController {
 		}
 
 		_unassignContactRole(account, accountRoleId, userId);
+	}
+
+	@GetMapping("/{externalReferenceCode}")
+	public ResponseEntity<String> getAccounts(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable("externalReferenceCode") String externalReferenceCode)
+		throws Exception {
+
+		_accountPermission.check(externalReferenceCode, ActionKeys.VIEW, jwt);
+
+		Account account = _accountService.fetchAccountByExternalReferenceCode(
+			externalReferenceCode);
+
+		if (account == null) {
+			throw new AccountNotFoundException();
+		}
+
+		List<Property> properties = _propertyService.getAccountProperties(
+			account.getId());
+
+		JSONObject accountJSONObject = new JSONObject(account.toString());
+
+		JSONArray externalLinksJSONArray = new JSONArray();
+
+		for (Property property : properties) {
+			externalLinksJSONArray.put(property.toExternalLinkJSONObject());
+		}
+
+		accountJSONObject.put("externalLinks", externalLinksJSONArray);
+
+		return new ResponseEntity<>(
+			accountJSONObject.toString(), HttpStatus.OK);
 	}
 
 	@GetMapping("/{externalReferenceCode}/jira/object-key")
@@ -414,6 +450,9 @@ public class AccountsRestController extends OneBaseRestController {
 
 	@Autowired
 	private OktaService _oktaService;
+
+	@Autowired
+	private PropertyService _propertyService;
 
 	@Autowired
 	private ProvisioningAssignmentService _provisioningAssignmentService;

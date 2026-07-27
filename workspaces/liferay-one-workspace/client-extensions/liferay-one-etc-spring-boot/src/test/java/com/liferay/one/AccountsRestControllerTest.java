@@ -9,18 +9,24 @@ import com.liferay.headless.admin.user.client.dto.v1_0.Account;
 import com.liferay.headless.admin.user.client.dto.v1_0.AccountBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.RoleBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
+import com.liferay.one.jira.exception.AccountNotFoundException;
 import com.liferay.one.jira.service.AccountAssetService;
+import com.liferay.one.model.Property;
 import com.liferay.one.okta.model.OktaUser;
 import com.liferay.one.okta.service.OktaService;
 import com.liferay.one.permission.AccountPermission;
 import com.liferay.one.service.AccountService;
 import com.liferay.one.service.EmailAddressValidatorService;
 import com.liferay.one.service.EntitlementService;
+import com.liferay.one.service.PropertyService;
 import com.liferay.one.service.ProvisioningAssignmentService;
 import com.liferay.one.service.ProvisioningEmailService;
 import com.liferay.one.service.UserAccountService;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -34,6 +40,7 @@ import org.mockito.InOrder;
 import org.mockito.Mockito;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -135,6 +142,130 @@ public class AccountsRestControllerTest {
 			_provisioningAssignmentService
 		).unassignAccountMembership(
 			_ACCOUNT_ID, _USER_ID
+		);
+	}
+
+	@Test
+	public void testGetAccounts() throws Exception {
+		AccountsRestController accountsRestController = _createController();
+
+		Account account = _createAccount();
+
+		account.setExternalReferenceCode(_EXTERNAL_REFERENCE_CODE);
+
+		Mockito.when(
+			_accountService.fetchAccountByExternalReferenceCode(
+				_EXTERNAL_REFERENCE_CODE)
+		).thenReturn(
+			account
+		);
+
+		Property property1 = new Property(
+			new JSONObject(
+			).put(
+				"id", 1
+			).put(
+				"name", "domain1:entityName1"
+			).put(
+				"value", "entityId1"
+			));
+
+		Property property2 = new Property(
+			new JSONObject(
+			).put(
+				"id", 2
+			).put(
+				"name", "domain2:entityName2"
+			).put(
+				"value", "entityId2"
+			));
+
+		Mockito.when(
+			_propertyService.getAccountProperties(_ACCOUNT_ID)
+		).thenReturn(
+			Arrays.asList(property1, property2)
+		);
+
+		ResponseEntity<String> responseEntity =
+			accountsRestController.getAccounts(null, _EXTERNAL_REFERENCE_CODE);
+
+		Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+		JSONObject jsonObject = new JSONObject(responseEntity.getBody());
+
+		Assertions.assertEquals(
+			_EXTERNAL_REFERENCE_CODE,
+			jsonObject.getString("externalReferenceCode"));
+		Assertions.assertEquals(_ACCOUNT_ID, jsonObject.getLong("id"));
+
+		JSONArray externalLinksJSONArray = jsonObject.getJSONArray(
+			"externalLinks");
+
+		Assertions.assertEquals(2, externalLinksJSONArray.length());
+
+		JSONObject externalLinkJSONObject1 =
+			externalLinksJSONArray.getJSONObject(0);
+
+		Assertions.assertEquals(
+			"domain1", externalLinkJSONObject1.getString("domain"));
+		Assertions.assertEquals(
+			"entityId1", externalLinkJSONObject1.getString("entityId"));
+		Assertions.assertEquals(
+			"entityName1", externalLinkJSONObject1.getString("entityName"));
+
+		JSONObject externalLinkJSONObject2 =
+			externalLinksJSONArray.getJSONObject(1);
+
+		Assertions.assertEquals(
+			"domain2", externalLinkJSONObject2.getString("domain"));
+		Assertions.assertEquals(
+			"entityId2", externalLinkJSONObject2.getString("entityId"));
+		Assertions.assertEquals(
+			"entityName2", externalLinkJSONObject2.getString("entityName"));
+	}
+
+	@Test
+	public void testGetAccountsThrowsAccountNotFoundExceptionWhenAccountDoesNotExist()
+		throws Exception {
+
+		AccountsRestController accountsRestController = _createController();
+
+		Mockito.when(
+			_accountService.fetchAccountByExternalReferenceCode(
+				_EXTERNAL_REFERENCE_CODE)
+		).thenReturn(
+			null
+		);
+
+		Assertions.assertThrows(
+			AccountNotFoundException.class,
+			() -> accountsRestController.getAccounts(
+				null, _EXTERNAL_REFERENCE_CODE));
+	}
+
+	@Test
+	public void testGetAccountsThrowsPrincipalExceptionWhenPermissionDenied()
+		throws Exception {
+
+		AccountsRestController accountsRestController = _createController();
+
+		Mockito.doThrow(
+			new PrincipalException()
+		).when(
+			_accountPermission
+		).check(
+			_EXTERNAL_REFERENCE_CODE, ActionKeys.VIEW, null
+		);
+
+		Assertions.assertThrows(
+			PrincipalException.class,
+			() -> accountsRestController.getAccounts(
+				null, _EXTERNAL_REFERENCE_CODE));
+
+		Mockito.verify(
+			_accountService, Mockito.never()
+		).fetchAccountByExternalReferenceCode(
+			Mockito.any()
 		);
 	}
 
@@ -585,6 +716,8 @@ public class AccountsRestControllerTest {
 		ReflectionTestUtils.setField(
 			accountsRestController, "_oktaService", _oktaService);
 		ReflectionTestUtils.setField(
+			accountsRestController, "_propertyService", _propertyService);
+		ReflectionTestUtils.setField(
 			accountsRestController, "_provisioningAssignmentService",
 			_provisioningAssignmentService);
 		ReflectionTestUtils.setField(
@@ -644,6 +777,8 @@ public class AccountsRestControllerTest {
 	private final EntitlementService _entitlementService = Mockito.mock(
 		EntitlementService.class);
 	private final OktaService _oktaService = Mockito.mock(OktaService.class);
+	private final PropertyService _propertyService = Mockito.mock(
+		PropertyService.class);
 	private final ProvisioningAssignmentService _provisioningAssignmentService =
 		Mockito.mock(ProvisioningAssignmentService.class);
 	private final ProvisioningEmailService _provisioningEmailService =

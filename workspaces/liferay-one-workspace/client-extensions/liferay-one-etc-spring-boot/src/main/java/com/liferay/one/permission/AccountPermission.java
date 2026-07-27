@@ -50,6 +50,13 @@ public class AccountPermission {
 
 				return true;
 			}
+
+			if (roleBriefName.equals(
+					RoleConstants.NAME_CLOUD_CONSOLE_SERVICE) &&
+				actionId.equals(ActionKeys.VIEW)) {
+
+				return true;
+			}
 		}
 
 		for (AccountBrief accountBrief : userAccount.getAccountBriefs()) {
