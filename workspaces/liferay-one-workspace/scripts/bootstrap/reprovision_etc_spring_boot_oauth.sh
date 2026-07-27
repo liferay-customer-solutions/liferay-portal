@@ -82,9 +82,27 @@ function main {
 
 	until curl --fail --max-time 5 --output /dev/null --silent "${SIDECAR_READY_URL}"
 	do
+		# Fail fast when the container has already exited: a crashed sidecar
+		# never answers /ready, so without this the loop would burn the full
+		# timeout before reporting a failure that happened in seconds. Dump the
+		# tail of its log so the boot error (a missing property, an unresolved
+		# route) is visible instead of a wall of dots.
+
+		local status
+		status=$(docker inspect --format "{{.State.Status}}" "${SIDECAR_SERVICE}" 2>/dev/null || echo "missing")
+
+		if [ "${status}" != "running" ]
+		then
+			echo "The Spring Boot client extension exited before becoming ready (status: ${status})." >&2
+			docker logs --tail 30 "${SIDECAR_SERVICE}" >&2 || true
+
+			return 1
+		fi
+
 		if [ "${elapsed}" -ge 120 ]
 		then
 			echo "Timed out waiting for the Spring Boot client extension." >&2
+			docker logs --tail 30 "${SIDECAR_SERVICE}" >&2 || true
 
 			return 1
 		fi

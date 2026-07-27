@@ -25,7 +25,7 @@ The Liferay containers must already be running (`docker ps` shows a healthy
 ## Run
 
 ```bash
-scripts/site_reset.sh
+scripts/seed/site_reset.sh
 ```
 
 The script pins basic auth against localhost, then:
