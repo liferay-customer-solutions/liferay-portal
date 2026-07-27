@@ -179,12 +179,6 @@ const EditPermissionsModal = ({
 
 	return (
 		<form id="edit-permissions" onSubmit={onSubmit}>
-			<p className="text-neutral-7">
-				{translate(
-					'team-members-will-receive-an-email-invitation-about-the-permissions-changes'
-				)}
-			</p>
-
 			<label className="account-members-roles-label">
 				{i18n.sub('x-roles', memberName)}
 			</label>

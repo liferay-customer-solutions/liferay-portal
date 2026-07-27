@@ -163,6 +163,18 @@
 .account-members-roles-trigger {
 	text-align: left;
 	width: 100%;
+
+	& span {
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	& .lexicon-icon {
+		flex-shrink: 0;
+		margin-left: var(--spacer-2);
+	}
 }
 
 .account-members-roles-menu {
