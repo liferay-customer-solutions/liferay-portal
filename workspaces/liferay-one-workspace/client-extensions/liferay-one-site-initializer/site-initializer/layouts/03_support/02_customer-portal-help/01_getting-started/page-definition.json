@@ -25,7 +25,8 @@
 							{
 								"definition": {
 									"widgetInstance": {
-										"widgetConfig": {},
+										"widgetConfig": {
+										},
 										"widgetName": "com_liferay_site_navigation_breadcrumb_web_portlet_SiteNavigationBreadcrumbPortlet"
 									}
 								},
@@ -64,7 +65,8 @@
 										},
 										{
 											"id": "tablet",
-											"rowViewportDefinition": {}
+											"rowViewportDefinition": {
+											}
 										}
 									],
 									"verticalAlignment": "top"
@@ -86,7 +88,8 @@
 													"id": "portraitMobile"
 												},
 												{
-													"columnViewportDefinition": {},
+													"columnViewportDefinition": {
+													},
 													"id": "tablet"
 												}
 											],
@@ -124,7 +127,8 @@
 													"id": "portraitMobile"
 												},
 												{
-													"columnViewportDefinition": {},
+													"columnViewportDefinition": {
+													},
 													"id": "tablet"
 												}
 											],
@@ -143,7 +147,8 @@
 														{
 															"id": "element-text",
 															"value": {
-																"fragmentLink": {},
+																"fragmentLink": {
+																},
 																"text": {
 																	"value_i18n": {
 																		"en_US": "Getting Started"
@@ -172,7 +177,8 @@
 														{
 															"id": "element-text",
 															"value": {
-																"fragmentLink": {},
+																"fragmentLink": {
+																},
 																"text": {
 																	"value_i18n": {
 																		"en_US": "Whether you are part of a brand new project which is just starting or you are now joining an already existing project, this article is for you! Follow along to learn how to access, activate and make the most of your Liferay Support resources."
@@ -211,7 +217,8 @@
 														},
 														{
 															"id": "tablet",
-															"rowViewportDefinition": {}
+															"rowViewportDefinition": {
+															}
 														}
 													]
 												},
@@ -232,7 +239,8 @@
 																	"id": "portraitMobile"
 																},
 																{
-																	"columnViewportDefinition": {},
+																	"columnViewportDefinition": {
+																	},
 																	"id": "tablet"
 																}
 															],
@@ -285,7 +293,8 @@
 																								}
 																							}
 																						},
-																						"fragmentLink": {}
+																						"fragmentLink": {
+																						}
 																					}
 																				}
 																			],
@@ -310,7 +319,8 @@
 																				{
 																					"id": "element-text",
 																					"value": {
-																						"fragmentLink": {},
+																						"fragmentLink": {
+																						},
 																						"text": {
 																							"value_i18n": {
 																								"en_US": "New Users"
@@ -340,7 +350,8 @@
 																				{
 																					"id": "element-text",
 																					"value": {
-																						"fragmentLink": {},
+																						"fragmentLink": {
+																						},
 																						"text": {
 																							"value_i18n": {
 																								"en_US": "Get set up, access One Liferay, and learn the essentials for your first project."
@@ -378,7 +389,8 @@
 																	"id": "portraitMobile"
 																},
 																{
-																	"columnViewportDefinition": {},
+																	"columnViewportDefinition": {
+																	},
 																	"id": "tablet"
 																}
 															],
@@ -431,7 +443,8 @@
 																								}
 																							}
 																						},
-																						"fragmentLink": {}
+																						"fragmentLink": {
+																						}
 																					}
 																				}
 																			],
@@ -456,7 +469,8 @@
 																				{
 																					"id": "element-text",
 																					"value": {
-																						"fragmentLink": {},
+																						"fragmentLink": {
+																						},
 																						"text": {
 																							"value_i18n": {
 																								"en_US": "Admin"
@@ -486,7 +500,8 @@
 																				{
 																					"id": "element-text",
 																					"value": {
-																						"fragmentLink": {},
+																						"fragmentLink": {
+																						},
 																						"text": {
 																							"value_i18n": {
 																								"en_US": "Manage projects, invite team members, and configure your organization's support access."
@@ -524,7 +539,8 @@
 																	"id": "portraitMobile"
 																},
 																{
-																	"columnViewportDefinition": {},
+																	"columnViewportDefinition": {
+																	},
 																	"id": "tablet"
 																}
 															],
@@ -577,7 +593,8 @@
 																								}
 																							}
 																						},
-																						"fragmentLink": {}
+																						"fragmentLink": {
+																						}
 																					}
 																				}
 																			],
@@ -602,7 +619,8 @@
 																				{
 																					"id": "element-text",
 																					"value": {
-																						"fragmentLink": {},
+																						"fragmentLink": {
+																						},
 																						"text": {
 																							"value_i18n": {
 																								"en_US": "Partners"
@@ -632,7 +650,8 @@
 																				{
 																					"id": "element-text",
 																					"value": {
-																						"fragmentLink": {},
+																						"fragmentLink": {
+																						},
 																						"text": {
 																							"value_i18n": {
 																								"en_US": "Understand partner roles, entitlements, and how to collaborate on customer projects."

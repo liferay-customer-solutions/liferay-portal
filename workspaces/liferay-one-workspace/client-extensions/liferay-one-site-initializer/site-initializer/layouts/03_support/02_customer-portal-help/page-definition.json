@@ -140,7 +140,8 @@
 								},
 								{
 									"id": "tablet",
-									"rowViewportDefinition": {}
+									"rowViewportDefinition": {
+									}
 								}
 							]
 						},
@@ -161,7 +162,8 @@
 											"id": "portraitMobile"
 										},
 										{
-											"columnViewportDefinition": {},
+											"columnViewportDefinition": {
+											},
 											"id": "tablet"
 										}
 									],
@@ -214,7 +216,8 @@
 																		}
 																	}
 																},
-																"fragmentLink": {}
+																"fragmentLink": {
+																}
 															}
 														}
 													],
@@ -239,7 +242,8 @@
 														{
 															"id": "element-text",
 															"value": {
-																"fragmentLink": {},
+																"fragmentLink": {
+																},
 																"text": {
 																	"value_i18n": {
 																		"en_US": "Getting Started"
@@ -269,7 +273,8 @@
 														{
 															"id": "element-text",
 															"value": {
-																"fragmentLink": {},
+																"fragmentLink": {
+																},
 																"text": {
 																	"value_i18n": {
 																		"en_US": "First steps and essential guidance for administrators, new users, and partners."
@@ -307,7 +312,8 @@
 											"id": "portraitMobile"
 										},
 										{
-											"columnViewportDefinition": {},
+											"columnViewportDefinition": {
+											},
 											"id": "tablet"
 										}
 									],
@@ -360,7 +366,8 @@
 																		}
 																	}
 																},
-																"fragmentLink": {}
+																"fragmentLink": {
+																}
 															}
 														}
 													],
@@ -385,7 +392,8 @@
 														{
 															"id": "element-text",
 															"value": {
-																"fragmentLink": {},
+																"fragmentLink": {
+																},
 																"text": {
 																	"value_i18n": {
 																		"en_US": "Administration"
@@ -415,7 +423,8 @@
 														{
 															"id": "element-text",
 															"value": {
-																"fragmentLink": {},
+																"fragmentLink": {
+																},
 																"text": {
 																	"value_i18n": {
 																		"en_US": "Learn more about project administration within One Liferay."
@@ -453,7 +462,8 @@
 											"id": "portraitMobile"
 										},
 										{
-											"columnViewportDefinition": {},
+											"columnViewportDefinition": {
+											},
 											"id": "tablet"
 										}
 									],
@@ -506,7 +516,8 @@
 																		}
 																	}
 																},
-																"fragmentLink": {}
+																"fragmentLink": {
+																}
 															}
 														}
 													],
@@ -531,7 +542,8 @@
 														{
 															"id": "element-text",
 															"value": {
-																"fragmentLink": {},
+																"fragmentLink": {
+																},
 																"text": {
 																	"value_i18n": {
 																		"en_US": "Activation"
@@ -561,7 +573,8 @@
 														{
 															"id": "element-text",
 															"value": {
-																"fragmentLink": {},
+																"fragmentLink": {
+																},
 																"text": {
 																	"value_i18n": {
 																		"en_US": "Activate your Liferay SaaS, Liferay PaaS, or Liferay Self-Hosted instance."
@@ -599,7 +612,8 @@
 											"id": "portraitMobile"
 										},
 										{
-											"columnViewportDefinition": {},
+											"columnViewportDefinition": {
+											},
 											"id": "tablet"
 										}
 									],
@@ -652,7 +666,8 @@
 																		}
 																	}
 																},
-																"fragmentLink": {}
+																"fragmentLink": {
+																}
 															}
 														}
 													],
@@ -677,7 +692,8 @@
 														{
 															"id": "element-text",
 															"value": {
-																"fragmentLink": {},
+																"fragmentLink": {
+																},
 																"text": {
 																	"value_i18n": {
 																		"en_US": "Overview"
@@ -707,7 +723,8 @@
 														{
 															"id": "element-text",
 															"value": {
-																"fragmentLink": {},
+																"fragmentLink": {
+																},
 																"text": {
 																	"value_i18n": {
 																		"en_US": "The essential guide to One Liferay."
@@ -745,7 +762,8 @@
 											"id": "portraitMobile"
 										},
 										{
-											"columnViewportDefinition": {},
+											"columnViewportDefinition": {
+											},
 											"id": "tablet"
 										}
 									],
@@ -798,7 +816,8 @@
 																		}
 																	}
 																},
-																"fragmentLink": {}
+																"fragmentLink": {
+																}
 															}
 														}
 													],
@@ -823,7 +842,8 @@
 														{
 															"id": "element-text",
 															"value": {
-																"fragmentLink": {},
+																"fragmentLink": {
+																},
 																"text": {
 																	"value_i18n": {
 																		"en_US": "DXP Activation"
@@ -853,7 +873,8 @@
 														{
 															"id": "element-text",
 															"value": {
-																"fragmentLink": {},
+																"fragmentLink": {
+																},
 																"text": {
 																	"value_i18n": {
 																		"en_US": "Details about Liferay DXP activation key usage and details."
@@ -891,7 +912,8 @@
 											"id": "portraitMobile"
 										},
 										{
-											"columnViewportDefinition": {},
+											"columnViewportDefinition": {
+											},
 											"id": "tablet"
 										}
 									],
@@ -944,7 +966,8 @@
 																		}
 																	}
 																},
-																"fragmentLink": {}
+																"fragmentLink": {
+																}
 															}
 														}
 													],
@@ -969,7 +992,8 @@
 														{
 															"id": "element-text",
 															"value": {
-																"fragmentLink": {},
+																"fragmentLink": {
+																},
 																"text": {
 																	"value_i18n": {
 																		"en_US": "Team Members"
@@ -999,7 +1023,8 @@
 														{
 															"id": "element-text",
 															"value": {
-																"fragmentLink": {},
+																"fragmentLink": {
+																},
 																"text": {
 																	"value_i18n": {
 																		"en_US": "Learn more about roles, support cases and Incident Contacts."
