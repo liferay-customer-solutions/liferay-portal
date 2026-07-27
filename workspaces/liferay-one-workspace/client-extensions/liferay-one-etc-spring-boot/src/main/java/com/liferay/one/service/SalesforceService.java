@@ -399,13 +399,13 @@ public class SalesforceService extends BaseService {
 	private AccessToken _accessToken;
 	private String _authorization;
 
-	@Value("${liferay.marketplace.salesforce.gcf.audience}")
+	@Value("${liferay.one.salesforce.gcf.audience}")
 	private String _gcfAudience;
 
-	@Value("${liferay.marketplace.salesforce.gcf.base.url}")
+	@Value("${liferay.one.salesforce.gcf.base.url}")
 	private String _gcfBaseUrl;
 
-	@Value("${liferay.marketplace.salesforce.gcf.service.account.key}")
+	@Value("${liferay.one.salesforce.gcf.service.account.key}")
 	private String _gcfServiceAccountKey;
 
 }
