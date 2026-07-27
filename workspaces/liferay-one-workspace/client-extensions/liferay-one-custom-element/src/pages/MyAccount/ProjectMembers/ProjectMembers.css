@@ -77,16 +77,19 @@
 .project-permissions-grid {
 	align-items: center;
 	display: grid;
-	gap: var(--spacer-3);
+	gap: var(--spacer-2) var(--spacer-3);
 	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
 	margin-bottom: var(--spacer-2);
+}
+
+.project-permissions-grid-row {
+	display: contents;
 }
 
 .project-permissions-grid-header {
 	color: var(--color-neutral-7);
 	font-size: var(--text-paragraph-sm-font-size, 13px);
 	font-weight: 600;
-	margin-bottom: var(--spacer-2);
 
 	& > :not(:last-child) {
 		padding-left: var(--input-padding-x, 0.75rem);

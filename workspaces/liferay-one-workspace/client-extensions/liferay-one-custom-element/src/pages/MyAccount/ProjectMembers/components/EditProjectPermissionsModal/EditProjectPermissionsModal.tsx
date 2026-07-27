@@ -288,75 +288,76 @@ const EditProjectPermissionsModal = ({
 
 	return (
 		<form id="edit-project-permissions" onSubmit={onSubmit}>
-			<p className="text-neutral-7">
-				{translate(
-					'team-members-will-receive-an-email-invitation-about-the-permissions-changes'
-				)}
-			</p>
+			<div className="project-permissions-grid">
+				<div className="project-permissions-grid-header project-permissions-grid-row">
+					<span>{translate('team-member')}</span>
 
-			<div className="project-permissions-grid project-permissions-grid-header">
-				<span>{translate('team-member')}</span>
+					<span>{translate('role')}</span>
 
-				<span>{translate('role')}</span>
+					<span />
+				</div>
 
-				<span />
-			</div>
+				{members.map((member, index) =>
+					member.removed ? null : (
+						<div
+							className="project-permissions-grid-row"
+							key={index}
+						>
+							{member.isNew && !member.userId ? (
+								<MemberDropDown
+									filteredOptions={accountMemberOptions.filter(
+										(option) =>
+											!members.some(
+												(m, i) =>
+													i !== index &&
+													!m.removed &&
+													m.userId === option.userId
+											)
+									)}
+									onChange={(option) =>
+										updateMember(index, {
+											email: option.email,
+											name: option.name,
+											userId: option.userId,
+										})
+									}
+									selectedName={member.name}
+								/>
+							) : (
+								<span className="form-control project-permissions-member-box">
+									{member.name}
+								</span>
+							)}
 
-			{members.map((member, index) =>
-				member.removed ? null : (
-					<div className="project-permissions-grid" key={index}>
-						{member.isNew && !member.userId ? (
-							<MemberDropDown
-								filteredOptions={accountMemberOptions.filter(
-									(option) =>
-										!members.some(
-											(m, i) =>
-												i !== index &&
-												!m.removed &&
-												m.userId === option.userId
-										)
-								)}
-								onChange={(option) =>
+							<PermissionsSelect
+								availableDesignations={availableDesignations}
+								designations={member.designations}
+								onRoleChange={(roleExternalReferenceCode) =>
 									updateMember(index, {
-										email: option.email,
-										name: option.name,
-										userId: option.userId,
+										roleExternalReferenceCode,
 									})
 								}
-								selectedName={member.name}
+								onToggleDesignation={(designation) =>
+									toggleDesignation(index, designation)
+								}
+								roleExternalReferenceCode={
+									member.roleExternalReferenceCode
+								}
 							/>
-						) : (
-							<span className="form-control project-permissions-member-box">
-								{member.name}
-							</span>
-						)}
 
-						<PermissionsSelect
-							availableDesignations={availableDesignations}
-							designations={member.designations}
-							onRoleChange={(roleExternalReferenceCode) =>
-								updateMember(index, {roleExternalReferenceCode})
-							}
-							onToggleDesignation={(designation) =>
-								toggleDesignation(index, designation)
-							}
-							roleExternalReferenceCode={
-								member.roleExternalReferenceCode
-							}
-						/>
+							<ClayButton
+								className="project-permissions-remove-button"
+								onClick={() => removeMember(index)}
+								type="button"
+							>
+								<ClayIcon className="mr-2" symbol="hr" />
 
-						<ClayButton
-							className="project-permissions-remove-button"
-							onClick={() => removeMember(index)}
-							type="button"
-						>
-							<ClayIcon className="mr-2" symbol="hr" />
-
-							{translate('remove')}
-						</ClayButton>
-					</div>
-				)
-			)}
+								{translate('remove')}
+							</ClayButton>
+						</div>
+					)
+				)}
+			</div>
 
 			<ClayButton
 				className="project-permissions-add-button"

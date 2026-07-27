@@ -56,7 +56,7 @@ export default class HeadlessAdminUser {
 
 	static async getAccountRoles(accountExternalReferenceCode: string) {
 		return fetcher<APIResponse<AccountRole>>(
-			`/o/headless-admin-user/v1.0/accounts/by-external-reference-code/${accountExternalReferenceCode}/account-roles`
+			`/o/headless-admin-user/v1.0/accounts/by-external-reference-code/${accountExternalReferenceCode}/account-roles?pageSize=-1`
 		);
 	}
 

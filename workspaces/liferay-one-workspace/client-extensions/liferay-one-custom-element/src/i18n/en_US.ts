@@ -1200,8 +1200,6 @@ export default {
 	'tax-vat-id': 'Tax/VAT ID',
 	'tax-vat-number': 'Tax/VAT Number',
 	'team-member': 'Team Member',
-	'team-members-will-receive-an-email-invitation-about-the-permissions-changes':
-		'Team members will receive an email invitation about the permissions changes.',
 	'technology-partnership-with-integrations':
 		'Technology Partnership With Integrations',
 	'term': 'Term',
