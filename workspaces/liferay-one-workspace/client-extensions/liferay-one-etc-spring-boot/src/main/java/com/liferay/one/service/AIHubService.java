@@ -8,8 +8,6 @@ package com.liferay.one.service;
 import com.liferay.client.extension.util.spring.boot3.client.LiferayOAuth2AccessTokenManager;
 import com.liferay.petra.string.StringBundler;
 
-import java.net.URL;
-
 import java.time.Duration;
 
 import org.apache.commons.logging.Log;
@@ -62,7 +60,7 @@ public class AIHubService extends OneBaseService {
 					"external-ai-hub"),
 				jsonObject.toString(),
 				UriComponentsBuilder.fromUriString(
-					_externalAIHubHomePageURL.toString()
+					_externalAIHubHomePageURL
 				).path(
 					"/o/ai-hub/v1.0/provisioning"
 				).build(
@@ -91,7 +89,7 @@ public class AIHubService extends OneBaseService {
 				"external-ai-hub"),
 			jsonObject.toString(),
 			UriComponentsBuilder.fromUriString(
-				_externalAIHubHomePageURL.toString()
+				_externalAIHubHomePageURL
 			).path(
 				"/o/ai-hub-pricing/v1.0/accounts/" + accountId +
 					"/quota-blocks/purchase"
@@ -150,8 +148,8 @@ public class AIHubService extends OneBaseService {
 
 	private static final Log _log = LogFactory.getLog(AIHubService.class);
 
-	@Value("${external.ai.hub.oauth2.headless.server.home.page.url}")
-	private URL _externalAIHubHomePageURL;
+	@Value("${external.ai.hub.oauth2.headless.server.home.page.url:}")
+	private String _externalAIHubHomePageURL;
 
 	@Autowired
 	private LiferayOAuth2AccessTokenManager _liferayOAuth2AccessTokenManager;
