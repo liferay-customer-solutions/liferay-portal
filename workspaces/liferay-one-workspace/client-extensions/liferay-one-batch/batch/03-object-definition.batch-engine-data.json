@@ -6943,6 +6943,249 @@
 			},
 			"system": false,
 			"titleObjectFieldName": "dedupeKey"
+		},
+		{
+			"active": true,
+			"className": "com.liferay.object.model.ObjectDefinition#C_USAGE_REPORT",
+			"enableCategorization": true,
+			"enableComments": false,
+			"enableObjectEntryHistory": true,
+			"externalReferenceCode": "C_USAGE_REPORT",
+			"friendlyURLSeparator": "cpur",
+			"label": {
+				"en_US": "Usage Report"
+			},
+			"name": "UsageReport",
+			"objectFields": [
+				{
+					"DBType": "Double",
+					"businessType": "Decimal",
+					"externalReferenceCode": "C_USAGE_REPORT_AGGREGATE_QUANTITY",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Aggregate Quantity"
+					},
+					"name": "aggregateQuantity",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Double"
+				},
+				{
+					"DBType": "Date",
+					"businessType": "DateTime",
+					"externalReferenceCode": "C_USAGE_REPORT_DATE_FROM",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Date From"
+					},
+					"name": "dateFrom",
+					"objectFieldSettings": [
+						{
+							"name": "timeStorage",
+							"value": "convertToUTC"
+						}
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Date"
+				},
+				{
+					"DBType": "Date",
+					"businessType": "DateTime",
+					"externalReferenceCode": "C_USAGE_REPORT_DATE_TO",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Date To"
+					},
+					"name": "dateTo",
+					"objectFieldSettings": [
+						{
+							"name": "timeStorage",
+							"value": "convertToUTC"
+						}
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Date"
+				},
+				{
+					"DBType": "Date",
+					"businessType": "DateTime",
+					"externalReferenceCode": "C_USAGE_REPORT_GENERATED_AT",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Generated At"
+					},
+					"name": "generatedAt",
+					"objectFieldSettings": [
+						{
+							"name": "timeStorage",
+							"value": "convertToUTC"
+						}
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Date"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_USAGE_REPORT_GENERATOR_CLASS_NAME",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Generator Class Name"
+					},
+					"name": "generatorClassName",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_USAGE_REPORT_TARGET_CLASS_NAME",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Target Class Name"
+					},
+					"name": "targetClassName",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "Long",
+					"businessType": "LongInteger",
+					"externalReferenceCode": "C_USAGE_REPORT_TARGET_PK",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Target PK"
+					},
+					"name": "targetPK",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Long"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_USAGE_REPORT_TARGET_TYPE",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Target Type"
+					},
+					"name": "targetType",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				}
+			],
+			"objectFolderExternalReferenceCode": "C_LIFERAY_ONE_FOLDER",
+			"objectRelationships": [
+			],
+			"objectValidationRules": [
+			],
+			"objectViews": [
+				{
+					"defaultObjectView": true,
+					"name": {
+						"en_US": "Default View"
+					},
+					"objectDefinitionExternalReferenceCode": "C_USAGE_REPORT",
+					"objectViewColumns": [
+						{
+							"label": {
+								"en_US": "ERC"
+							},
+							"objectFieldName": "externalReferenceCode",
+							"priority": 0
+						},
+						{
+							"label": {
+								"en_US": "Target Type"
+							},
+							"objectFieldName": "targetType",
+							"priority": 1
+						},
+						{
+							"label": {
+								"en_US": "Aggregate Quantity"
+							},
+							"objectFieldName": "aggregateQuantity",
+							"priority": 2
+						},
+						{
+							"label": {
+								"en_US": "Date From"
+							},
+							"objectFieldName": "dateFrom",
+							"priority": 3
+						},
+						{
+							"label": {
+								"en_US": "Date To"
+							},
+							"objectFieldName": "dateTo",
+							"priority": 4
+						},
+						{
+							"label": {
+								"en_US": "Generated At"
+							},
+							"objectFieldName": "generatedAt",
+							"priority": 5
+						}
+					]
+				}
+			],
+			"panelCategoryKey": "applications_menu.applications.content",
+			"pluralLabel": {
+				"en_US": "Usage Reports"
+			},
+			"portlet": true,
+			"restContextPath": "/o/c/usagereports",
+			"scope": "company",
+			"status": {
+				"code": 0,
+				"label": "approved",
+				"label_i18n": "Approved"
+			},
+			"system": false,
+			"titleObjectFieldName": "generatorClassName"
 		}
 	]
 }

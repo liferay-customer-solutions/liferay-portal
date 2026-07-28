@@ -244,6 +244,17 @@
 		},
 		{
 			"deletionType": "cascade",
+			"externalReferenceCode": "R_CONTRACT_TO_USAGE_REPORT",
+			"label": {
+				"en_US": "Contract to Usage Report"
+			},
+			"name": "contractToUsageReport",
+			"objectDefinitionExternalReferenceCode1": "C_CONTRACT",
+			"objectDefinitionExternalReferenceCode2": "C_USAGE_REPORT",
+			"type": "oneToMany"
+		},
+		{
+			"deletionType": "cascade",
 			"externalReferenceCode": "R_ENTITLEMENT_DEFINITION_TO_ENTITLEMENT",
 			"label": {
 				"en_US": "Entitlement Definition to Entitlement"
@@ -332,6 +343,17 @@
 		},
 		{
 			"deletionType": "disassociate",
+			"externalReferenceCode": "R_ORGANIZATION_TO_PROJECT",
+			"label": {
+				"en_US": "Organization to Project"
+			},
+			"name": "organizationToProject",
+			"objectDefinitionExternalReferenceCode1": "L_ORGANIZATION",
+			"objectDefinitionExternalReferenceCode2": "C_PROJECT",
+			"type": "oneToMany"
+		},
+		{
+			"deletionType": "disassociate",
 			"externalReferenceCode": "R_ORIGINAL_CONTRACT_TO_CONTRACT",
 			"label": {
 				"en_US": "Original Contract to Contract"
@@ -386,6 +408,17 @@
 			"type": "oneToMany"
 		},
 		{
+			"deletionType": "disassociate",
+			"externalReferenceCode": "R_PROJECT_TO_LICENSE_KEY",
+			"label": {
+				"en_US": "Project to License Key"
+			},
+			"name": "projectToLicenseKey",
+			"objectDefinitionExternalReferenceCode1": "C_PROJECT",
+			"objectDefinitionExternalReferenceCode2": "C_LICENSE_KEY",
+			"type": "oneToMany"
+		},
+		{
 			"deletionType": "cascade",
 			"externalReferenceCode": "R_PROJECT_TO_PROJECT_MEMBERSHIP",
 			"label": {
@@ -427,6 +460,17 @@
 			"name": "usageDefinitionToUsageEvent",
 			"objectDefinitionExternalReferenceCode1": "C_USAGE_DEFINITION",
 			"objectDefinitionExternalReferenceCode2": "C_USAGE_EVENT",
+			"type": "oneToMany"
+		},
+		{
+			"deletionType": "cascade",
+			"externalReferenceCode": "R_USAGE_DEFINITION_TO_USAGE_REPORT",
+			"label": {
+				"en_US": "Usage Definition to Usage Report"
+			},
+			"name": "usageDefinitionToUsageReport",
+			"objectDefinitionExternalReferenceCode1": "C_USAGE_DEFINITION",
+			"objectDefinitionExternalReferenceCode2": "C_USAGE_REPORT",
 			"type": "oneToMany"
 		},
 		{

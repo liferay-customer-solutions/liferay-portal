@@ -78,6 +78,24 @@
 
 ---
 
+#### Organization (`L_ORGANIZATION` — core system object)
+
+**system:** `true`
+
+Liferay system Organization, migrated from support.liferay for FLS (First Line Support) and Liferay-internal orgs only. Partner-account orgs are migrated separately by the partner-account team. Wired for JSM team sync via `onAfterAdd`/`onAfterUpdate`/`onAfterDelete` object actions.
+
+| Field | Type | Notes |
+|---|---|---|
+| PK `organizationId` | long | |
+| `name` | string | Copied from Support Organization name |
+| `accountEntryId` | long | Custom field — owning account, e.g. Accenture FLS → Accenture account. Must be a plain field, not a relationship: Liferay forbids object relationships between two system objects (`L_ACCOUNT` and `L_ORGANIZATION` are both system). |
+
+**Relationships:**
+
+- `organizationToProject` (`L_ORGANIZATION → C_PROJECT`, one-to-many, disassociate) — the FLS partner use case: which customer projects an org supports. A project is supported by at most one org. Valid because `C_PROJECT` is a custom object. Drives partner-scoped project visibility (VIEW permission + restricted-page gating are a dependent follow-up).
+
+---
+
 #### BannedEmailDomain (`C_BANNED_EMAIL`)
 
 **system:** `false`
@@ -370,13 +388,16 @@ Product-level entitlement template. One CProduct → many EntitlementDefinitions
 
 **system:** `false`
 
-Aggregated periodic report over UsageEvents.
+Aggregated periodic report over UsageEvents. The report target is polymorphic — a report can roll up at any level (project, contract, order, environment), expressed via `targetType` + `targetClassName` + `targetPK`, mirroring the `Property` pattern. A `usageDefinitionToUsageReport` and a `contractToUsageReport` relationship provide the primary FK rollups; `contractId` is the join the Nav-owned Invoice references.
 
 | Field | Type | Notes |
 |---|---|---|
 | PK `usageReportId` | long | |
-| FK `subscriptionId` | long | |
-| FK `usageDefinitionId` | long | |
+| FK `usageDefinitionId` | long | Via `usageDefinitionToUsageReport` relationship |
+| FK `contractId` | long | Via `contractToUsageReport` relationship |
+| `targetType` | string | `project` · `contract` · `order` · `environment` |
+| `targetClassName` | string | Denormalized class name of the report target |
+| `targetPK` | long | PK of the report target instance |
 | `generatorClassName` | string | |
 | `aggregateQuantity` | double | |
 | `generatedAt` | datetime | |
@@ -424,6 +445,7 @@ Aggregated periodic report over UsageEvents.
 | `modifiedByUserName` | string | Denormalized |
 | `modifiedDate` | datetime | |
 | FK `accountEntryId` | long | |
+| FK `projectId` | long | Nullable; set when the key is scoped to a project, else account-only |
 | FK `entitlementId` | long | |
 | `orderId` | long | FK to CommerceOrderItem via `assetReceiptLicenseUuid` |
 | `entitlementName` | string | Name of the attached entitlement |
