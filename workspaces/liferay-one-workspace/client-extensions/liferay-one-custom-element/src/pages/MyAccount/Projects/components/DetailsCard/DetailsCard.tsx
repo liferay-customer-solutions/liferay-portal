@@ -13,17 +13,23 @@ export type DetailsRow = {
 };
 
 type DetailsCardProps = {
+	bodyClassName?: string;
 	fullWidth?: boolean;
 	headerActions?: ReactNode;
 	icon?: string;
+	iconPosition?: 'left' | 'right';
+	iconSpritemap?: string;
 	rows: DetailsRow[];
 	title?: Word;
 };
 
 export default function DetailsCard({
+	bodyClassName = 'mt-3',
 	fullWidth = false,
 	headerActions,
 	icon = 'catalog',
+	iconPosition = 'right',
+	iconSpritemap,
 	rows,
 	title = 'details',
 }: DetailsCardProps) {
@@ -33,11 +39,13 @@ export default function DetailsCard({
 			cardTitle={i18n.translate(title)}
 			className="mt-3"
 			clayIcon={icon}
+			clayIconSpritemap={iconSpritemap}
 			fitContent={!fullWidth}
 			headerActions={headerActions}
+			iconPosition={iconPosition}
 		>
 			<div
-				className="mt-3"
+				className={bodyClassName}
 				style={
 					fullWidth
 						? {

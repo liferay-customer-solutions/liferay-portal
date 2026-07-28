@@ -99,6 +99,24 @@ export const commerceSchemas = {
 		lastName: z.string().min(3, 'Last name is required'),
 		roles: z.string().array().min(5, 'Please select at least one role'),
 	}),
+	newLicenseKey: z.object({
+		clusterSize: z.string().optional().or(z.literal('')),
+		description: z.string().optional().or(z.literal('')),
+		domains: z
+			.string()
+			.min(3, {message: i18n.translate('this-field-is-required')}),
+		environmentName: z
+			.string()
+			.min(1, {message: i18n.translate('this-field-is-required')}),
+		expirationDate: z.string().optional().or(z.literal('')),
+		hostName: z.string().optional().or(z.literal('')),
+		keyType: z
+			.string()
+			.min(1, {message: i18n.translate('this-field-is-required')}),
+		startDate: z
+			.string()
+			.min(1, {message: i18n.translate('this-field-is-required')}),
+	}),
 	productFeedback: z.object({
 		companyName: z.string().optional(),
 		emailAddress: z

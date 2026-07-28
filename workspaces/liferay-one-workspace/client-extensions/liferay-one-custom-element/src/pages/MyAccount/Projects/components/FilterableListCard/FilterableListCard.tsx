@@ -22,10 +22,12 @@ const FILTER_SEARCH_MIN_OPTIONS = 10;
 export type FilterOption = {label: string; value: string};
 
 export type ListFilter<T> = {
+	formatValue?: (value: string) => string;
 	key: string;
 	label: Word;
 	matches: (item: T, values: string[]) => boolean;
-	options: FilterOption[];
+	options?: FilterOption[];
+	variant?: 'checkbox' | 'date-range';
 };
 
 export type ListColumn<T> = {
@@ -57,7 +59,14 @@ type FilterSubPanelProps = {
 	options: FilterOption[];
 	selectedValues: string[];
 	title: string;
+	variant: 'checkbox' | 'date-range';
 };
+
+function getBoundValue(values: string[], bound: string): string {
+	const match = values.find((value) => value.startsWith(`${bound}:`));
+
+	return match ? match.slice(bound.length + 1) : '';
+}
 
 function FilterSubPanel({
 	onApply,
@@ -65,9 +74,16 @@ function FilterSubPanel({
 	options,
 	selectedValues,
 	title,
+	variant,
 }: FilterSubPanelProps) {
 	const [keywords, setKeywords] = useState('');
 	const [draftValues, setDraftValues] = useState<string[]>(selectedValues);
+	const [after, setAfter] = useState(() =>
+		getBoundValue(selectedValues, 'after')
+	);
+	const [before, setBefore] = useState(() =>
+		getBoundValue(selectedValues, 'before')
+	);
 
 	const filteredOptions = options.filter(({label}) =>
 		label.toLowerCase().includes(keywords.trim().toLowerCase())
@@ -78,6 +94,14 @@ function FilterSubPanel({
 			previous.includes(value)
 				? previous.filter((current) => current !== value)
 				: [...previous, value]
+		);
+
+	const applyDateRange = () =>
+		onApply(
+			[
+				after ? `after:${after}` : '',
+				before ? `before:${before}` : '',
+			].filter(Boolean)
 		);
 
 	return (
@@ -92,33 +116,74 @@ function FilterSubPanel({
 				<span className="list-card-filter-title">{title}</span>
 			</button>
 
-			{options.length > FILTER_SEARCH_MIN_OPTIONS && (
-				<ClayInput
-					className="list-card-filter-search mt-3"
-					onChange={(event) => setKeywords(event.target.value)}
-					placeholder={translate('search')}
-					type="text"
-					value={keywords}
-				/>
+			{variant === 'date-range' ? (
+				<>
+					<div className="list-card-filter-options mt-3">
+						<label>
+							{translate('after')}
+
+							<ClayInput
+								onChange={(event) =>
+									setAfter(event.target.value)
+								}
+								type="date"
+								value={after}
+							/>
+						</label>
+
+						<label className="mt-2">
+							{translate('before')}
+
+							<ClayInput
+								onChange={(event) =>
+									setBefore(event.target.value)
+								}
+								type="date"
+								value={before}
+							/>
+						</label>
+					</div>
+
+					<ClayButton
+						className="list-card-filter-apply w-100"
+						onClick={applyDateRange}
+					>
+						{translate('add-filter')}
+					</ClayButton>
+				</>
+			) : (
+				<>
+					{options.length > FILTER_SEARCH_MIN_OPTIONS && (
+						<ClayInput
+							className="list-card-filter-search mt-3"
+							onChange={(event) =>
+								setKeywords(event.target.value)
+							}
+							placeholder={translate('search')}
+							type="text"
+							value={keywords}
+						/>
+					)}
+
+					<div className="list-card-filter-options mt-3">
+						{filteredOptions.map(({label, value}) => (
+							<ClayCheckbox
+								checked={draftValues.includes(value)}
+								key={value}
+								label={label}
+								onChange={() => toggleValue(value)}
+							/>
+						))}
+					</div>
+
+					<ClayButton
+						className="list-card-filter-apply w-100"
+						onClick={() => onApply(draftValues)}
+					>
+						{translate('add-filter')}
+					</ClayButton>
+				</>
 			)}
-
-			<div className="list-card-filter-options mt-3">
-				{filteredOptions.map(({label, value}) => (
-					<ClayCheckbox
-						checked={draftValues.includes(value)}
-						key={value}
-						label={label}
-						onChange={() => toggleValue(value)}
-					/>
-				))}
-			</div>
-
-			<ClayButton
-				className="list-card-filter-apply w-100"
-				onClick={() => onApply(draftValues)}
-			>
-				{translate('add-filter')}
-			</ClayButton>
 		</div>
 	);
 }
@@ -180,11 +245,13 @@ export default function FilterableListCard<T>({
 			const values = selectedFilters[filter.key] ?? [];
 
 			values.forEach((value) => {
-				const option = filter.options.find(
+				const option = (filter.options ?? []).find(
 					(current) => current.value === value
 				);
 
-				const optionLabel = option?.label ?? value;
+				const optionLabel = filter.formatValue
+					? filter.formatValue(value)
+					: option?.label ?? value;
 
 				active.push({
 					label: hasMultipleCategories
@@ -256,11 +323,12 @@ export default function FilterableListCard<T>({
 									closeFilter();
 								}}
 								onBack={() => setActiveFilterKey(null)}
-								options={activeFilter.options}
+								options={activeFilter.options ?? []}
 								selectedValues={
 									selectedFilters[activeFilter.key] ?? []
 								}
 								title={translate(activeFilter.label)}
+								variant={activeFilter.variant ?? 'checkbox'}
 							/>
 						) : (
 							<div className="list-card-filter-panel">
