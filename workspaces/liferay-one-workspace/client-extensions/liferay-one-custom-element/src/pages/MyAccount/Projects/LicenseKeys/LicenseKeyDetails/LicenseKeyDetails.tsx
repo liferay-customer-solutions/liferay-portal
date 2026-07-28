@@ -6,7 +6,6 @@
 import ClayButton from '@clayui/button';
 import {ClayToggle} from '@clayui/form';
 import {useParams} from 'react-router-dom';
-import keyHorizontalSpritemap from '~/assets/icons/key_horizontal.svg';
 import BackLink from '~/components/BackLink/BackLink';
 import {
 	ProjectActivationKey,
@@ -170,7 +169,6 @@ function LicenseKeyDetailsContent({
 				}
 				icon="key-horizontal"
 				iconPosition="right"
-				iconSpritemap={keyHorizontalSpritemap}
 				rows={detailsRows}
 				title="license-key-details"
 			/>

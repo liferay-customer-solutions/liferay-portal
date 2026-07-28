@@ -3,13 +3,9 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import ClayIcon from '@clayui/icon';
 import {ReactNode} from 'react';
 import {NavLink} from 'react-router-dom';
-import applicationsIconUrl from '~/assets/icons/applications.svg';
-import keyHorizontalIconUrl from '~/assets/icons/key_horizontal.svg';
-import productsIconUrl from '~/assets/icons/products.svg';
-import unionIconUrl from '~/assets/icons/union.svg';
+import CustomIcon from '~/components/CustomIcon/CustomIcon';
 
 export type NavItem = {
 	children?: NavItem[];
@@ -20,13 +16,6 @@ export type NavItem = {
 };
 
 const ACTIVE_BG = 'var(--color-action-primary-active-lighten)';
-
-const CUSTOM_ICON_SPRITEMAPS: Record<string, string> = {
-	'applications': applicationsIconUrl,
-	'key-horizontal': keyHorizontalIconUrl,
-	'products': productsIconUrl,
-	'union': unionIconUrl,
-};
 
 const SIDEBAR_BG = 'var(--color-neutral-1)';
 const TEXT_ACTIVE = 'var(--color-action-primary-active)';
@@ -41,7 +30,6 @@ type SideNavItemProps = {
 function SideNavItem({depth, item}: SideNavItemProps) {
 	const hasChildren = Boolean(item.children && item.children.length);
 	const icon = item.icon;
-	const customSpritemap = icon ? CUSTOM_ICON_SPRITEMAPS[icon] : undefined;
 
 	return (
 		<li>
@@ -63,8 +51,7 @@ function SideNavItem({depth, item}: SideNavItemProps) {
 				{({isActive}) => (
 					<>
 						{icon && (
-							<ClayIcon
-								spritemap={customSpritemap}
+							<CustomIcon
 								style={{
 									flexShrink: 0,
 									opacity: isActive ? 1 : 0.5,

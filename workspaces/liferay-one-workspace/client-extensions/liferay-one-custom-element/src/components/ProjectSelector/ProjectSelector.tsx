@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import ClayIcon from '@clayui/icon';
 import {useState} from 'react';
-import projectIconUrl from '~/assets/icons/project.svg';
+import CustomIcon from '~/components/CustomIcon/CustomIcon';
 import EntitySelector, {
 	SelectorItem,
 } from '~/components/EntitySelector/EntitySelector';
@@ -97,8 +96,7 @@ const ProjectSelector = ({
 						width: '2.75rem',
 					}}
 				>
-					<ClayIcon
-						spritemap={projectIconUrl}
+					<CustomIcon
 						style={{height: '1.5rem', width: '1.5rem'}}
 						symbol="project"
 					/>

@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 import {ReactNode} from 'react';
+import CustomIcon from '~/components/CustomIcon/CustomIcon';
 
 import './DetailedCard.css';
 
@@ -43,7 +43,7 @@ export function DetailedCard({
 			)}
 		>
 			{clayIcon ? (
-				<ClayIcon
+				<CustomIcon
 					className="detailed-card-header-clay-icon"
 					spritemap={clayIconSpritemap}
 					symbol={clayIcon}

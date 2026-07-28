@@ -44,8 +44,16 @@ export default defineConfig(({command}) => ({
 		},
 	},
 	experimental: {
-		renderBuiltUrl(filename: string) {
-			return `/o/liferay-one-custom-element/${filename}`;
+		renderBuiltUrl(filename: string, {hostType}) {
+			if (hostType === 'js') {
+				return {
+					runtime: `new URL(${JSON.stringify(
+						filename
+					)}, import.meta.url).href`,
+				};
+			}
+
+			return {relative: true};
 		},
 	},
 	optimizeDeps: {
