@@ -13,6 +13,7 @@ import com.liferay.one.jira.synchronizer.AccountSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountRoleSynchronizer;
 import com.liferay.one.okta.service.OktaService;
 import com.liferay.one.permission.AccountPermission;
+import com.liferay.one.permission.AdminPermission;
 import com.liferay.one.service.AccountService;
 import com.liferay.one.service.EmailAddressValidatorService;
 import com.liferay.one.service.EntitlementService;
@@ -123,7 +124,7 @@ public class AccountsRestController extends OneBaseRestController {
 			@PathVariable("externalReferenceCode") String externalReferenceCode)
 		throws Exception {
 
-		_accountPermission.check(externalReferenceCode, ActionKeys.UPDATE, jwt);
+		_adminPermission.check(jwt);
 
 		_accountSynchronizer.syncAccount(
 			_accountService.getAccount(externalReferenceCode));
@@ -415,6 +416,9 @@ public class AccountsRestController extends OneBaseRestController {
 	@Autowired
 	private AccountUserAccountRoleSynchronizer
 		_accountUserAccountRoleSynchronizer;
+
+	@Autowired
+	private AdminPermission _adminPermission;
 
 	@Autowired
 	private EmailAddressValidatorService _emailAddressValidatorService;
