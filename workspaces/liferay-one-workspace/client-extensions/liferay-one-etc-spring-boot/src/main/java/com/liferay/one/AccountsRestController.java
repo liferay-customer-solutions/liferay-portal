@@ -33,6 +33,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -199,10 +200,19 @@ public class AccountsRestController extends OneBaseRestController {
 				"Email address uses a reserved Liferay domain");
 		}
 
+		JSONObject jsonObject = null;
+
+		try {
+			jsonObject = new JSONObject(json);
+		}
+		catch (JSONException jsonException) {
+			throw new ResponseStatusException(
+				HttpStatus.BAD_REQUEST, "Request body is not valid JSON",
+				jsonException);
+		}
+
 		Account account = _accountService.getAccount(
 			externalReferenceCode, jwt);
-
-		JSONObject jsonObject = new JSONObject(json);
 
 		Map<Long, String> accountRoleNames = _getAccountRoleNames(
 			account.getId(), jsonObject.optJSONArray("accountRoleIds"));
