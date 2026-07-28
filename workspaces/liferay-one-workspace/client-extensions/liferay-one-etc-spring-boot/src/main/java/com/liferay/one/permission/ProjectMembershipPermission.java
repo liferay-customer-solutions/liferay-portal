@@ -94,6 +94,10 @@ public class ProjectMembershipPermission {
 			}
 		}
 
+		if (!actionId.equals(ActionKeys.VIEW)) {
+			return false;
+		}
+
 		Account account = _accountService.getAccount(
 			accountExternalReferenceCode, jwt);
 
