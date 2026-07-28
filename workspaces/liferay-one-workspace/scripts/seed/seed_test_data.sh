@@ -108,10 +108,11 @@ function _wait_for_import {
 
 	# A remote environment's batch engine can take several minutes to drain a
 	# queued import, far longer than a fresh local bundle, so wait generously
-	# (300 attempts x 2s = 10 minutes). A completed or failed task breaks early,
-	# so this never slows down the common, fast case.
+	# (1200 attempts x 0.5s = 10 minutes). A completed or failed task breaks early,
+	# and the fine poll granularity keeps a fast local import from idling up to two
+	# seconds past completion on each of these files.
 
-	for ((attempt = 1; attempt <= 300; attempt++))
+	for ((attempt = 1; attempt <= 1200; attempt++))
 	do
 		local execute_status
 
@@ -135,7 +136,7 @@ function _wait_for_import {
 				;;
 		esac
 
-		sleep 2
+		sleep 0.5
 	done
 
 	echo "Timed out waiting for import of ${file}." >&2

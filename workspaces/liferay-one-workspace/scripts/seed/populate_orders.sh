@@ -19,6 +19,11 @@ source ../_common.sh
 # healthy and the client extensions (including the site initializer) have been
 # deployed, once the accounts, projects, contracts, products, and entitlement
 # definitions the orders reference exist.
+#
+# Orders are placed through a bounded pool of concurrent workers, since each is
+# independent of the others. The entitlements and license keys are then applied
+# in two batch engine imports (entitlements reference their order item, license
+# keys reference their entitlement), so both wait until every order exists.
 
 CHANNEL_EXTERNAL_REFERENCE_CODE="LIFERAY_ONE_CHANNEL"
 
@@ -35,7 +40,7 @@ ENTITLEMENT_GENERATION_OBJECT_ACTION_ID=""
 # The EntitlementGeneration object action fires onAfterAdd for every
 # CommerceOrderItem, posting the order item to the spring boot workload so it can
 # generate the entitlements. This script seeds the exact entitlements directly
-# (see _upsert_entitlements), so the action is redundant here, and because the
+# (see _import_entitlements), so the action is redundant here, and because the
 # add of a system object sends a null payload it also logs a PortalCatapult error
 # for every order item. It is disabled while the orders are placed and restored
 # afterward through the EXIT trap.
@@ -60,22 +65,54 @@ function main {
 		echo "Unable to resolve the EntitlementGeneration object action; placing orders with it enabled." >&2
 	fi
 
-	local file
+	_place_orders "${channel_id}" || return 1
+
+	# A remote token can expire (15 minutes) during a long order phase, so refresh
+	# it before the batch imports. This re-mints a fresh token in OAuth mode and is
+	# a no-op in basic auth or when a token was supplied.
+
+	_acquire_oauth_token
+
+	_import_entitlements || return 1
+	_import_license_keys || return 1
+}
+
+# Places every order file through a bounded pool of concurrent workers. Orders
+# are mutually independent -- each references accounts, projects, contracts, and
+# products that already exist -- so they can be created in parallel. The pool
+# width is capped so a slow remote environment is not overwhelmed; override it
+# with SEED_ORDER_PARALLELISM. A single order failure is counted and the rest
+# continue, and the count is surfaced at the end.
+
+function _place_orders {
+	local channel_id="${1}"
+
+	local max_parallel="${SEED_ORDER_PARALLELISM:-6}"
+
 	local failures=0
+	local running=0
+
+	local file
 
 	for file in "${ORDERS_DIR}"/*.json
 	do
+		_populate_order "${file}" "${channel_id}" &
 
-		# A remote environment's OAuth token expires (15 minutes), which is
-		# shorter than a full slow run takes, so refresh it before each order.
-		# This re-mints a fresh token in OAuth mode and is a no-op in basic auth.
+		running=$((running + 1))
 
-		_acquire_oauth_token
+		if ((running >= max_parallel))
+		then
+			wait -n || failures=$((failures + 1))
 
-		# One rejected order must not abort the rest of the seed, so a failure is
-		# counted and the loop continues. The count is surfaced at the end.
+			running=$((running - 1))
+		fi
+	done
 
-		_populate_order "${file}" "${channel_id}" || failures=$((failures + 1))
+	while ((running > 0))
+	do
+		wait -n || failures=$((failures + 1))
+
+		running=$((running - 1))
 	done
 
 	if ((failures > 0))
@@ -124,102 +161,25 @@ print(json.dumps(order))
 "
 }
 
-function _link_license_keys {
-	local file="${1}"
+# Collects a nested array (entitlements or licenseKeys) from every order file
+# into a single JSON array, ready to POST to a scoped batch endpoint.
 
-	local license_key
+function _collect_items {
+	local key="${1}"
 
-	while IFS= read -r license_key
-	do
-		[[ -z ${license_key} ]] && continue
-
-		local external_reference_code
-
-		external_reference_code=$(echo "${license_key}" | _read_field "externalReferenceCode")
-
-		local status
-
-		status=$(_curl \
-			--data "${license_key}" \
-			--header "Content-Type: application/json" \
-			--output /dev/null \
-			--request PATCH \
-			--write-out "%{http_code}" \
-			"${LIFERAY_URL}/o/c/licensekeys/by-external-reference-code/${external_reference_code}" || true)
-
-		if [[ ${status} == 2* ]]
-		then
-			echo "Linked license key ${external_reference_code} to its entitlement."
-		else
-			echo "Unable to link license key ${external_reference_code} to its entitlement." >&2
-		fi
-	done < <(_read_array "${file}" "licenseKeys")
-}
-
-# The My Projects UI reads order fields that the order placement payload does
-# not accept: the projectName and cloudProjectName custom fields (used to scope
-# the project's Orders and Environment tabs) and the standard purchaseOrderNumber
-# (shown as the purchase number on the product details). They are applied with a
-# follow-up PATCH from the customFields object and purchaseOrderNumber in the
-# order file once the order exists.
-#
-# projectName is a denormalized read cache: the project is linked authoritatively
-# through the projectToCommerceOrder relationship (see _build_order_payload), and
-# projectName is derived here from that same project's name rather than authored
-# in the order file, so the relationship stays the single source of truth. The
-# commerce order read APIs surface expando custom fields but not object
-# relationship foreign keys, so the UI reads projectName off the order directly.
-
-function _set_order_fields {
-	local file="${1}"
-	local order_id="${2}"
-	local project_name="${3}"
-
-	local payload
-
-	payload=$(python3 -c "
+	python3 -c "
+import glob
 import json
 import sys
 
-with open(sys.argv[1]) as file:
-	data = json.load(file)
+items = []
 
-patch = {}
+for path in sorted(glob.glob('${ORDERS_DIR}/*.json')):
+	with open(path) as file:
+		items.extend(json.load(file).get('${key}', []))
 
-custom_fields = dict(data.get('customFields') or {})
-
-project_name = sys.argv[2]
-
-if project_name:
-	custom_fields['projectName'] = project_name
-
-if custom_fields:
-	patch['customFields'] = custom_fields
-
-if data.get('purchaseOrderNumber'):
-	patch['purchaseOrderNumber'] = data['purchaseOrderNumber']
-
-print(json.dumps(patch))
-" "${file}" "${project_name}")
-
-	[[ ${payload} == "{}" ]] && return 0
-
-	local status
-
-	status=$(_curl \
-		--data "${payload}" \
-		--header "Content-Type: application/json" \
-		--output /dev/null \
-		--request PATCH \
-		--write-out "%{http_code}" \
-		"${LIFERAY_URL}/o/headless-commerce-admin-order/v1.0/orders/${order_id}" || true)
-
-	if [[ ${status} == 2* ]]
-	then
-		echo "Set fields for order ${order_id}."
-	else
-		echo "Unable to set fields for order ${order_id}." >&2
-	fi
+json.dump(items, sys.stdout)
+"
 }
 
 function _complete_payment {
@@ -250,25 +210,49 @@ function _complete_payment {
 	fi
 }
 
+# Imports every order's entitlements in one batch. An entitlement references its
+# order item through the commerceOrderItemToEntitlement relationship (by external
+# reference code), so this runs only after every order and its items exist. The
+# import upserts (a full replace, matching the per-entry PUT it replaces).
+
+function _import_entitlements {
+	local items
+
+	items=$(_collect_items "entitlements")
+
+	_run_batch_import "entitlements" "/o/c/entitlements" "UPDATE" "${items}"
+}
+
+# Imports every order's license keys in one batch. A license key entry carries
+# only the link to its entitlement, so it partial-updates (matching the per-entry
+# PATCH it replaces) to preserve the rest of each existing license key, and it
+# runs after the entitlements it references exist.
+
+function _import_license_keys {
+	local items
+
+	items=$(_collect_items "licenseKeys")
+
+	_run_batch_import "license keys" "/o/c/licensekeys" "PARTIAL_UPDATE" "${items}"
+}
+
 function _populate_order {
 	local file="${1}"
 	local channel_id="${2}"
 
 	local order_external_reference_code
-
-	order_external_reference_code=$(_read_field "order.externalReferenceCode" < "${file}")
-
 	local contract_external_reference_code
+	local project_external_reference_code
 
-	contract_external_reference_code=$(_read_field "order.contractExternalReferenceCode" < "${file}")
+	IFS=$'\t' read -r \
+		order_external_reference_code \
+		contract_external_reference_code \
+		project_external_reference_code \
+		< <(_read_order_meta "${file}")
 
 	local contract_id
 
 	contract_id=$(_resolve_contract_id "${contract_external_reference_code}") || return 1
-
-	local project_external_reference_code
-
-	project_external_reference_code=$(_read_field "order.projectExternalReferenceCode" < "${file}")
 
 	local project_id=""
 	local project_name=""
@@ -331,22 +315,7 @@ function _populate_order {
 	order_id=$(echo "${response}" | sed '$d' | _read_field "id")
 
 	_set_order_fields "${file}" "${order_id}" "${project_name}"
-	_upsert_entitlements "${file}"
 	_complete_payment "${file}" "${order_id}"
-	_link_license_keys "${file}"
-}
-
-function _read_array {
-	local file="${1}"
-	local key="${2}"
-
-	python3 -c "
-import json
-
-with open('${file}') as file:
-	for item in json.load(file).get('${key}', []):
-		print(json.dumps(item))
-"
 }
 
 function _read_field {
@@ -365,6 +334,27 @@ try:
 	print(value)
 except Exception:
 	print('')
+"
+}
+
+# Reads the three order fields the placement needs -- the order, contract, and
+# project external reference codes -- in a single parse, emitted as one
+# tab-separated line, so an order costs one Python process here rather than three.
+
+function _read_order_meta {
+	local file="${1}"
+
+	python3 -c "
+import json
+
+with open('${file}') as file:
+	order = json.load(file)['order']
+
+print('\t'.join((
+	order.get('externalReferenceCode', ''),
+	order.get('contractExternalReferenceCode', ''),
+	order.get('projectExternalReferenceCode', ''),
+)))
 "
 }
 
@@ -507,6 +497,46 @@ function _restore_entitlement_generation_object_action {
 	echo "Re-enabled the EntitlementGeneration object action."
 }
 
+# Imports a JSON array of custom object entries through the object's scoped batch
+# endpoint and waits for the import task to finish. The entries upsert by
+# external reference code, and ON_ERROR_CONTINUE keeps a single bad entry from
+# aborting the rest, exactly as the per-entry loops these batches replace did.
+
+function _run_batch_import {
+	local label="${1}"
+	local rest_context_path="${2}"
+	local update_strategy="${3}"
+	local items="${4}"
+
+	local count
+
+	count=$(echo "${items}" | python3 -c "import json, sys; print(len(json.load(sys.stdin)))")
+
+	if [[ ${count} == "0" ]]
+	then
+		return 0
+	fi
+
+	local url="${LIFERAY_URL}${rest_context_path}/batch?createStrategy=UPSERT&importStrategy=ON_ERROR_CONTINUE&updateStrategy=${update_strategy}"
+
+	local import_task_id
+
+	import_task_id=$(echo "${items}" | _curl \
+		--data @- \
+		--header "Content-Type: application/json" \
+		"${url}" \
+		| _read_field "id")
+
+	if [[ -z ${import_task_id} ]]
+	then
+		echo "Unable to start batch import of ${count} ${label}." >&2
+
+		return 1
+	fi
+
+	_wait_for_batch_import "${import_task_id}" "${label}" "${count}"
+}
+
 function _set_object_action_active {
 	local object_action_id="${1}"
 	local active="${2}"
@@ -519,36 +549,116 @@ function _set_object_action_active {
 		"${LIFERAY_URL}/o/object-admin/v1.0/object-actions/${object_action_id}" || true
 }
 
-function _upsert_entitlements {
+# The My Projects UI reads order fields that the order placement payload does
+# not accept: the projectName and cloudProjectName custom fields (used to scope
+# the project's Orders and Environment tabs) and the standard purchaseOrderNumber
+# (shown as the purchase number on the product details). They are applied with a
+# follow-up PATCH from the customFields object and purchaseOrderNumber in the
+# order file once the order exists.
+#
+# projectName is a denormalized read cache: the project is linked authoritatively
+# through the projectToCommerceOrder relationship (see _build_order_payload), and
+# projectName is derived here from that same project's name rather than authored
+# in the order file, so the relationship stays the single source of truth. The
+# commerce order read APIs surface expando custom fields but not object
+# relationship foreign keys, so the UI reads projectName off the order directly.
+
+function _set_order_fields {
 	local file="${1}"
+	local order_id="${2}"
+	local project_name="${3}"
 
-	local entitlement
+	local payload
 
-	while IFS= read -r entitlement
+	payload=$(python3 -c "
+import json
+import sys
+
+with open(sys.argv[1]) as file:
+	data = json.load(file)
+
+patch = {}
+
+custom_fields = dict(data.get('customFields') or {})
+
+project_name = sys.argv[2]
+
+if project_name:
+	custom_fields['projectName'] = project_name
+
+if custom_fields:
+	patch['customFields'] = custom_fields
+
+if data.get('purchaseOrderNumber'):
+	patch['purchaseOrderNumber'] = data['purchaseOrderNumber']
+
+print(json.dumps(patch))
+" "${file}" "${project_name}")
+
+	[[ ${payload} == "{}" ]] && return 0
+
+	local status
+
+	status=$(_curl \
+		--data "${payload}" \
+		--header "Content-Type: application/json" \
+		--output /dev/null \
+		--request PATCH \
+		--write-out "%{http_code}" \
+		"${LIFERAY_URL}/o/headless-commerce-admin-order/v1.0/orders/${order_id}" || true)
+
+	if [[ ${status} == 2* ]]
+	then
+		echo "Set fields for order ${order_id}."
+	else
+		echo "Unable to set fields for order ${order_id}." >&2
+	fi
+}
+
+function _wait_for_batch_import {
+	local import_task_id="${1}"
+	local label="${2}"
+	local count="${3}"
+
+	local url="${LIFERAY_URL}/o/headless-batch-engine/v1.0/import-task/${import_task_id}"
+
+	local attempt
+
+	# A completed or failed task breaks early, so the poll granularity only bounds
+	# how long a fast local import waits past completion (600 attempts x 0.5s =
+	# 5 minutes, generous enough for a slow remote queue).
+
+	for ((attempt = 1; attempt <= 600; attempt++))
 	do
-		[[ -z ${entitlement} ]] && continue
+		local task
 
-		local external_reference_code
-
-		external_reference_code=$(echo "${entitlement}" | _read_field "externalReferenceCode")
+		task=$(_curl "${url}")
 
 		local status
 
-		status=$(_curl \
-			--data "${entitlement}" \
-			--header "Content-Type: application/json" \
-			--output /dev/null \
-			--request PUT \
-			--write-out "%{http_code}" \
-			"${LIFERAY_URL}/o/c/entitlements/by-external-reference-code/${external_reference_code}" || true)
+		status=$(echo "${task}" | _read_field "executeStatus")
 
-		if [[ ${status} == 2* ]]
-		then
-			echo "Created entitlement ${external_reference_code}."
-		else
-			echo "Unable to create entitlement ${external_reference_code}." >&2
-		fi
-	done < <(_read_array "${file}" "entitlements")
+		case "${status}" in
+			COMPLETED)
+				echo "Imported ${count} ${label}."
+
+				return 0
+				;;
+			FAILED)
+				echo "Unable to import ${label}." >&2
+
+				_curl "${url}/failed-items/report" >&2
+
+				return 1
+				;;
+		esac
+
+		sleep 0.5
+	done
+
+	echo "Timed out waiting for import of ${label}." >&2
+
+	return 1
 }
 
 main "${@}"
