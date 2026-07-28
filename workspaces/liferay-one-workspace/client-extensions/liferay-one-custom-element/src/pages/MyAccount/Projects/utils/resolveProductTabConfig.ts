@@ -21,6 +21,13 @@ import type {DownloadProfile} from './resolveDownloadProfile';
 import type {EnvironmentProfile} from './resolveEnvironmentProfile';
 import type {UtilizationProfile} from './resolveUtilizationProfile';
 
+const LICENSE_KEY_ACTIVATION_PROFILES: ActivationProfile[] = [
+	'app-licenses',
+	'dxp-portal',
+	'keys-list',
+	'licenses',
+];
+
 export type ProductTabConfig = {
 	activationProfile?: ActivationProfile;
 	detailsProfile: DetailsProfile;
@@ -60,7 +67,9 @@ export function resolveProductTabConfig({
 			));
 
 	const tabPresent: Record<ProjectTabKey, boolean> = {
-		'activation': activationProfile !== 'none',
+		'activation':
+			activationProfile !== 'none' &&
+			!LICENSE_KEY_ACTIVATION_PROFILES.includes(activationProfile),
 		'details': true,
 		'download': downloadProfile !== 'none',
 		'environment': environmentProfile !== 'none',
@@ -70,7 +79,7 @@ export function resolveProductTabConfig({
 	};
 
 	return {
-		...(activationProfile !== 'none' && {activationProfile}),
+		...(tabPresent.activation && {activationProfile}),
 		detailsProfile,
 		...(downloadProfile !== 'none' && {downloadProfile}),
 		...(environmentProfile !== 'none' && {environmentProfile}),

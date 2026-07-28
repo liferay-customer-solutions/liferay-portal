@@ -67,6 +67,7 @@ export default {
 	'administration-email': 'Administration Email',
 	'administrator': 'Administrator',
 	'administrator-dashboard': 'Administrator Dashboard',
+	'after': 'After',
 	'agreements': 'Agreements',
 	'ai-administration-email': 'AI Administration Email',
 	'ai-hub': 'AI Hub',
@@ -186,6 +187,7 @@ export default {
 	'batch': 'Batch',
 	'becoming-a-liferay-marketplace-publisher':
 		'Becoming a Liferay Marketplace publisher',
+	'before': 'Before',
 	'beta': 'Beta',
 	'beta-product-feedback-form': 'Beta Product Feedback Form',
 	'billing-address': 'Billing Address',
@@ -247,6 +249,7 @@ export default {
 	'cloud-project': 'Cloud Project',
 	'cloud-provisioning': 'Cloud Provisioning',
 	'cloud-upload': 'Cloud Upload',
+	'cluster-size': 'Cluster Size',
 	'columns': 'Columns',
 	'comment': 'Comment',
 	'comments': 'Comments',
@@ -336,6 +339,8 @@ export default {
 	'date-created': 'Date Created',
 	'deactivate': 'Deactivate',
 	'deactivate-license-key': 'Deactivate License Key',
+	'deactivate-license-key-confirmation':
+		'Are you sure you want to deactivate this license key?',
 	'deactivated': 'Deactivated',
 	'decline': 'Decline',
 	'define-company-profile-information-for-your-solution-this-will-inform-users-about-this-versions-updates-on-the-storefront':
@@ -395,6 +400,8 @@ export default {
 	'elasticsearch': 'Elasticsearch',
 	'email': 'Email',
 	'email-address': 'Email Address',
+	'enable-notifications-through-email-when-this-activation-key-is-about-to-expire-30-days-before-15-days-before-and-on-the-day-of-expiration-you-can-unsubscribe-at-any-time':
+		'Enable notifications through email when this Activation Key is about to expire 30 days before, 15 days before, and on the day of expiration. You can unsubscribe at any time.',
 	'end-date': 'End Date',
 	'end-user-license-agreement': 'End User License Agreement',
 	'enter-administration-email-address': 'Enter administration email address',
@@ -447,6 +454,7 @@ export default {
 	'exit-from-providing-app-build': 'Exit from providing app build',
 	'exp-date': 'Exp. Date',
 	'expiration-date': 'Expiration Date',
+	'expiration-notifications': 'Expiration Notifications',
 	'expire': 'Expire',
 	'expire-trial': 'Expire Trial',
 	'expired': 'Expired',
@@ -491,6 +499,7 @@ export default {
 	'fulfillment-date': 'Fulfillment Date',
 	'full-name': 'Full Name',
 	'general-info': 'General Info',
+	'generate': 'Generate',
 	'generate-new': 'Generate New',
 	'get-activation-key': 'Get Activation Key',
 	'get-app': 'Get App',
@@ -609,7 +618,9 @@ export default {
 	'leave-a-comment': 'Leave a Comment',
 	'license': 'License',
 	'license-key-deleted-successfully': 'License key deleted successfully.',
+	'license-key-details': 'License Key Details',
 	'license-key-uploads': 'License Key Uploads',
+	'license-keys': 'License Keys',
 	'license-keys-uploaded-successfully': 'License keys uploaded successfully.',
 	'license-price': 'License Price',
 	'license-prices': 'License Prices',
@@ -682,6 +693,8 @@ export default {
 		'Manage roles and permissions of users within each product.',
 	'manage-the-applications-within-your-project':
 		'Manage the applications within your project',
+	'manage-the-license-keys-within-your-project':
+		'Manage the license keys within your project',
 	'manage-the-members-of-x': 'Manage the members of {0}.',
 	'manage-the-products-within-your-project':
 		'Manage the products within your project',
@@ -747,12 +760,14 @@ export default {
 	'new-app': 'New App',
 	'new-attachment': 'New Attachment',
 	'new-key': 'New Key',
+	'new-license-key': 'New License Key',
 	'new-potential-expiration-date': 'New Potential Expiration Date',
 	'new-projects-using-marketplace-apps':
 		'New Projects Using Marketplace Apps',
 	'new-solution-template': 'New Solution Template',
 	'new-trial': 'New Trial',
 	'new-version': 'New Version',
+	'next': 'Next',
 	'no': 'No',
 	'no-account-members-were-found': 'No account members were found.',
 	'no-accounts-available': 'No accounts available',
@@ -1023,6 +1038,10 @@ export default {
 	'ram': 'RAM',
 	'ram-in-gbs': 'RAM in GBs',
 	'rate-from-1-poor-to-5-excellent': 'Rate from 1 (poor) to 5 (excellent)',
+	'reactivate': 'Reactivate',
+	'reactivate-license-key': 'Reactivate License Key',
+	'reactivate-license-key-confirmation':
+		'Are you sure you want to reactivate this license key?',
 	'reason': 'Reason',
 	'reason-for-change': 'Reason for Change',
 	'recent-orders': 'Recent Orders',
@@ -1038,6 +1057,7 @@ export default {
 	'remove-member': 'Remove Member',
 	'remove-user': 'Remove User',
 	'renew': 'Renew',
+	'renew-license-key': 'Renew License Key',
 	'renewal-will-be-available-3-months-before-your-activation-key-expires':
 		'Renewal will be available 3 months before your activation key expires.',
 	'request-a-marketplace-publisher-account':
@@ -1055,6 +1075,7 @@ export default {
 	'return-to-attachments': 'Return to Attachments',
 	'return-to-marketplace': 'Return to Marketplace',
 	'return-to-ticket': 'Return to Ticket',
+	'review': 'Review',
 	'review-and-accept-the-legal-agreement-between-you-and-liferay-before-proceeding-you-are-about-to-create-a-new-solution-submission':
 		'Review and accept the legal agreement between you and Liferay before proceeding. You are about to create a new solution submission.',
 	'review-and-submit-app': 'Review and Submit App',
@@ -1109,6 +1130,7 @@ export default {
 	'select-contract': 'Select Contract',
 	'select-desired-amount-of-tokens': 'Select Desired Amount of Tokens',
 	'select-licensing-terms': 'Select Licensing Terms',
+	'select-products': 'Select Products',
 	'select-project': 'Select Project',
 	'select-purpose': 'Select Purpose',
 	'select-tags': 'Select Tags',
@@ -1137,6 +1159,7 @@ export default {
 	'sign-in-with-a-different-account': 'Sign in with a Different Account',
 	'site-initializer': 'Site Initializer',
 	'size': 'Size',
+	'sizing': 'Sizing',
 	'sku': 'SKU',
 	'solution': 'Solution',
 	'solution-details': 'Solution Details',
@@ -1167,6 +1190,7 @@ export default {
 	'start-trial': 'Start Trial',
 	'state': 'State',
 	'status': 'Status',
+	'step-x-of-x': 'Step {0} of {1}',
 	'storefront': 'Storefront',
 	'street-address': 'Street Address',
 	'submit': 'Submit',

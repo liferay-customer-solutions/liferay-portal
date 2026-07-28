@@ -5,13 +5,10 @@
 
 import {ReactNode} from 'react';
 
-import ActivationKeysCard from '../ActivationKeysCard/ActivationKeysCard';
-import ActivationKeysTable from '../ActivationKeysTable/ActivationKeysTable';
 import ActivationStatusCard from '../ActivationStatusCard/ActivationStatusCard';
 import CloudNativeActivation from '../CloudNativeActivation/CloudNativeActivation';
 import CommerceActivation from '../CommerceActivation/CommerceActivation';
 import EnterpriseSearchActivation from '../EnterpriseSearchActivation/EnterpriseSearchActivation';
-import LicensesTable from '../LicensesTable/LicensesTable';
 
 import type {DeliveryProduct} from '~/types/product';
 
@@ -26,19 +23,13 @@ const ACTIVATION_CONTENT_BY_PROFILE: Record<
 	ActivationProfile,
 	(product: DeliveryProduct) => ReactNode
 > = {
-	'app-licenses': (product) => (
-		<LicensesTable productName={product.name} variant="app-licenses" />
-	),
+	'app-licenses': () => null,
 	'cloud-native': () => <CloudNativeActivation />,
 	'commerce': () => <CommerceActivation />,
-	'dxp-portal': (product) => (
-		<ActivationKeysTable productName={product.name} />
-	),
+	'dxp-portal': () => null,
 	'enterprise-search': () => <EnterpriseSearchActivation />,
-	'keys-list': (product) => <ActivationKeysCard productName={product.name} />,
-	'licenses': (product) => (
-		<LicensesTable productName={product.name} variant="licenses" />
-	),
+	'keys-list': () => null,
+	'licenses': () => null,
 	'none': () => null,
 	'status': (product) => <ActivationStatusCard productName={product.name} />,
 };

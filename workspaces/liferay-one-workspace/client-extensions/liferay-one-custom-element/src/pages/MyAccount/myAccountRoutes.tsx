@@ -15,6 +15,10 @@ const OrderDetails = lazy(() => import('./Orders/OrderDetails/OrderDetails'));
 const OrderHistory = lazy(() => import('./Orders/OrderHistory/OrderHistory'));
 const Orders = lazy(() => import('./Orders/Orders'));
 const Applications = lazy(() => import('./Projects/Applications/Applications'));
+const LicenseKeys = lazy(() => import('./Projects/LicenseKeys/LicenseKeys'));
+const LicenseKeyDetails = lazy(
+	() => import('./Projects/LicenseKeys/LicenseKeyDetails/LicenseKeyDetails')
+);
 const ProjectItemDetails = lazy(
 	() => import('./Projects/ProjectItemDetails/ProjectItemDetails')
 );
@@ -46,6 +50,15 @@ export const projectDetailRoutes: AppRoute[] = [
 		],
 		nav: {icon: 'applications', label: 'Applications'},
 		path: 'applications',
+	},
+	{
+		children: [
+			{element: <LicenseKeys />, index: true},
+			{element: <LicenseKeyDetails />, path: ':licenseKeyERC'},
+			{element: <Navigate replace to="." />, path: '*'},
+		],
+		nav: {icon: 'key-horizontal', label: 'License Keys'},
+		path: 'license-keys',
 	},
 	{element: <Navigate replace to="products" />, path: '*'},
 ];

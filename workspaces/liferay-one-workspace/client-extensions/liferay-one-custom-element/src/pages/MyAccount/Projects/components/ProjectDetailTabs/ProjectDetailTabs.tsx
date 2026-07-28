@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import ClayIcon from '@clayui/icon';
 import ClayTabs from '@clayui/tabs';
 import {ReactNode} from 'react';
-import {Link, useLocation, useSearchParams} from 'react-router-dom';
+import {useLocation, useSearchParams} from 'react-router-dom';
+import BackLink from '~/components/BackLink/BackLink';
 import i18n, {Word} from '~/i18n';
 
 export type DetailTab = {
@@ -47,14 +47,11 @@ export default function ProjectDetailTabs({
 
 	return (
 		<div className="w-100">
-			<Link
-				className="align-items-center d-inline-flex gap-2 mb-4 text-decoration-none"
-				to={backTo}
-			>
-				<ClayIcon symbol="order-arrow-left" />
-
-				{i18n.translate('back-to-project')}
-			</Link>
+			<div className="mb-4">
+				<BackLink path={backTo}>
+					{i18n.translate('back-to-project')}
+				</BackLink>
+			</div>
 
 			{header}
 

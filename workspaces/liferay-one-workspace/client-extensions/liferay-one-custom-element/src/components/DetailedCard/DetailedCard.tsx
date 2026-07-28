@@ -4,6 +4,7 @@
  */
 
 import ClayIcon from '@clayui/icon';
+import classNames from 'classnames';
 import {ReactNode} from 'react';
 
 import './DetailedCard.css';
@@ -15,8 +16,10 @@ type DetailedCardProps = {
 	children: ReactNode;
 	className?: string;
 	clayIcon?: string;
+	clayIconSpritemap?: string;
 	fitContent?: boolean;
 	headerActions?: ReactNode;
+	iconPosition?: 'left' | 'right';
 	sizing?: 'lg';
 };
 
@@ -27,9 +30,30 @@ export function DetailedCard({
 	children,
 	className,
 	clayIcon,
+	clayIconSpritemap,
 	fitContent,
 	headerActions,
+	iconPosition = 'right',
 }: DetailedCardProps) {
+	const icon = (
+		<div
+			className={classNames(
+				'align-items-center d-flex detailed-card-header-icon-container justify-content-center',
+				iconPosition === 'left' && 'mr-3'
+			)}
+		>
+			{clayIcon ? (
+				<ClayIcon
+					className="detailed-card-header-clay-icon"
+					spritemap={clayIconSpritemap}
+					symbol={clayIcon}
+				/>
+			) : (
+				<img alt={cardIconAltText} src={cardIcon} />
+			)}
+		</div>
+	);
+
 	return (
 		<div
 			className={
@@ -40,6 +64,8 @@ export function DetailedCard({
 		>
 			<div className="detailed-card-container">
 				<div className="align-items-center d-flex detailed-card-header flex-row justify-content-between pr-2">
+					{iconPosition === 'left' && icon}
+
 					<h2>{cardTitle}</h2>
 
 					{headerActions && (
@@ -48,16 +74,7 @@ export function DetailedCard({
 						</div>
 					)}
 
-					<div className="align-items-center d-flex detailed-card-header-icon-container justify-content-center">
-						{clayIcon ? (
-							<ClayIcon
-								className="detailed-card-header-clay-icon"
-								symbol={clayIcon}
-							/>
-						) : (
-							<img alt={cardIconAltText} src={cardIcon} />
-						)}
-					</div>
+					{iconPosition === 'right' && icon}
 				</div>
 
 				{children}

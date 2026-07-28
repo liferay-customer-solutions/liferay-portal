@@ -7,6 +7,7 @@ import ClayIcon from '@clayui/icon';
 import {ReactNode} from 'react';
 import {NavLink} from 'react-router-dom';
 import applicationsIconUrl from '~/assets/icons/applications.svg';
+import keyHorizontalIconUrl from '~/assets/icons/key_horizontal.svg';
 import productsIconUrl from '~/assets/icons/products.svg';
 import unionIconUrl from '~/assets/icons/union.svg';
 
@@ -21,9 +22,10 @@ export type NavItem = {
 const ACTIVE_BG = 'var(--color-action-primary-active-lighten)';
 
 const CUSTOM_ICON_SPRITEMAPS: Record<string, string> = {
-	applications: applicationsIconUrl,
-	products: productsIconUrl,
-	union: unionIconUrl,
+	'applications': applicationsIconUrl,
+	'key-horizontal': keyHorizontalIconUrl,
+	'products': productsIconUrl,
+	'union': unionIconUrl,
 };
 
 const SIDEBAR_BG = 'var(--color-neutral-1)';
