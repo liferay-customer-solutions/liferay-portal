@@ -201,6 +201,24 @@
 				}
 			],
 			"objectFields": [
+				{
+					"DBType": "Long",
+					"businessType": "LongInteger",
+					"externalReferenceCode": "L_ORGANIZATION_ACCOUNT_ENTRY_ID",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Account Entry ID"
+					},
+					"name": "accountEntryId",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Long"
+				}
 			],
 			"objectRelationships": [
 			],
