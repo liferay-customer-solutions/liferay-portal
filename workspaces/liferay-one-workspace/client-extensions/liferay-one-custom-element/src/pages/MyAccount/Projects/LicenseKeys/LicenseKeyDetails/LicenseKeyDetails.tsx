@@ -169,7 +169,7 @@ function LicenseKeyDetailsContent({
 					</div>
 				}
 				icon="key-horizontal"
-				iconPosition="left"
+				iconPosition="right"
 				iconSpritemap={keyHorizontalSpritemap}
 				rows={detailsRows}
 				title="license-key-details"

@@ -39,7 +39,7 @@ export function DetailedCard({
 		<div
 			className={classNames(
 				'align-items-center d-flex detailed-card-header-icon-container justify-content-center',
-				iconPosition === 'left' && 'mr-3'
+				iconPosition === 'left' ? 'mr-3' : 'ml-3'
 			)}
 		>
 			{clayIcon ? (
