@@ -8,6 +8,7 @@
 
 | Extension | Description |
 |---|---|
+| `liferay-one-batch` | Batch import of Object definitions, list types, roles, and other headless resources |
 | `liferay-one-custom-element` | React + TypeScript — all dynamic UI for Marketplace, Support, Admin |
 | `liferay-one-etc-spring-boot` | Spring Boot REST service for provisioning, GCS, Jira, license gen, Salesforce Pub/Sub subscriber |
 | `liferay-one-global-css` | Shared color tokens + global styles |
@@ -19,31 +20,39 @@
 ```
 liferay-one-site-initializer/
 └── site-initializer/
-    ├── object-definitions/
-    ├── list-type-definitions/
-    ├── object-actions/
-    ├── object-validations/
-    ├── workflow-definitions/
-    ├── roles/
-    ├── oauth2-applications/
-    ├── notification-templates/
+    ├── data-definitions/
+    ├── ddm-templates/
+    ├── documents/
     ├── fragments/
     │   └── group/liferay-one/
-    │       ├── marketplace/
-    │       ├── support/
-    │       └── admin/
+    │       ├── collection.json
+    │       ├── fragments/
+    │       └── resources/
     ├── layout-page-templates/
-    ├── journal-articles/
-    ├── ddm-templates/
+    ├── layout-set/
     ├── layouts/
-    │   ├── marketplace/
-    │   ├── support/
-    │   └── admin/
-    ├── documents/
-    ├── navigation-menus.json
-    ├── permissions/
-    └── site.json
+    │   ├── 01_home/
+    │   ├── 02_my-account/
+    │   ├── 03_support/
+    │   ├── 04_marketplace/
+    │   ├── 05_admin/
+    │   ├── 06_product-purchase/
+    │   ├── 06_search/
+    │   └── 07_next-steps/
+    ├── notification-templates/
+    ├── style-books/
+    ├── taxonomy-vocabularies/
+    ├── asset-list-entries.json
+    ├── commerce-channel.json
+    ├── expando-columns.json
+    ├── expando-values.json
+    ├── resource-permissions.json
+    └── site-navigation-menus.json
 ```
+
+Layouts are ordered by numeric prefix, not grouped by page group. Object
+definitions, roles, and OAuth2 applications are imported by the
+`liferay-one-batch` client extension, not the site initializer.
 
 ### Object Names
 

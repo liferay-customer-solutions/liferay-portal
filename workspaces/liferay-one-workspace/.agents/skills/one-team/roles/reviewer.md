@@ -39,7 +39,7 @@ Run the `code-review` skill (the diff-review skill, not a PR review) against the
 
 1. **Completeness** — every acceptance criterion in `plan.md` is implemented and appears in `test-report.md` as tested; nothing implemented that the ticket did not ask for.
 
-1. **Security** — new or changed endpoints carry the right OAuth2 scopes (`.agents/specs/api.md`); object access is authorized (no IDOR through ERC or ID parameters); no secrets, tokens, or personal data in code or logs.
+1. **Security** — new or changed endpoints carry the right OAuth2 scopes (see the `client-extension.yaml` scopes and `.agents/rules/naming.md`); object access is authorized (no IDOR through ERC or ID parameters); no secrets, tokens, or personal data in code or logs.
 
 1. **Regression risk** — changed signatures, contracts, ERCs, or shared components, checked against their consumers; anything the test report's regression matrix missed.
 

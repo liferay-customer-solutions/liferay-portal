@@ -10,8 +10,10 @@ Target workspace: `workspaces/liferay-one-workspace/`
 
 1. [`data-model.md`](./data-model.md) — full entity index, ERC + FriendlyURL registry, field mappings
 
-1. [`api.md`](./api.md) — headless conventions, custom REST contracts, OAuth2 scopes
-
-1. [`ui.md`](./ui.md) — site-initializer page groups, custom elements, navigation, full site map
-
-1. [`integrations/`](./integrations/) — external-system contracts (Salesforce, Jira, GCS, Liferay Cloud, BigQuery, GCF)
+For the API surface, page/route map, and integration contracts, read the code
+directly — the Spring Boot controllers under
+`client-extensions/liferay-one-etc-spring-boot`, the frontend service layer and
+`src/pages/` under `client-extensions/liferay-one-custom-element`, and the
+`.agents/rules/` conventions. Earlier standalone `api.md`, `ui.md`, and
+`integrations/` specs were removed after drifting out of sync with the
+implementation.
