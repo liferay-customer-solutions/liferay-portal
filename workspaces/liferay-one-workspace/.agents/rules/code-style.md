@@ -78,6 +78,24 @@ In FreeMarker templates (`.ftl`, `index.html`), group all `[#assign ... /]` stat
 
 Never string-replace `https://` to `http://` on an image or document URL in shipped fragment markup (`src="${imageURL?replace('https://', 'http://')}"`). This is a local-dev bandaid: on any HTTPS environment (UAT/prod) it forces the asset to `http://`, which the browser blocks as mixed content, and the image silently fails to load. Serve the asset over the current scheme instead of rewriting the protocol.
 
+## Date Input Values Are Timezone-Naive
+
+Never feed a `yyyy-MM-dd` value from an `<input type="date">` straight into `new Date(...).toISOString()`. A bare date string is parsed as **UTC midnight**, so in any UTC-negative timezone (all of the Americas) `.toISOString()` and any later local-time display shift the day backward by one — the saved start/expiration date is off by one from what the user picked.
+
+```ts
+// Wrong — 2026-03-15 selected in the US saves/renders as 2026-03-14
+function toISODate(value?: string): string | undefined {
+	return value ? new Date(value).toISOString() : undefined;
+}
+
+// Correct — pin to local noon so the calendar day survives any offset
+function toISODate(value?: string): string | undefined {
+	return value ? new Date(`${value}T12:00:00`).toISOString() : undefined;
+}
+```
+
+Prefer a shared helper in `~/utils/dateUtils.ts` over re-deriving this per file.
+
 ## Java Code Ordering
 
 In Java classes, declare resource clients before the objects that use them:

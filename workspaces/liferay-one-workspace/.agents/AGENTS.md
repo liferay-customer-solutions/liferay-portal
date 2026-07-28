@@ -39,11 +39,9 @@ Run from `workspaces/liferay-one-workspace/`.
 
 ## Specs
 
-`.agents/specs/` is the source of truth for this workspace. Read these before making any implementation decisions:
+`.agents/specs/` documents the stable shape of this workspace. Read these before making any implementation decisions:
 
 - [`specs/workspace.md`](./specs/workspace.md) — shell layout, client extensions, naming conventions
 - [`specs/data-model.md`](./specs/data-model.md) — full entity index, ERC + FriendlyURL registry, field mappings
-- [`specs/api.md`](./specs/api.md) — headless conventions, custom REST contracts, OAuth2 scopes
-- [`specs/ui.md`](./specs/ui.md) — page groups, custom elements, navigation, full site map
-- [`specs/integrations/`](./specs/integrations/) — external-system contracts (Salesforce, Jira, GCS, Liferay Cloud, BigQuery, GCF)
-- [`specs/legacy/`](./specs/legacy/) — historical context only; consult when migrating or understanding prior implementation decisions, not for new work
+
+For the API surface, page/route map, and integration contracts, read the code directly (Spring Boot controllers in `liferay-one-etc-spring-boot`, the service layer and `src/pages/` in `liferay-one-custom-element`) — these change too often for a parallel spec to stay accurate.

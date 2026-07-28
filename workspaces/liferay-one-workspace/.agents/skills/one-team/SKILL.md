@@ -131,7 +131,6 @@ Teammates ground every decision in existing specs and code, in this order:
 | Legacy customer portal | `../../../liferay-portal-7.0.x/modules/dxp/apps/osb/osb-customer/` | prior customer.liferay.com behavior |
 | Legacy support portal | `../liferay-customer-workspace` | prior support.liferay.com behavior |
 | Legacy marketplace | `../liferay-marketplace-workspace` | prior marketplace behavior |
-| Legacy specs | `.agents/specs/legacy/` | recorded historical context |
 
 Legacy sources answer "how did this behave before" — they are behavioral references, never style references. New code follows current workspace patterns. When a legacy checkout is missing on this machine, note the gap in the plan instead of guessing.
 
