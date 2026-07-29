@@ -124,11 +124,6 @@ export type Properties2 = {
 	version: string;
 };
 
-export type Entitlement = {
-	entitlementDefinitionKey: string;
-	name: string;
-};
-
 export type PostalAddress = {
 	addressCountry: string;
 	addressLocality: string;

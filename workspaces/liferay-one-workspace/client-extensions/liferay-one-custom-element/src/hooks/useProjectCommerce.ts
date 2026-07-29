@@ -7,12 +7,10 @@ import {format} from 'date-fns';
 import {useMemo} from 'react';
 import useSWR from 'swr';
 import {useFetch} from '~/hooks/useFetch';
-import {usePlacedOrders} from '~/hooks/usePlacedOrder';
 import {getProductContactRoleExternalReferenceCodes} from '~/pages/MyAccount/ProjectMembers/projectRoles';
 import {isUnassignedProject} from '~/pages/MyAccount/Projects/projects';
 import HeadlessCommerceDeliveryCatalog from '~/services/headless/HeadlessCommerceDeliveryCatalog';
 import {Liferay} from '~/services/liferay/liferay';
-import {OrderCustomFields} from '~/utils/orderUtils';
 
 import type {APIResponse} from '~/types/api';
 import type {
@@ -56,6 +54,7 @@ type EntitlementNode = {
 	};
 	externalReferenceCode: string;
 	name: string;
+	r_projectToEntitlement_c_projectERC?: string;
 	startDate?: string;
 };
 
@@ -74,13 +73,14 @@ type ContractNode = {
 type ProjectNode = {
 	name?: string;
 	projectToContract?: ContractNode[];
+	projectToEntitlement?: EntitlementNode[];
 };
 
 type ProductEntitlement = {
 	endDate?: string;
 	orderExternalReferenceCode?: string;
 	productExternalReferenceCode?: string;
-	projectName?: string;
+	projectExternalReferenceCode?: string;
 	startDate?: string;
 };
 
@@ -127,9 +127,9 @@ function getEntitlementStatus(endDate?: string): string {
 }
 
 function toProductEntitlements(
-	contractNode?: ContractNode
+	entitlementNodes?: EntitlementNode[]
 ): ProductEntitlement[] {
-	return (contractNode?.contractToEntitlement ?? [])
+	return (entitlementNodes ?? [])
 		.map((entitlement) => ({
 			endDate: entitlement.endDate,
 			orderExternalReferenceCode:
@@ -138,6 +138,8 @@ function toProductEntitlements(
 			productExternalReferenceCode:
 				entitlement.entitlementDefinitionToEntitlement
 					?.commerceProductToEntitlementDefinitionERC,
+			projectExternalReferenceCode:
+				entitlement.r_projectToEntitlement_c_projectERC,
 			startDate: entitlement.startDate,
 		}))
 		.filter((entitlement) => entitlement.productExternalReferenceCode);
@@ -199,7 +201,7 @@ export function useProjectCommerce(
 		{
 			params: {
 				nestedFields:
-					'projectToContract,contractToEntitlement,entitlementDefinitionToEntitlement',
+					'projectToContract,projectToEntitlement,contractToEntitlement,entitlementDefinitionToEntitlement',
 				nestedFieldsDepth: 3,
 			},
 		}
@@ -247,8 +249,8 @@ export function useProjectCommerce(
 	const contract = contractNode ? toProjectContract(contractNode) : undefined;
 
 	const entitlements = usingAccountFallback
-		? []
-		: toProductEntitlements(contractNode);
+		? toProductEntitlements(data?.projectToEntitlement)
+		: toProductEntitlements(contractNode?.contractToEntitlement);
 
 	return {
 		contract,
@@ -259,34 +261,6 @@ export function useProjectCommerce(
 		projectName: data?.name,
 		usingAccountFallback,
 	};
-}
-
-function useOrderProjectNames(enabled = true) {
-	const accountId = Liferay.CommerceContext?.account?.accountId;
-
-	const {data, isLoading: loading} = usePlacedOrders({
-		accountId: accountId ?? -1,
-		page: 1,
-		pageSize: 100,
-		shouldFetch: enabled && Boolean(accountId),
-	});
-
-	const orderProjectNames = useMemo(() => {
-		const map = new Map<string, string>();
-
-		(data?.items ?? []).forEach((order) => {
-			if (order.externalReferenceCode) {
-				map.set(
-					order.externalReferenceCode,
-					order.customFields?.[OrderCustomFields.PROJECT_NAME] ?? ''
-				);
-			}
-		});
-
-		return map;
-	}, [data]);
-
-	return {loading, orderProjectNames};
 }
 
 function useAccountOrderEntitlements(enabled = true) {
@@ -309,25 +283,17 @@ function useAccountOrderEntitlements(enabled = true) {
 		}
 	);
 
-	const {loading: orderProjectNamesLoading, orderProjectNames} =
-		useOrderProjectNames(enabled);
-
 	const entitlements = useMemo(
 		() =>
 			(data?.items ?? [])
 				.filter((contract) => !contract.r_projectToContract_c_projectId)
-				.flatMap((contract) => toProductEntitlements(contract))
-				.map((entitlement) => ({
-					...entitlement,
-					projectName:
-						orderProjectNames.get(
-							entitlement.orderExternalReferenceCode ?? ''
-						) ?? '',
-				})),
-		[data, orderProjectNames]
+				.flatMap((contract) =>
+					toProductEntitlements(contract.contractToEntitlement)
+				),
+		[data]
 	);
 
-	return {entitlements, error, loading: loading || orderProjectNamesLoading};
+	return {entitlements, error, loading};
 }
 
 export function useUnassignedCommerce(enabled = true) {
@@ -335,7 +301,7 @@ export function useUnassignedCommerce(enabled = true) {
 
 	return {
 		entitlements: entitlements.filter(
-			(entitlement) => !entitlement.projectName
+			(entitlement) => !entitlement.projectExternalReferenceCode
 		),
 		error,
 		loading,
@@ -371,15 +337,20 @@ export function useAccountProducts() {
 		const accountProducts = new Map<string, DeliveryProduct>();
 
 		(contractsData?.items ?? []).forEach((contract) => {
-			toProductEntitlements(contract).forEach((entitlement) => {
-				const product = productsByExternalReferenceCode.get(
-					entitlement.productExternalReferenceCode as string
-				);
+			toProductEntitlements(contract.contractToEntitlement).forEach(
+				(entitlement) => {
+					const product = productsByExternalReferenceCode.get(
+						entitlement.productExternalReferenceCode as string
+					);
 
-				if (product) {
-					accountProducts.set(product.externalReferenceCode, product);
+					if (product) {
+						accountProducts.set(
+							product.externalReferenceCode,
+							product
+						);
+					}
 				}
-			});
+			);
 		});
 
 		return [...accountProducts.values()];
@@ -430,21 +401,23 @@ export function useAccountProjectContactRoles() {
 				externalReferenceCodesByProjectId.get(projectId) ??
 				new Set<string>();
 
-			toProductEntitlements(contract).forEach((entitlement) => {
-				const product = productsByExternalReferenceCode.get(
-					entitlement.productExternalReferenceCode as string
-				);
+			toProductEntitlements(contract.contractToEntitlement).forEach(
+				(entitlement) => {
+					const product = productsByExternalReferenceCode.get(
+						entitlement.productExternalReferenceCode as string
+					);
 
-				if (!product) {
-					return;
+					if (!product) {
+						return;
+					}
+
+					getProductContactRoleExternalReferenceCodes(
+						product.productSpecifications ?? []
+					).forEach((externalReferenceCode) =>
+						externalReferenceCodes.add(externalReferenceCode)
+					);
 				}
-
-				getProductContactRoleExternalReferenceCodes(
-					product.productSpecifications ?? []
-				).forEach((externalReferenceCode) =>
-					externalReferenceCodes.add(externalReferenceCode)
-				);
-			});
+			);
 
 			externalReferenceCodesByProjectId.set(
 				projectId,
@@ -480,8 +453,6 @@ export function useProjectProducts(
 		entitlements: projectEntitlements,
 		error: projectError,
 		loading: projectLoading,
-		projectName,
-		usingAccountFallback,
 	} = useProjectCommerce(
 		unassigned ? '' : projectExternalReferenceCode,
 		contractExternalReferenceCode
@@ -491,29 +462,17 @@ export function useProjectProducts(
 		entitlements: accountOrderEntitlements,
 		error: accountError,
 		loading: accountLoading,
-	} = useAccountOrderEntitlements(unassigned || usingAccountFallback);
+	} = useAccountOrderEntitlements(unassigned);
 
 	const entitlements = useMemo(() => {
 		if (unassigned) {
 			return accountOrderEntitlements.filter(
-				(entitlement) => !entitlement.projectName
-			);
-		}
-
-		if (usingAccountFallback) {
-			return accountOrderEntitlements.filter(
-				(entitlement) => entitlement.projectName === projectName
+				(entitlement) => !entitlement.projectExternalReferenceCode
 			);
 		}
 
 		return projectEntitlements;
-	}, [
-		accountOrderEntitlements,
-		projectEntitlements,
-		projectName,
-		unassigned,
-		usingAccountFallback,
-	]);
+	}, [accountOrderEntitlements, projectEntitlements, unassigned]);
 
 	const commerceError = projectError ?? accountError;
 	const commerceLoading = projectLoading || accountLoading;
