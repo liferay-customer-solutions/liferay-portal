@@ -418,6 +418,27 @@
 				}
 			],
 			"name": "Trial Extension Request Status"
+		},
+		{
+			"externalReferenceCode": "LT_USAGE_REPORT_REVIEW_STATUS",
+			"listTypeEntries": [
+				{
+					"externalReferenceCode": "LT_USAGE_REPORT_REVIEW_STATUS_APPROVED",
+					"key": "approved",
+					"name": "Approved"
+				},
+				{
+					"externalReferenceCode": "LT_USAGE_REPORT_REVIEW_STATUS_COMPLETED",
+					"key": "completed",
+					"name": "Completed"
+				},
+				{
+					"externalReferenceCode": "LT_USAGE_REPORT_REVIEW_STATUS_READY_FOR_REVIEW",
+					"key": "readyForReview",
+					"name": "Ready for Review"
+				}
+			],
+			"name": "Usage Report Review Status"
 		}
 	]
 }

@@ -3544,107 +3544,6 @@
 			"enableCategorization": false,
 			"enableComments": false,
 			"enableObjectEntryHistory": false,
-			"externalReferenceCode": "C_LICENSE_TYPES_DESCRIPTION",
-			"friendlyURLSeparator": "l",
-			"label": {
-				"en_US": "License Types Description"
-			},
-			"name": "LicenseTypesDescription",
-			"objectFields": [
-				{
-					"DBType": "String",
-					"businessType": "Text",
-					"externalReferenceCode": "C_LICENSE_TYPES_DESCRIPTION_DEVELOPER",
-					"indexed": true,
-					"indexedAsKeyword": false,
-					"indexedLanguageId": "en_US",
-					"label": {
-						"en_US": "Developer"
-					},
-					"name": "developer",
-					"objectFieldSettings": [
-					],
-					"required": false,
-					"state": false,
-					"system": false,
-					"type": "String"
-				},
-				{
-					"DBType": "String",
-					"businessType": "Text",
-					"externalReferenceCode": "C_LICENSE_TYPES_DESCRIPTION_STANDARD",
-					"indexed": true,
-					"indexedAsKeyword": false,
-					"indexedLanguageId": "en_US",
-					"label": {
-						"en_US": "Standard"
-					},
-					"name": "standard",
-					"objectFieldSettings": [
-					],
-					"required": false,
-					"state": false,
-					"system": false,
-					"type": "String"
-				}
-			],
-			"objectFolderExternalReferenceCode": "C_LIFERAY_ONE_FOLDER",
-			"objectRelationships": [
-			],
-			"objectValidationRules": [
-			],
-			"objectViews": [
-				{
-					"defaultObjectView": true,
-					"name": {
-						"en_US": "Default View"
-					},
-					"objectDefinitionExternalReferenceCode": "C_LICENSE_TYPES_DESCRIPTION",
-					"objectViewColumns": [
-						{
-							"label": {
-								"en_US": "ERC"
-							},
-							"objectFieldName": "externalReferenceCode",
-							"priority": 0
-						},
-						{
-							"label": {
-								"en_US": "Standard"
-							},
-							"objectFieldName": "standard",
-							"priority": 1
-						},
-						{
-							"label": {
-								"en_US": "Developer"
-							},
-							"objectFieldName": "developer",
-							"priority": 2
-						}
-					]
-				}
-			],
-			"panelCategoryKey": "applications_menu.applications.content",
-			"pluralLabel": {
-				"en_US": "License Types Descriptions"
-			},
-			"portlet": true,
-			"restContextPath": "/o/c/licensetypesdescriptions",
-			"scope": "company",
-			"status": {
-				"code": 0,
-				"label": "approved",
-				"label_i18n": "Approved"
-			},
-			"system": false,
-			"titleObjectFieldName": "standard"
-		},
-		{
-			"active": true,
-			"enableCategorization": false,
-			"enableComments": false,
-			"enableObjectEntryHistory": false,
 			"externalReferenceCode": "C_LIFERAY_BUNDLE",
 			"friendlyURLSeparator": "l",
 			"label": {
@@ -6634,14 +6533,14 @@
 				{
 					"DBType": "String",
 					"businessType": "Text",
-					"externalReferenceCode": "C_USAGE_DEFINITION_AGGREGATION",
+					"externalReferenceCode": "C_USAGE_DEFINITION_AGGREGATION_TYPE",
 					"indexed": true,
 					"indexedAsKeyword": true,
 					"indexedLanguageId": "",
 					"label": {
-						"en_US": "Aggregation"
+						"en_US": "Aggregation Type"
 					},
-					"name": "aggregation",
+					"name": "aggregationType",
 					"objectFieldSettings": [
 					],
 					"required": false,
@@ -6956,7 +6855,37 @@
 				"en_US": "Usage Report"
 			},
 			"name": "UsageReport",
+			"objectActions": [
+				{
+					"active": true,
+					"description": "Triggers Spring Boot CX to create the overage commerce order and Salesforce opportunity once a usage report is approved.",
+					"externalReferenceCode": "OA_USAGE_REPORT_APPROVED",
+					"name": "UsageReportApproved",
+					"objectActionExecutorKey": "function#liferay-one-etc-spring-boot-object-action-usage-report-approved",
+					"objectActionTriggerKey": "onAfterUpdate",
+					"parameters": {
+					}
+				}
+			],
 			"objectFields": [
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_USAGE_REPORT_ACCOUNT_EXTERNAL_REFERENCE_CODE",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Account External Reference Code"
+					},
+					"name": "accountExternalReferenceCode",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
 				{
 					"DBType": "Double",
 					"businessType": "Decimal",
@@ -6974,6 +6903,42 @@
 					"state": false,
 					"system": false,
 					"type": "Double"
+				},
+				{
+					"DBType": "Long",
+					"businessType": "LongInteger",
+					"externalReferenceCode": "C_USAGE_REPORT_COMMERCE_ORDER_ID",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Commerce Order ID"
+					},
+					"name": "commerceOrderId",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Long"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_USAGE_REPORT_CONTRACT_EXTERNAL_REFERENCE_CODE",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Contract External Reference Code"
+					},
+					"name": "contractExternalReferenceCode",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
 				},
 				{
 					"DBType": "Date",
@@ -7020,6 +6985,24 @@
 					"type": "Date"
 				},
 				{
+					"DBType": "Double",
+					"businessType": "Decimal",
+					"externalReferenceCode": "C_USAGE_REPORT_ENTITLED_QUANTITY",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Entitled Quantity"
+					},
+					"name": "entitledQuantity",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Double"
+				},
+				{
 					"DBType": "Date",
 					"businessType": "DateTime",
 					"externalReferenceCode": "C_USAGE_REPORT_GENERATED_AT",
@@ -7052,6 +7035,129 @@
 						"en_US": "Generator Class Name"
 					},
 					"name": "generatorClassName",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "Double",
+					"businessType": "Decimal",
+					"externalReferenceCode": "C_USAGE_REPORT_OVERAGE_AMOUNT",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Overage Amount"
+					},
+					"name": "overageAmount",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Double"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_USAGE_REPORT_OVERAGE_CURRENCY",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Overage Currency"
+					},
+					"name": "overageCurrency",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "Double",
+					"businessType": "Decimal",
+					"externalReferenceCode": "C_USAGE_REPORT_OVERAGE_QUANTITY",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Overage Quantity"
+					},
+					"name": "overageQuantity",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Double"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Picklist",
+					"defaultValue": "readyForReview",
+					"externalReferenceCode": "C_USAGE_REPORT_REVIEW_STATUS",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Review Status"
+					},
+					"listTypeDefinitionExternalReferenceCode": "LT_USAGE_REPORT_REVIEW_STATUS",
+					"name": "reviewStatus",
+					"objectFieldSettings": [
+						{
+							"name": "stateFlow",
+							"value": {
+								"objectStates": [
+									{
+										"key": "readyForReview",
+										"objectStateTransitions": [
+											{
+												"key": "approved"
+											},
+											{
+												"key": "completed"
+											}
+										]
+									},
+									{
+										"key": "approved",
+										"objectStateTransitions": [
+											{
+												"key": "completed"
+											}
+										]
+									},
+									{
+										"key": "completed",
+										"objectStateTransitions": [
+										]
+									}
+								]
+							}
+						}
+					],
+					"required": true,
+					"state": true,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_USAGE_REPORT_SKU_EXTERNAL_REFERENCE_CODE",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "SKU External Reference Code"
+					},
+					"name": "skuExternalReferenceCode",
 					"objectFieldSettings": [
 					],
 					"required": false,
@@ -7136,38 +7242,52 @@
 						},
 						{
 							"label": {
-								"en_US": "Target Type"
+								"en_US": "Review Status"
 							},
-							"objectFieldName": "targetType",
+							"objectFieldName": "reviewStatus",
 							"priority": 1
 						},
 						{
 							"label": {
-								"en_US": "Aggregate Quantity"
+								"en_US": "Target Type"
 							},
-							"objectFieldName": "aggregateQuantity",
+							"objectFieldName": "targetType",
 							"priority": 2
+						},
+						{
+							"label": {
+								"en_US": "Overage Quantity"
+							},
+							"objectFieldName": "overageQuantity",
+							"priority": 3
+						},
+						{
+							"label": {
+								"en_US": "Overage Amount"
+							},
+							"objectFieldName": "overageAmount",
+							"priority": 4
 						},
 						{
 							"label": {
 								"en_US": "Date From"
 							},
 							"objectFieldName": "dateFrom",
-							"priority": 3
+							"priority": 5
 						},
 						{
 							"label": {
 								"en_US": "Date To"
 							},
 							"objectFieldName": "dateTo",
-							"priority": 4
+							"priority": 6
 						},
 						{
 							"label": {
 								"en_US": "Generated At"
 							},
 							"objectFieldName": "generatedAt",
-							"priority": 5
+							"priority": 7
 						}
 					]
 				}

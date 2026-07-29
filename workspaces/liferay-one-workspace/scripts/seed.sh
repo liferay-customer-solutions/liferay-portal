@@ -40,6 +40,9 @@ function main {
 
 	echo "Populating orders, order items, and entitlements."
 	./seed/populate_orders.sh
+
+	echo "Populating overage usage reports and orders."
+	./seed/populate_overages.sh
 }
 
 main "${@}"

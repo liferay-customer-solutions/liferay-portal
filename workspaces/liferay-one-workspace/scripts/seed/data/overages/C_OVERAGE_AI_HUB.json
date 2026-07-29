@@ -1,0 +1,43 @@
+{
+	"order": {
+		"accountExternalReferenceCode": "ACCNT-026",
+		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
+		"contractExternalReferenceCode": "C_CONTRACT_AI_HUB",
+		"currencyCode": "USD",
+		"customFields": {
+			"marketplaceOrderType": "overage"
+		},
+		"externalReferenceCode": "C_OVERAGE_ORDER_AI_HUB_2026_07",
+		"orderItems": [
+			{
+				"externalReferenceCode": "C_OVERAGE_ORDER_ITEM_AI_HUB_2026_07",
+				"name": "Liferay AI Hub",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-AI-HUB",
+				"unitPrice": 250
+			}
+		],
+		"orderStatus": 5,
+		"orderTypeExternalReferenceCode": "DXP",
+		"projectExternalReferenceCode": "PRJCT-026"
+	},
+	"purchaseOrderNumber": "PO-OVERAGE-AI-HUB-2026-07",
+	"usageReport": {
+		"accountExternalReferenceCode": "ACCNT-026",
+		"aggregateQuantity": 62500000,
+		"contractExternalReferenceCode": "C_CONTRACT_AI_HUB",
+		"dateFrom": "2026-07-01T00:00:00Z",
+		"dateTo": "2026-07-31T23:59:59Z",
+		"entitledQuantity": 50000000,
+		"externalReferenceCode": "C_USAGE_REPORT_AI_HUB_2026_07",
+		"generatedAt": "2026-08-01T00:00:00Z",
+		"generatorClassName": "com.liferay.one.service.UsageReportService",
+		"overageAmount": 250,
+		"overageCurrency": "USD",
+		"overageQuantity": 12500000,
+		"projectExternalReferenceCode": "PRJCT-026",
+		"reviewStatus": "approved",
+		"skuExternalReferenceCode": "PRDCT-AI-HUB",
+		"targetType": "project"
+	}
+}

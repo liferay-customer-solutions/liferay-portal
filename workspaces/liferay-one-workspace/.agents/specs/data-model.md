@@ -361,7 +361,7 @@ Product-level entitlement template. One CProduct → many EntitlementDefinitions
 | PK `usageDefinitionId` | long | |
 | `externalReferenceCode` | string | e.g. `storage-gb`, `page-views-monthly` |
 | `unit` | string | e.g. GB, page views, vcpu, AI tokens |
-| `aggregation` | string | count / sum |
+| `aggregationType` | string | count / sum. Renamed from `aggregation`: a field literally named `aggregation` collides with Liferay's reserved OData aggregation term and generates an empty DB column name, so the object fails to publish (`CREATE TABLE` syntax error). |
 | `period` | string | Per month, day, hour |
 | `quantity` | double | Base unit quantity |
 | `overageRate` | double | |
@@ -389,18 +389,29 @@ Product-level entitlement template. One CProduct → many EntitlementDefinitions
 
 **system:** `false`
 
-Aggregated periodic report over UsageEvents. The report target is polymorphic — a report can roll up at any level (project, contract, order, environment), expressed via `targetType` + `targetClassName` + `targetPK`, mirroring the `Property` pattern. A `usageDefinitionToUsageReport` and a `contractToUsageReport` relationship provide the primary FK rollups; `contractId` is the join the Nav-owned Invoice references.
+Aggregated periodic report over UsageEvents. The report target is polymorphic — a report can roll up at any level (project, contract, order, environment), expressed via `targetType` + `targetClassName` + `targetPK`, mirroring the `Property` pattern. A `usageDefinitionToUsageReport` and a `projectToUsageReport` relationship provide the primary FK rollups: usage reports are children of the project they belong to (the dashboard is project-scoped, and `projectToContract` still reaches the contract in one hop). `commerceOrderId` is a denormalized plain field — not a relationship FK — holding the standalone overage order this report generated, as an audit trail. It is deliberately a plain field rather than a `usageReportToCommerceOrder` relationship: a navigable edge into the system CommerceOrder object puts a cycle through the object entry OData entity model, which throws `IllegalArgumentException: Name is null` and 500s every `/o/c/...` endpoint that embeds it (projects, contracts).
+
+**Consumption-based billing workflow (E24 / LPD-88265).** On the first of every month `UsageReportService` (in `liferay-one-etc-spring-boot`, `@Scheduled` cron `liferay.one.usage.report.cron`) queries the datawarehouse — mocked for now — for the prior month's metered consumption, compares each metered entitlement's usage against its allotment, and records every overage as a UsageReport in the `readyForReview` state. `reviewStatus` is a picklist **state field** (`Ready for Review` → `Approved` · `Completed`) backed by `LT_USAGE_REPORT_REVIEW_STATUS`; a reviewer works reports in the Liferay Objects admin UI. Setting a report to `Approved` (invoice needed) fires the `UsageReportApproved` `onAfterUpdate` object action → `ObjectActionUsageReportApprovedRestController`, which creates the standalone overage commerce order (order line = `overageQuantity` × the UsageDefinition's `overageRate`), writes its id back to `commerceOrderId`, and pushes it to Salesforce as an opportunity, mirroring the AI Hub token purchasing flow. Setting a report to `Completed` (no invoice needed) is terminal and creates nothing. The controller is idempotent: it no-ops unless `reviewStatus` is `approved` and `commerceOrderId` is unset. The `accountExternalReferenceCode`, `contractExternalReferenceCode`, and `skuExternalReferenceCode` fields are denormalized onto the report so the object action can build the order without traversing relationships over headless.
 
 | Field | Type | Notes |
 |---|---|---|
 | PK `usageReportId` | long | |
 | FK `usageDefinitionId` | long | Via `usageDefinitionToUsageReport` relationship |
-| FK `contractId` | long | Via `contractToUsageReport` relationship |
+| FK `projectId` | long | Via `projectToUsageReport` relationship |
+| `reviewStatus` | string | State picklist: `readyForReview` · `approved` · `completed` (`LT_USAGE_REPORT_REVIEW_STATUS`) |
+| `commerceOrderId` | long | Denormalized audit link to the generated overage order; not a relationship FK |
+| `accountExternalReferenceCode` | string | Denormalized; order-build input for the approved action |
+| `contractExternalReferenceCode` | string | Denormalized; order-build input for the approved action |
+| `skuExternalReferenceCode` | string | Denormalized; the product SKU billed on the overage order |
+| `aggregateQuantity` | double | Consumed quantity in the period |
+| `entitledQuantity` | double | Allotted quantity for the period |
+| `overageQuantity` | double | `aggregateQuantity − entitledQuantity` |
+| `overageAmount` | double | Billed amount: `overageQuantity` × UsageDefinition `overageRate` |
+| `overageCurrency` | string | USD / EUR / JPY, from the UsageDefinition |
 | `targetType` | string | `project` · `contract` · `order` · `environment` |
 | `targetClassName` | string | Denormalized class name of the report target |
 | `targetPK` | long | PK of the report target instance |
 | `generatorClassName` | string | |
-| `aggregateQuantity` | double | |
 | `generatedAt` | datetime | |
 | `dateFrom` | datetime | |
 | `dateTo` | datetime | |

@@ -11,7 +11,7 @@
 	},
 	"items": [
 		{
-			"aggregation": "sum",
+			"aggregationType": "sum",
 			"externalReferenceCode": "ai-tokens-monthly",
 			"overageCurrency": "USD",
 			"overageRate": 0.00002,
@@ -20,7 +20,7 @@
 			"unit": "AI tokens"
 		},
 		{
-			"aggregation": "count",
+			"aggregationType": "count",
 			"externalReferenceCode": "api-requests-monthly",
 			"overageCurrency": "USD",
 			"overageRate": 0.0005,
@@ -29,7 +29,7 @@
 			"unit": "API requests"
 		},
 		{
-			"aggregation": "count",
+			"aggregationType": "count",
 			"externalReferenceCode": "page-views-monthly",
 			"overageCurrency": "USD",
 			"overageRate": 0.001,
@@ -38,7 +38,7 @@
 			"unit": "page views"
 		},
 		{
-			"aggregation": "sum",
+			"aggregationType": "sum",
 			"externalReferenceCode": "storage-gb",
 			"overageCurrency": "USD",
 			"overageRate": 1.0,

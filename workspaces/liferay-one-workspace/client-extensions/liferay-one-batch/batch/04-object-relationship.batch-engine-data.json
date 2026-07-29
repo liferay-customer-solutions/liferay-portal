@@ -244,17 +244,6 @@
 		},
 		{
 			"deletionType": "cascade",
-			"externalReferenceCode": "R_CONTRACT_TO_USAGE_REPORT",
-			"label": {
-				"en_US": "Contract to Usage Report"
-			},
-			"name": "contractToUsageReport",
-			"objectDefinitionExternalReferenceCode1": "C_CONTRACT",
-			"objectDefinitionExternalReferenceCode2": "C_USAGE_REPORT",
-			"type": "oneToMany"
-		},
-		{
-			"deletionType": "cascade",
 			"externalReferenceCode": "R_ENTITLEMENT_DEFINITION_TO_ENTITLEMENT",
 			"label": {
 				"en_US": "Entitlement Definition to Entitlement"
@@ -438,6 +427,17 @@
 			"name": "projectToProjectMembership",
 			"objectDefinitionExternalReferenceCode1": "C_PROJECT",
 			"objectDefinitionExternalReferenceCode2": "C_PROJECT_MEMBERSHIP",
+			"type": "oneToMany"
+		},
+		{
+			"deletionType": "cascade",
+			"externalReferenceCode": "R_PROJECT_TO_USAGE_REPORT",
+			"label": {
+				"en_US": "Project to Usage Report"
+			},
+			"name": "projectToUsageReport",
+			"objectDefinitionExternalReferenceCode1": "C_PROJECT",
+			"objectDefinitionExternalReferenceCode2": "C_USAGE_REPORT",
 			"type": "oneToMany"
 		},
 		{

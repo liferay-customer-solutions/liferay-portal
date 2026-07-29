@@ -23,6 +23,7 @@ source _teardown_common.sh
 
 function main {
 	_delete_commerce_orders
+	_delete_usage_reports
 	_delete_entitlements
 	_delete_license_keys
 	_delete_contracts
@@ -48,6 +49,20 @@ function _delete_commerce_orders {
 		"${LIFERAY_URL}/o/headless-commerce-admin-order/v1.0/orders" \
 		"${LIFERAY_URL}/o/headless-commerce-admin-order/v1.0/orders" \
 		${ercs}
+}
+
+function _delete_usage_reports {
+
+	# Usage reports are the audit trail behind the overage orders deleted above
+	# (each records its order's ID in a plain commerceOrderId field, not a
+	# relationship, so there is no delete constraint between them). They are
+	# children of their project (projectToUsageReport is "cascade"), so deleting
+	# the projects below would remove them anyway; the explicit delete keeps the
+	# teardown leaf-to-root.
+
+	_log "Deleting usage reports..."
+
+	_delete_object_entries "C_USAGE_REPORT"
 }
 
 function _delete_entitlements {
@@ -220,7 +235,7 @@ function _read_order_ercs {
 import glob
 import json
 
-for path in sorted(glob.glob('data/orders/*.json')):
+for path in sorted(glob.glob('data/orders/*.json')) + sorted(glob.glob('data/overages/*.json')):
 	with open(path) as file:
 		external_reference_code = json.load(file).get('order', {}).get('externalReferenceCode')
 
