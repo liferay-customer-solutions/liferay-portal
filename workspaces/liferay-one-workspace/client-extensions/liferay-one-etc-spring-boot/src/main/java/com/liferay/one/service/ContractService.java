@@ -251,12 +251,20 @@ public class ContractService extends OneBaseService {
 						"eq '", orderItem.getId(), "'"));
 
 			for (Entitlement entitlement : entitlements) {
-				if (entitlement.getContractId() > 0) {
-					continue;
+				if (entitlement.getContractId() <= 0) {
+					_entitlementService.updateEntitlementContract(
+						entitlement.getEntitlementId(),
+						existingContract.getId());
 				}
 
-				_entitlementService.updateEntitlementContract(
-					entitlement.getEntitlementId(), existingContract.getId());
+				if (Validator.isNotNull(projectExternalReferenceCode) &&
+					Validator.isNull(
+						entitlement.getProjectExternalReferenceCode())) {
+
+					_entitlementService.updateEntitlementProject(
+						entitlement.getEntitlementId(),
+						projectExternalReferenceCode);
+				}
 			}
 		}
 	}

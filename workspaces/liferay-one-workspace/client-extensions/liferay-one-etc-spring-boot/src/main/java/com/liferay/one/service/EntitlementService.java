@@ -15,6 +15,7 @@ import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -44,7 +45,9 @@ public class EntitlementService extends OneBaseService {
 	public Entitlement addEntitlement(
 			long accountEntryId, long commerceOrderItemId, long contractId,
 			long entitlementDefinitionId, String endDate, String grantType,
-			Double maxQuantity, String name, Double quantity, String startDate)
+			Double maxQuantity, String name,
+			String projectExternalReferenceCode, Double quantity,
+			String startDate)
 		throws Exception {
 
 		Entitlement entitlement = fetchEntitlement(
@@ -87,6 +90,12 @@ public class EntitlementService extends OneBaseService {
 		if (contractId > 0) {
 			entitlementJSONObject.put(
 				"r_contractToEntitlement_c_contractId", contractId);
+		}
+
+		if (Validator.isNotNull(projectExternalReferenceCode)) {
+			entitlementJSONObject.put(
+				"r_projectToEntitlement_c_projectERC",
+				projectExternalReferenceCode);
 		}
 
 		String response = post(
@@ -164,6 +173,8 @@ public class EntitlementService extends OneBaseService {
 
 		long accountEntryId = _getAccountEntryId(order);
 		long contractId = _getContractId(order);
+		String projectExternalReferenceCode = _getProjectExternalReferenceCode(
+			order);
 
 		Instant endDateInstant = OrderItemUtil.getEndDateInstant(orderItem);
 		Instant startDateInstant = OrderItemUtil.getStartDateInstant(orderItem);
@@ -184,12 +195,21 @@ public class EntitlementService extends OneBaseService {
 				entitlementDefinitions) {
 
 			try {
-				addEntitlement(
+				Entitlement entitlement = addEntitlement(
 					accountEntryId, commerceOrderItemId, contractId,
 					entitlementDefinition.getEntitlementDefinitionId(), endDate,
 					entitlementDefinition.getGrantType(), null,
 					entitlementDefinition.getName(),
+					projectExternalReferenceCode,
 					entitlementDefinition.getDefaultQuantity(), startDate);
+
+				if (_log.isInfoEnabled()) {
+					_log.info(
+						StringBundler.concat(
+							"Created entitlement ",
+							entitlement.getEntitlementId(), " for order item ",
+							commerceOrderItemId));
+				}
 			}
 			catch (Exception exception) {
 				_log.error(
@@ -206,46 +226,33 @@ public class EntitlementService extends OneBaseService {
 			long accountEntryId)
 		throws Exception {
 
-		List<Entitlement> entitlements = getActiveEntitlements(accountEntryId);
+		return _getActiveEntitlementDefinitions(
+			getActiveEntitlements(accountEntryId));
+	}
 
-		Set<Long> entitlementDefinitionIds = new LinkedHashSet<>();
+	public List<EntitlementDefinition> getActiveEntitlementDefinitions(
+			String projectExternalReferenceCode)
+		throws Exception {
 
-		for (Entitlement entitlement : entitlements) {
-			long entitlementDefinitionId =
-				entitlement.getEntitlementDefinitionId();
-
-			if (entitlementDefinitionId > 0) {
-				entitlementDefinitionIds.add(entitlementDefinitionId);
-			}
-		}
-
-		if (entitlementDefinitionIds.isEmpty()) {
-			return Collections.emptyList();
-		}
-
-		List<String> statements = TransformUtil.transform(
-			entitlementDefinitionIds,
-			entitlementDefinitionId ->
-				"(id eq '" + entitlementDefinitionId + "')");
-
-		return _entitlementDefinitionService.getEntitlementDefinitions(
-			StringUtil.merge(statements, " or "));
+		return _getActiveEntitlementDefinitions(
+			getActiveEntitlements(projectExternalReferenceCode));
 	}
 
 	public List<Entitlement> getActiveEntitlements(long accountEntryId)
 		throws Exception {
 
-		Instant instant = Instant.now(
-		).truncatedTo(
-			ChronoUnit.MILLIS
-		);
+		return _getActiveEntitlements(
+			"r_accountEntryToEntitlement_accountEntryId eq '" + accountEntryId +
+				"'");
+	}
 
-		return getEntitlements(
-			StringBundler.concat(
-				"(endDate eq null or endDate ge ", instant,
-				") and (r_accountEntryToEntitlement_accountEntryId eq '",
-				accountEntryId, "') and (startDate eq null or startDate le ",
-				instant, ")"));
+	public List<Entitlement> getActiveEntitlements(
+			String projectExternalReferenceCode)
+		throws Exception {
+
+		return _getActiveEntitlements(
+			"r_projectToEntitlement_c_projectERC eq '" +
+				projectExternalReferenceCode + "'");
 	}
 
 	public List<Entitlement> getEntitlements(long commerceOrderItemId)
@@ -266,37 +273,19 @@ public class EntitlementService extends OneBaseService {
 	public boolean hasEntitlement(long accountId, String... entitlementNames)
 		throws Exception {
 
-		if (entitlementNames.length == 0) {
-			return false;
-		}
+		return _hasEntitlement(
+			"r_accountEntryToEntitlement_accountEntryId eq '" + accountId + "'",
+			entitlementNames);
+	}
 
-		StringBundler sb = new StringBundler();
+	public boolean hasEntitlement(
+			String projectExternalReferenceCode, String... entitlementNames)
+		throws Exception {
 
-		sb.append("(r_accountEntryToEntitlement_accountEntryId eq '");
-		sb.append(accountId);
-		sb.append("') and (");
-
-		for (int i = 0; i < entitlementNames.length; i++) {
-			if (i > 0) {
-				sb.append(" or ");
-			}
-
-			sb.append("name eq '");
-			sb.append(entitlementNames[i]);
-			sb.append("'");
-		}
-
-		sb.append(")");
-
-		List<Entitlement> entitlements = getEntitlements(sb.toString());
-
-		for (Entitlement entitlement : entitlements) {
-			if (!entitlement.isExpired()) {
-				return true;
-			}
-		}
-
-		return false;
+		return _hasEntitlement(
+			"r_projectToEntitlement_c_projectERC eq '" +
+				projectExternalReferenceCode + "'",
+			entitlementNames);
 	}
 
 	public void trimEntitlements(long commerceOrderItemId, String endDate)
@@ -339,6 +328,19 @@ public class EntitlementService extends OneBaseService {
 			new JSONObject(
 			).put(
 				"r_contractToEntitlement_c_contractId", contractId
+			));
+	}
+
+	public void updateEntitlementProject(
+			long entitlementId, String projectExternalReferenceCode)
+		throws Exception {
+
+		_patchEntitlement(
+			entitlementId,
+			new JSONObject(
+			).put(
+				"r_projectToEntitlement_c_projectERC",
+				projectExternalReferenceCode
 			));
 	}
 
@@ -404,6 +406,49 @@ public class EntitlementService extends OneBaseService {
 		return order.getAccountId();
 	}
 
+	private List<EntitlementDefinition> _getActiveEntitlementDefinitions(
+			List<Entitlement> entitlements)
+		throws Exception {
+
+		Set<Long> entitlementDefinitionIds = new LinkedHashSet<>();
+
+		for (Entitlement entitlement : entitlements) {
+			long entitlementDefinitionId =
+				entitlement.getEntitlementDefinitionId();
+
+			if (entitlementDefinitionId > 0) {
+				entitlementDefinitionIds.add(entitlementDefinitionId);
+			}
+		}
+
+		if (entitlementDefinitionIds.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		List<String> statements = TransformUtil.transform(
+			entitlementDefinitionIds,
+			entitlementDefinitionId ->
+				"(id eq '" + entitlementDefinitionId + "')");
+
+		return _entitlementDefinitionService.getEntitlementDefinitions(
+			StringUtil.merge(statements, " or "));
+	}
+
+	private List<Entitlement> _getActiveEntitlements(String filterString)
+		throws Exception {
+
+		Instant instant = Instant.now(
+		).truncatedTo(
+			ChronoUnit.MILLIS
+		);
+
+		return getEntitlements(
+			StringBundler.concat(
+				"(endDate eq null or endDate ge ", instant, ") and (",
+				filterString, ") and (startDate eq null or startDate le ",
+				instant, ")"));
+	}
+
 	private long _getContractId(Order order) {
 		if (order == null) {
 			return 0;
@@ -429,6 +474,58 @@ public class EntitlementService extends OneBaseService {
 		}
 
 		return endDateInstant;
+	}
+
+	private String _getProjectExternalReferenceCode(Order order) {
+		if (order == null) {
+			return null;
+		}
+
+		Map<String, Object> customFields =
+			(Map<String, Object>)order.getCustomFields();
+
+		if (customFields == null) {
+			return null;
+		}
+
+		return GetterUtil.getString(customFields.get("salesforceProjectId"));
+	}
+
+	private boolean _hasEntitlement(
+			String filterString, String... entitlementNames)
+		throws Exception {
+
+		if (entitlementNames.length == 0) {
+			return false;
+		}
+
+		StringBundler sb = new StringBundler();
+
+		sb.append("(");
+		sb.append(filterString);
+		sb.append(") and (");
+
+		for (int i = 0; i < entitlementNames.length; i++) {
+			if (i > 0) {
+				sb.append(" or ");
+			}
+
+			sb.append("name eq '");
+			sb.append(entitlementNames[i]);
+			sb.append("'");
+		}
+
+		sb.append(")");
+
+		List<Entitlement> entitlements = getEntitlements(sb.toString());
+
+		for (Entitlement entitlement : entitlements) {
+			if (!entitlement.isExpired()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private void _patchEntitlement(

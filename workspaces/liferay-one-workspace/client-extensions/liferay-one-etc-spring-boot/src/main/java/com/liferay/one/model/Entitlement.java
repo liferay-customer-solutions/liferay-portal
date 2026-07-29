@@ -27,6 +27,8 @@ public class Entitlement {
 		_grantType = jsonObject.optString("grantType");
 		_maxQuantity = jsonObject.optDoubleObject("maxQuantity", null);
 		_name = jsonObject.optString("name");
+		_projectExternalReferenceCode = jsonObject.optString(
+			"r_projectToEntitlement_c_projectERC");
 		_quantity = jsonObject.optDoubleObject("quantity", null);
 
 		String endDate = jsonObject.optString("endDate");
@@ -80,6 +82,10 @@ public class Entitlement {
 		return _name;
 	}
 
+	public String getProjectExternalReferenceCode() {
+		return _projectExternalReferenceCode;
+	}
+
 	public Double getQuantity() {
 		return _quantity;
 	}
@@ -104,6 +110,7 @@ public class Entitlement {
 	private final String _grantType;
 	private final Double _maxQuantity;
 	private final String _name;
+	private final String _projectExternalReferenceCode;
 	private final Double _quantity;
 	private final Instant _startDateInstant;
 

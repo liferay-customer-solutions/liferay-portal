@@ -324,9 +324,9 @@ public class AccountSynchronizer {
 	}
 
 	private Map<String, Object> _getProjectAttributeValues(
-			List<ProjectMembership> projectMemberships,
 			Map<String, Object> accountAttributeValues,
-			Map<String, Role> accountRolesByExternalReferenceCode)
+			Map<String, Role> accountRolesByExternalReferenceCode,
+			Project project, List<ProjectMembership> projectMemberships)
 		throws Exception {
 
 		List<UserAccount> customerUserAccounts = new ArrayList<>();
@@ -354,6 +354,14 @@ public class AccountSynchronizer {
 			_jiraAssetService.fetchReferenceObjectIds(
 				_contactConverter, customerUserAccounts,
 				UserAccount::getExternalReferenceCode)
+		).put(
+			AccountConstants.ATTRIBUTE_NAME_ENTITLEMENTS,
+			_jiraAssetService.getOrCreateReferenceObjectIds(
+				_entitlementConverter,
+				_entitlementService.getActiveEntitlementDefinitions(
+					project.getExternalReferenceCode()),
+				EntitlementDefinition::getDisplayName,
+				_entitlementConverter::toAssetObject)
 		).put(
 			AccountConstants.ATTRIBUTE_NAME_WORKER_CONTACTS,
 			_jiraAssetService.fetchReferenceObjectIds(
@@ -448,8 +456,8 @@ public class AccountSynchronizer {
 		_syncAccountAsset(
 			account,
 			_getProjectAttributeValues(
-				projectMemberships, accountAttributeValues,
-				accountRolesByExternalReferenceCode),
+				accountAttributeValues, accountRolesByExternalReferenceCode,
+				project, projectMemberships),
 			project.getExternalReferenceCode(), project.getName());
 
 		_syncProjectMemberships(project, projectMemberships);
