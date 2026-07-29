@@ -706,6 +706,7 @@
 	},
 	{
 		"dataType": 5,
+		"defaultValue": 0,
 		"modelResource": "com.liferay.commerce.model.CommerceOrderItem",
 		"name": "spendLimit",
 		"properties": {
