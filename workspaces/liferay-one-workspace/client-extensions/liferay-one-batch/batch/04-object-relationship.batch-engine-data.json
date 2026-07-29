@@ -409,6 +409,17 @@
 		},
 		{
 			"deletionType": "disassociate",
+			"externalReferenceCode": "R_PROJECT_TO_ENTITLEMENT",
+			"label": {
+				"en_US": "Project to Entitlement"
+			},
+			"name": "projectToEntitlement",
+			"objectDefinitionExternalReferenceCode1": "C_PROJECT",
+			"objectDefinitionExternalReferenceCode2": "C_ENTITLEMENT",
+			"type": "oneToMany"
+		},
+		{
+			"deletionType": "disassociate",
 			"externalReferenceCode": "R_PROJECT_TO_LICENSE_KEY",
 			"label": {
 				"en_US": "Project to License Key"
