@@ -77,9 +77,7 @@ public class ProvisioningHubService extends BaseService {
 			return;
 		}
 
-		if (Objects.equals(
-				productName, "Liferay Data Platform (Private Beta)")) {
-
+		if (productName.startsWith("Liferay Data Platform")) {
 			_provisionLDP(koroneikiAccount, order);
 		}
 	}
