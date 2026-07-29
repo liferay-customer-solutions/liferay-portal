@@ -82,7 +82,7 @@ public class CommonLicenseKeyService extends OneBaseService {
 	}
 
 	public JSONObject getCommonLicenseKey(
-			String productFamily, String environmentType)
+			String environmentType, String productFamily)
 		throws Exception {
 
 		List<JSONObject> commonLicenseKeys = getAllItems(

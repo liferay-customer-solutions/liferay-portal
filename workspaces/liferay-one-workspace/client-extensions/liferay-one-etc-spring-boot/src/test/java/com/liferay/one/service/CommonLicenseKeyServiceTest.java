@@ -126,7 +126,7 @@ public class CommonLicenseKeyServiceTest {
 	public void testGetCommonLicenseKey() throws Exception {
 		Assertions.assertNull(
 			_commonLicenseKeyService.getCommonLicenseKey(
-				"commerce", "production"));
+				"production", "commerce"));
 
 		JSONObject commonLicenseKeyJSONObject = new JSONObject(
 		).put(
@@ -145,7 +145,7 @@ public class CommonLicenseKeyServiceTest {
 		Assertions.assertSame(
 			commonLicenseKeyJSONObject,
 			_commonLicenseKeyService.getCommonLicenseKey(
-				"commerce", "production"));
+				"production", "commerce"));
 	}
 
 	@Test

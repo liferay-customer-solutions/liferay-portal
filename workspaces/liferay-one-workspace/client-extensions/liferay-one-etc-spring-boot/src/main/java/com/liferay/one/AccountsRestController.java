@@ -139,7 +139,7 @@ public class AccountsRestController extends OneBaseRestController {
 		_licenseKeyPermission.check(account.getId(), ActionKeys.VIEW, jwt);
 
 		JSONObject jsonObject = _commonLicenseKeyService.getCommonLicenseKey(
-			productGroup, productEnvironment);
+			productEnvironment, productGroup);
 
 		if (jsonObject == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);

@@ -158,7 +158,7 @@ public class AccountsRestControllerTest {
 
 		Mockito.when(
 			_commonLicenseKeyService.getCommonLicenseKey(
-				"commerce", "production")
+				"production", "commerce")
 		).thenReturn(
 			_createCommonLicenseKeyJSONObject()
 		);
@@ -199,7 +199,7 @@ public class AccountsRestControllerTest {
 
 		Mockito.when(
 			_commonLicenseKeyService.getCommonLicenseKey(
-				"commerce", "production")
+				"production", "commerce")
 		).thenReturn(
 			_createCommonLicenseKeyJSONObject()
 		);
