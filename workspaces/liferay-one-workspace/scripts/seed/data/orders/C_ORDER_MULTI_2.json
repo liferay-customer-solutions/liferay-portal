@@ -11,6 +11,7 @@
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MULTI_2_DSR",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MULTI_2",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DSR",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-025",
 			"startDate": "2025-07-01T00:00:00Z"
 		},
 		{
@@ -24,6 +25,7 @@
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MULTI_2_DXP",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MULTI_2",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DXP",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-025",
 			"startDate": "2025-07-01T00:00:00Z"
 		}
 	],

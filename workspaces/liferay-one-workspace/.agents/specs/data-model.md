@@ -299,6 +299,7 @@ Materialized grant records derived from CommerceOrderItems via EntitlementDefini
 | FK `entitlementDefinitionId` | long | |
 | FK `orderItemId` | long | Parent CommerceOrderItem that grants this entitlement |
 | FK `contractId` | long | Denormalized for fast lookup |
+| FK `projectId` | long | Project scoping the grant (`projectToEntitlement`), from the order's `salesforceProjectId` custom field; empty for project-less orders |
 | FK `usageDefinitionId` | long | For metered entitlements |
 | `name` | string | e.g. `database-size` · `vcpu` · `maxServers` · `licenseGeneration` |
 | `grantType` | string | `fixed` · `rollover` · `prepaid` · `metered` |

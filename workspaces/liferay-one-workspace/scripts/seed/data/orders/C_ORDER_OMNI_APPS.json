@@ -11,6 +11,7 @@
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_TEST_APP",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_TEST_APP",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-001",
 			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
@@ -24,6 +25,7 @@
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_TEST_CRM_ACCELERATOR",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_TEST_CRM_ACCELERATOR",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-001",
 			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
@@ -37,6 +39,7 @@
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_TEST_PARTNER_PORTAL",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_TEST_PARTNER_PORTAL",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-001",
 			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
@@ -50,6 +53,7 @@
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_TEST_SLACK_CONNECTOR",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_TEST_SLACK_CONNECTOR",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-001",
 			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
@@ -63,6 +67,7 @@
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_TEST_THEME_PACK",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_TEST_THEME_PACK",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-001",
 			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],

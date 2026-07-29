@@ -53,9 +53,10 @@ function _delete_commerce_orders {
 function _delete_entitlements {
 
 	# Entitlements (accountEntryToEntitlement is "prevent") must be gone before
-	# their accounts. Deleting an order item only disassociates its
-	# entitlements (commerceOrderItemToEntitlement is "disassociate"), so the
-	# orders above leave the entitlement entries behind for this step.
+	# their accounts. Deleting an order item or a project only disassociates
+	# its entitlements (commerceOrderItemToEntitlement and projectToEntitlement
+	# are "disassociate"), so the orders above leave the entitlement entries
+	# behind for this step.
 
 	_log "Deleting entitlements..."
 

@@ -15,10 +15,13 @@ source ../_common.sh
 #
 # Each file under data/orders/ describes one order: the order with its nested order
 # items, the entitlements granted by those order items, and the license keys
-# those entitlements unlock. This runs as a bootstrap step after Liferay is
-# healthy and the client extensions (including the site initializer) have been
-# deployed, once the accounts, projects, contracts, products, and entitlement
-# definitions the orders reference exist.
+# those entitlements unlock. Entitlements carry the order's account, contract,
+# and project links directly (see the projectToEntitlement object
+# relationship), matching what the EntitlementGeneration object action produces
+# at runtime. This runs as a bootstrap step after Liferay is healthy and the
+# client extensions (including the site initializer) have been deployed, once
+# the accounts, projects, contracts, products, and entitlement definitions the
+# orders reference exist.
 #
 # Orders are placed through a bounded pool of concurrent workers, since each is
 # independent of the others. The entitlements and license keys are then applied

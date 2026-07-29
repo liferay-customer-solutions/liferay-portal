@@ -11,6 +11,7 @@
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_ANALYTICS_CLOUD",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_ANALYTICS_CLOUD",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ANALYTICS_CLOUD",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-013",
 			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
