@@ -347,6 +347,19 @@ public class ProvisioningHubService extends BaseService {
 			return;
 		}
 
+		String salesforceProjectId = MarketplaceUtil.getEntityId(
+			koroneikiAccount.getExternalLinks(), "salesforce", "project");
+
+		if (Validator.isNull(salesforceProjectId)) {
+			if (_log.isInfoEnabled()) {
+				_log.info(
+					"Missing Salesforce project ID for account " +
+						koroneikiAccount.getKey());
+			}
+
+			return;
+		}
+
 		String securityContactEmailAddress = properties.get(
 			"securityContactEmailAddress");
 
@@ -362,7 +375,7 @@ public class ProvisioningHubService extends BaseService {
 			).put(
 				"corpProjectName", koroneikiAccount.getName()
 			).put(
-				"corpProjectUuid", koroneikiAccount.getKey()
+				"corpProjectUuid", salesforceProjectId
 			).put(
 				"incidentReportEmailAddresses",
 				incidentReportEmailAddressesJSONArray
