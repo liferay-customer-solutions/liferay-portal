@@ -24,6 +24,7 @@ import com.liferay.one.salesforce.model.SalesforceOpportunityLineItem;
 import com.liferay.one.salesforce.model.SalesforceProject;
 import com.liferay.one.util.SupportLanguageUtil;
 import com.liferay.one.util.SupportRegionUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.math.BigDecimal;
@@ -127,6 +128,81 @@ public class CommerceOrderService extends OneBaseService {
 
 			_provisionAiHub(order);
 		}
+	}
+
+	public Order createOverageOrder(
+			String accountExternalReferenceCode, Long contractId,
+			String currencyCode, String externalReferenceCode, Long projectId,
+			String projectName, String skuExternalReferenceCode,
+			BigDecimal unitPrice)
+		throws Exception {
+
+		Long channelId = _fetchChannelId();
+
+		JSONObject orderJSONObject = new JSONObject();
+
+		orderJSONObject.put(
+			"accountExternalReferenceCode", accountExternalReferenceCode
+		).put(
+			"channelId", channelId
+		).put(
+			"currencyCode", currencyCode
+		).put(
+			"externalReferenceCode", externalReferenceCode
+		).put(
+			"orderItems",
+			new JSONArray(
+			).put(
+				new JSONObject(
+				).put(
+					"quantity", 1
+				).put(
+					"skuExternalReferenceCode", skuExternalReferenceCode
+				).put(
+					"unitPrice", unitPrice
+				)
+			)
+		).put(
+			"orderStatus", _OVERAGE_ORDER_STATUS
+		).put(
+			"orderTypeExternalReferenceCode",
+			_OVERAGE_ORDER_TYPE_EXTERNAL_REFERENCE_CODE
+		).put(
+			"r_contractToCommerceOrder_c_contractId", contractId
+		);
+
+		if (projectId != null) {
+			orderJSONObject.put(
+				"r_projectToCommerceOrder_c_projectId", projectId);
+		}
+
+		String response = post(
+			getAuthorization(), orderJSONObject.toString(),
+			UriComponentsBuilder.fromPath(
+				"/o/headless-commerce-admin-order/v1.0/orders"
+			).build(
+			).toUri());
+
+		JSONObject responseJSONObject = new JSONObject(response);
+
+		long orderId = responseJSONObject.getLong("id");
+
+		patchOrderCustomFields(
+			orderId,
+			HashMapBuilder.<String, Object>put(
+				"marketplaceOrderType", "overage"
+			).put(
+				"projectName",
+				() -> {
+					if (Validator.isNotNull(projectName)) {
+						return projectName;
+					}
+
+					return null;
+				}
+			).build());
+
+		return fetchCommerceOrder(orderId);
 	}
 
 	public Order fetchCommerceOrder(long commerceOrderId) throws Exception {
@@ -718,6 +794,11 @@ public class CommerceOrderService extends OneBaseService {
 	private static final int _ACCOUNT_TYPE_PERSON = 1;
 
 	private static final String _LIFERAY_ONE_CHANNEL = "LIFERAY_ONE_CHANNEL";
+
+	private static final int _OVERAGE_ORDER_STATUS = 5;
+
+	private static final String _OVERAGE_ORDER_TYPE_EXTERNAL_REFERENCE_CODE =
+		"DXP";
 
 	private static final int _PAGE_SIZE = 500;
 

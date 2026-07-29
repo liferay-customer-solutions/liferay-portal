@@ -40,6 +40,36 @@ public class ProjectService extends OneBaseService {
 		return _fetchProject(getAuthorization(jwt), externalReferenceCode);
 	}
 
+	public String fetchProjectName(long projectId) throws Exception {
+		String response = null;
+
+		try {
+			response = get(
+				getAuthorization(),
+				UriComponentsBuilder.fromPath(
+					"/o/c/projects/{projectId}"
+				).buildAndExpand(
+					projectId
+				).toUri());
+		}
+		catch (WebClientResponseException webClientResponseException) {
+			int statusCode = webClientResponseException.getStatusCode(
+			).value();
+
+			if (statusCode != HttpStatus.NOT_FOUND.value()) {
+				throw webClientResponseException;
+			}
+		}
+
+		if (Validator.isNull(response)) {
+			return null;
+		}
+
+		JSONObject jsonObject = new JSONObject(response);
+
+		return jsonObject.optString("name", null);
+	}
+
 	public Project getProject(String externalReferenceCode) throws Exception {
 		String response = get(
 			getAuthorization(),

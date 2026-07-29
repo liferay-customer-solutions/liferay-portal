@@ -22,6 +22,8 @@ liferay-one-etc-spring-boot-oahs:
         -   c_subscriptionentry.everything
         -   c_ticketattachment.everything
         -   c_trialextensionrequest.everything
+        -   c_usagedefinition.everything.read
+        -   c_usagereport.everything
     type: oAuthApplicationHeadlessServer
 liferay-one-etc-spring-boot-oaua:
     .serviceAddress: localhost:58081
@@ -79,6 +81,11 @@ liferay-one-etc-spring-boot-object-action-organization-update:
     name: Liferay One Etc Spring Boot Object Action Organization Update
     oAuth2ApplicationExternalReferenceCode: liferay-one-etc-spring-boot-oaua
     resourcePath: /object/action/organization/update
+    type: objectAction
+liferay-one-etc-spring-boot-object-action-usage-report-approved:
+    name: Liferay One Etc Spring Boot Object Action Usage Report Approved
+    oAuth2ApplicationExternalReferenceCode: liferay-one-etc-spring-boot-oaua
+    resourcePath: /object/action/usage/report/approved
     type: objectAction
 liferay-one-etc-spring-boot-object-action-user-create:
     name: Liferay One Etc Spring Boot Object Action User Create
