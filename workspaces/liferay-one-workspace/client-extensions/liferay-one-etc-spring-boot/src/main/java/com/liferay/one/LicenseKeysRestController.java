@@ -19,6 +19,9 @@ import com.liferay.one.service.LicenseKeyService;
 import com.liferay.one.service.SubscriptionEntryService;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,6 +132,56 @@ public class LicenseKeysRestController extends OneBaseRestController {
 		);
 	}
 
+	@GetMapping("/download")
+	public ResponseEntity<String> getLicenseKeysDownload(
+			@AuthenticationPrincipal Jwt jwt,
+			@RequestParam("licenseKeyIds") long[] licenseKeyIds)
+		throws Exception {
+
+		List<LicenseKey> licenseKeys = _getActiveLicenseKeys(
+			jwt, licenseKeyIds);
+
+		if (licenseKeys.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+
+		return ResponseEntity.ok(
+		).contentType(
+			MediaType.APPLICATION_XML
+		).header(
+			HttpHeaders.CONTENT_DISPOSITION,
+			"attachment; filename=\"" +
+				_licenseKeyService.getLicenseKeysDownloadFileName(licenseKeys) +
+					"\""
+		).body(
+			_licenseKeyService.getLicenseKeysDownloadXML(licenseKeys)
+		);
+	}
+
+	@GetMapping("/download-zip")
+	public ResponseEntity<byte[]> getLicenseKeysDownloadZip(
+			@AuthenticationPrincipal Jwt jwt,
+			@RequestParam("licenseKeyIds") long[] licenseKeyIds)
+		throws Exception {
+
+		List<LicenseKey> licenseKeys = _getActiveLicenseKeys(
+			jwt, licenseKeyIds);
+
+		if (licenseKeys.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+
+		return ResponseEntity.ok(
+		).contentType(
+			MediaType.parseMediaType("application/zip")
+		).header(
+			HttpHeaders.CONTENT_DISPOSITION,
+			"attachment; filename=\"activation-keys.zip\""
+		).body(
+			_licenseKeyService.getLicenseKeysDownloadZip(licenseKeys)
+		);
+	}
+
 	@GetMapping("/subscriptions")
 	public boolean getSubscriptions(
 			@AuthenticationPrincipal Jwt jwt,
@@ -224,6 +277,29 @@ public class LicenseKeysRestController extends OneBaseRestController {
 				jwt, ClassNameConstants.LICENSE_KEY, licenseKeyId,
 				userAccount.getId());
 		}
+	}
+
+	private List<LicenseKey> _getActiveLicenseKeys(
+			Jwt jwt, long[] licenseKeyIds)
+		throws Exception {
+
+		List<LicenseKey> licenseKeys = new ArrayList<>();
+
+		for (long licenseKeyId : licenseKeyIds) {
+			LicenseKey licenseKey = _licenseKeyService.getLicenseKey(
+				jwt, licenseKeyId);
+
+			if (!licenseKey.isActive()) {
+				continue;
+			}
+
+			_licenseKeyPermission.check(
+				licenseKey.getAccountEntryId(), ActionKeys.VIEW, jwt);
+
+			licenseKeys.add(licenseKey);
+		}
+
+		return licenseKeys;
 	}
 
 	private static final int _MAX_PAGE_SIZE = 100;

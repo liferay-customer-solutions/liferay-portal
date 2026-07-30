@@ -176,6 +176,60 @@ public class LicenseKeysRestControllerTest {
 	}
 
 	@Test
+	public void testGetLicenseKeysDownloadAggregatesActiveKeys()
+		throws Exception {
+
+		LicenseKeysRestController licenseKeysRestController =
+			_createController();
+
+		LicenseKey licenseKey = Mockito.mock(LicenseKey.class);
+
+		Mockito.when(
+			licenseKey.getAccountEntryId()
+		).thenReturn(
+			_ACCOUNT_ID
+		);
+
+		Mockito.when(
+			licenseKey.isActive()
+		).thenReturn(
+			true
+		);
+
+		Mockito.when(
+			_licenseKeyService.getLicenseKey(Mockito.any(), Mockito.anyLong())
+		).thenReturn(
+			licenseKey
+		);
+
+		Mockito.when(
+			_licenseKeyService.getLicenseKeysDownloadFileName(Mockito.anyList())
+		).thenReturn(
+			"activation-keys.xml"
+		);
+
+		Mockito.when(
+			_licenseKeyService.getLicenseKeysDownloadXML(Mockito.anyList())
+		).thenReturn(
+			"<licenses/>"
+		);
+
+		ResponseEntity<String> responseEntity =
+			licenseKeysRestController.getLicenseKeysDownload(
+				null, new long[] {1L, 2L});
+
+		Assertions.assertEquals("<licenses/>", responseEntity.getBody());
+
+		HttpHeaders httpHeaders = responseEntity.getHeaders();
+
+		Assertions.assertEquals(
+			"attachment; filename=\"activation-keys.xml\"",
+			httpHeaders.getFirst(HttpHeaders.CONTENT_DISPOSITION));
+		Assertions.assertEquals(
+			MediaType.APPLICATION_XML, httpHeaders.getContentType());
+	}
+
+	@Test
 	public void testGetLicenseKeysDownloadThrowsForbiddenWhenAccountNotViewable()
 		throws Exception {
 
@@ -250,6 +304,52 @@ public class LicenseKeysRestControllerTest {
 
 		Assertions.assertEquals(
 			HttpStatus.NOT_FOUND, responseStatusException.getStatusCode());
+	}
+
+	@Test
+	public void testGetLicenseKeysDownloadZip() throws Exception {
+		LicenseKeysRestController licenseKeysRestController =
+			_createController();
+
+		LicenseKey licenseKey = Mockito.mock(LicenseKey.class);
+
+		Mockito.when(
+			licenseKey.getAccountEntryId()
+		).thenReturn(
+			_ACCOUNT_ID
+		);
+
+		Mockito.when(
+			licenseKey.isActive()
+		).thenReturn(
+			true
+		);
+
+		Mockito.when(
+			_licenseKeyService.getLicenseKey(Mockito.any(), Mockito.anyLong())
+		).thenReturn(
+			licenseKey
+		);
+
+		byte[] zip = {1, 2, 3};
+
+		Mockito.when(
+			_licenseKeyService.getLicenseKeysDownloadZip(Mockito.anyList())
+		).thenReturn(
+			zip
+		);
+
+		ResponseEntity<byte[]> responseEntity =
+			licenseKeysRestController.getLicenseKeysDownloadZip(
+				null, new long[] {1L});
+
+		Assertions.assertSame(zip, responseEntity.getBody());
+
+		HttpHeaders httpHeaders = responseEntity.getHeaders();
+
+		Assertions.assertEquals(
+			"attachment; filename=\"activation-keys.zip\"",
+			httpHeaders.getFirst(HttpHeaders.CONTENT_DISPOSITION));
 	}
 
 	@Test

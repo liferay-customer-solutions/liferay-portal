@@ -19,6 +19,10 @@ import com.liferay.portal.ee.license.shared.LicenseConstants;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.io.ByteArrayOutputStream;
+
+import java.nio.charset.StandardCharsets;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -28,8 +32,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -417,6 +426,70 @@ public class LicenseKeyService extends OneBaseService {
 				"(active eq ", active, ") and (productName eq '",
 				_escapeODataString(productName), "') and (serverId eq '",
 				_escapeODataString(serverId), "')"));
+	}
+
+	public String getLicenseKeysDownloadFileName(List<LicenseKey> licenseKeys) {
+		Set<String> licenseKeyNames = new LinkedHashSet<>();
+		Set<String> productNames = new LinkedHashSet<>();
+
+		for (LicenseKey licenseKey : licenseKeys) {
+			licenseKeyNames.add(licenseKey.getName());
+			productNames.add(licenseKey.getProductName());
+		}
+
+		return _licenseKeyExporter.getFileName(
+			productNames.toArray(new String[0]),
+			licenseKeyNames.toArray(new String[0]));
+	}
+
+	public String getLicenseKeysDownloadXML(List<LicenseKey> licenseKeys)
+		throws Exception {
+
+		String[] xmls = new String[licenseKeys.size()];
+
+		for (int i = 0; i < licenseKeys.size(); i++) {
+			xmls[i] = getLicenseKeyDownloadXML(licenseKeys.get(i));
+		}
+
+		return _licenseKeyExporter.aggregateXMLs(xmls);
+	}
+
+	public byte[] getLicenseKeysDownloadZip(List<LicenseKey> licenseKeys)
+		throws Exception {
+
+		ByteArrayOutputStream byteArrayOutputStream =
+			new ByteArrayOutputStream();
+
+		Set<String> fileNames = new HashSet<>();
+
+		try (ZipOutputStream zipOutputStream = new ZipOutputStream(
+				byteArrayOutputStream)) {
+
+			for (LicenseKey licenseKey : licenseKeys) {
+				String fileName = getLicenseKeyDownloadFileName(licenseKey);
+
+				if (!fileNames.add(fileName)) {
+					fileName = StringBundler.concat(
+						licenseKey.getLicenseKeyId(), "-", fileName);
+
+					fileNames.add(fileName);
+				}
+
+				zipOutputStream.putNextEntry(new ZipEntry(fileName));
+
+				byte[] bytes = getLicenseKeyDownloadXML(
+					licenseKey
+				).getBytes(
+					StandardCharsets.UTF_8
+				);
+
+				zipOutputStream.write(bytes, 0, bytes.length);
+
+				zipOutputStream.closeEntry();
+			}
+		}
+
+		return byteArrayOutputStream.toByteArray();
 	}
 
 	public JSONObject getLicenseKeysPage(int page, int pageSize)
