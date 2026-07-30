@@ -14,14 +14,18 @@ import type {DeliveryProduct} from '~/types/product';
 
 import type {ActivationProfile} from '../../utils/resolveActivationProfile';
 
-type ActivationTabProps = {
+type ActivationContent = {
+	contractId?: number;
 	product: DeliveryProduct;
+};
+
+type ActivationTabProps = ActivationContent & {
 	profile?: ActivationProfile;
 };
 
 const ACTIVATION_CONTENT_BY_PROFILE: Record<
 	ActivationProfile,
-	(product: DeliveryProduct) => ReactNode
+	(content: ActivationContent) => ReactNode
 > = {
 	'app-licenses': () => null,
 	'cloud-native': () => <CloudNativeActivation />,
@@ -31,9 +35,21 @@ const ACTIVATION_CONTENT_BY_PROFILE: Record<
 	'keys-list': () => null,
 	'licenses': () => null,
 	'none': () => null,
-	'status': (product) => <ActivationStatusCard productName={product.name} />,
+	'status': ({contractId, product}) => (
+		<ActivationStatusCard
+			contractId={contractId}
+			productName={product.name}
+		/>
+	),
 };
 
-export default function ActivationTab({product, profile}: ActivationTabProps) {
-	return ACTIVATION_CONTENT_BY_PROFILE[profile ?? 'none'](product);
+export default function ActivationTab({
+	contractId,
+	product,
+	profile,
+}: ActivationTabProps) {
+	return ACTIVATION_CONTENT_BY_PROFILE[profile ?? 'none']({
+		contractId,
+		product,
+	});
 }

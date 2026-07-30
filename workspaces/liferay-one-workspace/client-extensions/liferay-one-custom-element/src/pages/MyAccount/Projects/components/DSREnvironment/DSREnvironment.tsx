@@ -53,7 +53,12 @@ export default function DSREnvironment({environment}: DSREnvironmentProps) {
 				</div>
 			</DetailedCard>
 
-			<DetailsCard icon="document" rows={rows} title="workspace-info" />
+			<DetailsCard
+				compact
+				icon="document"
+				rows={rows}
+				title="workspace-info"
+			/>
 		</>
 	);
 }

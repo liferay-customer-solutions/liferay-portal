@@ -5,6 +5,7 @@
 
 import {useProjectEnvironments} from '~/hooks/useProjectEnvironments';
 import {buildEnvironmentSections} from '~/pages/MyAccount/Projects/utils/buildEnvironmentSections';
+import {filterEnvironmentsByContract} from '~/pages/MyAccount/Projects/utils/filterEnvironmentsByContract';
 
 import AIHubEnvironment from '../AIHubEnvironment/AIHubEnvironment';
 import DSREnvironment from '../DSREnvironment/DSREnvironment';
@@ -15,6 +16,7 @@ import type {ProductEnvironmentInfo} from '~/hooks/useProjectOrders';
 import type {EnvironmentProfile} from '~/pages/MyAccount/Projects/utils/resolveEnvironmentProfile';
 
 type EnvironmentTabProps = {
+	contractId?: number;
 	environment: ProductEnvironmentInfo;
 	profile?: EnvironmentProfile;
 };
@@ -30,6 +32,7 @@ const ENVIRONMENT_TYPE_BY_PROFILE: Record<EnvironmentProfile, string> = {
 };
 
 export default function EnvironmentTab({
+	contractId,
 	environment,
 	profile,
 }: EnvironmentTabProps) {
@@ -37,8 +40,9 @@ export default function EnvironmentTab({
 
 	const expectedType = profile ? ENVIRONMENT_TYPE_BY_PROFILE[profile] : '';
 
-	const matchingEnvironments = environments.filter(
-		(item) => item.type === expectedType
+	const matchingEnvironments = filterEnvironmentsByContract(
+		contractId,
+		environments.filter((item) => item.type === expectedType)
 	);
 
 	const [environmentEntry] = matchingEnvironments;
@@ -58,7 +62,7 @@ export default function EnvironmentTab({
 	return (
 		<SectionedDetailsCard
 			icon="cloud"
-			sections={buildEnvironmentSections(matchingEnvironments, profile)}
+			sections={buildEnvironmentSections([environmentEntry], profile)}
 			title="workspace-info"
 		/>
 	);

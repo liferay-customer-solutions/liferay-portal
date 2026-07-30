@@ -7,6 +7,7 @@ import ClayIcon from '@clayui/icon';
 import ClayLabel from '@clayui/label';
 import {useProjectEnvironments} from '~/hooks/useProjectEnvironments';
 import {Word, translate} from '~/i18n';
+import {filterEnvironmentsByContract} from '~/pages/MyAccount/Projects/utils/filterEnvironmentsByContract';
 
 import './ActivationStatusCard.css';
 
@@ -51,10 +52,12 @@ const STATUS_LABEL: Record<
 };
 
 type ActivationStatusCardProps = {
+	contractId?: number;
 	productName: string;
 };
 
 export default function ActivationStatusCard({
+	contractId,
 	productName,
 }: ActivationStatusCardProps) {
 	const {environments} = useProjectEnvironments();
@@ -63,9 +66,10 @@ export default function ActivationStatusCard({
 		CONFIG_BY_PRODUCT_NAME[productName] ??
 		CONFIG_BY_PRODUCT_NAME['Analytics Cloud'];
 
-	const environment =
-		environments.find((current) => current.type === config.type) ??
-		environments[0];
+	const [environment] = filterEnvironmentsByContract(
+		contractId,
+		environments.filter((current) => current.type === config.type)
+	);
 
 	const status = STATUS_LABEL[environment?.status ?? ''] ?? {
 		displayType: 'secondary' as const,

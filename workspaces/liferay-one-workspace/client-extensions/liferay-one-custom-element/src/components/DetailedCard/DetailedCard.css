@@ -4,6 +4,21 @@
 	padding: 2.125rem var(--spacer-4);
 }
 
+.detailed-card-compact {
+	font-size: var(--h6-font-size, 14px);
+
+	& .detailed-card-container {
+		box-sizing: border-box;
+		max-width: 100%;
+		width: 472px;
+	}
+
+	& .detailed-card-header h2 {
+		font-size: 18px;
+		margin-bottom: 0;
+	}
+}
+
 .detailed-card-fit {
 	width: fit-content;
 }

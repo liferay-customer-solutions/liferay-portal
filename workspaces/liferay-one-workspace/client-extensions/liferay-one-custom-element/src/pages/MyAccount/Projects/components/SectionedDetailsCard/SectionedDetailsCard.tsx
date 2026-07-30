@@ -12,7 +12,6 @@ import './SectionedDetailsCard.css';
 
 export type DetailsSection = {
 	rows: DetailsRow[];
-	title?: string;
 };
 
 type SectionedDetailsCardProps = {
@@ -30,7 +29,7 @@ export default function SectionedDetailsCard({
 		<DetailedCard
 			cardIconAltText={i18n.translate(title)}
 			cardTitle={i18n.translate(title)}
-			className="mt-3"
+			className="detailed-card-compact mt-3"
 			clayIcon={icon}
 			fitContent
 		>
@@ -38,14 +37,8 @@ export default function SectionedDetailsCard({
 				{sections.map((section, index) => (
 					<div
 						className="sectioned-details-card-section"
-						key={section.title ?? String(index)}
+						key={String(index)}
 					>
-						{section.title && (
-							<span className="sectioned-details-card-section-title">
-								{section.title}
-							</span>
-						)}
-
 						{section.rows.map((row) => (
 							<div
 								className="sectioned-details-card-row"

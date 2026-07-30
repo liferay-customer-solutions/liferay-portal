@@ -15,6 +15,7 @@ export type ProjectEnvironment = {
 	adminLastName: string;
 	aiHubURL: string;
 	allowedEmailDomains: string;
+	contractId?: number;
 	currentEntitlementHash: string;
 	domains: string;
 	externalReferenceCode: string;
@@ -49,6 +50,7 @@ type EnvironmentNode = {
 	id: number;
 	ownerEmailAddress?: string;
 	projectId?: string;
+	r_contractToEnvironment_c_contractId?: number;
 	region?: string;
 	timeZone?: string;
 	tokenMonthlyAllowance?: string;
@@ -82,6 +84,7 @@ export function useProjectEnvironments() {
 			adminLastName: node.adminLastName ?? '',
 			aiHubURL: node.aiHubURL ?? '',
 			allowedEmailDomains: node.allowedEmailDomains ?? '',
+			contractId: node.r_contractToEnvironment_c_contractId,
 			currentEntitlementHash: node.currentEntitlementHash ?? '',
 			domains: node.domains ?? '',
 			externalReferenceCode: node.externalReferenceCode,

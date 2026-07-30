@@ -21,6 +21,7 @@ import type {
 export type ProjectContract = {
 	endDate?: string;
 	externalReferenceCode: string;
+	id?: number;
 	name: string;
 	spendLimit?: number;
 	startDate?: string;
@@ -64,6 +65,7 @@ type ContractNode = {
 	customStatus?: string;
 	endDate?: string;
 	externalReferenceCode: string;
+	id?: number;
 	name: string;
 	r_projectToContract_c_projectId?: number;
 	spendLimit?: number;
@@ -88,6 +90,7 @@ function toProjectContract(contractNode: ContractNode): ProjectContract {
 	return {
 		endDate: contractNode.endDate,
 		externalReferenceCode: contractNode.externalReferenceCode,
+		id: contractNode.id,
 		name: contractNode.name,
 		spendLimit: contractNode.spendLimit,
 		startDate: contractNode.startDate,

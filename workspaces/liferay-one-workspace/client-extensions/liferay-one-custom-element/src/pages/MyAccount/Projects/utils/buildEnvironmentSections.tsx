@@ -116,7 +116,6 @@ export function buildEnvironmentSections(
 				value: field.value(environment),
 			}))
 			.filter((row) => row.value),
-		title: environment.externalReferenceCode,
 	}));
 }
 

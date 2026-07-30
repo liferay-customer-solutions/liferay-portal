@@ -104,7 +104,11 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 
 	const tabContent: Record<ProjectTabKey, () => ReactNode> = {
 		'activation': () => (
-			<ActivationTab product={product} profile={activationProfile} />
+			<ActivationTab
+				contractId={contract?.id}
+				product={product}
+				profile={activationProfile}
+			/>
 		),
 		'details': () => (
 			<DetailsTab
@@ -118,6 +122,7 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 		),
 		'environment': () => (
 			<EnvironmentTab
+				contractId={contract?.id}
 				environment={orderInfo.environment}
 				profile={environmentProfile}
 			/>
