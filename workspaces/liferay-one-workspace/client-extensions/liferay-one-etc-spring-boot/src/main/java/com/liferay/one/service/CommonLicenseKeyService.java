@@ -12,6 +12,10 @@ import com.liferay.one.license.CommonLicenseKeyParser;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 
+import java.time.Instant;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -82,21 +86,27 @@ public class CommonLicenseKeyService extends OneBaseService {
 	}
 
 	public JSONObject getCommonLicenseKey(
-			String environmentType, String productFamily)
+			Instant endDate, String environmentType, String productFamily,
+			Instant startDate)
 		throws Exception {
 
 		List<JSONObject> commonLicenseKeys = getAllItems(
 			"/o/c/commonlicensekeys",
 			StringBundler.concat(
-				"(environmentType eq '", environmentType,
-				"') and (productFamily eq '", productFamily, "')"),
+				"(endDate ge ", endDate, ") and (environmentType eq '",
+				environmentType, "') and (productFamily eq '", productFamily,
+				"') and (productVersion eq null) and (startDate le ", startDate,
+				")"),
 			jsonObject -> jsonObject);
 
 		if (commonLicenseKeys.isEmpty()) {
 			return null;
 		}
 
-		return commonLicenseKeys.get(0);
+		return Collections.min(
+			commonLicenseKeys,
+			Comparator.comparing(
+				commonLicenseKey -> commonLicenseKey.optString("endDate")));
 	}
 
 	public boolean hasCommonLicenseKey(String fileName) throws Exception {

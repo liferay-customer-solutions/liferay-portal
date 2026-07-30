@@ -156,7 +156,7 @@ public class AccountsRestController extends OneBaseRestController {
 		}
 
 		JSONObject jsonObject = _commonLicenseKeyService.getCommonLicenseKey(
-			productEnvironment, productGroup);
+			endDateInstant, productEnvironment, productGroup, startDateInstant);
 
 		if (jsonObject == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);

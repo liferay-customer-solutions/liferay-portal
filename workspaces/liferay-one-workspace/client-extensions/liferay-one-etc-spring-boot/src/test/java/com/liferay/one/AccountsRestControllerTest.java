@@ -167,7 +167,8 @@ public class AccountsRestControllerTest {
 
 		Mockito.when(
 			_commonLicenseKeyService.getCommonLicenseKey(
-				"production", "commerce")
+				Instant.parse("2027-01-01T00:00:00Z"), "production", "commerce",
+				Instant.parse("2026-01-01T00:00:00Z"))
 		).thenReturn(
 			_createCommonLicenseKeyJSONObject()
 		);

@@ -126,7 +126,8 @@ public class CommonLicenseKeyServiceTest {
 	public void testGetCommonLicenseKey() throws Exception {
 		Assertions.assertNull(
 			_commonLicenseKeyService.getCommonLicenseKey(
-				"production", "commerce"));
+				Instant.parse("2027-01-01T00:00:00Z"), "production", "commerce",
+				Instant.parse("2026-01-01T00:00:00Z")));
 
 		JSONObject commonLicenseKeyJSONObject = new JSONObject(
 		).put(
@@ -145,7 +146,8 @@ public class CommonLicenseKeyServiceTest {
 		Assertions.assertSame(
 			commonLicenseKeyJSONObject,
 			_commonLicenseKeyService.getCommonLicenseKey(
-				"production", "commerce"));
+				Instant.parse("2027-01-01T00:00:00Z"), "production", "commerce",
+				Instant.parse("2026-01-01T00:00:00Z")));
 	}
 
 	@Test
