@@ -289,16 +289,33 @@ public class EntitlementService extends OneBaseService {
 	}
 
 	public boolean hasEntitlementCoveringDateRange(
-			long accountEntryId, Instant startDateInstant,
-			Instant endDateInstant)
+			long accountEntryId,
+			String entitlementDefinitionExternalReferenceCode,
+			Instant startDateInstant, Instant endDateInstant)
 		throws Exception {
+
+		List<EntitlementDefinition> entitlementDefinitions =
+			_entitlementDefinitionService.getEntitlementDefinitions(
+				"externalReferenceCode eq '" +
+					entitlementDefinitionExternalReferenceCode + "'");
+
+		if (entitlementDefinitions.isEmpty()) {
+			return false;
+		}
+
+		EntitlementDefinition entitlementDefinition =
+			entitlementDefinitions.get(0);
 
 		List<Entitlement> entitlements = getEntitlements(
 			StringBundler.concat(
-				"(r_accountEntryToEntitlement_accountEntryId eq '",
-				accountEntryId, "') and (startDate eq null or startDate le ",
-				startDateInstant, ") and (endDate eq null or endDate ge ",
-				endDateInstant, ")"));
+				"(endDate eq null or endDate ge ", endDateInstant,
+				") and (r_accountEntryToEntitlement_accountEntryId eq '",
+				accountEntryId,
+				"') and (r_entitlementDefinitionToEntitlement_c_",
+				"entitlementDefinitionId eq '",
+				entitlementDefinition.getEntitlementDefinitionId(),
+				"') and (startDate eq null or startDate le ", startDateInstant,
+				")"));
 
 		return !entitlements.isEmpty();
 	}

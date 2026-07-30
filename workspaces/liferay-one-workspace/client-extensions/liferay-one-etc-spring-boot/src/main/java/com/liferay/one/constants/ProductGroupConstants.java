@@ -16,6 +16,8 @@ public class ProductGroupConstants {
 
 	public static final String DXP = "dxp";
 
+	public static final String ENTERPRISE_SEARCH = "enterpriseSearch";
+
 	public static final String PORTAL = "portal";
 
 	public static String getProductGroup(String productName) {

@@ -8,6 +8,8 @@ package com.liferay.one;
 import com.liferay.headless.admin.user.client.dto.v1_0.Account;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
 import com.liferay.one.constants.EntitlementConstants;
+import com.liferay.one.constants.EntitlementDefinitionConstants;
+import com.liferay.one.constants.ProductGroupConstants;
 import com.liferay.one.jira.service.AccountAssetService;
 import com.liferay.one.jira.synchronizer.AccountSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountRoleSynchronizer;
@@ -26,6 +28,7 @@ import com.liferay.one.util.UserAccountUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.time.Instant;
@@ -53,6 +56,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -130,6 +134,8 @@ public class AccountsRestController extends OneBaseRestController {
 			getProductGroupsProductEnvironmentsCommonLicenseKey(
 				@AuthenticationPrincipal Jwt jwt,
 				@PathVariable("accountKey") String accountKey,
+				@RequestParam("dateEnd") String dateEnd,
+				@RequestParam("dateStart") String dateStart,
 				@PathVariable("productEnvironment") String productEnvironment,
 				@PathVariable("productGroup") String productGroup)
 		throws Exception {
@@ -138,19 +144,22 @@ public class AccountsRestController extends OneBaseRestController {
 
 		_licenseKeyPermission.check(account.getId(), ActionKeys.VIEW, jwt);
 
+		Instant endDateInstant = Instant.parse(dateEnd);
+		Instant startDateInstant = Instant.parse(dateStart);
+
+		if (!_entitlementService.hasEntitlementCoveringDateRange(
+				account.getId(),
+				_getEntitlementDefinitionExternalReferenceCode(productGroup),
+				startDateInstant, endDateInstant)) {
+
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+		}
+
 		JSONObject jsonObject = _commonLicenseKeyService.getCommonLicenseKey(
 			productEnvironment, productGroup);
 
 		if (jsonObject == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-		}
-
-		if (!_entitlementService.hasEntitlementCoveringDateRange(
-				account.getId(),
-				Instant.parse(jsonObject.getString("startDate")),
-				Instant.parse(jsonObject.getString("endDate")))) {
-
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 		}
 
 		return ResponseEntity.ok(
@@ -412,6 +421,24 @@ public class AccountsRestController extends OneBaseRestController {
 		}
 
 		return accountRoleNames;
+	}
+
+	private String _getEntitlementDefinitionExternalReferenceCode(
+		String productGroup) {
+
+		if (StringUtil.equals(productGroup, ProductGroupConstants.COMMERCE)) {
+			return EntitlementDefinitionConstants.
+				EXTERNAL_REFERENCE_CODE_COMMERCE;
+		}
+
+		if (StringUtil.equals(
+				productGroup, ProductGroupConstants.ENTERPRISE_SEARCH)) {
+
+			return EntitlementDefinitionConstants.
+				EXTERNAL_REFERENCE_CODE_ENTERPRISE_SEARCH;
+		}
+
+		throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 	}
 
 	private void _unassignContactRole(

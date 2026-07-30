@@ -157,24 +157,26 @@ public class AccountsRestControllerTest {
 		);
 
 		Mockito.when(
+			_entitlementService.hasEntitlementCoveringDateRange(
+				_ACCOUNT_ID, "C_ENT_DEF_COMMERCE",
+				Instant.parse("2026-01-01T00:00:00Z"),
+				Instant.parse("2027-01-01T00:00:00Z"))
+		).thenReturn(
+			true
+		);
+
+		Mockito.when(
 			_commonLicenseKeyService.getCommonLicenseKey(
 				"production", "commerce")
 		).thenReturn(
 			_createCommonLicenseKeyJSONObject()
 		);
 
-		Mockito.when(
-			_entitlementService.hasEntitlementCoveringDateRange(
-				_ACCOUNT_ID, Instant.parse("2026-01-01T00:00:00Z"),
-				Instant.parse("2027-01-01T00:00:00Z"))
-		).thenReturn(
-			true
-		);
-
 		ResponseEntity<String> responseEntity =
 			accountsRestController.
 				getProductGroupsProductEnvironmentsCommonLicenseKey(
-					null, _EXTERNAL_REFERENCE_CODE, "production", "commerce");
+					null, _EXTERNAL_REFERENCE_CODE, "2027-01-01T00:00:00Z",
+					"2026-01-01T00:00:00Z", "production", "commerce");
 
 		Assertions.assertEquals("<license/>", responseEntity.getBody());
 
@@ -198,16 +200,9 @@ public class AccountsRestControllerTest {
 		);
 
 		Mockito.when(
-			_commonLicenseKeyService.getCommonLicenseKey(
-				"production", "commerce")
-		).thenReturn(
-			_createCommonLicenseKeyJSONObject()
-		);
-
-		Mockito.when(
 			_entitlementService.hasEntitlementCoveringDateRange(
 				Mockito.anyLong(), ArgumentMatchers.any(),
-				ArgumentMatchers.any())
+				ArgumentMatchers.any(), ArgumentMatchers.any())
 		).thenReturn(
 			false
 		);
@@ -218,8 +213,9 @@ public class AccountsRestControllerTest {
 				() ->
 					accountsRestController.
 						getProductGroupsProductEnvironmentsCommonLicenseKey(
-							null, _EXTERNAL_REFERENCE_CODE, "production",
-							"commerce"));
+							null, _EXTERNAL_REFERENCE_CODE,
+							"2027-01-01T00:00:00Z", "2026-01-01T00:00:00Z",
+							"production", "commerce"));
 
 		Assertions.assertEquals(
 			HttpStatus.FORBIDDEN, responseStatusException.getStatusCode());
