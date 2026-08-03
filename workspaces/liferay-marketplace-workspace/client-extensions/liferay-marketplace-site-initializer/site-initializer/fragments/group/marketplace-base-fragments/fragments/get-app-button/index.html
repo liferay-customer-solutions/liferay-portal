@@ -1,3 +1,6 @@
+[#assign buttonText = configuration.buttonText!"Get App"] [#assign
+useDescription = configuration.useDescription!true]
+
 <span class="d-none product-id" data-lfr-editable-type="text" data-lfr-editable-id="product-id">#</span>
 
 <div class="d-flex justify-content-center">
@@ -20,9 +23,11 @@
 		Contact Sales
 	</a>
 
-	<button class="btn btn-primary d-none" id="get-app" type="button">
-		Get App
+	<button class="btn btn-primary d-none main-button" id="get-app" type="button">
+		${buttonText}
 	</button>
 </div>
 
-<small class="d-flex justify-content-end" id="get-app-description"></small>
+[#if useDescription]
+<small class="d-flex justify-content-end text-nowrap" id="get-app-description"></small>
+[/#if]
