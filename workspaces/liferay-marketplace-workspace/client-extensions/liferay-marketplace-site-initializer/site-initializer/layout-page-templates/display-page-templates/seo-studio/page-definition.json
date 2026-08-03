@@ -485,6 +485,14 @@
 															"id": "product-id",
 															"value": {
 																"fragmentLink": {
+																},
+																"text": {
+																	"mapping": {
+																		"fieldKey": "CPDefinition_cProductId",
+																		"itemReference": {
+																			"contextSource": "DisplayPageItem"
+																		}
+																	}
 																}
 															}
 														}

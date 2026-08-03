@@ -29,6 +29,8 @@ const SEOStudioRequirementsModal: React.FC<SEOStudioRequirementsModalProps> = ({
 		await onContinue().catch(console.error);
 
 		setLoading(false);
+
+		onOpenChange(false);
 	};
 
 	return (
