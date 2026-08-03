@@ -33,7 +33,7 @@
 
 		<#if developerNames?has_content>
 			<#list developerNames as developerName>
-				<a class="bg-neutral-8" href="q=${developerName}">
+				<a class="bg-neutral-8" href="/?developer-name=${developerName.value?url('UTF-8')}">
 					${developerName.value}
 				</a>
 			</#list>
