@@ -26,6 +26,11 @@ const isFreeApp = (productSpecifications = []) =>
 			productSpecification.value === 'Free'
 	);
 
+const getSolutionType = (productSpecifications = []) =>
+	productSpecifications.find(
+		({specificationKey}) => specificationKey === 'solution-type'
+	)?.value;
+
 const trackAnalytics = (key, options) => {
 	if (!window.Analytics) {
 		return;
@@ -84,7 +89,22 @@ const customizeGetAppButton = async (product) => {
 		);
 	};
 
-	getAppDescriptionElement.innerText = await getProductPrice(product);
+	if (getAppDescriptionElement) {
+		getAppDescriptionElement.innerText = await getProductPrice(product);
+	}
+};
+
+const getAccount = async () => {
+	try {
+		const response = await Liferay.Util.fetch(
+			`/o/headless-admin-user/v1.0/accounts/${Liferay.CommerceContext.account.accountId}?nestedFields=accountGroupBriefs`
+		);
+
+		return response.json();
+	}
+	catch {
+		return {};
+	}
 };
 
 const getCommerceProduct = async (channelId) => {
@@ -157,7 +177,9 @@ const main = async () => {
 
 	const product = await getCommerceProduct(channelId);
 
-	const isReferral = product.productSpecifications.some(
+	const productSpecifications = product.productSpecifications ?? [];
+
+	const isReferral = productSpecifications.some(
 		({specificationKey, value}) =>
 			specificationKey === 'type' && value === 'referral'
 	);
@@ -166,7 +188,7 @@ const main = async () => {
 		return;
 	}
 
-	const isContactSalesProduct = product.productSpecifications.some(
+	const isContactSalesProduct = productSpecifications.some(
 		({specificationKey, value}) =>
 			specificationKey === 'solution-type' &&
 			['cmp', 'dsr'].includes(value)
@@ -184,7 +206,27 @@ const main = async () => {
 		return;
 	}
 
-	const skuPublished = product.skus.some((sku) => sku.purchasable);
+	if (getSolutionType(productSpecifications) === 'liferay-data-platform') {
+		if (!Liferay.ThemeDisplay.isSignedIn()) {
+			return;
+		}
+
+		const account = await getAccount();
+
+		const accountGroupBriefs = account?.accountGroupBriefs ?? [];
+
+		const isPartner = accountGroupBriefs.some(
+			({externalReferenceCode}) => externalReferenceCode === 'PARTNERS'
+		);
+
+		if (!isPartner) {
+			return;
+		}
+
+		getAppButtonElement.classList.remove('d-none');
+	}
+
+	const skuPublished = (product.skus ?? []).some((sku) => sku.purchasable);
 
 	if (skuPublished) {
 		getAppButtonElement.classList.remove('d-none');
