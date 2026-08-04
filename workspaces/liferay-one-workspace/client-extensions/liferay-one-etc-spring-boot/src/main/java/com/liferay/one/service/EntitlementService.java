@@ -65,6 +65,10 @@ public class EntitlementService extends OneBaseService {
 		).put(
 			"endDate", endDate
 		).put(
+			"externalReferenceCode",
+			StringBundler.concat(
+				commerceOrderItemId, "-", entitlementDefinitionId)
+		).put(
 			"grantType", grantType
 		).put(
 			"maxQuantity", maxQuantity
