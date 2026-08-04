@@ -12,7 +12,7 @@ import {
 	useProjectActivationKeys,
 } from '~/hooks/useProjectActivationKeys';
 import {useProjectProducts} from '~/hooks/useProjectCommerce';
-import {Word, translate} from '~/i18n';
+import {translate} from '~/i18n';
 import DetailsCard, {
 	DetailsRow,
 } from '~/pages/MyAccount/Projects/components/DetailsCard/DetailsCard';
@@ -88,7 +88,9 @@ function LicenseKeyDetailsContent({
 		},
 		{
 			label: translate('key-type'),
-			value: translate(getKeyType(licenseKey.licenseType)),
+			value: licenseKey.licenseType
+				? translate(getKeyType(licenseKey.licenseType))
+				: '-',
 		},
 		{label: translate('host-name'), value: licenseKey.hostName || '-'},
 		{
@@ -117,7 +119,10 @@ function LicenseKeyDetailsContent({
 		{label: translate('start-date'), value: licenseKey.startDate || '-'},
 		{
 			label: translate('expiration-date'),
-			value: isPermanentKey(licenseKey.expirationDate)
+			value: isPermanentKey(
+				licenseKey.expirationDateValue,
+				licenseKey.startDateValue
+			)
 				? translate('does-not-expire')
 				: licenseKey.expirationDate || '-',
 		},
@@ -132,7 +137,7 @@ function LicenseKeyDetailsContent({
 						}}
 					/>
 
-					{translate(licenseKey.status as Word)}
+					{translate(licenseKey.status)}
 				</span>
 			),
 		},

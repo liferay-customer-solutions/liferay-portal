@@ -20,7 +20,7 @@ export type ProjectActivationKey = {
 	active: boolean;
 	badge?: Word;
 	clusterSize: string;
-	complimentary?: boolean;
+	complimentary: boolean;
 	description: string;
 	domain: string;
 	environmentType: Word;
@@ -31,12 +31,12 @@ export type ProjectActivationKey = {
 	licenseKeyId: string;
 	licenseType: string;
 	name: string;
-	productVersion?: string;
+	productVersion: string;
 	products: ProjectActivationKeyProduct[];
-	sizing?: string;
+	sizing: string;
 	startDate: string;
 	startDateValue: string;
-	status: string;
+	status: Word;
 };
 
 type LicenseKeyNode = {
@@ -107,6 +107,23 @@ function getEnvironmentType(licenseType?: string): Word {
 	return 'production';
 }
 
+function getStatus(node: LicenseKeyNode): Word {
+	const now = new Date();
+
+	if (!node.active || (node.startDate && now < new Date(node.startDate))) {
+		return 'not-activated';
+	}
+
+	if (
+		node.customExpirationDate &&
+		now > new Date(node.customExpirationDate)
+	) {
+		return 'expired';
+	}
+
+	return 'active';
+}
+
 function formatDate(value?: string): string {
 	return value ? format(new Date(value), 'MMM d, yyyy') : '';
 }
@@ -168,7 +185,7 @@ export function useProjectActivationKeys(productName?: string) {
 			active: node.active,
 			badge: getBadge(node),
 			clusterSize: getClusterSize(node),
-			complimentary: node.complimentary,
+			complimentary: node.complimentary ?? false,
 			description: node.description ?? '',
 			domain: node.domains ?? '',
 			environmentType: getEnvironmentType(node.licenseType),
@@ -184,7 +201,7 @@ export function useProjectActivationKeys(productName?: string) {
 			sizing: node.sizing ?? '',
 			startDate: formatDate(node.startDate),
 			startDateValue: getDateValue(node.startDate),
-			status: node.active ? 'active' : 'expired',
+			status: getStatus(node),
 		})
 	);
 

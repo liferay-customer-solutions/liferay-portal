@@ -14,18 +14,15 @@ import type {DeliveryProduct} from '~/types/product';
 
 import type {ActivationProfile} from '../../utils/resolveActivationProfile';
 
-type ActivationContent = {
+type ActivationTabProps = {
 	contractId?: number;
 	product: DeliveryProduct;
-};
-
-type ActivationTabProps = ActivationContent & {
 	profile?: ActivationProfile;
 };
 
 const ACTIVATION_CONTENT_BY_PROFILE: Record<
 	ActivationProfile,
-	(content: ActivationContent) => ReactNode
+	(props: Omit<ActivationTabProps, 'profile'>) => ReactNode
 > = {
 	'app-licenses': () => null,
 	'cloud-native': () => <CloudNativeActivation />,

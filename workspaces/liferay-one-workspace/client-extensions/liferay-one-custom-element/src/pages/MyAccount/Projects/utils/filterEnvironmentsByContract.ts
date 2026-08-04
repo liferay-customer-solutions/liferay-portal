@@ -10,7 +10,7 @@ export function filterEnvironmentsByContract(
 	environments: ProjectEnvironment[]
 ): ProjectEnvironment[] {
 	if (!contractId) {
-		return environments;
+		return [];
 	}
 
 	return environments.filter(

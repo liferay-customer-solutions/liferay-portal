@@ -62,7 +62,7 @@ export default function EnvironmentTab({
 	return (
 		<SectionedDetailsCard
 			icon="cloud"
-			sections={buildEnvironmentSections([environmentEntry], profile)}
+			sections={buildEnvironmentSections(matchingEnvironments, profile)}
 			title="workspace-info"
 		/>
 	);

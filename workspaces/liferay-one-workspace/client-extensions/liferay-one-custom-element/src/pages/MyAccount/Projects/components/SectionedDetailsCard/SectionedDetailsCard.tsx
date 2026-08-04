@@ -11,6 +11,7 @@ import {DetailsRow} from '../DetailsCard/DetailsCard';
 import './SectionedDetailsCard.css';
 
 export type DetailsSection = {
+	id?: string;
 	rows: DetailsRow[];
 };
 
@@ -37,7 +38,7 @@ export default function SectionedDetailsCard({
 				{sections.map((section, index) => (
 					<div
 						className="sectioned-details-card-section"
-						key={String(index)}
+						key={section.id ?? String(index)}
 					>
 						{section.rows.map((row) => (
 							<div

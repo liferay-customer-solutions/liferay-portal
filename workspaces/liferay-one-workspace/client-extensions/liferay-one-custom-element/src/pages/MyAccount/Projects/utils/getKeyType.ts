@@ -5,14 +5,12 @@
 
 import {Word} from '~/i18n';
 
-const CLUSTER_LICENSE_TYPES = ['cluster', 'developer-cluster'];
-
 export function getKeyType(licenseType?: string): Word {
 	if (licenseType === 'virtual-cluster') {
 		return 'virtual-cluster';
 	}
 
-	if (CLUSTER_LICENSE_TYPES.includes(licenseType ?? '')) {
+	if (licenseType === 'cluster' || licenseType === 'developer-cluster') {
 		return 'cluster';
 	}
 

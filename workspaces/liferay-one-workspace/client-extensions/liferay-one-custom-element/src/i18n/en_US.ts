@@ -371,7 +371,7 @@ export default {
 		'Developer licenses are limited to 5 unique addresses and should not be used for full-scale production deployments.',
 	'do-not-close-this-window': 'DO NOT CLOSE THIS WINDOW',
 	'documentation': 'Documentation',
-	'does-not-expire': 'Does not expire',
+	'does-not-expire': 'Does Not Expire',
 	'domain': 'Domain',
 	'domains': 'Domains',
 	'done': 'Done',
