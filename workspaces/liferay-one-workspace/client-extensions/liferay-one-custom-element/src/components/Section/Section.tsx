@@ -25,4 +25,5 @@ const Section = ({children, className, label, required}: SectionProps) => (
 	</div>
 );
 
+export {Section};
 export default Section;

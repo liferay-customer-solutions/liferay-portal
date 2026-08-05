@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {useNavigate} from 'react-router-dom';
+
 import i18n from '~/i18n';
 import {formatDate} from '~/utils/dateUtils';
 
@@ -16,6 +18,8 @@ import PublishedProductsListView, {
 import type {Product} from '~/types/product';
 
 export default function PublishedApps() {
+	const navigate = useNavigate();
+
 	return (
 		<PublishedProductsListView
 			categoryVocabulary="App"
@@ -25,6 +29,7 @@ export default function PublishedApps() {
 			emptyStateTitle="you-havent-published-any-apps-yet"
 			filterSchema="publisherApps"
 			id="publisher-published-apps"
+			onCtaClick={() => navigate('/newapp/publisher')}
 			tableProps={{
 				actions: [
 					{

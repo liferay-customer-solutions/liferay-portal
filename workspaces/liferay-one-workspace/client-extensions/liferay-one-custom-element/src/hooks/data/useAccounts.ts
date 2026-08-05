@@ -1,0 +1,37 @@
+// @ts-nocheck
+/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+import useSWR from 'swr';
+
+import SearchBuilder from '~/utils/SearchBuilder';
+import {Liferay} from '~/services/liferay/liferay';
+import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
+import useInfiniteSearch from '../useInfiniteSearch';
+
+const useAccount = () => {
+	const accountId = Liferay.CommerceContext.account?.accountId ?? 0;
+
+	return useSWR(`/account/${accountId}`, () =>
+		HeadlessAdminUser.getAccount(accountId)
+	);
+};
+
+const useAccounts = () =>
+	useInfiniteSearch('accounts', ({pageIndex, search}) =>
+		HeadlessAdminUser.getAccounts(
+			new URLSearchParams({
+				fields: 'id,name,logoURL',
+				filter: SearchBuilder.contains('name', search),
+				page: pageIndex + 1,
+				pageSize: '20',
+				sort: 'name:asc',
+			})
+		)
+	);
+
+export {useAccount, useAccounts};
+
+export default useAccounts;

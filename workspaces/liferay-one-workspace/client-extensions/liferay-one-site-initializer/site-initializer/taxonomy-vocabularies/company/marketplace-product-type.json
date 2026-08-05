@@ -10,6 +10,9 @@
 		"en-US"
 	],
 	"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE",
-	"name": "marketplace-product-type",
+	"name": "Marketplace Product Type",
+	"name_i18n": {
+		"en_US": "Marketplace Product Type"
+	},
 	"viewableBy": "Anyone"
 }

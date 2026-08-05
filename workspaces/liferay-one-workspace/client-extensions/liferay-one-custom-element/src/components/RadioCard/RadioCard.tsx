@@ -55,4 +55,5 @@ const RadioCard = ({
 	</div>
 );
 
+export {RadioCard};
 export default RadioCard;

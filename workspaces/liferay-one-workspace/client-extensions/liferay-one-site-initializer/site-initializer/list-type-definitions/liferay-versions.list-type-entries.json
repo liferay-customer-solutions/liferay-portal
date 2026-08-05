@@ -1,0 +1,128 @@
+[
+	{
+		"externalReferenceCode": "71",
+		"key": "71",
+		"name": "7.1",
+		"name_i18n": {
+			"en-US": "7.1"
+		},
+		"type": "string"
+	},
+	{
+		"externalReferenceCode": "72",
+		"key": "72",
+		"name": "7.2",
+		"name_i18n": {
+			"en-US": "7.2"
+		},
+		"type": "string"
+	},
+	{
+		"externalReferenceCode": "73",
+		"key": "73",
+		"name": "7.3",
+		"name_i18n": {
+			"en-US": "7.3"
+		},
+		"type": "string"
+	},
+	{
+		"externalReferenceCode": "74",
+		"key": "74",
+		"name": "7.4",
+		"name_i18n": {
+			"en-US": "7.4"
+		},
+		"type": "string"
+	},
+	{
+		"externalReferenceCode": "2023Q3",
+		"key": "2023Q3",
+		"name": "2023 Q3",
+		"name_i18n": {
+			"en-US": "2023 Q3"
+		},
+		"type": "string"
+	},
+	{
+		"externalReferenceCode": "2023Q4",
+		"key": "2023Q4",
+		"name": "2023 Q4",
+		"name_i18n": {
+			"en-US": "2023 Q4"
+		},
+		"type": "string"
+	},
+	{
+		"externalReferenceCode": "2024Q1",
+		"key": "2024Q1",
+		"name": "2024 Q1",
+		"name_i18n": {
+			"en-US": "2024 Q1"
+		},
+		"type": "string"
+	},
+	{
+		"externalReferenceCode": "2024Q2",
+		"key": "2024Q2",
+		"name": "2024 Q2",
+		"name_i18n": {
+			"en-US": "2024 Q2"
+		},
+		"type": "string"
+	},
+	{
+		"externalReferenceCode": "2024Q3",
+		"key": "2024Q3",
+		"name": "2024 Q3",
+		"name_i18n": {
+			"en-US": "2024 Q3"
+		},
+		"type": "string"
+	},
+	{
+		"externalReferenceCode": "2024Q4",
+		"key": "2024Q4",
+		"name": "2024 Q4",
+		"name_i18n": {
+			"en-US": "2024 Q4"
+		},
+		"type": "string"
+	},
+	{
+		"externalReferenceCode": "2025Q1",
+		"key": "2025Q1",
+		"name": "2025 Q1",
+		"name_i18n": {
+			"en-US": "2025 Q1"
+		},
+		"type": "string"
+	},
+	{
+		"externalReferenceCode": "2025Q2",
+		"key": "2025Q2",
+		"name": "2025 Q2",
+		"name_i18n": {
+			"en-US": "2025 Q2"
+		},
+		"type": "string"
+	},
+	{
+		"externalReferenceCode": "2025Q3",
+		"key": "2025Q3",
+		"name": "2025 Q3",
+		"name_i18n": {
+			"en-US": "2025 Q3"
+		},
+		"type": "string"
+	},
+	{
+		"externalReferenceCode": "2025Q4",
+		"key": "2025Q4",
+		"name": "2025 Q4",
+		"name_i18n": {
+			"en-US": "2025 Q4"
+		},
+		"type": "string"
+	}
+]

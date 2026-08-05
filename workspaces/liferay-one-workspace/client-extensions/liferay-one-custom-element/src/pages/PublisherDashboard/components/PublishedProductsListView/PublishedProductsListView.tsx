@@ -142,6 +142,7 @@ type PublishedProductsListViewProps = {
 	emptyStateTitle: Word;
 	filterSchema: string;
 	id: string;
+	onCtaClick?: () => void;
 	tableProps: ListViewProps<Product>['tableProps'];
 	title: Word;
 };
@@ -154,6 +155,7 @@ export default function PublishedProductsListView({
 	emptyStateTitle,
 	filterSchema,
 	id,
+	onCtaClick,
 	tableProps,
 	title,
 }: PublishedProductsListViewProps) {
@@ -181,7 +183,7 @@ export default function PublishedProductsListView({
 			description={i18n.translate(description)}
 			pageRendererProps={{className: 'border py-2 rounded-lg'}}
 			rightButton={
-				<Button displayType="primary" onClick={() => {}}>
+				<Button displayType="primary" onClick={onCtaClick}>
 					{i18n.translate(ctaLabel)}
 				</Button>
 			}

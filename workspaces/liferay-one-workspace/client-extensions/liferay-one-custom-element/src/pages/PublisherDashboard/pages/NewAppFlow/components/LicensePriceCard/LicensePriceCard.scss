@@ -1,0 +1,46 @@
+.license-card {
+	&-container {
+		border: 1px solid #e2e2e4;
+		border-radius: 10px;
+		padding: 16px;
+	}
+	&-input {
+		border: 1px solid var(--neutral-07, #6c6c75);
+		border-radius: 8px !important;
+
+		&.disabled {
+			background: var(--neutral-01, #f7f7f8);
+			border: 1px solid var(--neutral-03, #c9c9cf);
+		}
+	}
+}
+
+.informing-licensing-terms-page {
+	&-container {
+		width: 37.5rem;
+
+		.icon-button {
+			background: #fbfcfe;
+			border: 1px solid #e7efff;
+			border-radius: 10px;
+			color: #0b5fff;
+			font-size: 14px;
+			font-weight: 600;
+			line-height: 16px;
+		}
+	}
+
+	&-app-license-container {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		margin-bottom: 2.5rem;
+	}
+
+	&-day-trial-container {
+		align-items: center;
+		display: flex;
+		gap: 1.5rem;
+		justify-content: flex-start;
+	}
+}
