@@ -22,6 +22,20 @@ import type {
 	SkuOptions,
 } from '~/types/product';
 
+export {
+	ProductLicense,
+	ProductLicenseFriendlyName,
+	ProductLicenseType,
+	ProductOfferingTypes,
+	ProductPriceModel,
+	ProductTags,
+	ProductType,
+	ProductTypeVocabulary,
+	ProductUploadType,
+	ProductVocabulary,
+	SkuOptions,
+} from '~/enums/Product';
+
 export function getProductCategoriesByVocabularyName(
 	categories: ProductCategories[],
 	vocabulary: string

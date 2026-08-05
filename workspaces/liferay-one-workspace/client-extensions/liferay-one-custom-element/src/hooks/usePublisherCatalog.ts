@@ -6,7 +6,6 @@
 import useSWR, {SWRConfiguration} from 'swr';
 import HeadlessCommerceAdminCatalog from '~/services/headless/HeadlessCommerceAdminCatalog';
 import {Liferay} from '~/services/liferay/liferay';
-import SearchBuilder from '~/utils/SearchBuilder';
 
 const usePublisherCatalog = (swrOptions?: SWRConfiguration) => {
 	const accountId = Liferay.CommerceContext.account?.accountId;
@@ -16,13 +15,11 @@ const usePublisherCatalog = (swrOptions?: SWRConfiguration) => {
 		async () => {
 			const {items} = await HeadlessCommerceAdminCatalog.getCatalogs(
 				new URLSearchParams({
-					filter: SearchBuilder.unquote(
-						SearchBuilder.eq('accountId', accountId!)
-					),
+					pageSize: '-1',
 				})
 			);
 
-			return items?.[0] ?? null;
+			return items?.find((item: any) => item.accountId === Number(accountId)) ?? null;
 		},
 		swrOptions
 	);

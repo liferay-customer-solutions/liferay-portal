@@ -5,6 +5,8 @@
 
 import {useLayoutEffect} from 'react';
 import {HashRouter, useRoutes} from 'react-router-dom';
+import MarketplaceContextProvider from '~/context/MarketplaceContext';
+import {useOneContext} from '~/context/OneContextProvider';
 import {toRouteObjects} from '~/utils/routeUtils';
 
 import PublisherDashboardLayout from './components/PublisherDashboardLayout/PublisherDashboardLayout';
@@ -23,17 +25,29 @@ function PublisherDashboardRoutes() {
 
 	return useRoutes([
 		{
-			children: toRouteObjects(publisherDashboardRoutes),
+			children: toRouteObjects(
+				publisherDashboardRoutes.filter((route) => route.path !== 'newapp')
+			),
 			element: <PublisherDashboardLayout />,
+			path: '/',
+		},
+		{
+			children: toRouteObjects(
+				publisherDashboardRoutes.filter((route) => route.path === 'newapp')
+			),
 			path: '/',
 		},
 	]);
 }
 
 export default function PublisherDashboardRouter() {
+	const {properties} = useOneContext();
+
 	return (
-		<HashRouter>
-			<PublisherDashboardRoutes />
-		</HashRouter>
+		<MarketplaceContextProvider properties={properties}>
+			<HashRouter>
+				<PublisherDashboardRoutes />
+			</HashRouter>
+		</MarketplaceContextProvider>
 	);
 }

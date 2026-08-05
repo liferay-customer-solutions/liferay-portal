@@ -23,7 +23,7 @@
 				"en-US"
 			],
 			"externalReferenceCode": "MARKETPLACE_APP_CATEGORY",
-			"name": "marketplace-app-category",
+			"name": "Marketplace App Category",
 			"viewableBy": "Anyone"
 		},
 		{
@@ -38,7 +38,7 @@
 				"en-US"
 			],
 			"externalReferenceCode": "MARKETPLACE_APP_TAGS",
-			"name": "marketplace-app-tags",
+			"name": "Marketplace App Tags",
 			"viewableBy": "Anyone"
 		},
 		{
@@ -53,7 +53,7 @@
 				"en-US"
 			],
 			"externalReferenceCode": "MARKETPLACE_AVAILABILITY",
-			"name": "marketplace-availability",
+			"name": "Marketplace Availability",
 			"viewableBy": "Anyone"
 		},
 		{
@@ -68,7 +68,7 @@
 				"en-US"
 			],
 			"externalReferenceCode": "MARKETPLACE_CATEGORY",
-			"name": "marketplace-category",
+			"name": "Marketplace Category",
 			"viewableBy": "Anyone"
 		},
 		{
@@ -83,7 +83,7 @@
 				"en-US"
 			],
 			"externalReferenceCode": "MARKETPLACE_LIFERAY_PLATFORM_OFFERING",
-			"name": "marketplace-liferay-platform-offering",
+			"name": "Marketplace Liferay Platform Offering",
 			"viewableBy": "Anyone"
 		},
 		{
@@ -98,7 +98,7 @@
 				"en-US"
 			],
 			"externalReferenceCode": "MARKETPLACE_LIFERAY_VERSION",
-			"name": "marketplace-liferay-version",
+			"name": "Marketplace Liferay Version",
 			"viewableBy": "Anyone"
 		},
 		{
@@ -113,7 +113,7 @@
 				"en-US"
 			],
 			"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE",
-			"name": "marketplace-product-type",
+			"name": "Marketplace Product Type",
 			"viewableBy": "Anyone"
 		},
 		{
@@ -128,7 +128,7 @@
 				"en-US"
 			],
 			"externalReferenceCode": "MARKETPLACE_SOLUTION_CATEGORY",
-			"name": "marketplace-solution-category",
+			"name": "Marketplace Solution Category",
 			"viewableBy": "Anyone"
 		},
 		{
@@ -143,7 +143,7 @@
 				"en-US"
 			],
 			"externalReferenceCode": "MARKETPLACE_SOLUTION_TAGS",
-			"name": "marketplace-solution-tags",
+			"name": "Marketplace Solution Tags",
 			"viewableBy": "Anyone"
 		}
 	]

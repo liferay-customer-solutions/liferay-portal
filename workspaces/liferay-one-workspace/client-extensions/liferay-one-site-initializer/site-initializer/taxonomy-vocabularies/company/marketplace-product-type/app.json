@@ -4,6 +4,9 @@
 		"en_US": "An app is a specialized component developed using Liferay or other technology that helps a customer to accomplish a specific task."
 	},
 	"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_APP",
-	"name": "app",
+	"name": "App",
+	"name_i18n": {
+		"en_US": "App"
+	},
 	"viewableBy": "Anyone"
 }

@@ -1,0 +1,98 @@
+.document-file-list-item {
+	&-container {
+		align-items: center;
+		border: 1px solid #e2e2e4;
+		border-radius: 0.625rem;
+		display: flex;
+		flex-direction: row;
+		height: 6.5rem;
+		justify-content: space-between;
+		margin-bottom: 1.5rem;
+		padding: 1rem;
+		width: 37.5rem;
+	}
+
+	&-icon {
+		align-items: center;
+		border: solid 2px #fff;
+		border-radius: 50%;
+		display: flex;
+		font-size: 10px;
+		font-weight: 700;
+		height: 22px;
+		justify-content: center;
+		left: 0;
+		padding: 3px;
+		position: relative;
+		top: 0;
+		width: 22px;
+
+		svg {
+			margin-top: 1px;
+		}
+	}
+
+	&-left-content {
+		align-items: center;
+		display: flex;
+		justify-content: center;
+
+		&-icon {
+			height: 1.5rem;
+			width: 1.5rem;
+			filter: invert(35%) sepia(86%) saturate(1411%) hue-rotate(206deg)
+				brightness(102%) contrast(101%);
+		}
+
+		&-icon-container {
+			align-items: center;
+			background-color: #e7efff;
+			border-radius: 0.25rem;
+			display: flex;
+			height: 4.5rem;
+			justify-content: center;
+			margin-right: 1rem;
+			width: 4.5rem;
+		}
+
+		&-text {
+			&-container {
+				display: flex;
+				flex-direction: column;
+			}
+
+			&-file-name {
+				color: #282934;
+				font-size: 1rem;
+				font-weight: 400;
+				line-height: 1.5rem;
+			}
+
+			&-file-size {
+				color: #6c6c75;
+				font-size: 0.813rem;
+				font-weight: 400;
+				line-height: 1rem;
+			}
+		}
+	}
+
+	&-button {
+		background-color: transparent;
+		border: 1.5px solid #2b3a4b;
+		border-radius: 0.375rem;
+		color: #2b3a4b;
+		font-size: 0.875rem;
+		font-weight: 600;
+		height: 2rem;
+		line-height: 1rem;
+		transition: background-color 0.3s;
+		transition: color 0.3s;
+		width: 6.938rem;
+
+		&:hover {
+			background-color: #2b3a4b;
+			color: #fff;
+		}
+	}
+}
