@@ -128,6 +128,8 @@ buildDockerImage {
 		}
 
 		localEnvironmentFile.text =
-		names.collect { "${it}=unused" }.join("\n") + "\n"
+		names.collect { "${it}=unused" }.join("\n") + "\n" +
+		"LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_REACTIVE_FUNCTION_CLIENT=DEBUG\n" +
+		"LOGGING_LEVEL_SUN_NET_WWW_PROTOCOL_HTTP=TRACE\n"
 	}
 }
