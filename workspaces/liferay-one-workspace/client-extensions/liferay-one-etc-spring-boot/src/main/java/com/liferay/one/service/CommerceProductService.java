@@ -96,7 +96,7 @@ public class CommerceProductService extends OneBaseService {
 	private ProductResource _buildProductResource() {
 		return ProductResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();

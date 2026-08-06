@@ -162,7 +162,7 @@ public class CommerceOrderItemService extends OneBaseService {
 	private OrderItemResource _buildOrderItemResource() {
 		return OrderItemResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).parameters(

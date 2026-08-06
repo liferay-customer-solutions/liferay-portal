@@ -56,7 +56,7 @@ public class CommercePriceListService extends OneBaseService {
 	private PriceListResource _buildPriceListResource() {
 		return PriceListResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();

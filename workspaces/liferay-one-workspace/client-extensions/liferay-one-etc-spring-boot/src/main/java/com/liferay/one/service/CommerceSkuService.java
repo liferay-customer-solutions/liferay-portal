@@ -21,7 +21,7 @@ public class CommerceSkuService extends OneBaseService {
 	public Sku fetchSku(String externalReferenceCode) throws Exception {
 		SkuResource skuResource = SkuResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();
@@ -44,7 +44,7 @@ public class CommerceSkuService extends OneBaseService {
 	public Sku getSku(long skuId) throws Exception {
 		SkuResource skuResource = SkuResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();

@@ -60,7 +60,7 @@ public class RoleService extends OneBaseService {
 	private RoleResource _buildRoleResource() {
 		return RoleResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();

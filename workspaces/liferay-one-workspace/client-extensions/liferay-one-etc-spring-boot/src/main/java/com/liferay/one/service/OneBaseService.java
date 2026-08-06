@@ -7,6 +7,7 @@ package com.liferay.one.service;
 
 import com.liferay.client.extension.util.spring.boot3.client.LiferayOAuth2AccessTokenManager;
 import com.liferay.client.extension.util.spring.boot3.service.BaseService;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
@@ -93,6 +94,20 @@ public abstract class OneBaseService extends BaseService {
 		}
 
 		return "Bearer " + jwt.getTokenValue();
+	}
+
+	protected String getDXPEndpointAddress() {
+		if (lxcDXPMainDomain.contains(":")) {
+			return lxcDXPMainDomain;
+		}
+
+		int port = 80;
+
+		if (StringUtil.equals(lxcDXPServerProtocol, "https")) {
+			port = 443;
+		}
+
+		return lxcDXPMainDomain + ":" + port;
 	}
 
 	protected boolean isNotFound(String status) {

@@ -220,7 +220,7 @@ public class UserAccountService extends OneBaseService {
 
 		return UserAccountResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization(jwt)
 		).parameters(
@@ -233,7 +233,7 @@ public class UserAccountService extends OneBaseService {
 
 		return UserAccountResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).parameters(

@@ -356,7 +356,7 @@ public class CommerceOrderService extends OneBaseService {
 	private CurrencyResource _buildCurrencyResource() {
 		return CurrencyResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();
@@ -365,7 +365,7 @@ public class CommerceOrderService extends OneBaseService {
 	private OrderResource _buildOrderResource() {
 		return OrderResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).parameters(

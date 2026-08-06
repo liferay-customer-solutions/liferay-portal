@@ -23,7 +23,7 @@ public class PostalAddressService extends OneBaseService {
 		PostalAddressResource postalAddressResource =
 			PostalAddressResource.builder(
 			).endpoint(
-				lxcDXPMainDomain, lxcDXPServerProtocol
+				getDXPEndpointAddress(), lxcDXPServerProtocol
 			).header(
 				HttpHeaders.AUTHORIZATION, getAuthorization()
 			).build();

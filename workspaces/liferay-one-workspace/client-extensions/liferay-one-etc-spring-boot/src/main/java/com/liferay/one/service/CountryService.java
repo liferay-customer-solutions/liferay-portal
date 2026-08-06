@@ -20,7 +20,7 @@ public class CountryService extends OneBaseService {
 	public Country getCountryByA2(String a2) throws Exception {
 		CountryResource countryResource = CountryResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();

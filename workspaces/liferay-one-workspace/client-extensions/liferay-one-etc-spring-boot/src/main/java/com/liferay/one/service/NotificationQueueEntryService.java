@@ -28,7 +28,7 @@ public class NotificationQueueEntryService extends OneBaseService {
 		NotificationQueueEntryResource notificationQueueEntryResource =
 			NotificationQueueEntryResource.builder(
 			).endpoint(
-				lxcDXPMainDomain, lxcDXPServerProtocol
+				getDXPEndpointAddress(), lxcDXPServerProtocol
 			).header(
 				HttpHeaders.AUTHORIZATION, getAuthorization()
 			).build();

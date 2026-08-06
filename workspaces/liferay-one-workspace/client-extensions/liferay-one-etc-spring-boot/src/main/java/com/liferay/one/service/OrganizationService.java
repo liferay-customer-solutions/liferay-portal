@@ -83,7 +83,7 @@ public class OrganizationService extends OneBaseService {
 	private OrganizationResource _buildOrganizationResource() {
 		return OrganizationResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();

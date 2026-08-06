@@ -21,7 +21,7 @@ public class CommerceCatalogService extends OneBaseService {
 	public Catalog fetchCatalog(String externalReferenceCode) throws Exception {
 		CatalogResource catalogResource = CatalogResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();

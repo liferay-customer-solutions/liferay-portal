@@ -30,7 +30,7 @@ public class NotificationTemplateService extends OneBaseService {
 		NotificationTemplateResource notificationTemplateResource =
 			NotificationTemplateResource.builder(
 			).endpoint(
-				lxcDXPMainDomain, lxcDXPServerProtocol
+				getDXPEndpointAddress(), lxcDXPServerProtocol
 			).header(
 				HttpHeaders.AUTHORIZATION, getAuthorization()
 			).build();

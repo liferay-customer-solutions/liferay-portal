@@ -142,7 +142,7 @@ public class AccountService extends OneBaseService {
 
 		AccountResource accountResource = AccountResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();
@@ -154,7 +154,7 @@ public class AccountService extends OneBaseService {
 	public Account fetchAccount(long accountId) throws Exception {
 		AccountResource accountResource = AccountResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();
@@ -179,7 +179,7 @@ public class AccountService extends OneBaseService {
 
 		AccountResource accountResource = AccountResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();
@@ -217,7 +217,7 @@ public class AccountService extends OneBaseService {
 	public Account getAccount(long accountEntryId, Jwt jwt) throws Exception {
 		AccountResource accountResource = AccountResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, "Bearer " + jwt.getTokenValue()
 		).build();
@@ -228,7 +228,7 @@ public class AccountService extends OneBaseService {
 	public Account getAccount(String externalReferenceCode) throws Exception {
 		AccountResource accountResource = AccountResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();
@@ -242,7 +242,7 @@ public class AccountService extends OneBaseService {
 
 		AccountResource accountResource = AccountResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, "Bearer " + jwt.getTokenValue()
 		).build();
@@ -381,7 +381,7 @@ public class AccountService extends OneBaseService {
 
 		AccountResource accountResource = AccountResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();
@@ -413,7 +413,7 @@ public class AccountService extends OneBaseService {
 	private AccountRoleResource _buildAccountRoleResource() {
 		return AccountRoleResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();
@@ -540,7 +540,7 @@ public class AccountService extends OneBaseService {
 
 		AccountResource accountResource = AccountResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();
@@ -691,7 +691,7 @@ public class AccountService extends OneBaseService {
 
 		AccountResource accountResource = AccountResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();

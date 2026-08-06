@@ -74,7 +74,7 @@ public class CommercePriceEntryService extends OneBaseService {
 	private PriceEntryResource _buildPriceEntryResource() {
 		return PriceEntryResource.builder(
 		).endpoint(
-			lxcDXPMainDomain, lxcDXPServerProtocol
+			getDXPEndpointAddress(), lxcDXPServerProtocol
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();
