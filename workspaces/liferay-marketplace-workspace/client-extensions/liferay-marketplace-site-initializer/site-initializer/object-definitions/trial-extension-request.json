@@ -1,6 +1,6 @@
 {
 	"accountEntryRestricted": true,
-	"accountEntryRestrictedObjectFieldName": "r_accountToTrialExtensionRequest_accountEntryId",
+	"accountEntryRestrictedObjectFieldName": "r_accountEntryToTrialExtensionRequest_accountEntryId",
 	"enableLocalization": false,
 	"externalReferenceCode": "TRIAL-EXTENSION-REQUEST",
 	"label": {

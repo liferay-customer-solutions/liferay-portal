@@ -1,9 +1,10 @@
 {
 	"deletionType": "cascade",
+	"externalReferenceCode": "R_ACCOUNT_ENTRY_TO_OAUTH2_DXP_AUTHORIZATION",
 	"label": {
 		"en_US": "Account to OAuth2 DXP Authorization"
 	},
-	"name": "accountToOAuth2DxpAuthorization",
+	"name": "accountEntryToOAuth2DxpAuthorization",
 	"objectDefinitionId1": "[$OBJECT_DEFINITION_ID:AccountEntry$]",
 	"objectDefinitionId2": "[$OBJECT_DEFINITION_ID:OAuth2DxpAuthorization$]",
 	"objectDefinitionName2": "OAuth2DxpAuthorization",

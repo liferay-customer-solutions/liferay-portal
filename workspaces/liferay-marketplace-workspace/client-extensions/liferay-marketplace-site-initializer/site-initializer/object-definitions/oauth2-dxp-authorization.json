@@ -1,6 +1,6 @@
 {
 	"accountEntryRestricted": true,
-	"accountEntryRestrictedObjectFieldName": "r_accountToOAuth2DxpAuthorization_accountEntryId",
+	"accountEntryRestrictedObjectFieldName": "r_accountEntryToOAuth2DxpAuthorization_accountEntryId",
 	"label": {
 		"en_US": "OAuth2 DXP Authorization"
 	},

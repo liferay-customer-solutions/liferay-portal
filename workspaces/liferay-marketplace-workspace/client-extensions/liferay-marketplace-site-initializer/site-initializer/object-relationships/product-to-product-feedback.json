@@ -1,5 +1,6 @@
 {
 	"deletionType": "cascade",
+	"externalReferenceCode": "R_PRODUCT_TO_PRODUCT_FEEDBACK",
 	"label": {
 		"en_US": "Product to Product Feedback"
 	},
