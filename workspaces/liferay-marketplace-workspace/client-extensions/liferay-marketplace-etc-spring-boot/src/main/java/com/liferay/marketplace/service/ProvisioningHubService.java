@@ -118,6 +118,80 @@ public class ProvisioningHubService extends BaseService {
 		return contact.getEmailAddress();
 	}
 
+	private JSONObject _getDSRAnalyticsProjectJSONObject(
+			Account koroneikiAccount)
+		throws Exception {
+
+		JSONObject analyticsProjectJSONObject =
+			_analyticsService.getCorpProjectUuidJSONObject(
+				koroneikiAccount.getKey());
+
+		if (analyticsProjectJSONObject != null) {
+			return analyticsProjectJSONObject;
+		}
+
+		if (_koroneikiService.hasEntitlement(
+				koroneikiAccount,
+				MarketplaceConstants.KORONEIKI_AC_ENTITLEMENTS)) {
+
+			if (_log.isInfoEnabled()) {
+				_log.info(
+					StringBundler.concat(
+						"Unable to find an Analytics Cloud project for the ",
+						"entitled account ", koroneikiAccount.getKey()));
+			}
+
+			return null;
+		}
+
+		Map<String, String> properties = koroneikiAccount.getProperties();
+
+		if (Validator.isNull(properties.get("dataCenterLocation")) ||
+			Validator.isNull(properties.get("ldpWorkspaceName"))) {
+
+			if (_log.isInfoEnabled()) {
+				_log.info(
+					StringBundler.concat(
+						"Missing properties to provision the DSR workspace ",
+						"for account ", koroneikiAccount.getKey(), ": ",
+						properties));
+			}
+
+			return null;
+		}
+
+		String securityContactEmailAddress = properties.get(
+			"securityContactEmailAddress");
+
+		JSONArray incidentReportEmailAddressesJSONArray = new JSONArray();
+
+		if (Validator.isNotNull(securityContactEmailAddress)) {
+			incidentReportEmailAddressesJSONArray = new JSONArray(
+				securityContactEmailAddress.split(","));
+		}
+
+		return new JSONObject(
+			_analyticsService.provision(
+				new JSONObject(
+				).put(
+					"corpProjectName", koroneikiAccount.getName()
+				).put(
+					"corpProjectUuid", koroneikiAccount.getKey()
+				).put(
+					"incidentReportEmailAddresses",
+					incidentReportEmailAddressesJSONArray
+				).put(
+					"name", properties.get("ldpWorkspaceName")
+				).put(
+					"ownerEmailAddress",
+					_getContactEmailAddress(
+						koroneikiAccount.getKey(), securityContactEmailAddress)
+				).put(
+					"serverLocation",
+					_getServerLocation(properties.get("dataCenterLocation"))
+				)));
+	}
+
 	private String _getServerLocation(String dataCenterLocation) {
 		if (Objects.equals(dataCenterLocation, "asia-south1")) {
 			return "asia-south1-ac5-c1";
@@ -257,66 +331,16 @@ public class ProvisioningHubService extends BaseService {
 		_koroneikiService.linkProductPurchaseToOrder(
 			order.getId(), productPurchase.getKey());
 
-		if (_koroneikiService.hasEntitlement(
-				koroneikiAccount,
-				MarketplaceConstants.KORONEIKI_AC_ENTITLEMENTS)) {
+		JSONObject analyticsProjectJSONObject =
+			_getDSRAnalyticsProjectJSONObject(koroneikiAccount);
 
+		if (analyticsProjectJSONObject == null) {
 			_marketplaceService.completeOrder(
 				order.getId(),
 				MarketplaceConstants.ORDER_PAYMENT_STATUS_NOT_REQUIRED);
 
 			return;
 		}
-
-		Map<String, String> properties = koroneikiAccount.getProperties();
-
-		if (Validator.isNull(properties.get("dataCenterLocation")) ||
-			Validator.isNull(properties.get("dsrWorkspaceName"))) {
-
-			if (_log.isInfoEnabled()) {
-				_log.info(
-					StringBundler.concat(
-						"Missing properties to provision the DSR workspace ",
-						"for account ", koroneikiAccount.getKey(), ": ",
-						properties));
-			}
-
-			_marketplaceService.completeOrder(
-				order.getId(),
-				MarketplaceConstants.ORDER_PAYMENT_STATUS_NOT_REQUIRED);
-
-			return;
-		}
-
-		String securityContactEmailAddress = properties.get(
-			"securityContactEmailAddress");
-
-		JSONArray incidentReportEmailAddressesJSONArray = new JSONArray();
-
-		if (Validator.isNotNull(securityContactEmailAddress)) {
-			incidentReportEmailAddressesJSONArray = new JSONArray(
-				securityContactEmailAddress.split(","));
-		}
-
-		String analyticsProject = _analyticsService.provision(
-			new JSONObject(
-			).put(
-				"corpProjectName", koroneikiAccount.getName()
-			).put(
-				"corpProjectUuid", koroneikiAccount.getKey()
-			).put(
-				"incidentReportEmailAddresses",
-				incidentReportEmailAddressesJSONArray
-			).put(
-				"name", properties.get("dsrWorkspaceName")
-			).put(
-				"ownerEmailAddress",
-				_getContactEmailAddress(
-					koroneikiAccount.getKey(), securityContactEmailAddress)
-			).put(
-				"serverLocation",
-				_getServerLocation(properties.get("dataCenterLocation"))
-			));
 
 		_marketplaceService.completeOrder(
 			HashMapBuilder.put(
@@ -324,7 +348,7 @@ public class ProvisioningHubService extends BaseService {
 				MarketplaceUtil.getOrderMetadataJSONObject(
 					order
 				).put(
-					"analyticsProject", new JSONObject(analyticsProject)
+					"analyticsProject", analyticsProjectJSONObject
 				).toString()
 			).build(),
 			order.getId(),

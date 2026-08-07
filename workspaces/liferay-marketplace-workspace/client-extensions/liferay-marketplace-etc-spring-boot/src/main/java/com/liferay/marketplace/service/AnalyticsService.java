@@ -104,6 +104,11 @@ public class AnalyticsService extends BaseService {
 		}
 	}
 
+	public JSONObject getCorpProjectUuidJSONObject(String corpProjectUuid) {
+		return getCorpProjectUuidJSONObject(
+			getAnalyticsContextJSONObject(null), corpProjectUuid);
+	}
+
 	public String provision(JSONObject jsonObject) throws Exception {
 		return provision(getAnalyticsContextJSONObject(null), jsonObject);
 	}
@@ -143,6 +148,8 @@ public class AnalyticsService extends BaseService {
 					).toString()
 				).with(
 					"name", jsonObject.getString("name")
+				).with(
+					"offeringEntries", "[]"
 				).with(
 					"serverLocation", jsonObject.getString("serverLocation")
 				).with(
