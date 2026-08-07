@@ -65,10 +65,8 @@ type EntitlementNode = {
 type ContractNode = {
 	contractTerm?: number;
 	contractToEntitlement?: EntitlementNode[];
-	customStatus?: string;
 	endDate?: string;
 	externalReferenceCode: string;
-	name: string;
 	r_projectToContract_c_projectId?: number;
 	spendLimit?: number;
 	startDate?: string;
@@ -92,10 +90,10 @@ function toProjectContract(contractNode: ContractNode): ProjectContract {
 	return {
 		endDate: contractNode.endDate,
 		externalReferenceCode: contractNode.externalReferenceCode,
-		name: contractNode.name,
+		name: contractNode.externalReferenceCode,
 		spendLimit: contractNode.spendLimit,
 		startDate: contractNode.startDate,
-		status: contractNode.customStatus,
+		status: getContractStatus(contractNode.startDate, contractNode.endDate),
 		termMonths: contractNode.contractTerm,
 	};
 }
@@ -124,6 +122,20 @@ export function resolveDefaultContractERC(
 
 function getEntitlementStatus(endDate?: string): string {
 	if (endDate && new Date(endDate) < new Date()) {
+		return 'expired';
+	}
+
+	return 'active';
+}
+
+function getContractStatus(startDate?: string, endDate?: string): string {
+	const now = new Date();
+
+	if (startDate && new Date(startDate) > now) {
+		return 'future';
+	}
+
+	if (endDate && new Date(endDate) < now) {
 		return 'expired';
 	}
 

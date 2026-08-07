@@ -4,7 +4,7 @@
  */
 
 import {format} from 'date-fns';
-import i18n from '~/i18n';
+import i18n, {Word} from '~/i18n';
 
 import {DetailsRow} from '../components/DetailsCard/DetailsCard';
 import {DetailsSection} from '../components/SectionedDetailsCard/SectionedDetailsCard';
@@ -53,7 +53,12 @@ function contractRows(contract?: ProjectContract): DetailsRow[] {
 			label: i18n.translate('expiration-date'),
 			value: formatDate(contract?.endDate),
 		},
-		{label: i18n.translate('status'), value: contract?.status ?? ''},
+		{
+			label: i18n.translate('status'),
+			value: contract?.status
+				? i18n.translate(contract.status as Word)
+				: '',
+		},
 	];
 }
 

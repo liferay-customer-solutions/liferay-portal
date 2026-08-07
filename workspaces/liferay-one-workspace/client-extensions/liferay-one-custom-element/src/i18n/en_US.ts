@@ -498,6 +498,7 @@ export default {
 	'friendly-workspace-url': 'Friendly Workspace URL',
 	'fulfillment-date': 'Fulfillment Date',
 	'full-name': 'Full Name',
+	'future': 'Future',
 	'general-info': 'General Info',
 	'generate': 'Generate',
 	'generate-new': 'Generate New',

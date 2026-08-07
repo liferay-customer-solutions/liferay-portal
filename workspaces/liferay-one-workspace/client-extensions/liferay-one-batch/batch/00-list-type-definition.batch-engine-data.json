@@ -162,11 +162,6 @@
 			"externalReferenceCode": "LT_CONTRACT_TYPE",
 			"listTypeEntries": [
 				{
-					"externalReferenceCode": "LT_CONTRACT_TYPE_AMENDMENT",
-					"key": "amendment",
-					"name": "Amendment"
-				},
-				{
 					"externalReferenceCode": "LT_CONTRACT_TYPE_INITIAL",
 					"key": "initial",
 					"name": "Initial"

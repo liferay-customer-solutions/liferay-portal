@@ -50,7 +50,7 @@ export default function ProjectHeader() {
 
 	const items: SelectorItem[] = contracts
 		.filter((contract) =>
-			contract.name
+			contract.externalReferenceCode
 				.toLowerCase()
 				.includes(searchValue.trim().toLowerCase())
 		)

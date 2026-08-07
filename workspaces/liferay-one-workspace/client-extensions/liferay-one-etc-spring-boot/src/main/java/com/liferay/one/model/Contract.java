@@ -17,12 +17,24 @@ import org.json.JSONObject;
 public class Contract {
 
 	public Contract(JSONObject jsonObject) {
-		_dateCreatedInstant = Instant.parse(
-			jsonObject.optString("dateCreated"));
 		_externalReferenceCode = jsonObject.optString("externalReferenceCode");
 		_id = jsonObject.optLong("id");
+		_opportunityId = jsonObject.optString("opportunityId");
+		_originalContractExternalReferenceCode = jsonObject.optString(
+			"r_originalContractToContract_c_contractERC");
 		_projectExternalReferenceCode = jsonObject.optString(
 			"r_projectToContract_c_projectERC");
+		_renewalOpportunityId = jsonObject.optString("renewalOpportunityId");
+
+		JSONObject contractTypeJSONObject = jsonObject.optJSONObject(
+			"contractType");
+
+		if (contractTypeJSONObject == null) {
+			_contractType = null;
+		}
+		else {
+			_contractType = contractTypeJSONObject.optString("key", null);
+		}
 
 		String endDate = jsonObject.optString("endDate");
 
@@ -34,8 +46,8 @@ public class Contract {
 		}
 	}
 
-	public Instant getDateCreatedInstant() {
-		return _dateCreatedInstant;
+	public String getContractType() {
+		return _contractType;
 	}
 
 	public Instant getEndDateInstant() {
@@ -50,14 +62,29 @@ public class Contract {
 		return _id;
 	}
 
+	public String getOpportunityId() {
+		return _opportunityId;
+	}
+
+	public String getOriginalContractExternalReferenceCode() {
+		return _originalContractExternalReferenceCode;
+	}
+
 	public String getProjectExternalReferenceCode() {
 		return _projectExternalReferenceCode;
 	}
 
-	private final Instant _dateCreatedInstant;
+	public String getRenewalOpportunityId() {
+		return _renewalOpportunityId;
+	}
+
+	private final String _contractType;
 	private final Instant _endDateInstant;
 	private final String _externalReferenceCode;
 	private final long _id;
+	private final String _opportunityId;
+	private final String _originalContractExternalReferenceCode;
 	private final String _projectExternalReferenceCode;
+	private final String _renewalOpportunityId;
 
 }

@@ -70,29 +70,42 @@ public class SalesforceObjectPubsubSubscriber extends BasePubsubSubscriber {
 			JSONArray recordsJSONArray = jsonObject.getJSONArray("records");
 
 			for (int i = 0; i < recordsJSONArray.length(); i++) {
-				JSONObject recordJSONObject = recordsJSONArray.getJSONObject(i);
+				try {
+					JSONObject recordJSONObject =
+						recordsJSONArray.getJSONObject(i);
 
-				if (Objects.equals(salesforceObjectName, "Account")) {
-					_processAccount(recordJSONObject);
-				}
-				else if (Objects.equals(salesforceObjectName, "Contract")) {
-					_processContract(recordJSONObject);
-				}
-				else if (Objects.equals(
-							salesforceObjectName, "PricebookEntry")) {
+					if (Objects.equals(salesforceObjectName, "Account")) {
+						_processAccount(recordJSONObject);
+					}
+					else if (Objects.equals(salesforceObjectName, "Contract")) {
+						_processContract(action, recordJSONObject);
+					}
+					else if (Objects.equals(
+								salesforceObjectName, "PricebookEntry")) {
 
-					_processPricebookEntry(action, recordJSONObject);
+						_processPricebookEntry(action, recordJSONObject);
+					}
+					else if (Objects.equals(salesforceObjectName, "Product2")) {
+						_processProduct2(action, recordJSONObject);
+					}
+					else if (Objects.equals(
+								salesforceObjectName, "Project__c")) {
+
+						_processProject(recordJSONObject);
+					}
+					else if (_log.isInfoEnabled()) {
+						_log.info(
+							"Unable to handle Salesforce object " +
+								salesforceObjectName);
+					}
 				}
-				else if (Objects.equals(salesforceObjectName, "Product2")) {
-					_processProduct2(action, recordJSONObject);
-				}
-				else if (Objects.equals(salesforceObjectName, "Project__c")) {
-					_processProject(recordJSONObject);
-				}
-				else if (_log.isInfoEnabled()) {
-					_log.info(
-						"Unable to handle Salesforce object " +
-							salesforceObjectName);
+				catch (Exception exception) {
+					_log.error(
+						StringBundler.concat(
+							"Unable to process Salesforce ",
+							salesforceObjectName, " record ",
+							recordsJSONArray.opt(i)),
+						exception);
 				}
 			}
 		}
@@ -135,11 +148,11 @@ public class SalesforceObjectPubsubSubscriber extends BasePubsubSubscriber {
 		_accountService.upsertAccount(salesforceAccount);
 	}
 
-	private void _processContract(JSONObject recordJSONObject)
+	private void _processContract(String action, JSONObject recordJSONObject)
 		throws Exception {
 
 		_contractService.upsertContract(
-			new SalesforceContract(recordJSONObject));
+			action, new SalesforceContract(recordJSONObject));
 	}
 
 	private void _processPricebookEntry(

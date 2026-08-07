@@ -892,24 +892,6 @@
 					"type": "String"
 				},
 				{
-					"DBType": "String",
-					"businessType": "Text",
-					"externalReferenceCode": "C_CONTRACT_CUSTOM_STATUS",
-					"indexed": true,
-					"indexedAsKeyword": true,
-					"indexedLanguageId": "",
-					"label": {
-						"en_US": "Status"
-					},
-					"name": "customStatus",
-					"objectFieldSettings": [
-					],
-					"required": false,
-					"state": false,
-					"system": false,
-					"type": "String"
-				},
-				{
 					"DBType": "Date",
 					"businessType": "DateTime",
 					"externalReferenceCode": "C_CONTRACT_END_DATE",
@@ -930,24 +912,6 @@
 					"state": false,
 					"system": false,
 					"type": "Date"
-				},
-				{
-					"DBType": "String",
-					"businessType": "Text",
-					"externalReferenceCode": "C_CONTRACT_NAME",
-					"indexed": true,
-					"indexedAsKeyword": true,
-					"indexedLanguageId": "",
-					"label": {
-						"en_US": "Name"
-					},
-					"name": "name",
-					"objectFieldSettings": [
-					],
-					"required": false,
-					"state": false,
-					"system": false,
-					"type": "String"
 				},
 				{
 					"DBType": "String",
@@ -996,6 +960,24 @@
 						"en_US": "Owner Email Address"
 					},
 					"name": "ownerEmailAddress",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_CONTRACT_RENEWAL_OPPORTUNITY_ID",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "en_US",
+					"label": {
+						"en_US": "Renewal Opportunity ID"
+					},
+					"name": "renewalOpportunityId",
 					"objectFieldSettings": [
 					],
 					"required": false,
