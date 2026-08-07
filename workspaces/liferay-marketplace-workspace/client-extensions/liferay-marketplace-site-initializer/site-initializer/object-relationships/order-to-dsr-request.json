@@ -1,5 +1,6 @@
 {
 	"deletionType": "cascade",
+	"externalReferenceCode": "R_ORDER_TO_DSR_REQUEST",
 	"label": {
 		"en_US": "Order to DSR Request"
 	},

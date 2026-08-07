@@ -1,5 +1,6 @@
 {
 	"deletionType": "cascade",
+	"externalReferenceCode": "R_ORDER_TO_DXP_FREE_ACTIVATION_KEY_REQUEST",
 	"label": {
 		"en_US": "Order to DXP Free Activation key Request"
 	},

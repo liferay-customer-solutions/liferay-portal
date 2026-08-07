@@ -1,5 +1,6 @@
 {
 	"deletionType": "cascade",
+	"externalReferenceCode": "R_ORDER_TO_TRIAL_EXTENSION_REQUEST",
 	"label": {
 		"en_US": "Order To Trial Extension Request"
 	},
