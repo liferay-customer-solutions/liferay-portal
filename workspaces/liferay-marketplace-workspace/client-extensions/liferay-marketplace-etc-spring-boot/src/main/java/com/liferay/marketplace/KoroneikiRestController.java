@@ -21,14 +21,11 @@ import com.liferay.marketplace.util.MarketplaceUtil;
 import com.liferay.marketplace.util.SkuUtil;
 import com.liferay.osb.koroneiki.phloem.rest.client.dto.v1_0.Account;
 import com.liferay.osb.koroneiki.phloem.rest.client.dto.v1_0.Contact;
-import com.liferay.osb.koroneiki.phloem.rest.client.dto.v1_0.ExternalLink;
 import com.liferay.osb.koroneiki.phloem.rest.client.dto.v1_0.ProductConsumption;
 import com.liferay.osb.koroneiki.phloem.rest.client.dto.v1_0.ProductPurchase;
-import com.liferay.osb.koroneiki.phloem.rest.client.dto.v1_0.ProductPurchaseView;
 import com.liferay.osb.koroneiki.phloem.rest.client.pagination.Page;
 import com.liferay.osb.koroneiki.phloem.rest.client.resource.v1_0.AccountResource;
 import com.liferay.osb.koroneiki.phloem.rest.client.resource.v1_0.ContactResource;
-import com.liferay.osb.koroneiki.phloem.rest.client.resource.v1_0.ProductPurchaseViewResource;
 import com.liferay.osb.koroneiki.phloem.rest.client.resource.v1_0.ProductResource;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -38,7 +35,8 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 import java.util.Date;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -113,6 +111,23 @@ public class KoroneikiRestController extends BaseRestController {
 
 		Order order = _marketplaceService.getOrder(orderId);
 
+		Map<String, ProductPurchase> productPurchases = new HashMap<>();
+
+		Page<ProductPurchase> productPurchasesPage =
+			_koroneikiService.getProductPurchaseResource(
+			).getProductPurchaseByExternalLinkDomainEntityNameEntityPage(
+				"marketplace", "opportunity", String.valueOf(orderId),
+				com.liferay.osb.koroneiki.phloem.rest.client.pagination.
+					Pagination.of(1, 20)
+			);
+
+		for (ProductPurchase productPurchase :
+				productPurchasesPage.getItems()) {
+
+			productPurchases.put(
+				productPurchase.getProductKey(), productPurchase);
+		}
+
 		OrderItemResource orderItemResource =
 			_marketplaceService.getOrderItemResource();
 
@@ -123,34 +138,8 @@ public class KoroneikiRestController extends BaseRestController {
 						Pagination.of(1, 10)
 				).getItems()) {
 
-			ProductPurchaseViewResource productPurchaseViewResource =
-				_koroneikiService.getProductPurchaseViewResource();
-
-			ProductPurchaseView productPurchaseView =
-				productPurchaseViewResource.
-					getAccountAccountKeyProductProductKeyProductPurchaseView(
-						order.getAccountExternalReferenceCode(),
-						orderItem.getSkuExternalReferenceCode());
-
-			ProductPurchase productPurchase = null;
-
-			outerLoop:
-			for (ProductPurchase currentProductPurchase :
-					productPurchaseView.getProductPurchases()) {
-
-				for (ExternalLink externalLink :
-						currentProductPurchase.getExternalLinks()) {
-
-					if (Objects.equals(
-							externalLink.getEntityId(),
-							String.valueOf(orderId))) {
-
-						productPurchase = currentProductPurchase;
-
-						break outerLoop;
-					}
-				}
-			}
+			ProductPurchase productPurchase = productPurchases.get(
+				orderItem.getSkuExternalReferenceCode());
 
 			if (productPurchase == null) {
 				continue;
@@ -184,18 +173,20 @@ public class KoroneikiRestController extends BaseRestController {
 
 			int provisionedCount = 0;
 
-			for (ProductConsumption productConsumption :
-					productPurchaseView.getProductConsumptions()) {
+			ProductConsumption[] productConsumptions =
+				productPurchase.getProductConsumptions();
 
-				Date endDate = productConsumption.getEndDate();
+			if (productConsumptions != null) {
+				for (ProductConsumption productConsumption :
+						productConsumptions) {
 
-				if (Objects.equals(
-						productConsumption.getProductPurchaseKey(),
-						productPurchase.getKey()) &&
-					(((endDate != null) && endDate.after(new Date())) ||
-					 productPurchase.getPerpetual())) {
+					Date endDate = productConsumption.getEndDate();
 
-					provisionedCount++;
+					if (((endDate != null) && endDate.after(new Date())) ||
+						productPurchase.getPerpetual()) {
+
+						provisionedCount++;
+					}
 				}
 			}
 
