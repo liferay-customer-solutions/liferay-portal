@@ -110,13 +110,13 @@ export function buildEnvironmentSections(
 	const fields = ENVIRONMENT_FIELDS_BY_PROFILE[profile] ?? [];
 
 	return environments.map((environment) => ({
+		id: environment.id,
 		rows: fields
 			.map((field) => ({
 				label: i18n.translate(field.label),
 				value: field.value(environment),
 			}))
 			.filter((row) => row.value),
-		title: environment.externalReferenceCode,
 	}));
 }
 

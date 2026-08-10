@@ -23,6 +23,7 @@ export type ProjectEnvironment = {
 	hostName: string;
 	id: string;
 	ownerEmailAddress: string;
+	projectExternalReferenceCode: string;
 	projectId: string;
 	region: string;
 	status: string;
@@ -49,6 +50,7 @@ type EnvironmentNode = {
 	id: number;
 	ownerEmailAddress?: string;
 	projectId?: string;
+	r_projectToEnvironment_c_projectERC?: string;
 	region?: string;
 	timeZone?: string;
 	tokenMonthlyAllowance?: string;
@@ -90,6 +92,8 @@ export function useProjectEnvironments() {
 			hostName: node.hostName ?? '',
 			id: String(node.id),
 			ownerEmailAddress: node.ownerEmailAddress ?? '',
+			projectExternalReferenceCode:
+				node.r_projectToEnvironment_c_projectERC ?? '',
 			projectId: node.projectId ?? '',
 			region: node.region ?? '',
 			status: node.activationStatus ?? '',

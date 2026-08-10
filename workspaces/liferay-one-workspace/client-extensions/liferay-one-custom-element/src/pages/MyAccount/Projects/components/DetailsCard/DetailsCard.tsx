@@ -14,6 +14,7 @@ export type DetailsRow = {
 
 type DetailsCardProps = {
 	bodyClassName?: string;
+	compact?: boolean;
 	fullWidth?: boolean;
 	headerActions?: ReactNode;
 	icon?: string;
@@ -25,6 +26,7 @@ type DetailsCardProps = {
 
 export default function DetailsCard({
 	bodyClassName = 'mt-3',
+	compact = false,
 	fullWidth = false,
 	headerActions,
 	icon = 'catalog',
@@ -37,7 +39,7 @@ export default function DetailsCard({
 		<DetailedCard
 			cardIconAltText={i18n.translate(title)}
 			cardTitle={i18n.translate(title)}
-			className="mt-3"
+			className={compact ? 'detailed-card-compact mt-3' : 'mt-3'}
 			clayIcon={icon}
 			clayIconSpritemap={iconSpritemap}
 			fitContent={!fullWidth}

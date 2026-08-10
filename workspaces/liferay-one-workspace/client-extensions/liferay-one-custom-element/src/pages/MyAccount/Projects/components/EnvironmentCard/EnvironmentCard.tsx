@@ -31,7 +31,7 @@ export default function EnvironmentCard({environment}: EnvironmentCardProps) {
 			<DetailedCard
 				cardIconAltText={i18n.translate('workspace-info')}
 				cardTitle={i18n.translate('workspace-info')}
-				className="mt-3"
+				className="detailed-card-compact mt-3"
 				clayIcon="cloud"
 			>
 				<p className="mt-3 text-neutral-7">
@@ -41,5 +41,7 @@ export default function EnvironmentCard({environment}: EnvironmentCardProps) {
 		);
 	}
 
-	return <DetailsCard icon="cloud" rows={rows} title="workspace-info" />;
+	return (
+		<DetailsCard compact icon="cloud" rows={rows} title="workspace-info" />
+	);
 }

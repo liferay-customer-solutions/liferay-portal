@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {useProject} from '~/context/ProjectContext';
 import {useProjectEnvironments} from '~/hooks/useProjectEnvironments';
 import {buildEnvironmentSections} from '~/pages/MyAccount/Projects/utils/buildEnvironmentSections';
+import {filterEnvironmentsByProject} from '~/pages/MyAccount/Projects/utils/filterEnvironmentsByProject';
 
 import AIHubEnvironment from '../AIHubEnvironment/AIHubEnvironment';
 import DSREnvironment from '../DSREnvironment/DSREnvironment';
@@ -33,12 +35,14 @@ export default function EnvironmentTab({
 	environment,
 	profile,
 }: EnvironmentTabProps) {
+	const {projectId} = useProject();
 	const {environments} = useProjectEnvironments();
 
 	const expectedType = profile ? ENVIRONMENT_TYPE_BY_PROFILE[profile] : '';
 
-	const matchingEnvironments = environments.filter(
-		(item) => item.type === expectedType
+	const matchingEnvironments = filterEnvironmentsByProject(
+		projectId,
+		environments.filter((item) => item.type === expectedType)
 	);
 
 	const [environmentEntry] = matchingEnvironments;

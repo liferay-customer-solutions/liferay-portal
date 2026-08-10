@@ -204,7 +204,7 @@
 			"accountName": "",
 			"active": true,
 			"complimentary": false,
-			"customExpirationDate": "2026-09-15T00:00:00Z",
+			"customExpirationDate": "2029-01-12T00:00:00Z",
 			"description": "Main production instance",
 			"domains": "bravekiwi.com",
 			"externalReferenceCode": "C_LICENSE_KEY_MAIN_INSTANCE",

@@ -15,7 +15,7 @@ import {
 	useProjectActivationKeys,
 } from '~/hooks/useProjectActivationKeys';
 import {useProjectProducts} from '~/hooks/useProjectCommerce';
-import i18n, {Word, translate} from '~/i18n';
+import i18n, {translate} from '~/i18n';
 import {getStatusColor} from '~/pages/MyAccount/Projects/utils/getStatusColor';
 
 import FilterableListCard, {
@@ -175,7 +175,7 @@ export default function LicenseKeys() {
 							style={{
 								backgroundColor: getStatusColor(row.status),
 							}}
-							title={translate(row.status as Word)}
+							title={translate(row.status)}
 						/>
 					</ClayTooltipProvider>
 
