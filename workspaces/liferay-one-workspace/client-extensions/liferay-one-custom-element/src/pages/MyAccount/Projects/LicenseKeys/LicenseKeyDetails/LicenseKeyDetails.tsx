@@ -12,11 +12,13 @@ import {
 	useProjectActivationKeys,
 } from '~/hooks/useProjectActivationKeys';
 import {useProjectProducts} from '~/hooks/useProjectCommerce';
-import {Word, translate} from '~/i18n';
+import {translate} from '~/i18n';
 import DetailsCard, {
 	DetailsRow,
 } from '~/pages/MyAccount/Projects/components/DetailsCard/DetailsCard';
+import {getKeyType} from '~/pages/MyAccount/Projects/utils/getKeyType';
 import {getStatusColor} from '~/pages/MyAccount/Projects/utils/getStatusColor';
+import {isPermanentKey} from '~/pages/MyAccount/Projects/utils/isPermanentKey';
 
 import useLicenseKeyActions from '../hooks/useLicenseKeyActions';
 import useLicenseKeySubscription from '../hooks/useLicenseKeySubscription';
@@ -84,21 +86,45 @@ function LicenseKeyDetailsContent({
 			label: translate('description'),
 			value: licenseKey.description || '-',
 		},
-		{label: translate('key-type'), value: licenseKey.keyType || '-'},
+		{
+			label: translate('key-type'),
+			value: licenseKey.licenseType
+				? translate(getKeyType(licenseKey.licenseType))
+				: '-',
+		},
 		{label: translate('host-name'), value: licenseKey.hostName || '-'},
 		{
 			label: translate('cluster-size'),
 			value: licenseKey.clusterSize || '-',
 		},
 		{
+			label: translate('version'),
+			value: licenseKey.productVersion || '-',
+		},
+		{
+			label: translate('instance-size'),
+			value: licenseKey.sizing || '-',
+		},
+		{
 			label: translate('environment-type'),
 			value: translate(licenseKey.environmentType),
+		},
+		{
+			label: translate('subscription-type'),
+			value: translate(
+				licenseKey.complimentary ? 'complimentary' : 'subscription'
+			),
 		},
 		{label: translate('domains'), value: licenseKey.domain || '-'},
 		{label: translate('start-date'), value: licenseKey.startDate || '-'},
 		{
 			label: translate('expiration-date'),
-			value: licenseKey.expirationDate || '-',
+			value: isPermanentKey(
+				licenseKey.expirationDateValue,
+				licenseKey.startDateValue
+			)
+				? translate('does-not-expire')
+				: licenseKey.expirationDate || '-',
 		},
 		{
 			label: translate('status'),
@@ -111,7 +137,7 @@ function LicenseKeyDetailsContent({
 						}}
 					/>
 
-					{translate(licenseKey.status as Word)}
+					{translate(licenseKey.status)}
 				</span>
 			),
 		},

@@ -20,6 +20,7 @@ export type ProjectActivationKey = {
 	active: boolean;
 	badge?: Word;
 	clusterSize: string;
+	complimentary: boolean;
 	description: string;
 	domain: string;
 	environmentType: Word;
@@ -27,19 +28,21 @@ export type ProjectActivationKey = {
 	expirationDateValue: string;
 	hostName: string;
 	id: string;
-	keyType: string;
 	licenseKeyId: string;
 	licenseType: string;
 	name: string;
+	productVersion: string;
 	products: ProjectActivationKeyProduct[];
+	sizing: string;
 	startDate: string;
 	startDateValue: string;
-	status: string;
+	status: Word;
 };
 
 type LicenseKeyNode = {
 	active: boolean;
 	additionalInfo?: string;
+	complimentary?: boolean;
 	customExpirationDate?: string;
 	dateCreated?: string;
 	description?: string;
@@ -51,6 +54,8 @@ type LicenseKeyNode = {
 	maxClusterNodes?: number;
 	maxServers?: number;
 	name: string;
+	productVersion?: string;
+	sizing?: string;
 	startDate?: string;
 };
 
@@ -102,15 +107,21 @@ function getEnvironmentType(licenseType?: string): Word {
 	return 'production';
 }
 
-function getKeyType(licenseType?: string): string {
-	if (!licenseType) {
-		return '';
+function getStatus(node: LicenseKeyNode): Word {
+	const now = new Date();
+
+	if (!node.active || (node.startDate && now < new Date(node.startDate))) {
+		return 'not-activated';
 	}
 
-	return licenseType
-		.split('-')
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-		.join(' ');
+	if (
+		node.customExpirationDate &&
+		now > new Date(node.customExpirationDate)
+	) {
+		return 'expired';
+	}
+
+	return 'active';
 }
 
 function formatDate(value?: string): string {
@@ -174,6 +185,7 @@ export function useProjectActivationKeys(productName?: string) {
 			active: node.active,
 			badge: getBadge(node),
 			clusterSize: getClusterSize(node),
+			complimentary: node.complimentary ?? false,
 			description: node.description ?? '',
 			domain: node.domains ?? '',
 			environmentType: getEnvironmentType(node.licenseType),
@@ -181,14 +193,15 @@ export function useProjectActivationKeys(productName?: string) {
 			expirationDateValue: getDateValue(node.customExpirationDate),
 			hostName: node.hostName ?? '',
 			id: node.externalReferenceCode,
-			keyType: getKeyType(node.licenseType),
 			licenseKeyId: node.id ? String(node.id) : '',
 			licenseType: node.licenseType ?? '',
 			name: node.name,
+			productVersion: node.productVersion ?? '',
 			products: getProducts(node.additionalInfo),
+			sizing: node.sizing ?? '',
 			startDate: formatDate(node.startDate),
 			startDateValue: getDateValue(node.startDate),
-			status: node.active ? 'active' : 'expired',
+			status: getStatus(node),
 		})
 	);
 

@@ -249,6 +249,7 @@ export default {
 	'cloud-project': 'Cloud Project',
 	'cloud-provisioning': 'Cloud Provisioning',
 	'cloud-upload': 'Cloud Upload',
+	'cluster': 'Cluster',
 	'cluster-size': 'Cluster Size',
 	'columns': 'Columns',
 	'comment': 'Comment',
@@ -370,6 +371,7 @@ export default {
 		'Developer licenses are limited to 5 unique addresses and should not be used for full-scale production deployments.',
 	'do-not-close-this-window': 'DO NOT CLOSE THIS WINDOW',
 	'documentation': 'Documentation',
+	'does-not-expire': 'Does Not Expire',
 	'domain': 'Domain',
 	'domains': 'Domains',
 	'done': 'Done',
@@ -827,6 +829,7 @@ export default {
 	'ok': 'OK',
 	'okta-sso': 'Okta SSO',
 	'on-hold': 'On Hold',
+	'on-premise': 'On-Premise',
 	'once-canceled-no-further-edits-can-be-made-to-this-event':
 		'Once canceled, no further edits can be made to this event.',
 	'one-time-purchases': 'One-Time Purchases',
@@ -1433,6 +1436,7 @@ export default {
 	'view-license-details': 'View License Details',
 	'view-request': 'View Request',
 	'view-the-documentation': 'View the documentation',
+	'virtual-cluster': 'Virtual Cluster',
 	'visit': 'Visit',
 	'we-apologize-for-the-inconvenience-but-we-ve-detected-a-system-error-with-this-project':
 		"We apologize for the inconvenience, but we've detected a system error with this project.",
