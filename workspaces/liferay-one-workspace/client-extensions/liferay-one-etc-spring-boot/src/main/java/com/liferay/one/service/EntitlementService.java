@@ -296,6 +296,18 @@ public class EntitlementService extends OneBaseService {
 				commerceOrderItemId, "'"));
 	}
 
+	public List<Entitlement> getEntitlements(
+			long accountEntryId, long entitlementDefinitionId)
+		throws Exception {
+
+		return getEntitlements(
+			StringBundler.concat(
+				"(r_accountEntryToEntitlement_accountEntryId eq '",
+				accountEntryId, "') and ",
+				"(r_entitlementDefinitionToEntitlement_c_",
+				"entitlementDefinitionId eq '", entitlementDefinitionId, "')"));
+	}
+
 	public List<Entitlement> getEntitlements(String filterString)
 		throws Exception {
 

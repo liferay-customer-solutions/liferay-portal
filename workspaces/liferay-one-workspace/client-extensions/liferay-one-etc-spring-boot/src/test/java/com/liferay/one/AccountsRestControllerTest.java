@@ -9,12 +9,15 @@ import com.liferay.headless.admin.user.client.dto.v1_0.Account;
 import com.liferay.headless.admin.user.client.dto.v1_0.AccountBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.RoleBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
+import com.liferay.one.constants.EntitlementConstants;
 import com.liferay.one.jira.service.AccountAssetService;
 import com.liferay.one.jira.synchronizer.AccountSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountRoleSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountSynchronizer;
 import com.liferay.one.license.LicenseKeyCSVExporter;
 import com.liferay.one.model.AccountInvitation;
+import com.liferay.one.model.Entitlement;
+import com.liferay.one.model.EntitlementDefinition;
 import com.liferay.one.model.LicenseKey;
 import com.liferay.one.model.Project;
 import com.liferay.one.okta.model.OktaUser;
@@ -27,6 +30,7 @@ import com.liferay.one.service.AccountInvitationEmailService;
 import com.liferay.one.service.AccountInvitationService;
 import com.liferay.one.service.AccountService;
 import com.liferay.one.service.EmailAddressValidatorService;
+import com.liferay.one.service.EntitlementDefinitionService;
 import com.liferay.one.service.EntitlementService;
 import com.liferay.one.service.LicenseKeyService;
 import com.liferay.one.service.ProjectService;
@@ -34,11 +38,14 @@ import com.liferay.one.service.ProvisioningAssignmentService;
 import com.liferay.one.service.ProvisioningEmailService;
 import com.liferay.one.service.UserAccountService;
 import com.liferay.one.util.KeyedLock;
+import com.liferay.one.util.TermCountUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 
 import java.lang.reflect.Field;
+
+import java.time.Instant;
 
 import java.util.Collections;
 import java.util.List;
@@ -414,6 +421,159 @@ public class AccountsRestControllerTest {
 		).check(
 			_ACCOUNT_ID, ActionKeys.VIEW, null
 		);
+	}
+
+	@Test
+	public void testGetProductUsage() throws Exception {
+		AccountsRestController accountsRestController = _createController();
+
+		Mockito.when(
+			_accountService.getAccount(_EXTERNAL_REFERENCE_CODE, null)
+		).thenReturn(
+			_createAccount()
+		);
+
+		EntitlementDefinition entitlementDefinition = Mockito.mock(
+			EntitlementDefinition.class);
+
+		Mockito.when(
+			entitlementDefinition.getEntitlementDefinitionId()
+		).thenReturn(
+			99L
+		);
+
+		Mockito.when(
+			_entitlementDefinitionService.fetchEntitlementDefinition(
+				EntitlementConstants.EXTERNAL_REFERENCE_CODE_DXP)
+		).thenReturn(
+			entitlementDefinition
+		);
+
+		int currentYear = TermCountUtil.getYear(Instant.now());
+
+		Instant endInstant = TermCountUtil.getStartOfYearInstant(
+			currentYear + 1);
+		Instant startInstant = TermCountUtil.getStartOfYearInstant(currentYear);
+
+		Entitlement entitlement = Mockito.mock(Entitlement.class);
+
+		Mockito.when(
+			entitlement.getEndDateInstant()
+		).thenReturn(
+			endInstant
+		);
+
+		Mockito.when(
+			entitlement.getEntitlementId()
+		).thenReturn(
+			7L
+		);
+
+		Mockito.when(
+			entitlement.getQuantity()
+		).thenReturn(
+			5.0
+		);
+
+		Mockito.when(
+			entitlement.getStartDateInstant()
+		).thenReturn(
+			startInstant
+		);
+
+		Mockito.when(
+			_entitlementService.getEntitlements(_ACCOUNT_ID, 99L)
+		).thenReturn(
+			Collections.singletonList(entitlement)
+		);
+
+		LicenseKey licenseKey = Mockito.mock(LicenseKey.class);
+
+		Mockito.when(
+			licenseKey.getCustomExpirationDateInstant()
+		).thenReturn(
+			endInstant
+		);
+
+		Mockito.when(
+			licenseKey.getEntitlementId()
+		).thenReturn(
+			7L
+		);
+
+		Mockito.when(
+			licenseKey.getStartDateInstant()
+		).thenReturn(
+			startInstant
+		);
+
+		LicenseKey unrelatedLicenseKey = Mockito.mock(LicenseKey.class);
+
+		Mockito.when(
+			unrelatedLicenseKey.getEntitlementId()
+		).thenReturn(
+			8L
+		);
+
+		Mockito.when(
+			_licenseKeyService.getLicenseKeysByAccountEntryId(_ACCOUNT_ID)
+		).thenReturn(
+			List.of(licenseKey, unrelatedLicenseKey)
+		);
+
+		ResponseEntity<String> responseEntity =
+			accountsRestController.getProductUsage(
+				null, _EXTERNAL_REFERENCE_CODE,
+				EntitlementConstants.EXTERNAL_REFERENCE_CODE_DXP);
+
+		JSONObject jsonObject = new JSONObject(responseEntity.getBody());
+
+		Assertions.assertEquals(1, jsonObject.getInt("currentConsumption"));
+
+		JSONArray jsonArray = jsonObject.getJSONArray("annualSubscriptions");
+
+		Assertions.assertEquals(3, jsonArray.length());
+
+		JSONObject currentYearJSONObject = jsonArray.getJSONObject(1);
+
+		Assertions.assertEquals(
+			currentYear, currentYearJSONObject.getInt("year"));
+
+		Assertions.assertEquals(
+			1, currentYearJSONObject.getInt("maxConcurrentConsumption"));
+
+		Assertions.assertEquals(
+			5, currentYearJSONObject.getInt("maxConcurrentQuantity"));
+
+		Mockito.verify(
+			_licenseKeyPermission
+		).check(
+			_ACCOUNT_ID, ActionKeys.VIEW, null
+		);
+	}
+
+	@Test
+	public void testGetProductUsageWhenProductIsNotSelfHosted()
+		throws Exception {
+
+		AccountsRestController accountsRestController = _createController();
+
+		Mockito.when(
+			_accountService.getAccount(_EXTERNAL_REFERENCE_CODE, null)
+		).thenReturn(
+			_createAccount()
+		);
+
+		ResponseStatusException responseStatusException =
+			Assertions.assertThrows(
+				ResponseStatusException.class,
+				() -> accountsRestController.getProductUsage(
+					null, _EXTERNAL_REFERENCE_CODE, "C_ENT_DEF_COMMERCE"));
+
+		Assertions.assertEquals(
+			HttpStatus.NOT_FOUND, responseStatusException.getStatusCode());
+
+		Mockito.verifyNoInteractions(_entitlementDefinitionService);
 	}
 
 	@Test
@@ -1554,6 +1714,9 @@ public class AccountsRestControllerTest {
 			accountsRestController, "_emailAddressValidatorService",
 			_emailAddressValidatorService);
 		ReflectionTestUtils.setField(
+			accountsRestController, "_entitlementDefinitionService",
+			_entitlementDefinitionService);
+		ReflectionTestUtils.setField(
 			accountsRestController, "_entitlementService", _entitlementService);
 		ReflectionTestUtils.setField(
 			accountsRestController, "_keyedLock", new KeyedLock());
@@ -1703,6 +1866,8 @@ public class AccountsRestControllerTest {
 		AdminPermission.class);
 	private final EmailAddressValidatorService _emailAddressValidatorService =
 		Mockito.mock(EmailAddressValidatorService.class);
+	private final EntitlementDefinitionService _entitlementDefinitionService =
+		Mockito.mock(EntitlementDefinitionService.class);
 	private final EntitlementService _entitlementService = Mockito.mock(
 		EntitlementService.class);
 	private final LicenseKeyCSVExporter _licenseKeyCSVExporter = Mockito.mock(

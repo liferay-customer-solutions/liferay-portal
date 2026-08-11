@@ -19,6 +19,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class EntitlementDefinitionService extends OneBaseService {
 
+	public EntitlementDefinition fetchEntitlementDefinition(
+			String externalReferenceCode)
+		throws Exception {
+
+		List<EntitlementDefinition> entitlementDefinitions =
+			getEntitlementDefinitions(
+				"externalReferenceCode eq '" + externalReferenceCode + "'");
+
+		if (entitlementDefinitions.isEmpty()) {
+			return null;
+		}
+
+		return entitlementDefinitions.get(0);
+	}
+
 	public List<EntitlementDefinition> getEntitlementDefinitions(
 			String filterString)
 		throws Exception {

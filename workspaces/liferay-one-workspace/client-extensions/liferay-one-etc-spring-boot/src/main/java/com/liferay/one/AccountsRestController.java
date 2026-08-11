@@ -17,6 +17,8 @@ import com.liferay.one.jira.synchronizer.AccountUserAccountRoleSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountSynchronizer;
 import com.liferay.one.license.LicenseKeyCSVExporter;
 import com.liferay.one.model.AccountInvitation;
+import com.liferay.one.model.Entitlement;
+import com.liferay.one.model.EntitlementDefinition;
 import com.liferay.one.model.LicenseKey;
 import com.liferay.one.model.Project;
 import com.liferay.one.okta.service.OktaService;
@@ -28,6 +30,7 @@ import com.liferay.one.service.AccountInvitationEmailService;
 import com.liferay.one.service.AccountInvitationService;
 import com.liferay.one.service.AccountService;
 import com.liferay.one.service.EmailAddressValidatorService;
+import com.liferay.one.service.EntitlementDefinitionService;
 import com.liferay.one.service.EntitlementService;
 import com.liferay.one.service.LicenseKeyService;
 import com.liferay.one.service.ProjectService;
@@ -36,22 +39,26 @@ import com.liferay.one.service.ProvisioningEmailService;
 import com.liferay.one.service.UserAccountService;
 import com.liferay.one.util.FindUtil;
 import com.liferay.one.util.KeyedLock;
+import com.liferay.one.util.TermCountUtil;
 import com.liferay.one.util.UserAccountUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -230,6 +237,49 @@ public class AccountsRestController extends OneBaseRestController {
 			_licenseKeyCSVExporter.toCSV(
 				_licenseKeyService.getLicenseKeysByAccountEntryId(
 					account.getId()))
+		);
+	}
+
+	@GetMapping("/{accountKey}/products/{productExternalReferenceCode}/usage")
+	public ResponseEntity<String> getProductUsage(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable("accountKey") String accountKey,
+			@PathVariable("productExternalReferenceCode") String
+				productExternalReferenceCode)
+		throws Exception {
+
+		Account account = _accountService.getAccount(accountKey, jwt);
+
+		_licenseKeyPermission.check(account.getId(), ActionKeys.VIEW, jwt);
+
+		if (!ArrayUtil.contains(
+				EntitlementConstants.EXTERNAL_REFERENCE_CODES_SELF_HOSTED,
+				productExternalReferenceCode)) {
+
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+
+		EntitlementDefinition entitlementDefinition =
+			_entitlementDefinitionService.fetchEntitlementDefinition(
+				productExternalReferenceCode);
+
+		if (entitlementDefinition == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+
+		List<Entitlement> entitlements = _entitlementService.getEntitlements(
+			account.getId(),
+			entitlementDefinition.getEntitlementDefinitionId());
+
+		if (entitlements.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+
+		return ResponseEntity.ok(
+		).contentType(
+			MediaType.APPLICATION_JSON
+		).body(
+			_getProductUsageJSON(account, entitlements)
 		);
 	}
 
@@ -663,6 +713,82 @@ public class AccountsRestController extends OneBaseRestController {
 		return accountInvitation;
 	}
 
+	private String _getProductUsageJSON(
+			Account account, List<Entitlement> entitlements)
+		throws Exception {
+
+		int currentYear = TermCountUtil.getYear(Instant.now());
+
+		TreeMap<Instant, Integer> consumptionCounts = new TreeMap<>();
+		TreeMap<Instant, Integer> subscriptionCounts = new TreeMap<>();
+
+		Set<Long> entitlementIds = new HashSet<>();
+
+		for (Entitlement entitlement : entitlements) {
+			entitlementIds.add(entitlement.getEntitlementId());
+
+			Double quantity = entitlement.getQuantity();
+
+			int count = 0;
+
+			if (quantity != null) {
+				count = quantity.intValue();
+			}
+
+			TermCountUtil.consolidate(
+				subscriptionCounts, currentYear,
+				entitlement.getStartDateInstant(),
+				entitlement.getEndDateInstant(), count);
+		}
+
+		for (LicenseKey licenseKey :
+				_licenseKeyService.getLicenseKeysByAccountEntryId(
+					account.getId())) {
+
+			if (!entitlementIds.contains(licenseKey.getEntitlementId())) {
+				continue;
+			}
+
+			TermCountUtil.consolidate(
+				consumptionCounts, currentYear,
+				licenseKey.getStartDateInstant(),
+				licenseKey.getCustomExpirationDateInstant(), 1);
+		}
+
+		Map<Integer, Integer> maxConcurrentConsumptions =
+			TermCountUtil.getMaxConcurrentCounts(
+				consumptionCounts, currentYear);
+		Map<Integer, Integer> maxConcurrentQuantities =
+			TermCountUtil.getMaxConcurrentCounts(
+				subscriptionCounts, currentYear);
+
+		JSONArray jsonArray = new JSONArray();
+
+		for (int year = currentYear - 1; year <= (currentYear + 1); year++) {
+			jsonArray.put(
+				new JSONObject(
+				).put(
+					"maxConcurrentConsumption",
+					GetterUtil.getInteger(maxConcurrentConsumptions.get(year))
+				).put(
+					"maxConcurrentQuantity",
+					GetterUtil.getInteger(maxConcurrentQuantities.get(year))
+				).put(
+					"year", year
+				));
+		}
+
+		JSONObject jsonObject = new JSONObject(
+		).put(
+			"annualSubscriptions", jsonArray
+		).put(
+			"currentConsumption",
+			TermCountUtil.getCurrentCount(consumptionCounts)
+		);
+
+		return jsonObject.toString();
+	}
+
 	private String _getProjectName(String projectExternalReferenceCode)
 		throws Exception {
 
@@ -867,6 +993,9 @@ public class AccountsRestController extends OneBaseRestController {
 
 	@Autowired
 	private EmailAddressValidatorService _emailAddressValidatorService;
+
+	@Autowired
+	private EntitlementDefinitionService _entitlementDefinitionService;
 
 	@Autowired
 	private EntitlementService _entitlementService;

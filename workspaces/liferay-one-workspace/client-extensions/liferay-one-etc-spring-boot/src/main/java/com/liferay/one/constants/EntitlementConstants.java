@@ -10,6 +10,19 @@ package com.liferay.one.constants;
  */
 public class EntitlementConstants {
 
+	public static final String EXTERNAL_REFERENCE_CODE_DXP = "C_ENT_DEF_DXP";
+
+	public static final String EXTERNAL_REFERENCE_CODE_PORTAL =
+		"C_ENT_DEF_PORTAL";
+
+	public static final String EXTERNAL_REFERENCE_CODE_PORTAL_EWSA =
+		"C_ENT_DEF_PORTAL_EWSA";
+
+	public static final String[] EXTERNAL_REFERENCE_CODES_SELF_HOSTED = {
+		EXTERNAL_REFERENCE_CODE_DXP, EXTERNAL_REFERENCE_CODE_PORTAL,
+		EXTERNAL_REFERENCE_CODE_PORTAL_EWSA
+	};
+
 	public static final String GRANT_TYPE_UNLIMITED = "unlimited";
 
 	public static final String NAME_1_PRODUCTION_POD = "1 Production Pod";
@@ -30,6 +43,8 @@ public class EntitlementConstants {
 	public static final String NAME_GLOBAL_24_7_SUPPORT = "Global 24/7 Support";
 
 	public static final String NAME_GOLD_SUPPORT = "Gold Support";
+
+	public static final String NAME_LICENSE_GENERATION = "licenseGeneration";
 
 	public static final String
 		NAME_LIFERAY_CLOUD_NATIVE_DIGITAL_ACCELERATOR_BUNDLE =
