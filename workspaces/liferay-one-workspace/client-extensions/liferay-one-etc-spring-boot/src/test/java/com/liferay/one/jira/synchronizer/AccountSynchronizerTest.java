@@ -29,6 +29,7 @@ import com.liferay.one.service.ProjectService;
 import com.liferay.one.service.PropertyService;
 import com.liferay.one.service.UserAccountService;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
@@ -114,6 +115,8 @@ public class AccountSynchronizerTest {
 			Collections.emptyList()
 		);
 
+		_userAccountSynchronizer = Mockito.mock(UserAccountSynchronizer.class);
+
 		_accountOrganizationSynchronizer = Mockito.mock(
 			AccountOrganizationSynchronizer.class);
 		_accountUserAccountRoleSynchronizer = Mockito.mock(
@@ -163,6 +166,9 @@ public class AccountSynchronizerTest {
 			Mockito.mock(TeamConverter.class));
 		ReflectionTestUtils.setField(
 			_accountSynchronizer, "_userAccountService", _userAccountService);
+		ReflectionTestUtils.setField(
+			_accountSynchronizer, "_userAccountSynchronizer",
+			_userAccountSynchronizer);
 	}
 
 	@Test
@@ -259,6 +265,60 @@ public class AccountSynchronizerTest {
 	}
 
 	@Test
+	public void testSyncAccountSyncsAccountUserAccounts() throws Exception {
+		UserAccount failingUserAccount = new UserAccount();
+
+		failingUserAccount.setExternalReferenceCode("failing-user-account-erc");
+
+		UserAccount userAccount = new UserAccount();
+
+		userAccount.setExternalReferenceCode("user-account-erc");
+
+		Mockito.when(
+			_userAccountService.getAccountUserAccounts(Mockito.anyLong())
+		).thenReturn(
+			Arrays.asList(failingUserAccount, userAccount)
+		);
+
+		Mockito.doThrow(
+			new Exception("Unable to sync user account")
+		).when(
+			_userAccountSynchronizer
+		).syncUserAccount(
+			failingUserAccount
+		);
+
+		Account account = new Account();
+
+		account.setExternalReferenceCode(_EXTERNAL_REFERENCE_CODE);
+		account.setId(1L);
+		account.setName("Test Account");
+
+		_accountSynchronizer.syncAccount(account);
+
+		InOrder inOrder = Mockito.inOrder(
+			_jiraAssetService, _userAccountSynchronizer);
+
+		inOrder.verify(
+			_jiraAssetService
+		).upsert(
+			Mockito.any(), Mockito.any()
+		);
+
+		inOrder.verify(
+			_userAccountSynchronizer
+		).syncUserAccount(
+			failingUserAccount
+		);
+
+		inOrder.verify(
+			_userAccountSynchronizer
+		).syncUserAccount(
+			userAccount
+		);
+	}
+
+	@Test
 	public void testSyncAccountUnassignsStaleAssignments() throws Exception {
 		RoleBrief roleBrief = new RoleBrief();
 
@@ -273,6 +333,7 @@ public class AccountSynchronizerTest {
 
 		userAccount.setAccountBriefs(new AccountBrief[] {accountBrief});
 		userAccount.setExternalReferenceCode("user-account-erc");
+		userAccount.setId(2L);
 
 		Mockito.when(
 			_userAccountService.getAccountUserAccounts(Mockito.anyLong())
@@ -361,5 +422,6 @@ public class AccountSynchronizerTest {
 	private JiraAssetService _jiraAssetService;
 	private OrganizationService _organizationService;
 	private UserAccountService _userAccountService;
+	private UserAccountSynchronizer _userAccountSynchronizer;
 
 }

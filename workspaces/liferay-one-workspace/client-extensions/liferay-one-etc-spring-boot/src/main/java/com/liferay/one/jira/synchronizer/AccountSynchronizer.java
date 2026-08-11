@@ -133,6 +133,8 @@ public class AccountSynchronizer {
 		_syncAccountOrganizationAssignments(
 			account, accountOrganizations, startDate);
 
+		_syncUserAccounts(accountUserAccounts);
+
 		List<Project> projects = _projectService.getProjects(account.getId());
 
 		if (!projects.isEmpty()) {
@@ -579,6 +581,37 @@ public class AccountSynchronizer {
 		}
 	}
 
+	private void _syncUserAccounts(List<UserAccount> userAccounts) {
+		int failureCount = 0;
+
+		for (UserAccount userAccount : userAccounts) {
+			if (_log.isInfoEnabled()) {
+				_log.info(
+					"Syncing user account " +
+						userAccount.getExternalReferenceCode() + " to JSM");
+			}
+
+			try {
+				_userAccountSynchronizer.syncUserAccount(userAccount);
+			}
+			catch (Exception exception) {
+				failureCount++;
+
+				_log.error(
+					"Unable to sync user account " +
+						userAccount.getExternalReferenceCode() + " to JSM",
+					exception);
+			}
+		}
+
+		if (failureCount > 0) {
+			_log.error(
+				StringBundler.concat(
+					"Unable to sync ", failureCount, " of ",
+					userAccounts.size(), " user accounts to JSM"));
+		}
+	}
+
 	private String _toBusinessEventFieldValuePart(
 		JiraBusinessEvent jiraBusinessEvent) {
 
@@ -686,6 +719,9 @@ public class AccountSynchronizer {
 
 	@Autowired
 	private UserAccountService _userAccountService;
+
+	@Autowired
+	private UserAccountSynchronizer _userAccountSynchronizer;
 
 	private static class UserAccountBucket {
 
