@@ -436,7 +436,9 @@ public class ProvisioningHubService extends BaseService {
 			new JSONObject(
 			).put(
 				"accountEntryExternalReferenceCode",
-				order.getAccountExternalReferenceCode()
+				MarketplaceUtil.getEntityId(
+					koroneikiAccount.getExternalLinks(), "salesforce",
+					"project")
 			).put(
 				"accountEntryName", properties.get("aiHubAccountName")
 			).put(
