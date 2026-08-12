@@ -16,7 +16,6 @@ import type {
 	ProductCategories,
 	ProductImageFallbackCategories,
 	ProductLicense,
-	ProductLicenseTier,
 	ProductOfferingTypes,
 	ProductType,
 	SKU,
@@ -26,7 +25,6 @@ import type {
 export {
 	ProductLicense,
 	ProductLicenseFriendlyName,
-	ProductLicenseTier,
 	ProductLicenseType,
 	ProductOfferingTypes,
 	ProductPriceModel,

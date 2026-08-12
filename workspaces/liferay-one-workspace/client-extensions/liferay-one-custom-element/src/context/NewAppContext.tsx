@@ -19,7 +19,6 @@ import HeadlessPublisherAsset from '~/services/headless/HeadlessPublisherAsset';
 import SearchBuilder from '~/utils/SearchBuilder';
 import {
 	ProductSpecificationKey,
-	ProductWorkflowStatusCode,
 } from '~/utils/productUtils';
 
 import {useMarketplaceContext} from './MarketplaceContext';
@@ -29,9 +28,6 @@ import type {Catalog} from '~/types/commerce';
 import type {
 	Product,
 	ProductLicenseTier,
-	ProductLicenseType,
-	ProductPriceModel,
-	ProductTags,
 	ProductType,
 } from '~/types/product';
 
@@ -265,19 +261,22 @@ const filterProductVocabularies = (product: Product, vocabulary: string) =>
 const reducer = (state: NewAppInitialState, action: AppActions) => {
 	switch (action.type) {
 		case NewAppTypes.SET_BUILD: {
-			if (
+			const isAppTypeChanged =
 				action.payload.appType &&
-				action.payload.appType !== state.build.appType
-			) {
-				state.references.buildsToDelete = state.build.liferayPackages;
-				state.build.liferayPackages = [];
-			}
+				action.payload.appType !== state.build.appType;
 
 			return {
 				...state,
 				build: {
 					...state.build,
+					...(isAppTypeChanged && {liferayPackages: []}),
 					...action.payload,
+				},
+				references: {
+					...state.references,
+					...(isAppTypeChanged && {
+						buildsToDelete: state.build.liferayPackages,
+					}),
 				},
 			};
 		}

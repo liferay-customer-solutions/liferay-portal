@@ -7,12 +7,12 @@ import {ClayInput} from '@clayui/form';
 import classNames from 'classnames';
 import {InputHTMLAttributes} from 'react';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
 	component?: 'input' | 'textarea';
 	name: string;
 }
 
-export function Input({component, ...props}: InputProps) {
+export function Input({component, ...props}: IInputProps) {
 	const maxLength = props.maxLength;
 
 	return (

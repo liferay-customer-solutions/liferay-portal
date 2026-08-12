@@ -19,10 +19,10 @@ import {
 	ProductTags,
 	ProductVocabulary,
 } from '~/utils/productUtils';
+import {safeJSONParse} from '~/utils/publishUtils';
 
 import {breadcrumbStore} from '../components/Breadcrumb/BreadcrumbStore';
 import {UploadedFile} from '../components/FileList/FileList';
-import {safeJSONParse} from '~/utils/publishUtils';
 
 import type {ActionMap} from '~/types/actionMap';
 import type {Product} from '~/types/product';

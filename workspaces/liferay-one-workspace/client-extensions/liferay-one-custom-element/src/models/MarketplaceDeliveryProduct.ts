@@ -11,13 +11,11 @@ import {
 	ProductLicenseType,
 	ProductPriceModel,
 	ProductSpecificationKey,
-	ProductTags,
-	getProductSpecificationValue,
-} from '~/utils/productUtils';
-import {ProductTypeLabels} from '~/utils/productUtils';
+	ProductTypeLabels,
+	} from '~/utils/productUtils';
+import {safeJSONParse} from '~/utils/publishUtils';
 
 import i18n from '../i18n';
-import {safeJSONParse} from '~/utils/publishUtils';
 
 import type {DeliveryProduct} from '~/types/product';
 
