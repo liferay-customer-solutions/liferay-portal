@@ -11,6 +11,7 @@ liferay-one-etc-spring-boot-oahs:
         -   Liferay.Headless.Commerce.Admin.Order.everything
         -   Liferay.Headless.Commerce.Admin.Pricing.everything
         -   Liferay.Notification.REST.everything
+        -   c_accountinvitation.everything
         -   c_commonlicensekey.everything
         -   c_contract.everything
         -   c_entitlement.everything
