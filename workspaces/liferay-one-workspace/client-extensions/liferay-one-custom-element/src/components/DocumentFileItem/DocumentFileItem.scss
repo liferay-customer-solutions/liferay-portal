@@ -12,27 +12,7 @@
 		width: 37.5rem;
 	}
 
-	&-icon {
-		align-items: center;
-		border: solid 2px #fff;
-		border-radius: 50%;
-		display: flex;
-		font-size: 10px;
-		font-weight: 700;
-		height: 22px;
-		justify-content: center;
-		left: 0;
-		padding: 3px;
-		position: relative;
-		top: 0;
-		width: 22px;
-
-		svg {
-			margin-top: 1px;
-		}
-	}
-
-	&-left-content {
+&-left-content {
 		align-items: center;
 		display: flex;
 		justify-content: center;
