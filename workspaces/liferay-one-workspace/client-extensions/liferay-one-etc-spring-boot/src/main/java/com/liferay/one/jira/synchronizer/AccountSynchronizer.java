@@ -40,6 +40,8 @@ import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -118,12 +120,20 @@ public class AccountSynchronizer {
 		_syncContactRoleAssignments(accountSyncModel, startDate);
 		_syncAccountOrganizationAssignments(accountSyncModel, startDate);
 
-		_syncUserAccounts(accountSyncModel.getAccountUserAccounts());
+		List<UserAccount> userAccountsToSync = new ArrayList<>(
+			accountSyncModel.getAccountUserAccounts());
 
 		for (Project project : accountSyncModel.getProjects()) {
 			try {
-				_syncProject(
-					_createProjectSyncModel(accountSyncModel, project));
+				ProjectSyncModel projectSyncModel = _createProjectSyncModel(
+					accountSyncModel, project);
+
+				_syncProject(projectSyncModel);
+
+				userAccountsToSync.addAll(
+					projectSyncModel.getCustomerUserAccounts());
+				userAccountsToSync.addAll(
+					projectSyncModel.getWorkerUserAccounts());
 			}
 			catch (Exception exception) {
 				_log.error(
@@ -132,6 +142,8 @@ public class AccountSynchronizer {
 					exception);
 			}
 		}
+
+		_syncUserAccounts(userAccountsToSync);
 	}
 
 	public void syncAccountUserAccounts(Account account) throws Exception {
@@ -176,7 +188,17 @@ public class AccountSynchronizer {
 		AccountSyncModel accountSyncModel = _createAccountSyncModel(
 			_accountService.getAccount(accountExternalReferenceCode));
 
-		_syncProject(_createProjectSyncModel(accountSyncModel, project));
+		ProjectSyncModel projectSyncModel = _createProjectSyncModel(
+			accountSyncModel, project);
+
+		_syncProject(projectSyncModel);
+
+		List<UserAccount> userAccounts = new ArrayList<>(
+			projectSyncModel.getCustomerUserAccounts());
+
+		userAccounts.addAll(projectSyncModel.getWorkerUserAccounts());
+
+		_syncUserAccounts(userAccounts);
 	}
 
 	private AccountSyncModel _createAccountSyncModel(Account account) {
@@ -419,15 +441,26 @@ public class AccountSynchronizer {
 		}
 	}
 
-	private void _syncUserAccounts(List<UserAccount> userAccounts) {
+	private void _syncUserAccounts(Collection<UserAccount> userAccounts) {
+		List<String> seenUserAccountExternalKeys = new ArrayList<>();
+
 		int failureCount = 0;
 
 		for (UserAccount userAccount : userAccounts) {
+			if (seenUserAccountExternalKeys.contains(
+					userAccount.getExternalReferenceCode())) {
+
+				continue;
+			}
+
 			if (_log.isInfoEnabled()) {
 				_log.info(
 					"Syncing user account " +
 						userAccount.getExternalReferenceCode() + " to JSM");
 			}
+
+			seenUserAccountExternalKeys.add(
+				userAccount.getExternalReferenceCode());
 
 			try {
 				_userAccountSynchronizer.syncUserAccount(userAccount);
