@@ -11,6 +11,7 @@ import com.liferay.one.exception.CommonLicenseKeyEntitlementException;
 import com.liferay.one.exception.LicenseKeyActiveException;
 import com.liferay.one.exception.LicenseKeyValidationException;
 import com.liferay.one.exception.NoSuchLicenseKeyException;
+import com.liferay.one.exception.ProjectNotFoundException;
 import com.liferay.one.jira.exception.AccountNotFoundException;
 import com.liferay.one.jira.exception.JiraAssetObjectException;
 import com.liferay.one.service.UserAccountService;
@@ -46,7 +47,9 @@ public abstract class OneBaseRestController extends BaseRestController {
 	public ResponseEntity<?> handleException(
 		AccountNotFoundException accountNotFoundException) {
 
-		_log.error("The account was not found", accountNotFoundException);
+		if (_log.isWarnEnabled()) {
+			_log.warn("The account was not found", accountNotFoundException);
+		}
 
 		return _toResponseEntity(
 			HttpStatus.NOT_FOUND, "The account was not found");
@@ -141,6 +144,18 @@ public abstract class OneBaseRestController extends BaseRestController {
 		return _toResponseEntity(
 			HttpStatus.FORBIDDEN,
 			"You do not have permission to access this resource");
+	}
+
+	@ExceptionHandler(ProjectNotFoundException.class)
+	public ResponseEntity<?> handleException(
+		ProjectNotFoundException projectNotFoundException) {
+
+		if (_log.isWarnEnabled()) {
+			_log.warn("The project was not found", projectNotFoundException);
+		}
+
+		return _toResponseEntity(
+			HttpStatus.NOT_FOUND, "The project was not found");
 	}
 
 	@ExceptionHandler(ResponseStatusException.class)

@@ -7,6 +7,8 @@ package com.liferay.one;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 
+import java.time.Duration;
+
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +32,33 @@ public class CacheConfiguration {
 			).maximumSize(
 				1000
 			));
+
+		caffeineCacheManager.registerCustomCache(
+			"composableAccountUsage",
+			Caffeine.newBuilder(
+			).expireAfterWrite(
+				Duration.ofHours(1)
+			).maximumSize(
+				1000
+			).build());
+
+		caffeineCacheManager.registerCustomCache(
+			"customerAccountUsage",
+			Caffeine.newBuilder(
+			).expireAfterWrite(
+				Duration.ofHours(1)
+			).maximumSize(
+				1000
+			).build());
+
+		caffeineCacheManager.registerCustomCache(
+			"productName",
+			Caffeine.newBuilder(
+			).expireAfterWrite(
+				Duration.ofHours(1)
+			).maximumSize(
+				1000
+			).build());
 
 		return caffeineCacheManager;
 	}

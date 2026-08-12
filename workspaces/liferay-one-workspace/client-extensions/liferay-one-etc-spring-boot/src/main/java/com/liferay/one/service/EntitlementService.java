@@ -22,11 +22,9 @@ import java.time.temporal.ChronoUnit;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -231,7 +229,7 @@ public class EntitlementService extends OneBaseService {
 			Collection<Long> accountEntryIds)
 		throws Exception {
 
-		return _getActiveEntitlementDefinitions(
+		return _entitlementDefinitionService.getEntitlementDefinitions(
 			getActiveEntitlements(accountEntryIds));
 	}
 
@@ -239,7 +237,7 @@ public class EntitlementService extends OneBaseService {
 			long accountEntryId)
 		throws Exception {
 
-		return _getActiveEntitlementDefinitions(
+		return _entitlementDefinitionService.getEntitlementDefinitions(
 			getActiveEntitlements(accountEntryId));
 	}
 
@@ -247,7 +245,7 @@ public class EntitlementService extends OneBaseService {
 			String projectExternalReferenceCode)
 		throws Exception {
 
-		return _getActiveEntitlementDefinitions(
+		return _entitlementDefinitionService.getEntitlementDefinitions(
 			getActiveEntitlements(projectExternalReferenceCode));
 	}
 
@@ -434,34 +432,6 @@ public class EntitlementService extends OneBaseService {
 		}
 
 		return order.getAccountId();
-	}
-
-	private List<EntitlementDefinition> _getActiveEntitlementDefinitions(
-			List<Entitlement> entitlements)
-		throws Exception {
-
-		Set<Long> entitlementDefinitionIds = new LinkedHashSet<>();
-
-		for (Entitlement entitlement : entitlements) {
-			long entitlementDefinitionId =
-				entitlement.getEntitlementDefinitionId();
-
-			if (entitlementDefinitionId > 0) {
-				entitlementDefinitionIds.add(entitlementDefinitionId);
-			}
-		}
-
-		if (entitlementDefinitionIds.isEmpty()) {
-			return Collections.emptyList();
-		}
-
-		List<String> statements = TransformUtil.transform(
-			entitlementDefinitionIds,
-			entitlementDefinitionId ->
-				"(id eq '" + entitlementDefinitionId + "')");
-
-		return _entitlementDefinitionService.getEntitlementDefinitions(
-			StringUtil.merge(statements, " or "));
 	}
 
 	private List<Entitlement> _getActiveEntitlements(String filterString)

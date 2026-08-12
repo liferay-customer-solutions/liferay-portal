@@ -10,11 +10,30 @@ package com.liferay.one.constants;
  */
 public class EntitlementConstants {
 
+	public static final String GRANT_TYPE_UNLIMITED = "unlimited";
+
+	public static final String NAME_APV = "apv";
+
+	public static final String NAME_DATABASE = "database";
+
+	public static final String NAME_DOCUMENT_LIBRARY_SIZE =
+		"document-library-size";
+
+	public static final String NAME_EXTENSIONS_RAM = "extensions-ram";
+
+	public static final String NAME_EXTENSIONS_VCPU = "extensions-vcpu";
+
+	public static final String NAME_EXTENSIONS_VCPUS = "extensions-vcpus";
+
 	public static final String NAME_GLOBAL_24_7_SUPPORT = "Global 24/7 Support";
 
 	public static final String NAME_GOLD_SUPPORT = "Gold Support";
 
 	public static final String NAME_LIMITED_SUPPORT = "Limited Support";
+
+	public static final String NAME_LOGS = "logs";
+
+	public static final String NAME_MALU = "malu";
 
 	public static final String NAME_PARTNER = "Partner";
 
@@ -26,13 +45,23 @@ public class EntitlementConstants {
 	public static final String NAME_PREMIUM_SUBSCRIPTION =
 		"Premium Subscription";
 
+	public static final String NAME_RAM = "ram";
+
 	public static final String NAME_SILVER_SUBSCRIPTION = "Silver Subscription";
+
+	public static final String NAME_SITES = "sites";
 
 	public static final String NAME_STANDARD_8_5_SUPPORT =
 		"Standard 8/5 Support";
 
+	public static final String NAME_STORAGE = "storage";
+
 	public static final String NAME_STRATEGIC_24_7_SUPPORT =
 		"Strategic 24/7 Support";
+
+	public static final String NAME_TRAFFIC_NETWORKING = "traffic-networking";
+
+	public static final String NAME_VCPU = "vcpu";
 
 	public static final String[] NAMES_SLAS = {
 		NAME_GLOBAL_24_7_SUPPORT, NAME_GOLD_SUPPORT, NAME_LIMITED_SUPPORT,

@@ -5,11 +5,17 @@
 
 package com.liferay.one.service;
 
+import com.liferay.one.model.Entitlement;
 import com.liferay.one.model.EntitlementDefinition;
+import com.liferay.petra.function.transform.TransformUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
@@ -18,6 +24,33 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class EntitlementDefinitionService extends OneBaseService {
+
+	public List<EntitlementDefinition> getEntitlementDefinitions(
+			List<Entitlement> entitlements)
+		throws Exception {
+
+		Set<Long> entitlementDefinitionIds = new LinkedHashSet<>();
+
+		for (Entitlement entitlement : entitlements) {
+			long entitlementDefinitionId =
+				entitlement.getEntitlementDefinitionId();
+
+			if (entitlementDefinitionId > 0) {
+				entitlementDefinitionIds.add(entitlementDefinitionId);
+			}
+		}
+
+		if (entitlementDefinitionIds.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		List<String> statements = TransformUtil.transform(
+			entitlementDefinitionIds,
+			entitlementDefinitionId ->
+				"(id eq '" + entitlementDefinitionId + "')");
+
+		return getEntitlementDefinitions(StringUtil.merge(statements, " or "));
+	}
 
 	public List<EntitlementDefinition> getEntitlementDefinitions(
 			String filterString)

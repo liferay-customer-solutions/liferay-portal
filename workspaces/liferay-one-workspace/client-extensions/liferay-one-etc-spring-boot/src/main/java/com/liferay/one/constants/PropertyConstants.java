@@ -13,6 +13,9 @@ public class PropertyConstants {
 	public static final String NAME_CLOUD_NATIVE_SUBDOMAIN =
 		"cloud-native:subdomain";
 
+	public static final String NAME_KORONEIKI_ACCOUNT_KEY =
+		"koroneikiAccountKey";
+
 	public static final String NAME_OKTA_APPLICATION = "okta:application";
 
 	public static final String NAME_OKTA_GROUP = "okta:group";

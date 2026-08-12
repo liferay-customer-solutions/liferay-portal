@@ -15,7 +15,9 @@ import com.liferay.one.constants.CommerceCatalogConstants;
 import com.liferay.one.constants.CommerceProductConstants;
 
 import java.util.Collections;
+import java.util.Map;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
@@ -93,6 +95,37 @@ public class CommerceProductService extends OneBaseService {
 			externalReferenceCode, product);
 	}
 
+	@Cacheable("productName")
+	public String fetchProductName(long id) throws Exception {
+		Product product = _fetchProduct(id, _buildProductResource());
+
+		return getName(product);
+	}
+
+	@Cacheable("productName")
+	public String fetchProductName(String externalReferenceCode)
+		throws Exception {
+
+		Product product = _fetchProduct(
+			externalReferenceCode, _buildProductResource());
+
+		return getName(product);
+	}
+
+	protected String getName(Product product) {
+		if (product == null) {
+			return null;
+		}
+
+		Map<String, String> name = product.getName();
+
+		if (name == null) {
+			return null;
+		}
+
+		return name.get("en_US");
+	}
+
 	private ProductResource _buildProductResource() {
 		return ProductResource.builder(
 		).endpoint(
@@ -100,6 +133,23 @@ public class CommerceProductService extends OneBaseService {
 		).header(
 			HttpHeaders.AUTHORIZATION, getAuthorization()
 		).build();
+	}
+
+	private Product _fetchProduct(long id, ProductResource productResource)
+		throws Exception {
+
+		try {
+			return productResource.getProduct(id);
+		}
+		catch (Problem.ProblemException problemException) {
+			Problem problem = problemException.getProblem();
+
+			if ((problem != null) && isNotFound(problem.getStatus())) {
+				return null;
+			}
+
+			throw problemException;
+		}
 	}
 
 	private Product _fetchProduct(
