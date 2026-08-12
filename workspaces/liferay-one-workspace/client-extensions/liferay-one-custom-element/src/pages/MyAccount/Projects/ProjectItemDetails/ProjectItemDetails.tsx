@@ -96,6 +96,7 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 		environmentProfile,
 		learnUrl,
 		tabKeys,
+		utilizationProfile,
 	} = resolveProductTabConfig({
 		kind,
 		orderType: orderInfo.orderType,
@@ -126,7 +127,13 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 			<HelpSupportTab learnUrl={learnUrl} product={product} />
 		),
 		'orders': () => <OrdersTab />,
-		'utilization': () => <UtilizationTab />,
+		'utilization': () => (
+			<UtilizationTab
+				productExternalReferenceCode={itemERC}
+				profile={utilizationProfile}
+				projectExternalReferenceCode={projectId}
+			/>
+		),
 	};
 
 	const tabs: DetailTab[] = tabKeys.map((tabKey) => ({

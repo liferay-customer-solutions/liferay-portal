@@ -7,10 +7,10 @@ export type ProjectItemKind = 'application' | 'product';
 
 export const PROJECT_TAB_KEYS = [
 	'details',
-	'activation',
-	'download',
 	'utilization',
 	'environment',
+	'activation',
+	'download',
 	'orders',
 	'help-and-support',
 ] as const;

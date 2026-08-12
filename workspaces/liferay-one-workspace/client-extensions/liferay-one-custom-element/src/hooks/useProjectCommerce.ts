@@ -550,6 +550,8 @@ export function useProjectProducts(
 			])
 		);
 
+		const seenProductKeys = new Set<string>();
+
 		return entitlements
 			.map((entitlement) => {
 				const product = productsByExternalReferenceCode.get(
@@ -587,7 +589,21 @@ export function useProjectProducts(
 						)[0] ?? getSpecificationValue(product, 'price-model'),
 				};
 			})
-			.filter((product): product is ProjectProduct => Boolean(product));
+			.filter((product): product is ProjectProduct => {
+				if (!product) {
+					return false;
+				}
+
+				const productKey = `${product.externalReferenceCode}|${product.startDate}|${product.endDate}`;
+
+				if (seenProductKeys.has(productKey)) {
+					return false;
+				}
+
+				seenProductKeys.add(productKey);
+
+				return true;
+			});
 	}, [entitlements, productsData]);
 
 	return {

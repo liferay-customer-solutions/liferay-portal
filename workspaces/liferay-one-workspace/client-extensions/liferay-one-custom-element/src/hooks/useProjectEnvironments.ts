@@ -58,7 +58,7 @@ type EnvironmentNode = {
 	workspaceName?: string;
 };
 
-export function useProjectEnvironments() {
+export function useProjectEnvironments(skip = false) {
 	const accountId = Liferay.CommerceContext.account?.accountId;
 
 	const {
@@ -66,7 +66,7 @@ export function useProjectEnvironments() {
 		error,
 		isLoading: loading,
 	} = useFetch<APIResponse<EnvironmentNode>>(
-		accountId ? '/o/c/environments' : null,
+		!skip && accountId ? '/o/c/environments' : null,
 		{
 			params: {
 				filter: `r_accountEntryToEnvironment_accountEntryId eq '${accountId}'`,

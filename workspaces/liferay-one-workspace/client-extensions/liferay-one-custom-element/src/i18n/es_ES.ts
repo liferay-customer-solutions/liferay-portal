@@ -11,6 +11,7 @@ export default {
 	'add-a-description-of-the-file-related-to-this-ticket':
 		'Añade una descripción del archivo relacionado con este ticket.',
 	'an-unexpected-error-occurred': 'Se produjo un error inesperado.',
+	'anonymous-page-views-apv': 'Visualizaciones de página anónimas (APV)',
 	'are-there-any-support-tickets-impacting-this-event':
 		'¿Hay tickets de soporte que afecten a este evento?',
 	'are-you-sure-you-want-to-delete-this-attachment':
@@ -19,7 +20,9 @@ export default {
 	'attach-file-to-ticket-x': 'Adjunta un Archivo al Ticket #{0}',
 	'attachment': 'Adjunto',
 	'attachment-deleted-successfully': 'Adjunto eliminado con éxito.',
+	'authenticated-logins-malus': 'Accesos autenticados (MALU)',
 	'back-to-business-events': 'Volver a Evento de Negocio',
+	'billing-period': 'Periodo de facturación',
 	'business-event-actual-event-date-recorded-successfully':
 		'Fecha real del evento de negocio registrada con éxito.',
 	'business-event-canceled-successfully':
@@ -41,6 +44,7 @@ export default {
 	'create-event': 'Crear Evento',
 	'create-new-ticket': 'Crear Ticket Nuevo',
 	'current-version': 'Versión Actual',
+	'database': 'Base de Datos',
 	'date': 'Fecha',
 	'download': 'Descargar',
 	'drag-and-drop-to-upload-or': 'Arrastra para subir o',
@@ -52,6 +56,8 @@ export default {
 	'event-name': 'Nombre de Evento',
 	'event-status': 'Estado del Evento',
 	'event-type': 'Tipo de Evento',
+	'extensions-ram': 'RAM de Extensiones',
+	'extensions-vcpu': 'vCPUs de Extensiones',
 	'file-to-download-doesnt-exist-anymore':
 		'El archivo a descargar ya no existe.',
 	'filters': 'Filtros',
@@ -61,6 +67,7 @@ export default {
 	'leave-a-comment': 'Pon un Comentario',
 	'login-as-a-user-that-has-access-to-a-project-or-contact-your-project-administrator-to-add-you-to-a-project.':
 		'Inicia sesión como un usuario con acceso a un proyecto o contacta al administrador del proyecto para que te agregue.',
+	'logs': 'Logs',
 	'make-sure-the-project-link-is-correct-and-that-you-have-access-to-this-project':
 		'Asegúrate de que el enlace del proyecto sea correcto y de que tengas acceso a este proyecto.',
 	'make-sure-the-ticket-number-is-correct':
@@ -68,6 +75,7 @@ export default {
 	'manage-user-options': 'Gestionar Opciones de Usuario',
 	'migration': 'Migración',
 	'mm-dd-yyyy': 'MM-DD-AAAA',
+	'monthly-inbound-and-outbound': 'Entrada y Salida Mensuales',
 	'new-version': 'Nueva Versión',
 	'no-business-events-were-found': 'No se han encontrado eventos de negocio.',
 	'no-data-found': 'No se encontraron datos.',
@@ -75,11 +83,14 @@ export default {
 		'No se pueden editar los tickets ya cerrados. Abre un nuevo ticket de soporte si necesitas asistencia.',
 	'no-history-of-activity-was-found':
 		'No se ha encontrado histórico de actividades.',
+	'number-of-sites': 'Número de sitios',
 	'once-canceled-no-further-edits-can-be-made-to-this-event':
 		'Una vez cancelado no se podrá editar este evento.',
 	'open': 'Abierto',
 	'other-event': 'Otro Evento',
 	'overdue': 'Atrasado',
+	'peak-usage-exceeded-your-entitlements':
+		'El uso máximo superó tus límites contratados',
 	'planned-event-date': 'Fecha Planeada del Evento',
 	'please-check-again-later': 'Revísalo un poco más tarde.',
 	'please-check-this-box-if-the-file-you-upload-does-not-contain-any-personal-data-and-therefore-can-be-uploaded-to-and-accessed-from-any-liferay-support-location-globally':
@@ -93,9 +104,13 @@ export default {
 		'Selecciona una fecha real del evento que haya ocurrido ya o la fecha actual.',
 	'please-select-the-tickets-that-are-impacting-this-event':
 		'Por favor, selecciona los tickets que impactan este evento.',
+	'project-metrics-are-available-for-liferay-saas-customers-on-liferays-latest-usage-based-model':
+		'Las Métricas de uso del proyecto están disponibles para clientes de Liferay SaaS con el modelo de facturación más reciente. Contacta con tu Account Manager para saber más sobre cómo monitorizar el uso de recursos, los usuarios de sitio y la capacidad de almacenamiento.',
+	'project-usage-metrics': 'Métricas de uso del proyecto',
 	'reason-for-change': 'Razón para el Cambio',
 	'record-actual-event-date': 'Registrar Fecha Real del Evento',
 	'remove': 'Eliminar',
+	'resource-usage': 'Uso de recursos',
 	'return-to-attachments': 'Volver a Adjuntos',
 	'return-to-ticket': 'Volver al ticket',
 	'save-changes': 'Guardar Cambios',
@@ -107,25 +122,37 @@ export default {
 	'select-the-option': 'Selecciona la Opción',
 	'select-the-project-and-ticket-you-want-to-attach-a-file-to':
 		'Selecciona el proyecto y el ticket al que quieres adjuntar un archivo.',
+	'sites-and-users': 'Sitios y usuarios',
+	'storage': 'Almacenamiento',
 	'the-changes-were-saved-successfully':
 		'Los cambios se guardaron con éxito.',
 	'the-file-may-have-been-deleted': 'El archivo puede haberse eliminado.',
 	'there-are-currently-no-open-tickets-under-this-project':
 		'No hay tickets abiertos actualmente en este proyecto.',
+	'this-project-is-on-a-legacy-billing-model':
+		'Este proyecto usa un modelo de facturación antiguo.',
 	'this-table-allows-you-to-create-manage-and-track-your-business-events-please-note-that-business-events-closed-for-more-than-a-year-will-not-be-displayed-here':
 		'Esta tabla permite crear, gestionar y supervisar tus eventos de negocio. Ten en cuenta que no aparecerán aquí eventos de negocio cerrados hace más de un año.',
 	'this-ticket-has-been-closed': 'Se ha cerrado este ticket',
 	'tickets-impacting-this-event': 'Tickets que Impactan Este Evento',
 	'time': 'Hora',
 	'time-zone': 'Zona Horaria',
+	'total-ram': 'RAM Total',
+	'total-storage': 'Almacenamiento Total',
+	'total-vcpu': 'vCPU Total',
+	'total-volume': 'Volumen Total',
+	'traffic-networking': 'Tráfico de Red',
 	'try-again-later': 'Inténtalo de nuevo más tarde.',
 	'unable-to-connect-to-file-server':
 		'No es posible conectarse al servidor de archivos',
 	'unable-to-delete-attachment': 'No se pudo eliminar el adjunto.',
 	'unable-to-load-the-license-keys':
 		'No se pudieron cargar las claves de licencia.',
+	'unlimited': 'Ilimitado',
 	'upgrade': 'Actualización',
 	'upload': 'Subir',
+	'usage-data-is-temporarily-unavailable-please-try-again-later':
+		'Los datos de uso no están disponibles temporalmente. Inténtalo de nuevo más tarde.',
 	'user': 'Usuario',
 	'we-apologize-for-the-inconvenience-but-we-ve-detected-a-system-error-with-this-project':
 		'Hemos detectado un error de sistema en este proyecto. Crea un ticket de soporte para que podamos resolverlo. Disculpa las molestias.',
@@ -141,4 +168,6 @@ export default {
 	'your-attachment-is-uploaded-however-we-encountered-a-problem-posting-your-comment-the-system-is-automatically-retrying-to-send-it':
 		'Tu adjunto se ha subido pero hemos encontrado un problema al poner tu comentario. El sistema está intentando reenviarlo automáticamente.',
 	'your-current-liferay-version': 'Tu Versión Actual de Liferay',
+	'your-peak-usage-for-this-billing-period-exceeded-your-entitlement-limits-overage-charges-may-apply':
+		'Tu uso máximo en este periodo de facturación superó los límites contratados. Pueden aplicarse cargos por exceso.',
 } as const;

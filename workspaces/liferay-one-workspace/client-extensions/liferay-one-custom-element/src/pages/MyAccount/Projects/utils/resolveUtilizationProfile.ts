@@ -10,15 +10,17 @@ import {resolveProfile} from './resolveProfile';
 import type {DeliveryProduct} from '~/types/product';
 
 export type UtilizationProfile =
+	| 'experience-dashboard'
+	| 'legacy'
 	| 'none'
-	| 'paas-dashboard'
-	| 'saas-dashboard'
+	| 'saas-plan-dashboard'
 	| 'usage-metrics';
 
 const UTILIZATION_PROFILES: UtilizationProfile[] = [
+	'experience-dashboard',
+	'legacy',
 	'none',
-	'paas-dashboard',
-	'saas-dashboard',
+	'saas-plan-dashboard',
 	'usage-metrics',
 ];
 

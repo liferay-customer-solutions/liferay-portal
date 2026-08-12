@@ -110,6 +110,7 @@ export default {
 	'and-the': 'and the',
 	'annual': 'Annual',
 	'annual-target': 'Annual Target',
+	'anonymous-page-views-apv': 'Anonymous Page Views (APV)',
 	'api-requests-per-month': 'API Requests / Month',
 	'app': 'App',
 	'app-awaiting-review': 'App Awaiting Review',
@@ -172,6 +173,7 @@ export default {
 	'attachment-already-exists': 'Attachment Already Exists',
 	'attachment-deleted-successfully': 'Attachment deleted successfully.',
 	'attributes': 'Attributes',
+	'authenticated-logins-malus': 'Authenticated Logins (MALUs)',
 	'available': 'Available',
 	'awaiting-signature': 'Awaiting Signature',
 	'back': 'Back',
@@ -192,6 +194,7 @@ export default {
 	'beta-product-feedback-form': 'Beta Product Feedback Form',
 	'billing-address': 'Billing Address',
 	'billing-email': 'Billing Email',
+	'billing-period': 'Billing Period',
 	'breadcrumb': 'Breadcrumb',
 	'browse-catalog': 'Browse Catalog',
 	'browse-products': 'Browse Products',
@@ -335,6 +338,7 @@ export default {
 		'Customize Storefront Solution Details',
 	'dashboard': 'Dashboard',
 	'data-center-location': 'Data Center Location',
+	'database': 'Database',
 	'date': 'Date',
 	'date-added': 'Date Added',
 	'date-created': 'Date Created',
@@ -470,6 +474,8 @@ export default {
 	'extension-optional': 'Extension (optional)',
 	'extension-request': 'Extension Request',
 	'extension-status': 'Extension Status',
+	'extensions-ram': 'Extensions RAM',
+	'extensions-vcpu': 'Extensions vCPUs',
 	'external-reference-code': 'External Reference Code',
 	'failed': 'Failed',
 	'failed-to-approve-trial-extension': 'Failed to approve trial extension.',
@@ -660,6 +666,7 @@ export default {
 	'loading': 'Loading…',
 	'login-as-a-user-that-has-access-to-a-project-or-contact-your-project-administrator-to-add-you-to-a-project.':
 		'Login as a user that has access to a project or contact your project administrator to add you to a project.',
+	'logs': 'Logs',
 	'low-code-configuration': 'Low-Code Configuration',
 	'low-code-configurations-published': 'Low Code Configurations Published',
 	'mac-addresses': 'Mac Addresses',
@@ -734,6 +741,7 @@ export default {
 	'module-based-apps-delivered-as-lpkg-files-that-the-user-can-install-to-modify-native-liferay-behavior':
 		'Module-based apps delivered as .lpkg files that the user can install to modify native Liferay behavior.',
 	'monetize-your-apps-and-solutions': 'Monetize Your Apps and Solutions',
+	'monthly-inbound-and-outbound': 'Monthly Inbound and Outbound',
 	'monthly-increase': 'Monthly Increase',
 	'more-actions': 'More Actions',
 	'more-info': 'More Info',
@@ -820,6 +828,7 @@ export default {
 		'Notify me about products, services and events.',
 	'number-of-cpus': 'Number of CPUs',
 	'number-of-purchases': 'Number of purchases',
+	'number-of-sites': 'Number of Sites',
 	'object-action': 'Object Action',
 	'objective': 'Objective',
 	'of-service': 'of Service.',
@@ -883,6 +892,8 @@ export default {
 	'payments': 'Payments',
 	'paypal': 'PayPal',
 	'paypal-account': 'PayPal Account',
+	'peak-usage-exceeded-your-entitlements':
+		'Peak usage exceeded your entitlements',
 	'pending': 'Pending',
 	'pending-payment': 'Pending Payment',
 	'permissions-successfully-updated': 'Permissions successfully updated.',
@@ -978,12 +989,15 @@ export default {
 	'project-members': 'Project Members',
 	'project-members-successfully-updated':
 		'Project members successfully updated.',
+	'project-metrics-are-available-for-liferay-saas-customers-on-liferays-latest-usage-based-model':
+		"Project Metrics are available for Liferay SaaS customers on Liferay's latest usage-based model. Reach out to your Account Manager to learn more about how you can track resource usage, site users, and storage capacity.",
 	'project-name': 'Project Name',
 	'project-permissions': 'Project Permissions',
 	'project-roles': 'Project Roles',
 	'project-selected': 'Project Selected',
 	'project-selection': 'Project Selection',
 	'project-type': 'Project Type',
+	'project-usage-metrics': 'Project Usage Metrics',
 	'projects': 'Projects',
 	'projects-and-resources': 'Projects and Resources',
 	'prompt': 'Prompt',
@@ -1076,6 +1090,7 @@ export default {
 	'requested': 'Requested',
 	'requester': 'Requester',
 	'resource-requirements': 'Resource Requirements',
+	'resource-usage': 'Resource Usage',
 	'resources': 'Resources',
 	'return-to-attachments': 'Return to Attachments',
 	'return-to-marketplace': 'Return to Marketplace',
@@ -1163,6 +1178,7 @@ export default {
 	'showing-x-to-x-of-x': 'Showing {0} to {1} of {2}',
 	'sign-in-with-a-different-account': 'Sign in with a Different Account',
 	'site-initializer': 'Site Initializer',
+	'sites-and-users': 'Sites and Users',
 	'size': 'Size',
 	'sizing': 'Sizing',
 	'sku': 'SKU',
@@ -1196,6 +1212,7 @@ export default {
 	'state': 'State',
 	'status': 'Status',
 	'step-x-of-x': 'Step {0} of {1}',
+	'storage': 'Storage',
 	'storefront': 'Storefront',
 	'street-address': 'Street Address',
 	'submit': 'Submit',
@@ -1306,6 +1323,8 @@ export default {
 	'this-product-is-no-longer-available':
 		'This product is no longer available.',
 	'this-project-has-no-members': 'This project has no members yet.',
+	'this-project-is-on-a-legacy-billing-model':
+		'This project is on a legacy billing model.',
 	'this-purchase-will-be-billed-under-your-existing-payment-agreement-the-payment-method-cannot-be-changed-and-no-online-payment-is-required':
 		'This purchase will be billed under your existing payment agreement. The payment method cannot be changed, and no online payment is required.',
 	'this-submission-is-currently-under-review-by-liferay-once-the-process-is-complete-it-will-be-published-on-the-marketplace-in-the-meantime-no-information-or-data-from-this-app-submission-can-be-updated':
@@ -1341,6 +1360,11 @@ export default {
 	'topic': 'Topic',
 	'topics': 'Topics',
 	'total': 'Total',
+	'total-ram': 'Total RAM',
+	'total-storage': 'Total Storage',
+	'total-vcpu': 'Total vCPU',
+	'total-volume': 'Total Volume',
+	'traffic-networking': 'Traffic / Networking',
 	'transaction-details': 'Transaction Details',
 	'transaction-id': 'Transaction ID',
 	'trial': 'Trial',
@@ -1382,6 +1406,7 @@ export default {
 	'under-review': 'Under Review',
 	'uninstall': 'Uninstall',
 	'unknown-member': 'Unknown member',
+	'unlimited': 'Unlimited',
 	'unlock-exclusive-benefits-with-a-business-account':
 		'Unlock exclusive benefits with a Business Account!',
 	'unpaid': 'Unpaid',
@@ -1399,6 +1424,8 @@ export default {
 	'usage': 'Usage',
 	'usage-dashboard-is-not-available-yet':
 		'Usage dashboard is not available yet.',
+	'usage-data-is-temporarily-unavailable-please-try-again-later':
+		'Usage data is temporarily unavailable. Please try again later.',
 	'use-any-build-from-any-available-liferay-experience-cloud-account-requires-lxc-account':
 		'Use any build from any available Liferay SaaS account (requires Liferay SaaS account) ',
 	'use-any-build-from-your-computer-connecting-with-a-github-provider':
@@ -1539,6 +1566,8 @@ export default {
 	'your-free-activation-key-has-been-generated':
 		'Your free activation key has been generated!',
 	'your-order-id-is': 'Your Order ID is:',
+	'your-peak-usage-for-this-billing-period-exceeded-your-entitlement-limits-overage-charges-may-apply':
+		'Your peak usage for this billing period exceeded your entitlement limits. Overage charges may apply.',
 	'your-purchase-has-been-successfully-processed-to-continue-please-click-the-button-below-to-download-or-install-the-app':
 		'Your purchase has been successfully processed. To continue, please click the button below to download or install the app.',
 	'your-request-completed-successfully':

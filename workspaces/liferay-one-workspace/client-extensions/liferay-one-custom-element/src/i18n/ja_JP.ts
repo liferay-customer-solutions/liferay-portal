@@ -11,6 +11,7 @@ export default {
 	'add-a-description-of-the-file-related-to-this-ticket':
 		'このチケットに関連するファイルの説明を追加してください。',
 	'an-unexpected-error-occurred': '予期しないエラーが発生しました。',
+	'anonymous-page-views-apv': '匿名ページビュー（APV）',
 	'are-there-any-support-tickets-impacting-this-event':
 		'このイベントに影響するサポートチケットはありますか？',
 	'are-you-sure-you-want-to-delete-this-attachment':
@@ -19,7 +20,9 @@ export default {
 	'attach-file-to-ticket-x': 'チケット番号{0}にファイルを添付する',
 	'attachment': '添付ファイル',
 	'attachment-deleted-successfully': '添付ファイルは正常に削除されました。',
+	'authenticated-logins-malus': '認証ログイン（MALU）',
 	'back-to-business-events': 'ビジネスイベントに戻る',
+	'billing-period': '請求期間',
 	'business-event-actual-event-date-recorded-successfully':
 		'ビジネスイベントの実際のイベント日が正常に記録されました。',
 	'business-event-canceled-successfully':
@@ -41,6 +44,7 @@ export default {
 	'create-event': 'イベント作成',
 	'create-new-ticket': '新規チケットの作成',
 	'current-version': '現在のバージョン',
+	'database': 'データベース',
 	'date': '日付',
 	'download': 'ダウンロード',
 	'drag-and-drop-to-upload-or': 'ファイルをアップロードする、または',
@@ -52,6 +56,8 @@ export default {
 	'event-name': 'イベント名',
 	'event-status': 'イベントステータス',
 	'event-type': 'イベントの種類',
+	'extensions-ram': '拡張機能のRAM',
+	'extensions-vcpu': '拡張機能のvCPU',
 	'file-to-download-doesnt-exist-anymore':
 		'ダウンロードするファイルが存在しません。',
 	'filters': 'フィルター',
@@ -60,6 +66,7 @@ export default {
 	'leave-a-comment': 'コメントを残す',
 	'login-as-a-user-that-has-access-to-a-project-or-contact-your-project-administrator-to-add-you-to-a-project.':
 		'プロジェクトにアクセスできるユーザーとしてログインするか、プロジェクト管理者に追加を依頼してください。',
+	'logs': 'ログ',
 	'make-sure-the-project-link-is-correct-and-that-you-have-access-to-this-project':
 		'プロジェクトリンクが正しいこと、およびこのプロジェクトへのアクセス権があることを確認してください。',
 	'make-sure-the-ticket-number-is-correct':
@@ -67,6 +74,7 @@ export default {
 	'manage-user-options': 'ユーザーオプションの管理',
 	'migration': 'マイグレーション',
 	'mm-dd-yyyy': 'MM-DD-YYYY',
+	'monthly-inbound-and-outbound': '月間インバウンドおよびアウトバウンド',
 	'new-version': '新しいバージョン',
 	'no-business-events-were-found': 'ビジネスイベントは検出されませんでした。',
 	'no-data-found': 'データが見つかりませんでした。',
@@ -74,11 +82,14 @@ export default {
 		'チケットがクローズされると、それ以上の編集はできません。サポートが必要な場合は、新しいサポートチケットを開いてください。',
 	'no-history-of-activity-was-found':
 		'アクティビティ履歴は見つかりませんでした。',
+	'number-of-sites': 'サイト数',
 	'once-canceled-no-further-edits-can-be-made-to-this-event':
 		'一度キャンセルすると、これ以上、このイベントを編集できなくなります。',
 	'open': 'オープン',
 	'other-event': 'その他のイベント',
 	'overdue': '期限切れ',
+	'peak-usage-exceeded-your-entitlements':
+		'ピーク使用量がエンタイトルメントを超過しました',
 	'planned-event-date': 'イベント予定日',
 	'please-check-again-later': '後でもう一度確認してください。',
 	'please-check-this-box-if-the-file-you-upload-does-not-contain-any-personal-data-and-therefore-can-be-uploaded-to-and-accessed-from-any-liferay-support-location-globally':
@@ -92,9 +103,13 @@ export default {
 		'すでに発生した実際のイベント日、または現在の日付を選択してください。',
 	'please-select-the-tickets-that-are-impacting-this-event':
 		'このイベントに影響しているチケットを選択してください。',
+	'project-metrics-are-available-for-liferay-saas-customers-on-liferays-latest-usage-based-model':
+		'プロジェクトメトリックは、Liferayの最新の使用量ベースモデルを採用しており、Liferay SaaSのお客様にご利用いただけます。リソースの使用状況、サイトユーザー、ストレージの容量を追跡する方法の詳細については、アカウントマネージャーにお問い合わせください。',
+	'project-usage-metrics': 'プロジェクトの利用状況のメトリクス',
 	'reason-for-change': '変更の理由',
 	'record-actual-event-date': '実際のイベント日を記録',
 	'remove': '削除',
+	'resource-usage': 'リソースの利用',
 	'return-to-attachments': '添付ファイルに戻る',
 	'return-to-ticket': 'チケットに戻る',
 	'save-changes': '変更を保存する',
@@ -106,22 +121,34 @@ export default {
 	'select-the-option': 'オプションの選択',
 	'select-the-project-and-ticket-you-want-to-attach-a-file-to':
 		'ファイルを添付するプロジェクトとチケットを選択してください。',
+	'sites-and-users': 'サイトとユーザー',
+	'storage': 'ストレージ',
 	'the-changes-were-saved-successfully': '変更点は正常に保存されました。',
 	'the-file-may-have-been-deleted': 'ファイルが削除された可能性があります。',
 	'there-are-currently-no-open-tickets-under-this-project':
 		'現在、このプロジェクトで未解決のチケットはありません。',
+	'this-project-is-on-a-legacy-billing-model':
+		'このプロジェクトは従来の課金モデルを使用しています。',
 	'this-table-allows-you-to-create-manage-and-track-your-business-events-please-note-that-business-events-closed-for-more-than-a-year-will-not-be-displayed-here':
 		'このテーブルでは、ビジネスイベントを作成、管理、追跡できます。1年以上クローズ済みのビジネスイベントは、こちらに表示されませんので、ご注意ください。',
 	'this-ticket-has-been-closed': 'このチケットはクローズされました。',
 	'tickets-impacting-this-event': 'このイベントに影響するチケット',
 	'time': '時間',
 	'time-zone': 'タイムゾーン',
+	'total-ram': '合計RAM',
+	'total-storage': '合計ストレージ',
+	'total-vcpu': '総vCPU',
+	'total-volume': '総ボリューム',
+	'traffic-networking': 'トラフィック／ネットワーク',
 	'try-again-later': '後でもう一度試してください。',
 	'unable-to-connect-to-file-server': 'ファイルサーバーに接続できない',
 	'unable-to-delete-attachment': '添付ファイルを削除できませんでした。',
 	'unable-to-load-the-license-keys': 'ライセンスキーを読み込めませんでした。',
+	'unlimited': '無制限',
 	'upgrade': 'アップグレード',
 	'upload': 'アップロード',
+	'usage-data-is-temporarily-unavailable-please-try-again-later':
+		'使用状況データは一時的に利用できません。しばらくしてから再度お試しください。',
 	'user': 'ユーザー',
 	'we-apologize-for-the-inconvenience-but-we-ve-detected-a-system-error-with-this-project':
 		'ご不便をおかけして申し訳ございませんが、このプロジェクトでシステムエラーが検出されました。この問題を解決するために、サポートチケットを作成してください。',
@@ -137,4 +164,6 @@ export default {
 	'your-attachment-is-uploaded-however-we-encountered-a-problem-posting-your-comment-the-system-is-automatically-retrying-to-send-it':
 		'添付ファイルがアップロードされました。 コメントを投稿する際に問題が発生しましたが、システムが自動的に送信を再試行しています。',
 	'your-current-liferay-version': '現在のLiferayのバージョン',
+	'your-peak-usage-for-this-billing-period-exceeded-your-entitlement-limits-overage-charges-may-apply':
+		'この請求期間のピーク使用量がエンタイトルメントの上限を超過しました。超過料金が発生する場合があります。',
 } as const;
