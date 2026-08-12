@@ -9,12 +9,12 @@ import {LabelHTMLAttributes} from 'react';
 
 import './index.scss';
 
-interface LabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
+interface ILabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
 	info?: string;
 	required?: boolean;
 }
 
-export function Label({info, required, ...props}: LabelProps) {
+export function Label({info, required, ...props}: ILabelProps) {
 	return (
 		<>
 			<label {...props} />

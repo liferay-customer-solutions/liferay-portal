@@ -11,7 +11,7 @@ import ClayDropDown from '@clayui/drop-down';
 import {HTMLAttributes, useState} from 'react';
 import {BlockDirections} from '~/context/SolutionContext';
 
-interface SectionWithControllersProps extends HTMLAttributes<HTMLDivElement> {
+interface ISectionWithControllersProps extends HTMLAttributes<HTMLDivElement> {
 	dropdownItems: {
 		disabled?: boolean;
 		name: string;
@@ -31,7 +31,7 @@ export function SectionWithControllers({
 	onArrowClick,
 	position,
 	...props
-}: SectionWithControllersProps) {
+}: ISectionWithControllersProps) {
 	const [collapsed, setCollapsed] = useState(true);
 
 	return (

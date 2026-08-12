@@ -12,9 +12,9 @@ import {
 	ProductWorkflowStatusCode,
 	ProductWorkflowStatusLabel,
 } from '~/utils/productUtils';
+import {getAccountImage} from '~/utils/publishUtils';
 
 import i18n from '../../../i18n';
-import {getAccountImage} from '~/utils/publishUtils';
 
 import './index.scss';
 

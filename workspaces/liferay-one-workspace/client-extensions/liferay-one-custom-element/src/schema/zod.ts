@@ -5,9 +5,9 @@
 
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
+import {removeHTMLTags} from '~/utils/stringUtils';
 
 import i18n from '../i18n';
-import {removeHTMLTags} from '~/utils/stringUtils';
 
 const domainRegex = /^(?!:\/\/)([a-zA-Z0-9-_]+?\.)+[a-zA-Z]{2,}$/;
 

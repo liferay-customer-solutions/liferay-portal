@@ -5,10 +5,10 @@
 
 import './Tag.scss';
 
-interface TagProps {
+interface ITagProps {
 	label: string;
 }
 
-export function Tag({label}: TagProps) {
+export function Tag({label}: ITagProps) {
 	return <span className="tag">{label}</span>;
 }

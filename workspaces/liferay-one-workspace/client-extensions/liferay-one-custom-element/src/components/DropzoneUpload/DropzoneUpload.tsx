@@ -10,7 +10,7 @@ import './DropzoneUpload.scss';
 
 import ClayIcon from '@clayui/icon';
 
-interface DropzoneUploadProps {
+interface IDropzoneUploadProps {
 	acceptFileTypes: {
 		[key: string]: string[];
 	};
@@ -40,7 +40,7 @@ export function DropzoneUpload({
 	showDocumentIcon = true,
 	title,
 	versionName,
-}: DropzoneUploadProps) {
+}: IDropzoneUploadProps) {
 	return (
 		<Dropzone
 			accept={acceptFileTypes}

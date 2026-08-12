@@ -11,7 +11,6 @@ import Select from '~/components/Select/Select';
 import UploadLogo from '~/components/UploadLogo/UploadLogo';
 import {NewAppTypes, useNewAppContext} from '~/context/NewAppContext';
 import {
-	ProductTags,
 	ProductVocabulary,
 	ProductWorkflowStatusCode,
 } from '~/enums/Product';
