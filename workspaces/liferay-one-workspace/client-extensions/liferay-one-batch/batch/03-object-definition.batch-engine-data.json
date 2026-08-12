@@ -12,6 +12,205 @@
 	"items": [
 		{
 			"active": true,
+			"className": "com.liferay.object.model.ObjectDefinition#C_ACCOUNT_INVITATION",
+			"enableCategorization": false,
+			"enableComments": false,
+			"enableObjectEntryHistory": false,
+			"externalReferenceCode": "C_ACCOUNT_INVITATION",
+			"friendlyURLSeparator": "l",
+			"label": {
+				"en_US": "Account Invitation"
+			},
+			"name": "AccountInvitation",
+			"objectFields": [
+				{
+					"DBType": "Boolean",
+					"businessType": "Boolean",
+					"externalReferenceCode": "C_ACCOUNT_INVITATION_ACCEPTED",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Accepted"
+					},
+					"name": "accepted",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Boolean"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ACCOUNT_INVITATION_ACCOUNT_EXTERNAL_REFERENCE_CODE",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Account External Reference Code"
+					},
+					"name": "accountExternalReferenceCode",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ACCOUNT_INVITATION_EMAIL_ADDRESS",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "en_US",
+					"label": {
+						"en_US": "Email Address"
+					},
+					"name": "emailAddress",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ACCOUNT_INVITATION_FAMILY_NAME",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "en_US",
+					"label": {
+						"en_US": "Last Name"
+					},
+					"name": "familyName",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ACCOUNT_INVITATION_GIVEN_NAME",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "en_US",
+					"label": {
+						"en_US": "First Name"
+					},
+					"name": "givenName",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ACCOUNT_INVITATION_ROLE_NAMES",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "en_US",
+					"label": {
+						"en_US": "Role Names"
+					},
+					"name": "roleNames",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ACCOUNT_INVITATION_TOKEN",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Token"
+					},
+					"name": "token",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				}
+			],
+			"objectFolderExternalReferenceCode": "C_LIFERAY_ONE_FOLDER",
+			"objectRelationships": [
+			],
+			"objectValidationRules": [
+			],
+			"objectViews": [
+				{
+					"defaultObjectView": true,
+					"name": {
+						"en_US": "Default View"
+					},
+					"objectDefinitionExternalReferenceCode": "C_ACCOUNT_INVITATION",
+					"objectViewColumns": [
+						{
+							"label": {
+								"en_US": "Email Address"
+							},
+							"objectFieldName": "emailAddress",
+							"priority": 0
+						},
+						{
+							"label": {
+								"en_US": "Account External Reference Code"
+							},
+							"objectFieldName": "accountExternalReferenceCode",
+							"priority": 1
+						},
+						{
+							"label": {
+								"en_US": "Role Names"
+							},
+							"objectFieldName": "roleNames",
+							"priority": 2
+						},
+						{
+							"label": {
+								"en_US": "Accepted"
+							},
+							"objectFieldName": "accepted",
+							"priority": 3
+						}
+					]
+				}
+			],
+			"panelCategoryKey": "applications_menu.applications.content",
+			"pluralLabel": {
+				"en_US": "Account Invitations"
+			},
+			"portlet": true,
+			"restContextPath": "/o/c/accountinvitations",
+			"scope": "company",
+			"status": {
+				"code": 0,
+				"label": "approved",
+				"label_i18n": "Approved"
+			},
+			"system": false,
+			"titleObjectFieldName": "emailAddress"
+		},
+		{
+			"active": true,
 			"className": "com.liferay.object.model.ObjectDefinition#C_ACCOUNT_NOTE",
 			"enableCategorization": true,
 			"enableComments": true,
