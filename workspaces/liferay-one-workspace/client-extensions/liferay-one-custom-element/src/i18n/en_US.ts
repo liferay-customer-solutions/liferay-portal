@@ -233,6 +233,8 @@ export default {
 	'checkout': 'Checkout',
 	'choose-an-option': 'Choose an Option',
 	'choose-currency': 'Choose Currency',
+	'choose-the-marketplace-category-that-most-accurately-describes-what-your-app-does-users-looking-for-specific-types-of-apps-will-often-browse-categories-by-searching-for-a-specific-category-name-on-the-main-marketplace-home-page-having-your-app-listed-under-the-appropriate-category-will-help-them-find-it':
+		'Choose the Marketplace category that most accurately describes what your app does. Users looking for specific types of apps will often browse categories by searching for a specific category name on the main Marketplace home page. Having your app listed under the appropriate category will help them find it.',
 	'choose-the-marketplace-category-that-most-accurately-describes-what-your-solution-does-users-looking-for-specific-types-of-solutions-will-often-browse-categories-by-searching-for-a-specific-category-name-on-the-main-marketplace-home-page-having-your-solution-listed-under-the-appropriate-category-will-help-them-find-it':
 		'Choose the Marketplace category that most accurately describes what your solution does. Users looking for specific types of solutions will often browse categories by searching for a specific category name on the main Marketplace home page. Having your solution listed under the appropriate category will help them find it.',
 	'city': 'City',
@@ -331,6 +333,8 @@ export default {
 	'customer-account': 'Customer Account',
 	'customer-dashboard': 'Customer Dashboard',
 	'customer-project': 'Customer Project',
+	'customers-of-the-marketplace-will-see-this-as-the-name-of-the-app-please-use-a-title-no-longer-than-50-characters-titles-longer-than-18-characters-may-be-truncated-the-app-title-may-contain-the-word-liferay-to-describe-its-use-or-intent-as-long-as-the-name-does-not-imply-official-certification-or-validation-from-liferay-inc-examples-of-permissible-names-include-exchange-connector-for-liferay-or-integration-connector-kit-for-liferay-while-liferay-mail-solution-or-liferay-management-console-would-not-be-permitted-without-explicit-approval-please-refer-to-our-trademark-policy':
+		'Customers of the Marketplace will see this as the name of the app. Please use a title no longer than 50 characters. Titles longer than 18 characters may be truncated. The app title may contain the word "Liferay" to describe its use or intent, as long as the name does not imply official certification or validation from Liferay, Inc. Examples of permissible names include "Exchange Connector for Liferay" or "Integration Connector Kit for Liferay" while "Liferay Mail Solution" or "Liferay Management Console" would not be permitted without explicit approval. Please refer to our trademark policy.',
 	'customers-of-the-marketplace-will-see-this-as-the-name-of-the-solution-please-use-a-title-no-longer-than-50-characters-titles-longer-than-18-characters-may-be-truncated-the-solution-title-may-contain-the-word-liferay-to-describe-its-use-or-intent-as-long-as-the-name-does-not-imply-official-certification-or-validation-from-liferay-inc-examples-of-permissible-names-would-include-exchange-connector-for-liferay-or-integration-connector-kit-for-liferay-while-liferay-mail-solution-or-liferay-management-console-would-not-be-permitted-without-explicit-approval-please-refer-to-our-trademark-policy':
 		'Customers of the Marketplace will see this as the name of the solution. Please use a title no longer than 50 characters. Titles longer than 18 characters may be truncated. The Solution title may contain the word "Liferay" to describe its use or intent, as long as the name does not imply official certification or validation from Liferay, Inc. Examples of permissible names include "Exchange Connector for Liferay" or "Integration Connector Kit for Liferay" while "Liferay Mail Solution" or "Liferay Management Console" would not be permitted without explicit approval. Please refer to our trademark policy.',
 	'customize-solution-header': 'Customize Solution Header',
@@ -1154,6 +1158,8 @@ export default {
 	'select-project': 'Select Project',
 	'select-purpose': 'Select Purpose',
 	'select-tags': 'Select Tags',
+	'select-the-areas-of-liferay-your-app-extends-such-as-analytics-content-management-or-commerce-areas-help-customers-browsing-the-marketplace-by-capability-find-your-app':
+		'Select the areas of Liferay your app extends, such as analytics, content management, or commerce. Areas help customers browsing the Marketplace by capability find your app.',
 	'select-the-license-type-and-the-number-of-licenses-you-want-to-purchase':
 		'Select the license type and the number of licenses you want to purchase.',
 	'select-the-offering-of-liferay-your-app-is-compatible-with-the-compatibility-selections-will-determine-on-what-platforms-your-app-is-tested':
@@ -1242,6 +1248,8 @@ export default {
 	'system-admin-first-name': 'System Admin First Name',
 	'system-admin-last-name': 'System Admin Last Name',
 	'tags': 'Tags',
+	'tags-help-to-describe-your-app-in-the-marketplace-select-the-tags-most-relevant-to-your-app-they-can-be-changed-if-needed':
+		'Tags help to describe your app in the Marketplace. Select the tags most relevant to your app. They can be changed if needed.',
 	'tags-help-to-describe-your-solution-in-the-marketplace-select-the-tags-most-relevant-to-your-solution-they-can-be-changed-if-needed':
 		'Tags help to describe your solution in the Marketplace. Select the tags most relevant to your solution. They can be changed if needed.',
 	'tax-id': 'Tax ID',

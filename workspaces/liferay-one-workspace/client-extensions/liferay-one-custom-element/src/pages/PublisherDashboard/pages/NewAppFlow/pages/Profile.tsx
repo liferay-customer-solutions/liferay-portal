@@ -18,11 +18,21 @@ import {getRandomID} from '~/utils/stringUtils';
 import type {VocabularyCategoryOption} from '~/hooks/useGetVocabulariesAndCategories';
 
 const tooltipInfo = {
-	areas: 'tooltip',
-	categories: 'tootip',
-	description: 'tootip',
-	name: 'tootip',
-	tags: 'tootip',
+	areas: i18n.translate(
+		'select-the-areas-of-liferay-your-app-extends-such-as-analytics-content-management-or-commerce-areas-help-customers-browsing-the-marketplace-by-capability-find-your-app'
+	),
+	categories: i18n.translate(
+		'choose-the-marketplace-category-that-most-accurately-describes-what-your-app-does-users-looking-for-specific-types-of-apps-will-often-browse-categories-by-searching-for-a-specific-category-name-on-the-main-marketplace-home-page-having-your-app-listed-under-the-appropriate-category-will-help-them-find-it'
+	),
+	description: i18n.translate(
+		'you-can-put-anything-you-want-here-but-a-good-guideline-is-no-more-than-4-5-paragraphs-this-field-does-not-allow-any-markup-tags-its-just-text-please-do-not-use-misleading-names-information-or-icons-descriptions-should-be-as-concise-as-possible-ensure-your-icons-images-descriptions-and-tags-are-free-of-profanity-or-other-offensive-material'
+	),
+	name: i18n.translate(
+		'customers-of-the-marketplace-will-see-this-as-the-name-of-the-app-please-use-a-title-no-longer-than-50-characters-titles-longer-than-18-characters-may-be-truncated-the-app-title-may-contain-the-word-liferay-to-describe-its-use-or-intent-as-long-as-the-name-does-not-imply-official-certification-or-validation-from-liferay-inc-examples-of-permissible-names-include-exchange-connector-for-liferay-or-integration-connector-kit-for-liferay-while-liferay-mail-solution-or-liferay-management-console-would-not-be-permitted-without-explicit-approval-please-refer-to-our-trademark-policy'
+	),
+	tags: i18n.translate(
+		'tags-help-to-describe-your-app-in-the-marketplace-select-the-tags-most-relevant-to-your-app-they-can-be-changed-if-needed'
+	),
 };
 
 const Profile = () => {
