@@ -7,7 +7,7 @@ import ClayButton from '@clayui/button';
 import {useModal} from '@clayui/modal';
 import {useMemo} from 'react';
 import {Link} from 'react-router-dom';
-import Modal from '~/components/Modal';
+import Modal from '~/components/Modal/Modal';
 import {useMarketplaceContext} from '~/context/MarketplaceContext';
 import {useNewAppContext} from '~/context/NewAppContext';
 import usePublishAppSubmission from '~/hooks/usePublishAppSubmission';

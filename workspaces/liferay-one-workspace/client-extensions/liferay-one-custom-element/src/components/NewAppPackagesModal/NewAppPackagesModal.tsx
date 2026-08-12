@@ -22,7 +22,7 @@ type NewAppPackageVersionModal = {
 	handleClose: () => void;
 };
 
-export function NewAppPackageVersionModal({
+export function NewAppPackagesModal({
 	currentVersions,
 	handleClose,
 }: NewAppPackageVersionModal) {
