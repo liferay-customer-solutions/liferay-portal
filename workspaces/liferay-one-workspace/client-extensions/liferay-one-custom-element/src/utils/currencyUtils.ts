@@ -7,7 +7,14 @@ import EURFlag from '../assets/icons/eur_flag.svg';
 
 export {formatCurrency} from './formatCurrency';
 
-export const currenciesCode = [
+export type Currency = {
+	code: string;
+	flag: string;
+	iconSrc?: string;
+	symbol: string;
+};
+
+export const currenciesCode: Currency[] = [
 	{
 		code: 'USD',
 		flag: 'en-us',

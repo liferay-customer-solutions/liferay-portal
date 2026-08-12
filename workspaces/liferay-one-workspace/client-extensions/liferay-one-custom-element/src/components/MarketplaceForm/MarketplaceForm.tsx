@@ -4,7 +4,7 @@
  */
 
 import {FormHTMLAttributes, ReactNode} from 'react';
-import {FormProvider} from 'react-hook-form';
+import {FieldValues, FormProvider, UseFormReturn} from 'react-hook-form';
 import Checkbox from '~/components/MarketplaceFormCheckbox/MarketplaceFormCheckbox';
 import FormControl from '~/components/MarketplaceFormControl/MarketplaceFormControl';
 import {MarketplaceFormHelpMessage} from '~/components/MarketplaceFormHelpMessage/MarketplaceFormHelpMessage';
@@ -19,7 +19,7 @@ function Divider(props: React.HTMLAttributes<HTMLHRElement>) {
 
 type FormProps = {
 	children: ReactNode;
-	formProviderProps: any;
+	formProviderProps: UseFormReturn<FieldValues>;
 } & FormHTMLAttributes<HTMLFormElement>;
 
 type FormChildrens = {

@@ -10,10 +10,11 @@ import {
 } from '~/context/NewAppContextProvider';
 import {LICENSING_OPTIONS} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
 import {currenciesCode, formatCurrency} from '~/utils/currencyUtils';
+import type {Currency} from '~/utils/currencyUtils';
 import {ProductPriceModel} from '~/utils/productUtils';
 
 type LicensePricesProps = {
-	currency: any;
+	currency?: Currency;
 	currencyCode: string;
 	prices: LicensingPrices;
 };
@@ -27,16 +28,18 @@ const LicensePrices: React.FC<LicensePricesProps> = ({
 		<span>
 			{currencyCode}
 
-			{currency.iconSrc ? (
+			{currency?.iconSrc ? (
 				<img
 					className="currency-selector-icon ml-2"
 					src={currency.iconSrc}
 				/>
 			) : (
-				<ClayIcon
-					className="currency-selector-icon ml-2"
-					symbol={currency.flag}
-				/>
+				currency && (
+					<ClayIcon
+						className="currency-selector-icon ml-2"
+						symbol={currency.flag}
+					/>
+				)
 			)}
 		</span>
 

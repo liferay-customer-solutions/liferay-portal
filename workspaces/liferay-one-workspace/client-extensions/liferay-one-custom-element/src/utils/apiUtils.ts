@@ -547,7 +547,7 @@ export async function postPriceListEntry(priceListId: number, priceEntry: unknow
 
 export async function postPriceEntryIdTierPrice(
 	priceEntryId: number,
-	tierPrice: any
+	tierPrice: unknown
 ) {
 	const response = await fetch(
 		`/o/headless-commerce-admin-pricing/v2.0/price-entries/${priceEntryId}/tier-prices`,
@@ -578,7 +578,7 @@ export async function postOption(optionBody: unknown) {
 
 export async function postProductOption(
 	productId: number,
-	productOptionBody: any
+	productOptionBody: unknown
 ) {
 	const response = await fetch(
 		`${baseURL}/o/headless-commerce-admin-catalog/v1.0/products/${productId}/productOptions`,

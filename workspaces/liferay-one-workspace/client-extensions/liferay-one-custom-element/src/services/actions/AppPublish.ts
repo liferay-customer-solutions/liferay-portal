@@ -34,7 +34,7 @@ export type ProductConfig = {
 };
 
 type TemporaryData = {
-	compatibleOfferings: any | null;
+	compatibleOfferings: Partial<ProductCategories>[] | null;
 	description: {[key: string]: string} | null;
 	name: {[key: string]: string} | null;
 	productCategories: Partial<ProductCategories>[] | null;
@@ -204,7 +204,7 @@ export default class AppPublish extends BaseAppPublish {
 		const productTypeCategories = (
 			vocabulariesAndCategories[ProductVocabulary.PRODUCT_TYPE]
 				?.categories ?? []
-		).filter(({label}: any) => label === ProductTypeVocabulary.APP);
+		).filter(({label}: {label: string}) => label === ProductTypeVocabulary.APP);
 
 		const productCategories = [
 			...areas,

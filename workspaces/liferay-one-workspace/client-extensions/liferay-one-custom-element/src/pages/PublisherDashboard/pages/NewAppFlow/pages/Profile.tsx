@@ -56,7 +56,7 @@ const Profile = () => {
 			[],
 	};
 
-	const onChange = (event: any) => {
+	const onChange = (event: {target: {name: string; value: unknown}}) => {
 		dispatch({
 			payload: {[event.target.name]: event.target.value},
 			type: NewAppTypes.SET_PROFILE,
