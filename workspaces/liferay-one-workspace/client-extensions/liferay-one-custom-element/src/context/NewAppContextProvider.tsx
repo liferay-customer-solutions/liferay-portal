@@ -12,6 +12,7 @@ import {UploadedFile} from '~/components/FileList/FileList';
 import Loading from '~/components/Loading/Loading';
 import {ProductVocabulary} from '~/enums/Product';
 import {useGetVocabulariesAndCategories} from '~/hooks/useGetVocabulariesAndCategories';
+import type {VocabularyCategoryOption} from '~/hooks/useGetVocabulariesAndCategories';
 import {MarketplaceProduct} from '~/models/MarketplaceProduct';
 import HeadlessCommerceAdminCatalogImpl from '~/services/headless/HeadlessCommerceAdminCatalog';
 import HeadlessDelivery from '~/services/headless/HeadlessDelivery';
@@ -47,7 +48,7 @@ export type LicensingPrices = {
 };
 
 export type LiferayPackage = {
-	file: any;
+	file: UploadedFile[];
 	id: string;
 	uploaded: boolean;
 	versions: string[];
@@ -131,7 +132,10 @@ export type NewAppInitialState = {
 			canModifyProductProfileCategory: boolean;
 		};
 		imagesToDelete: string[];
-		vocabulariesAndCategories: any;
+		vocabulariesAndCategories: Record<
+			string,
+			{categories: VocabularyCategoryOption[]; id: unknown; name: string}
+		>;
 	};
 	storefront: {
 		images: UploadedFile[];
@@ -579,7 +583,7 @@ const reducer = (state: NewAppInitialState, action: AppActions) => {
 			};
 
 			if (key in updatedLicenseTierPrices) {
-				delete (updatedLicenseTierPrices as any)[key];
+				delete updatedLicenseTierPrices[key as unknown as number];
 			}
 
 			return {
@@ -764,7 +768,7 @@ export default function NewAppContextProvider({
 						);
 
 						return {
-							file: packageFiles,
+							file: packageFiles as unknown as UploadedFile[],
 							id: String(publisherAsset.id),
 							uploaded: true,
 							versions: publisherAsset.version.split(','),

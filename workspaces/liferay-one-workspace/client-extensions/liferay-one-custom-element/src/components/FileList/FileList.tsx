@@ -28,7 +28,7 @@ export type UploadedImage = {
 		options: {};
 		priority: number;
 		src: string;
-		tags: any[];
+		tags: string[];
 		title: {en_US: string};
 		type: number;
 	};
@@ -46,14 +46,14 @@ export type UploadedFile = {
 	readableSize:
 		| string
 		| number
-		| any[]
+		| [number, string]
 		| {
 				exponent: number;
-				symbol: any;
+				symbol: string;
 				unit: string;
-				value: any;
+				value: number;
 		  };
-	tags?: any[];
+	tags?: string[];
 	uploaded: boolean;
 	uploadedImage?: UploadedImage;
 	versionName?: string;
