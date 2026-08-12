@@ -3,12 +3,13 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import type {Product} from '~/types/product';
 import {Liferay} from '~/services/liferay/liferay';
 import SearchBuilder from '~/utils/SearchBuilder';
 
 import {UploadedFile} from '../../components/FileList/FileList';
 import {DOCUMENT_FOLDER_PERMISSIONS} from '../../enums/File';
-import {MarketplaceProperties} from '../../utils/attributes';
+import {Properties} from '~/utils/attributeUtils';
 import HeadlessDelivery from '../headless/HeadlessDelivery';
 import HeadlessPublisherAssetses from '../headless/HeadlessPublisherAsset';
 import HeadlessPublisherAssetAttachment from '../headless/HeadlessPublisherAssetAttachment';
@@ -22,7 +23,7 @@ export default class PublisherAsset {
 		protected file: UploadedFile[],
 		protected id: string,
 		protected product: Product,
-		protected properties: MarketplaceProperties,
+		protected properties: Properties,
 		protected versions: string
 	) {}
 

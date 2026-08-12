@@ -3,24 +3,26 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import type {UserAccount} from '~/types/accounts';
+import type {Channel} from '~/types/commerce';
 import {ReactNode, createContext, useContext} from 'react';
 import useSWR, {KeyedMutator} from 'swr';
 import {MarketplaceUserAccount} from '~/models/MarketplaceUserAccount';
 import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
 import {Liferay} from '~/services/liferay/liferay';
-import {MarketplaceProperties} from '~/utils/attributeUtils';
+import {Properties} from '~/utils/attributeUtils';
 
 type Context = {
 	channel: Channel;
 	marketplaceUserAccount: MarketplaceUserAccount;
 	mutateMyUserAccount: KeyedMutator<UserAccount | undefined>;
 	myUserAccount: UserAccount;
-	properties: MarketplaceProperties;
+	properties: Properties;
 };
 
 type MarketplaceContextProviderProps = {
 	children: ReactNode;
-	properties: MarketplaceProperties;
+	properties: Properties;
 };
 
 const channel = {
