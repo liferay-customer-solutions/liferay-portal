@@ -4,11 +4,12 @@
  */
 
 import type {APIResponse} from '~/types/api';
+import type {PublisherAsset} from '~/types/publisherAsset';
 import fetcher from '~/services/fetcher/fetcher';
 
 export default class HeadlessPublisherAsset {
 	static async createPublisherAsset(body: unknown) {
-		return fetcher.post('o/c/publisherassetses', body);
+		return fetcher.post<PublisherAsset>('o/c/publisherassetses', body);
 	}
 
 	static async deletePublisherAsset(id: number | string) {
@@ -16,7 +17,7 @@ export default class HeadlessPublisherAsset {
 	}
 
 	static getPublisherAssets(searchParams: URLSearchParams) {
-		return fetcher<APIResponse>(
+		return fetcher<APIResponse<PublisherAsset>>(
 			`o/c/publisherassetses?${searchParams.toString()}`
 		);
 	}

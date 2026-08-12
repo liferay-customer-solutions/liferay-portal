@@ -726,11 +726,11 @@ export default function NewAppContextProvider({
 						featurePreview.includes(
 							'product-versioning-new-primary-key'
 						)
-							? 'r_productEntryToPublisherAssets_CProductId'
-							: 'r_productEntryToPublisherAssets_CPDefinitionId',
+							? 'r_productEntryToPublisherAsset_CProductId'
+							: 'r_productEntryToPublisherAsset_CPDefinitionId',
 						productId as string
 					),
-					nestedFields: 'publisherAssetsToAttachment',
+					nestedFields: 'publisherAssetToAttachment',
 				})
 			).then((response) => response.items),
 		{
@@ -738,7 +738,7 @@ export default function NewAppContextProvider({
 				const liferayPackages = await Promise.all(
 					publisherAssetses.map(async (publisherAsset) => {
 						const packageFiles = await Promise.all(
-							publisherAsset.publisherAssetsToAttachment.map(
+							publisherAsset.publisherAssetToAttachment.map(
 								async (file: {
 									sourceCode: {
 										id: number;

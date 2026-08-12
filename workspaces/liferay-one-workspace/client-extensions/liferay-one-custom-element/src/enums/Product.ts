@@ -228,6 +228,7 @@ const offeringTypes = {
 };
 
 export const ProductTypeLabels = {
+	[ProductType.AI_HUB]: 'AI Hub',
 	[ProductType.CLIENT_EXTENSION]: 'Client Extension',
 	[ProductType.CLOUD]: 'Cloud',
 	[ProductType.COMPOSITE_APP]: 'Composite App',

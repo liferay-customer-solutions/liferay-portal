@@ -4,6 +4,8 @@
  */
 
 import fetcher from '~/services/fetcher/fetcher';
+import type {APIResponse} from '~/types/api';
+import type {Document, DocumentFolder} from '~/types/publisherAsset';
 import {Liferay} from '~/services/liferay/liferay';
 
 export default class HeadlessDelivery {
@@ -17,7 +19,7 @@ export default class HeadlessDelivery {
 				? `o/headless-delivery/v1.0/document-folders/${parentDocumentFolderId}/document-folders`
 				: `o/headless-delivery/v1.0/sites/${Liferay.ThemeDisplay.getScopeGroupId()}/document-folders`;
 
-		return fetcher.post(url, {
+		return fetcher.post<DocumentFolder>(url, {
 			name,
 			parentDocumentFolderId,
 			viewableBy,
@@ -25,10 +27,10 @@ export default class HeadlessDelivery {
 	}
 
 	static async createDocumentFolderDocument(
-		documentFolderId: string | number,
-		body: any
+		body: FormData | Record<string, unknown>,
+		documentFolderId: string | number
 	) {
-		return fetcher.post(
+		return fetcher.post<Document>(
 			`o/headless-delivery/v1.0/document-folders/${documentFolderId}/documents`,
 			body
 		);
@@ -41,14 +43,16 @@ export default class HeadlessDelivery {
 	}
 
 	static async getDocument(documentId: number | string) {
-		return fetcher(`o/headless-delivery/v1.0/documents/${documentId}`);
+		return fetcher<Document>(
+			`o/headless-delivery/v1.0/documents/${documentId}`
+		);
 	}
 
 	static async getDocumentFolders(
 		siteId: number | string,
 		searchParams: URLSearchParams = new URLSearchParams()
 	) {
-		return fetcher(
+		return fetcher<APIResponse<DocumentFolder>>(
 			`o/headless-delivery/v1.0/sites/${siteId}/document-folders?${searchParams.toString()}`
 		);
 	}
@@ -57,7 +61,7 @@ export default class HeadlessDelivery {
 		folderId: number | string,
 		searchParams: URLSearchParams = new URLSearchParams()
 	) {
-		return fetcher(
+		return fetcher<APIResponse<Document>>(
 			`o/headless-delivery/v1.0/document-folders/${folderId}/documents?${searchParams.toString()}`
 		);
 	}
@@ -66,7 +70,7 @@ export default class HeadlessDelivery {
 		folderId: number | string,
 		searchParams: URLSearchParams = new URLSearchParams()
 	) {
-		return fetcher(
+		return fetcher<APIResponse<DocumentFolder>>(
 			`o/headless-delivery/v1.0/document-folders/${folderId}/document-folders?${searchParams.toString()}`
 		);
 	}
