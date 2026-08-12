@@ -1,14 +1,10 @@
-// @ts-nocheck
 /**
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 import Panel from '@clayui/panel';
-import type { ProductLicenseTier } from "~/types/product";
-
 import React from 'react';
-
 import ButtonWithIcon from '~/components/ButtonWithIcon';
 import {Section} from '~/components/Section/Section';
 import {
@@ -17,14 +13,14 @@ import {
 	NewAppTypes,
 	useNewAppContext,
 } from '~/context/NewAppContext';
-import {
-	ProductTypeLicenseOptions,
-} from "~/utils/productUtils";
-;
 import i18n from '~/i18n';
 import {currenciesCode} from '~/utils/currencies';
+import {ProductTypeLicenseOptions} from '~/utils/productUtils';
+
 import {CurrencyFlag} from '../pages/Licensing/components/CurrencyModal';
 import LicensePriceCard from './LicensePriceCard';
+
+import type {ProductLicenseTier} from '~/types/product';
 
 const licensePrices = [
 	{

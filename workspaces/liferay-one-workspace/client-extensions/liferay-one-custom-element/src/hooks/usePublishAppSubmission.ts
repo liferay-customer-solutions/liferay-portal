@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
@@ -6,17 +5,16 @@
 
 import {Dispatch} from 'react';
 import {useNavigate} from 'react-router-dom';
-
 import {useMarketplaceContext} from '~/context/MarketplaceContext';
 import {
 	AppActions,
 	NewAppInitialState,
 	NewAppTypes,
 } from '~/context/NewAppContext';
-import {ProductWorkflowStatusCode} from '~/utils/productUtils';
 import i18n from '~/i18n';
-import {Liferay} from '~/services/liferay/liferay';
 import AppPublish, {ProductConfig} from '~/services/actions/AppPublish';
+import {Liferay} from '~/services/liferay/liferay';
+import {ProductWorkflowStatusCode} from '~/utils/productUtils';
 
 const usePublishAppSubmission = (
 	context: NewAppInitialState,

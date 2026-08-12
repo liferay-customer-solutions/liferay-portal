@@ -5,7 +5,6 @@
 
 import {lazy} from 'react';
 import {Navigate, Outlet} from 'react-router-dom';
-
 import NewAppContextProvider from '~/context/NewAppContext';
 import usePublisherCatalog from '~/hooks/usePublisherCatalog';
 import {AppRoute} from '~/utils/routeUtils';

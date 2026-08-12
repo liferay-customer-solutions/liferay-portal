@@ -1,11 +1,10 @@
-// @ts-nocheck
 /**
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {Liferay} from '~/services/liferay/liferay';
 import fetcher from '~/services/fetcher/fetcher';
+import {Liferay} from '~/services/liferay/liferay';
 
 const headers = {
 	'Content-Type': 'application/json',
@@ -14,8 +13,6 @@ const headers = {
 
 export const baseURL =
 	window.location.origin + Liferay.ThemeDisplay.getPathContext();
-
-// LiferayJsonWS.addExpandoValue
 
 export async function addExpandoValue({
 	attributeValues,
@@ -63,9 +60,6 @@ export async function getTierPrice(
 	return tierPrices;
 }
 
-/**
- * @deprecated We will remove this object definition soon
- */
 export async function getLicenseDescription() {
 	const response = await fetch(`${baseURL}/o/c/licensetypesdescriptions/`, {
 		headers,

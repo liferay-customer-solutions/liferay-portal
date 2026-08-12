@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
@@ -6,12 +5,10 @@
 
 import {RadioCard} from '~/components/RadioCard/RadioCard';
 import {Section} from '~/components/Section/Section';
-import {
-	NewAppTypes,
-	useNewAppContext,
-} from '~/context/NewAppContext';
-import {ProductWorkflowStatusCode} from '~/utils/productUtils';
+import {NewAppTypes, useNewAppContext} from '~/context/NewAppContext';
 import i18n from '~/i18n';
+import {ProductWorkflowStatusCode} from '~/utils/productUtils';
+
 import {PRICING_OPTIONS} from '../constants';
 
 const Pricing = () => {

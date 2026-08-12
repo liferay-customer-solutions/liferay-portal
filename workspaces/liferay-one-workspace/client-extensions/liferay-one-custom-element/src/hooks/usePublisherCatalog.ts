@@ -19,7 +19,11 @@ const usePublisherCatalog = (swrOptions?: SWRConfiguration) => {
 				})
 			);
 
-			return items?.find((item: any) => item.accountId === Number(accountId)) ?? null;
+			return (
+				items?.find(
+					(item: any) => item.accountId === Number(accountId)
+				) ?? null
+			);
 		},
 		swrOptions
 	);

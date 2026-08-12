@@ -1,14 +1,13 @@
-// @ts-nocheck
 /**
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 import useSWR from 'swr';
-
-import SearchBuilder from '~/utils/SearchBuilder';
-import {Liferay} from '~/services/liferay/liferay';
 import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
+import {Liferay} from '~/services/liferay/liferay';
+import SearchBuilder from '~/utils/SearchBuilder';
+
 import useInfiniteSearch from '../useInfiniteSearch';
 
 const useAccount = () => {

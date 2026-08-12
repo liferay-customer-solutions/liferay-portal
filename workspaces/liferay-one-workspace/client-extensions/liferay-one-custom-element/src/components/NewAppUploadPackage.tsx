@@ -1,27 +1,16 @@
-// @ts-nocheck
 /**
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 import {filesize} from 'filesize';
-
 import {DropzoneUpload} from '~/components/DropzoneUpload/DropzoneUpload';
-import {
-	FileList,
-	UploadedFile,
-} from '~/components/FileList/FileList';
-import {
-	NewAppTypes,
-	useNewAppContext,
-} from '~/context/NewAppContext';
-import {
-	ALLOWED_MIME_TYPES,
-	PUBLISH_APP_UPLOAD_MAX_SIZE,
-} from '~/enums/File';
-import {ProductType} from '~/utils/productUtils';
+import {FileList, UploadedFile} from '~/components/FileList/FileList';
+import {NewAppTypes, useNewAppContext} from '~/context/NewAppContext';
+import {ALLOWED_MIME_TYPES, PUBLISH_APP_UPLOAD_MAX_SIZE} from '~/enums/File';
 import i18n from '~/i18n';
 import {Liferay} from '~/services/liferay/liferay';
+import {ProductType} from '~/utils/productUtils';
 import {getRandomID} from '~/utils/string';
 
 type NewAppUploadAppPackagesComponentProps = {

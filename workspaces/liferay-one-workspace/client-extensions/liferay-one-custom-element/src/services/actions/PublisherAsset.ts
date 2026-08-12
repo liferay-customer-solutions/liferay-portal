@@ -1,13 +1,13 @@
-// @ts-nocheck
 /**
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {UploadedFile} from '../../components/FileList/FileList';
-import SearchBuilder from '~/utils/SearchBuilder';
-import {DOCUMENT_FOLDER_PERMISSIONS} from '../../enums/File';
 import {Liferay} from '~/services/liferay/liferay';
+import SearchBuilder from '~/utils/SearchBuilder';
+
+import {UploadedFile} from '../../components/FileList/FileList';
+import {DOCUMENT_FOLDER_PERMISSIONS} from '../../enums/File';
 import {MarketplaceProperties} from '../../utils/attributes';
 import HeadlessDelivery from '../headless/HeadlessDelivery';
 import HeadlessPublisherAssetses from '../headless/HeadlessPublisherAsset';

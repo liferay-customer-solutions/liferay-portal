@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
@@ -9,16 +8,12 @@ import ClayForm, {ClayCheckbox, ClayInput} from '@clayui/form';
 import ClayManagementToolbar from '@clayui/management-toolbar';
 import ClayModal, {useModal} from '@clayui/modal';
 import {useMemo, useState} from 'react';
-
 import ButtonWithIcon from '~/components/ButtonWithIcon';
-import {
-	NewAppTypes,
-	useNewAppContext,
-} from '~/context/NewAppContext';
+import {NewAppTypes, useNewAppContext} from '~/context/NewAppContext';
 import useListTypeDefinition from '~/hooks/useListTypeDefinition';
 import i18n from '~/i18n';
-import {getRandomID} from '~/utils/string';
 import {LIFERAY_VERSION_PICKLIST} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
+import {getRandomID} from '~/utils/string';
 
 import './NewAppPackagesModal.scss';
 

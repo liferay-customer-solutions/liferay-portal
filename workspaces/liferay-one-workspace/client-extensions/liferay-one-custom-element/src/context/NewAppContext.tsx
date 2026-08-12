@@ -1,40 +1,39 @@
-// @ts-nocheck
 /**
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 import {filesize} from 'filesize';
-import type { ActionMap } from "~/types/actionMap";
-
 import {ReactNode, createContext, useContext, useReducer} from 'react';
 import {useParams} from 'react-router-dom';
 import useSWR from 'swr';
-
 import {breadcrumbStore} from '~/components/Breadcrumb/BreadcrumbStore';
 import {UploadedFile} from '~/components/FileList/FileList';
 import Loading from '~/components/Loading/Loading';
-import SearchBuilder from '~/utils/SearchBuilder';
+import {ProductVocabulary} from '~/enums/Product';
+import {useGetVocabulariesAndCategories} from '~/hooks/useGetVocabulariesAndCategories';
 import {MarketplaceProduct} from '~/models/MarketplaceProduct';
+import HeadlessCommerceAdminCatalogImpl from '~/services/headless/HeadlessCommerceAdminCatalog';
+import HeadlessDelivery from '~/services/headless/HeadlessDelivery';
+import HeadlessPublisherAsset from '~/services/headless/HeadlessPublisherAsset';
+import SearchBuilder from '~/utils/SearchBuilder';
 import {
 	ProductSpecificationKey,
 	ProductWorkflowStatusCode,
 } from '~/utils/productUtils';
-import {ProductVocabulary} from '~/enums/Product';
-import type {
-    ProductLicenseTier,
-    ProductLicenseType,
-    ProductPriceModel,
-    ProductTags,
-    ProductType,
-    Product
-} from '~/types/product';
-import type { Catalog } from '~/types/catalog';
-import {useGetVocabulariesAndCategories} from '~/hooks/useGetVocabulariesAndCategories';
-import HeadlessCommerceAdminCatalogImpl from '~/services/headless/HeadlessCommerceAdminCatalog';
-import HeadlessDelivery from '~/services/headless/HeadlessDelivery';
-import HeadlessPublisherAsset from '~/services/headless/HeadlessPublisherAsset';
+
 import {useMarketplaceContext} from './MarketplaceContext';
+
+import type {ActionMap} from '~/types/actionMap';
+import type {Catalog} from '~/types/catalog';
+import type {
+	Product,
+	ProductLicenseTier,
+	ProductLicenseType,
+	ProductPriceModel,
+	ProductTags,
+	ProductType,
+} from '~/types/product';
 
 export type LicensePrice = {key: number; value: number};
 export type LicenseType = 'Perpetual' | 'Subscription';
@@ -266,9 +265,6 @@ const filterProductVocabularies = (product: Product, vocabulary: string) =>
 const reducer = (state: NewAppInitialState, action: AppActions) => {
 	switch (action.type) {
 		case NewAppTypes.SET_BUILD: {
-
-			// Reset the Liferay Packages if the App Type is changed
-
 			if (
 				action.payload.appType &&
 				action.payload.appType !== state.build.appType
@@ -383,10 +379,7 @@ const reducer = (state: NewAppInitialState, action: AppActions) => {
 				} as NewAppInitialState['pricing'],
 				profile: {
 					...newState.profile,
-					areas: filterProductVocabularies(
-						_product,
-						'App Area'
-					),
+					areas: filterProductVocabularies(_product, 'App Area'),
 					categories,
 					description: _product.description.en_US,
 					file: {
@@ -398,10 +391,7 @@ const reducer = (state: NewAppInitialState, action: AppActions) => {
 						uploaded: true,
 					},
 					name: _product.name.en_US,
-					tags: filterProductVocabularies(
-						_product,
-						'App Tags'
-					),
+					tags: filterProductVocabularies(_product, 'App Tags'),
 				} as NewAppInitialState['profile'],
 				references: {
 					...state.references,

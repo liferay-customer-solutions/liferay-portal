@@ -1,11 +1,10 @@
-// @ts-nocheck
 /**
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {NewAppInitialState} from '../../context/NewAppContext';
 import SearchBuilder from '~/utils/SearchBuilder';
+import {base64ToText, fileToBase64} from '~/utils/file';
 import {
 	ProductLicense,
 	ProductOfferingTypes,
@@ -18,8 +17,9 @@ import {
 	SkuOptions,
 	getOfferingTypes,
 } from '~/utils/productUtils';
+
+import {NewAppInitialState} from '../../context/NewAppContext';
 import {MarketplaceProperties} from '../../utils/attributes';
-import {base64ToText, fileToBase64} from '~/utils/file';
 import HeadlessCommerceAdminCatalogImpl from '../headless/HeadlessCommerceAdminCatalog';
 import HeadlessCommerceAdminPricing from '../headless/HeadlessCommerceAdminPricing';
 import BaseAppPublish from './BaseAppPublish';
@@ -402,9 +402,6 @@ export default class AppPublish extends BaseAppPublish {
 		const {
 			storefront: {images, video},
 		} = this.context;
-
-		// Process Upload Images, priority starts in 1 to not conflict with
-		// the app icon defined as priority 0
 
 		await AppPublish.addOrUpdateImages(images, null, product, 1);
 
