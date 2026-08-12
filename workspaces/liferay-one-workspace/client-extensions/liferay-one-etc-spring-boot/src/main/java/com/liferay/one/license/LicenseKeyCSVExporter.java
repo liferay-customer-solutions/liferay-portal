@@ -17,6 +17,8 @@ import com.liferay.portal.ee.license.shared.LicenseConstants;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,17 +38,31 @@ public class LicenseKeyCSVExporter {
 
 		sb.append(_HEADER);
 
+		Map<Long, String> externalReferenceCodes = new HashMap<>();
+		Map<Long, String> subscriptionStates = new HashMap<>();
+		Map<Long, String> supportRegions = new HashMap<>();
+
 		for (LicenseKey licenseKey : licenseKeys) {
 			long accountEntryId = licenseKey.getAccountEntryId();
 
-			Account account = _accountService.fetchAccount(accountEntryId);
+			if (!externalReferenceCodes.containsKey(accountEntryId)) {
+				Account account = _accountService.fetchAccount(accountEntryId);
+
+				externalReferenceCodes.put(
+					accountEntryId, _getExternalReferenceCode(account));
+				supportRegions.put(accountEntryId, _getSupportRegion(account));
+
+				subscriptionStates.put(
+					accountEntryId,
+					_entitlementService.getSubscriptionState(accountEntryId));
+			}
 
 			sb.append(
 				_formatCSVFields(
 					licenseKey.getAccountName(),
-					_getExternalReferenceCode(account),
-					_entitlementService.getSubscriptionState(accountEntryId),
-					_getSupportRegion(account),
+					externalReferenceCodes.get(accountEntryId),
+					subscriptionStates.get(accountEntryId),
+					supportRegions.get(accountEntryId),
 					licenseKey.getProductVersionLabel(),
 					licenseKey.getProductName(), licenseKey.getLicenseKeyId(),
 					licenseKey.getIpAddresses(), licenseKey.getMacAddresses(),

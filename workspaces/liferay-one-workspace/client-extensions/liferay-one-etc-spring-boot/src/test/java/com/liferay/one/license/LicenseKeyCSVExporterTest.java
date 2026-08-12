@@ -103,6 +103,61 @@ public class LicenseKeyCSVExporterTest {
 	}
 
 	@Test
+	public void testToCSVResolvesEachAccountOnce() throws Exception {
+		Account account = new Account();
+
+		account.setDefaultBillingAddressId(4L);
+		account.setExternalReferenceCode("ACCNT-1");
+		account.setId(_ACCOUNT_ENTRY_ID);
+
+		Mockito.when(
+			_accountService.fetchAccount(_ACCOUNT_ENTRY_ID)
+		).thenReturn(
+			account
+		);
+
+		Mockito.when(
+			_commerceOrderService.getAccountSupportInfo(_ACCOUNT_ENTRY_ID, 4L)
+		).thenReturn(
+			new AccountSupportInfo("en_US", "US")
+		);
+
+		Mockito.when(
+			_entitlementService.getSubscriptionState(_ACCOUNT_ENTRY_ID)
+		).thenReturn(
+			"Active"
+		);
+
+		String csv = _licenseKeyCSVExporter.toCSV(
+			List.of(
+				_createLicenseKey("enterprise"),
+				_createLicenseKey("enterprise"),
+				_createLicenseKey("enterprise")));
+
+		List<String> lines = List.of(csv.split("\n"));
+
+		Assertions.assertEquals(4, lines.size());
+
+		Mockito.verify(
+			_accountService, Mockito.times(1)
+		).fetchAccount(
+			_ACCOUNT_ENTRY_ID
+		);
+
+		Mockito.verify(
+			_commerceOrderService, Mockito.times(1)
+		).getAccountSupportInfo(
+			_ACCOUNT_ENTRY_ID, 4L
+		);
+
+		Mockito.verify(
+			_entitlementService, Mockito.times(1)
+		).getSubscriptionState(
+			_ACCOUNT_ENTRY_ID
+		);
+	}
+
+	@Test
 	public void testToCSVWhenAccountIsNull() throws Exception {
 		Mockito.when(
 			_accountService.fetchAccount(_ACCOUNT_ENTRY_ID)
