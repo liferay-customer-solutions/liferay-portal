@@ -9,24 +9,40 @@ import {Liferay} from '~/services/liferay/liferay';
 
 import type {Catalog} from '~/types/commerce';
 
+const MAX_PAGES = 20;
+const PAGE_SIZE = 100;
+
+async function findCatalogByAccountId(accountId: number) {
+	for (let page = 1; page <= MAX_PAGES; page++) {
+		const response = await HeadlessCommerceAdminCatalog.getCatalogs(
+			new URLSearchParams({
+				page: `${page}`,
+				pageSize: `${PAGE_SIZE}`,
+			})
+		);
+
+		const catalog = response.items?.find(
+			(item: Catalog) => item.accountId === accountId
+		);
+
+		if (catalog) {
+			return catalog;
+		}
+
+		if (!response.items?.length || page >= response.lastPage) {
+			return null;
+		}
+	}
+
+	return null;
+}
+
 const usePublisherCatalog = (swrOptions?: SWRConfiguration) => {
 	const accountId = Liferay.CommerceContext.account?.accountId;
 
 	return useSWR(
 		accountId ? `/publisher-catalog/${accountId}` : null,
-		async () => {
-			const {items} = await HeadlessCommerceAdminCatalog.getCatalogs(
-				new URLSearchParams({
-					pageSize: '-1',
-				})
-			);
-
-			return (
-				items?.find(
-					(item: Catalog) => item.accountId === Number(accountId)
-				) ?? null
-			);
-		},
+		() => findCatalogByAccountId(Number(accountId)),
 		swrOptions
 	);
 };
