@@ -1,7 +1,27 @@
 {
-	"externalReferenceCode": "PUBLISHER-TYPE",
-	"name": "PublisherType",
-	"name_i18n": {
-		"en-US": "Publisher Type"
-	}
+  "externalReferenceCode": "PUBLISHER-TYPE",
+  "name": "PublisherType",
+  "permissions": [
+    {
+      "actionIds": [
+        "VIEW"
+      ],
+      "roleName": "Guest"
+    },
+    {
+      "actionIds": [
+        "VIEW"
+      ],
+      "roleName": "User"
+    },
+    {
+      "actionIds": [
+        "VIEW"
+      ],
+      "roleName": "Marketplace Publisher"
+    }
+  ],
+  "name_i18n": {
+    "en-US": "Publisher Type"
+  }
 }

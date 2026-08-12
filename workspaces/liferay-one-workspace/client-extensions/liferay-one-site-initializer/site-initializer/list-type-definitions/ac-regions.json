@@ -1,7 +1,27 @@
 {
-	"externalReferenceCode": "AC-REGIONS",
-	"name": "acRegions",
-	"name_i18n": {
-		"en-US": "AC | Regions"
-	}
+  "externalReferenceCode": "AC-REGIONS",
+  "name": "acRegions",
+  "permissions": [
+    {
+      "actionIds": [
+        "VIEW"
+      ],
+      "roleName": "Guest"
+    },
+    {
+      "actionIds": [
+        "VIEW"
+      ],
+      "roleName": "User"
+    },
+    {
+      "actionIds": [
+        "VIEW"
+      ],
+      "roleName": "Marketplace Publisher"
+    }
+  ],
+  "name_i18n": {
+    "en-US": "AC | Regions"
+  }
 }

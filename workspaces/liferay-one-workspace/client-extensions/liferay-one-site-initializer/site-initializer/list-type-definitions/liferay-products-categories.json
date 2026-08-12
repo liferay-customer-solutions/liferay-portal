@@ -1,7 +1,27 @@
 {
-	"externalReferenceCode": "LIFERAY-PRODUCTS-CATEGORIES",
-	"name": "Liferay Products Categories",
-	"name_i18n": {
-		"en-US": "Liferay Products Categories"
-	}
+  "externalReferenceCode": "LIFERAY-PRODUCTS-CATEGORIES",
+  "name": "Liferay Products Categories",
+  "permissions": [
+    {
+      "actionIds": [
+        "VIEW"
+      ],
+      "roleName": "Guest"
+    },
+    {
+      "actionIds": [
+        "VIEW"
+      ],
+      "roleName": "User"
+    },
+    {
+      "actionIds": [
+        "VIEW"
+      ],
+      "roleName": "Marketplace Publisher"
+    }
+  ],
+  "name_i18n": {
+    "en-US": "Liferay Products Categories"
+  }
 }

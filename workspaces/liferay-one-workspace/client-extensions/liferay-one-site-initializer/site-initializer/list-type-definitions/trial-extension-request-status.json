@@ -1,7 +1,27 @@
 {
-	"externalReferenceCode": "TRIAL-EXTENSION-REQUEST-STATUS",
-	"name": "Trial Extension Request Status",
-	"name_i18n": {
-		"en-US": "Trial Extension Request Status"
-	}
+  "externalReferenceCode": "TRIAL-EXTENSION-REQUEST-STATUS",
+  "name": "Trial Extension Request Status",
+  "permissions": [
+    {
+      "actionIds": [
+        "VIEW"
+      ],
+      "roleName": "Guest"
+    },
+    {
+      "actionIds": [
+        "VIEW"
+      ],
+      "roleName": "User"
+    },
+    {
+      "actionIds": [
+        "VIEW"
+      ],
+      "roleName": "Marketplace Publisher"
+    }
+  ],
+  "name_i18n": {
+    "en-US": "Trial Extension Request Status"
+  }
 }
