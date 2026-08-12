@@ -3,11 +3,12 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {ReactNode} from 'react';
 import Navbar from '~/components/AppPublishNavbar/AppPublishNavbar';
 import Sidebar from '~/components/AppPublishSidebar/AppPublishSidebar';
 
 type PropsWithChildren = {
-	children?: any;
+	children?: ReactNode;
 };
 
 const Body: React.FC<PropsWithChildren> = ({children}) => (

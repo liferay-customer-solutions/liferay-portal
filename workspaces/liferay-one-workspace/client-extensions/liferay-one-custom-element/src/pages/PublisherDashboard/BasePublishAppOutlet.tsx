@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import type {AppFlowItem} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
 import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
 import {ReactNode, useMemo, useState} from 'react';
@@ -25,7 +26,7 @@ type BasePublishAppOutletProps = {
 	canSaveAsDraft: boolean;
 	children: ReactNode;
 	context: NewAppInitialState;
-	flowItems: any[];
+	flowItems: AppFlowItem[];
 	isEditingApp: boolean;
 	onClickExit: () => void;
 	onSave: () => Promise<void>;
