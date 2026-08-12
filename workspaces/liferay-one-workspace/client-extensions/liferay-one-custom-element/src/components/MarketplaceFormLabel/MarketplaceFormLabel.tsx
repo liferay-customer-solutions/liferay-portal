@@ -28,7 +28,7 @@ export function MarketplaceFormLabel({
 				className
 			)}
 		>
-			<label {...props} />
+			<label {...props} className="mb-0 w-auto" />
 
 			{required && (
 				<ClayIcon
