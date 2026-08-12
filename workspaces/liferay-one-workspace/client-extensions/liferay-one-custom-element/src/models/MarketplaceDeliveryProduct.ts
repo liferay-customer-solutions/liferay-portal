@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import type {ProductType, ProductVocabulary} from '~/types/product';
-import type {ProductTypeLabels} from '~/utils/productUtils';
+import {ProductType, ProductVocabulary} from '~/enums/Product';
+import {ProductTypeLabels} from '~/utils/productUtils';
 import {
 	ProductLicense,
 	ProductLicenseFriendlyName,

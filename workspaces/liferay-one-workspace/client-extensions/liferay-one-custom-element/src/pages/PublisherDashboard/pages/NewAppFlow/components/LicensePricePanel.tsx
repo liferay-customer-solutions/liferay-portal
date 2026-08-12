@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {ProductLicenseTier} from '~/enums/Product';
 import Panel from '@clayui/panel';
 import React from 'react';
 import ButtonWithIcon from '~/components/ButtonWithIcon';
@@ -20,7 +21,7 @@ import {ProductTypeLicenseOptions} from '~/utils/productUtils';
 import {CurrencyFlag} from '../pages/Licensing/components/CurrencyModal';
 import LicensePriceCard from './LicensePriceCard';
 
-import type {ProductLicenseTier} from '~/types/product';
+
 
 const licensePrices = [
 	{
