@@ -29,8 +29,8 @@ function main {
 	echo "Assigning user group and role memberships."
 	./seed/assign_user_memberships.sh
 
-	echo "Assigning users to the Omni Test Account."
-	./seed/assign_omni_account_users.sh
+	echo "Assigning users to their accounts."
+	./seed/assign_account_users.sh
 
 	echo "Linking supplier accounts to commerce catalogs."
 	./seed/link_commerce_catalogs.sh
