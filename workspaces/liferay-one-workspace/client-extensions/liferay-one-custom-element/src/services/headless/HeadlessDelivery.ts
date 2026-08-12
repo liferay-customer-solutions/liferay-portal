@@ -4,9 +4,10 @@
  */
 
 import fetcher from '~/services/fetcher/fetcher';
+import {Liferay} from '~/services/liferay/liferay';
+
 import type {APIResponse} from '~/types/api';
 import type {Document, DocumentFolder} from '~/types/publisherAsset';
-import {Liferay} from '~/services/liferay/liferay';
 
 export default class HeadlessDelivery {
 	static async createDocumentFolder(

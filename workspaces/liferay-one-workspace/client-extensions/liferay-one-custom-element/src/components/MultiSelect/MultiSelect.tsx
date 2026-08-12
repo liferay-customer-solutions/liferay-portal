@@ -6,7 +6,7 @@
 import ClayMultiSelect from '@clayui/multi-select';
 import {getIconSpriteMap} from '~/services/liferay/constants';
 
-import {FieldBase} from '../FieldBase';
+import {FieldBase} from '../FieldBase/FieldBase';
 
 type MultiSelectProps<T> = {
 	ariaLabel?: string;

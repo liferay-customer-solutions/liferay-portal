@@ -4,7 +4,7 @@
  */
 
 import {useLocation, useNavigate, useParams} from 'react-router-dom';
-import {scrollToTop} from '~/utils/browser';
+import {scrollToTop} from '~/utils/browserUtils';
 
 const usePublishNavigation = ({
 	exitLink,

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import type {VocabularyCategoryOption} from '~/hooks/useGetVocabulariesAndCategories';
 import {filesize} from 'filesize';
 import {UploadedFile} from '~/components/FileList/FileList';
 import Form from '~/components/MarketplaceForm';
@@ -17,7 +16,9 @@ import {
 	ProductWorkflowStatusCode,
 } from '~/enums/Product';
 import i18n from '~/i18n';
-import {getRandomID} from '~/utils/string';
+import {getRandomID} from '~/utils/stringUtils';
+
+import type {VocabularyCategoryOption} from '~/hooks/useGetVocabulariesAndCategories';
 
 const tooltipInfo = {
 	areas: 'tooltip',

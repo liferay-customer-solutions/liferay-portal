@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {ProductLicenseTier} from '~/enums/Product';
 import ClayForm, {ClayInput} from '@clayui/form';
 import classNames from 'classnames';
-import ButtonWithIcon from '~/components/ButtonWithIcon';
-import {FieldBase} from '~/components/FieldBase';
-import {currenciesCode} from '~/utils/currencies';
+import ButtonWithIcon from '~/components/ButtonWithIcon/ButtonWithIcon';
+import {FieldBase} from '~/components/FieldBase/FieldBase';
+import {ProductLicenseTier} from '~/enums/Product';
+import {currenciesCode} from '~/utils/currencyUtils';
 
 import './LicensePriceCard.scss';
 

@@ -5,6 +5,8 @@
 
 import EURFlag from '../assets/icons/eur_flag.svg';
 
+export {formatCurrency} from './formatCurrency';
+
 export const currenciesCode = [
 	{
 		code: 'USD',
@@ -29,13 +31,3 @@ export const currenciesCode = [
 	},
 ];
 
-export function formatCurrency(
-	amount: number,
-	currencyCode = 'USD',
-	locale = 'en-US'
-) {
-	return new Intl.NumberFormat(locale, {
-		currency: currencyCode,
-		style: 'currency',
-	}).format(amount);
-}

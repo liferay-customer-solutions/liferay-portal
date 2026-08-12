@@ -3,11 +3,12 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import type {APIResponse} from '~/types/api';
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import useSWRInfinite from 'swr/infinite';
 
 import useDebounce from './useDebounce';
+
+import type {APIResponse} from '~/types/api';
 
 const getKey =
 	(search: string, searchKey: string) =>

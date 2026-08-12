@@ -12,9 +12,8 @@ import VideoThumbnail from '~/components/VideoThumbnail';
 import {NewAppTypes, useNewAppContext} from '~/context/NewAppContext';
 import {ACCEPT_FILE_TYPES} from '~/enums/File';
 import i18n from '~/i18n';
-
-import {swapElements} from '~/utils/array';
-import {getRandomID} from '~/utils/string';
+import {swapElements} from '~/utils/swapElements';
+import {getRandomID} from '~/utils/stringUtils';
 
 import {MAX_IMAGE_QUANTITY, MAX_SIZE_5MBS} from '../constants';
 

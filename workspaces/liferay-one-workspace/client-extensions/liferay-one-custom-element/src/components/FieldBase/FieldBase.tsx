@@ -30,7 +30,7 @@ export function RequiredMask() {
 interface IFieldBaseProps {
 	children?: ReactNode;
 	className?: string;
-	description?: string;
+	description?: ReactNode | string;
 	disabled?: boolean;
 	errorMessage?: string;
 	helpMessage?: string;

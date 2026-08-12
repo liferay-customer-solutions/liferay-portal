@@ -3,16 +3,15 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {ProductLicenseTier} from '~/enums/Product';
 import ClayButton from '@clayui/button';
 import {Option, Picker, useModal} from '@clayui/core';
 import ClayIcon from '@clayui/icon';
 import React, {ComponentProps, useState} from 'react';
 import Modal from '~/components/Modal';
 import {NewAppTypes, useNewAppContext} from '~/context/NewAppContext';
+import {ProductLicenseTier} from '~/enums/Product';
 import i18n from '~/i18n';
-
-import {currenciesCode} from '~/utils/currencies';
+import {currenciesCode} from '~/utils/currencyUtils';
 
 
 
