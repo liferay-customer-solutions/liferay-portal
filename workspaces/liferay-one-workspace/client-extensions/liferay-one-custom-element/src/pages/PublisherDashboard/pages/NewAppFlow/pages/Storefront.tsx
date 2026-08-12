@@ -17,7 +17,6 @@ import {swapElements} from '~/utils/swapElements';
 
 import {MAX_IMAGE_QUANTITY, MAX_SIZE_5MBS} from '../constants';
 
-import type {ProductTags} from '~/types/product';
 
 const Storefront = () => {
 	const [{storefront}, dispatch] = useNewAppContext();

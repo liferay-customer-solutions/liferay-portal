@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import type {Catalog} from '~/types/commerce';
 import useSWR, {SWRConfiguration} from 'swr';
 import HeadlessCommerceAdminCatalog from '~/services/headless/HeadlessCommerceAdminCatalog';
 import {Liferay} from '~/services/liferay/liferay';
@@ -21,7 +22,7 @@ const usePublisherCatalog = (swrOptions?: SWRConfiguration) => {
 
 			return (
 				items?.find(
-					(item: any) => item.accountId === Number(accountId)
+					(item: Catalog) => item.accountId === Number(accountId)
 				) ?? null
 			);
 		},

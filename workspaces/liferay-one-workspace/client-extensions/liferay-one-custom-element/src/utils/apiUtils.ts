@@ -9,7 +9,7 @@ import {Liferay} from '~/services/liferay/liferay';
 import type {CommerceAccount, CommerceOption} from '~/types/commerce';
 import type {ContactSales} from '~/types/contactSales';
 import type {BillingAddress, Cart} from '~/types/orders';
-import type {PriceList, Product, ProductCategories, ProductOptionItem, ProductSpecification, SKU, Specification} from '~/types/product';
+import type {PriceList, Product, ProductCategories, ProductOptionItem, ProductSpecification, SKU, Specification, TierPrice} from '~/types/product';
 
 const headers = {
 	'Content-Type': 'application/json',
@@ -56,9 +56,9 @@ export async function getTierPrice(
 
 	const {skus = []} = await response.json();
 
-	const tierPrices: [any?] = [];
+	const tierPrices: {skuId: number; tierPrice: TierPrice[]}[] = [];
 
-	skus.forEach((sku: any) => {
+	skus.forEach((sku: SKU & {tierPrices?: TierPrice[]}) => {
 		tierPrices.push({skuId: sku.id, tierPrice: sku.tierPrices || []});
 	});
 
@@ -262,7 +262,7 @@ export async function getCategories({vocabId}: {vocabId: number}) {
 		}
 	);
 
-	const {items} = (await response.json()) as {items: any[]};
+	const {items} = (await response.json()) as {items: unknown[]};
 
 	return items;
 }
@@ -408,7 +408,7 @@ export async function getVocabularies() {
 	return response.json();
 }
 
-export async function patchOrderByERC(erc: string, body: any) {
+export async function patchOrderByERC(erc: string, body: unknown) {
 	const response = await fetch(
 		`${baseURL}/o/headless-commerce-admin-order/v1.0/orders/by-externalReferenceCode/${erc}`,
 		{
@@ -426,7 +426,7 @@ export async function patchProductIdCategory({
 	body,
 }: {
 	appId: string;
-	body: any;
+	body: unknown;
 }) {
 	await fetch(
 		`${baseURL}/o/headless-commerce-admin-catalog/v1.0/products/${appId}/categories`,
@@ -438,7 +438,7 @@ export async function patchProductIdCategory({
 	);
 }
 
-export async function patchSKUById(skuId: number, body: any) {
+export async function patchSKUById(skuId: number, body: unknown) {
 	const response = await fetch(
 		`${baseURL}/o/headless-commerce-admin-catalog/v1.0/skus/${skuId}`,
 		{
@@ -455,7 +455,7 @@ export async function postCartByChannelId({
 	cartBody,
 	channelId,
 }: {
-	cartBody: any;
+	cartBody: unknown;
 	channelId: number;
 }) {
 	const cartResponse = await fetch(
@@ -474,7 +474,7 @@ export async function postCheckoutCart({
 	body,
 	cartId,
 }: {
-	body?: any;
+	body?: unknown;
 	cartId: number;
 }) {
 	const response = await fetch(
@@ -489,7 +489,7 @@ export async function postCheckoutCart({
 	return (await response.json()) as Cart;
 }
 
-export async function postOptionValue(optionBody: any, optionId: number) {
+export async function postOptionValue(optionBody: unknown, optionId: number) {
 	{
 		const response = await fetch(
 			`${baseURL}/o/headless-commerce-admin-catalog/v1.0/productOptions/${optionId}/productOptionValues`,
@@ -506,7 +506,7 @@ export async function postOptionValue(optionBody: any, optionId: number) {
 	}
 }
 
-export async function patchPriceEntry(priceEntry: any, priceEntryId: number) {
+export async function patchPriceEntry(priceEntry: unknown, priceEntryId: number) {
 	const response = await fetch(
 		`/o/headless-commerce-admin-pricing/v2.0/price-entries/${priceEntryId}`,
 		{
@@ -532,7 +532,7 @@ export async function postPriceList(priceList: PriceList) {
 	return await response.json();
 }
 
-export async function postPriceListEntry(priceListId: number, priceEntry: any) {
+export async function postPriceListEntry(priceListId: number, priceEntry: unknown) {
 	const response = await fetch(
 		`/o/headless-commerce-admin-pricing/v1.0/priceLists/${priceListId}/priceEntries`,
 		{
@@ -546,7 +546,7 @@ export async function postPriceListEntry(priceListId: number, priceEntry: any) {
 }
 
 export async function postPriceEntryIdTierPrice(
-	priceEntryId: any,
+	priceEntryId: number,
 	tierPrice: any
 ) {
 	const response = await fetch(
@@ -561,7 +561,7 @@ export async function postPriceEntryIdTierPrice(
 	return await response.json();
 }
 
-export async function postOption(optionBody: any) {
+export async function postOption(optionBody: unknown) {
 	const response = await fetch(
 		`${baseURL}/o/headless-commerce-admin-catalog/v1.0/options`,
 		{
@@ -615,7 +615,7 @@ export async function updateProductSpecification({
 	return await response.json();
 }
 
-export async function postEmailAppInformation(emailInformation: any) {
+export async function postEmailAppInformation(emailInformation: unknown) {
 	await fetch(`${baseURL}/o/c/getappinformations/`, {
 		body: JSON.stringify(emailInformation),
 		headers,

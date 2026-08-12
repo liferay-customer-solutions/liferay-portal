@@ -15,6 +15,20 @@ import {
 
 import type {ProductPriceModel} from '~/types/product';
 
+export type AppFlowItem = {
+	alertText?: string;
+	hide?: boolean;
+	description: (isEditing?: boolean) => string;
+	label: string;
+	parseSchema?: (
+		context: NewAppInitialState
+	) => {success: boolean} & Record<string, unknown>;
+	path: string;
+	saveAsDraftRequired: boolean;
+	title: (isEditing?: boolean) => string;
+	visible: (context: NewAppInitialState) => boolean;
+};
+
 export const LIFERAY_VERSION_PICKLIST = 'LIFERAY-VERSIONS';
 export const MAX_IMAGE_QUANTITY = 5;
 export const MAX_SIZE_5MBS = 5_000_000;

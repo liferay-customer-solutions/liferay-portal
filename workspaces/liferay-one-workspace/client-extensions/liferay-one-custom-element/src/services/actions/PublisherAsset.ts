@@ -13,6 +13,7 @@ import HeadlessDelivery from '../headless/HeadlessDelivery';
 import HeadlessPublisherAssetses from '../headless/HeadlessPublisherAsset';
 import HeadlessPublisherAssetAttachment from '../headless/HeadlessPublisherAssetAttachment';
 
+import type {DocumentFolder} from '~/types/publisherAsset';
 import type {Product} from '~/types/product';
 
 const DOCUMENTS_ROOT_FOLDER = 0;
@@ -49,7 +50,7 @@ export default class PublisherAsset {
 			);
 
 		const appFolder = appFolders.find(
-			(document: any) => document.name === folderName
+			(document: DocumentFolder) => document.name === folderName
 		);
 
 		let appFolderId = appFolder?.id;
@@ -79,7 +80,7 @@ export default class PublisherAsset {
 			);
 
 		const packageFolder = packageFolders.find(
-			(document: any) => document.name === folderName
+			(document: DocumentFolder) => document.name === folderName
 		);
 
 		let packageFolderId = packageFolder?.id;

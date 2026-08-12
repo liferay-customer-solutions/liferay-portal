@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {ReactNode} from 'react';
 import Build from '~/components/AppReviewBuild/AppReviewBuild';
 import Categories from '~/components/AppReviewCategories/AppReviewCategories';
 import Description from '~/components/AppReviewDescription/AppReviewDescription';
@@ -16,7 +17,7 @@ import {NewAppInitialState} from '~/context/NewAppContextProvider';
 import './AppReview.scss';
 
 export type AppReviewProps = {
-	children?: any;
+	children?: ReactNode;
 	context: NewAppInitialState;
 	editNavigate?: () => void;
 	isLastSection?: boolean;
