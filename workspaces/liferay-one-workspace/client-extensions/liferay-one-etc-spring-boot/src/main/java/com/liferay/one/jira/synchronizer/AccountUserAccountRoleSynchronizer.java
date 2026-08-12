@@ -84,7 +84,7 @@ public class AccountUserAccountRoleSynchronizer {
 			for (String roleExternalKey : entry.getValue()) {
 				names.add(
 					_accountContactRoleAssignmentConverter.getName(
-						roleExternalKey, entry.getKey(), accountExternalKey));
+						accountExternalKey, entry.getKey(), roleExternalKey));
 			}
 		}
 

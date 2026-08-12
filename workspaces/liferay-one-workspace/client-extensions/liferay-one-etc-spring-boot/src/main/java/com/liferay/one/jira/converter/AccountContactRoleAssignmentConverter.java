@@ -32,8 +32,8 @@ public class AccountContactRoleAssignmentConverter
 	}
 
 	public String getName(
-		String contactRoleExternalKey, String contactExternalKey,
-		String accountExternalKey) {
+		String accountExternalKey, String contactExternalKey,
+		String contactRoleExternalKey) {
 
 		return StringBundler.concat(
 			contactRoleExternalKey, ";", contactExternalKey, ";",
@@ -54,8 +54,8 @@ public class AccountContactRoleAssignmentConverter
 		jiraAssetObject.setAttributeValue(
 			AccountContactRoleAssignmentConstants.ATTRIBUTE_NAME_NAME,
 			getName(
-				contactRoleExternalKey, contactExternalKey,
-				accountExternalKey));
+				accountExternalKey, contactExternalKey,
+				contactRoleExternalKey));
 		jiraAssetObject.setAttributeValue(
 			AccountContactRoleAssignmentConstants.
 				ATTRIBUTE_NAME_CONTACT_ROLE_EXTERNAL_KEY,

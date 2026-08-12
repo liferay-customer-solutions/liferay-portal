@@ -52,8 +52,8 @@ public class AccountUserAccountRoleSynchronizerTest {
 				Mockito.any(), Mockito.any(), Mockito.any())
 		).thenAnswer(
 			invocation -> StringBundler.concat(
-				invocation.getArgument(0), ";", invocation.getArgument(1), ";",
-				invocation.getArgument(2))
+				invocation.getArgument(2), ";", invocation.getArgument(1), ";",
+				invocation.getArgument(0))
 		);
 
 		Mockito.when(
