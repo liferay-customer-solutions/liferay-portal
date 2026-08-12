@@ -43,7 +43,7 @@ const AppPublishNavbar: React.FC<NavbarProps> = ({
 }) => {
 	return (
 		<>
-			<div className="new-app-tool-bar-container">
+			<div className="align-items-center d-flex justify-content-center w-100">
 				<ClayManagementToolbar.ItemList expand>
 					<div className="d-flex justify-content-between">
 						<div className="d-flex">
