@@ -25,16 +25,7 @@
 			width: 3rem;
 		}
 
-		&-text {
-			font-size: 1.125rem;
-			font-weight: 600;
-			line-height: 1.25rem;
-			max-width: 167px;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-		}
-	}
+}
 
 	&-new-app-logo {
 		align-items: center;
@@ -127,17 +118,7 @@
 			line-height: 1rem;
 		}
 
-		&-exit {
-			color: #2b3a4b;
-			height: 32px;
-			padding: 0;
-
-			&:hover {
-				background: #e2e2e4;
-			}
-		}
-
-		&-save-draft {
+&-save-draft {
 			background: none;
 			border: 0.125rem solid #2b3a4b;
 			border-radius: 6px;

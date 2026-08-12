@@ -129,24 +129,13 @@
 			}
 		}
 
-		&-important-note {
-			color: #54555f;
-			font-size: 13px;
-			font-weight: 400;
-			margin-top: 12px;
-		}
-	}
+}
 
 	&-version {
 		color: #54555f;
 		font-size: 14px;
 		font-weight: 600;
 	}
-}
-
-.licensing-option-title {
-	font-size: 18px;
-	font-weight: 600;
 }
 
 .licesing-price-type {
@@ -159,20 +148,7 @@
 }
 
 .app-review-support {
-	&-container {
-		border: 1px solid #e2e2e4;
-		border-radius: 0.5rem;
-		display: flex;
-		flex-direction: column;
-		margin-top: 20px;
-		max-width: 37.5rem;
-		padding: 1rem;
-		transition: background-color 0.5s;
-		transition: border 0.5s;
-		width: 100%;
-	}
-
-	&-icon {
+&-icon {
 		align-items: center;
 		background-color: #e2e2e4;
 		border-radius: 99px;
@@ -204,13 +180,7 @@
 			line-height: 16px;
 		}
 
-		&-description {
-			color: #0b5fff;
-			font-size: 16px;
-			font-weight: 600;
-			line-height: 24px;
-		}
-	}
+}
 
 	&-description {
 		color: #54555f;
