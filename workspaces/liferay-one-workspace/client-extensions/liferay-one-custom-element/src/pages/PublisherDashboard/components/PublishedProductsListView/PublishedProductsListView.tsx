@@ -183,7 +183,11 @@ export default function PublishedProductsListView({
 			description={i18n.translate(description)}
 			pageRendererProps={{className: 'border py-2 rounded-lg'}}
 			rightButton={
-				<Button displayType="primary" onClick={onCtaClick}>
+				<Button
+					disabled={!catalogId}
+					displayType="primary"
+					onClick={onCtaClick}
+				>
 					{i18n.translate(ctaLabel)}
 				</Button>
 			}
