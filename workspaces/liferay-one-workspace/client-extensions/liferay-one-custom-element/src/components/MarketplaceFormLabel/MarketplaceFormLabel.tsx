@@ -44,7 +44,10 @@ export function MarketplaceFormLabel({
 						data-tooltip-align="top"
 						title={info}
 					>
-						<ClayIcon className="info-icon" symbol="info-circle-open" />
+						<ClayIcon
+							className="info-icon"
+							symbol="info-circle-open"
+						/>
 					</div>
 				</ClayTooltipProvider>
 			)}
