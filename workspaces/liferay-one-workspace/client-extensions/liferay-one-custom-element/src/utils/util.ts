@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import type {DeliveryProductAttachment, DeliveryProductSpecification, ProductAttachment, ProductSpecification, SKU} from '~/types/product';
 import accountPlaceholder from '../assets/images/account_placeholder.png';
 import appPlaceholder from '../assets/images/app_placeholder.png';
 import i18n from '../i18n';

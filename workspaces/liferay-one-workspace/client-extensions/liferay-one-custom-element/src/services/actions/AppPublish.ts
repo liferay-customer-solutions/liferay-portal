@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import type {PriceEntry} from '~/context/NewAppContext';
+import type {Product, ProductCategories, TierPrice} from '~/types/product';
 import SearchBuilder from '~/utils/SearchBuilder';
 import {base64ToText, fileToBase64} from '~/utils/file';
 import {
@@ -19,7 +21,7 @@ import {
 } from '~/utils/productUtils';
 
 import {NewAppInitialState} from '../../context/NewAppContext';
-import {MarketplaceProperties} from '../../utils/attributes';
+import {Properties} from '~/utils/attributeUtils';
 import HeadlessCommerceAdminCatalogImpl from '../headless/HeadlessCommerceAdminCatalog';
 import HeadlessCommerceAdminPricing from '../headless/HeadlessCommerceAdminPricing';
 import BaseAppPublish from './BaseAppPublish';
@@ -28,20 +30,20 @@ import PublisherAsset from './PublisherAsset';
 export type ProductConfig = {
 	isDraft: boolean;
 	isEdit?: boolean;
-	properties: MarketplaceProperties;
+	properties: Properties;
 };
 
 type TemporaryData = {
 	compatibleOfferings: any | null;
 	description: {[key: string]: string} | null;
 	name: {[key: string]: string} | null;
-	productCategories: Partial<Categories>[] | null;
+	productCategories: Partial<ProductCategories>[] | null;
 };
 
 function normalizeCategory(category: {
 	label: string;
 	value: number;
-}): Partial<Categories> {
+}): Partial<ProductCategories> {
 	return {
 		id: String(category.value),
 		name: category.label,

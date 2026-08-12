@@ -11,7 +11,7 @@ import {ProductPriceModel} from '~/utils/productUtils';
 import {
 	LicensingPrices,
 	NewAppInitialState,
-} from '../../../../../context/NewAppContext';
+} from '~/context/NewAppContext';
 
 type LicensePricesProps = {
 	currency: any;

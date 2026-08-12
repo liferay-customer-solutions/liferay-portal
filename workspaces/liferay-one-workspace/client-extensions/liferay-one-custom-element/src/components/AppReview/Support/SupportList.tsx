@@ -7,7 +7,7 @@ import ClayIcon from '@clayui/icon';
 import ExternalLink from '~/components/ExternalLink';
 import i18n from '~/i18n';
 
-import {NewAppInitialState} from '../../../../../context/NewAppContext';
+import {NewAppInitialState} from '~/context/NewAppContext';
 
 type SupportContent = {
 	symbol: string;

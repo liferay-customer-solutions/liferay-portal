@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import type {Product} from '~/types/product';
 import {UploadedFile} from '../../components/FileList/FileList';
 import {LiferayPackage} from '../../context/NewAppContext';
 import {ProductSpecificationKey} from '../../enums/Product';

@@ -25,7 +25,7 @@ import {
 import {useMarketplaceContext} from './MarketplaceContext';
 
 import type {ActionMap} from '~/types/actionMap';
-import type {Catalog} from '~/types/catalog';
+import type {Catalog} from '~/types/commerce';
 import type {
 	Product,
 	ProductLicenseTier,
