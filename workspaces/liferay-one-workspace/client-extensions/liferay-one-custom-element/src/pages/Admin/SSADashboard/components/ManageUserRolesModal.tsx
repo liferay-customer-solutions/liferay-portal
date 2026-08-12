@@ -12,7 +12,7 @@ import getFilteredItems from '~/pages/Admin/SSADashboard/utils/getFilteredItems'
 import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
 import {Liferay} from '~/services/liferay/liferay';
 
-import MultiSelect from './MultiSelect/MultiSelect';
+import MultiSelect from '~/components/MultiSelect/MultiSelect';
 
 import type {UserAccount} from '~/types/accounts';
 import type {APIResponse} from '~/types/api';

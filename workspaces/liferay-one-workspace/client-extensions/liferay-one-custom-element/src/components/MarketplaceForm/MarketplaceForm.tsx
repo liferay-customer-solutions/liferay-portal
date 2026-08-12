@@ -5,7 +5,7 @@
 
 import {FormHTMLAttributes, ReactNode} from 'react';
 import {FieldValues, FormProvider, UseFormReturn} from 'react-hook-form';
-import Checkbox from '~/components/MarketplaceFormCheckbox/MarketplaceFormCheckbox';
+import Checkbox from '~/components/Checkbox/Checkbox';
 import FormControl from '~/components/MarketplaceFormControl/MarketplaceFormControl';
 import {MarketplaceFormHelpMessage} from '~/components/MarketplaceFormHelpMessage/MarketplaceFormHelpMessage';
 import {MarketplaceFormInput} from '~/components/MarketplaceFormInput/MarketplaceFormInput';
