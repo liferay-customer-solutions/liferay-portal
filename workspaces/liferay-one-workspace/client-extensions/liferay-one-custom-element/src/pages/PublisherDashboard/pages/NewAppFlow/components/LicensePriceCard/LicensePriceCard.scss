@@ -1,16 +1,16 @@
 .license-card {
 	&-container {
-		border: 1px solid #e2e2e4;
+		border: 1px solid var(--color-neutral-2);
 		border-radius: 10px;
 		padding: 16px;
 	}
 	&-input {
-		border: 1px solid var(--neutral-07, #6c6c75);
+		border: 1px solid var(--neutral-07, var(--color-neutral-7));
 		border-radius: 8px !important;
 
 		&.disabled {
-			background: var(--neutral-01, #f7f7f8);
-			border: 1px solid var(--neutral-03, #c9c9cf);
+			background: var(--neutral-01, var(--color-neutral-1));
+			border: 1px solid var(--neutral-03, var(--color-neutral-3));
 		}
 	}
 }
@@ -20,10 +20,10 @@
 		width: 37.5rem;
 
 		.icon-button {
-			background: #fbfcfe;
-			border: 1px solid #e7efff;
+			background: var(--color-brand-primary-lighten-6);
+			border: 1px solid var(--color-brand-primary-lighten-5);
 			border-radius: 10px;
-			color: #0b5fff;
+			color: var(--color-brand-primary);
 			font-size: 14px;
 			font-weight: 600;
 			line-height: 16px;

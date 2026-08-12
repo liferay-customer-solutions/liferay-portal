@@ -6,7 +6,7 @@
 		padding-top: 1.5rem;
 
 		h1 {
-			color: #282934;
+			color: var(--color-neutral-10);
 			font-size: 1.8rem;
 			font-weight: 700;
 			line-height: 2.5rem;
@@ -25,12 +25,12 @@
 		}
 
 		.management-bar > div {
-			background: #f7f7f8;
+			background: var(--color-neutral-1);
 			border-radius: 0.625rem;
 		}
 
 		.navbar-form {
-			background: #f7f7f8;
+			background: var(--color-neutral-1);
 		}
 
 		input[type='text'],
@@ -38,12 +38,12 @@
 		.input-group-inset.focus ~ .input-group-inset-item,
 		.input-group-inset:focus-visible ~ .input-group-inset-item,
 		.c-prefers-focus .input-group-inset:focus ~ .input-group-inset-item {
-			background-color: #fff;
-			border-color: #e7efff;
+			background-color: var(--color-neutral-0);
+			border-color: var(--color-brand-primary-lighten-5);
 		}
 
 		p {
-			color: #282934;
+			color: var(--color-neutral-10);
 			font-size: 15.7px;
 			line-height: 24px;
 		}

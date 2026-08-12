@@ -1,18 +1,18 @@
 .license-agreement-container {
 	.border-details {
-		border: 1px solid #e2e2e4;
+		border: 1px solid var(--color-neutral-2);
 		border-radius: 12px;
 
 		.icon-background {
-			background-color: #e2e2e4;
+			background-color: var(--color-neutral-2);
 			border-radius: 50%;
 			height: 40px;
 			width: 40px;
 		}
 
 		.text-agreement {
-			border-top: 1px solid #e2e2e4;
-			color: #3f404b;
+			border-top: 1px solid var(--color-neutral-2);
+			color: var(--color-neutral-9);
 			font-size: 0.813rem;
 			line-height: 1rem;
 

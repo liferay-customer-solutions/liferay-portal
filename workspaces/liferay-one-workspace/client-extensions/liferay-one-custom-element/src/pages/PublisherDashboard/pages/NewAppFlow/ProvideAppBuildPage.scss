@@ -15,7 +15,7 @@
 
 		&:hover {
 			border-radius: 6px !important;
-			color: #0053f0 !important;
+			color: var(--color-action-primary-hover) !important;
 			transition: all 0.3s ease-in-out;
 		}
 	}
@@ -29,16 +29,16 @@
 
 .provide-app-build-page {
 &-add-package-button {
-		background-color: #fbfcfe;
-		border-color: #e7efff;
-		color: #0b5fff;
+		background-color: var(--color-brand-primary-lighten-6);
+		border-color: var(--color-brand-primary-lighten-5);
+		color: var(--color-brand-primary);
 		margin-top: 1.5rem;
 
 		&:active,
 		&:hover {
-			background-color: #edf3fe;
-			border-color: #0053f0;
-			color: #0b5fff;
+			background-color: var(--color-action-primary-hover-10);
+			border-color: var(--color-action-primary-hover);
+			color: var(--color-brand-primary);
 		}
 	}
 
@@ -63,11 +63,11 @@
 	}
 
 	&-dropzone-container {
-		border: 1px solid #e2e2e4;
+		border: 1px solid var(--color-neutral-2);
 		border-radius: 0.5rem;
 
 		&-header {
-			background-color: #f7f7f8;
+			background-color: var(--color-neutral-1);
 		}
 
 		.dropzone-upload-container {

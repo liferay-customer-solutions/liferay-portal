@@ -1,10 +1,10 @@
 .tag {
-	background: #e6ebf5;
-	border-color: #e6ebf5;
+	background: var(--color-state-info-lighten-2);
+	border-color: var(--color-state-info-lighten-2);
 	border-radius: 4px;
 	border-style: solid;
 	border-width: 0.0625rem;
-	color: #1c3667;
+	color: var(--color-state-info-darken-2);
 	font-size: 13px;
 	font-style: normal;
 	font-weight: 400;

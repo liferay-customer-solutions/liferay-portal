@@ -1,6 +1,6 @@
 .app-flow-list {
 	&-container {
-		background-color: #f7f7f8;
+		background-color: var(--color-neutral-1);
 		border-radius: 14px;
 		height: fit-content;
 		min-width: 280px;
@@ -48,13 +48,13 @@
 	}
 
 	&-text {
-		color: #999aa3;
+		color: var(--color-neutral-5);
 		font-size: 1rem;
 		font-weight: 600;
 		line-height: 1rem;
 
 		&-checked {
-			color: #0b5fff;
+			color: var(--color-brand-primary);
 			font-size: 1rem;
 			font-weight: 600;
 			line-height: 1rem;

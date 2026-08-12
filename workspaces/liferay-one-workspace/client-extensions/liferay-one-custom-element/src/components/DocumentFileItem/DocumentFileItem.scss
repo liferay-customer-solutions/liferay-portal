@@ -1,7 +1,7 @@
 .document-file-list-item {
 	&-container {
 		align-items: center;
-		border: 1px solid #e2e2e4;
+		border: 1px solid var(--color-neutral-2);
 		border-radius: 0.625rem;
 		display: flex;
 		flex-direction: row;
@@ -26,7 +26,7 @@
 
 		&-icon-container {
 			align-items: center;
-			background-color: #e7efff;
+			background-color: var(--color-brand-primary-lighten-5);
 			border-radius: 0.25rem;
 			display: flex;
 			height: 4.5rem;
@@ -42,14 +42,14 @@
 			}
 
 			&-file-name {
-				color: #282934;
+				color: var(--color-neutral-10);
 				font-size: 1rem;
 				font-weight: 400;
 				line-height: 1.5rem;
 			}
 
 			&-file-size {
-				color: #6c6c75;
+				color: var(--color-neutral-7);
 				font-size: 0.813rem;
 				font-weight: 400;
 				line-height: 1rem;
@@ -59,9 +59,9 @@
 
 	&-button {
 		background-color: transparent;
-		border: 1.5px solid #2b3a4b;
+		border: 1.5px solid var(--color-action-neutral-default);
 		border-radius: 0.375rem;
-		color: #2b3a4b;
+		color: var(--color-action-neutral-default);
 		font-size: 0.875rem;
 		font-weight: 600;
 		height: 2rem;
@@ -71,8 +71,8 @@
 		width: 6.938rem;
 
 		&:hover {
-			background-color: #2b3a4b;
-			color: #fff;
+			background-color: var(--color-action-neutral-default);
+			color: var(--color-neutral-0);
 		}
 	}
 }
