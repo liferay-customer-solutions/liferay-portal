@@ -6,9 +6,9 @@
 import {filesize} from 'filesize';
 import {DropzoneUpload} from '~/components/DropzoneUpload/DropzoneUpload';
 import {FileList} from '~/components/FileList/FileList';
-import Form from '~/components/MarketplaceForm';
+import Form from '~/components/MarketplaceForm/MarketplaceForm';
 import {Section} from '~/components/Section/Section';
-import VideoThumbnail from '~/components/VideoThumbnail';
+import VideoThumbnail from '~/components/VideoThumbnail/VideoThumbnail';
 import {NewAppTypes, useNewAppContext} from '~/context/NewAppContext';
 import {ACCEPT_FILE_TYPES} from '~/enums/File';
 import i18n from '~/i18n';

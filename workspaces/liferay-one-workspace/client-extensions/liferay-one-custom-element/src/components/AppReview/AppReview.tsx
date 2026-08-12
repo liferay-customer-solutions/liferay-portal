@@ -3,16 +3,15 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import Build from '~/components/AppReviewBuild/AppReviewBuild';
+import Categories from '~/components/AppReviewCategories/AppReviewCategories';
+import Description from '~/components/AppReviewDescription/AppReviewDescription';
+import Licensing from '~/components/AppReviewLicensing/AppReviewLicensing';
+import Pricing from '~/components/AppReviewPricing/AppReviewPricing';
+import Profile from '~/components/AppReviewProfile/AppReviewProfile';
+import Storefront from '~/components/AppReviewStorefront/AppReviewStorefront';
+import Support from '~/components/AppReviewSupport/AppReviewSupport';
 import {NewAppInitialState} from '~/context/NewAppContext';
-
-import Build from './Build/Build';
-import Categories from './Categories/Categories';
-import Description from './Description/Description';
-import Licensing from './Licensing/Licensing';
-import Pricing from './Pricing/Pricing';
-import Profile from './Profile/Profile';
-import Storefront from './Storefront/Storefront';
-import Support from './Support/Support';
 
 import './AppReview.scss';
 

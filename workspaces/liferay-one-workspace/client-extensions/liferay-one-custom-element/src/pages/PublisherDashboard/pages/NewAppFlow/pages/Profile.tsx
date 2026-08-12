@@ -5,7 +5,7 @@
 
 import {filesize} from 'filesize';
 import {UploadedFile} from '~/components/FileList/FileList';
-import Form from '~/components/MarketplaceForm';
+import Form from '~/components/MarketplaceForm/MarketplaceForm';
 import MultiSelect from '~/components/MultiSelect/MultiSelect';
 import Select from '~/components/Select/Select';
 import UploadLogo from '~/components/UploadLogo/UploadLogo';

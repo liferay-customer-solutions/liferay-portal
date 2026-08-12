@@ -7,7 +7,7 @@ import ClayButton from '@clayui/button';
 import {Option, Picker, useModal} from '@clayui/core';
 import ClayIcon from '@clayui/icon';
 import React, {ComponentProps, useState} from 'react';
-import Modal from '~/components/Modal';
+import Modal from '~/components/Modal/Modal';
 import {NewAppTypes, useNewAppContext} from '~/context/NewAppContext';
 import {ProductLicenseTier} from '~/enums/Product';
 import i18n from '~/i18n';

@@ -7,9 +7,9 @@ import ClayButton from '@clayui/button';
 import ClayDropDown, {Align} from '@clayui/drop-down';
 import ClayIcon from '@clayui/icon';
 import {useState} from 'react';
-import CloudResourceRequirements from '~/components/CloudResourceRequirements';
-import {NewAppPackageVersionModal} from '~/components/NewAppPackagesModal/NewAppPackagesModal';
-import NewAppUploadAppPackagesComponent from '~/components/NewAppUploadPackage';
+import CloudResourceRequirements from '~/components/CloudResourceRequirements/CloudResourceRequirements';
+import {NewAppPackagesModal} from '~/components/NewAppPackagesModal/NewAppPackagesModal';
+import NewAppUploadAppPackagesComponent from '~/components/NewAppUploadPackage/NewAppUploadPackage';
 import {RadioCard} from '~/components/RadioCard/RadioCard';
 import {Section} from '~/components/Section/Section';
 import {NewAppTypes, useNewAppContext} from '~/context/NewAppContext';
@@ -184,7 +184,7 @@ const BuildContent = () => {
 				)}
 
 				{visibleSelectVersionModal && (
-					<NewAppPackageVersionModal
+					<NewAppPackagesModal
 						currentVersions={selectedVersions}
 						handleClose={() => setVisibleSelectVersionModal(false)}
 					/>
