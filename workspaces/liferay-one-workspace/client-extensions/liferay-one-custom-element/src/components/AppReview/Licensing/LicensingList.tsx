@@ -1,18 +1,17 @@
-// @ts-nocheck
 /**
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 import ClayIcon from '@clayui/icon';
+import {LICENSING_OPTIONS} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
+import {currenciesCode, formatCurrency} from '~/utils/currencies';
+import {ProductPriceModel} from '~/utils/productUtils';
 
 import {
 	LicensingPrices,
 	NewAppInitialState,
 } from '../../../../../context/NewAppContext';
-import {ProductPriceModel} from '~/utils/productUtils';
-import {currenciesCode, formatCurrency} from '~/utils/currencies';
-import {LICENSING_OPTIONS} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
 
 type LicensePricesProps = {
 	currency: any;

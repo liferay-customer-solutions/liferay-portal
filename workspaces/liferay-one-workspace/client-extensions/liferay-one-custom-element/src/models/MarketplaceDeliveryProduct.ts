@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
@@ -13,10 +12,12 @@ import {
 	ProductTags,
 	getProductSpecificationValue,
 } from '~/utils/productUtils';
-import type { DeliveryProduct } from '~/types/product';
+
 import i18n from '../i18n';
 import {ConsoleUserProject} from '../services/oauth/types';
 import {safeJSONParse} from '../utils/util';
+
+import type {DeliveryProduct} from '~/types/product';
 
 const productTypeIcons = {
 	cloud: 'cloud',

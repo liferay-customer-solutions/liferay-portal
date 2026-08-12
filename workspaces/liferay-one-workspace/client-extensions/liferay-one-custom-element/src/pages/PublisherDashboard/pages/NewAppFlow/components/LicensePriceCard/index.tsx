@@ -1,21 +1,17 @@
-// @ts-nocheck
 /**
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 import ClayForm, {ClayInput} from '@clayui/form';
-import type { ProductLicenseTier } from "~/types/product";
-
 import classNames from 'classnames';
-
 import ButtonWithIcon from '~/components/ButtonWithIcon';
 import {FieldBase} from '~/components/FieldBase';
-
-;
 import {currenciesCode} from '~/utils/currencies';
 
 import './LicensePriceCard.scss';
+
+import type {ProductLicenseTier} from '~/types/product';
 
 type LicensePriceCardProps = {
 	currency: string;

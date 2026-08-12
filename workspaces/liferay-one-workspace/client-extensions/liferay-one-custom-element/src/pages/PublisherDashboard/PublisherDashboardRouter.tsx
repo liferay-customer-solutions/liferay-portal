@@ -26,14 +26,18 @@ function PublisherDashboardRoutes() {
 	return useRoutes([
 		{
 			children: toRouteObjects(
-				publisherDashboardRoutes.filter((route) => route.path !== 'newapp')
+				publisherDashboardRoutes.filter(
+					(route) => route.path !== 'newapp'
+				)
 			),
 			element: <PublisherDashboardLayout />,
 			path: '/',
 		},
 		{
 			children: toRouteObjects(
-				publisherDashboardRoutes.filter((route) => route.path === 'newapp')
+				publisherDashboardRoutes.filter(
+					(route) => route.path === 'newapp'
+				)
 			),
 			path: '/',
 		},

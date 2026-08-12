@@ -1,22 +1,19 @@
-// @ts-nocheck
 /**
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 import ReactDOMServer from 'react-dom/server';
-import type { ProductPriceModel } from "~/types/product";
-
-
 import {NewAppInitialState} from '~/context/NewAppContext';
 import {LearnLinks} from '~/enums/Learn';
+import i18n from '~/i18n';
 import {
 	ProductUploadType,
 	ProductWorkflowStatusCode,
-} from "~/utils/productUtils";
-;
-import i18n from '~/i18n';
+} from '~/utils/productUtils';
 import zodSchema from '../../../../../schema/zod';
+
+import type {ProductPriceModel} from '~/types/product';
 
 export const LIFERAY_VERSION_PICKLIST = 'LIFERAY-VERSIONS';
 export const MAX_IMAGE_QUANTITY = 5;
@@ -280,8 +277,7 @@ export const LICENSING_OPTIONS = [
 	},
 	{
 		description: 'App License must be renewed annually.',
-		disabled: (priceModel: ProductPriceModel) =>
-			priceModel === 'Free',
+		disabled: (priceModel: ProductPriceModel) => priceModel === 'Free',
 		icon: 'document-pending',
 		title: 'Subscription License',
 		tooltip: 'A subscription license that must be renewed annually.',
@@ -292,8 +288,7 @@ export const LICENSING_OPTIONS = [
 export const LICENSING_30_DAYS_TRIAL_OPTIONS = [
 	{
 		description: 'Offer a 30-day free trial for this app.',
-		disabled: (priceModel: ProductPriceModel) =>
-			priceModel === 'Free',
+		disabled: (priceModel: ProductPriceModel) => priceModel === 'Free',
 		icon: 'check-circle',
 		title: 'Yes',
 		tooltip: 'Offer a 30-day free trial for this app.',

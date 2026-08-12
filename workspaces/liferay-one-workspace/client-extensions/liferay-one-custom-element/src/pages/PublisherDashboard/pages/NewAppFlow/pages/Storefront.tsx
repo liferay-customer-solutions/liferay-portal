@@ -1,29 +1,24 @@
-// @ts-nocheck
 /**
  * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 import {filesize} from 'filesize';
-import type { ProductTags } from "~/types/product";
-
-
 import {DropzoneUpload} from '~/components/DropzoneUpload/DropzoneUpload';
 import {FileList} from '~/components/FileList/FileList';
 import Form from '~/components/MarketplaceForm';
 import {Section} from '~/components/Section/Section';
 import VideoThumbnail from '~/components/VideoThumbnail';
-import {
-	NewAppTypes,
-	useNewAppContext,
-} from '~/context/NewAppContext';
+import {NewAppTypes, useNewAppContext} from '~/context/NewAppContext';
 import {ACCEPT_FILE_TYPES} from '~/enums/File';
-
-;
 import i18n from '~/i18n';
+
 import {swapElements} from '~/utils/array';
 import {getRandomID} from '~/utils/string';
+
 import {MAX_IMAGE_QUANTITY, MAX_SIZE_5MBS} from '../constants';
+
+import type {ProductTags} from '~/types/product';
 
 const Storefront = () => {
 	const [{storefront}, dispatch] = useNewAppContext();
@@ -116,10 +111,6 @@ const Storefront = () => {
 					multiple
 					onDropRejected={(fileList) => {
 						if (fileList.length > MAX_IMAGE_QUANTITY) {
-
-							// TODO
-							// onOpenChange(true);
-
 						}
 					}}
 					onHandleUpload={handleUploadAppPackages}
