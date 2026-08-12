@@ -15,6 +15,9 @@
 		"moduleResolution": "Node",
 		"noEmit": true,
 		"paths": {
+			"@xstate/store": [
+				"../../node_modules/@xstate/store/dist/xstate-store.d.ts"
+			],
 			"~/*": [
 				"./src/*"
 			]

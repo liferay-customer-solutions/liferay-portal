@@ -4,11 +4,12 @@
  */
 
 import type {APIResponse} from '~/types/api';
+import type {PublisherAssetAttachment} from '~/types/publisherAsset';
 import fetcher from '~/services/fetcher/fetcher';
 
 export default class HeadlessPublisherAssetAttachment {
 	static async createPublisherAssetAttachment(body: unknown) {
-		return fetcher.post('o/c/publisherassetattachments', body);
+		return fetcher.post<PublisherAssetAttachment>('o/c/publisherassetattachments', body);
 	}
 
 	static async deletePublisherAssetAttachment(id: number | string) {
@@ -16,7 +17,7 @@ export default class HeadlessPublisherAssetAttachment {
 	}
 
 	static getPublisherAssetAttachments(searchParams: URLSearchParams) {
-		return fetcher<APIResponse>(
+		return fetcher<APIResponse<PublisherAssetAttachment>>(
 			`o/c/publisherassetattachments?${searchParams.toString()}`
 		);
 	}

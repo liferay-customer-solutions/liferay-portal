@@ -5,6 +5,7 @@
 
 import productIconFallback from '~/assets/icons/purchased_app_icon.svg';
 import productImageFallback from '~/assets/images/app_placeholder.png';
+import {ProductSpecificationKey} from '~/enums/Product';
 import i18n from '~/i18n';
 
 import {getValueFromDeliverySpecifications} from './getValueFromDeliverySpecifications';

@@ -97,16 +97,16 @@ export default class PublisherAsset {
 	}
 
 	private async getPublisherAssetDocumentId(
-		file: UploadedFile,
-		appFolderId: number
+		appFolderId: number,
+		file: UploadedFile
 	): Promise<number> {
 		const formData = new FormData();
 		formData.append('file', file.file, file.fileName);
 
 		const sourceDocument =
 			await HeadlessDelivery.createDocumentFolderDocument(
-				appFolderId,
-				formData
+				formData,
+				appFolderId
 			);
 
 		return sourceDocument.id;
@@ -145,29 +145,29 @@ export default class PublisherAsset {
 				this.properties?.featurePreview?.includes(
 					'product-versioning-new-primary-key'
 				)
-					? 'r_productEntryToPublisherAssets_CProductId'
-					: 'r_productEntryToPublisherAssets_CPDefinitionId';
+					? 'r_productEntryToPublisherAsset_CProductId'
+					: 'r_productEntryToPublisherAsset_CPDefinitionId';
 
 			const publisherAsset =
 				await HeadlessPublisherAssetses.createPublisherAsset({
 					[productRelationshipName]: this.product
 						.id as unknown as string,
-					r_accountEntryToPublisherAssets_accountEntryId:
+					r_accountEntryToPublisherAsset_accountEntryId:
 						Liferay.CommerceContext.account?.accountId,
 					version: this.versions,
 				});
 
 			for (const file of this.file) {
 				const sourceCode = await this.getPublisherAssetDocumentId(
-					file,
-					packageFolderId
+					packageFolderId,
+					file
 				);
 
 				await HeadlessPublisherAssetAttachment.createPublisherAssetAttachment(
 					{
 						name: file.fileName,
 						publisherAssetAttachmentType: PICK_LIST_ASSET_TYPE,
-						r_publisherAssetsToAttachment_c_publisherAssetsId:
+						r_publisherAssetToAttachment_c_publisherAssetId:
 							publisherAsset.id,
 						sourceCode,
 					}
