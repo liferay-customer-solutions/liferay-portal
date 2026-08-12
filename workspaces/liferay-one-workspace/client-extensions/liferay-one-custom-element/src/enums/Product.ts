@@ -5,37 +5,49 @@
 
 import i18n from '../i18n';
 
-export enum LicenseType {
-	PERPETUAL = 'perpetual',
-	SUBSCRIPTION = 'subscription',
-}
+export const LicenseType = {
+	PERPETUAL: 'perpetual',
+	SUBSCRIPTION: 'subscription',
+} as const;
 
-export enum ProductEditionOption {
-	EE = 'EE',
-}
+export type LicenseType = (typeof LicenseType)[keyof typeof LicenseType];
 
-export enum ProductImageFallbackCategories {
-	PRODUCT_ICON = 'productIcon',
-	PRODUCT_IMAGE = 'productImage',
-}
+export const ProductEditionOption = {
+	EE: 'EE',
+} as const;
 
-export enum ProductLicense {
-	BASE = 'base-license-usage-type',
-	CLOUD = 'cloud-license-usage-type',
-	DXP = 'dxp-license-usage-type',
-}
+export type ProductEditionOption = (typeof ProductEditionOption)[keyof typeof ProductEditionOption];
 
-export enum ProductLicenseTier {
-	DEVELOPER = 'developer',
-	STANDARD = 'standard',
-	TRIAL = 'trial',
-}
+export const ProductImageFallbackCategories = {
+	PRODUCT_ICON: 'productIcon',
+	PRODUCT_IMAGE: 'productImage',
+} as const;
 
-export enum ProductLicenseType {
-	MONTHLY = 'Monthly',
-	PERPETUAL = 'Perpetual',
-	SUBSCRIPTION = 'Subscription',
-}
+export type ProductImageFallbackCategories = (typeof ProductImageFallbackCategories)[keyof typeof ProductImageFallbackCategories];
+
+export const ProductLicense = {
+	BASE: 'base-license-usage-type',
+	CLOUD: 'cloud-license-usage-type',
+	DXP: 'dxp-license-usage-type',
+} as const;
+
+export type ProductLicense = (typeof ProductLicense)[keyof typeof ProductLicense];
+
+export const ProductLicenseTier = {
+	DEVELOPER: 'developer',
+	STANDARD: 'standard',
+	TRIAL: 'trial',
+} as const;
+
+export type ProductLicenseTier = (typeof ProductLicenseTier)[keyof typeof ProductLicenseTier];
+
+export const ProductLicenseType = {
+	MONTHLY: 'Monthly',
+	PERPETUAL: 'Perpetual',
+	SUBSCRIPTION: 'Subscription',
+} as const;
+
+export type ProductLicenseType = (typeof ProductLicenseType)[keyof typeof ProductLicenseType];
 
 export const ProductLicenseFriendlyName = {
 	[ProductLicenseType.MONTHLY]: 'Monthly',
@@ -43,132 +55,159 @@ export const ProductLicenseFriendlyName = {
 	[ProductLicenseType.SUBSCRIPTION]: 'Yearly',
 };
 
-export enum ProductOfferingTypes {
-	LIFERAY_PAAS = 'Liferay PaaS',
-	LIFERAY_SAAS = 'Liferay SaaS',
-	LIFERAY_SELF_HOSTED = 'Liferay Self-Hosted',
-}
+export const ProductOfferingTypes = {
+	LIFERAY_PAAS: 'Liferay PaaS',
+	LIFERAY_SAAS: 'Liferay SaaS',
+	LIFERAY_SELF_HOSTED: 'Liferay Self-Hosted',
+} as const;
 
-export enum ProductPriceModel {
-	FREE = 'Free',
-	PAID = 'Paid',
-}
+export type ProductOfferingTypes = (typeof ProductOfferingTypes)[keyof typeof ProductOfferingTypes];
 
-export enum ProductSpecificationKey {
-	APP_BETA = 'app-beta',
-	APP_BUILD_NUMBER_OF_CPUS = 'cpu',
-	APP_BUILD_RAM_IN_GBS = 'ram',
-	APP_DEFAULT_SKU_REF = 'default-sku-ref',
-	APP_DEVELOPER_NAME = 'developer-name',
-	APP_ENTRY_UUID = 'app-entry-uuid',
-	APP_LICENSING_TYPE = 'license-type',
-	APP_PRICING_MODEL = 'price-model',
-	APP_SETTINGS = 'app-settings',
-	APP_STOREFRONT_VIDEO_DESCRIPTION = 'app-storefront-video-description',
-	APP_STOREFRONT_VIDEO_URL = 'app-storefront-video-url',
-	APP_SUPPORT_DOCUMENTATION_URL = 'appdocumentationurl',
-	APP_SUPPORT_EMAIL = 'supportemailaddress',
-	APP_SUPPORT_INSTALLATION_GUIDE_URL = 'appinstallationguideurl',
-	APP_SUPPORT_PHONE = 'supportphone',
-	APP_SUPPORT_PUBLISHER_WEBSITE_URL = 'publisherwebsiteurl',
-	APP_SUPPORT_URL = 'supporturl',
-	APP_SUPPORT_USAGE_TERMS_URL = 'appusagetermsurl',
-	APP_TYPE = 'type',
-	APP_VERSION = 'latest-version',
-	APP_VERSION_NOTES = 'product-notes',
-	LIFERAY_PRODUCT_TYPE = 'liferay-product-type',
-	LIFERAY_VERSION = 'liferay-version',
-	SOLUTION_COMPANY_DESCRIPTION = 'solution-company-description',
-	SOLUTION_COMPANY_EMAIL = 'solution-company-email',
-	SOLUTION_COMPANY_PHONE = 'solution-company-phone',
-	SOLUTION_COMPANY_WEBSITE = 'solution-company-website',
-	SOLUTION_CONTACT_EMAIL = 'solution-contact-email',
-	SOLUTION_DETAILS_BLOCKS = 'solution-details-blocks',
-	SOLUTION_HEADER_DESCRIPTION = 'solution-header-description',
-	SOLUTION_HEADER_TITLE = 'solution-header-title',
-	SOLUTION_HEADER_VIDEO_DESCRIPTION = 'solution-header-video-description',
-	SOLUTION_HEADER_VIDEO_URL = 'solution-header-video-url',
-	SOLUTION_TYPE = 'solution-type',
-}
+export const ProductPriceModel = {
+	FREE: 'Free',
+	PAID: 'Paid',
+} as const;
 
-export enum ProductSupportSpecificationKey {
-	APP_DOCUMENTATION_URL = 'appdocumentationurl',
-	APP_INSTALLATION_GUIDE_URL = 'appinstallationguideurl',
-	APP_USAGE_TERMS_URL = 'appusagetermsurl',
-	PUBLISHER_WEBSITE_URL = 'publisherwebsiteurl',
-	SUPPORT_EMAIL = 'supportemailaddress',
-	SUPPORT_PHONE = 'supportphone',
-	SUPPORT_URL = 'supporturl',
-}
+export type ProductPriceModel = (typeof ProductPriceModel)[keyof typeof ProductPriceModel];
 
-export enum ProductTags {
-	APP_ICON = 'app-icon',
-	SOLUTION_DETAILS = 'solution-details',
-	SOLUTION_HEADER = 'solution-header',
-	SOLUTION_PROFILE_APP_ICON = 'solution-profile-app-icon',
-}
+export const ProductSpecificationKey = {
+	APP_BETA: 'app-beta',
+	APP_BUILD_NUMBER_OF_CPUS: 'cpu',
+	APP_BUILD_RAM_IN_GBS: 'ram',
+	APP_DEFAULT_SKU_REF: 'default-sku-ref',
+	APP_DEVELOPER_NAME: 'developer-name',
+	APP_ENTRY_UUID: 'app-entry-uuid',
+	APP_LICENSING_TYPE: 'license-type',
+	APP_PRICING_MODEL: 'price-model',
+	APP_SETTINGS: 'app-settings',
+	APP_STOREFRONT_VIDEO_DESCRIPTION: 'app-storefront-video-description',
+	APP_STOREFRONT_VIDEO_URL: 'app-storefront-video-url',
+	APP_SUPPORT_DOCUMENTATION_URL: 'appdocumentationurl',
+	APP_SUPPORT_EMAIL: 'supportemailaddress',
+	APP_SUPPORT_INSTALLATION_GUIDE_URL: 'appinstallationguideurl',
+	APP_SUPPORT_PHONE: 'supportphone',
+	APP_SUPPORT_PUBLISHER_WEBSITE_URL: 'publisherwebsiteurl',
+	APP_SUPPORT_URL: 'supporturl',
+	APP_SUPPORT_USAGE_TERMS_URL: 'appusagetermsurl',
+	APP_TYPE: 'type',
+	APP_VERSION: 'latest-version',
+	APP_VERSION_NOTES: 'product-notes',
+	LIFERAY_PRODUCT_TYPE: 'liferay-product-type',
+	LIFERAY_VERSION: 'liferay-version',
+	SOLUTION_COMPANY_DESCRIPTION: 'solution-company-description',
+	SOLUTION_COMPANY_EMAIL: 'solution-company-email',
+	SOLUTION_COMPANY_PHONE: 'solution-company-phone',
+	SOLUTION_COMPANY_WEBSITE: 'solution-company-website',
+	SOLUTION_CONTACT_EMAIL: 'solution-contact-email',
+	SOLUTION_DETAILS_BLOCKS: 'solution-details-blocks',
+	SOLUTION_HEADER_DESCRIPTION: 'solution-header-description',
+	SOLUTION_HEADER_TITLE: 'solution-header-title',
+	SOLUTION_HEADER_VIDEO_DESCRIPTION: 'solution-header-video-description',
+	SOLUTION_HEADER_VIDEO_URL: 'solution-header-video-url',
+	SOLUTION_TYPE: 'solution-type',
+} as const;
 
-export enum ProductType {
-	CLIENT_EXTENSION = 'client-extension',
-	CLOUD = 'cloud',
-	COMPOSITE_APP = 'composite-app',
-	DXP = 'dxp',
-	LOW_CODE_CONFIGURATION = 'low-code-configuration',
-	OTHER = 'other',
-	SSA_SAAS = 'ssa-saas',
-}
+export type ProductSpecificationKey = (typeof ProductSpecificationKey)[keyof typeof ProductSpecificationKey];
 
-export enum ProductTypeVocabulary {
-	APP = 'App',
-	LIFERAY_PRODUCT = 'Liferay Product',
-	SOLUTION = 'Solution',
-}
+export const ProductSupportSpecificationKey = {
+	APP_DOCUMENTATION_URL: 'appdocumentationurl',
+	APP_INSTALLATION_GUIDE_URL: 'appinstallationguideurl',
+	APP_USAGE_TERMS_URL: 'appusagetermsurl',
+	PUBLISHER_WEBSITE_URL: 'publisherwebsiteurl',
+	SUPPORT_EMAIL: 'supportemailaddress',
+	SUPPORT_PHONE: 'supportphone',
+	SUPPORT_URL: 'supporturl',
+} as const;
 
-export enum ProductUploadType {
-	GITHUB = 'GitHub',
-	LXC = 'Liferay SaaS',
-	ZIP_UPLOAD = 'upload',
-}
+export type ProductSupportSpecificationKey = (typeof ProductSupportSpecificationKey)[keyof typeof ProductSupportSpecificationKey];
 
-export enum ProductVersionOption {
-	'7.4x' = '7.4',
-}
+export const ProductTags = {
+	APP_ICON: 'app-icon',
+	SOLUTION_DETAILS: 'solution-details',
+	SOLUTION_HEADER: 'solution-header',
+	SOLUTION_PROFILE_APP_ICON: 'solution-profile-app-icon',
+} as const;
 
-export enum ProductVocabulary {
-	APP_AREA = 'Marketplace App Category',
-	APP_CATEGORY = 'Marketplace Category',
-	APP_TAGS = 'Marketplace App Tags',
-	AVAILABILITY = 'Marketplace Availability',
-	LIFERAY_PLATFORM_OFFERING = 'Marketplace Liferay Platform Offering',
-	LIFERAY_VERSION = 'Marketplace Liferay Version',
-	PRODUCT_TYPE = 'Marketplace Product Type',
-	SOLUTION_CATEGORY = 'Marketplace Solution Category',
-	SOLUTION_TAGS = 'Marketplace Solution Tags',
-}
+export type ProductTags = (typeof ProductTags)[keyof typeof ProductTags];
 
-export enum ProductWorkflowStatusCode {
-	APPROVED = 0,
-	DRAFT = 2,
-	PENDING = 1,
-}
+export const ProductType = {
+	AI_HUB: 'ai-hub',
+	CLIENT_EXTENSION: 'client-extension',
+	CLOUD: 'cloud',
+	COMPOSITE_APP: 'composite-app',
+	DXP: 'dxp',
+	LOW_CODE_CONFIGURATION: 'low-code-configuration',
+	OTHER: 'other',
+	SSA_SAAS: 'ssa-saas',
+} as const;
 
-export enum SkuOptions {
-	DEVELOPER = 'developer',
-	OPEN_BETA = 'open-beta',
-	STANDARD = 'standard',
-	TRIAL = 'trial',
-}
+export type ProductType = (typeof ProductType)[keyof typeof ProductType];
 
-export enum SolutionTypes {
-	AI_HUB = 'ai-hub',
-	AI_HUB_OPEN_BETA = 'ai-hub-open-beta',
-	ANALYTICS = 'analytics',
-	CMP = 'cmp',
-	DSR = 'dsr',
-	DXP = 'dxp',
-	LIFERAY_DATA_PLATFORM = 'liferay-data-platform',
-	PRE_BUILT_TRIAL = 'pre-built-trial',
-}
+export const ProductTypeVocabulary = {
+	APP: 'App',
+	LIFERAY_PRODUCT: 'Liferay Product',
+	SOLUTION: 'Solution',
+} as const;
+
+export type ProductTypeVocabulary = (typeof ProductTypeVocabulary)[keyof typeof ProductTypeVocabulary];
+
+export const ProductUploadType = {
+	GITHUB: 'GitHub',
+	LXC: 'Liferay SaaS',
+	ZIP_UPLOAD: 'upload',
+} as const;
+
+export type ProductUploadType = (typeof ProductUploadType)[keyof typeof ProductUploadType];
+
+export const ProductVersionOption = {
+	'7.4x': '7.4',
+} as const;
+
+export type ProductVersionOption = (typeof ProductVersionOption)[keyof typeof ProductVersionOption];
+
+export const ProductVocabulary = {
+	APP_AREA: 'Marketplace App Category',
+	APP_CATEGORY: 'Marketplace Category',
+	APP_TAGS: 'Marketplace App Tags',
+	AVAILABILITY: 'Marketplace Availability',
+	LIFERAY_PLATFORM_OFFERING: 'Marketplace Liferay Platform Offering',
+	LIFERAY_VERSION: 'Marketplace Liferay Version',
+	PRODUCT_TYPE: 'Marketplace Product Type',
+	SOLUTION_CATEGORY: 'Marketplace Solution Category',
+	SOLUTION_TAGS: 'Marketplace Solution Tags',
+} as const;
+
+export type ProductVocabulary = (typeof ProductVocabulary)[keyof typeof ProductVocabulary];
+
+export const ProductWorkflowStatusCode = {
+	APPROVED: 0,
+	DRAFT: 2,
+	PENDING: 1,
+} as const;
+
+export type ProductWorkflowStatusCode = (typeof ProductWorkflowStatusCode)[keyof typeof ProductWorkflowStatusCode];
+
+export const SkuOptions = {
+	DEVELOPER: 'developer',
+	OPEN_BETA: 'open-beta',
+	STANDARD: 'standard',
+	TRIAL: 'trial',
+} as const;
+
+export type SkuOptions = (typeof SkuOptions)[keyof typeof SkuOptions];
+
+export const SolutionTypes = {
+	AI_HUB: 'ai-hub',
+	AI_HUB_OPEN_BETA: 'ai-hub-open-beta',
+	ANALYTICS: 'analytics',
+	CMP: 'cmp',
+	DSR: 'dsr',
+	DXP: 'dxp',
+	LIFERAY_DATA_PLATFORM: 'liferay-data-platform',
+	PRE_BUILT_TRIAL: 'pre-built-trial',
+} as const;
+
+export type SolutionTypes = (typeof SolutionTypes)[keyof typeof SolutionTypes];
 
 const ALL_OFFERINGS = [
 	ProductOfferingTypes.LIFERAY_PAAS,
@@ -199,6 +238,7 @@ export const ProductTypeLabels = {
 } as const;
 
 export const ProductTypeLicenseOptions = {
+	[ProductType.AI_HUB]: [ProductLicenseTier.STANDARD],
 	[ProductType.CLIENT_EXTENSION]: [ProductLicenseTier.STANDARD],
 	[ProductType.CLOUD]: [ProductLicenseTier.STANDARD],
 	[ProductType.COMPOSITE_APP]: [ProductLicenseTier.STANDARD],

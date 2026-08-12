@@ -4,6 +4,7 @@
  */
 
 import {ClayRadio} from '@clayui/form';
+import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 import {ReactNode} from 'react';
 
@@ -11,44 +12,56 @@ type RadioCardProps = {
 	className?: string;
 	content?: ReactNode;
 	description?: string;
+	disabled?: boolean;
+	icon?: string;
 	onChange: () => void;
 	selected: boolean;
 	title?: string;
+	tooltip?: string;
 };
 
 const RadioCard = ({
 	className,
 	content,
 	description,
+	disabled,
+	icon,
 	onChange,
 	selected,
 	title,
+	tooltip,
 }: RadioCardProps) => (
 	<div
 		className={classNames(
 			'border p-3 product-purchase-radio-card rounded',
-			{selected},
+			{disabled, selected},
 			className
 		)}
-		onClick={onChange}
+		onClick={disabled ? undefined : onChange}
 		role="button"
-		tabIndex={0}
+		tabIndex={disabled ? -1 : 0}
+		title={tooltip}
 	>
 		<div className="align-items-center d-flex">
 			<ClayRadio
 				checked={selected}
 				className="mr-2"
+				disabled={disabled}
 				onChange={onChange}
 				value=""
 			/>
 
 			{content || (
-				<div>
-					<strong className="d-block">{title}</strong>
+				<div className="align-items-center d-flex">
+					{icon && <ClayIcon className="mr-2" symbol={icon} />}
 
-					{description && (
-						<small className="text-muted">{description}</small>
-					)}
+					<div>
+						<strong className="d-block">{title}</strong>
+
+						{description && (
+							<small className="text-muted">{description}</small>
+						)}
+					</div>
 				</div>
 			)}
 		</div>

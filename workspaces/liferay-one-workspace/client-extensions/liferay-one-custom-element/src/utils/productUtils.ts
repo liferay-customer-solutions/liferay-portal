@@ -25,14 +25,21 @@ import type {
 export {
 	ProductLicense,
 	ProductLicenseFriendlyName,
+	ProductLicenseTier,
 	ProductLicenseType,
 	ProductOfferingTypes,
 	ProductPriceModel,
+	ProductSpecificationKey,
 	ProductTags,
 	ProductType,
+	ProductTypeLabels,
+	ProductTypeLicenseOptions,
 	ProductTypeVocabulary,
 	ProductUploadType,
 	ProductVocabulary,
+	ProductWorkflowDisplayType,
+	ProductWorkflowStatusCode,
+	ProductWorkflowStatusLabel,
 	SkuOptions,
 } from '~/enums/Product';
 
@@ -50,53 +57,7 @@ export function getProductCategoriesByVocabularyName(
 		.map(({name}) => name);
 }
 
-export const ProductSpecificationKey = {
-	APP_BETA: 'app-beta',
-	APP_BUILD_NUMBER_OF_CPUS: 'cpu',
-	APP_BUILD_RAM_IN_GBS: 'ram',
-	APP_DEVELOPER_NAME: 'developer-name',
-	APP_ENTRY_UUID: 'app-entry-uuid',
-	APP_LICENSING_TYPE: 'license-type',
-	APP_PRICING_MODEL: 'price-model',
-	APP_SETTINGS: 'app-settings',
-	APP_STOREFRONT_VIDEO_DESCRIPTION: 'app-storefront-video-description',
-	APP_STOREFRONT_VIDEO_URL: 'app-storefront-video-url',
-	APP_SUPPORT_DOCUMENTATION_URL: 'appdocumentationurl',
-	APP_SUPPORT_EMAIL: 'supportemailaddress',
-	APP_SUPPORT_INSTALLATION_GUIDE_URL: 'appinstallationguideurl',
-	APP_SUPPORT_PHONE: 'supportphone',
-	APP_SUPPORT_PUBLISHER_WEBSITE_URL: 'publisherwebsiteurl',
-	APP_SUPPORT_URL: 'supporturl',
-	APP_SUPPORT_USAGE_TERMS_URL: 'appusagetermsurl',
-	APP_TYPE: 'type',
-	APP_VERSION: 'latest-version',
-	APP_VERSION_NOTES: 'product-notes',
-	LIFERAY_PRODUCT_TYPE: 'liferay-product-type',
-	LIFERAY_VERSION: 'liferay-version',
-	SOLUTION_COMPANY_DESCRIPTION: 'solution-company-description',
-	SOLUTION_COMPANY_EMAIL: 'solution-company-email',
-	SOLUTION_COMPANY_PHONE: 'solution-company-phone',
-	SOLUTION_COMPANY_WEBSITE: 'solution-company-website',
-	SOLUTION_CONTACT_EMAIL: 'solution-contact-email',
-	SOLUTION_DETAILS_BLOCKS: 'solution-details-blocks',
-	SOLUTION_HEADER_DESCRIPTION: 'solution-header-description',
-	SOLUTION_HEADER_TITLE: 'solution-header-title',
-	SOLUTION_HEADER_VIDEO_DESCRIPTION: 'solution-header-video-description',
-	SOLUTION_HEADER_VIDEO_URL: 'solution-header-video-url',
-	SOLUTION_TYPE: 'solution-type',
-} as const;
 
-export type ProductSpecificationKey =
-	(typeof ProductSpecificationKey)[keyof typeof ProductSpecificationKey];
-
-export const ProductWorkflowStatusCode = {
-	APPROVED: 0,
-	DRAFT: 2,
-	PENDING: 1,
-};
-
-export type ProductWorkflowStatusCode =
-	(typeof ProductWorkflowStatusCode)[keyof typeof ProductWorkflowStatusCode];
 
 const ALL_OFFERINGS: ProductOfferingTypes[] = [
 	'Liferay PaaS',
@@ -113,39 +74,8 @@ const offeringTypes: Record<string, ProductOfferingTypes[]> = {
 	'other': ALL_OFFERINGS,
 };
 
-export const ProductTypeLabels = {
-	'ai-hub': 'AI Hub',
-	'client-extension': 'Client Extension',
-	'cloud': 'Cloud',
-	'composite-app': 'Composite App',
-	'dxp': 'DXP',
-	'low-code-configuration': 'Low-Code Configuration',
-	'other': 'Other',
-	'ssa-saas': 'SSA SaaS',
-} as const;
 
-export const ProductTypeLicenseOptions: Record<string, ProductLicenseTier[]> = {
-	'ai-hub': ['standard'],
-	'client-extension': ['standard'],
-	'cloud': ['standard'],
-	'composite-app': ['standard'],
-	'dxp': ['standard', 'developer', 'trial'],
-	'low-code-configuration': ['standard'],
-	'other': ['standard'],
-	'ssa-saas': ['standard'],
-};
 
-export const ProductWorkflowDisplayType = {
-	[ProductWorkflowStatusCode.APPROVED]: 'success',
-	[ProductWorkflowStatusCode.DRAFT]: 'secondary',
-	[ProductWorkflowStatusCode.PENDING]: 'warning',
-};
-
-export const ProductWorkflowStatusLabel = {
-	[ProductWorkflowStatusCode.APPROVED]: i18n.translate('approved'),
-	[ProductWorkflowStatusCode.DRAFT]: i18n.translate('draft'),
-	[ProductWorkflowStatusCode.PENDING]: i18n.translate('under-review'),
-};
 
 export function getOfferingTypes(type: ProductType) {
 	return offeringTypes[type];
