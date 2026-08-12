@@ -11,7 +11,7 @@ import {ALLOWED_MIME_TYPES, PUBLISH_APP_UPLOAD_MAX_SIZE} from '~/enums/File';
 import i18n from '~/i18n';
 import {Liferay} from '~/services/liferay/liferay';
 import {ProductType} from '~/utils/productUtils';
-import {getRandomID} from '~/utils/string';
+import {getRandomID} from '~/utils/stringUtils';
 
 type NewAppUploadAppPackagesComponentProps = {
 	isProcessing: boolean;

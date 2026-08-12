@@ -7,7 +7,7 @@ import ClayButton from '@clayui/button';
 import {useModal} from '@clayui/core';
 import {LicensingPrices, useNewAppContext} from '~/context/NewAppContext';
 import i18n from '~/i18n';
-import {currenciesCode} from '~/utils/currencies';
+import {currenciesCode} from '~/utils/currencyUtils';
 
 import LicensePricePanel from '../../components/LicensePricePanel';
 import CurrencyModal from './components/CurrencyModal';

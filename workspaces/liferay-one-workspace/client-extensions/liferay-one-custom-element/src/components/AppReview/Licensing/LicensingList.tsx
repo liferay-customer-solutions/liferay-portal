@@ -4,14 +4,13 @@
  */
 
 import ClayIcon from '@clayui/icon';
-import {LICENSING_OPTIONS} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
-import {currenciesCode, formatCurrency} from '~/utils/currencies';
-import {ProductPriceModel} from '~/utils/productUtils';
-
 import {
 	LicensingPrices,
 	NewAppInitialState,
 } from '~/context/NewAppContext';
+import {LICENSING_OPTIONS} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
+import {currenciesCode, formatCurrency} from '~/utils/currencyUtils';
+import {ProductPriceModel} from '~/utils/productUtils';
 
 type LicensePricesProps = {
 	currency: any;

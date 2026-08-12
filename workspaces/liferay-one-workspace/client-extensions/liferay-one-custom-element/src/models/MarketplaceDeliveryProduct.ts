@@ -4,7 +4,7 @@
  */
 
 import {ProductType, ProductVocabulary} from '~/enums/Product';
-import {ProductTypeLabels} from '~/utils/productUtils';
+import {ConsoleUserProject} from '~/services/spring-boot/types';
 import {
 	ProductLicense,
 	ProductLicenseFriendlyName,
@@ -14,10 +14,10 @@ import {
 	ProductTags,
 	getProductSpecificationValue,
 } from '~/utils/productUtils';
+import {ProductTypeLabels} from '~/utils/productUtils';
 
 import i18n from '../i18n';
-import {ConsoleUserProject} from '~/services/spring-boot/types';
-import {safeJSONParse} from '../utils/util';
+import {safeJSONParse} from '~/utils/publishUtils';
 
 import type {DeliveryProduct} from '~/types/product';
 

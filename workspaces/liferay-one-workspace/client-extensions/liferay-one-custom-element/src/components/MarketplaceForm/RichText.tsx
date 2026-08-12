@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import {useState} from 'react';
 import ReactQuill from 'react-quill';
 
-import {removeHTMLTags} from '../../utils/string';
+import {removeHTMLTags} from '~/utils/stringUtils';
 
 type RichTextProps = {
 	maxLength?: number;

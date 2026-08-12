@@ -14,3 +14,28 @@ export function normalizeURLProtocol(url = '') {
 export function removeHTMLTags(text: string) {
 	return text.replace(/<\/?[^>]+(>|$)/g, '');
 }
+
+export function getRandomID() {
+	try {
+		return crypto.randomUUID();
+	}
+	catch {
+		return `liferay-${Math.random()}`.replace('.', '-');
+	}
+}
+
+export function removeUnnecessaryURLString(text: string) {
+	const index = text.indexOf('/o');
+
+	return text.substring(index);
+}
+
+export function sanitizeStringForURL(text: string) {
+	return text
+		.toLowerCase()
+		.trim()
+		.replace(/[^a-z0-9\s-]/g, '')
+		.replace(/\s+/g, '-')
+		.replace(/-+/g, '-')
+		.replace(/^-|-$/g, '');
+}

@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import type {ActionMap} from '~/types/actionMap';
-import type {Product} from '~/types/product';
 import {
 	ReactNode,
 	createContext,
@@ -24,7 +22,10 @@ import {
 
 import {breadcrumbStore} from '../components/Breadcrumb/BreadcrumbStore';
 import {UploadedFile} from '../components/FileList/FileList';
-import {safeJSONParse} from '../utils/util';
+import {safeJSONParse} from '~/utils/publishUtils';
+
+import type {ActionMap} from '~/types/actionMap';
+import type {Product} from '~/types/product';
 
 export enum BlockDirections {
 	DELETE,

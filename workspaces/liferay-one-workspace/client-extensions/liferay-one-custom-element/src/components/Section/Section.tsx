@@ -5,7 +5,6 @@
 
 import classNames from 'classnames';
 import {ReactNode} from 'react';
-
 import {Tooltip} from '~/components/Tooltip/Tooltip';
 
 type SectionProps = {

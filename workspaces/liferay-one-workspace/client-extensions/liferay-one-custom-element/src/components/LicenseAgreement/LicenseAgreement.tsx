@@ -6,7 +6,7 @@
 import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import i18n from '~/i18n';
-import {getSiteName} from '~/utils/site';
+import {getSiteName} from '~/utils/siteUtils';
 
 import './LicenseAgreement.scss';
 

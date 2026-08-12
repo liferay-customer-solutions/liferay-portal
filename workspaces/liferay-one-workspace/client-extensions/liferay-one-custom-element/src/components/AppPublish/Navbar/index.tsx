@@ -14,7 +14,7 @@ import {
 } from '~/utils/productUtils';
 
 import i18n from '../../../i18n';
-import {getAccountImage} from '../../../utils/util';
+import {getAccountImage} from '~/utils/publishUtils';
 
 import './index.scss';
 

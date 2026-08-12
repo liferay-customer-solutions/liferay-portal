@@ -14,3 +14,5 @@ export function swapElements<T>(
 
 	return array;
 }
+
+export default swapElements;

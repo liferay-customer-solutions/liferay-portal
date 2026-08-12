@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-
-import type {PriceEntry, Product, ProductCategories, TierPrice} from '~/types/product';
 import SearchBuilder from '~/utils/SearchBuilder';
-import {base64ToText, fileToBase64} from '~/utils/file';
+import {Properties} from '~/utils/attributeUtils';
+import {base64ToText, fileToBase64} from '~/utils/fileUtils';
 import {
 	ProductLicense,
 	ProductOfferingTypes,
@@ -21,11 +20,12 @@ import {
 } from '~/utils/productUtils';
 
 import {NewAppInitialState} from '../../context/NewAppContext';
-import {Properties} from '~/utils/attributeUtils';
 import HeadlessCommerceAdminCatalogImpl from '../headless/HeadlessCommerceAdminCatalog';
 import HeadlessCommerceAdminPricing from '../headless/HeadlessCommerceAdminPricing';
 import BaseAppPublish from './BaseAppPublish';
 import PublisherAsset from './PublisherAsset';
+
+import type {PriceEntry, Product, ProductCategories, TierPrice} from '~/types/product';
 
 export type ProductConfig = {
 	isDraft: boolean;
