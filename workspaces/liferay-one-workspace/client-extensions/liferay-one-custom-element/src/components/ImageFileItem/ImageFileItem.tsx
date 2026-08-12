@@ -27,7 +27,7 @@ type ImageFileItemProps = {
 	position: number;
 	tooltip?: string;
 	uploadedFile: UploadedFile;
-	uploadedImages: any;
+	uploadedImages: UploadedFile[];
 	versionName?: string;
 };
 

@@ -126,8 +126,8 @@ const CurrencyModal = ({observer, onClose}: ReturnType<typeof useModal>) => {
 						),
 						itemSelected: i18n.translate('x-selected'),
 					}}
-					onSelectionChange={(key: any) =>
-						setSelectedNewCurrency(key)
+					onSelectionChange={(key: React.Key) =>
+						setSelectedNewCurrency(String(key))
 					}
 					width={200}
 				>

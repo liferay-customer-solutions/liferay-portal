@@ -10,7 +10,7 @@ import {removeHTMLTags} from '~/utils/stringUtils';
 
 type RichTextProps = {
 	maxLength?: number;
-	onChange: (value: any) => void;
+	onChange: (value: string) => void;
 	placeholder?: string;
 	value: string;
 };
@@ -25,7 +25,7 @@ const MarketplaceFormRichText: React.FC<RichTextProps> = ({
 }) => {
 	const [validate, setValidate] = useState(false);
 
-	function handleKeyDown(event: any) {
+	function handleKeyDown(event: React.KeyboardEvent) {
 		setValidate(false);
 
 		const text = removeHTMLTags(value);

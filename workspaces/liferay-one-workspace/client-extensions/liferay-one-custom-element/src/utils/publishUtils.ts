@@ -317,7 +317,7 @@ export async function submitBase64EncodedFile({
 	});
 }
 
-export function safeJSONParse<T = any>(
+export function safeJSONParse<T = unknown>(
 	value: string | null,
 	defaultValue: T
 ): T {

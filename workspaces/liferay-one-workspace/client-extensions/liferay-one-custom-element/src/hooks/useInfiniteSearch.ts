@@ -12,7 +12,7 @@ import type {APIResponse} from '~/types/api';
 
 const getKey =
 	(search: string, searchKey: string) =>
-	(pageIndex: number, previousData: any) => {
+	(pageIndex: number, previousData: APIResponse | null) => {
 		if (previousData && previousData.lastPage === pageIndex) {
 			return null;
 		}
