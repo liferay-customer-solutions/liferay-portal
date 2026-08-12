@@ -2,6 +2,20 @@
 	"entitlements": [
 		{
 			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_ENTERPRISE_PLAN_DOCUMENT_LIBRARY_SIZE",
+			"grantType": "fixed",
+			"maxQuantity": 300,
+			"name": "document-library-size",
+			"quantity": 300,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-010",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_ENTERPRISE_PLAN_DXP",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_ENTERPRISE_PLAN",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_ENTERPRISE_DOCUMENT_LIBRARY_SIZE",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-010",
+			"startDate": "2025-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
 			"externalReferenceCode": "C_ENT_ENTERPRISE_PLAN_DXP",
 			"grantType": "fixed",
 			"maxQuantity": 1,
@@ -12,7 +26,61 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_ENTERPRISE_PLAN",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_ENTERPRISE_PLAN",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-010",
-			"startDate": "2026-08-09T00:00:00Z"
+			"startDate": "2025-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_ENTERPRISE_PLAN_MARKER",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "liferay-saas-enterprise",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-010",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_ENTERPRISE_PLAN_DXP",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_ENTERPRISE_PLAN",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_ENTERPRISE_MARKER",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-010",
+			"startDate": "2025-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_ENTERPRISE_PLAN_RAM",
+			"grantType": "fixed",
+			"maxQuantity": 6,
+			"name": "ram",
+			"quantity": 6,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-010",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_ENTERPRISE_PLAN_DXP",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_ENTERPRISE_PLAN",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_ENTERPRISE_RAM",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-010",
+			"startDate": "2025-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_ENTERPRISE_PLAN_SITES",
+			"grantType": "unlimited",
+			"name": "sites",
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-010",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_ENTERPRISE_PLAN_DXP",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_ENTERPRISE_PLAN",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_ENTERPRISE_SITES",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-010",
+			"startDate": "2025-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_ENTERPRISE_PLAN_VCPU",
+			"grantType": "fixed",
+			"maxQuantity": 12,
+			"name": "vcpu",
+			"quantity": 12,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-010",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_ENTERPRISE_PLAN_DXP",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_ENTERPRISE_PLAN",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_ENTERPRISE_VCPU",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-010",
+			"startDate": "2025-08-09T00:00:00Z"
 		}
 	],
 	"licenseKeys": [

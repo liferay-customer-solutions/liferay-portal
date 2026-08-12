@@ -689,12 +689,6 @@
 					}
 				},
 				{
-					"specificationKey": "project-utilization-profile",
-					"value": {
-						"en_US": "saas-dashboard"
-					}
-				},
-				{
 					"specificationKey": "product-family",
 					"value": {
 						"en_US": "Liferay Customer Management Platform (Subscription)"
@@ -1987,7 +1981,7 @@
 				{
 					"specificationKey": "project-utilization-profile",
 					"value": {
-						"en_US": "paas-dashboard"
+						"en_US": "experience-dashboard"
 					}
 				},
 				{
@@ -2012,101 +2006,6 @@
 					"published": true,
 					"purchasable": true,
 					"sku": "PRDCT-PAAS"
-				}
-			]
-		},
-		{
-			"active": true,
-			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
-			"categories": [
-				{
-					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
-				}
-			],
-			"description": {
-				"en_US": "Liferay PaaS Experience subscription for testing the activation status card."
-			},
-			"externalReferenceCode": "PRDCT-PAAS-EXPERIENCE",
-			"name": {
-				"en_US": "Liferay PaaS Experience"
-			},
-			"productSpecifications": [
-				{
-					"specificationKey": "publisher-name",
-					"value": {
-						"en_US": "Liferay, Inc."
-					}
-				},
-				{
-					"specificationKey": "price-model",
-					"value": {
-						"en_US": "Paid"
-					}
-				},
-				{
-					"specificationKey": "liferay-products-categories",
-					"value": {
-						"en_US": "Platform"
-					}
-				},
-				{
-					"specificationKey": "product-icon",
-					"value": {
-						"en_US": "cloud"
-					}
-				},
-				{
-					"specificationKey": "type",
-					"value": {
-						"en_US": "cloud"
-					}
-				},
-				{
-					"specificationKey": "project-activation-profile",
-					"value": {
-						"en_US": "status"
-					}
-				},
-				{
-					"specificationKey": "project-details-profile",
-					"value": {
-						"en_US": "paas"
-					}
-				},
-				{
-					"specificationKey": "project-environment-profile",
-					"value": {
-						"en_US": "paas"
-					}
-				},
-				{
-					"specificationKey": "project-utilization-profile",
-					"value": {
-						"en_US": "paas-dashboard"
-					}
-				},
-				{
-					"specificationKey": "project-contacts-role-ercs",
-					"value": {
-						"en_US": "C_CRITICAL_INCIDENT_CONTACT,C_PAAS_USER"
-					}
-				},
-				{
-					"specificationKey": "product-family",
-					"value": {
-						"en_US": "Liferay PaaS (Subscription)"
-					}
-				}
-			],
-			"productType": "virtual",
-			"skus": [
-				{
-					"externalReferenceCode": "PRDCT-PAAS-EXPERIENCE",
-					"neverExpire": true,
-					"price": 0,
-					"published": true,
-					"purchasable": true,
-					"sku": "PRDCT-PAAS-EXPERIENCE"
 				}
 			]
 		},
@@ -2177,7 +2076,7 @@
 				{
 					"specificationKey": "project-utilization-profile",
 					"value": {
-						"en_US": "paas-dashboard"
+						"en_US": "experience-dashboard"
 					}
 				},
 				{
@@ -2984,7 +2883,7 @@
 				{
 					"specificationKey": "project-utilization-profile",
 					"value": {
-						"en_US": "saas-dashboard"
+						"en_US": "experience-dashboard"
 					}
 				},
 				{
@@ -3009,6 +2908,47 @@
 					"published": true,
 					"purchasable": true,
 					"sku": "PRDCT-SAAS"
+				}
+			]
+		},
+		{
+			"active": true,
+			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
+			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
+				}
+			],
+			"description": {
+				"en_US": "APV tier add-on for testing the anonymous page views limit on SaaS plan dashboards."
+			},
+			"externalReferenceCode": "PRDCT-SAAS-APV-1M",
+			"name": {
+				"en_US": "Liferay SaaS - Entitlements for up to 1,000,000 APVs"
+			},
+			"productSpecifications": [
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "price-model",
+					"value": {
+						"en_US": "Paid"
+					}
+				}
+			],
+			"productType": "virtual",
+			"skus": [
+				{
+					"externalReferenceCode": "PRDCT-SAAS-APV-1M",
+					"neverExpire": true,
+					"price": 0,
+					"published": true,
+					"purchasable": true,
+					"sku": "PRDCT-SAAS-APV-1M"
 				}
 			]
 		},
@@ -3079,7 +3019,7 @@
 				{
 					"specificationKey": "project-utilization-profile",
 					"value": {
-						"en_US": "saas-dashboard"
+						"en_US": "saas-plan-dashboard"
 					}
 				},
 				{
@@ -3174,7 +3114,7 @@
 				{
 					"specificationKey": "project-utilization-profile",
 					"value": {
-						"en_US": "saas-dashboard"
+						"en_US": "saas-plan-dashboard"
 					}
 				},
 				{
@@ -3207,15 +3147,15 @@
 			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
 			"categories": [
 				{
-					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
 				}
 			],
 			"description": {
-				"en_US": "Liferay SaaS Experience subscription for testing the activation status card."
+				"en_US": "Extra document library storage add-on for testing entitlement aggregation on SaaS plan dashboards."
 			},
-			"externalReferenceCode": "PRDCT-SAAS-EXPERIENCE",
+			"externalReferenceCode": "PRDCT-SAAS-EXTRA-STORAGE-DL",
 			"name": {
-				"en_US": "Liferay SaaS Experience"
+				"en_US": "Liferay SaaS - 100GB Extra Storage (Document Library)"
 			},
 			"productSpecifications": [
 				{
@@ -3229,71 +3169,17 @@
 					"value": {
 						"en_US": "Paid"
 					}
-				},
-				{
-					"specificationKey": "liferay-products-categories",
-					"value": {
-						"en_US": "Platform"
-					}
-				},
-				{
-					"specificationKey": "product-icon",
-					"value": {
-						"en_US": "cloud"
-					}
-				},
-				{
-					"specificationKey": "type",
-					"value": {
-						"en_US": "cloud"
-					}
-				},
-				{
-					"specificationKey": "project-activation-profile",
-					"value": {
-						"en_US": "status"
-					}
-				},
-				{
-					"specificationKey": "project-details-profile",
-					"value": {
-						"en_US": "saas"
-					}
-				},
-				{
-					"specificationKey": "project-environment-profile",
-					"value": {
-						"en_US": "saas"
-					}
-				},
-				{
-					"specificationKey": "project-utilization-profile",
-					"value": {
-						"en_US": "saas-dashboard"
-					}
-				},
-				{
-					"specificationKey": "project-contacts-role-ercs",
-					"value": {
-						"en_US": "C_CRITICAL_INCIDENT_CONTACT,C_DATA_BREACH_CONTACT,C_SECURITY_INCIDENT_CONTACT"
-					}
-				},
-				{
-					"specificationKey": "product-family",
-					"value": {
-						"en_US": "Liferay SaaS (Subscription)"
-					}
 				}
 			],
 			"productType": "virtual",
 			"skus": [
 				{
-					"externalReferenceCode": "PRDCT-SAAS-EXPERIENCE",
+					"externalReferenceCode": "PRDCT-SAAS-EXTRA-STORAGE-DL",
 					"neverExpire": true,
 					"price": 0,
 					"published": true,
 					"purchasable": true,
-					"sku": "PRDCT-SAAS-EXPERIENCE"
+					"sku": "PRDCT-SAAS-EXTRA-STORAGE-DL"
 				}
 			]
 		},
@@ -3302,7 +3188,7 @@
 			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
 			"categories": [
 				{
-					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
 				}
 			],
 			"description": {
@@ -3364,7 +3250,7 @@
 				{
 					"specificationKey": "project-utilization-profile",
 					"value": {
-						"en_US": "saas-dashboard"
+						"en_US": "legacy"
 					}
 				},
 				{
@@ -3383,6 +3269,142 @@
 					"published": true,
 					"purchasable": true,
 					"sku": "PRDCT-SAAS-LEGACY"
+				}
+			]
+		},
+		{
+			"active": true,
+			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
+			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_PRODUCT"
+				}
+			],
+			"description": {
+				"en_US": "MALU tier add-on for testing the monthly active logged-in users limit on SaaS plan dashboards."
+			},
+			"externalReferenceCode": "PRDCT-SAAS-MALU-2500",
+			"name": {
+				"en_US": "Liferay SaaS - Entitlements for up to 2,500 MALUs"
+			},
+			"productSpecifications": [
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "price-model",
+					"value": {
+						"en_US": "Paid"
+					}
+				}
+			],
+			"productType": "virtual",
+			"skus": [
+				{
+					"externalReferenceCode": "PRDCT-SAAS-MALU-2500",
+					"neverExpire": true,
+					"price": 0,
+					"published": true,
+					"purchasable": true,
+					"sku": "PRDCT-SAAS-MALU-2500"
+				}
+			]
+		},
+		{
+			"active": true,
+			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
+			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
+				}
+			],
+			"description": {
+				"en_US": "Liferay SaaS Pro plan for testing the Utilization dashboard."
+			},
+			"externalReferenceCode": "PRDCT-SAAS-PRO-PLAN",
+			"name": {
+				"en_US": "Liferay SaaS - Pro Plan"
+			},
+			"productSpecifications": [
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "price-model",
+					"value": {
+						"en_US": "Paid"
+					}
+				},
+				{
+					"specificationKey": "liferay-products-categories",
+					"value": {
+						"en_US": "Platform"
+					}
+				},
+				{
+					"specificationKey": "product-icon",
+					"value": {
+						"en_US": "cloud"
+					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "cloud"
+					}
+				},
+				{
+					"specificationKey": "project-activation-profile",
+					"value": {
+						"en_US": "status"
+					}
+				},
+				{
+					"specificationKey": "project-details-profile",
+					"value": {
+						"en_US": "saas"
+					}
+				},
+				{
+					"specificationKey": "project-environment-profile",
+					"value": {
+						"en_US": "saas"
+					}
+				},
+				{
+					"specificationKey": "project-utilization-profile",
+					"value": {
+						"en_US": "saas-plan-dashboard"
+					}
+				},
+				{
+					"specificationKey": "project-contacts-role-ercs",
+					"value": {
+						"en_US": "C_CRITICAL_INCIDENT_CONTACT,C_DATA_BREACH_CONTACT,C_SECURITY_INCIDENT_CONTACT"
+					}
+				},
+				{
+					"specificationKey": "product-family",
+					"value": {
+						"en_US": "LXC (Subscription)"
+					}
+				}
+			],
+			"productType": "virtual",
+			"skus": [
+				{
+					"externalReferenceCode": "PRDCT-SAAS-PRO-PLAN",
+					"neverExpire": true,
+					"price": 0,
+					"published": true,
+					"purchasable": true,
+					"sku": "PRDCT-SAAS-PRO-PLAN"
 				}
 			]
 		},

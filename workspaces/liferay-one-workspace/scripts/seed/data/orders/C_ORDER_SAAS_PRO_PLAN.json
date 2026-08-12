@@ -1,0 +1,94 @@
+{
+	"entitlements": [
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_PRO_PLAN_DOCUMENT_LIBRARY_SIZE",
+			"grantType": "fixed",
+			"maxQuantity": 50,
+			"name": "document-library-size",
+			"quantity": 50,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-009",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_SAAS_PRO_PLAN",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PRO_PLAN",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_PRO_DOCUMENT_LIBRARY_SIZE",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-009",
+			"startDate": "2025-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_PRO_PLAN_MARKER",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "liferay-saas-pro",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-009",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_SAAS_PRO_PLAN",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PRO_PLAN",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_PRO_MARKER",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-009",
+			"startDate": "2025-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_PRO_PLAN_RAM",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "ram",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-009",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_SAAS_PRO_PLAN",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PRO_PLAN",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_PRO_RAM",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-009",
+			"startDate": "2025-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_PRO_PLAN_SITES",
+			"grantType": "fixed",
+			"maxQuantity": 2,
+			"name": "sites",
+			"quantity": 2,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-009",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_SAAS_PRO_PLAN",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PRO_PLAN",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_PRO_SITES",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-009",
+			"startDate": "2025-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_PRO_PLAN_VCPU",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "vcpu",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-009",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_SAAS_PRO_PLAN",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PRO_PLAN",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_PRO_VCPU",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-009",
+			"startDate": "2025-08-09T00:00:00Z"
+		}
+	],
+	"order": {
+		"accountExternalReferenceCode": "ACCNT-009",
+		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
+		"contractExternalReferenceCode": "C_CONTRACT_PRO_PLAN",
+		"currencyCode": "USD",
+		"externalReferenceCode": "C_ORDER_SAAS_PRO_PLAN",
+		"orderItems": [
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_SAAS_PRO_PLAN",
+				"name": "Liferay SaaS - Pro Plan",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-SAAS-PRO-PLAN",
+				"unitPrice": 0
+			}
+		],
+		"orderStatus": 5,
+		"orderTypeExternalReferenceCode": "DXP",
+		"projectExternalReferenceCode": "PRJCT-009"
+	},
+	"purchaseOrderNumber": "PO-SAAS-PRO-PLAN"
+}

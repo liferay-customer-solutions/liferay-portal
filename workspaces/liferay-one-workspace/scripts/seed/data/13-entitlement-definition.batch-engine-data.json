@@ -182,6 +182,39 @@
 		},
 		{
 			"active": true,
+			"defaultQuantity": 100,
+			"displayName": "Database",
+			"externalReferenceCode": "C_ENT_DEF_PAAS_DATABASE",
+			"grantType": "fixed",
+			"name": "database",
+			"productOptions": "{\"machineType\": \"standard\"}",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS",
+			"unit": "GiB"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 2,
+			"displayName": "Extensions RAM",
+			"externalReferenceCode": "C_ENT_DEF_PAAS_EXTENSIONS_RAM",
+			"grantType": "fixed",
+			"name": "extensions-ram",
+			"productOptions": "{\"machineType\": \"standard\"}",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS",
+			"unit": "GiB"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 3,
+			"displayName": "Extensions vCPUs",
+			"externalReferenceCode": "C_ENT_DEF_PAAS_EXTENSIONS_VCPUS",
+			"grantType": "fixed",
+			"name": "extensions-vcpus",
+			"productOptions": "{\"machineType\": \"standard\"}",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS",
+			"unit": "vCPU"
+		},
+		{
+			"active": true,
 			"defaultQuantity": 1,
 			"displayName": "PaaS (Legacy)",
 			"externalReferenceCode": "C_ENT_DEF_PAAS_LEGACY",
@@ -189,6 +222,39 @@
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS-LEGACY",
 			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 300,
+			"displayName": "Logs",
+			"externalReferenceCode": "C_ENT_DEF_PAAS_LOGS",
+			"grantType": "fixed",
+			"name": "logs",
+			"productOptions": "{\"machineType\": \"standard\"}",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS",
+			"unit": "GiB"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Storage",
+			"externalReferenceCode": "C_ENT_DEF_PAAS_STORAGE",
+			"grantType": "fixed",
+			"name": "storage",
+			"productOptions": "{\"machineType\": \"standard\"}",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS",
+			"unit": "TiB"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Traffic Networking",
+			"externalReferenceCode": "C_ENT_DEF_PAAS_TRAFFIC_NETWORKING",
+			"grantType": "fixed",
+			"name": "traffic-networking",
+			"productOptions": "{\"machineType\": \"standard\"}",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS",
+			"unit": "TiB"
 		},
 		{
 			"active": true,
@@ -312,12 +378,102 @@
 		},
 		{
 			"active": true,
+			"defaultQuantity": 1000000,
+			"displayName": "APV",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_APV_1M",
+			"grantType": "fixed",
+			"name": "apv",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-APV-1M"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 100,
+			"displayName": "Document Library Size",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_BUSINESS_DOCUMENT_LIBRARY_SIZE",
+			"grantType": "fixed",
+			"name": "document-library-size",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-BUSINESS-PLAN",
+			"unit": "GB"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Liferay SaaS - Business",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_BUSINESS_MARKER",
+			"grantType": "fixed",
+			"name": "liferay-saas-business",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-BUSINESS-PLAN",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
 			"defaultQuantity": 1,
 			"displayName": "Liferay SaaS - Business Plan",
 			"externalReferenceCode": "C_ENT_DEF_SAAS_BUSINESS_PLAN",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-BUSINESS-PLAN",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 4,
+			"displayName": "RAM",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_BUSINESS_RAM",
+			"grantType": "fixed",
+			"name": "ram",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-BUSINESS-PLAN",
+			"unit": "GB"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 15,
+			"displayName": "Sites",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_BUSINESS_SITES",
+			"grantType": "fixed",
+			"name": "sites",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-BUSINESS-PLAN",
+			"unit": "count"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 8,
+			"displayName": "vCPU",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_BUSINESS_VCPU",
+			"grantType": "fixed",
+			"name": "vcpu",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-BUSINESS-PLAN",
+			"unit": "vCPU"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 100,
+			"displayName": "Database",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_DATABASE",
+			"grantType": "fixed",
+			"name": "database",
+			"productOptions": "{\"machineType\": \"standard\"}",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS",
+			"unit": "GiB"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 300,
+			"displayName": "Document Library Size",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_ENTERPRISE_DOCUMENT_LIBRARY_SIZE",
+			"grantType": "fixed",
+			"name": "document-library-size",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-ENTERPRISE-PLAN",
+			"unit": "GB"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Liferay SaaS - Enterprise",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_ENTERPRISE_MARKER",
+			"grantType": "fixed",
+			"name": "liferay-saas-enterprise",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-ENTERPRISE-PLAN",
 			"unit": "boolean"
 		},
 		{
@@ -332,6 +488,68 @@
 		},
 		{
 			"active": true,
+			"defaultQuantity": 6,
+			"displayName": "RAM",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_ENTERPRISE_RAM",
+			"grantType": "fixed",
+			"name": "ram",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-ENTERPRISE-PLAN",
+			"unit": "GB"
+		},
+		{
+			"active": true,
+			"defaultQuantity": null,
+			"displayName": "Sites",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_ENTERPRISE_SITES",
+			"grantType": "unlimited",
+			"name": "sites",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-ENTERPRISE-PLAN",
+			"unit": "count"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 12,
+			"displayName": "vCPU",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_ENTERPRISE_VCPU",
+			"grantType": "fixed",
+			"name": "vcpu",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-ENTERPRISE-PLAN",
+			"unit": "vCPU"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 2,
+			"displayName": "Extensions RAM",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_EXTENSIONS_RAM",
+			"grantType": "fixed",
+			"name": "extensions-ram",
+			"productOptions": "{\"machineType\": \"standard\"}",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS",
+			"unit": "GiB"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 3,
+			"displayName": "Extensions vCPUs",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_EXTENSIONS_VCPUS",
+			"grantType": "fixed",
+			"name": "extensions-vcpus",
+			"productOptions": "{\"machineType\": \"standard\"}",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS",
+			"unit": "vCPU"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 100,
+			"displayName": "Document Library Size",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_EXTRA_STORAGE_DL",
+			"grantType": "fixed",
+			"name": "document-library-size",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-EXTRA-STORAGE-DL",
+			"unit": "GB"
+		},
+		{
+			"active": true,
 			"defaultQuantity": 1,
 			"displayName": "SaaS (Legacy)",
 			"externalReferenceCode": "C_ENT_DEF_SAAS_LEGACY",
@@ -339,6 +557,98 @@
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-LEGACY",
 			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 300,
+			"displayName": "Logs",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_LOGS",
+			"grantType": "fixed",
+			"name": "logs",
+			"productOptions": "{\"machineType\": \"standard\"}",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS",
+			"unit": "GiB"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 2500,
+			"displayName": "MALU",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_MALU_2500",
+			"grantType": "fixed",
+			"name": "malu",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-MALU-2500"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 50,
+			"displayName": "Document Library Size",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_PRO_DOCUMENT_LIBRARY_SIZE",
+			"grantType": "fixed",
+			"name": "document-library-size",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-PRO-PLAN",
+			"unit": "GB"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Liferay SaaS - Pro",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_PRO_MARKER",
+			"grantType": "fixed",
+			"name": "liferay-saas-pro",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-PRO-PLAN",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "RAM",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_PRO_RAM",
+			"grantType": "fixed",
+			"name": "ram",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-PRO-PLAN",
+			"unit": "GB"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 2,
+			"displayName": "Sites",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_PRO_SITES",
+			"grantType": "fixed",
+			"name": "sites",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-PRO-PLAN",
+			"unit": "count"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "vCPU",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_PRO_VCPU",
+			"grantType": "fixed",
+			"name": "vcpu",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-PRO-PLAN",
+			"unit": "vCPU"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Storage",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_STORAGE",
+			"grantType": "fixed",
+			"name": "storage",
+			"productOptions": "{\"machineType\": \"standard\"}",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS",
+			"unit": "TiB"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Traffic Networking",
+			"externalReferenceCode": "C_ENT_DEF_SAAS_TRAFFIC_NETWORKING",
+			"grantType": "fixed",
+			"name": "traffic-networking",
+			"productOptions": "{\"machineType\": \"standard\"}",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS",
+			"unit": "TiB"
 		},
 		{
 			"active": true,

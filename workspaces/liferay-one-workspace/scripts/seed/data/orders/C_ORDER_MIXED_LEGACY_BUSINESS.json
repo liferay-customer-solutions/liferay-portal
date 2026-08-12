@@ -1,0 +1,115 @@
+{
+	"entitlements": [
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_MIXED_LEGACY_BUSINESS_DOCUMENT_LIBRARY_SIZE",
+			"grantType": "fixed",
+			"maxQuantity": 100,
+			"name": "document-library-size",
+			"quantity": 100,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-002",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_LEGACY_BUSINESS_BUSINESS",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_DOCUMENT_LIBRARY_SIZE",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-032",
+			"startDate": "2025-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_MIXED_LEGACY_BUSINESS_LICENSE_GENERATION",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "licenseGeneration",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-002",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_LEGACY_BUSINESS_LEGACY",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_LEGACY",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-032",
+			"startDate": "2025-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_MIXED_LEGACY_BUSINESS_MARKER",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "liferay-saas-business",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-002",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_LEGACY_BUSINESS_BUSINESS",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_MARKER",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-032",
+			"startDate": "2025-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_MIXED_LEGACY_BUSINESS_RAM",
+			"grantType": "fixed",
+			"maxQuantity": 4,
+			"name": "ram",
+			"quantity": 4,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-002",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_LEGACY_BUSINESS_BUSINESS",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_RAM",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-032",
+			"startDate": "2025-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_MIXED_LEGACY_BUSINESS_SITES",
+			"grantType": "fixed",
+			"maxQuantity": 15,
+			"name": "sites",
+			"quantity": 15,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-002",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_LEGACY_BUSINESS_BUSINESS",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_SITES",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-032",
+			"startDate": "2025-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_MIXED_LEGACY_BUSINESS_VCPU",
+			"grantType": "fixed",
+			"maxQuantity": 8,
+			"name": "vcpu",
+			"quantity": 8,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-002",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_LEGACY_BUSINESS_BUSINESS",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_VCPU",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-032",
+			"startDate": "2025-08-09T00:00:00Z"
+		}
+	],
+	"order": {
+		"accountExternalReferenceCode": "ACCNT-002",
+		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
+		"contractExternalReferenceCode": "C_CONTRACT_BUSINESS_PLAN",
+		"currencyCode": "USD",
+		"externalReferenceCode": "C_ORDER_MIXED_LEGACY_BUSINESS",
+		"orderItems": [
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_MIXED_LEGACY_BUSINESS_BUSINESS",
+				"name": "Liferay SaaS - Business Plan",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-SAAS-BUSINESS-PLAN",
+				"unitPrice": 0
+			},
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_MIXED_LEGACY_BUSINESS_LEGACY",
+				"name": "SaaS (Legacy)",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-SAAS-LEGACY",
+				"unitPrice": 0
+			}
+		],
+		"orderStatus": 5,
+		"orderTypeExternalReferenceCode": "DXP",
+		"projectExternalReferenceCode": "PRJCT-032"
+	},
+	"purchaseOrderNumber": "PO-MIXED-LEGACY-BUSINESS"
+}

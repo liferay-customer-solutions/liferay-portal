@@ -164,6 +164,21 @@
 			"externalReferenceCode": "PRJCT-030",
 			"name": "No Contract Project",
 			"r_accountEntryToProject_accountEntryERC": "ACCNT-030"
+		},
+		{
+			"externalReferenceCode": "PRJCT-031",
+			"name": "SaaS Experience Project Without Entitlements",
+			"r_accountEntryToProject_accountEntryERC": "ACCNT-002"
+		},
+		{
+			"externalReferenceCode": "PRJCT-032",
+			"name": "Mixed Legacy And Business Plan Project",
+			"r_accountEntryToProject_accountEntryERC": "ACCNT-002"
+		},
+		{
+			"externalReferenceCode": "PRJCT-033",
+			"name": "Mixed Business Plan And PaaS Project",
+			"r_accountEntryToProject_accountEntryERC": "ACCNT-004"
 		}
 	]
 }
