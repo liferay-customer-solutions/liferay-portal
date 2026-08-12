@@ -174,12 +174,14 @@ export default class PublisherAsset {
 				);
 			}
 		}
-		catch {
+		catch (error) {
 			Liferay.Util.openToast({
 				message:
 					'Something went wrong when trying to upload a new package',
 				type: 'danger',
 			});
+
+			throw error;
 		}
 	}
 }
