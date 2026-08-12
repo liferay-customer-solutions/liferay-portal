@@ -32,7 +32,7 @@ import {Liferay} from '~/services/liferay/liferay';
 import trialOAuth2 from '~/services/spring-boot/Trial';
 import {OrderCustomFields, OrderWorkflowStatusCode} from '~/utils/orderUtils';
 
-import Form from './MarketplaceForm/MarketplaceForm';
+import Form from '~/components/MarketplaceForm/MarketplaceForm';
 
 import type {APIResponse} from '~/types/api';
 import type {Cart, PlacedOrder} from '~/types/orders';
