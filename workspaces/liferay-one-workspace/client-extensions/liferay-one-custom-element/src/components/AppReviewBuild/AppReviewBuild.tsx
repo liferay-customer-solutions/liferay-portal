@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import type {UploadedFile} from '~/components/FileList/FileList';
 import ClayIcon from '@clayui/icon';
 import {AppReviewProps} from '~/components/AppReview/AppReview';
 import AppReviewSection from '~/components/AppReviewSection/AppReviewSection';
@@ -83,12 +84,7 @@ const AppReviewBuild = ({
 										</div>
 										<div className="d-flex flex-column">
 											{liferayPackage.file.map(
-												(packageFile: {
-													fileName?: string;
-													id: string;
-													readableSize?: string;
-													src?: string;
-												}) => {
+												(packageFile: UploadedFile) => {
 													return (
 														<div
 															key={packageFile.id}
@@ -102,9 +98,10 @@ const AppReviewBuild = ({
 																}
 															/>
 															<small className="document-file-list-item-left-content-text-file-size ml-3">
-																{
-																	packageFile?.readableSize
-																}
+																{String(
+																	packageFile?.readableSize ??
+																		''
+																)}
 															</small>
 														</div>
 													);

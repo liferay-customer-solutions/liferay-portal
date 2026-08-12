@@ -42,10 +42,10 @@ type TemporaryData = {
 
 function normalizeCategory(category: {
 	label: string;
-	value: number;
+	value: number | string;
 }): Partial<ProductCategories> {
 	return {
-		id: category.value,
+		id: Number(category.value),
 		name: category.label,
 	};
 }

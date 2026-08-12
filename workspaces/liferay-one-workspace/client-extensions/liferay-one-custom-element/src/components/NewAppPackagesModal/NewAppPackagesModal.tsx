@@ -149,7 +149,7 @@ export function NewAppPackagesModal({
 										liferayPackages: [
 											...liferayPackages,
 											{
-												file: null,
+												file: [],
 												id: getRandomID(),
 												uploaded: false,
 												versions: checkboxVersions,

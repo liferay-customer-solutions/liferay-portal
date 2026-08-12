@@ -9,7 +9,7 @@ import HeadlessAdminTaxonomy from '~/services/headless/HeadlessAdminTaxonomy';
 
 export type VocabularyCategoryOption = {
 	label: string;
-	value: unknown;
+	value: string;
 };
 
 const useGetVocabulariesAndCategories = (vocabulariesName: string[]) => {
@@ -25,7 +25,7 @@ const useGetVocabulariesAndCategories = (vocabulariesName: string[]) => {
 		const vocabularies: Record<
 			string,
 			{
-				categories: {label: string; value: unknown}[];
+				categories: VocabularyCategoryOption[];
 				id: unknown;
 				name: string;
 			}
@@ -45,7 +45,7 @@ const useGetVocabulariesAndCategories = (vocabulariesName: string[]) => {
 				categories: vocabulary.taxonomyCategories.items.map(
 					(taxonomyCategory) => ({
 						label: taxonomyCategory.name,
-						value: taxonomyCategory.id,
+						value: `${taxonomyCategory.id}`,
 					})
 				),
 			};

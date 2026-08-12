@@ -194,17 +194,14 @@ const Profile = () => {
 						name="category"
 						onChange={(event) => {
 							const category = defaultSourceItems.categories.find(
-								(defaultCategory: {
-									label: string;
-									value: string;
-								}) =>
+								(defaultCategory: VocabularyCategoryOption) =>
 									defaultCategory.value === event.target.value
 							);
 							onChange({
 								target: {
 									name: 'categories',
 									value: {
-										label: category.label,
+										label: category?.label ?? '',
 										value: event.target.value,
 									},
 								},

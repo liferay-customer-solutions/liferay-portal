@@ -14,6 +14,7 @@ import {useParams} from 'react-router-dom';
 import {breadcrumbStore} from '~/components/Breadcrumb/breadcrumbStore';
 import Loading from '~/components/Loading/Loading';
 import {useGetVocabulariesAndCategories} from '~/hooks/useGetVocabulariesAndCategories';
+import type {VocabularyCategoryOption} from '~/hooks/useGetVocabulariesAndCategories';
 import HeadlessCommerceAdminCatalog from '~/services/headless/HeadlessCommerceAdminCatalog';
 import {
 	ProductSpecificationKey,
@@ -127,11 +128,11 @@ type SolutionPayload = {
 	[SolutionTypes.SET_PRODUCT]: Product;
 	[SolutionTypes.SET_PRODUCT_ID]: number;
 	[SolutionTypes.SET_PROFILE]: Partial<{
-		categories: any[];
+		categories: VocabularyCategoryOption[];
 		description: string;
 		file: UploadedFile;
 		name: string;
-		tags: any[];
+		tags: VocabularyCategoryOption[];
 	}>;
 	[SolutionTypes.SET_TERMS_AND_CONDITIONS]: boolean;
 	[SolutionTypes.SET_UPDATE_BLOCK]: {block: ContentBlock; index: number};
@@ -170,7 +171,10 @@ export type SolutionInitialState = {
 	};
 	references: {
 		imagesToDelete: string[];
-		vocabulariesAndCategories: any;
+		vocabulariesAndCategories: Record<
+			string,
+			{categories: VocabularyCategoryOption[]; id: unknown; name: string}
+		>;
 	};
 	termsAndConditions: boolean;
 };
@@ -381,7 +385,7 @@ const reducer = (state: SolutionInitialState, action: AppActions) => {
 										uploaded: true,
 									};
 
-									return newFile as any;
+									return newFile as UploadedFile;
 								}),
 							},
 						};

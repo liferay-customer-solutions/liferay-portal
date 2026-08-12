@@ -69,29 +69,38 @@ export default class BaseAppPublish {
 	public static async deleteLiferayPackages(
 		liferayPackages: LiferayPackage[]
 	) {
-		try {
-			for (const liferayPackage of liferayPackages) {
-				await HeadlessDelivery.deleteDocument(liferayPackage.file.id);
+		for (const liferayPackage of liferayPackages) {
+			try {
+				for (const file of liferayPackage.file ?? []) {
+					await HeadlessDelivery.deleteDocument(file.id);
+				}
+
 				await HeadlessPublisherAsset.deletePublisherAsset(
 					liferayPackage.id
 				);
 			}
-		}
-		catch (error) {
-			console.error(error);
+			catch (error) {
+				console.error(
+					`Unable to delete Liferay package ${liferayPackage.id}`,
+					error
+				);
+			}
 		}
 	}
 
 	public static async deleteReferences(externalReferenceCodes: string[]) {
-		try {
-			for (const externalReferenceCode of externalReferenceCodes) {
+		for (const externalReferenceCode of externalReferenceCodes) {
+			try {
 				await HeadlessCommerceAdminCatalogImpl.deleteAttachmentByExternalReferenceCode(
 					externalReferenceCode
 				);
 			}
-		}
-		catch (error) {
-			console.error(error);
+			catch (error) {
+				console.error(
+					`Unable to delete attachment ${externalReferenceCode}`,
+					error
+				);
+			}
 		}
 	}
 
