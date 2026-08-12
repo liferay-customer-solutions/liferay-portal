@@ -36,7 +36,7 @@ public abstract class BasePubsubClient {
 			_ensureTopicExists(topic, topicAdminClient);
 
 			if (isDeadLetterTopicEnabled()) {
-				_ensureTopicExists(getDeadLetterTopic(topic), topicAdminClient);
+				_ensureTopicExists(getDeadLetterTopic(), topicAdminClient);
 			}
 		}
 	}
@@ -45,8 +45,8 @@ public abstract class BasePubsubClient {
 		return _serviceAccountCredentialsProvider.getCredentialsProvider();
 	}
 
-	protected String getDeadLetterTopic(String topic) {
-		return "dead-letter";
+	protected String getDeadLetterTopic() {
+		return "one-liferay-dead-letter";
 	}
 
 	protected String getNamespace() {

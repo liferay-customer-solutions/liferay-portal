@@ -196,7 +196,7 @@ public abstract class BasePubsubSubscriber extends BasePubsubClient {
 
 			if (isDeadLetterTopicEnabled()) {
 				TopicName deadLetterTopicName = TopicName.ofProjectTopicName(
-					getProjectId(), getNamespace() + getDeadLetterTopic(topic));
+					getProjectId(), getNamespace() + getDeadLetterTopic());
 
 				builder.setDeadLetterPolicy(
 					DeadLetterPolicy.newBuilder(

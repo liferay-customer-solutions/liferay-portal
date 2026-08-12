@@ -7,6 +7,7 @@ package com.liferay.one.okta.pubsub;
 
 import com.liferay.headless.admin.user.client.dto.v1_0.Account;
 import com.liferay.one.constants.PropertyConstants;
+import com.liferay.one.jira.exception.AccountNotFoundException;
 import com.liferay.one.pubsub.Message;
 import com.liferay.one.pubsub.subscriber.BasePubsubSubscriber;
 import com.liferay.one.service.AccountService;
@@ -51,14 +52,18 @@ public class OktaAppCreatedPubsubSubscriber extends BasePubsubSubscriber {
 			String appId = jsonObject.optString("appId");
 
 			if (Validator.isNull(accountKey) || Validator.isNull(appId)) {
-				return;
+				throw new IllegalArgumentException(
+					"Missing accountKey or appId in the Okta app created " +
+						"message");
 			}
 
 			Account account =
 				_accountService.fetchAccountByExternalReferenceCode(accountKey);
 
 			if (account == null) {
-				return;
+				throw new AccountNotFoundException(
+					"No account exists for external reference code " +
+						accountKey);
 			}
 
 			String oktaApplicationId = _propertyService.getPropertyValue(
@@ -77,6 +82,8 @@ public class OktaAppCreatedPubsubSubscriber extends BasePubsubSubscriber {
 				"Unable to process Okta app created message " +
 					message.getPayload(),
 				exception);
+
+			throw exception;
 		}
 	}
 

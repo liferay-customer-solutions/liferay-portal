@@ -80,6 +80,8 @@ public class OktaUsersPubsubSubscriber extends BasePubsubSubscriber {
 			_log.error(
 				"Unable to process Okta users message " + message.getPayload(),
 				exception);
+
+			throw exception;
 		}
 	}
 
@@ -146,15 +148,29 @@ public class OktaUsersPubsubSubscriber extends BasePubsubSubscriber {
 			return;
 		}
 
+		Exception exception1 = null;
+
 		for (AccountBrief accountBrief : accountBriefs) {
 			try {
 				_removeAccountUserAccount(accountBrief.getId(), userAccount);
 			}
-			catch (Exception exception) {
+			catch (Exception exception2) {
 				_log.error(
 					"Unable to unassign membership for " + oktaUser.getEmail(),
-					exception);
+					exception2);
+
+				if (exception1 == null) {
+					exception1 = new Exception(
+						"Unable to unassign all memberships for " +
+							oktaUser.getEmail());
+				}
+
+				exception1.addSuppressed(exception2);
 			}
+		}
+
+		if (exception1 != null) {
+			throw exception1;
 		}
 	}
 
