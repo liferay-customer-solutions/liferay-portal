@@ -24,7 +24,8 @@
 			],
 			"externalReferenceCode": "MARKETPLACE_APP_CATEGORY",
 			"name": "Marketplace App Category",
-			"viewableBy": "Anyone"
+			"viewableBy": "Anyone",
+			"multiValued": true
 		},
 		{
 			"assetTypes": [
@@ -39,7 +40,8 @@
 			],
 			"externalReferenceCode": "MARKETPLACE_APP_TAGS",
 			"name": "Marketplace App Tags",
-			"viewableBy": "Anyone"
+			"viewableBy": "Anyone",
+			"multiValued": true
 		},
 		{
 			"assetTypes": [
@@ -54,7 +56,8 @@
 			],
 			"externalReferenceCode": "MARKETPLACE_AVAILABILITY",
 			"name": "Marketplace Availability",
-			"viewableBy": "Anyone"
+			"viewableBy": "Anyone",
+			"multiValued": true
 		},
 		{
 			"assetTypes": [
@@ -69,7 +72,8 @@
 			],
 			"externalReferenceCode": "MARKETPLACE_CATEGORY",
 			"name": "Marketplace Category",
-			"viewableBy": "Anyone"
+			"viewableBy": "Anyone",
+			"multiValued": true
 		},
 		{
 			"assetTypes": [
@@ -84,7 +88,8 @@
 			],
 			"externalReferenceCode": "MARKETPLACE_LIFERAY_PLATFORM_OFFERING",
 			"name": "Marketplace Liferay Platform Offering",
-			"viewableBy": "Anyone"
+			"viewableBy": "Anyone",
+			"multiValued": true
 		},
 		{
 			"assetTypes": [
@@ -99,7 +104,8 @@
 			],
 			"externalReferenceCode": "MARKETPLACE_LIFERAY_VERSION",
 			"name": "Marketplace Liferay Version",
-			"viewableBy": "Anyone"
+			"viewableBy": "Anyone",
+			"multiValued": true
 		},
 		{
 			"assetTypes": [
@@ -114,7 +120,8 @@
 			],
 			"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE",
 			"name": "Marketplace Product Type",
-			"viewableBy": "Anyone"
+			"viewableBy": "Anyone",
+			"multiValued": true
 		},
 		{
 			"assetTypes": [
@@ -129,7 +136,8 @@
 			],
 			"externalReferenceCode": "MARKETPLACE_SOLUTION_CATEGORY",
 			"name": "Marketplace Solution Category",
-			"viewableBy": "Anyone"
+			"viewableBy": "Anyone",
+			"multiValued": true
 		},
 		{
 			"assetTypes": [
@@ -144,7 +152,8 @@
 			],
 			"externalReferenceCode": "MARKETPLACE_SOLUTION_TAGS",
 			"name": "Marketplace Solution Tags",
-			"viewableBy": "Anyone"
+			"viewableBy": "Anyone",
+			"multiValued": true
 		}
 	]
 }

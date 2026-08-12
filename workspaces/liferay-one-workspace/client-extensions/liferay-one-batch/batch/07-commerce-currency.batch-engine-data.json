@@ -3,7 +3,7 @@
 		"className": "com.liferay.headless.commerce.admin.catalog.dto.v1_0.Currency",
 		"parameters": {
 			"containsHeaders": "true",
-			"createStrategy": "INSERT",
+			"createStrategy": "UPSERT",
 			"onErrorFail": "false",
 			"taskItemDelegateName": "DEFAULT",
 			"updateStrategy": "PARTIAL_UPDATE"
