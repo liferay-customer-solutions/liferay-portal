@@ -5,7 +5,7 @@
 
 import {Input} from '~/components/Input/Input';
 import {Section} from '~/components/Section/Section';
-import {NewAppTypes, useNewAppContext} from '~/context/NewAppContext';
+import {NewAppTypes, useNewAppContext} from '~/context/NewAppContextProvider';
 import i18n from '~/i18n';
 
 const Version = () => {

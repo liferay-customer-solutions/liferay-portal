@@ -7,7 +7,7 @@ import {filesize} from 'filesize';
 import {ReactNode, createContext, useContext, useReducer} from 'react';
 import {useParams} from 'react-router-dom';
 import useSWR from 'swr';
-import {breadcrumbStore} from '~/components/Breadcrumb/BreadcrumbStore';
+import {breadcrumbStore} from '~/components/Breadcrumb/breadcrumbStore';
 import {UploadedFile} from '~/components/FileList/FileList';
 import Loading from '~/components/Loading/Loading';
 import {ProductVocabulary} from '~/enums/Product';
@@ -21,7 +21,7 @@ import {
 	ProductSpecificationKey,
 } from '~/utils/productUtils';
 
-import {useMarketplaceContext} from './MarketplaceContext';
+import {useMarketplaceContext} from './MarketplaceContextProvider';
 
 import type {ActionMap} from '~/types/actionMap';
 import type {Catalog} from '~/types/commerce';

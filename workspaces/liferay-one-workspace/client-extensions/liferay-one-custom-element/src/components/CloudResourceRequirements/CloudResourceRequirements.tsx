@@ -4,7 +4,7 @@
  */
 
 import Form from '~/components/MarketplaceForm/MarketplaceForm';
-import {NewAppTypes, useNewAppContext} from '~/context/NewAppContext';
+import {NewAppTypes, useNewAppContext} from '~/context/NewAppContextProvider';
 import i18n from '~/i18n';
 
 const CloudResourceRequirements = () => {

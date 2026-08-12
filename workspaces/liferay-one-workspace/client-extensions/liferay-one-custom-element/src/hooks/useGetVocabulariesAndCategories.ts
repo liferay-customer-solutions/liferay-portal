@@ -4,7 +4,7 @@
  */
 
 import useSWR from 'swr';
-import {useMarketplaceContext} from '~/context/MarketplaceContext';
+import {useMarketplaceContext} from '~/context/MarketplaceContextProvider';
 import HeadlessAdminTaxonomy from '~/services/headless/HeadlessAdminTaxonomy';
 
 export type VocabularyCategoryOption = {

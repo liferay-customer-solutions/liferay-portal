@@ -12,13 +12,13 @@ import {NewAppPackagesModal} from '~/components/NewAppPackagesModal/NewAppPackag
 import NewAppUploadAppPackagesComponent from '~/components/NewAppUploadPackage/NewAppUploadPackage';
 import {RadioCard} from '~/components/RadioCard/RadioCard';
 import {Section} from '~/components/Section/Section';
-import {NewAppTypes, useNewAppContext} from '~/context/NewAppContext';
+import {NewAppTypes, useNewAppContext} from '~/context/NewAppContextProvider';
 import {ProductType} from '~/enums/Product';
 import i18n from '~/i18n';
+import {ProductTypeOptions} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants/ProductTypeOptions';
 import {ProductWorkflowStatusCode} from '~/utils/productUtils';
 
 import {BUILD_UPLOAD_OPTIONS} from '../constants';
-import {ProductTypeOptions} from '../constants/productTypes';
 
 import '../ProvideAppBuildPage.scss';
 

@@ -10,7 +10,7 @@ import {Outlet} from 'react-router-dom';
 import AppPublish from '~/components/AppPublish/AppPublish';
 import Checkbox from '~/components/Checkbox/Checkbox';
 import ExternalLink from '~/components/ExternalLink/ExternalLink';
-import {NewAppInitialState} from '~/context/NewAppContext';
+import {NewAppInitialState} from '~/context/NewAppContextProvider';
 import {useAccount} from '~/hooks/data/useAccounts';
 import i18n from '~/i18n';
 

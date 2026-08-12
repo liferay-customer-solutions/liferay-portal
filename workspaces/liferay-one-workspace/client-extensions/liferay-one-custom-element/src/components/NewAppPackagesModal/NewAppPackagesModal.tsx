@@ -9,7 +9,7 @@ import ClayManagementToolbar from '@clayui/management-toolbar';
 import ClayModal, {useModal} from '@clayui/modal';
 import {useMemo, useState} from 'react';
 import ButtonWithIcon from '~/components/ButtonWithIcon/ButtonWithIcon';
-import {NewAppTypes, useNewAppContext} from '~/context/NewAppContext';
+import {NewAppTypes, useNewAppContext} from '~/context/NewAppContextProvider';
 import useListTypeDefinition from '~/hooks/useListTypeDefinition';
 import i18n from '~/i18n';
 import {LIFERAY_VERSION_PICKLIST} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';

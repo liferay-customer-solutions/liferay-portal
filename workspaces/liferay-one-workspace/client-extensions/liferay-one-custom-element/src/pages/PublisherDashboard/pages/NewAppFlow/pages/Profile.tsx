@@ -9,7 +9,7 @@ import Form from '~/components/MarketplaceForm/MarketplaceForm';
 import MultiSelect from '~/components/MultiSelect/MultiSelect';
 import Select from '~/components/Select/Select';
 import UploadLogo from '~/components/UploadLogo/UploadLogo';
-import {NewAppTypes, useNewAppContext} from '~/context/NewAppContext';
+import {NewAppTypes, useNewAppContext} from '~/context/NewAppContextProvider';
 import {
 	ProductVocabulary,
 	ProductWorkflowStatusCode,
