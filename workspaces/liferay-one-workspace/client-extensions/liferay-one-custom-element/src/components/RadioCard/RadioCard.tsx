@@ -8,6 +8,8 @@ import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 import {ReactNode} from 'react';
 
+import './RadioCard.scss';
+
 type RadioCardProps = {
 	className?: string;
 	content?: ReactNode;
@@ -42,10 +44,9 @@ const RadioCard = ({
 		tabIndex={disabled ? -1 : 0}
 		title={tooltip}
 	>
-		<div className="align-items-center d-flex">
+		<div className="radio-card-control">
 			<ClayRadio
 				checked={selected}
-				className="mr-2"
 				disabled={disabled}
 				onChange={onChange}
 				value=""

@@ -5,6 +5,7 @@
 
 import ClayIcon from '@clayui/icon';
 import {ClayTooltipProvider} from '@clayui/tooltip';
+import classNames from 'classnames';
 import {LabelHTMLAttributes} from 'react';
 
 import '~/components/MarketplaceForm/MarketplaceForm.scss';
@@ -14,33 +15,39 @@ interface ILabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
 	required?: boolean;
 }
 
-export function MarketplaceFormLabel({info, required, ...props}: ILabelProps) {
+export function MarketplaceFormLabel({
+	className,
+	info,
+	required,
+	...props
+}: ILabelProps) {
 	return (
-		<>
+		<div
+			className={classNames(
+				'align-items-center d-flex marketplace-form-label',
+				className
+			)}
+		>
 			<label {...props} />
+
 			{required && (
 				<ClayIcon
 					className="required-icon text-danger"
-					symbol="asterisk
-"
+					symbol="asterisk"
 				/>
 			)}
 
 			{info && (
 				<ClayTooltipProvider>
 					<div
-						className="info-bg inline-item inline-item-after mb-1"
+						className="info-bg inline-item"
 						data-tooltip-align="top"
 						title={info}
 					>
-						<ClayIcon
-							className="info-icon"
-							symbol="info-circle-open
-"
-						/>
+						<ClayIcon className="info-icon" symbol="info-circle-open" />
 					</div>
 				</ClayTooltipProvider>
 			)}
-		</>
+		</div>
 	);
 }

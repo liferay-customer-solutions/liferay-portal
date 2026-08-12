@@ -40,9 +40,18 @@ input[type='file'] {
 
 	&-icon {
 		border-radius: 4px;
-		max-height: 4.5rem;
+		height: 4.5rem;
 		object-fit: contain;
 		width: 4.5rem;
+	}
+
+	&-placeholder {
+		height: 4.5rem;
+		width: 4.5rem;
+
+		&-icon {
+			font-size: 1.5rem;
+		}
 	}
 
 	&-upload-label {

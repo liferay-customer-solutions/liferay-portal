@@ -34,10 +34,10 @@ const UploadLogo: React.FC<UploadLogoProps> = ({
 						src={uploadedFile?.preview}
 					/>
 				) : (
-					<div className="bg-light py-5 rounded">
+					<div className="align-items-center bg-light d-flex justify-content-center rounded upload-logo-placeholder">
 						<ClayIcon
 							aria-label="New App logo"
-							className="text-muted upload-logo-icon"
+							className="text-muted upload-logo-placeholder-icon"
 							symbol="picture"
 						/>
 					</div>
