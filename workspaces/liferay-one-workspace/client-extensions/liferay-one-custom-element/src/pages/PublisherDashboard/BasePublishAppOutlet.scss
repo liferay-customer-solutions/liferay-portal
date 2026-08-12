@@ -6,15 +6,15 @@
 		&-profile {
 			.form-multiselect {
 				.form-control {
-					background-color: #ffff;
-					border: 1px solid #b1b2b9;
+					background-color: var(--color-neutral-0);
+					border: 1px solid var(--color-neutral-4);
 					border-radius: 8px;
 					min-height: 48px;
 
 					.label {
-						background-color: #e6ebf5;
+						background-color: var(--color-state-info-lighten-2);
 						border: none;
-						color: #1c3667;
+						color: var(--color-state-info-darken-2);
 						font-size: 13px;
 						padding: 8px;
 					}

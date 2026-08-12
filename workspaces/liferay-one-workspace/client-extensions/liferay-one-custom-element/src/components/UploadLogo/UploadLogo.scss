@@ -28,12 +28,12 @@ input[type='file'] {
 	}
 
 &-delete-button {
-		border: 1.2px solid #2b3a4b;
+		border: 1.2px solid var(--color-action-neutral-default);
 		border-radius: 0.1875rem;
 		transition: background-color 0.3s;
 
 		&-text {
-			color: #2b3a4b;
+			color: var(--color-action-neutral-default);
 			font-size: 0.875rem;
 			font-weight: 600;
 			line-height: 1rem;
@@ -42,9 +42,9 @@ input[type='file'] {
 		}
 
 		&:hover {
-			background-color: #2b3a4b;
-			border: 1.5px solid #2b3a4b;
-			color: #fff;
+			background-color: var(--color-action-neutral-default);
+			border: 1.5px solid var(--color-action-neutral-default);
+			color: var(--color-neutral-0);
 		}
 	}
 }

@@ -1,12 +1,12 @@
 .add-currency-button {
-	background: #fbfcfe;
-	border: 1px solid #e7efff;
-	color: #0b5fff;
+	background: var(--color-brand-primary-lighten-6);
+	border: 1px solid var(--color-brand-primary-lighten-5);
+	color: var(--color-brand-primary);
 
 	&:hover {
-		background: #edf3fe;
-		border: 1px solid #0053f0;
-		color: #0b5fff;
+		background: var(--color-action-primary-hover-10);
+		border: 1px solid var(--color-action-primary-hover);
+		color: var(--color-brand-primary);
 		opacity: 0.8;
 	}
 }
@@ -21,10 +21,10 @@
 }
 
 .license-icon-button {
-	background: #fbfcfe;
-	border: 1px solid #e7efff;
+	background: var(--color-brand-primary-lighten-6);
+	border: 1px solid var(--color-brand-primary-lighten-5);
 	border-radius: 10px;
-	color: #0b5fff;
+	color: var(--color-brand-primary);
 	font-size: 14px;
 	font-weight: 600;
 	line-height: 16px;
@@ -36,7 +36,7 @@
 	}
 
 	.modal-subtitle-section {
-		color: #6c6c75;
+		color: var(--color-neutral-7);
 		display: flex;
 		padding-inline: 1.5rem;
 	}

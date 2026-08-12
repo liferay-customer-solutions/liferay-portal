@@ -72,7 +72,7 @@
 			}
 
 			&-draft {
-				color: #82828c;
+				color: var(--color-neutral-6);
 			}
 
 			&-hidden {
@@ -81,7 +81,7 @@
 		}
 
 		&-text {
-			color: #6c6c75;
+			color: var(--color-neutral-7);
 			font-weight: 600;
 		}
 	}
@@ -108,7 +108,7 @@
 			}
 
 			&:hover {
-				background: #edf3fe;
+				background: var(--color-action-primary-hover-10);
 			}
 		}
 
@@ -120,9 +120,9 @@
 
 &-save-draft {
 			background: none;
-			border: 0.125rem solid #2b3a4b;
+			border: 0.125rem solid var(--color-action-neutral-default);
 			border-radius: 6px;
-			color: #2b3a4b;
+			color: var(--color-action-neutral-default);
 			font-size: 0.813rem;
 			font-weight: 600;
 			line-height: 1rem;
@@ -130,16 +130,16 @@
 			transition: background 0.3s;
 
 			&:hover {
-				background: #2b3a4b;
-				color: #ffff;
+				background: var(--color-action-neutral-default);
+				color: var(--color-neutral-0);
 			}
 		}
 
 		&-preview-storefront {
 			background: none;
-			border: 0.125rem solid #0b5fff;
+			border: 0.125rem solid var(--color-brand-primary);
 			border-radius: 6px;
-			color: #0b5fff;
+			color: var(--color-brand-primary);
 			font-size: 0.813rem;
 			font-weight: 600;
 			height: 32px;
@@ -148,8 +148,8 @@
 			transition: background 0.3s;
 
 			&:hover {
-				background: #0b5fff;
-				color: #ffff;
+				background: var(--color-brand-primary);
+				color: var(--color-neutral-0);
 			}
 		}
 	}

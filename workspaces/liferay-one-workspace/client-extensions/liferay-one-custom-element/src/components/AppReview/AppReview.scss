@@ -10,7 +10,7 @@
 
 		&-container {
 			align-items: center;
-			background-color: #e7efff;
+			background-color: var(--color-brand-primary-lighten-5);
 			border-radius: 4px;
 			display: flex;
 			height: 72px;
@@ -39,7 +39,7 @@
 
 	&-pricing {
 		&-description {
-			color: #54555f;
+			color: var(--color-neutral-8);
 			font-size: 13px;
 		}
 
@@ -71,7 +71,7 @@
 		margin-top: 22px;
 
 		&-description {
-			color: #54555f;
+			color: var(--color-neutral-8);
 			font-size: 16px;
 
 			&-paragraph {
@@ -106,7 +106,7 @@
 			}
 
 			.storefront-description {
-				color: #54555f;
+				color: var(--color-neutral-8);
 				font-size: 13px;
 				font-weight: 400;
 			}
@@ -117,7 +117,7 @@
 			}
 
 			.storefront-url-title {
-				color: #282934;
+				color: var(--color-neutral-10);
 				font-size: 13px;
 				font-weight: 600;
 			}
@@ -132,7 +132,7 @@
 }
 
 	&-version {
-		color: #54555f;
+		color: var(--color-neutral-8);
 		font-size: 14px;
 		font-weight: 600;
 	}
@@ -143,14 +143,14 @@
 }
 
 .licensing-unit-price {
-	color: #54555f;
+	color: var(--color-neutral-8);
 	font-size: 13px;
 }
 
 .app-review-support {
 &-icon {
 		align-items: center;
-		background-color: #e2e2e4;
+		background-color: var(--color-neutral-2);
 		border-radius: 99px;
 		display: flex;
 		height: 40px;
@@ -183,7 +183,7 @@
 }
 
 	&-description {
-		color: #54555f;
+		color: var(--color-neutral-8);
 		font-size: 16px;
 		font-weight: 600;
 		line-height: 24px;
