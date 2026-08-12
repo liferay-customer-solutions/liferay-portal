@@ -7,6 +7,11 @@ import useSWR from 'swr';
 import {useMarketplaceContext} from '~/context/MarketplaceContext';
 import HeadlessAdminTaxonomy from '~/services/headless/HeadlessAdminTaxonomy';
 
+export type VocabularyCategoryOption = {
+	label: string;
+	value: unknown;
+};
+
 const useGetVocabulariesAndCategories = (vocabulariesName: string[]) => {
 	const {properties} = useMarketplaceContext();
 

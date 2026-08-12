@@ -766,7 +766,7 @@ export default function NewAppContextProvider({
 
 						return {
 							file: packageFiles,
-							id: publisherAsset.id,
+							id: String(publisherAsset.id),
 							uploaded: true,
 							versions: publisherAsset.version.split(','),
 						};

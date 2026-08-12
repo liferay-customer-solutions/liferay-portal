@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import type {ProductWorkflowStatusCode} from '~/enums/Product';
 import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
 import {ReactNode, useMemo, useState} from 'react';
@@ -68,7 +69,7 @@ const BasePublishAppOutlet = ({
 		return null;
 	}, [activeRoute, context]);
 
-	const isValidSchema = parsedSchema ? !parsedSchema.success : false;
+	const hasSchemaErrors = parsedSchema ? !parsedSchema.success : false;
 
 	if (context.loading) {
 		return null;
@@ -81,7 +82,11 @@ const BasePublishAppOutlet = ({
 				accountName={account?.name as string}
 				appImage={context.profile.file?.preview}
 				appName={context.profile.name}
-				appStatus={context._product?.productStatus}
+				appStatus={
+					context._product?.productStatus as
+						| ProductWorkflowStatusCode
+						| undefined
+				}
 				display={{
 					preview: true,
 					saveAsDraft: canSaveAsDraft,
@@ -90,7 +95,7 @@ const BasePublishAppOutlet = ({
 					onClick: () => onClickExit(),
 				}}
 				saveAsDraftProps={{
-					disabled: isValidSchema || !canSaveAsDraft,
+					disabled: !canSaveAsDraft,
 					onClick: onSaveAsDraft,
 				}}
 				submitProps={{
@@ -165,7 +170,7 @@ const BasePublishAppOutlet = ({
 							disabled={
 								isLastStep
 									? !checkedUserAgreement
-									: isValidSchema
+									: hasSchemaErrors
 							}
 							displayType="primary"
 							onClick={() => {

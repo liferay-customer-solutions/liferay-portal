@@ -40,7 +40,7 @@ function NewAppContextWrapper() {
 	const {data: catalog} = usePublisherCatalog();
 
 	return (
-		<NewAppContextProvider catalog={catalog}>
+		<NewAppContextProvider catalog={catalog ?? undefined}>
 			<Outlet />
 		</NewAppContextProvider>
 	);

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import type {ProductCategories} from '~/types/product';
+import type {VocabularyCategoryOption} from '~/hooks/useGetVocabulariesAndCategories';
 import {filesize} from 'filesize';
 import {UploadedFile} from '~/components/FileList/FileList';
 import Form from '~/components/MarketplaceForm';
@@ -241,7 +241,7 @@ const Profile = () => {
 						onItemsChange={(items: {[key: string]: string}[]) => {
 							const filteredValue = items.filter((item) =>
 								defaultSourceItems.areas.some(
-									(defaultItem: ProductCategories) =>
+									(defaultItem: VocabularyCategoryOption) =>
 										defaultItem.value === item.value
 								)
 							);
@@ -276,7 +276,7 @@ const Profile = () => {
 						onItemsChange={(items: {[key: string]: string}[]) => {
 							const filteredValue = items.filter((item) =>
 								defaultSourceItems.tags.some(
-									(defaultItem: ProductCategories) =>
+									(defaultItem: VocabularyCategoryOption) =>
 										defaultItem.value === item.value
 								)
 							);

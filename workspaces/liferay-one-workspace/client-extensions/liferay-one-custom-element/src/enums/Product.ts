@@ -238,7 +238,10 @@ export const ProductTypeLabels = {
 	[ProductType.SSA_SAAS]: 'SSA SaaS',
 } as const;
 
-export const ProductTypeLicenseOptions = {
+export const ProductTypeLicenseOptions: Record<
+	ProductType,
+	ProductLicenseTier[]
+> = {
 	[ProductType.AI_HUB]: [ProductLicenseTier.STANDARD],
 	[ProductType.CLIENT_EXTENSION]: [ProductLicenseTier.STANDARD],
 	[ProductType.CLOUD]: [ProductLicenseTier.STANDARD],

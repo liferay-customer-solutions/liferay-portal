@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import type {PriceEntry} from '~/context/NewAppContext';
-import type {Product, ProductCategories, TierPrice} from '~/types/product';
+
+import type {PriceEntry, Product, ProductCategories, TierPrice} from '~/types/product';
 import SearchBuilder from '~/utils/SearchBuilder';
 import {base64ToText, fileToBase64} from '~/utils/file';
 import {
@@ -45,7 +45,7 @@ function normalizeCategory(category: {
 	value: number;
 }): Partial<ProductCategories> {
 	return {
-		id: String(category.value),
+		id: category.value,
 		name: category.label,
 	};
 }
@@ -259,17 +259,12 @@ export default class AppPublish extends BaseAppPublish {
 				...this.getProductStatus(),
 			});
 
-		product.productSpecifications = [
+		await BaseAppPublish.updateSpecifications(product, [
 			{
 				key: ProductSpecificationKey.APP_DEVELOPER_NAME,
 				value: catalog?.name,
 			},
-		];
-
-		await BaseAppPublish.updateSpecifications(
-			product,
-			product.productSpecifications
-		);
+		]);
 
 		if (file.file) {
 			await HeadlessCommerceAdminCatalogImpl.addOrUpdateProductImageByExternalReferenceCode(
@@ -301,7 +296,10 @@ export default class AppPublish extends BaseAppPublish {
 			build: {appType, resourceRequirements},
 		} = this.context;
 
-		const specifications = [
+		const specifications: {
+			key: ProductSpecificationKey;
+			value: string;
+		}[] = [
 			{
 				key: ProductSpecificationKey.APP_TYPE,
 				value: appType as string,
@@ -438,7 +436,7 @@ export default class AppPublish extends BaseAppPublish {
 
 	public async sync(config: ProductConfig) {
 		const isNewProduct = !this.context._product;
-		let product;
+		let product: Product | undefined;
 
 		this.config = config;
 
@@ -448,6 +446,8 @@ export default class AppPublish extends BaseAppPublish {
 			this.context._product = product;
 
 			await this.cleanUp();
+
+			const failedSteps: string[] = [];
 
 			for (const sync of [
 				this.syncBuild.bind(this),
@@ -463,8 +463,18 @@ export default class AppPublish extends BaseAppPublish {
 					await sync(product);
 				}
 				catch (error) {
+					failedSteps.push(sync.name);
+
 					console.error(`Unable to sync ${sync.name}`, error);
 				}
+			}
+
+			if (failedSteps.length) {
+				throw new Error(
+					`Unable to publish the app because the following steps did not complete ${failedSteps.join(
+						', '
+					)}`
+				);
 			}
 
 			if (!isNewProduct) {

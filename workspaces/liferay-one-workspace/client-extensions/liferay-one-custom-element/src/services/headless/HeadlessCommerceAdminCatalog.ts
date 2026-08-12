@@ -59,7 +59,7 @@ export default class HeadlessCommerceAdminCatalog {
 		productStatus?: number;
 		workflowStatusInfo?: number;
 	}) {
-		return fetcher.post(
+		return fetcher.post<Product>(
 			`/o/headless-commerce-admin-catalog/v1.0/products?nestedFields=productVirtualSettings`,
 			{
 				active: true,
@@ -96,7 +96,7 @@ export default class HeadlessCommerceAdminCatalog {
 	}
 
 	static async updateProduct(productId: number, body: unknown) {
-		return fetcher.patch(
+		return fetcher.patch<Product>(
 			`/o/headless-commerce-admin-catalog/v1.0/products/${productId}`,
 			body
 		);
@@ -106,7 +106,7 @@ export default class HeadlessCommerceAdminCatalog {
 		productId: number | string,
 		productSpecification: ProductSpecification
 	) {
-		return fetcher.post(
+		return fetcher.post<ProductSpecification>(
 			`/o/headless-commerce-admin-catalog/v1.0/products/${productId}/productSpecifications`,
 			productSpecification
 		);
@@ -225,7 +225,7 @@ export default class HeadlessCommerceAdminCatalog {
 		id: number | string,
 		productSpecification: ProductSpecification
 	) {
-		return fetcher.patch(
+		return fetcher.patch<ProductSpecification>(
 			`/o/headless-commerce-admin-catalog/v1.0/productSpecifications/${id}`,
 			productSpecification
 		);
