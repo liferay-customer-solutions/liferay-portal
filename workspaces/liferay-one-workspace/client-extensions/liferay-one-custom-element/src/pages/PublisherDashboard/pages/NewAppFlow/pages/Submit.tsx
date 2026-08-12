@@ -6,7 +6,7 @@
 import {useNavigate} from 'react-router-dom';
 import AppReview from '~/components/AppReview/AppReview';
 import {Section} from '~/components/Section/Section';
-import {useNewAppContext} from '~/context/NewAppContext';
+import {useNewAppContext} from '~/context/NewAppContextProvider';
 import i18n from '~/i18n';
 import {ProductWorkflowStatusCode} from '~/utils/productUtils';
 

@@ -11,6 +11,7 @@ import {
 	useReducer,
 } from 'react';
 import {useParams} from 'react-router-dom';
+import {breadcrumbStore} from '~/components/Breadcrumb/breadcrumbStore';
 import Loading from '~/components/Loading/Loading';
 import {useGetVocabulariesAndCategories} from '~/hooks/useGetVocabulariesAndCategories';
 import HeadlessCommerceAdminCatalog from '~/services/headless/HeadlessCommerceAdminCatalog';
@@ -21,7 +22,6 @@ import {
 } from '~/utils/productUtils';
 import {safeJSONParse} from '~/utils/publishUtils';
 
-import {breadcrumbStore} from '../components/Breadcrumb/BreadcrumbStore';
 import {UploadedFile} from '../components/FileList/FileList';
 
 import type {ActionMap} from '~/types/actionMap';

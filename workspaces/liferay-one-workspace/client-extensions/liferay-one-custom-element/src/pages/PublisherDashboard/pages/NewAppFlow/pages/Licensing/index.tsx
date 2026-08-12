@@ -5,7 +5,7 @@
 
 import {RadioCard} from '~/components/RadioCard/RadioCard';
 import {Section} from '~/components/Section/Section';
-import {NewAppTypes, useNewAppContext} from '~/context/NewAppContext';
+import {NewAppTypes, useNewAppContext} from '~/context/NewAppContextProvider';
 
 import {
 	LICENSING_30_DAYS_TRIAL_OPTIONS,

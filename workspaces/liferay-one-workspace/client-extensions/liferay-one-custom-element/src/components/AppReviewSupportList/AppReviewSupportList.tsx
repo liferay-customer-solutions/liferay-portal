@@ -5,7 +5,7 @@
 
 import ClayIcon from '@clayui/icon';
 import ExternalLink from '~/components/ExternalLink/ExternalLink';
-import {NewAppInitialState} from '~/context/NewAppContext';
+import {NewAppInitialState} from '~/context/NewAppContextProvider';
 import i18n from '~/i18n';
 
 type SupportContent = {

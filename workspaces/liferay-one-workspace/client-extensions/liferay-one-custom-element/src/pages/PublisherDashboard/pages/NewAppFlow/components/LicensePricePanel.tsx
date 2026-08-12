@@ -12,7 +12,7 @@ import {
 	LicensingPrices,
 	NewAppTypes,
 	useNewAppContext,
-} from '~/context/NewAppContext';
+} from '~/context/NewAppContextProvider';
 import {ProductLicenseTier} from '~/enums/Product';
 import i18n from '~/i18n';
 import {currenciesCode} from '~/utils/currencyUtils';

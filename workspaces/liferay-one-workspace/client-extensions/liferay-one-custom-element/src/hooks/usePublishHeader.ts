@@ -4,7 +4,7 @@
  */
 
 import {useLayoutEffect} from 'react';
-import {breadcrumbStore} from '~/components/Breadcrumb/BreadcrumbStore';
+import {breadcrumbStore} from '~/components/Breadcrumb/breadcrumbStore';
 
 const usePublishHeader = () => {
 	useLayoutEffect(() => {

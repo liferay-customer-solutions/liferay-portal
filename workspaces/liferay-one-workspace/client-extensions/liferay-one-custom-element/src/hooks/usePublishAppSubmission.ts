@@ -5,12 +5,12 @@
 
 import {Dispatch} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {useMarketplaceContext} from '~/context/MarketplaceContext';
+import {useMarketplaceContext} from '~/context/MarketplaceContextProvider';
 import {
 	AppActions,
 	NewAppInitialState,
 	NewAppTypes,
-} from '~/context/NewAppContext';
+} from '~/context/NewAppContextProvider';
 import i18n from '~/i18n';
 import AppPublish, {ProductConfig} from '~/services/actions/AppPublish';
 import {Liferay} from '~/services/liferay/liferay';

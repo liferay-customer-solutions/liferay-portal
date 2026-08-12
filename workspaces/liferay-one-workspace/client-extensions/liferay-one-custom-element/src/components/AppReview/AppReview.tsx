@@ -11,7 +11,7 @@ import Pricing from '~/components/AppReviewPricing/AppReviewPricing';
 import Profile from '~/components/AppReviewProfile/AppReviewProfile';
 import Storefront from '~/components/AppReviewStorefront/AppReviewStorefront';
 import Support from '~/components/AppReviewSupport/AppReviewSupport';
-import {NewAppInitialState} from '~/context/NewAppContext';
+import {NewAppInitialState} from '~/context/NewAppContextProvider';
 
 import './AppReview.scss';
 

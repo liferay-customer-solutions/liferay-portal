@@ -4,15 +4,14 @@
  */
 
 import ReactDOMServer from 'react-dom/server';
-import {NewAppInitialState} from '~/context/NewAppContext';
+import {NewAppInitialState} from '~/context/NewAppContextProvider';
 import {LearnLinks} from '~/enums/Learn';
 import i18n from '~/i18n';
+import zodSchema from '~/schema/zodSchema';
 import {
 	ProductUploadType,
 	ProductWorkflowStatusCode,
 } from '~/utils/productUtils';
-
-import zodSchema from '../../../../../schema/zod';
 
 import type {ProductPriceModel} from '~/types/product';
 

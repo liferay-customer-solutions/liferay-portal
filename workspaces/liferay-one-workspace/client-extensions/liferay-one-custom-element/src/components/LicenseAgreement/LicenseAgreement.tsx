@@ -10,7 +10,7 @@ import {getSiteName} from '~/utils/siteUtils';
 
 import './LicenseAgreement.scss';
 
-import {useMarketplaceContext} from '~/context/MarketplaceContext';
+import {useMarketplaceContext} from '~/context/MarketplaceContextProvider';
 
 const LicenseAgreement = () => {
 	const {properties} = useMarketplaceContext();

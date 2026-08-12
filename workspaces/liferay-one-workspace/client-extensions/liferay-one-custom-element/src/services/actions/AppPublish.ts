@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {NewAppInitialState} from '~/context/NewAppContextProvider';
 import SearchBuilder from '~/utils/SearchBuilder';
 import {Properties} from '~/utils/attributeUtils';
 import {base64ToText, fileToBase64} from '~/utils/fileUtils';
@@ -19,7 +20,6 @@ import {
 	getOfferingTypes,
 } from '~/utils/productUtils';
 
-import {NewAppInitialState} from '../../context/NewAppContext';
 import HeadlessCommerceAdminCatalogImpl from '../headless/HeadlessCommerceAdminCatalog';
 import HeadlessCommerceAdminPricing from '../headless/HeadlessCommerceAdminPricing';
 import BaseAppPublish from './BaseAppPublish';

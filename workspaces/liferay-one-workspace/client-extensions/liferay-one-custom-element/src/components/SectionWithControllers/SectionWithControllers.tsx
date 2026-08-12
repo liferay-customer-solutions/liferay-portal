@@ -6,10 +6,9 @@
 import ButtonWithIcon from '~/components/ButtonWithIcon/ButtonWithIcon';
 
 import '~/components/MarketplaceForm/MarketplaceForm.scss';
-
 import ClayDropDown from '@clayui/drop-down';
 import {HTMLAttributes, useState} from 'react';
-import {BlockDirections} from '~/context/SolutionContext';
+import {BlockDirections} from '~/context/SolutionContextProvider';
 
 interface ISectionWithControllersProps extends HTMLAttributes<HTMLDivElement> {
 	dropdownItems: {

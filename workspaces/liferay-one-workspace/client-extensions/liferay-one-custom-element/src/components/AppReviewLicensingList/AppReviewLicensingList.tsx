@@ -7,7 +7,7 @@ import ClayIcon from '@clayui/icon';
 import {
 	LicensingPrices,
 	NewAppInitialState,
-} from '~/context/NewAppContext';
+} from '~/context/NewAppContextProvider';
 import {LICENSING_OPTIONS} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
 import {currenciesCode, formatCurrency} from '~/utils/currencyUtils';
 import {ProductPriceModel} from '~/utils/productUtils';

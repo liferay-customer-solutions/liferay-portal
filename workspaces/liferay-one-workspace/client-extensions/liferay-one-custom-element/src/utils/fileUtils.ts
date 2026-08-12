@@ -5,15 +5,18 @@
 
 export {downloadFile} from './downloadFile';
 
-export const base64ToText = (base64: string) => base64.split(',').at(-1);
+export function base64ToText(base64: string) {
+	return base64.split(',').at(-1);
+}
 
-export const fileToBase64 = (
+export function fileToBase64(
 	file: File
-): Promise<ArrayBuffer | null | string> =>
-	new Promise((resolve, reject) => {
+): Promise<ArrayBuffer | null | string> {
+	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
 
 		reader.readAsDataURL(file);
 		reader.onload = () => resolve(reader.result);
 		reader.onerror = reject;
 	});
+}
