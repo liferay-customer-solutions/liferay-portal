@@ -16,14 +16,16 @@ export const ProductEditionOption = {
 	EE: 'EE',
 } as const;
 
-export type ProductEditionOption = (typeof ProductEditionOption)[keyof typeof ProductEditionOption];
+export type ProductEditionOption =
+	(typeof ProductEditionOption)[keyof typeof ProductEditionOption];
 
 export const ProductImageFallbackCategories = {
 	PRODUCT_ICON: 'productIcon',
 	PRODUCT_IMAGE: 'productImage',
 } as const;
 
-export type ProductImageFallbackCategories = (typeof ProductImageFallbackCategories)[keyof typeof ProductImageFallbackCategories];
+export type ProductImageFallbackCategories =
+	(typeof ProductImageFallbackCategories)[keyof typeof ProductImageFallbackCategories];
 
 export const ProductLicense = {
 	BASE: 'base-license-usage-type',
@@ -31,7 +33,8 @@ export const ProductLicense = {
 	DXP: 'dxp-license-usage-type',
 } as const;
 
-export type ProductLicense = (typeof ProductLicense)[keyof typeof ProductLicense];
+export type ProductLicense =
+	(typeof ProductLicense)[keyof typeof ProductLicense];
 
 export const ProductLicenseTier = {
 	DEVELOPER: 'developer',
@@ -39,7 +42,8 @@ export const ProductLicenseTier = {
 	TRIAL: 'trial',
 } as const;
 
-export type ProductLicenseTier = (typeof ProductLicenseTier)[keyof typeof ProductLicenseTier];
+export type ProductLicenseTier =
+	(typeof ProductLicenseTier)[keyof typeof ProductLicenseTier];
 
 export const ProductLicenseType = {
 	MONTHLY: 'Monthly',
@@ -47,7 +51,8 @@ export const ProductLicenseType = {
 	SUBSCRIPTION: 'Subscription',
 } as const;
 
-export type ProductLicenseType = (typeof ProductLicenseType)[keyof typeof ProductLicenseType];
+export type ProductLicenseType =
+	(typeof ProductLicenseType)[keyof typeof ProductLicenseType];
 
 export const ProductLicenseFriendlyName = {
 	[ProductLicenseType.MONTHLY]: 'Monthly',
@@ -61,14 +66,16 @@ export const ProductOfferingTypes = {
 	LIFERAY_SELF_HOSTED: 'Liferay Self-Hosted',
 } as const;
 
-export type ProductOfferingTypes = (typeof ProductOfferingTypes)[keyof typeof ProductOfferingTypes];
+export type ProductOfferingTypes =
+	(typeof ProductOfferingTypes)[keyof typeof ProductOfferingTypes];
 
 export const ProductPriceModel = {
 	FREE: 'Free',
 	PAID: 'Paid',
 } as const;
 
-export type ProductPriceModel = (typeof ProductPriceModel)[keyof typeof ProductPriceModel];
+export type ProductPriceModel =
+	(typeof ProductPriceModel)[keyof typeof ProductPriceModel];
 
 export const ProductSpecificationKey = {
 	APP_BETA: 'app-beta',
@@ -107,7 +114,8 @@ export const ProductSpecificationKey = {
 	SOLUTION_TYPE: 'solution-type',
 } as const;
 
-export type ProductSpecificationKey = (typeof ProductSpecificationKey)[keyof typeof ProductSpecificationKey];
+export type ProductSpecificationKey =
+	(typeof ProductSpecificationKey)[keyof typeof ProductSpecificationKey];
 
 export const ProductSupportSpecificationKey = {
 	APP_DOCUMENTATION_URL: 'appdocumentationurl',
@@ -119,7 +127,8 @@ export const ProductSupportSpecificationKey = {
 	SUPPORT_URL: 'supporturl',
 } as const;
 
-export type ProductSupportSpecificationKey = (typeof ProductSupportSpecificationKey)[keyof typeof ProductSupportSpecificationKey];
+export type ProductSupportSpecificationKey =
+	(typeof ProductSupportSpecificationKey)[keyof typeof ProductSupportSpecificationKey];
 
 export const ProductTags = {
 	APP_ICON: 'app-icon',
@@ -149,7 +158,8 @@ export const ProductTypeVocabulary = {
 	SOLUTION: 'Solution',
 } as const;
 
-export type ProductTypeVocabulary = (typeof ProductTypeVocabulary)[keyof typeof ProductTypeVocabulary];
+export type ProductTypeVocabulary =
+	(typeof ProductTypeVocabulary)[keyof typeof ProductTypeVocabulary];
 
 export const ProductUploadType = {
 	GITHUB: 'GitHub',
@@ -157,13 +167,15 @@ export const ProductUploadType = {
 	ZIP_UPLOAD: 'upload',
 } as const;
 
-export type ProductUploadType = (typeof ProductUploadType)[keyof typeof ProductUploadType];
+export type ProductUploadType =
+	(typeof ProductUploadType)[keyof typeof ProductUploadType];
 
 export const ProductVersionOption = {
 	'7.4x': '7.4',
 } as const;
 
-export type ProductVersionOption = (typeof ProductVersionOption)[keyof typeof ProductVersionOption];
+export type ProductVersionOption =
+	(typeof ProductVersionOption)[keyof typeof ProductVersionOption];
 
 export const ProductVocabulary = {
 	APP_AREA: 'Marketplace App Category',
@@ -177,7 +189,8 @@ export const ProductVocabulary = {
 	SOLUTION_TAGS: 'Marketplace Solution Tags',
 } as const;
 
-export type ProductVocabulary = (typeof ProductVocabulary)[keyof typeof ProductVocabulary];
+export type ProductVocabulary =
+	(typeof ProductVocabulary)[keyof typeof ProductVocabulary];
 
 export const ProductWorkflowStatusCode = {
 	APPROVED: 0,
@@ -185,7 +198,8 @@ export const ProductWorkflowStatusCode = {
 	PENDING: 1,
 } as const;
 
-export type ProductWorkflowStatusCode = (typeof ProductWorkflowStatusCode)[keyof typeof ProductWorkflowStatusCode];
+export type ProductWorkflowStatusCode =
+	(typeof ProductWorkflowStatusCode)[keyof typeof ProductWorkflowStatusCode];
 
 export const SkuOptions = {
 	DEVELOPER: 'developer',

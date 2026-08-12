@@ -29,7 +29,7 @@ type MultiSelectProps<T> = {
 	value?: string;
 };
 
-const MultiSelect: React.FC<MultiSelectProps<any>> = ({
+const MultiSelect: React.FC<MultiSelectProps<unknown>> = ({
 	ariaLabel,
 	className,
 	disabledClearAll = false,
@@ -63,11 +63,11 @@ const MultiSelect: React.FC<MultiSelectProps<any>> = ({
 				aria-label={ariaLabel}
 				disabledClearAll={disabledClearAll}
 				inputName={inputName}
-				items={selectedItems}
+				items={selectedItems as Record<string, unknown>[]}
 				key={multiselectKey}
 				onChange={onChange}
 				onItemsChange={onItemsChange}
-				sourceItems={sourceItems}
+				sourceItems={sourceItems as Record<string, unknown>[]}
 				spritemap={getIconSpriteMap()}
 				value={value}
 			/>

@@ -17,7 +17,6 @@ import {getAccountImage} from '~/utils/publishUtils';
 
 import './AppPublishNavbar.scss';
 
-
 type NavbarProps = {
 	accountImage?: string;
 	accountName: string;

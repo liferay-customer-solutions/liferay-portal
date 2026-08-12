@@ -10,8 +10,9 @@ import {
 } from '~/context/NewAppContextProvider';
 import {LICENSING_OPTIONS} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
 import {currenciesCode, formatCurrency} from '~/utils/currencyUtils';
-import type {Currency} from '~/utils/currencyUtils';
 import {ProductPriceModel} from '~/utils/productUtils';
+
+import type {Currency} from '~/utils/currencyUtils';
 
 type LicensePricesProps = {
 	currency?: Currency;

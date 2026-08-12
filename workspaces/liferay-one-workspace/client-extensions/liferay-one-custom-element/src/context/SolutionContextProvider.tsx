@@ -14,7 +14,6 @@ import {useParams} from 'react-router-dom';
 import {breadcrumbStore} from '~/components/Breadcrumb/breadcrumbStore';
 import Loading from '~/components/Loading/Loading';
 import {useGetVocabulariesAndCategories} from '~/hooks/useGetVocabulariesAndCategories';
-import type {VocabularyCategoryOption} from '~/hooks/useGetVocabulariesAndCategories';
 import HeadlessCommerceAdminCatalog from '~/services/headless/HeadlessCommerceAdminCatalog';
 import {
 	ProductSpecificationKey,
@@ -25,6 +24,7 @@ import {safeJSONParse} from '~/utils/publishUtils';
 
 import {UploadedFile} from '../components/FileList/FileList';
 
+import type {VocabularyCategoryOption} from '~/hooks/useGetVocabulariesAndCategories';
 import type {ActionMap} from '~/types/actionMap';
 import type {Product} from '~/types/product';
 

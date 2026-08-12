@@ -10,7 +10,10 @@ import type {PublisherAssetAttachment} from '~/types/publisherAsset';
 
 export default class HeadlessPublisherAssetAttachment {
 	static async createPublisherAssetAttachment(body: unknown) {
-		return fetcher.post<PublisherAssetAttachment>('o/c/publisherassetattachments', body);
+		return fetcher.post<PublisherAssetAttachment>(
+			'o/c/publisherassetattachments',
+			body
+		);
 	}
 
 	static async deletePublisherAssetAttachment(id: number | string) {

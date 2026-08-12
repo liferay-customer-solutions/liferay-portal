@@ -7,7 +7,10 @@ import {HTMLAttributes} from 'react';
 
 type FormControlProps = HTMLAttributes<HTMLDivElement>;
 
-const MarketplaceFormControl: React.FC<FormControlProps> = ({children, ...otherProps}) => {
+const MarketplaceFormControl: React.FC<FormControlProps> = ({
+	children,
+	...otherProps
+}) => {
 	return <div {...otherProps}>{children}</div>;
 };
 

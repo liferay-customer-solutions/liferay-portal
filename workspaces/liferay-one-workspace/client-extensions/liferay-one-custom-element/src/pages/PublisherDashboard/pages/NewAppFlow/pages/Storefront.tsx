@@ -12,17 +12,20 @@ import VideoThumbnail from '~/components/VideoThumbnail/VideoThumbnail';
 import {NewAppTypes, useNewAppContext} from '~/context/NewAppContextProvider';
 import {ACCEPT_FILE_TYPES} from '~/enums/File';
 import i18n from '~/i18n';
+import {Liferay} from '~/services/liferay/liferay';
+import {ProductTags} from '~/utils/productUtils';
 import {getRandomID} from '~/utils/stringUtils';
 import {swapElements} from '~/utils/swapElements';
 
 import {MAX_IMAGE_QUANTITY, MAX_SIZE_5MBS} from '../constants';
 
+import type {UploadedFile} from '~/components/FileList/FileList';
 
 const Storefront = () => {
 	const [{storefront}, dispatch] = useNewAppContext();
 
 	const images = storefront.images.filter(
-		(image) => !image.tags?.includes('app icon')
+		(image) => !image.tags?.includes(ProductTags.APP_ICON)
 	);
 	const video = storefront.video;
 
@@ -55,7 +58,7 @@ const Storefront = () => {
 						readableSize: filesize(file.size),
 						uploaded: false,
 					})),
-				] as any,
+				] as UploadedFile[],
 			},
 			type: NewAppTypes.SET_STOREFRONT,
 		});
@@ -65,8 +68,8 @@ const Storefront = () => {
 
 		const _images = swapElements(images, index, newIndex);
 
-		_images[index].changed = true;
-		_images[newIndex].changed = true;
+		_images[index] = {..._images[index], changed: true};
+		_images[newIndex] = {..._images[newIndex], changed: true};
 
 		dispatch({
 			payload: {
@@ -80,7 +83,7 @@ const Storefront = () => {
 		<>
 			<Section label={i18n.translate('app-storefront-images')} required>
 				<span className="h5">
-					{i18n.sub('add-up-to-x-images', '10')}
+					{i18n.sub('add-up-to-x-images', `${MAX_IMAGE_QUANTITY}`)}
 				</span>
 
 				<FileList
@@ -109,6 +112,13 @@ const Storefront = () => {
 					multiple
 					onDropRejected={(fileList) => {
 						if (fileList.length > MAX_IMAGE_QUANTITY) {
+							Liferay.Util.openToast({
+								message: i18n.sub(
+									'you-can-only-upload-up-to-x-images',
+									`${MAX_IMAGE_QUANTITY}`
+								),
+								type: 'danger',
+							});
 						}
 					}}
 					onHandleUpload={handleUploadAppPackages}

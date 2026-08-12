@@ -8,11 +8,12 @@ export function swapElements<T>(
 	currentIndex: number,
 	newIndex: number
 ) {
-	const value = array[currentIndex];
-	array[currentIndex] = array[newIndex];
-	array[newIndex] = value;
+	const swapped = [...array];
 
-	return array;
+	swapped[currentIndex] = array[newIndex];
+	swapped[newIndex] = array[currentIndex];
+
+	return swapped;
 }
 
 export default swapElements;

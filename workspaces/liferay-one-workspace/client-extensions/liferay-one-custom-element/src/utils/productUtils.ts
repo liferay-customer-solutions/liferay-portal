@@ -56,8 +56,6 @@ export function getProductCategoriesByVocabularyName(
 		.map(({name}) => name);
 }
 
-
-
 const ALL_OFFERINGS: ProductOfferingTypes[] = [
 	'Liferay PaaS',
 	'Liferay SaaS',
@@ -72,9 +70,6 @@ const offeringTypes: Record<string, ProductOfferingTypes[]> = {
 	'low-code-configuration': ALL_OFFERINGS,
 	'other': ALL_OFFERINGS,
 };
-
-
-
 
 export function getOfferingTypes(type: ProductType) {
 	return offeringTypes[type];

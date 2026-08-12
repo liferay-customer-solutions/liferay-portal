@@ -17,8 +17,8 @@ import type {ProductPriceModel} from '~/types/product';
 
 export type AppFlowItem = {
 	alertText?: string;
-	hide?: boolean;
 	description: (isEditing?: boolean) => string;
+	hide?: boolean;
 	label: string;
 	parseSchema?: (
 		context: NewAppInitialState

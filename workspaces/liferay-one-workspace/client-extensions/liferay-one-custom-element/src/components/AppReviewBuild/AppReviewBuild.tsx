@@ -3,12 +3,13 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import type {UploadedFile} from '~/components/FileList/FileList';
 import ClayIcon from '@clayui/icon';
 import {AppReviewProps} from '~/components/AppReview/AppReview';
 import AppReviewSection from '~/components/AppReviewSection/AppReviewSection';
 import i18n from '~/i18n';
 import {ProductTypeOptions} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants/ProductTypeOptions';
+
+import type {UploadedFile} from '~/components/FileList/FileList';
 
 const FileContent = ({
 	liferayPackage,
