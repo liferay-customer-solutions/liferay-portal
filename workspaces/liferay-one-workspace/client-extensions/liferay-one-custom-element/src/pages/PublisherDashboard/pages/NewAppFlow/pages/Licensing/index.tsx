@@ -12,6 +12,8 @@ import {
 	LICENSING_OPTIONS,
 } from '../../constants';
 
+import type {ProductPriceModel} from '~/types/product';
+
 const Licensing = () => {
 	const [
 		{
@@ -31,7 +33,7 @@ const Licensing = () => {
 			>
 				{LICENSING_OPTIONS.map(({value, ...licensingOption}, index) => {
 					const disabled = licensingOption.disabled(
-						priceModel as any
+						priceModel as ProductPriceModel
 					);
 
 					return (
@@ -64,7 +66,7 @@ const Licensing = () => {
 					{LICENSING_30_DAYS_TRIAL_OPTIONS.map(
 						({value, ...licensingOption}, index) => {
 							const disabled = licensingOption.disabled(
-								priceModel as any
+								priceModel as ProductPriceModel
 							);
 
 							return (

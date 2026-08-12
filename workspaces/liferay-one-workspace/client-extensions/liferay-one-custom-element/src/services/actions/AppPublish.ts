@@ -25,7 +25,13 @@ import HeadlessCommerceAdminPricing from '../headless/HeadlessCommerceAdminPrici
 import BaseAppPublish from './BaseAppPublish';
 import PublisherAsset from './PublisherAsset';
 
-import type {PriceEntry, Product, ProductCategories, TierPrice} from '~/types/product';
+import type {CommerceOption} from '~/types/commerce';
+import type {
+	PriceEntry,
+	Product,
+	ProductCategories,
+	TierPrice,
+} from '~/types/product';
 
 export type ProductConfig = {
 	isDraft: boolean;
@@ -147,15 +153,19 @@ export default class AppPublish extends BaseAppPublish {
 			return;
 		}
 
-		(option as any).optionId = option?.id;
-
-		delete (option as any).actions;
-		delete (option as any).externalReferenceCode;
+		const {
+			actions: _actions,
+			externalReferenceCode: _externalReferenceCode,
+			...optionBody
+		} = option as CommerceOption & {
+			actions?: unknown;
+			externalReferenceCode?: string;
+		};
 
 		const {
 			items: [productOption],
 		} = await HeadlessCommerceAdminCatalogImpl.createProductOption(
-			[option],
+			[{...optionBody, optionId: option.id}],
 			product.productId
 		);
 
@@ -204,7 +214,9 @@ export default class AppPublish extends BaseAppPublish {
 		const productTypeCategories = (
 			vocabulariesAndCategories[ProductVocabulary.PRODUCT_TYPE]
 				?.categories ?? []
-		).filter(({label}: {label: string}) => label === ProductTypeVocabulary.APP);
+		).filter(
+			({label}: {label: string}) => label === ProductTypeVocabulary.APP
+		);
 
 		const productCategories = [
 			...areas,

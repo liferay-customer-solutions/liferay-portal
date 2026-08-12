@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {ProductTags} from '~/utils/productUtils';
+
 import accountPlaceholder from '../assets/images/account_placeholder.png';
 import appPlaceholder from '../assets/images/app_placeholder.png';
 import i18n from '../i18n';
@@ -13,7 +15,13 @@ import {
 	updateProductSpecification,
 } from './apiUtils';
 
-import type {DeliveryProductAttachment, DeliveryProductSpecification, ProductAttachment, ProductSpecification, SKU} from '~/types/product';
+import type {
+	DeliveryProductAttachment,
+	DeliveryProductSpecification,
+	ProductAttachment,
+	ProductSpecification,
+	SKU,
+} from '~/types/product';
 
 type FileRequest = {
 	appERC: string;
@@ -117,7 +125,7 @@ export function getThumbnailByProductAttachment(
 
 	const thumbnail =
 		images.find((images) => {
-			return (images.tags || []).indexOf('app icon') >= 0;
+			return (images.tags || []).indexOf(ProductTags.APP_ICON) >= 0;
 		}) || images[0];
 
 	return thumbnail?.src;

@@ -1524,6 +1524,8 @@ export default {
 		'You are currently on a text element, inside of a list box.',
 	'you-are-finalizing-your-connection-with-the-marketplace':
 		'We are finalizing your connection with the Marketplace. Please, do not close the window until the connection is fully completed, as it will close automatically once it is done.',
+	'you-can-only-upload-up-to-x-images':
+		'You can only upload up to {0} images.',
 	'you-can-paste-links-directly-from-youtube':
 		'You can paste links directly from YouTube.',
 	'you-can-put-anything-you-want-here-but-a-good-guideline-is-no-more-than-4-5-paragraphs-this-field-does-not-allow-any-markup-tags-its-just-text-please-do-not-use-misleading-names-information-or-icons-descriptions-should-be-as-concise-as-possible-ensure-your-icons-images-descriptions-and-tags-are-free-of-profanity-or-other-offensive-material':

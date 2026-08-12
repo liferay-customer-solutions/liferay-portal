@@ -3,11 +3,12 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import type {AppFlowItem} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 
 import './AppPublishSidebar.scss';
+
+import type {AppFlowItem} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
 
 type AppPublishSidebar = {
 	activeIndex: number;
@@ -32,7 +33,10 @@ const getIcon = ({
 	return 'circle';
 };
 
-const AppPublishSidebar: React.FC<AppPublishSidebar> = ({activeIndex, items}) => (
+const AppPublishSidebar: React.FC<AppPublishSidebar> = ({
+	activeIndex,
+	items,
+}) => (
 	<ul className="app-flow-list-container app-flow-list-ul mt-0 pt-5">
 		{items.map(({hide, label}, index) => {
 			if (hide) {

@@ -13,8 +13,8 @@ import HeadlessDelivery from '../headless/HeadlessDelivery';
 import HeadlessPublisherAssetses from '../headless/HeadlessPublisherAsset';
 import HeadlessPublisherAssetAttachment from '../headless/HeadlessPublisherAssetAttachment';
 
-import type {DocumentFolder} from '~/types/publisherAsset';
 import type {Product} from '~/types/product';
+import type {DocumentFolder} from '~/types/publisherAsset';
 
 const DOCUMENTS_ROOT_FOLDER = 0;
 const PICK_LIST_ASSET_TYPE = 'package';

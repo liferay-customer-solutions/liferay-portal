@@ -12,8 +12,6 @@ import {currenciesCode} from '~/utils/currencyUtils';
 
 import './LicensePriceCard.scss';
 
-
-
 type LicensePriceCardProps = {
 	currency: string;
 	licensePrices: {[key: number]: number};

@@ -12,25 +12,19 @@ import {UploadedFile} from '~/components/FileList/FileList';
 import Loading from '~/components/Loading/Loading';
 import {ProductVocabulary} from '~/enums/Product';
 import {useGetVocabulariesAndCategories} from '~/hooks/useGetVocabulariesAndCategories';
-import type {VocabularyCategoryOption} from '~/hooks/useGetVocabulariesAndCategories';
 import {MarketplaceProduct} from '~/models/MarketplaceProduct';
 import HeadlessCommerceAdminCatalogImpl from '~/services/headless/HeadlessCommerceAdminCatalog';
 import HeadlessDelivery from '~/services/headless/HeadlessDelivery';
 import HeadlessPublisherAsset from '~/services/headless/HeadlessPublisherAsset';
 import SearchBuilder from '~/utils/SearchBuilder';
-import {
-	ProductSpecificationKey,
-} from '~/utils/productUtils';
+import {ProductSpecificationKey, ProductTags} from '~/utils/productUtils';
 
 import {useMarketplaceContext} from './MarketplaceContextProvider';
 
+import type {VocabularyCategoryOption} from '~/hooks/useGetVocabulariesAndCategories';
 import type {ActionMap} from '~/types/actionMap';
 import type {Catalog} from '~/types/commerce';
-import type {
-	Product,
-	ProductLicenseTier,
-	ProductType,
-} from '~/types/product';
+import type {Product, ProductLicenseTier, ProductType} from '~/types/product';
 
 export type LicensePrice = {key: number; value: number};
 export type LicenseType = 'Perpetual' | 'Subscription';
@@ -337,16 +331,16 @@ const reducer = (state: NewAppInitialState, action: AppActions) => {
 			}
 
 			const storeFrontImages = (_product.images ?? []).filter(
-				({tags}) => !tags?.includes('app icon')
+				({tags}) => !tags?.includes(ProductTags.APP_ICON)
 			);
 
 			const appIcon = (_product.images ?? []).find(({tags}) =>
-				tags?.includes('app icon')
+				tags?.includes(ProductTags.APP_ICON)
 			);
 
 			const categories = filterProductVocabularies(
 				_product,
-				'App Category'
+				ProductVocabulary.APP_CATEGORY
 			)[0];
 
 			return {
@@ -382,7 +376,10 @@ const reducer = (state: NewAppInitialState, action: AppActions) => {
 				} as NewAppInitialState['pricing'],
 				profile: {
 					...newState.profile,
-					areas: filterProductVocabularies(_product, 'App Area'),
+					areas: filterProductVocabularies(
+						_product,
+						ProductVocabulary.APP_AREA
+					),
 					categories,
 					description: _product.description.en_US,
 					file: {
@@ -394,7 +391,10 @@ const reducer = (state: NewAppInitialState, action: AppActions) => {
 						uploaded: true,
 					},
 					name: _product.name.en_US,
-					tags: filterProductVocabularies(_product, 'App Tags'),
+					tags: filterProductVocabularies(
+						_product,
+						ProductVocabulary.APP_TAGS
+					),
 				} as NewAppInitialState['profile'],
 				references: {
 					...state.references,

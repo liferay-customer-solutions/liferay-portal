@@ -10,11 +10,9 @@ import MultiSelect from '~/components/MultiSelect/MultiSelect';
 import Select from '~/components/Select/Select';
 import UploadLogo from '~/components/UploadLogo/UploadLogo';
 import {NewAppTypes, useNewAppContext} from '~/context/NewAppContextProvider';
-import {
-	ProductVocabulary,
-	ProductWorkflowStatusCode,
-} from '~/enums/Product';
+import {ProductVocabulary, ProductWorkflowStatusCode} from '~/enums/Product';
 import i18n from '~/i18n';
+import {ProductTags} from '~/utils/productUtils';
 import {getRandomID} from '~/utils/stringUtils';
 
 import type {VocabularyCategoryOption} from '~/hooks/useGetVocabulariesAndCategories';
@@ -75,7 +73,7 @@ const Profile = () => {
 			preview: URL.createObjectURL(_file),
 			progress: 0,
 			readableSize: filesize(_file.size),
-			tags: ['app icon'],
+			tags: [ProductTags.APP_ICON],
 			uploaded: true,
 		};
 
@@ -235,8 +233,10 @@ const Profile = () => {
 							getFilteredItems(areas, defaultSourceItems?.areas)
 								.length
 						}`}
-						onItemsChange={(items: {[key: string]: string}[]) => {
-							const filteredValue = items.filter((item) =>
+						onItemsChange={(items) => {
+							const filteredValue = (
+								items as {[key: string]: string}[]
+							).filter((item) =>
 								defaultSourceItems.areas.some(
 									(defaultItem: VocabularyCategoryOption) =>
 										defaultItem.value === item.value
@@ -270,8 +270,10 @@ const Profile = () => {
 							getFilteredItems(tags, defaultSourceItems?.tags)
 								.length
 						}`}
-						onItemsChange={(items: {[key: string]: string}[]) => {
-							const filteredValue = items.filter((item) =>
+						onItemsChange={(items) => {
+							const filteredValue = (
+								items as {[key: string]: string}[]
+							).filter((item) =>
 								defaultSourceItems.tags.some(
 									(defaultItem: VocabularyCategoryOption) =>
 										defaultItem.value === item.value

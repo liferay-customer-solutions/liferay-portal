@@ -19,10 +19,12 @@ export class MarketplaceProduct extends MarketplaceDeliveryProduct {
 	get specificationValues() {
 		const specificationValues = super.specificationValues;
 
-		for (const key in specificationValues) {
-			(specificationValues as any)[key] = (specificationValues as any)[
-				key
-			].en_US;
+		for (const key of Object.keys(
+			specificationValues
+		) as (keyof typeof specificationValues)[]) {
+			specificationValues[key] = (
+				specificationValues[key] as unknown as {en_US: string}
+			).en_US;
 		}
 
 		return specificationValues;

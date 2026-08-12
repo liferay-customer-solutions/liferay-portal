@@ -9,9 +9,7 @@ export function base64ToText(base64: string) {
 	return base64.split(',').at(-1);
 }
 
-export function fileToBase64(
-	file: File
-): Promise<ArrayBuffer | null | string> {
+export function fileToBase64(file: File): Promise<ArrayBuffer | null | string> {
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
 

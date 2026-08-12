@@ -12,7 +12,7 @@ import {
 	ProductPriceModel,
 	ProductSpecificationKey,
 	ProductTypeLabels,
-	} from '~/utils/productUtils';
+} from '~/utils/productUtils';
 import {safeJSONParse} from '~/utils/publishUtils';
 
 import i18n from '../i18n';
@@ -83,14 +83,14 @@ export class MarketplaceDeliveryProduct {
 
 	get specificationValues() {
 		const _specifications = {} as {
-			[key in keyof typeof ProductSpecificationKey]: string;
+			-readonly [key in keyof typeof ProductSpecificationKey]: string;
 		};
 
 		for (const specificationKey in ProductSpecificationKey) {
 			const _key =
 				specificationKey as keyof typeof ProductSpecificationKey;
 
-			(_specifications as any)[_key] = this.getSpecificationValue(
+			_specifications[_key] = this.getSpecificationValue(
 				ProductSpecificationKey[_key]
 			);
 		}
@@ -186,9 +186,8 @@ export class MarketplaceDeliveryProduct {
 
 		return {
 			icon:
-				(productTypeIcons as any)[
-					type as keyof typeof productTypeIcons
-				] || 'cog',
+				productTypeIcons[type as keyof typeof productTypeIcons] ||
+				'cog',
 			label: `${type} App`,
 			type,
 		};

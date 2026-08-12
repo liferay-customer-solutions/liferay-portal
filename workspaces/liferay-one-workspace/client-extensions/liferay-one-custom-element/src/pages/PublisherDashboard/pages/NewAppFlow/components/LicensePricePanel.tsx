@@ -21,8 +21,6 @@ import {ProductTypeLicenseOptions} from '~/utils/productUtils';
 import {CurrencyFlag} from '../pages/Licensing/components/CurrencyModal';
 import LicensePriceCard from './LicensePriceCard';
 
-
-
 const licensePrices = [
 	{
 		description:

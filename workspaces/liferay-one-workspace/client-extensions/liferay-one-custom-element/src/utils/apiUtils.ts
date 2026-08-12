@@ -9,7 +9,16 @@ import {Liferay} from '~/services/liferay/liferay';
 import type {CommerceAccount, CommerceOption} from '~/types/commerce';
 import type {ContactSales} from '~/types/contactSales';
 import type {BillingAddress, Cart} from '~/types/orders';
-import type {PriceList, Product, ProductCategories, ProductOptionItem, ProductSpecification, SKU, Specification, TierPrice} from '~/types/product';
+import type {
+	PriceList,
+	Product,
+	ProductCategories,
+	ProductOptionItem,
+	ProductSpecification,
+	SKU,
+	Specification,
+	TierPrice,
+} from '~/types/product';
 
 const headers = {
 	'Content-Type': 'application/json',
@@ -506,7 +515,10 @@ export async function postOptionValue(optionBody: unknown, optionId: number) {
 	}
 }
 
-export async function patchPriceEntry(priceEntry: unknown, priceEntryId: number) {
+export async function patchPriceEntry(
+	priceEntry: unknown,
+	priceEntryId: number
+) {
 	const response = await fetch(
 		`/o/headless-commerce-admin-pricing/v2.0/price-entries/${priceEntryId}`,
 		{
@@ -532,7 +544,10 @@ export async function postPriceList(priceList: PriceList) {
 	return await response.json();
 }
 
-export async function postPriceListEntry(priceListId: number, priceEntry: unknown) {
+export async function postPriceListEntry(
+	priceListId: number,
+	priceEntry: unknown
+) {
 	const response = await fetch(
 		`/o/headless-commerce-admin-pricing/v1.0/priceLists/${priceListId}/priceEntries`,
 		{

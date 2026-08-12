@@ -13,8 +13,6 @@ import {ProductLicenseTier} from '~/enums/Product';
 import i18n from '~/i18n';
 import {currenciesCode} from '~/utils/currencyUtils';
 
-
-
 export type CurrencyFlagProps = (typeof currenciesCode)[number];
 
 const CurrencyFlag = ({flag, iconSrc}: CurrencyFlagProps) => {

@@ -99,7 +99,6 @@ const PublishAppOutlet = () => {
 					</>
 				}
 				observer={observer}
-				size={'md' as any}
 				title="Exit from creating an app"
 				visible={open}
 			>
@@ -122,7 +121,6 @@ const PublishAppOutlet = () => {
 						</ClayButton>
 					}
 					observer={onExitModal.observer}
-					size={'md' as any}
 					title="Exit from creating an App"
 					visible={onExitModal.open}
 				>

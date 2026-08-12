@@ -14,7 +14,7 @@ type ModalProps = {
 	first?: ReactElement;
 	last?: ReactElement;
 	observer: Observer;
-	size: Size;
+	size?: Size;
 	status?: Status;
 	subtitle?: string;
 	title?: string;

@@ -16,7 +16,11 @@ type PriceOptionsType = {
 	tooltip: string;
 };
 
-const AppReviewPricing = ({context, editNavigate, required = false}: AppReviewProps) => {
+const AppReviewPricing = ({
+	context,
+	editNavigate,
+	required = false,
+}: AppReviewProps) => {
 	const pricingOption = PRICING_OPTIONS.find(
 		(pricingOption) => pricingOption.title === context.pricing.priceModel
 	) as PriceOptionsType;
