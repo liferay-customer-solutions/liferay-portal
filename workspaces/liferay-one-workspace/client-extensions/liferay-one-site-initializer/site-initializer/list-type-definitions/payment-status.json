@@ -1,27 +1,27 @@
 {
-  "externalReferenceCode": "PAYMENT-STATUS",
-  "name": "Payment Status",
-  "permissions": [
-    {
-      "actionIds": [
-        "VIEW"
-      ],
-      "roleName": "Guest"
-    },
-    {
-      "actionIds": [
-        "VIEW"
-      ],
-      "roleName": "User"
-    },
-    {
-      "actionIds": [
-        "VIEW"
-      ],
-      "roleName": "Marketplace Publisher"
-    }
-  ],
-  "name_i18n": {
-    "en-US": "Payment Status"
-  }
+	"externalReferenceCode": "PAYMENT-STATUS",
+	"name": "Payment Status",
+	"name_i18n": {
+		"en-US": "Payment Status"
+	},
+	"permissions": [
+		{
+			"actionIds": [
+				"VIEW"
+			],
+			"roleName": "Guest"
+		},
+		{
+			"actionIds": [
+				"VIEW"
+			],
+			"roleName": "User"
+		},
+		{
+			"actionIds": [
+				"VIEW"
+			],
+			"roleName": "Marketplace Publisher"
+		}
+	]
 }

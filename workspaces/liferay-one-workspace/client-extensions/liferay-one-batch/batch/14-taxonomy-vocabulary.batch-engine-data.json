@@ -23,9 +23,9 @@
 				"en-US"
 			],
 			"externalReferenceCode": "MARKETPLACE_APP_CATEGORY",
+			"multiValued": true,
 			"name": "Marketplace App Category",
-			"viewableBy": "Anyone",
-			"multiValued": true
+			"viewableBy": "Anyone"
 		},
 		{
 			"assetTypes": [
@@ -39,9 +39,9 @@
 				"en-US"
 			],
 			"externalReferenceCode": "MARKETPLACE_APP_TAGS",
+			"multiValued": true,
 			"name": "Marketplace App Tags",
-			"viewableBy": "Anyone",
-			"multiValued": true
+			"viewableBy": "Anyone"
 		},
 		{
 			"assetTypes": [
@@ -55,9 +55,9 @@
 				"en-US"
 			],
 			"externalReferenceCode": "MARKETPLACE_AVAILABILITY",
+			"multiValued": true,
 			"name": "Marketplace Availability",
-			"viewableBy": "Anyone",
-			"multiValued": true
+			"viewableBy": "Anyone"
 		},
 		{
 			"assetTypes": [
@@ -71,9 +71,9 @@
 				"en-US"
 			],
 			"externalReferenceCode": "MARKETPLACE_CATEGORY",
+			"multiValued": true,
 			"name": "Marketplace Category",
-			"viewableBy": "Anyone",
-			"multiValued": true
+			"viewableBy": "Anyone"
 		},
 		{
 			"assetTypes": [
@@ -87,9 +87,9 @@
 				"en-US"
 			],
 			"externalReferenceCode": "MARKETPLACE_LIFERAY_PLATFORM_OFFERING",
+			"multiValued": true,
 			"name": "Marketplace Liferay Platform Offering",
-			"viewableBy": "Anyone",
-			"multiValued": true
+			"viewableBy": "Anyone"
 		},
 		{
 			"assetTypes": [
@@ -103,9 +103,9 @@
 				"en-US"
 			],
 			"externalReferenceCode": "MARKETPLACE_LIFERAY_VERSION",
+			"multiValued": true,
 			"name": "Marketplace Liferay Version",
-			"viewableBy": "Anyone",
-			"multiValued": true
+			"viewableBy": "Anyone"
 		},
 		{
 			"assetTypes": [
@@ -119,9 +119,9 @@
 				"en-US"
 			],
 			"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE",
+			"multiValued": true,
 			"name": "Marketplace Product Type",
-			"viewableBy": "Anyone",
-			"multiValued": true
+			"viewableBy": "Anyone"
 		},
 		{
 			"assetTypes": [
@@ -135,9 +135,9 @@
 				"en-US"
 			],
 			"externalReferenceCode": "MARKETPLACE_SOLUTION_CATEGORY",
+			"multiValued": true,
 			"name": "Marketplace Solution Category",
-			"viewableBy": "Anyone",
-			"multiValued": true
+			"viewableBy": "Anyone"
 		},
 		{
 			"assetTypes": [
@@ -151,9 +151,9 @@
 				"en-US"
 			],
 			"externalReferenceCode": "MARKETPLACE_SOLUTION_TAGS",
+			"multiValued": true,
 			"name": "Marketplace Solution Tags",
-			"viewableBy": "Anyone",
-			"multiValued": true
+			"viewableBy": "Anyone"
 		}
 	]
 }

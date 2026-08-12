@@ -1,27 +1,27 @@
 {
-  "externalReferenceCode": "LIFERAY-PRODUCTS-CAPABILITIES",
-  "name": "Liferay Products Capabilities",
-  "permissions": [
-    {
-      "actionIds": [
-        "VIEW"
-      ],
-      "roleName": "Guest"
-    },
-    {
-      "actionIds": [
-        "VIEW"
-      ],
-      "roleName": "User"
-    },
-    {
-      "actionIds": [
-        "VIEW"
-      ],
-      "roleName": "Marketplace Publisher"
-    }
-  ],
-  "name_i18n": {
-    "en-US": "Liferay Products Capabilities"
-  }
+	"externalReferenceCode": "LIFERAY-PRODUCTS-CAPABILITIES",
+	"name": "Liferay Products Capabilities",
+	"name_i18n": {
+		"en-US": "Liferay Products Capabilities"
+	},
+	"permissions": [
+		{
+			"actionIds": [
+				"VIEW"
+			],
+			"roleName": "Guest"
+		},
+		{
+			"actionIds": [
+				"VIEW"
+			],
+			"roleName": "User"
+		},
+		{
+			"actionIds": [
+				"VIEW"
+			],
+			"roleName": "Marketplace Publisher"
+		}
+	]
 }

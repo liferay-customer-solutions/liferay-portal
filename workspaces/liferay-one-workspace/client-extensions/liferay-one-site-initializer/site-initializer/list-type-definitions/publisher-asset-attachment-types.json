@@ -1,27 +1,27 @@
 {
-  "externalReferenceCode": "PUBLISHER-ASSET-ATTACHMENT-TYPES",
-  "name": "PublisherAssetAttachmentTypes",
-  "permissions": [
-    {
-      "actionIds": [
-        "VIEW"
-      ],
-      "roleName": "Guest"
-    },
-    {
-      "actionIds": [
-        "VIEW"
-      ],
-      "roleName": "User"
-    },
-    {
-      "actionIds": [
-        "VIEW"
-      ],
-      "roleName": "Marketplace Publisher"
-    }
-  ],
-  "name_i18n": {
-    "en-US": "Publisher Asset Attachment Types"
-  }
+	"externalReferenceCode": "PUBLISHER-ASSET-ATTACHMENT-TYPES",
+	"name": "PublisherAssetAttachmentTypes",
+	"name_i18n": {
+		"en-US": "Publisher Asset Attachment Types"
+	},
+	"permissions": [
+		{
+			"actionIds": [
+				"VIEW"
+			],
+			"roleName": "Guest"
+		},
+		{
+			"actionIds": [
+				"VIEW"
+			],
+			"roleName": "User"
+		},
+		{
+			"actionIds": [
+				"VIEW"
+			],
+			"roleName": "Marketplace Publisher"
+		}
+	]
 }

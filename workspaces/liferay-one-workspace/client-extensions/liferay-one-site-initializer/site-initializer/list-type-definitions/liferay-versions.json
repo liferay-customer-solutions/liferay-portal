@@ -1,27 +1,27 @@
 {
-  "externalReferenceCode": "LIFERAY-VERSIONS",
-  "name": "Liferay Versions",
-  "name_i18n": {
-    "en-US": "Liferay Versions"
-  },
-  "permissions": [
-    {
-      "actionIds": [
-        "VIEW"
-      ],
-      "roleName": "Guest"
-    },
-    {
-      "actionIds": [
-        "VIEW"
-      ],
-      "roleName": "User"
-    },
-    {
-      "actionIds": [
-        "VIEW"
-      ],
-      "roleName": "Marketplace Publisher"
-    }
-  ]
+	"externalReferenceCode": "LIFERAY-VERSIONS",
+	"name": "Liferay Versions",
+	"name_i18n": {
+		"en-US": "Liferay Versions"
+	},
+	"permissions": [
+		{
+			"actionIds": [
+				"VIEW"
+			],
+			"roleName": "Guest"
+		},
+		{
+			"actionIds": [
+				"VIEW"
+			],
+			"roleName": "User"
+		},
+		{
+			"actionIds": [
+				"VIEW"
+			],
+			"roleName": "Marketplace Publisher"
+		}
+	]
 }

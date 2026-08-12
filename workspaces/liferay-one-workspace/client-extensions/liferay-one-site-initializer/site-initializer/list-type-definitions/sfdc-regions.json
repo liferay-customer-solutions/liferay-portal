@@ -1,27 +1,27 @@
 {
-  "externalReferenceCode": "SFDC-REGIONS",
-  "name": "sfdcRegions",
-  "permissions": [
-    {
-      "actionIds": [
-        "VIEW"
-      ],
-      "roleName": "Guest"
-    },
-    {
-      "actionIds": [
-        "VIEW"
-      ],
-      "roleName": "User"
-    },
-    {
-      "actionIds": [
-        "VIEW"
-      ],
-      "roleName": "Marketplace Publisher"
-    }
-  ],
-  "name_i18n": {
-    "en-US": "SFDC | Regions"
-  }
+	"externalReferenceCode": "SFDC-REGIONS",
+	"name": "sfdcRegions",
+	"name_i18n": {
+		"en-US": "SFDC | Regions"
+	},
+	"permissions": [
+		{
+			"actionIds": [
+				"VIEW"
+			],
+			"roleName": "Guest"
+		},
+		{
+			"actionIds": [
+				"VIEW"
+			],
+			"roleName": "User"
+		},
+		{
+			"actionIds": [
+				"VIEW"
+			],
+			"roleName": "Marketplace Publisher"
+		}
+	]
 }
