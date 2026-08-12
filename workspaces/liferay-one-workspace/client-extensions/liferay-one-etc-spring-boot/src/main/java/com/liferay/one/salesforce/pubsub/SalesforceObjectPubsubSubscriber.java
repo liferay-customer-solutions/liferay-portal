@@ -69,6 +69,8 @@ public class SalesforceObjectPubsubSubscriber extends BasePubsubSubscriber {
 
 			JSONArray recordsJSONArray = jsonObject.getJSONArray("records");
 
+			Exception exception1 = null;
+
 			for (int i = 0; i < recordsJSONArray.length(); i++) {
 				try {
 					JSONObject recordJSONObject =
@@ -99,20 +101,35 @@ public class SalesforceObjectPubsubSubscriber extends BasePubsubSubscriber {
 								salesforceObjectName);
 					}
 				}
-				catch (Exception exception) {
+				catch (Exception exception2) {
 					_log.error(
 						StringBundler.concat(
 							"Unable to process Salesforce ",
 							salesforceObjectName, " record ",
 							recordsJSONArray.opt(i)),
-						exception);
+						exception2);
+
+					if (exception1 == null) {
+						exception1 = new Exception(
+							StringBundler.concat(
+								"Unable to process Salesforce ",
+								salesforceObjectName, " records"));
+					}
+
+					exception1.addSuppressed(exception2);
 				}
+			}
+
+			if (exception1 != null) {
+				throw exception1;
 			}
 		}
 		catch (Exception exception) {
 			_log.error(
 				"Unable to process Salesforce message " + message.getPayload(),
 				exception);
+
+			throw exception;
 		}
 	}
 
