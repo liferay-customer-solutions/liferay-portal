@@ -7,9 +7,7 @@ package com.liferay.one.jira.synchronizer;
 
 import com.liferay.headless.admin.user.client.dto.v1_0.Account;
 import com.liferay.headless.admin.user.client.dto.v1_0.AccountBrief;
-import com.liferay.headless.admin.user.client.dto.v1_0.AccountContactInformation;
 import com.liferay.headless.admin.user.client.dto.v1_0.Organization;
-import com.liferay.headless.admin.user.client.dto.v1_0.Role;
 import com.liferay.headless.admin.user.client.dto.v1_0.RoleBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
 import com.liferay.one.jira.constants.AccountConstants;
@@ -21,11 +19,9 @@ import com.liferay.one.jira.converter.PostalAddressConverter;
 import com.liferay.one.jira.converter.TeamConverter;
 import com.liferay.one.jira.exception.AccountNotFoundException;
 import com.liferay.one.jira.model.JiraAssetObject;
-import com.liferay.one.jira.model.JiraBusinessEvent;
 import com.liferay.one.jira.service.JiraAssetService;
 import com.liferay.one.jira.service.JiraBusinessEventService;
 import com.liferay.one.jira.util.JiraSyncLock;
-import com.liferay.one.model.AccountSupportInfo;
 import com.liferay.one.model.EntitlementDefinition;
 import com.liferay.one.model.Project;
 import com.liferay.one.model.ProjectMembership;
@@ -40,15 +36,10 @@ import com.liferay.one.service.PropertyService;
 import com.liferay.one.service.RoleService;
 import com.liferay.one.service.UserAccountService;
 import com.liferay.one.util.FindUtil;
-import com.liferay.one.util.role.EmployeeRoles;
+import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
-import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -117,42 +108,28 @@ public class AccountSynchronizer {
 
 		Date startDate = new Date();
 
-		List<UserAccount> accountUserAccounts =
-			_userAccountService.getAccountUserAccounts(account.getId());
-		List<Organization> accountOrganizations =
-			_organizationService.getAccountOrganizations(account.getId());
-
-		Map<String, Object> accountAttributeValues = _getAccountAttributeValues(
-			account, accountUserAccounts, accountOrganizations);
+		AccountSyncModel accountSyncModel = _createAccountSyncModel(account);
 
 		_syncAccountAsset(
-			account, accountAttributeValues, account.getExternalReferenceCode(),
-			account.getName());
+			account, account.getExternalReferenceCode(), account.getName(),
+			jiraAssetObject -> _setAttributeValues(
+				accountSyncModel, jiraAssetObject));
 
-		_syncContactRoleAssignments(account, accountUserAccounts, startDate);
-		_syncAccountOrganizationAssignments(
-			account, accountOrganizations, startDate);
+		_syncContactRoleAssignments(accountSyncModel, startDate);
+		_syncAccountOrganizationAssignments(accountSyncModel, startDate);
 
-		_syncUserAccounts(accountUserAccounts);
+		_syncUserAccounts(accountSyncModel.getAccountUserAccounts());
 
-		List<Project> projects = _projectService.getProjects(account.getId());
-
-		if (!projects.isEmpty()) {
-			Map<String, Role> accountRolesByExternalReferenceCode =
-				_getAccountRolesByExternalReferenceCode();
-
-			for (Project project : projects) {
-				try {
-					_syncProject(
-						account, project, accountAttributeValues,
-						accountRolesByExternalReferenceCode);
-				}
-				catch (Exception exception) {
-					_log.error(
-						"Unable to sync project " +
-							project.getExternalReferenceCode(),
-						exception);
-				}
+		for (Project project : accountSyncModel.getProjects()) {
+			try {
+				_syncProject(
+					_createProjectSyncModel(accountSyncModel, project));
+			}
+			catch (Exception exception) {
+				_log.error(
+					"Unable to sync project " +
+						project.getExternalReferenceCode(),
+					exception);
 			}
 		}
 	}
@@ -164,29 +141,20 @@ public class AccountSynchronizer {
 					account.getExternalReferenceCode() + " to JSM");
 		}
 
-		UserAccountBucket accountUserAccountBucket =
-			_getAccountUserAccountBucket(
-				account,
-				_userAccountService.getAccountUserAccounts(account.getId()));
+		AccountSyncModel accountSyncModel = _createAccountSyncModel(account);
 
 		_syncAccountAsset(
-			account,
-			LinkedHashMapBuilder.<String, Object>put(
-				AccountConstants.ATTRIBUTE_NAME_CUSTOMER_CONTACTS,
-				_jiraAssetService.getOrCreateReferenceObjectIds(
-					_contactConverter,
-					accountUserAccountBucket.getCustomerUserAccounts(),
-					UserAccount::getExternalReferenceCode,
-					_contactConverter::toAssetObject)
-			).put(
-				AccountConstants.ATTRIBUTE_NAME_WORKER_CONTACTS,
-				_jiraAssetService.getOrCreateReferenceObjectIds(
-					_contactConverter,
-					accountUserAccountBucket.getWorkerUserAccounts(),
-					UserAccount::getExternalReferenceCode,
-					_contactConverter::toAssetObject)
-			).build(),
-			account.getExternalReferenceCode(), account.getName());
+			account, account.getExternalReferenceCode(), account.getName(),
+			jiraAssetObject -> {
+				jiraAssetObject.setAttributeValue(
+					AccountConstants.ATTRIBUTE_NAME_CUSTOMER_CONTACTS,
+					_toContactObjectIds(
+						accountSyncModel.getCustomerUserAccounts()));
+				jiraAssetObject.setAttributeValue(
+					AccountConstants.ATTRIBUTE_NAME_WORKER_CONTACTS,
+					_toContactObjectIds(
+						accountSyncModel.getWorkerUserAccounts()));
+			});
 	}
 
 	public void syncProject(Project project) throws Exception {
@@ -205,235 +173,100 @@ public class AccountSynchronizer {
 					" has no account external reference code");
 		}
 
-		Account account = _accountService.getAccount(
-			accountExternalReferenceCode);
+		AccountSyncModel accountSyncModel = _createAccountSyncModel(
+			_accountService.getAccount(accountExternalReferenceCode));
 
-		List<UserAccount> accountUserAccounts =
-			_userAccountService.getAccountUserAccounts(account.getId());
-		List<Organization> accountOrganizations =
-			_organizationService.getAccountOrganizations(account.getId());
-
-		_syncProject(
-			account, project,
-			_getAccountAttributeValues(
-				account, accountUserAccounts, accountOrganizations),
-			_getAccountRolesByExternalReferenceCode());
+		_syncProject(_createProjectSyncModel(accountSyncModel, project));
 	}
 
-	private void _addJiraBusinessEventLine(
-		List<String> lines, String fieldName, String value) {
-
-		if (Validator.isNull(value)) {
-			return;
-		}
-
-		lines.add(fieldName + ": " + value);
+	private AccountSyncModel _createAccountSyncModel(Account account) {
+		return new AccountSyncModel(
+			account, _commerceOrderService, _entitlementService,
+			_externalLinkConverter, _jiraBusinessEventService,
+			_organizationService, _projectService, _propertyService,
+			_roleService, _userAccountService);
 	}
 
-	private Map<String, Object> _getAccountAttributeValues(
-			Account account, List<UserAccount> accountUserAccounts,
-			List<Organization> accountOrganizations)
+	private ProjectSyncModel _createProjectSyncModel(
+		AccountSyncModel accountSyncModel, Project project) {
+
+		return new ProjectSyncModel(
+			accountSyncModel, _entitlementService, project,
+			_projectMembershipService, _userAccountService);
+	}
+
+	private void _setAttributeValues(
+			AccountSyncModel accountSyncModel, JiraAssetObject jiraAssetObject)
 		throws Exception {
 
-		UserAccountBucket accountUserAccountBucket =
-			_getAccountUserAccountBucket(account, accountUserAccounts);
-
-		AccountSupportInfo accountSupportInfo =
-			_commerceOrderService.getAccountSupportInfo(
-				account.getId(), account.getDefaultBillingAddressId());
-
-		return LinkedHashMapBuilder.<String, Object>put(
+		jiraAssetObject.setAttributeValue(
 			AccountConstants.ATTRIBUTE_NAME_ASSIGNED_TEAMS,
 			_jiraAssetService.getOrCreateReferenceObjectIds(
-				_teamConverter, accountOrganizations,
+				_teamConverter, accountSyncModel.getAccountOrganizations(),
 				Organization::getExternalReferenceCode,
-				_teamConverter::toAssetObject)
-		).put(
+				_teamConverter::toAssetObject));
+		jiraAssetObject.setAttributeValue(
 			AccountConstants.ATTRIBUTE_NAME_BUSINESS_EVENTS,
-			_toBusinessEventsFieldValue(account)
-		).put(
+			accountSyncModel.getBusinessEventsFieldValue());
+		jiraAssetObject.setAttributeValue(
 			AccountConstants.ATTRIBUTE_NAME_CUSTOMER_CONTACTS,
-			_jiraAssetService.getOrCreateReferenceObjectIds(
-				_contactConverter,
-				accountUserAccountBucket.getCustomerUserAccounts(),
-				UserAccount::getExternalReferenceCode,
-				_contactConverter::toAssetObject)
-		).put(
+			_toContactObjectIds(accountSyncModel.getCustomerUserAccounts()));
+		jiraAssetObject.setAttributeValue(
 			AccountConstants.ATTRIBUTE_NAME_ENTITLEMENTS,
-			_jiraAssetService.getOrCreateReferenceObjectIds(
-				_entitlementConverter,
-				_entitlementService.getActiveEntitlementDefinitions(
-					account.getId()),
-				EntitlementDefinition::getDisplayName,
-				_entitlementConverter::toAssetObject)
-		).put(
+			_toEntitlementObjectIds(
+				accountSyncModel.getActiveEntitlementDefinitions()));
+		jiraAssetObject.setAttributeValue(
 			AccountConstants.ATTRIBUTE_NAME_EXTERNAL_LINKS,
 			_jiraAssetService.getOrCreateReferenceObjectIds(
-				_externalLinkConverter, _getExternalLinkProperties(account),
+				_externalLinkConverter,
+				accountSyncModel.getExternalLinkProperties(),
 				Property::getExternalReferenceCode,
-				_externalLinkConverter::toAssetObject)
-		).put(
+				_externalLinkConverter::toAssetObject));
+		jiraAssetObject.setAttributeValue(
 			AccountConstants.ATTRIBUTE_NAME_LANGUAGE,
-			GetterUtil.getString(accountSupportInfo.getSupportLanguage())
-		).put(
+			accountSyncModel.getSupportLanguage());
+		jiraAssetObject.setAttributeValue(
 			AccountConstants.ATTRIBUTE_NAME_POSTAL_ADDRESSES,
-			() -> {
-				AccountContactInformation accountContactInformation =
-					account.getAccountContactInformation();
-
-				if (accountContactInformation == null) {
-					return null;
-				}
-
-				return _jiraAssetService.getOrCreateReferenceObjectIds(
-					_postalAddressConverter,
-					ListUtil.fromArray(
-						accountContactInformation.getPostalAddresses()),
-					postalAddress -> String.valueOf(postalAddress.getId()),
-					_postalAddressConverter::toAssetObject);
-			}
-		).put(
+			_jiraAssetService.getOrCreateReferenceObjectIds(
+				_postalAddressConverter, accountSyncModel.getPostalAddresses(),
+				postalAddress -> String.valueOf(postalAddress.getId()),
+				_postalAddressConverter::toAssetObject));
+		jiraAssetObject.setAttributeValue(
 			AccountConstants.ATTRIBUTE_NAME_SUPPORT_REGION,
-			GetterUtil.getString(accountSupportInfo.getSupportRegion())
-		).put(
+			accountSyncModel.getSupportRegion());
+		jiraAssetObject.setAttributeValue(
 			AccountConstants.ATTRIBUTE_NAME_WORKER_CONTACTS,
-			_jiraAssetService.getOrCreateReferenceObjectIds(
-				_contactConverter,
-				accountUserAccountBucket.getWorkerUserAccounts(),
-				UserAccount::getExternalReferenceCode,
-				_contactConverter::toAssetObject)
-		).build();
+			_toContactObjectIds(accountSyncModel.getWorkerUserAccounts()));
 	}
 
-	private Map<String, Role> _getAccountRolesByExternalReferenceCode()
+	private void _setAttributeValues(
+			JiraAssetObject jiraAssetObject, ProjectSyncModel projectSyncModel)
 		throws Exception {
 
-		Map<String, Role> accountRolesByExternalReferenceCode =
-			new LinkedHashMap<>();
+		_setAttributeValues(
+			projectSyncModel.getAccountSyncModel(), jiraAssetObject);
 
-		for (Role role : _roleService.getAccountRoles()) {
-			accountRolesByExternalReferenceCode.put(
-				role.getExternalReferenceCode(), role);
-		}
-
-		return accountRolesByExternalReferenceCode;
-	}
-
-	private UserAccountBucket _getAccountUserAccountBucket(
-		Account account, List<UserAccount> accountUserAccounts) {
-
-		UserAccountBucket accountUserAccountBucket = new UserAccountBucket();
-
-		for (UserAccount accountUserAccount : accountUserAccounts) {
-			AccountBrief accountBrief = FindUtil.findFirst(
-				accountUserAccount.getAccountBriefs(),
-				accountBrief1 -> Objects.equals(
-					account.getExternalReferenceCode(),
-					accountBrief1.getExternalReferenceCode()));
-
-			if (accountBrief == null) {
-				_log.error(
-					"accountBrief is null for user account = " +
-						accountUserAccount);
-
-				continue;
-			}
-
-			RoleBrief roleBrief = FindUtil.findFirst(
-				accountBrief.getRoleBriefs(),
-				roleBrief1 -> _employeeRoleNames.contains(
-					roleBrief1.getName()));
-
-			if (roleBrief != null) {
-				accountUserAccountBucket.addWorkerUserAccount(
-					accountUserAccount);
-			}
-			else {
-				accountUserAccountBucket.addCustomerUserAccount(
-					accountUserAccount);
-			}
-		}
-
-		return accountUserAccountBucket;
-	}
-
-	private List<Property> _getExternalLinkProperties(Account account)
-		throws Exception {
-
-		List<Property> externalLinkProperties = new ArrayList<>();
-
-		List<Property> properties = _propertyService.getAccountProperties(
-			account.getId());
-
-		for (Property property : properties) {
-			if (_externalLinkConverter.isExternalLinkProperty(property)) {
-				externalLinkProperties.add(property);
-			}
-		}
-
-		return externalLinkProperties;
-	}
-
-	private Map<String, Object> _getProjectAttributeValues(
-			Map<String, Object> accountAttributeValues,
-			Map<String, Role> accountRolesByExternalReferenceCode,
-			Project project, List<ProjectMembership> projectMemberships)
-		throws Exception {
-
-		List<UserAccount> customerUserAccounts = new ArrayList<>();
-		List<UserAccount> workerUserAccounts = new ArrayList<>();
-
-		for (ProjectMembership projectMembership : projectMemberships) {
-			UserAccount userAccount = _userAccountService.getUserAccount(
-				projectMembership.getUserId());
-
-			Role role = accountRolesByExternalReferenceCode.get(
-				projectMembership.getRoleExternalReferenceCode());
-
-			if ((role != null) && _employeeRoleNames.contains(role.getName())) {
-				workerUserAccounts.add(userAccount);
-			}
-			else {
-				customerUserAccounts.add(userAccount);
-			}
-		}
-
-		return LinkedHashMapBuilder.<String, Object>putAll(
-			accountAttributeValues
-		).put(
+		jiraAssetObject.setAttributeValue(
 			AccountConstants.ATTRIBUTE_NAME_CUSTOMER_CONTACTS,
-			_jiraAssetService.getOrCreateReferenceObjectIds(
-				_contactConverter, customerUserAccounts,
-				UserAccount::getExternalReferenceCode,
-				_contactConverter::toAssetObject)
-		).put(
+			_toContactObjectIds(projectSyncModel.getCustomerUserAccounts()));
+		jiraAssetObject.setAttributeValue(
 			AccountConstants.ATTRIBUTE_NAME_ENTITLEMENTS,
-			_jiraAssetService.getOrCreateReferenceObjectIds(
-				_entitlementConverter,
-				_entitlementService.getActiveEntitlementDefinitions(
-					project.getExternalReferenceCode()),
-				EntitlementDefinition::getDisplayName,
-				_entitlementConverter::toAssetObject)
-		).put(
+			_toEntitlementObjectIds(
+				projectSyncModel.getActiveEntitlementDefinitions()));
+		jiraAssetObject.setAttributeValue(
 			AccountConstants.ATTRIBUTE_NAME_WORKER_CONTACTS,
-			_jiraAssetService.getOrCreateReferenceObjectIds(
-				_contactConverter, workerUserAccounts,
-				UserAccount::getExternalReferenceCode,
-				_contactConverter::toAssetObject)
-		).build();
+			_toContactObjectIds(projectSyncModel.getWorkerUserAccounts()));
 	}
 
 	private void _syncAccountAsset(
-			Account account, Map<String, Object> attributeValues,
-			String externalKey, String name)
+			Account account, String externalKey, String name,
+			UnsafeConsumer<JiraAssetObject, Exception> unsafeConsumer)
 		throws Exception {
 
 		JiraAssetObject assetObject = _accountConverter.toAssetObject(
 			account, externalKey, name);
 
-		for (Map.Entry<String, Object> entry : attributeValues.entrySet()) {
-			assetObject.setAttributeValue(entry.getKey(), entry.getValue());
-		}
+		unsafeConsumer.accept(assetObject);
 
 		_jiraSyncLock.withLock(
 			externalKey,
@@ -441,18 +274,21 @@ public class AccountSynchronizer {
 	}
 
 	private void _syncAccountOrganizationAssignments(
-		Account account, List<Organization> organizations, Date startDate) {
+			AccountSyncModel accountSyncModel, Date startDate)
+		throws Exception {
 
 		Set<String> organizationExternalKeys = new LinkedHashSet<>();
 
-		for (Organization organization : organizations) {
+		for (Organization organization :
+				accountSyncModel.getAccountOrganizations()) {
+
 			organizationExternalKeys.add(
 				organization.getExternalReferenceCode());
 
 			try {
 				_accountOrganizationSynchronizer.syncAssignOrganization(
 					organization.getExternalReferenceCode(),
-					account.getExternalReferenceCode());
+					accountSyncModel.getExternalReferenceCode());
 			}
 			catch (Exception exception) {
 				_log.error(
@@ -466,29 +302,31 @@ public class AccountSynchronizer {
 
 		try {
 			_accountOrganizationSynchronizer.syncUnassignStaleOrganizations(
-				account.getExternalReferenceCode(), organizationExternalKeys,
-				startDate);
+				accountSyncModel.getExternalReferenceCode(),
+				organizationExternalKeys, startDate);
 		}
 		catch (Exception exception) {
 			_log.error(
 				"Unable to unassign stale organizations from account " +
-					account.getExternalReferenceCode(),
+					accountSyncModel.getExternalReferenceCode(),
 				exception);
 		}
 	}
 
 	private void _syncContactRoleAssignments(
-		Account account, List<UserAccount> accountUserAccounts,
-		Date startDate) {
+			AccountSyncModel accountSyncModel, Date startDate)
+		throws Exception {
 
 		Map<String, Set<String>> roleExternalKeysByUserAccountExternalKey =
 			new LinkedHashMap<>();
 
-		for (UserAccount accountUserAccount : accountUserAccounts) {
+		for (UserAccount accountUserAccount :
+				accountSyncModel.getAccountUserAccounts()) {
+
 			AccountBrief accountBrief = FindUtil.findFirst(
 				accountUserAccount.getAccountBriefs(),
 				accountBrief1 -> Objects.equals(
-					account.getExternalReferenceCode(),
+					accountSyncModel.getExternalReferenceCode(),
 					accountBrief1.getExternalReferenceCode()));
 
 			if (accountBrief == null) {
@@ -514,7 +352,7 @@ public class AccountSynchronizer {
 					_accountUserAccountRoleSynchronizer.syncAssignRole(
 						roleBrief.getExternalReferenceCode(),
 						accountUserAccount.getExternalReferenceCode(),
-						account.getExternalReferenceCode());
+						accountSyncModel.getExternalReferenceCode());
 				}
 				catch (Exception exception) {
 					_log.error(
@@ -528,41 +366,41 @@ public class AccountSynchronizer {
 
 		try {
 			_accountUserAccountRoleSynchronizer.syncUnassignStaleRoles(
-				account.getExternalReferenceCode(),
+				accountSyncModel.getExternalReferenceCode(),
 				roleExternalKeysByUserAccountExternalKey, startDate);
 		}
 		catch (Exception exception) {
 			_log.error(
 				"Unable to unassign stale contact roles for account " +
-					account.getExternalReferenceCode(),
+					accountSyncModel.getExternalReferenceCode(),
 				exception);
 		}
 	}
 
-	private void _syncProject(
-			Account account, Project project,
-			Map<String, Object> accountAttributeValues,
-			Map<String, Role> accountRolesByExternalReferenceCode)
+	private void _syncProject(ProjectSyncModel projectSyncModel)
 		throws Exception {
 
-		List<ProjectMembership> projectMemberships =
-			_projectMembershipService.getProjectMemberships(
-				project.getExternalReferenceCode());
+		AccountSyncModel accountSyncModel =
+			projectSyncModel.getAccountSyncModel();
+		Project project = projectSyncModel.getProject();
 
 		_syncAccountAsset(
-			account,
-			_getProjectAttributeValues(
-				accountAttributeValues, accountRolesByExternalReferenceCode,
-				project, projectMemberships),
-			project.getExternalReferenceCode(), project.getName());
+			accountSyncModel.getAccount(), project.getExternalReferenceCode(),
+			project.getName(),
+			jiraAssetObject -> _setAttributeValues(
+				jiraAssetObject, projectSyncModel));
 
-		_syncProjectMemberships(project, projectMemberships);
+		_syncProjectMemberships(projectSyncModel);
 	}
 
-	private void _syncProjectMemberships(
-		Project project, List<ProjectMembership> projectMemberships) {
+	private void _syncProjectMemberships(ProjectSyncModel projectSyncModel)
+		throws Exception {
 
-		for (ProjectMembership projectMembership : projectMemberships) {
+		Project project = projectSyncModel.getProject();
+
+		for (ProjectMembership projectMembership :
+				projectSyncModel.getProjectMemberships()) {
+
 			try {
 				UserAccount userAccount = _userAccountService.getUserAccount(
 					projectMembership.getUserId());
@@ -612,46 +450,20 @@ public class AccountSynchronizer {
 		}
 	}
 
-	private String _toBusinessEventFieldValuePart(
-		JiraBusinessEvent jiraBusinessEvent) {
-
-		List<String> lines = new ArrayList<>();
-
-		_addJiraBusinessEventLine(lines, "name", jiraBusinessEvent.getName());
-		_addJiraBusinessEventLine(
-			lines, "targetGoLiveDateTime",
-			jiraBusinessEvent.getPlannedEventDate());
-		_addJiraBusinessEventLine(
-			lines, "description", jiraBusinessEvent.getDescription());
-		_addJiraBusinessEventLine(
-			lines, "type", jiraBusinessEvent.getEventTypeName());
-		_addJiraBusinessEventLine(
-			lines, "currentVersion",
-			jiraBusinessEvent.getCurrentLiferayVersionName());
-		_addJiraBusinessEventLine(
-			lines, "newVersion", jiraBusinessEvent.getNewLiferayVersionName());
-
-		return StringUtil.merge(lines, ",\n");
+	private List<String> _toContactObjectIds(List<UserAccount> userAccounts) {
+		return _jiraAssetService.getOrCreateReferenceObjectIds(
+			_contactConverter, userAccounts,
+			UserAccount::getExternalReferenceCode,
+			_contactConverter::toAssetObject);
 	}
 
-	private String _toBusinessEventsFieldValue(Account account)
-		throws Exception {
+	private List<String> _toEntitlementObjectIds(
+		List<EntitlementDefinition> entitlementDefinitions) {
 
-		List<String> parts = new ArrayList<>();
-
-		List<JiraBusinessEvent> jiraBusinessEvents =
-			_jiraBusinessEventService.getJiraBusinessEvents(
-				account.getExternalReferenceCode());
-
-		for (JiraBusinessEvent businessEvent : jiraBusinessEvents) {
-			String part = _toBusinessEventFieldValuePart(businessEvent);
-
-			if (Validator.isNotNull(part)) {
-				parts.add(part);
-			}
-		}
-
-		return StringUtil.merge(parts, "\n\n");
+		return _jiraAssetService.getOrCreateReferenceObjectIds(
+			_entitlementConverter, entitlementDefinitions,
+			EntitlementDefinition::getDisplayName,
+			_entitlementConverter::toAssetObject);
 	}
 
 	private static final Log _log = LogFactory.getLog(
@@ -675,8 +487,6 @@ public class AccountSynchronizer {
 
 	@Autowired
 	private ContactConverter _contactConverter;
-
-	private final List<String> _employeeRoleNames = EmployeeRoles.getNames();
 
 	@Autowired
 	private EntitlementConverter _entitlementConverter;
@@ -722,29 +532,5 @@ public class AccountSynchronizer {
 
 	@Autowired
 	private UserAccountSynchronizer _userAccountSynchronizer;
-
-	private static class UserAccountBucket {
-
-		public void addCustomerUserAccount(UserAccount userAccount) {
-			_customerUserAccounts.add(userAccount);
-		}
-
-		public void addWorkerUserAccount(UserAccount userAccount) {
-			_workerUserAccounts.add(userAccount);
-		}
-
-		public List<UserAccount> getCustomerUserAccounts() {
-			return _customerUserAccounts;
-		}
-
-		public List<UserAccount> getWorkerUserAccounts() {
-			return _workerUserAccounts;
-		}
-
-		private final List<UserAccount> _customerUserAccounts =
-			new ArrayList<>();
-		private final List<UserAccount> _workerUserAccounts = new ArrayList<>();
-
-	}
 
 }
