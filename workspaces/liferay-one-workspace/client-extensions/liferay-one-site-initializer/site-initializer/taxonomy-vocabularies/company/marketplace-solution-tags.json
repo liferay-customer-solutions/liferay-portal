@@ -10,9 +10,6 @@
 		"en-US"
 	],
 	"externalReferenceCode": "MARKETPLACE_SOLUTION_TAGS",
-	"name": "Marketplace Solution Tags",
-	"name_i18n": {
-		"en_US": "Marketplace Solution Tags"
-	},
+	"name": "marketplace-solution-tags",
 	"viewableBy": "Anyone"
 }

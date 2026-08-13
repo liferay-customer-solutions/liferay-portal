@@ -10,9 +10,6 @@
 		"en-US"
 	],
 	"externalReferenceCode": "MARKETPLACE_LIFERAY_PLATFORM_OFFERING",
-	"name": "Marketplace Liferay Platform Offering",
-	"name_i18n": {
-		"en_US": "Marketplace Liferay Platform Offering"
-	},
+	"name": "marketplace-liferay-platform-offering",
 	"viewableBy": "Anyone"
 }

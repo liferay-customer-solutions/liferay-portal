@@ -10,9 +10,6 @@
 		"en-US"
 	],
 	"externalReferenceCode": "MARKETPLACE_LIFERAY_VERSION",
-	"name": "Marketplace Liferay Version",
-	"name_i18n": {
-		"en_US": "Marketplace Liferay Version"
-	},
+	"name": "marketplace-liferay-version",
 	"viewableBy": "Anyone"
 }

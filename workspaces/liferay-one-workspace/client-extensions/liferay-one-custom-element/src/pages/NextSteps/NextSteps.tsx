@@ -69,9 +69,9 @@ const SolutionTypes = {
 type SolutionTypes = (typeof SolutionTypes)[keyof typeof SolutionTypes];
 
 const ProductTypeVocabulary = {
-	APP: 'App',
-	LIFERAY_PRODUCT: 'Liferay Product',
-	SOLUTION: 'Solution',
+	APP: 'app',
+	LIFERAY_PRODUCT: 'liferay-product',
+	SOLUTION: 'solution',
 } as const;
 
 type ProductTypeVocabulary =

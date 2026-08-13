@@ -21,7 +21,7 @@ export default function PublishedApps() {
 
 	return (
 		<PublishedProductsListView
-			categoryVocabulary="App"
+			categoryVocabulary="app"
 			ctaLabel="publish-new-app"
 			description="manage-and-publish-apps-on-the-marketplace"
 			emptyStateDescription="publish-your-first-app-to-make-it-available"

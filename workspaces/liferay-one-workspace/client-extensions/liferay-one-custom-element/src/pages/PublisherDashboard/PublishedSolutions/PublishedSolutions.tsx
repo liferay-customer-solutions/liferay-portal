@@ -16,7 +16,7 @@ import type {Product} from '~/types/product';
 export default function PublishedSolutions() {
 	return (
 		<PublishedProductsListView
-			categoryVocabulary="Solution"
+			categoryVocabulary="solution"
 			ctaLabel="new-solution-template"
 			description="manage-and-publish-solutions-on-the-marketplace"
 			emptyStateDescription="publish-your-first-solution-to-make-it-available"
