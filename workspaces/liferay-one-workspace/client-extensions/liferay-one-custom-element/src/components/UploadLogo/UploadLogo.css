@@ -1,0 +1,47 @@
+input[type='file'] {
+	display: none;
+}
+
+.upload-logo-container {
+	align-items: center;
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+	margin-bottom: 1.5rem;
+}
+
+.upload-logo-icon {
+	border-radius: 4px;
+	height: 4.5rem;
+	object-fit: contain;
+	width: 4.5rem;
+}
+
+.upload-logo-placeholder {
+	height: 4.5rem;
+	width: 4.5rem;
+}
+
+.upload-logo-placeholder-icon {
+	font-size: 1.5rem;
+}
+
+.upload-logo-delete-button {
+	border: 1.2px solid var(--color-action-neutral-default);
+	border-radius: 0.1875rem;
+	transition: background-color 0.3s;
+}
+
+.upload-logo-delete-button-text {
+	color: var(--color-action-neutral-default);
+	font-size: 0.875rem;
+	font-weight: 600;
+	line-height: 1rem;
+	transition: color 0.3s;
+}
+
+.upload-logo-delete-button:hover {
+	background-color: var(--color-action-neutral-default);
+	border: 1.5px solid var(--color-action-neutral-default);
+	color: var(--color-neutral-0);
+}

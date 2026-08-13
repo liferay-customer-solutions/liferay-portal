@@ -1,0 +1,72 @@
+.package-version-modal-container .modal-header {
+	border-width: 0;
+	height: auto;
+	padding-bottom: 4px;
+	padding-top: 1.5rem;
+}
+
+.package-version-modal-container .modal-header h1 {
+	color: var(--color-neutral-10);
+	font-size: 1.8rem;
+	font-weight: 700;
+	line-height: 2.5rem;
+}
+
+.package-version-modal-container .modal-body {
+	align-items: center;
+	border-top: 0;
+	justify-content: center;
+	padding-top: 0.25rem;
+}
+
+.package-version-modal-container .modal-body .custom-control-label-text {
+	font-size: 0.8125rem;
+	font-weight: 600;
+}
+
+.package-version-modal-container .modal-body .management-bar > div {
+	background: var(--color-neutral-1);
+	border-radius: 0.625rem;
+}
+
+.package-version-modal-container .modal-body .navbar-form {
+	background: var(--color-neutral-1);
+}
+
+.package-version-modal-container .modal-body input[type='text'],
+.package-version-modal-container
+	.modal-body
+	.input-group
+	.input-group-inset-item,
+.package-version-modal-container
+	.modal-body
+	.input-group-inset.focus
+	~ .input-group-inset-item,
+.package-version-modal-container
+	.modal-body
+	.input-group-inset:focus-visible
+	~ .input-group-inset-item,
+.package-version-modal-container
+	.modal-body
+	.c-prefers-focus
+	.input-group-inset:focus
+	~ .input-group-inset-item {
+	background-color: var(--color-neutral-0);
+	border-color: var(--color-brand-primary-lighten-5);
+}
+
+.package-version-modal-container .modal-body p {
+	color: var(--color-neutral-10);
+	font-size: 15.7px;
+	line-height: 24px;
+}
+
+.package-version-modal-container .modal-form {
+	height: 300px;
+	overflow: scroll;
+	padding: 1rem 0.5rem;
+}
+
+.package-version-modal-container .modal-footer {
+	border-top: 0;
+}

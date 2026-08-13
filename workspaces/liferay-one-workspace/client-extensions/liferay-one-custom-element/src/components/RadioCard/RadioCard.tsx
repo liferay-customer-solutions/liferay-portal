@@ -8,7 +8,7 @@ import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 import {ReactNode} from 'react';
 
-import './RadioCard.scss';
+import './RadioCard.css';
 
 type RadioCardProps = {
 	className?: string;

@@ -6,7 +6,7 @@
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 
-import './AppPublishSidebar.scss';
+import './AppPublishSidebar.css';
 
 import type {AppFlowItem} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
 

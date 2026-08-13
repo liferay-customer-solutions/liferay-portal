@@ -15,7 +15,7 @@ import {
 } from '~/utils/productUtils';
 import {getAccountImage} from '~/utils/publishUtils';
 
-import './AppPublishNavbar.scss';
+import './AppPublishNavbar.css';
 
 type NavbarProps = {
 	accountImage?: string;

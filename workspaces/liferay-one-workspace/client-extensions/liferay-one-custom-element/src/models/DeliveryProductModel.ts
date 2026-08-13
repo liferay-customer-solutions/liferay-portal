@@ -32,7 +32,9 @@ export class DeliveryProductModel {
 			ProductTypeLabels[APP_TYPE as unknown as ProductType];
 
 		if (!type) {
-			const categories = this.getCategories(ProductVocabulary.PRODUCT_TYPE);
+			const categories = this.getCategories(
+				ProductVocabulary.PRODUCT_TYPE
+			);
 
 			type = categories[0]?.name;
 		}

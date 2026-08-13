@@ -9,7 +9,7 @@ import {UploadedFile} from '~/components/FileList/FileList';
 
 import {Tooltip} from '../Tooltip/Tooltip';
 
-import './ImageFileItem.scss';
+import './ImageFileItem.css';
 
 import {ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';

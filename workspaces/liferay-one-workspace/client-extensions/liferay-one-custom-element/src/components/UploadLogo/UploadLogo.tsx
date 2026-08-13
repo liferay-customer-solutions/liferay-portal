@@ -10,7 +10,7 @@ import ReactDOMServer from 'react-dom/server';
 import i18n from '../../i18n';
 import {UploadedFile} from '../FileList/FileList';
 
-import './UploadLogo.scss';
+import './UploadLogo.css';
 
 type UploadLogoProps = {
 	onDeleteFile: (id: string) => void;

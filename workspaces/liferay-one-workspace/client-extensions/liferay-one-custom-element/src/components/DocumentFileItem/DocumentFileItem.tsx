@@ -5,7 +5,7 @@
 
 import {UploadedFile} from '~/components/FileList/FileList';
 
-import './DocumentFileItem.scss';
+import './DocumentFileItem.css';
 
 import ClayIcon from '@clayui/icon';
 import CircularProgress from '~/components/CircularProgress/CircularProgress';

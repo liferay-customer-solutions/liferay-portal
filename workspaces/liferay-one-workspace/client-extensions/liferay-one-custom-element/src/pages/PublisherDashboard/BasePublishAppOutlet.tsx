@@ -17,7 +17,7 @@ import i18n from '~/i18n';
 import usePublishHeader from './hooks/usePublishHeader';
 import usePublishNavigation from './hooks/usePublishNavigation';
 
-import './BasePublishAppOutlet.scss';
+import './BasePublishAppOutlet.css';
 
 import type {ProductWorkflowStatusCode} from '~/enums/Product';
 import type {AppFlowItem} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
