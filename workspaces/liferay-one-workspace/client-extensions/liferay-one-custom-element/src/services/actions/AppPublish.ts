@@ -99,7 +99,7 @@ export default class AppPublish extends BaseAppPublish {
 	}
 
 	private async createProductSKUs(product: Product) {
-		if (!product.productOptions) {
+		if (!product.productOptions?.length) {
 			const _productOptions =
 				await HeadlessCommerceAdminCatalogImpl.getProductOptions(
 					product.productId
@@ -109,6 +109,12 @@ export default class AppPublish extends BaseAppPublish {
 		}
 
 		const [productOption] = product.productOptions ?? [];
+
+		if (!productOption) {
+			throw new Error(
+				`Unable to create the SKUs because product ${product.productId} has no product option`
+			);
+		}
 
 		if (!product?.skus || !product.skus.length) {
 			product.skus = [];
@@ -171,9 +177,9 @@ export default class AppPublish extends BaseAppPublish {
 
 		if (!product.productOptions) {
 			product.productOptions = [];
-
-			product.productOptions.push(productOption);
 		}
+
+		product.productOptions.push(productOption);
 
 		return productOption;
 	}
