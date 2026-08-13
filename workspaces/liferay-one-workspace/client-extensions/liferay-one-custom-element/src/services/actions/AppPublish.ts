@@ -229,7 +229,9 @@ export default class AppPublish extends BaseAppPublish {
 			...productTypeCategories,
 			...tags,
 			categories,
-		].map(normalizeCategory);
+		]
+			.filter((category) => category?.value)
+			.map(normalizeCategory);
 
 		if (_product) {
 			if (file && (!file?.uploaded || file?.changed)) {

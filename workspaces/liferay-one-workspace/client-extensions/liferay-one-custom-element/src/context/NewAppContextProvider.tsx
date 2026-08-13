@@ -333,10 +333,11 @@ const reducer = (state: NewAppInitialState, action: AppActions) => {
 				tags?.includes(ProductTags.APP_ICON)
 			);
 
-			const categories = filterProductVocabularies(
-				_product,
-				ProductVocabulary.APP_CATEGORY
-			)[0];
+			const [categories = newAppInitialState.profile.categories] =
+				filterProductVocabularies(
+					_product,
+					ProductVocabulary.APP_CATEGORY
+				);
 
 			return {
 				...state,
