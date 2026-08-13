@@ -43,18 +43,6 @@ export default function PublishedApps() {
 					},
 					{
 						hidden: (product: Product) =>
-							product.productStatus !==
-							ProductWorkflowStatusCode.APPROVED,
-						icon: 'shortcut',
-						name: i18n.translate('open-in-marketplace'),
-						onClick: (product: Product) =>
-							window.open(
-								getProductPageURL(product.urls),
-								'_blank'
-							),
-					},
-					{
-						hidden: (product: Product) =>
 							product.productStatus ===
 							ProductWorkflowStatusCode.PENDING,
 						icon: 'pencil',
@@ -73,6 +61,18 @@ export default function PublishedApps() {
 						onClick: (product: Product) =>
 							navigate(
 								`/newversion/${product.productId}/publisher/build`
+							),
+					},
+					{
+						hidden: (product: Product) =>
+							product.productStatus !==
+							ProductWorkflowStatusCode.APPROVED,
+						icon: 'shortcut',
+						name: i18n.translate('open-in-marketplace'),
+						onClick: (product: Product) =>
+							window.open(
+								getProductPageURL(product.urls),
+								'_blank'
 							),
 					},
 				],
