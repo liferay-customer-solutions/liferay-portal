@@ -1,6 +1,7 @@
 .management-toolbar-dropdown {
-	padding: 0 10px 10px;
-	width: 400px;
+	min-width: 280px;
+	padding: 8px;
+	width: 320px;
 }
 
 .management-toolbar-dropdown-body {
@@ -8,6 +9,77 @@
 }
 
 .management-toolbar-filter-button {
+	border: 1px solid var(--color-neutral-4);
 	height: 40px;
 	max-height: 40px;
+	white-space: nowrap;
+}
+
+.management-toolbar-filter-panel {
+	padding: 8px;
+}
+
+.management-toolbar-filter-heading {
+	color: var(--color-neutral-7);
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+	padding: 8px 12px;
+	text-transform: uppercase;
+}
+
+.management-toolbar-filter-category {
+	background-color: transparent;
+	border: 0;
+	border-radius: 8px;
+	color: var(--color-neutral-10);
+	cursor: pointer;
+	font-weight: 600;
+	padding: 10px 12px;
+	text-align: left;
+	width: 100%;
+
+	&:hover {
+		background-color: var(--color-neutral-1);
+	}
+}
+
+.management-toolbar-filter-back {
+	align-items: center;
+	background-color: transparent;
+	border: 0;
+	color: var(--color-neutral-10);
+	cursor: pointer;
+	display: flex;
+	gap: 8px;
+	padding: 4px 0;
+}
+
+.management-toolbar-filter-title {
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+}
+
+.management-toolbar-filter-options {
+	margin-top: 12px;
+	max-height: 240px;
+	overflow-y: auto;
+
+	& label {
+		margin-bottom: 0;
+	}
+
+	& label:empty {
+		display: none;
+	}
+
+	& .custom-control {
+		margin-bottom: 0;
+	}
+}
+
+.management-toolbar-filter-apply {
+	margin-top: 12px;
 }

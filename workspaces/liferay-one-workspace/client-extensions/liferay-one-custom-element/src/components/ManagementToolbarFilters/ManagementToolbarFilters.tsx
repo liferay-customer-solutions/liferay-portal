@@ -67,6 +67,8 @@ const FilterBody: React.FC<FilterBodyProps> = ({
 		return initialValues;
 	}, [fields]);
 
+	const [activeFieldName, setActiveFieldName] = useState<string | null>(null);
+
 	const [form, setForm] = useState(() => ({
 		...initialFilters,
 		...listViewContext.filters.filter,
@@ -75,8 +77,6 @@ const FilterBody: React.FC<FilterBodyProps> = ({
 	const clearButtonDisabled = Object.values(form).every(
 		(value) => !value || !(value as string | unknown[]).length
 	);
-
-	const onClear = () => setForm(initialFilters);
 
 	const onChange = (event: {
 		target: {
@@ -178,67 +178,78 @@ const FilterBody: React.FC<FilterBodyProps> = ({
 		}
 	);
 
-	const onApply = useCallback(() => {
-		const filterCleaned = CreateFilters.removeEmptyFilter(
-			form as {[key: string]: string | number | string[] | number[]}
-		);
+	const applyFilters = useCallback(
+		(appliedForm: Record<string, unknown>) => {
+			const filterCleaned = CreateFilters.removeEmptyFilter(
+				appliedForm as {
+					[key: string]: string | number | string[] | number[];
+				}
+			);
 
-		const entries = Object.keys(filterCleaned).map((key) => ({
-			label: fields?.find(({name}) => name === key)?.label ?? key,
-			name: key,
-			value: filterCleaned[key] as string,
-		}));
+			const entries = Object.keys(filterCleaned).map((key) => ({
+				label: fields?.find(({name}) => name === key)?.label ?? key,
+				name: key,
+				value: filterCleaned[key] as string,
+			}));
 
-		const filters = Object.keys(filterCleaned).map((key) => ({
-			name: key,
-			value: Array.isArray(filterCleaned[key])
-				? (filterCleaned as unknown as Record<string, Option[]>)[
-						key
-					].map((options: Option) =>
-						options?.value
-							? options?.value
-							: options?.label || options
-					)
-				: filterCleaned[key],
-		}));
+			const filters = Object.keys(filterCleaned).map((key) => ({
+				name: key,
+				value: Array.isArray(filterCleaned[key])
+					? (filterCleaned as unknown as Record<string, Option[]>)[
+							key
+						].map((options: Option) =>
+							options?.value
+								? options?.value
+								: options?.label || options
+						)
+					: filterCleaned[key],
+			}));
 
-		const formattedFilter = filters.reduce(
-			(previousValue, currentValue) => {
-				return {
-					...previousValue,
-					[currentValue.name]: currentValue.value,
-				};
-			},
-			{}
-		);
+			const formattedFilter = filters.reduce(
+				(previousValue, currentValue) => {
+					return {
+						...previousValue,
+						[currentValue.name]: currentValue.value,
+					};
+				},
+				{}
+			);
 
-		if (filterSchema) {
-			updateUrlParams({
-				filter: JSON.stringify(formattedFilter),
-				filterSchema: filterSchema?.name as string,
-				page: '1',
+			if (filterSchema) {
+				updateUrlParams({
+					filter: JSON.stringify(formattedFilter),
+					filterSchema: filterSchema?.name as string,
+					page: '1',
+				});
+			}
+
+			if (!Object.keys(formattedFilter).length) {
+				handleRemoveItemFromFilter();
+			}
+
+			dispatch({
+				payload: {filters: {entries, filter: filterCleaned}},
+				type: ListViewTypes.SET_FILTERS,
 			});
-		}
 
-		if (!Object.keys(formattedFilter).length) {
-			handleRemoveItemFromFilter();
-		}
+			setIsVisible(false);
+		},
+		[
+			dispatch,
+			fields,
+			filterSchema,
+			handleRemoveItemFromFilter,
+			setIsVisible,
+			updateUrlParams,
+		]
+	);
 
-		dispatch({
-			payload: {filters: {entries, filter: filterCleaned}},
-			type: ListViewTypes.SET_FILTERS,
-		});
+	const onApply = useCallback(() => applyFilters(form), [applyFilters, form]);
 
-		setIsVisible(false);
-	}, [
-		dispatch,
-		fields,
-		filterSchema,
-		form,
-		handleRemoveItemFromFilter,
-		setIsVisible,
-		updateUrlParams,
-	]);
+	const onClearAll = useCallback(() => {
+		setForm(initialFilters);
+		applyFilters(initialFilters);
+	}, [applyFilters, initialFilters]);
 
 	useEffect(() => {
 		const searchParams = new URLSearchParams(location.search);
@@ -248,38 +259,73 @@ const FilterBody: React.FC<FilterBodyProps> = ({
 		}
 	}, [initialFilters, location.search]);
 
-	return (
-		<div className="align-content-between d-flex flex-column">
-			<ClayDropDown.Section>
-				<div className="management-toolbar-body">
-					<div className="dropdown-filter-content" tabIndex={1}>
-						<Form.Renderer
-							fieldOptions={fieldOptions}
-							fields={fields}
-							filterSchema={filterSchema?.name as string}
-							form={form}
-							isLoading={isLoading}
-							onApply={onApply}
-							onChange={onChange}
-						/>
-					</div>
-				</div>
-			</ClayDropDown.Section>
+	const activeField = fields?.find(({name}) => name === activeFieldName);
 
-			<ClayDropDown.Section className="d-flex dropdown-footer justify-content-center">
-				<ClayButton className="mt-2" onClick={onApply}>
-					{i18n.translate('apply')}
-				</ClayButton>
+	if (activeField) {
+		return (
+			<div className="management-toolbar-filter-panel">
+				<button
+					className="management-toolbar-filter-back"
+					onClick={() => setActiveFieldName(null)}
+					type="button"
+				>
+					<ClayIcon symbol="angle-left" />
+
+					<span className="management-toolbar-filter-title">
+						{activeField.label}
+					</span>
+				</button>
+
+				<div className="management-toolbar-filter-options">
+					<Form.Renderer
+						fieldOptions={fieldOptions}
+						fields={[{...activeField, label: ''}]}
+						filterSchema={filterSchema?.name as string}
+						form={form}
+						isLoading={isLoading}
+						onApply={onApply}
+						onChange={onChange}
+					/>
+				</div>
 
 				<ClayButton
-					className="ml-3 mt-2"
-					disabled={clearButtonDisabled}
+					className="management-toolbar-filter-apply w-100"
+					onClick={onApply}
+				>
+					{i18n.translate('add-filter')}
+				</ClayButton>
+			</div>
+		);
+	}
+
+	return (
+		<div className="management-toolbar-filter-panel">
+			<div className="management-toolbar-filter-heading">
+				{i18n.translate('filter-by')}
+			</div>
+
+			{fields?.map((field) => (
+				<button
+					className="align-items-center d-flex justify-content-between management-toolbar-filter-category"
+					key={field.name}
+					onClick={() => setActiveFieldName(field.name)}
+					type="button"
+				>
+					{field.label}
+
+					<ClayIcon symbol="angle-right" />
+				</button>
+			))}
+
+			{!clearButtonDisabled && (
+				<ClayButton
+					className="management-toolbar-filter-apply w-100"
 					displayType="secondary"
-					onClick={onClear}
+					onClick={onClearAll}
 				>
 					{i18n.translate('clear')}
 				</ClayButton>
-			</ClayDropDown.Section>
+			)}
 		</div>
 	);
 };
@@ -310,7 +356,10 @@ const ManagementToolbarFilters: React.FC<ManagementToolbarFilterProps> = ({
 					onClick={handleExpand}
 				>
 					<ClayIcon className="mr-2" symbol="filter" />
+
 					{i18n.translate('filter')}
+
+					<ClayIcon className="ml-2" symbol="caret-bottom" />
 				</ClayButton>
 			</div>
 
