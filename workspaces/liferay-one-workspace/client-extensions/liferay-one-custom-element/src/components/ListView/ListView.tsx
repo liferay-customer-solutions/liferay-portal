@@ -68,11 +68,7 @@ export type ListViewProps<T extends Record<string, unknown>> = {
 		visible?: boolean;
 	} & Omit<
 		ManagementToolbarProps,
-		| 'actions'
-		| 'onSelectAllRows'
-		| 'rowSelectable'
-		| 'tableProps'
-		| 'totalItems'
+		'actions' | 'onSelectAllRows' | 'rowSelectable' | 'tableProps'
 	>;
 
 	paginationOptions?: {
@@ -285,10 +281,7 @@ const ListViewBase = <T extends Record<string, unknown>>({
 	return (
 		<>
 			{managementToolbarVisible && (
-				<ManagementToolbar
-					{...managementToolbarProps}
-					totalItems={totalCount}
-				/>
+				<ManagementToolbar {...managementToolbarProps} />
 			)}
 
 			{!items.length && (

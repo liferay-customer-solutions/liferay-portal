@@ -22,14 +22,12 @@ export type ManagementToolbarProps = {
 
 	filterSchema?: FilterSchemaOption;
 	searchVisible?: boolean;
-	totalItems: number;
 };
 
 const ManagementToolbar: React.FC<ManagementToolbarProps> = ({
 	actionButton,
 	filterSchema,
 	searchVisible = false,
-	totalItems,
 }) => {
 	const [{filters}] = useContext(ListViewContext);
 
@@ -57,7 +55,7 @@ const ManagementToolbar: React.FC<ManagementToolbarProps> = ({
 				</div>
 
 				{!!filters.entries?.filter(({value}) => value).length && (
-					<ManagementToolbarResultsBar totalItems={totalItems} />
+					<ManagementToolbarResultsBar />
 				)}
 			</ClayManagementToolbar>
 		</>

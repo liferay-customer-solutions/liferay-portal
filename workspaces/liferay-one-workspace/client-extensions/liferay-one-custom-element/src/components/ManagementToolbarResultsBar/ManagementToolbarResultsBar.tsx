@@ -4,25 +4,16 @@
  */
 
 import ClayIcon from '@clayui/icon';
-import ClayLabel from '@clayui/label';
-import {ClayResultsBar} from '@clayui/management-toolbar';
 import {useContext, useEffect} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {
 	ListViewContext,
 	ListViewTypes,
 } from '~/components/ListView/context/ListViewContextProvider';
-import i18n from '~/i18n';
 
 import './ManagementToolbarResultsBar.css';
 
-type ManagementToolbarResultsBarProps = {
-	totalItems: number;
-};
-
-const ManagementToolbarResultsBar: React.FC<
-	ManagementToolbarResultsBarProps
-> = ({totalItems}) => {
+const ManagementToolbarResultsBar = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const searchParams = new URLSearchParams(location.search);
@@ -73,63 +64,45 @@ const ManagementToolbarResultsBar: React.FC<
 		}
 	}, [dispatch, filter, filters.entries]);
 
+	const entries = filters.entries.filter(({value}) => value);
+
+	if (!entries.length) {
+		return null;
+	}
+
 	return (
-		<div className="border-bottom border-top d-block toolbar-results-container w-100">
-			<ClayResultsBar>
-				<ClayResultsBar.Item>
-					<span className="component-text text-truncate-inline">
-						<span className="text-truncate">
-							{i18n.sub('x-results-for', [totalItems.toString()])}
-						</span>
-					</span>
-				</ClayResultsBar.Item>
+		<div className="management-toolbar-active-filters">
+			{entries.map((entry) => (
+				<span
+					className="management-toolbar-filter-tag"
+					key={entry.name}
+				>
+					{`${entry.label}: ${
+						Array.isArray(entry.value)
+							? entry.value
+									.map((entryValue) =>
+										String(
+											typeof entryValue === 'object'
+												? entryValue?.label
+												: entryValue
+										)
+									)
+									.sort((entryA, entryB) =>
+										entryA.localeCompare(entryB)
+									)
+									.join(', ')
+							: entry.value
+					}`}
 
-				{filters.entries
-					.filter(({value}) => value)
-					.map((entry, index) => (
-						<ClayResultsBar.Item
-							expand={index === filters.entries.length - 1}
-							key={index}
-						>
-							<ClayLabel
-								className="component-label result-filter tbar-label"
-								displayType="unstyled"
-							>
-								<span className="d-flex flex-row">
-									<b>{entry.label}</b>
-
-									{`: ${
-										Array.isArray(entry.value)
-											? entry.value
-													.map((entryValue) =>
-														String(
-															typeof entryValue ===
-																'object'
-																? entryValue?.label
-																: entryValue
-														)
-													)
-													.sort((entryA, entryB) =>
-														entryA.localeCompare(
-															entryB
-														)
-													)
-													.join(', ')
-											: entry.value
-									}`}
-
-									<ClayIcon
-										className="cursor-pointer ml-2"
-										onClick={() =>
-											onRemoveFilter(entry.name)
-										}
-										symbol="times"
-									/>
-								</span>
-							</ClayLabel>
-						</ClayResultsBar.Item>
-					))}
-			</ClayResultsBar>
+					<button
+						className="management-toolbar-filter-tag-close"
+						onClick={() => onRemoveFilter(entry.name)}
+						type="button"
+					>
+						<ClayIcon symbol="times" />
+					</button>
+				</span>
+			))}
 		</div>
 	);
 };
