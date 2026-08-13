@@ -1,0 +1,16 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+.app-summary-status {
+	color: var(--color-neutral-7);
+	gap: 0.5rem;
+}
+
+.app-summary-status-dot {
+	border-radius: 50%;
+	display: inline-block;
+	height: 0.5rem;
+	width: 0.5rem;
+}

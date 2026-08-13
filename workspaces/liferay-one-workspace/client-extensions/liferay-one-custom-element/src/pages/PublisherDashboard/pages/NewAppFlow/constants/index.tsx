@@ -8,18 +8,24 @@ import {NewAppInitialState} from '~/context/NewAppContextProvider';
 import {LearnLinks} from '~/enums/Learn';
 import i18n from '~/i18n';
 import zodSchema from '~/schema/zodSchema';
-import {
-	ProductUploadType,
-	ProductWorkflowStatusCode,
-} from '~/utils/productUtils';
+import {ProductUploadType} from '~/utils/productUtils';
 
 import type {ProductPriceModel} from '~/types/product';
+
+export const PublishMode = {
+	CREATE: 'create',
+	EDIT: 'edit',
+	NEW_VERSION: 'new-version',
+} as const;
+
+export type PublishMode = (typeof PublishMode)[keyof typeof PublishMode];
 
 export type AppFlowItem = {
 	alertText?: string;
 	description: (isEditing?: boolean) => string;
 	hide?: boolean;
 	label: string;
+	modes: PublishMode[];
 	parseSchema?: (
 		context: NewAppInitialState
 	) => {success: boolean} & Record<string, unknown>;
@@ -33,17 +39,16 @@ export const LIFERAY_VERSION_PICKLIST = 'LIFERAY-VERSIONS';
 export const MAX_IMAGE_QUANTITY = 5;
 export const MAX_SIZE_5MBS = 5_000_000;
 
-export const APP_FLOW_ITEMS = [
+export const APP_FLOW_ITEMS: AppFlowItem[] = [
 	{
 		description: () =>
 			'Review and accept the legal agreement between you and Liferay before proceeding, You are about to create a new app submission.',
 		label: i18n.translate('create'),
+		modes: [PublishMode.CREATE],
 		path: '',
 		saveAsDraftRequired: false,
 		title: () => 'Create new app',
-		visible: (context: NewAppInitialState) =>
-			!context._product?.productId ||
-			context._product?.productStatus === ProductWorkflowStatusCode.DRAFT,
+		visible: () => true,
 	},
 	{
 		alertText:
@@ -51,6 +56,7 @@ export const APP_FLOW_ITEMS = [
 		description: (isEditing = false) =>
 			`${isEditing ? 'Edit' : 'Enter'} your new app details. This information will be used for submission, presentation, customer support, and search capabilities.`,
 		label: i18n.translate('profile'),
+		modes: [PublishMode.CREATE, PublishMode.EDIT],
 		parseSchema: (context: NewAppInitialState) =>
 			zodSchema.appPublishing.profile.safeParse(context.profile),
 		path: 'profile',
@@ -63,19 +69,19 @@ export const APP_FLOW_ITEMS = [
 		description: () =>
 			'Use one of the following methods to provide your app builds.',
 		label: 'Build',
+		modes: [PublishMode.CREATE, PublishMode.NEW_VERSION],
 		parseSchema: (context: NewAppInitialState) =>
 			zodSchema.appPublishing.build.safeParse(context.build),
 		path: 'build',
 		saveAsDraftRequired: true,
 		title: () => 'Provide app build',
-		visible: (context: NewAppInitialState) =>
-			!context._product?.productId ||
-			context._product?.productStatus === ProductWorkflowStatusCode.DRAFT,
+		visible: () => true,
 	},
 	{
 		description: () =>
 			'Design the storefront for your app. This will set the information displayed on the app page in the Marketplace.',
 		label: 'Storefront',
+		modes: [PublishMode.CREATE, PublishMode.EDIT],
 		parseSchema: (context: NewAppInitialState) =>
 			zodSchema.appPublishing.storefront.safeParse(context.storefront),
 		path: 'storefront',
@@ -88,19 +94,19 @@ export const APP_FLOW_ITEMS = [
 		description: () =>
 			`Define version information for your app. This will inform users about this version's updates on the storefront.`,
 		label: 'Version',
+		modes: [PublishMode.CREATE, PublishMode.NEW_VERSION],
 		parseSchema: (context: NewAppInitialState) =>
 			zodSchema.appPublishing.version.safeParse(context.version),
 		path: 'version',
 		saveAsDraftRequired: false,
 		title: () => 'Provide version details',
-		visible: (context: NewAppInitialState) =>
-			!context._product?.productId ||
-			context._product?.productStatus === ProductWorkflowStatusCode.DRAFT,
+		visible: () => true,
 	},
 	{
 		description: () =>
 			'Select one of the pricing models for your app. This will define how much users will pay. To enable paid apps, you must be a business and enter payment information in your Marketplace account profile.',
 		label: 'Pricing',
+		modes: [PublishMode.CREATE, PublishMode.EDIT],
 		path: 'pricing',
 		saveAsDraftRequired: false,
 		title: (isEditing = false) =>
@@ -111,6 +117,7 @@ export const APP_FLOW_ITEMS = [
 		description: () =>
 			`Define the licensing approach for your app. This will impact users' licensing renewal experience.`,
 		label: 'Licensing',
+		modes: [PublishMode.CREATE, PublishMode.EDIT],
 		path: 'licensing',
 		saveAsDraftRequired: false,
 		title: (isEditing = false) =>
@@ -122,6 +129,7 @@ export const APP_FLOW_ITEMS = [
 			`Define the licensing approach for your app. This will impact users' licensing renewal experience.`,
 		hide: true,
 		label: 'Licensing',
+		modes: [PublishMode.CREATE, PublishMode.EDIT],
 		path: 'licensing-prices',
 		saveAsDraftRequired: false,
 		title: (isEditing = false) =>
@@ -133,6 +141,7 @@ export const APP_FLOW_ITEMS = [
 		description: () =>
 			`Inform the support and help references. This will impact how users will experience this app's customer support and learning.`,
 		label: 'Support',
+		modes: [PublishMode.CREATE, PublishMode.EDIT],
 		parseSchema: (context: NewAppInitialState) => {
 			const schema =
 				context.pricing.priceModel === 'Paid'
@@ -151,6 +160,7 @@ export const APP_FLOW_ITEMS = [
 		description: () =>
 			'Please, review before submitting. Once sent, you will not be able to edit any information until this submission is completely reviewed by Liferay.',
 		label: 'Submit',
+		modes: [PublishMode.CREATE, PublishMode.EDIT, PublishMode.NEW_VERSION],
 		path: 'submit',
 		saveAsDraftRequired: false,
 		title: () => 'Review and submit app',

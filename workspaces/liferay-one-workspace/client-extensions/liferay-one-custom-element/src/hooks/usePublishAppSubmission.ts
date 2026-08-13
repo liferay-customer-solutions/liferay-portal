@@ -12,13 +12,15 @@ import {
 	NewAppTypes,
 } from '~/context/NewAppContextProvider';
 import i18n from '~/i18n';
+import {PublishMode} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
 import AppPublish, {ProductConfig} from '~/services/actions/AppPublish';
 import {Liferay} from '~/services/liferay/liferay';
 import {ProductWorkflowStatusCode} from '~/utils/productUtils';
 
 const usePublishAppSubmission = (
 	context: NewAppInitialState,
-	dispatch: Dispatch<AppActions>
+	dispatch: Dispatch<AppActions>,
+	mode: PublishMode = PublishMode.CREATE
 ) => {
 	const navigate = useNavigate();
 	const {properties} = useMarketplaceContext();
@@ -69,6 +71,7 @@ const usePublishAppSubmission = (
 		await _onSave({
 			isDraft: false,
 			isEdit:
+				mode !== PublishMode.NEW_VERSION &&
 				!!context._product &&
 				context._product.productStatus !==
 					ProductWorkflowStatusCode.DRAFT,

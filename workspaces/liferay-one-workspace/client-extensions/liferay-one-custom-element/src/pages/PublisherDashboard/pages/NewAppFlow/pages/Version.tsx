@@ -7,14 +7,21 @@ import {Input} from '~/components/Input/Input';
 import {Section} from '~/components/Section/Section';
 import {NewAppTypes, useNewAppContext} from '~/context/NewAppContextProvider';
 import i18n from '~/i18n';
+import {ProductSpecificationKey} from '~/utils/productUtils';
 
 const Version = () => {
 	const [
 		{
+			_product,
 			version: {notes, version},
 		},
 		dispatch,
 	] = useNewAppContext();
+
+	const publishedVersion = (_product?.productSpecifications ?? []).find(
+		({specificationKey}) =>
+			specificationKey === ProductSpecificationKey.APP_VERSION
+	)?.value?.en_US;
 
 	return (
 		<Section
@@ -23,7 +30,15 @@ const Version = () => {
 			tooltipText="More Info"
 		>
 			<Input
-				helpMessage="This is the first version of the app to be published"
+				helpMessage={
+					publishedVersion
+						? i18n.sub('the-published-version-is-x', [
+								publishedVersion,
+							])
+						: i18n.translate(
+								'this-is-the-first-version-of-the-app-to-be-published'
+							)
+				}
 				label={i18n.translate('version')}
 				onChange={({target}) =>
 					dispatch({

@@ -873,6 +873,7 @@ export default {
 		'Only ZIP files are allowed. Max file size is 500MB.',
 	'oops-something-went-wrong': 'Oops! Something went wrong.',
 	'open': 'Open',
+	'open-in-marketplace': 'Open in Marketplace',
 	'order-confirmation': 'Order Confirmation',
 	'order-date': 'Order Date',
 	'order-details': 'Order Details',
@@ -1123,6 +1124,8 @@ export default {
 		'Review and accept the legal agreement between you and Liferay before proceeding. You are about to create a new solution submission.',
 	'review-and-submit-app': 'Review and Submit App',
 	'review-and-submit-solution': 'Review and Submit Solution',
+	'review-the-information-published-for-this-app':
+		'Review the information published for this app.',
 	'review-the-new-publisher-info-and-the-liferay-marketplace-terms-before-proceeding':
 		'Review the new publisher info and the Liferay Marketplace terms before proceeding.',
 	'role': 'Role',
@@ -1324,6 +1327,7 @@ export default {
 		'The Liferay Marketplace is the premier place for Liferay customers to find pre-built, pre-approved app extensions to quickly extend the Liferay platform to new and legacy technologies.',
 	'the-order-must-be-completed-before-licensing-this-app.':
 		'The order must be completed before licensing this app.',
+	'the-published-version-is-x': 'The published version is {0}.',
 	'the-selected-project-does-not-meet-the-necessary-resource-requirements-for-this-app-please-contact-sales-to-request-additional-resources':
 		'The selected project does not meet the necessary resource requirements for this app. Please contact Sales to request additional resources.',
 	'theme': 'Theme',
