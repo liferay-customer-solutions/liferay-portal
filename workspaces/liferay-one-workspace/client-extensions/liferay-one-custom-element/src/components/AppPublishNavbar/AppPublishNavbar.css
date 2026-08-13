@@ -29,8 +29,13 @@
 
 .new-app-tool-bar-new-app-logo-img {
 	border-radius: 4px;
-	max-height: 3rem;
+	height: 3rem;
 	object-fit: contain;
+	width: 3rem;
+}
+
+.new-app-tool-bar-new-app-logo-placeholder {
+	height: 3rem;
 	width: 3rem;
 }
 
