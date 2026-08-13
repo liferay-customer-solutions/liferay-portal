@@ -14,9 +14,6 @@ import com.liferay.one.service.AccountService;
 import com.liferay.one.service.PropertyService;
 import com.liferay.portal.kernel.util.Validator;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,50 +38,33 @@ public class OktaAppCreatedPubsubSubscriber extends BasePubsubSubscriber {
 
 	@Override
 	public void receive(Message message) throws Exception {
-		if (_log.isDebugEnabled()) {
-			_log.debug("Parsing message: " + message.getPayload());
+		JSONObject jsonObject = new JSONObject(message.getPayload());
+
+		String accountKey = jsonObject.optString("accountKey");
+		String appId = jsonObject.optString("appId");
+
+		if (Validator.isNull(accountKey) || Validator.isNull(appId)) {
+			throw new IllegalArgumentException(
+				"Missing accountKey or appId in the Okta app created message");
 		}
 
-		try {
-			JSONObject jsonObject = new JSONObject(message.getPayload());
+		Account account = _accountService.fetchAccountByExternalReferenceCode(
+			accountKey);
 
-			String accountKey = jsonObject.optString("accountKey");
-			String appId = jsonObject.optString("appId");
-
-			if (Validator.isNull(accountKey) || Validator.isNull(appId)) {
-				throw new IllegalArgumentException(
-					"Missing accountKey or appId in the Okta app created " +
-						"message");
-			}
-
-			Account account =
-				_accountService.fetchAccountByExternalReferenceCode(accountKey);
-
-			if (account == null) {
-				throw new AccountNotFoundException(
-					"No account exists for external reference code " +
-						accountKey);
-			}
-
-			String oktaApplicationId = _propertyService.getPropertyValue(
-				account.getId(), PropertyConstants.NAME_OKTA_APPLICATION);
-
-			if (Validator.isNotNull(oktaApplicationId)) {
-				return;
-			}
-
-			_propertyService.addProperty(
-				account.getId(), PropertyConstants.NAME_OKTA_APPLICATION,
-				appId);
+		if (account == null) {
+			throw new AccountNotFoundException(
+				"No account exists for external reference code " + accountKey);
 		}
-		catch (Exception exception) {
-			_log.error(
-				"Unable to process Okta app created message " +
-					message.getPayload(),
-				exception);
 
-			throw exception;
+		String oktaApplicationId = _propertyService.getPropertyValue(
+			account.getId(), PropertyConstants.NAME_OKTA_APPLICATION);
+
+		if (Validator.isNotNull(oktaApplicationId)) {
+			return;
 		}
+
+		_propertyService.addProperty(
+			account.getId(), PropertyConstants.NAME_OKTA_APPLICATION, appId);
 	}
 
 	@Override
@@ -101,9 +81,6 @@ public class OktaAppCreatedPubsubSubscriber extends BasePubsubSubscriber {
 	protected boolean isAutoCreateTopic() {
 		return false;
 	}
-
-	private static final Log _log = LogFactory.getLog(
-		OktaAppCreatedPubsubSubscriber.class);
 
 	@Autowired
 	private AccountService _accountService;

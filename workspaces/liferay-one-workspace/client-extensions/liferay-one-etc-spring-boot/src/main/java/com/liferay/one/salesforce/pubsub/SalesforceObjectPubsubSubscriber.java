@@ -56,80 +56,60 @@ public class SalesforceObjectPubsubSubscriber extends BasePubsubSubscriber {
 
 	@Override
 	public void receive(Message message) throws Exception {
-		if (_log.isDebugEnabled()) {
-			_log.debug("Parsing message: " + message.getPayload());
-		}
+		JSONObject jsonObject = new JSONObject(message.getPayload());
 
-		try {
-			JSONObject jsonObject = new JSONObject(message.getPayload());
+		String action = jsonObject.getString("action");
+		String salesforceObjectName = jsonObject.getString(
+			"salesforceObjectName");
 
-			String action = jsonObject.getString("action");
-			String salesforceObjectName = jsonObject.getString(
-				"salesforceObjectName");
+		JSONArray recordsJSONArray = jsonObject.getJSONArray("records");
 
-			JSONArray recordsJSONArray = jsonObject.getJSONArray("records");
+		int failureCount = 0;
 
-			Exception exception1 = null;
+		for (int i = 0; i < recordsJSONArray.length(); i++) {
+			try {
+				JSONObject recordJSONObject = recordsJSONArray.getJSONObject(i);
 
-			for (int i = 0; i < recordsJSONArray.length(); i++) {
-				try {
-					JSONObject recordJSONObject =
-						recordsJSONArray.getJSONObject(i);
-
-					if (Objects.equals(salesforceObjectName, "Account")) {
-						_processAccount(recordJSONObject);
-					}
-					else if (Objects.equals(salesforceObjectName, "Contract")) {
-						_processContract(action, recordJSONObject);
-					}
-					else if (Objects.equals(
-								salesforceObjectName, "PricebookEntry")) {
-
-						_processPricebookEntry(action, recordJSONObject);
-					}
-					else if (Objects.equals(salesforceObjectName, "Product2")) {
-						_processProduct2(action, recordJSONObject);
-					}
-					else if (Objects.equals(
-								salesforceObjectName, "Project__c")) {
-
-						_processProject(recordJSONObject);
-					}
-					else if (_log.isInfoEnabled()) {
-						_log.info(
-							"Unable to handle Salesforce object " +
-								salesforceObjectName);
-					}
+				if (Objects.equals(salesforceObjectName, "Account")) {
+					_processAccount(recordJSONObject);
 				}
-				catch (Exception exception2) {
-					_log.error(
-						StringBundler.concat(
-							"Unable to process Salesforce ",
-							salesforceObjectName, " record ",
-							recordsJSONArray.opt(i)),
-						exception2);
+				else if (Objects.equals(salesforceObjectName, "Contract")) {
+					_processContract(action, recordJSONObject);
+				}
+				else if (Objects.equals(
+							salesforceObjectName, "PricebookEntry")) {
 
-					if (exception1 == null) {
-						exception1 = new Exception(
-							StringBundler.concat(
-								"Unable to process Salesforce ",
-								salesforceObjectName, " records"));
-					}
-
-					exception1.addSuppressed(exception2);
+					_processPricebookEntry(action, recordJSONObject);
+				}
+				else if (Objects.equals(salesforceObjectName, "Product2")) {
+					_processProduct2(action, recordJSONObject);
+				}
+				else if (Objects.equals(salesforceObjectName, "Project__c")) {
+					_processProject(recordJSONObject);
+				}
+				else if (_log.isInfoEnabled()) {
+					_log.info(
+						"Unable to handle Salesforce object " +
+							salesforceObjectName);
 				}
 			}
+			catch (Exception exception) {
+				failureCount++;
 
-			if (exception1 != null) {
-				throw exception1;
+				_log.error(
+					StringBundler.concat(
+						"Unable to process Salesforce ", salesforceObjectName,
+						" record ", recordsJSONArray.opt(i)),
+					exception);
 			}
 		}
-		catch (Exception exception) {
-			_log.error(
-				"Unable to process Salesforce message " + message.getPayload(),
-				exception);
 
-			throw exception;
+		if (failureCount > 0) {
+			throw new Exception(
+				StringBundler.concat(
+					"Unable to process ", failureCount, " of ",
+					recordsJSONArray.length(), " Salesforce ",
+					salesforceObjectName, " records"));
 		}
 	}
 

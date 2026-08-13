@@ -19,9 +19,6 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Objects;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,42 +43,27 @@ public class OktaUsersPubsubSubscriber extends BasePubsubSubscriber {
 
 	@Override
 	public void receive(Message message) throws Exception {
-		if (_log.isDebugEnabled()) {
-			_log.debug("Parsing message: " + message.getPayload());
+		JSONObject jsonObject = new JSONObject(message.getPayload());
+
+		String eventType = jsonObject.optString("eventType");
+
+		OktaUser oktaUser = new OktaUser(
+			jsonObject.optJSONObject("user", new JSONObject()));
+
+		if (Objects.equals(eventType, _EVENT_TYPE_LIFECYCLE_ACTIVATE) ||
+			Objects.equals(eventType, _EVENT_TYPE_LIFECYCLE_CREATE)) {
+
+			_syncContact(oktaUser);
 		}
-
-		try {
-			JSONObject jsonObject = new JSONObject(message.getPayload());
-
-			String eventType = jsonObject.optString("eventType");
-
-			OktaUser oktaUser = new OktaUser(
-				jsonObject.optJSONObject("user", new JSONObject()));
-
-			if (Objects.equals(eventType, _EVENT_TYPE_LIFECYCLE_ACTIVATE) ||
-				Objects.equals(eventType, _EVENT_TYPE_LIFECYCLE_CREATE)) {
-
-				_syncContact(oktaUser);
-			}
-			else if (Objects.equals(
-						eventType, _EVENT_TYPE_LIFECYCLE_DEACTIVATE)) {
-
-				_unassignAllMemberships(oktaUser);
-			}
-			else if (Objects.equals(
-						eventType, _EVENT_TYPE_ACCOUNT_UPDATE_PASSWORD) ||
-					 Objects.equals(
-						 eventType, _EVENT_TYPE_ACCOUNT_UPDATE_PROFILE)) {
-
-				_updateContact(oktaUser);
-			}
+		else if (Objects.equals(eventType, _EVENT_TYPE_LIFECYCLE_DEACTIVATE)) {
+			_unassignAllMemberships(oktaUser);
 		}
-		catch (Exception exception) {
-			_log.error(
-				"Unable to process Okta users message " + message.getPayload(),
-				exception);
+		else if (Objects.equals(
+					eventType, _EVENT_TYPE_ACCOUNT_UPDATE_PASSWORD) ||
+				 Objects.equals(
+					 eventType, _EVENT_TYPE_ACCOUNT_UPDATE_PROFILE)) {
 
-			throw exception;
+			_updateContact(oktaUser);
 		}
 	}
 
@@ -148,29 +130,8 @@ public class OktaUsersPubsubSubscriber extends BasePubsubSubscriber {
 			return;
 		}
 
-		Exception exception1 = null;
-
 		for (AccountBrief accountBrief : accountBriefs) {
-			try {
-				_removeAccountUserAccount(accountBrief.getId(), userAccount);
-			}
-			catch (Exception exception2) {
-				_log.error(
-					"Unable to unassign membership for " + oktaUser.getEmail(),
-					exception2);
-
-				if (exception1 == null) {
-					exception1 = new Exception(
-						"Unable to unassign all memberships for " +
-							oktaUser.getEmail());
-				}
-
-				exception1.addSuppressed(exception2);
-			}
-		}
-
-		if (exception1 != null) {
-			throw exception1;
+			_removeAccountUserAccount(accountBrief.getId(), userAccount);
 		}
 	}
 
@@ -184,9 +145,9 @@ public class OktaUsersPubsubSubscriber extends BasePubsubSubscriber {
 		if (oktaUser.isEmailAddressVerified() &&
 			!UserAccountUtil.isVerified(userAccount)) {
 
-			_provisioningEmailService.sendVerifiedWelcomeEmail(userAccount);
-
 			_userAccountService.setVerified(userAccount.getId());
+
+			_provisioningEmailService.sendVerifiedWelcomeEmail(userAccount);
 		}
 	}
 
@@ -204,9 +165,6 @@ public class OktaUsersPubsubSubscriber extends BasePubsubSubscriber {
 
 	private static final String _EVENT_TYPE_LIFECYCLE_DEACTIVATE =
 		"user.lifecycle.deactivate";
-
-	private static final Log _log = LogFactory.getLog(
-		OktaUsersPubsubSubscriber.class);
 
 	@Autowired
 	private AccountService _accountService;

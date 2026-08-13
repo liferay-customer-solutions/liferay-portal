@@ -20,6 +20,7 @@ import com.google.pubsub.v1.TopicName;
 
 import com.liferay.one.pubsub.BasePubsubClient;
 import com.liferay.one.pubsub.Message;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -75,18 +76,32 @@ public abstract class BasePubsubSubscriber extends BasePubsubClient {
 					PubsubMessage pubsubMessage,
 					AckReplyConsumer ackReplyConsumer) {
 
-					try {
-						ByteString byteString = pubsubMessage.getData();
+					ByteString byteString = pubsubMessage.getData();
 
-						receive(
-							new Message(
-								pubsubMessage.getAttributesMap(),
-								byteString.toStringUtf8(), getTopic()));
+					Message message = new Message(
+						pubsubMessage.getAttributesMap(),
+						byteString.toStringUtf8(), getTopic());
+
+					if (_log.isDebugEnabled()) {
+						_log.debug(
+							StringBundler.concat(
+								"Processing message from subscription ",
+								projectSubscriptionName.getSubscription(), " ",
+								message));
+					}
+
+					try {
+						receive(message);
 
 						ackReplyConsumer.ack();
 					}
 					catch (Exception exception) {
-						_log.error("Unable to process message", exception);
+						_log.error(
+							StringBundler.concat(
+								"Unable to process message from subscription ",
+								projectSubscriptionName.getSubscription(), " ",
+								message),
+							exception);
 
 						ackReplyConsumer.nack();
 					}

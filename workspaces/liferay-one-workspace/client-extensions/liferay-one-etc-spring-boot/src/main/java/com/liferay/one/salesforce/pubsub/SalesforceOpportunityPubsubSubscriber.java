@@ -73,10 +73,6 @@ public class SalesforceOpportunityPubsubSubscriber
 
 	@Override
 	public void receive(Message message) throws Exception {
-		if (_log.isDebugEnabled()) {
-			_log.debug("Parsing message: " + message.getPayload());
-		}
-
 		try {
 			JSONObject jsonObject = new JSONObject(message.getPayload());
 
