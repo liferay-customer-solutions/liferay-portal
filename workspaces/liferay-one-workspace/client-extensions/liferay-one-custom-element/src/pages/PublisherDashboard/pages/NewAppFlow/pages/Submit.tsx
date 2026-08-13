@@ -5,17 +5,28 @@
 
 import {useNavigate} from 'react-router-dom';
 import AppReview from '~/components/AppReview/AppReview';
+import AppReviewSection from '~/components/AppReviewSection/AppReviewSection';
 import {Section} from '~/components/Section/Section';
 import {useNewAppContext} from '~/context/NewAppContextProvider';
+import {usePublishMode} from '~/context/PublishModeContextProvider';
 import i18n from '~/i18n';
 import {ProductWorkflowStatusCode} from '~/utils/productUtils';
+
+import {PublishMode} from '../constants';
 
 const Submit = () => {
 	const [context] = useNewAppContext();
 	const navigate = useNavigate();
+	const mode = usePublishMode();
+
+	const isNewVersion = mode === PublishMode.NEW_VERSION;
+
 	const isEditingApp =
 		context?._product &&
 		context._product.productStatus === ProductWorkflowStatusCode.APPROVED;
+
+	const editNavigate = (path: string) =>
+		isNewVersion ? undefined : () => navigate(path);
 
 	return (
 		<div className="app-review-container">
@@ -33,39 +44,52 @@ const Submit = () => {
 				<hr />
 				<AppReview.Description
 					context={context}
-					editNavigate={() => navigate('../profile')}
+					editNavigate={editNavigate('../profile')}
 					required
 				/>
 				<AppReview.Categories
 					context={context}
-					editNavigate={() => navigate('../profile')}
+					editNavigate={editNavigate('../profile')}
 					required
 				/>
-				{!isEditingApp && (
+				{(!isEditingApp || isNewVersion) && (
 					<AppReview.Build
 						context={context}
 						editNavigate={() => navigate('../build')}
 						required
 					/>
 				)}
+				{isNewVersion && (
+					<AppReviewSection
+						editNavigate={() => navigate('../version')}
+						required
+						title={i18n.translate('version')}
+					>
+						<p className="mb-1">{context.version.version}</p>
+
+						<p className="text-secondary">
+							{context.version.notes}
+						</p>
+					</AppReviewSection>
+				)}
 				<AppReview.Pricing
 					context={context}
-					editNavigate={() => navigate('../pricing')}
+					editNavigate={editNavigate('../pricing')}
 					required
 				/>
 				<AppReview.Licensing
 					context={context}
-					editNavigate={() => navigate('../licensing')}
+					editNavigate={editNavigate('../licensing')}
 					required
 				/>
 				<AppReview.Storefront
 					context={context}
-					editNavigate={() => navigate('../storefront')}
+					editNavigate={editNavigate('../storefront')}
 					required
 				/>
 				<AppReview.Support
 					context={context}
-					editNavigate={() => navigate('../support')}
+					editNavigate={editNavigate('../support')}
 					isLastSection
 					required
 				/>

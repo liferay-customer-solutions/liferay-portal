@@ -10,7 +10,15 @@ import {useOneContext} from '~/context/OneContextProvider';
 import {toRouteObjects} from '~/utils/routeUtils';
 
 import PublisherDashboardLayout from './components/PublisherDashboardLayout/PublisherDashboardLayout';
-import {publisherDashboardRoutes} from './publisherDashboardRoutes';
+import {
+	PUBLISH_FLOW_PATHS,
+	publisherDashboardRoutes,
+} from './publisherDashboardRoutes';
+
+import type {AppRoute} from '~/utils/routeUtils';
+
+const isPublishFlowRoute = (route: AppRoute) =>
+	!!route.path && PUBLISH_FLOW_PATHS.includes(route.path);
 
 function PublisherDashboardRoutes() {
 	useLayoutEffect(() => {
@@ -27,7 +35,7 @@ function PublisherDashboardRoutes() {
 		{
 			children: toRouteObjects(
 				publisherDashboardRoutes.filter(
-					(route) => route.path !== 'newapp'
+					(route) => !isPublishFlowRoute(route)
 				)
 			),
 			element: <PublisherDashboardLayout />,
@@ -35,9 +43,7 @@ function PublisherDashboardRoutes() {
 		},
 		{
 			children: toRouteObjects(
-				publisherDashboardRoutes.filter(
-					(route) => route.path === 'newapp'
-				)
+				publisherDashboardRoutes.filter(isPublishFlowRoute)
 			),
 			path: '/',
 		},
