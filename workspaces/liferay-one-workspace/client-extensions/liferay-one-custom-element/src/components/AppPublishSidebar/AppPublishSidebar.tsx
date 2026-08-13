@@ -5,6 +5,7 @@
 
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
+import {Link} from 'react-router-dom';
 
 import '~/components/SideNav/SideNav.css';
 
@@ -15,6 +16,7 @@ import type {AppFlowItem} from '~/pages/PublisherDashboard/pages/NewAppFlow/cons
 type AppPublishSidebar = {
 	activeIndex: number;
 	items: AppFlowItem[];
+	navigable?: boolean;
 };
 
 const getIcon = ({
@@ -38,11 +40,12 @@ const getIcon = ({
 const AppPublishSidebar: React.FC<AppPublishSidebar> = ({
 	activeIndex,
 	items,
+	navigable = false,
 }) => (
 	<nav className="side-nav">
 		<div className="side-nav-panel">
 			<ul className="side-nav-list">
-				{items.map(({hide, label}, index) => {
+				{items.map(({hide, label, path}, index) => {
 					if (hide) {
 						return null;
 					}
@@ -50,26 +53,34 @@ const AppPublishSidebar: React.FC<AppPublishSidebar> = ({
 					const checked = index < activeIndex;
 					const selected = activeIndex === index;
 
+					const className = classNames('side-nav-link', {
+						'side-nav-link-active': selected,
+						'side-nav-link-complete': checked,
+					});
+
+					const content = (
+						<>
+							<ClayIcon
+								aria-label={
+									selected ? 'radio selected' : 'circle fill'
+								}
+								className="app-flow-step-icon side-nav-icon"
+								symbol={getIcon({checked, selected})}
+							/>
+
+							<span className="side-nav-label">{label}</span>
+						</>
+					);
+
 					return (
 						<li className="side-nav-item" key={index}>
-							<span
-								className={classNames('side-nav-link', {
-									'side-nav-link-active': selected,
-									'side-nav-link-complete': checked,
-								})}
-							>
-								<ClayIcon
-									aria-label={
-										selected
-											? 'radio selected'
-											: 'circle fill'
-									}
-									className="app-flow-step-icon side-nav-icon"
-									symbol={getIcon({checked, selected})}
-								/>
-
-								<span className="side-nav-label">{label}</span>
-							</span>
+							{navigable ? (
+								<Link className={className} to={path}>
+									{content}
+								</Link>
+							) : (
+								<span className={className}>{content}</span>
+							)}
 						</li>
 					);
 				})}
