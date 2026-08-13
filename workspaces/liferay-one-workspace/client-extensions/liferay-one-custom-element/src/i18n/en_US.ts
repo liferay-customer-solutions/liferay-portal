@@ -54,6 +54,7 @@ export default {
 	'add-currency': 'Add Currency',
 	'add-developer-licenses': 'Add Developer Licenses',
 	'add-filter': 'Add Filter',
+	'add-more-members': 'Add More Members',
 	'add-more-people': 'Add More People',
 	'add-new-trial': 'Add New Trial',
 	'add-new-version': 'Add New Version',
@@ -657,14 +658,16 @@ export default {
 		'Invalid or non-existent attachment ID.',
 	'invalid-or-non-existent-ticket-number':
 		'Invalid or non-existent ticket number.',
-	'invite-a-new-member-by-email-address-they-will-be-added-to-the-account-once-they-accept-the-invitation':
-		'Invite a new member by email address. They will be added to the account once they accept the invitation.',
+	'invitation-successfully-sent': 'Invitation successfully sent.',
+	'invitations-successfully-sent': 'Invitations successfully sent.',
 	'invite-a-new-member-to-this-project-they-will-be-added-as-an-account-member-once-they-accept-the-invitation':
 		'Invite a new member to this project. They will be added as an account member once they accept the invitation.',
 	'invite-manage-roles-designate-incident-contacts':
 		'Invite, manage roles, designate incident contacts.',
 	'invite-member': 'Invite Member',
 	'invite-project-member': 'Invite Project Member',
+	'invited-members-receive-an-email-and-join-the-account-after-accepting-the-invitation':
+		'Invited members receive an email and join the account after accepting the invitation.',
 	'iot': 'IoT',
 	'ip-addresses': 'IP Addresses',
 	'job-title': 'Job Title',
@@ -798,7 +801,6 @@ export default {
 		'Maximum number of active nodes available for this environment. This does not include expired or future nodes.',
 	'maximum-number-of-uploads-reached': 'Maximum Number of Uploads Reached',
 	'member': 'Member',
-	'member-successfully-invited': 'Member successfully invited.',
 	'member-successfully-removed': 'Member successfully removed.',
 	'members': 'Members',
 	'metadata': 'Metadata',
@@ -1158,6 +1160,7 @@ export default {
 	'remove': 'Remove',
 	'remove-all-roles': 'Remove all roles',
 	'remove-member': 'Remove Member',
+	'remove-this-member': 'Remove This Member',
 	'remove-user': 'Remove User',
 	'renew': 'Renew',
 	'renew-license-key': 'Renew License Key',
@@ -1407,6 +1410,7 @@ export default {
 	'this-action-cannot-be-undone': 'This action cannot be undone.',
 	'this-app-is-already-installed-in-this-environment':
 		'This app is already installed in this environment.',
+	'this-email-address-is-duplicated': 'This email address is duplicated.',
 	'this-feature-is-not-included-in-your-current-plan':
 		'This feature is not included in your current plan',
 	'this-field-is-required': 'This field is required.',
@@ -1496,11 +1500,12 @@ export default {
 	'unable-to-download-the-license-key': 'Unable to download the license key.',
 	'unable-to-download-your-license-file-please-try-again-and-or-contact-support-via-the-manage-menu-on-the-dashboard':
 		'Unable to download your license file.  Please try again and/or contact support via the manage menu on the dashboard.',
-	'unable-to-invite-member': 'Unable to invite member.',
 	'unable-to-invite-project-member': 'Unable to invite project member.',
 	'unable-to-load-the-license-keys': 'Unable to load the license keys.',
 	'unable-to-remove-member': 'Unable to remove member.',
 	'unable-to-remove-roles': 'Unable to remove roles',
+	'unable-to-send-the-invitation-to-x':
+		'Unable to send the invitation to {0}.',
 	'unable-to-update-account-details': 'Unable to update account details',
 	'unable-to-update-permissions': 'Unable to update permissions.',
 	'unable-to-update-project-members': 'Unable to update project members.',
@@ -1569,6 +1574,7 @@ export default {
 	'virtual-cluster': 'Virtual Cluster',
 	'visit': 'Visit',
 	'vr': 'VR',
+	'warning': 'Warning',
 	'we-apologize-for-the-inconvenience-but-we-ve-detected-a-system-error-with-this-project':
 		"We apologize for the inconvenience, but we've detected a system error with this project.",
 	'we-are-happy-to-have-you-interested-in-the-liferay-marketplace-at-the-moment-we-are-working-on-enhancing-the-experience-for-our-customers-in-the-marketplace-and-access-is-invite-only-if-you-are-an-existing-liferay-customer-please-keep-an-eye-out-for-an-announcement-related-to-the-new-marketplace-in-the-coming-months':
@@ -1602,11 +1608,14 @@ export default {
 	'x-in-use': '{0} in use',
 	'x-is-a-member-of-x-on-this-account-removing-them-from-the-account-will-also-remove-their-access-to-these-projects-are-you-sure-you-want-to-proceed':
 		'{0} is a member of {1} on this account. Removing them from the account will also remove their access to these projects. Are you sure you want to proceed?',
+	'x-is-already-a-member-of-this-account':
+		'{0} is already a member of this account.',
 	'x-is-required': '{0} is required',
 	'x-items': '{0} Items',
 	'x-me': '{0} (me)',
 	'x-more': '+{0} more',
 	'x-of-x-available': '{0} of {1} available',
+	'x-of-x-invitations-were-sent': '{0} of {1} invitations were sent.',
 	'x-result-for-x': '{0} Result for "{1}"',
 	'x-results-for': '{0} Results for',
 	'x-results-for-x': '{0} Results for "{1}"',

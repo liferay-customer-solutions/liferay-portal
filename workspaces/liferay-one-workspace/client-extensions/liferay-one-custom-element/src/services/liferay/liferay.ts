@@ -69,7 +69,7 @@ type ILiferay = {
 			message: string;
 			onClick?: ({event}: {event: Event}) => void;
 			title?: string;
-			type?: 'danger' | 'info' | 'success';
+			type?: 'danger' | 'info' | 'success' | 'warning';
 		}) => void;
 	};
 	authToken: string;

@@ -3,23 +3,32 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import ClayDropDown from '@clayui/drop-down';
-import {ClayCheckbox, ClayInput} from '@clayui/form';
-import ClayIcon from '@clayui/icon';
-import {useState} from 'react';
+import {ClayInput} from '@clayui/form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {useFieldArray, useForm} from 'react-hook-form';
+import Button from '~/components/Button/Button';
 import {FieldBase} from '~/components/FieldBase/FieldBase';
-import {useMeasuredWidth} from '~/hooks/useMeasuredWidth';
-import i18n, {translate} from '~/i18n';
+import i18n, {sub, translate} from '~/i18n';
 import {isPartnerRole} from '~/pages/MyAccount/AccountMembers/accountRoles';
-import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
+import AccountRolesSelect from '~/pages/MyAccount/AccountMembers/components/AccountRolesSelect/AccountRolesSelect';
+import accountSchemas, {MAX_INVITATIONS_COUNT} from '~/schema/accountSchemas';
+import FetcherError from '~/services/fetcher/FetcherError';
 import {Liferay} from '~/services/liferay/liferay';
-import {EMAIL_PATTERN} from '~/utils/formValidationUtils';
+import Accounts from '~/services/spring-boot/Accounts';
 
 import '../../AccountMembers.css';
 
+import type {InviteMembersForm} from '~/schema/accountSchemas';
+
+const createEmptyInvite = () => ({
+	emailAddress: '',
+	familyName: '',
+	givenName: '',
+	roleNames: [],
+});
+
 type InviteMemberModalProps = {
 	accountExternalReferenceCode: string;
-	accountId: number | string;
 	mutate: () => Promise<unknown>;
 	onClose: () => void;
 	roleNames: string[];
@@ -27,282 +36,260 @@ type InviteMemberModalProps = {
 
 const InviteMemberModal = ({
 	accountExternalReferenceCode,
-	accountId,
 	mutate,
 	onClose,
-	roleNames,
+	roleNames: availableRoleNames,
 }: InviteMemberModalProps) => {
-	const [active, setActive] = useState(false);
-	const [emailAddress, setEmailAddress] = useState('');
-	const [emailError, setEmailError] = useState('');
-	const [familyName, setFamilyName] = useState('');
-	const [familyNameError, setFamilyNameError] = useState('');
-	const [givenName, setGivenName] = useState('');
-	const [givenNameError, setGivenNameError] = useState('');
-	const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+	const {
+		control,
+		formState: {errors, isSubmitting},
+		handleSubmit,
+		register,
+		setValue,
+		watch,
+	} = useForm<InviteMembersForm>({
+		defaultValues: {invites: [createEmptyInvite()]},
+		resolver: zodResolver(accountSchemas.inviteMembers),
+	});
 
-	const {ref: rolesRef, width: menuWidth} =
-		useMeasuredWidth<HTMLDivElement>(active);
+	const {append, fields, remove} = useFieldArray({control, name: 'invites'});
 
-	const toggleRole = (roleName: string) =>
-		setSelectedRoles((previous) => {
-			if (previous.includes(roleName)) {
-				return previous.filter((value) => value !== roleName);
-			}
+	const invites = watch('invites');
 
-			if (isPartnerRole(roleName)) {
-				return [
-					...previous.filter((value) => !isPartnerRole(value)),
-					roleName,
-				];
-			}
+	const toggleRole = (index: number, roleName: string) => {
+		const selectedRoleNames = invites[index]?.roleNames ?? [];
 
-			return [...previous, roleName];
-		});
-
-	const triggerLabel = selectedRoles.length
-		? selectedRoles.join(', ')
-		: translate('none');
-
-	const onSubmit = async (event: React.FormEvent) => {
-		event.preventDefault();
-
-		const trimmedEmail = emailAddress.trim();
-		const trimmedFamilyName = familyName.trim();
-		const trimmedGivenName = givenName.trim();
-
-		let hasError = false;
-
-		if (!trimmedGivenName) {
-			setGivenNameError(
-				i18n.translate('please-enter-a-valid-first-name')
+		if (selectedRoleNames.includes(roleName)) {
+			setValue(
+				`invites.${index}.roleNames`,
+				selectedRoleNames.filter((value) => value !== roleName)
 			);
-			hasError = true;
-		}
 
-		if (!trimmedFamilyName) {
-			setFamilyNameError(
-				i18n.translate('please-enter-a-valid-last-name')
-			);
-			hasError = true;
-		}
-
-		if (!EMAIL_PATTERN.test(trimmedEmail)) {
-			setEmailError(i18n.translate('please-enter-a-valid-email-address'));
-			hasError = true;
-		}
-
-		if (hasError) {
 			return;
 		}
 
-		try {
-			let userAccount;
+		if (isPartnerRole(roleName)) {
+			setValue(`invites.${index}.roleNames`, [
+				...selectedRoleNames.filter((value) => !isPartnerRole(value)),
+				roleName,
+			]);
 
+			return;
+		}
+
+		setValue(`invites.${index}.roleNames`, [
+			...selectedRoleNames,
+			roleName,
+		]);
+	};
+
+	const onSubmit = async (form: InviteMembersForm) => {
+		if (isSubmitting) {
+			return;
+		}
+
+		const alreadyMemberEmailAddresses: string[] = [];
+		const failedEmailAddresses: string[] = [];
+		const invitedIndexes: number[] = [];
+
+		for (const [index, invite] of form.invites.entries()) {
 			try {
-				userAccount = await HeadlessAdminUser.postAccountUserAccount(
-					accountExternalReferenceCode,
-					{
-						emailAddress: trimmedEmail,
-						familyName: trimmedFamilyName,
-						givenName: trimmedGivenName,
-					}
-				);
+				await Accounts.postInvitations(accountExternalReferenceCode, {
+					emailAddress: invite.emailAddress,
+					familyName: invite.familyName,
+					givenName: invite.givenName,
+					roleNames: invite.roleNames,
+				});
+
+				invitedIndexes.push(index);
 			}
-			catch {
-				userAccount =
-					await HeadlessAdminUser.postAccountUserAccountByEmailAddress(
-						accountExternalReferenceCode,
-						trimmedEmail
-					);
+			catch (error) {
+				if (error instanceof FetcherError && error.status === 409) {
+					alreadyMemberEmailAddresses.push(invite.emailAddress);
+				}
+				else {
+					failedEmailAddresses.push(invite.emailAddress);
+				}
 			}
+		}
 
-			if (selectedRoles.length) {
-				const {items: accountRoles} =
-					await HeadlessAdminUser.getAccountRoles(
-						accountExternalReferenceCode
-					);
+		const unsentEmailAddresses = [
+			...alreadyMemberEmailAddresses,
+			...failedEmailAddresses,
+		];
 
-				const selectedRoleNames = new Set(selectedRoles);
-
-				await Promise.all(
-					accountRoles
-						.filter(
-							(accountRole) =>
-								selectedRoleNames.has(accountRole.name) ||
-								selectedRoleNames.has(accountRole.displayName)
-						)
-						.map((accountRole) =>
-							HeadlessAdminUser.sendRoleAccountUser(
-								accountId,
-								accountRole.id,
-								userAccount.id
-							)
-						)
-				);
-			}
-
+		if (invitedIndexes.length) {
 			await mutate();
+		}
 
+		if (!unsentEmailAddresses.length) {
 			Liferay.Util.openToast({
-				message: i18n.translate('member-successfully-invited'),
-				title: i18n.translate('success'),
+				message:
+					invitedIndexes.length > 1
+						? translate('invitations-successfully-sent')
+						: translate('invitation-successfully-sent'),
+				title: translate('success'),
 			});
 
 			onClose();
+
+			return;
 		}
-		catch {
+
+		remove(invitedIndexes);
+
+		const unsentMessage = [
+			alreadyMemberEmailAddresses.length
+				? sub('x-is-already-a-member-of-this-account', [
+						alreadyMemberEmailAddresses.join(', '),
+					])
+				: '',
+			failedEmailAddresses.length
+				? sub('unable-to-send-the-invitation-to-x', [
+						failedEmailAddresses.join(', '),
+					])
+				: '',
+		]
+			.filter(Boolean)
+			.join(' ');
+
+		if (!invitedIndexes.length) {
 			Liferay.Util.openToast({
-				message: i18n.translate('unable-to-invite-member'),
-				title: i18n.translate('error'),
+				message: unsentMessage,
+				title: translate('error'),
 				type: 'danger',
 			});
+
+			return;
 		}
+
+		Liferay.Util.openToast({
+			message: `${sub('x-of-x-invitations-were-sent', [
+				String(invitedIndexes.length),
+				String(form.invites.length),
+			])} ${unsentMessage}`,
+			title: translate('warning'),
+			type: 'warning',
+		});
 	};
 
 	return (
-		<form id="invite-member" onSubmit={onSubmit}>
+		<form id="invite-member" onSubmit={handleSubmit(onSubmit)}>
 			<p>
 				{i18n.translate(
-					'invite-a-new-member-by-email-address-they-will-be-added-to-the-account-once-they-accept-the-invitation'
+					'invited-members-receive-an-email-and-join-the-account-after-accepting-the-invitation'
 				)}
 			</p>
 
-			<FieldBase
-				errorMessage={givenNameError}
-				label={i18n.translate('first-name')}
-				required
-			>
-				<ClayInput
-					onChange={(event) => {
-						setGivenNameError('');
-						setGivenName(event.target.value);
-					}}
-					type="text"
-					value={givenName}
-				/>
-			</FieldBase>
-
-			<FieldBase
-				errorMessage={familyNameError}
-				label={i18n.translate('last-name')}
-				required
-			>
-				<ClayInput
-					onChange={(event) => {
-						setFamilyNameError('');
-						setFamilyName(event.target.value);
-					}}
-					type="text"
-					value={familyName}
-				/>
-			</FieldBase>
-
-			<FieldBase
-				errorMessage={emailError}
-				label={i18n.translate('email-address')}
-				required
-			>
-				<ClayInput
-					onChange={(event) => {
-						setEmailError('');
-						setEmailAddress(event.target.value);
-					}}
-					placeholder={i18n.translate('name-example-com')}
-					type="email"
-					value={emailAddress}
-				/>
-			</FieldBase>
-
-			<FieldBase label={i18n.translate('roles')}>
-				<div ref={rolesRef}>
-					<ClayDropDown
-						active={active}
-						className="account-members-roles-dropdown"
-						closeOnClick={false}
-						menuElementAttrs={{
-							className: 'account-members-roles-menu',
-							style: menuWidth ? {width: menuWidth} : undefined,
-						}}
-						onActiveChange={setActive}
-						trigger={
-							<button
-								className="account-members-roles-trigger align-items-center d-flex form-control justify-content-between"
-								type="button"
-							>
-								<span>{triggerLabel}</span>
-
-								<ClayIcon symbol="caret-bottom" />
-							</button>
+			{fields.map((field, index) => (
+				<div
+					className={
+						index ? 'account-members-invite-row pt-3' : undefined
+					}
+					key={field.id}
+				>
+					<FieldBase
+						errorMessage={
+							errors.invites?.[index]?.givenName?.message
 						}
+						label={i18n.translate('first-name')}
+						required
 					>
-						<ClayDropDown.ItemList>
-							{(() => {
-								const standardRoles = roleNames.filter(
-									(roleName) => !isPartnerRole(roleName)
-								);
-								const partnerRoles = roleNames.filter(
-									(roleName) => isPartnerRole(roleName)
-								);
-								const hasPartnerRoles = !!partnerRoles.length;
+						<ClayInput
+							{...register(`invites.${index}.givenName`)}
+							disabled={isSubmitting}
+							type="text"
+						/>
+					</FieldBase>
 
-								const renderItem = (roleName: string) => (
-									<ClayDropDown.Item
-										key={roleName}
-										onClick={() => toggleRole(roleName)}
-									>
-										<ClayCheckbox
-											checked={selectedRoles.includes(
-												roleName
-											)}
-											label={roleName}
-											onChange={() =>
-												toggleRole(roleName)
-											}
-										/>
-									</ClayDropDown.Item>
-								);
+					<FieldBase
+						errorMessage={
+							errors.invites?.[index]?.familyName?.message
+						}
+						label={i18n.translate('last-name')}
+						required
+					>
+						<ClayInput
+							{...register(`invites.${index}.familyName`)}
+							disabled={isSubmitting}
+							type="text"
+						/>
+					</FieldBase>
 
-								return (
-									<>
-										{hasPartnerRoles && (
-											<li className="dropdown-subheader">
-												{translate('account-roles')}
-											</li>
-										)}
+					<FieldBase
+						errorMessage={
+							errors.invites?.[index]?.emailAddress?.message
+						}
+						label={i18n.translate('email-address')}
+						required
+					>
+						<ClayInput
+							{...register(`invites.${index}.emailAddress`)}
+							disabled={isSubmitting}
+							placeholder={i18n.translate('name-example-com')}
+							type="email"
+						/>
+					</FieldBase>
 
-										{standardRoles.map(renderItem)}
-
-										{hasPartnerRoles && (
-											<>
-												<ClayDropDown.Divider />
-
-												<li className="dropdown-subheader">
-													{translate('partner-roles')}
-												</li>
-
-												{partnerRoles.map(renderItem)}
-											</>
-										)}
-									</>
-								);
-							})()}
-
-							<ClayDropDown.Divider />
-
-							<ClayDropDown.Item
-								onClick={() => setSelectedRoles([])}
-							>
-								<ClayCheckbox
-									checked={!selectedRoles.length}
-									label={translate('none')}
-									onChange={() => setSelectedRoles([])}
-								/>
-							</ClayDropDown.Item>
-						</ClayDropDown.ItemList>
-					</ClayDropDown>
+					<FieldBase label={i18n.translate('roles')}>
+						<AccountRolesSelect
+							onClearRoles={() =>
+								setValue(`invites.${index}.roleNames`, [])
+							}
+							onToggleRole={(roleName) =>
+								toggleRole(index, roleName)
+							}
+							roleNames={availableRoleNames}
+							selectedRoleNames={invites[index]?.roleNames ?? []}
+						/>
+					</FieldBase>
 				</div>
-			</FieldBase>
+			))}
+
+			<div className="mt-3">
+				{fields.length < MAX_INVITATIONS_COUNT && (
+					<Button
+						className="mr-3"
+						disabled={isSubmitting}
+						displayType="secondary"
+						onClick={() => append(createEmptyInvite())}
+						prependIcon="plus"
+						small
+						type="button"
+					>
+						{translate('add-more-members')}
+					</Button>
+				)}
+
+				{fields.length > 1 && (
+					<Button
+						disabled={isSubmitting}
+						displayType="secondary"
+						onClick={() => remove(fields.length - 1)}
+						prependIcon="hr"
+						small
+						type="button"
+					>
+						{translate('remove-this-member')}
+					</Button>
+				)}
+			</div>
+
+			<div className="d-flex justify-content-end mt-4">
+				<Button
+					className="mr-3"
+					disabled={isSubmitting}
+					displayType="secondary"
+					onClick={onClose}
+					type="button"
+				>
+					{translate('cancel')}
+				</Button>
+
+				<Button disabled={isSubmitting} type="submit">
+					{translate('send-invitation')}
+				</Button>
+			</div>
 		</form>
 	);
 };
