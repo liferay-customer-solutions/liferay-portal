@@ -1,0 +1,24 @@
+{
+	"description": "",
+	"editorType": "richText",
+	"externalReferenceCode": "ACCOUNT-INVITATION",
+	"name": "Account Invitation",
+	"recipientType": "email",
+	"recipients": [
+		{
+			"bcc": "",
+			"cc": "",
+			"from": "[%FROM_EMAIL%]",
+			"fromName": {
+				"en-US": "One Liferay"
+			},
+			"to": {
+				"en-US": "[%TO_EMAIL%]"
+			}
+		}
+	],
+	"subject": {
+		"en_US": "You have been invited to [%ACCOUNT_NAME%]"
+	},
+	"type": "email"
+}
