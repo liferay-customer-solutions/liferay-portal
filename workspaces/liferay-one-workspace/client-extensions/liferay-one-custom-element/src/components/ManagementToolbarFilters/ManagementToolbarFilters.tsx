@@ -18,6 +18,7 @@ import {
 import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import useSWR from 'swr';
 import Form from '~/components/Form/Form';
+import {FieldOptions} from '~/components/FormRenderer/FormRenderer';
 import {
 	ListViewContext,
 	ListViewTypes,
@@ -32,17 +33,20 @@ import {safeJSONParse} from '~/utils/safeJSONParse';
 import './ManagementToolbarFilters.css';
 
 type ManagementToolbarFilterProps = {
+	availableOptions?: FieldOptions;
 	filterSchema?: FilterSchema;
 };
 
 export type Option = {label: string; value: string};
 
 type FilterBodyProps = {
+	availableOptions?: FieldOptions;
 	filterSchema: FilterSchema | undefined;
 	setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const FilterBody: React.FC<FilterBodyProps> = ({
+	availableOptions,
 	filterSchema,
 	setIsVisible,
 }) => {
@@ -53,8 +57,12 @@ const FilterBody: React.FC<FilterBodyProps> = ({
 	const updateUrlParams = useUpdateUrlParams();
 
 	const fields = useMemo(
-		() => filterSchema?.fields as RendererFields[],
-		[filterSchema?.fields]
+		() =>
+			(filterSchema?.fields as RendererFields[])?.filter(
+				({name}) =>
+					!availableOptions?.[name] || availableOptions[name].length
+			),
+		[availableOptions, filterSchema?.fields]
 	);
 
 	const initialFilters = useMemo(() => {
@@ -140,7 +148,7 @@ const FilterBody: React.FC<FilterBodyProps> = ({
 
 	const fieldsMemoized = useMemo(() => filterSchema?.fields, [filterSchema]);
 
-	const {data: fieldOptions = {}, isLoading} = useSWR(
+	const {data: resourceOptions = {}, isLoading} = useSWR(
 		filterSchema?.fields?.length ? `/filter-${filterSchema?.name}` : null,
 		async () => {
 			const parameters = safeJSONParse(paramsMemoized, {});
@@ -176,6 +184,11 @@ const FilterBody: React.FC<FilterBodyProps> = ({
 
 			return _fieldOptions;
 		}
+	);
+
+	const fieldOptions = useMemo(
+		() => ({...resourceOptions, ...availableOptions}),
+		[availableOptions, resourceOptions]
 	);
 
 	const applyFilters = useCallback(
@@ -331,6 +344,7 @@ const FilterBody: React.FC<FilterBodyProps> = ({
 };
 
 const ManagementToolbarFilters: React.FC<ManagementToolbarFilterProps> = ({
+	availableOptions,
 	filterSchema,
 }) => {
 	const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -378,6 +392,7 @@ const ManagementToolbarFilters: React.FC<ManagementToolbarFilterProps> = ({
 				>
 					<div className="management-toolbar-dropdown-body">
 						<FilterBody
+							availableOptions={availableOptions}
 							filterSchema={filterSchema}
 							setIsVisible={setIsVisible}
 						/>
