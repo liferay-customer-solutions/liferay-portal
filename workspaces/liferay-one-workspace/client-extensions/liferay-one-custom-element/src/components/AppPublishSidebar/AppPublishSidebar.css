@@ -1,59 +1,9 @@
-.app-flow-list-container {
-	background-color: var(--color-neutral-1);
-	border-radius: 14px;
-	height: fit-content;
-	min-width: 280px;
-	width: 280px;
-}
+/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
 
-.app-flow-list-ul {
-	list-style-type: none;
-	margin-top: 0 !important;
-	padding-right: 40px;
-}
-
-.app-flow-list-ul:first-child {
-	padding-top: 12px;
-}
-
-.app-flow-list-item-container {
-	align-items: center;
-	display: flex;
-	margin-bottom: 2.5rem;
-}
-
-.app-flow-list-item-icon {
+.app-flow-step-icon {
 	height: 0.75rem;
-	margin-right: 0.625rem;
 	width: 0.75rem;
-}
-
-.app-flow-list-item-icon-checked {
-	filter: invert(26%) sepia(83%) saturate(5507%) hue-rotate(220deg)
-		brightness(104%) contrast(97%);
-	height: 0.75rem;
-	margin-right: 0.625rem;
-	width: 0.75rem;
-}
-
-.app-flow-list-item-icon-selected {
-	filter: invert(26%) sepia(83%) saturate(5507%) hue-rotate(220deg)
-		brightness(104%) contrast(97%);
-	height: 0.75rem;
-	margin-right: 0.625rem;
-	width: 0.75rem;
-}
-
-.app-flow-list-item-text {
-	color: var(--color-neutral-5);
-	font-size: 1rem;
-	font-weight: 600;
-	line-height: 1rem;
-}
-
-.app-flow-list-item-text-checked {
-	color: var(--color-brand-primary);
-	font-size: 1rem;
-	font-weight: 600;
-	line-height: 1rem;
 }

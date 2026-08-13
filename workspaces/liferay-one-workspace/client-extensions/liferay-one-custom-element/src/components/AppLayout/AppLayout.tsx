@@ -8,6 +8,8 @@ import {ReactNode, Suspense} from 'react';
 import {Outlet} from 'react-router-dom';
 import SideNav, {NavItem} from '~/components/SideNav/SideNav';
 
+import '~/components/SideNav/SideNav.css';
+
 type AppLayoutProps = {
 	breadcrumb?: ReactNode;
 	contentHeader?: ReactNode;
@@ -34,7 +36,7 @@ export default function AppLayout({
 		>
 			{breadcrumb}
 
-			<div className="d-flex" style={{gap: 'var(--spacer-3)'}}>
+			<div className="side-nav-layout">
 				<SideNav
 					header={header}
 					headerBackground={headerBackground}
