@@ -6,7 +6,7 @@
 import classnames from 'classnames';
 import Dropzone, {FileRejection} from 'react-dropzone';
 
-import './DropzoneUpload.scss';
+import './DropzoneUpload.css';
 
 import ClayIcon from '@clayui/icon';
 

@@ -6,7 +6,7 @@
 import ClayIcon from '@clayui/icon';
 import {ReactNode} from 'react';
 
-import './VideoThumbnail.scss';
+import './VideoThumbnail.css';
 
 type VideoThumbnailProps = {
 	videoURL: string;

@@ -1,0 +1,23 @@
+/** * SPDX-FileCopyrightText: (c) 2026 Liferay, Inc. https://liferay.com * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06 */
+.product-purchase-radio-card {
+	cursor: pointer;
+}
+
+/** * SPDX-FileCopyrightText: (c) 2026 Liferay.disabled, Inc. https://liferay.com * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06 */
+.product-purchase-radio-card.disabled {
+	cursor: not-allowed;
+	opacity: 0.65;
+}
+
+/** * SPDX-FileCopyrightText: (c) 2026 Liferay .radio-card-control, Inc. https://liferay.com * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06 */
+.product-purchase-radio-card .radio-card-control {
+	align-items: center;
+	display: flex;
+	gap: 0.75rem;
+}
+
+/** * SPDX-FileCopyrightText: (c) 2026 Liferay .radio-card-control .custom-control, Inc. https://liferay.com * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06 */
+.product-purchase-radio-card .radio-card-control .custom-control {
+	margin-bottom: 0;
+	min-height: auto;
+}

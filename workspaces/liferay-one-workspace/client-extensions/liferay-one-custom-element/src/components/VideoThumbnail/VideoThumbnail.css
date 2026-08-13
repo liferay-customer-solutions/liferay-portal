@@ -5,11 +5,12 @@
 	height: 110px;
 	object-fit: cover;
 	width: 195px;
+}
 
-	&:hover .video-thumbnail-play-symbol {
-		opacity: 1;
-		transform: scale(110%);
-	}
+.video-player:hover .video-thumbnail-play-symbol,
+.video-preview:hover .video-thumbnail-play-symbol {
+	opacity: 1;
+	transform: scale(110%);
 }
 
 .video-thumbnail-play-symbol {

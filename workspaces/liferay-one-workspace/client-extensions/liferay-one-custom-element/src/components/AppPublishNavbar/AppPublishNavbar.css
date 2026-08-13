@@ -1,0 +1,142 @@
+.new-app-tool-bar-arrow-right {
+	align-self: center;
+	height: 1rem;
+	width: 1rem;
+}
+
+.new-app-tool-bar-main-account-logo {
+	align-items: center;
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+	margin-right: 1.438rem;
+}
+
+.new-app-tool-bar-main-account-logo-img {
+	border-radius: 8px;
+	height: 3rem;
+	width: 3rem;
+}
+
+.new-app-tool-bar-new-app-logo {
+	align-items: center;
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+	margin-left: 1.438rem;
+	margin-right: 1.438rem;
+}
+
+.new-app-tool-bar-new-app-logo-img {
+	border-radius: 4px;
+	max-height: 3rem;
+	object-fit: contain;
+	width: 3rem;
+}
+
+.new-app-tool-bar-new-app-logo-text {
+	font-size: 1.125rem;
+	font-weight: 600;
+	line-height: 1.25rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-wrap: nowrap;
+	width: 330px;
+}
+
+.new-app-tool-bar-status-container {
+	align-items: center;
+	display: flex;
+	gap: 0.375rem;
+	justify-content: center;
+}
+
+.new-app-tool-bar-status-icon {
+	filter: invert(54%) sepia(5%) saturate(427%) hue-rotate(201deg)
+		brightness(94%) contrast(98%);
+	height: 0.5rem;
+	width: 0.5rem;
+}
+
+.new-app-tool-bar-status-icon-approved {
+	color: #4aab3b;
+}
+
+.new-app-tool-bar-status-icon-draft {
+	color: var(--color-neutral-6);
+}
+
+.new-app-tool-bar-status-icon-hidden {
+	display: none;
+}
+
+.new-app-tool-bar-status-text {
+	color: var(--color-neutral-7);
+	font-weight: 600;
+}
+
+.new-app-tool-bar-button-container {
+	display: flex;
+	gap: 1rem;
+}
+
+.new-app-tool-bar-button-dropdown {
+	align-items: center;
+	border-radius: 6px;
+	display: flex;
+	flex-direction: row;
+	height: 32px;
+	justify-content: center;
+	margin-left: 16px;
+	width: 32px;
+}
+
+.new-app-tool-bar-button-dropdown-icon {
+	height: 16px;
+	width: 16px;
+}
+
+.new-app-tool-bar-button-dropdown:hover {
+	background: var(--color-action-primary-hover-10);
+}
+
+.new-app-tool-bar-button-text {
+	font-size: 0.875rem;
+	font-weight: 600;
+	line-height: 1rem;
+}
+
+.new-app-tool-bar-button-save-draft {
+	background: none;
+	border: 0.125rem solid var(--color-action-neutral-default);
+	border-radius: 6px;
+	color: var(--color-action-neutral-default);
+	font-size: 0.813rem;
+	font-weight: 600;
+	line-height: 1rem;
+	transition: color 0.3s;
+	transition: background 0.3s;
+}
+
+.new-app-tool-bar-button-save-draft:hover {
+	background: var(--color-action-neutral-default);
+	color: var(--color-neutral-0);
+}
+
+.new-app-tool-bar-button-preview-storefront {
+	background: none;
+	border: 0.125rem solid var(--color-brand-primary);
+	border-radius: 6px;
+	color: var(--color-brand-primary);
+	font-size: 0.813rem;
+	font-weight: 600;
+	height: 32px;
+	line-height: 1rem;
+	transition: color 0.3s;
+	transition: background 0.3s;
+}
+
+.new-app-tool-bar-button-preview-storefront:hover {
+	background: var(--color-brand-primary);
+	color: var(--color-neutral-0);
+}

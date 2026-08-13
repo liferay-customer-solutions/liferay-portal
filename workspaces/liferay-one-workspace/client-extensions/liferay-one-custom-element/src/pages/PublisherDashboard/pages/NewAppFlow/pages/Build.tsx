@@ -20,7 +20,7 @@ import {ProductWorkflowStatusCode} from '~/utils/productUtils';
 
 import {BUILD_UPLOAD_OPTIONS} from '../constants';
 
-import '../ProvideAppBuildPage.scss';
+import '../ProvideAppBuildPage.css';
 
 type ProductTypeOption = {
 	description: string;

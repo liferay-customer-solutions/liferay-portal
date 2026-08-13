@@ -10,7 +10,7 @@ import {FieldBase} from '~/components/FieldBase/FieldBase';
 import {ProductLicenseTier} from '~/enums/Product';
 import {currenciesCode} from '~/utils/currencyUtils';
 
-import './LicensePriceCard.scss';
+import './LicensePriceCard.css';
 
 type LicensePriceCardProps = {
 	currency: string;

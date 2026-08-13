@@ -15,7 +15,7 @@ import {currenciesCode} from '~/utils/currencyUtils';
 import LicensePricePanel from '../../components/LicensePricePanel';
 import CurrencyModal from './components/CurrencyModal';
 
-import './LicensePrices.scss';
+import './LicensePrices.css';
 
 const LicensePrices = () => {
 	const [

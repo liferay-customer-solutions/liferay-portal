@@ -5,7 +5,7 @@
 
 import {DocumentFileItem} from '~/components/DocumentFileItem/DocumentFileItem';
 
-import './FileList.scss';
+import './FileList.css';
 
 import {ImageFileItem} from '~/components/ImageFileItem/ImageFileItem';
 

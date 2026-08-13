@@ -15,7 +15,7 @@ import i18n from '~/i18n';
 import {LIFERAY_VERSION_PICKLIST} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
 import {getRandomID} from '~/utils/stringUtils';
 
-import './NewAppPackagesModal.scss';
+import './NewAppPackagesModal.css';
 
 type NewAppPackageVersionModal = {
 	currentVersions: string[];

@@ -8,7 +8,7 @@ import {ClayTooltipProvider} from '@clayui/tooltip';
 import classNames from 'classnames';
 import {LabelHTMLAttributes} from 'react';
 
-import '~/components/MarketplaceForm/MarketplaceForm.scss';
+import '~/components/MarketplaceForm/MarketplaceForm.css';
 
 interface ILabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
 	info?: string;
