@@ -7,16 +7,18 @@ import {ReactNode} from 'react';
 import Navbar from '~/components/AppPublishNavbar/AppPublishNavbar';
 import Sidebar from '~/components/AppPublishSidebar/AppPublishSidebar';
 
+import '~/components/SideNav/SideNav.css';
+
 type PropsWithChildren = {
 	children?: ReactNode;
 };
 
 const Body: React.FC<PropsWithChildren> = ({children}) => (
-	<div className="d-flex mt-5 w-100">{children}</div>
+	<div className="mt-5 side-nav-layout w-100">{children}</div>
 );
 
 const Content: React.FC<PropsWithChildren> = ({children}) => (
-	<div className="flex-grow-1 ml-5 new-app-body-container">{children}</div>
+	<div className="flex-grow-1 new-app-body-container">{children}</div>
 );
 
 const AppPublish: React.FC<PropsWithChildren> & {

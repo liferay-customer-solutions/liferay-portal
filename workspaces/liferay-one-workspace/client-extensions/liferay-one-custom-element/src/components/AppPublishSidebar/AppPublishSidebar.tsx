@@ -6,6 +6,8 @@
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 
+import '~/components/SideNav/SideNav.css';
+
 import './AppPublishSidebar.css';
 
 import type {AppFlowItem} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
@@ -37,41 +39,43 @@ const AppPublishSidebar: React.FC<AppPublishSidebar> = ({
 	activeIndex,
 	items,
 }) => (
-	<ul className="app-flow-list-container app-flow-list-ul mt-0 pt-5">
-		{items.map(({hide, label}, index) => {
-			if (hide) {
-				return null;
-			}
+	<nav className="side-nav">
+		<div className="side-nav-panel">
+			<ul className="side-nav-list">
+				{items.map(({hide, label}, index) => {
+					if (hide) {
+						return null;
+					}
 
-			const checked = index < activeIndex;
-			const selected = activeIndex === index;
+					const checked = index < activeIndex;
+					const selected = activeIndex === index;
 
-			return (
-				<div className="app-flow-list-item-container" key={index}>
-					<ClayIcon
-						aria-label={selected ? 'radio selected' : 'circle fill'}
-						className={classNames(
-							'app-flow-list-item-icon text-muted',
-							{
-								'app-flow-list-item-icon-checked': checked,
-								'app-flow-list-item-icon-selected': selected,
-							}
-						)}
-						symbol={getIcon({checked, selected})}
-					/>
+					return (
+						<li className="side-nav-item" key={index}>
+							<span
+								className={classNames('side-nav-link', {
+									'side-nav-link-active': selected,
+									'side-nav-link-complete': checked,
+								})}
+							>
+								<ClayIcon
+									aria-label={
+										selected
+											? 'radio selected'
+											: 'circle fill'
+									}
+									className="app-flow-step-icon side-nav-icon"
+									symbol={getIcon({checked, selected})}
+								/>
 
-					<li
-						className={classNames('app-flow-list-item-text', {
-							'app-flow-list-item-text-checked':
-								checked || selected,
-						})}
-					>
-						{label}
-					</li>
-				</div>
-			);
-		})}
-	</ul>
+								<span className="side-nav-label">{label}</span>
+							</span>
+						</li>
+					);
+				})}
+			</ul>
+		</div>
+	</nav>
 );
 
 export default AppPublishSidebar;
