@@ -500,20 +500,6 @@ export const filterSchema: FilterSchemas = {
 				],
 				type: 'checkbox',
 			}),
-			overrides(baseFilters.version, {
-				label: i18n.translate('liferay-version'),
-				name: 'specificationValues|liferayVersion',
-				operator: 'lambda',
-				resource: `o/headless-admin-list-type/v1.0/list-type-definitions/by-external-reference-code/${LIFERAY_VERSION_PICKLIST}`,
-				transformData: (item) =>
-					(item as ListTypeDefinition).listTypeEntries.map(
-						(entry) => ({
-							label: entry.name,
-							value: entry.name,
-						})
-					),
-				type: 'multiselect',
-			}),
 			overrides(baseFilters.status, {
 				name: 'statusCode',
 				options: [
@@ -531,7 +517,7 @@ export const filterSchema: FilterSchemas = {
 					},
 				],
 				removeQuoteMark: true,
-				type: 'select',
+				type: 'checkbox',
 			}),
 		],
 		name: 'publisherApps',
@@ -555,7 +541,7 @@ export const filterSchema: FilterSchemas = {
 					},
 				],
 				removeQuoteMark: true,
-				type: 'select',
+				type: 'checkbox',
 			}),
 		],
 		name: 'publisherSolutions',
