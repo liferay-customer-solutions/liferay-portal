@@ -1006,9 +1006,8 @@ public class AccountsRestControllerTest {
 
 	private final AccountAssetService _accountAssetService = Mockito.mock(
 		AccountAssetService.class);
-	private final AccountInvitationEmailService
-		_accountInvitationEmailService = Mockito.mock(
-			AccountInvitationEmailService.class);
+	private final AccountInvitationEmailService _accountInvitationEmailService =
+		Mockito.mock(AccountInvitationEmailService.class);
 	private final AccountInvitationService _accountInvitationService =
 		Mockito.mock(AccountInvitationService.class);
 	private final AccountPermission _accountPermission = Mockito.mock(
