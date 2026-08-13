@@ -6,13 +6,16 @@
 import {useNavigate} from 'react-router-dom';
 import i18n from '~/i18n';
 import {formatDate} from '~/utils/dateUtils';
-import {getProductPageURL} from '~/utils/productUtils';
+import {
+	ProductWorkflowStatusCode,
+	getProductPageURL,
+} from '~/utils/productUtils';
 
 import PublishedProductsListView, {
 	renderAppType,
-	renderLiferayVersion,
 	renderProductName,
 	renderProductStatus,
+	renderProductVersion,
 } from '../components/PublishedProductsListView/PublishedProductsListView';
 
 import type {Product} from '~/types/product';
@@ -34,17 +37,47 @@ export default function PublishedApps() {
 				actions: [
 					{
 						icon: 'view',
-						name: i18n.translate('view-details'),
+						name: i18n.translate('view'),
+						onClick: (product: Product) =>
+							navigate(`/published-apps/${product.productId}`),
+					},
+					{
+						hidden: (product: Product) =>
+							product.productStatus !==
+							ProductWorkflowStatusCode.APPROVED,
+						icon: 'shortcut',
+						name: i18n.translate('open-in-marketplace'),
 						onClick: (product: Product) =>
 							window.open(
 								getProductPageURL(product.urls),
 								'_blank'
 							),
 					},
+					{
+						hidden: (product: Product) =>
+							product.productStatus ===
+							ProductWorkflowStatusCode.PENDING,
+						icon: 'pencil',
+						name: i18n.translate('edit'),
+						onClick: (product: Product) =>
+							navigate(
+								`/newapp/${product.productId}/publisher/profile`
+							),
+					},
+					{
+						hidden: (product: Product) =>
+							product.productStatus !==
+							ProductWorkflowStatusCode.APPROVED,
+						icon: 'plus',
+						name: i18n.translate('add-new-version'),
+						onClick: (product: Product) =>
+							navigate(
+								`/newversion/${product.productId}/publisher/build`
+							),
+					},
 				],
 				columns: [
 					{
-						clickable: true,
 						id: 'name',
 						name: i18n.translate('name'),
 						render: renderProductName,
@@ -52,24 +85,19 @@ export default function PublishedApps() {
 					},
 					{
 						id: 'productSpecifications',
-						name: i18n.translate('app-type'),
-						render: renderAppType,
+						name: i18n.translate('version'),
+						render: renderProductVersion,
 					},
 					{
-						id: 'catalog',
-						name: i18n.translate('publisher'),
-						render: (catalog) => catalog?.name,
+						id: 'productSpecifications',
+						name: i18n.translate('app-type'),
+						render: renderAppType,
 					},
 					{
 						id: 'modifiedDate',
 						name: i18n.translate('last-update'),
 						render: (modifiedDate) => formatDate(modifiedDate),
 						sortable: true,
-					},
-					{
-						id: 'productSpecifications',
-						name: i18n.translate('liferay-version'),
-						render: renderLiferayVersion,
 					},
 					{
 						id: 'workflowStatusInfo',
