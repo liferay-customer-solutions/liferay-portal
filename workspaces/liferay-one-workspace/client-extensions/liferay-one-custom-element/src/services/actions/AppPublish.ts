@@ -47,12 +47,12 @@ type TemporaryData = {
 };
 
 function normalizeCategory(category: {
-	label: string;
+	name: string;
 	value: number | string;
 }): Partial<ProductCategories> {
 	return {
 		id: Number(category.value),
-		name: category.label,
+		name: category.name,
 	};
 }
 
@@ -221,7 +221,7 @@ export default class AppPublish extends BaseAppPublish {
 			vocabulariesAndCategories[ProductVocabulary.PRODUCT_TYPE]
 				?.categories ?? []
 		).filter(
-			({label}: {label: string}) => label === ProductTypeVocabulary.APP
+			({name}: {name: string}) => name === ProductTypeVocabulary.APP
 		);
 
 		const productCategories = [
@@ -263,8 +263,8 @@ export default class AppPublish extends BaseAppPublish {
 			]?.categories ?? [];
 		const platformOfferingLabels = getOfferingTypes(appType);
 		const compatibleOfferings = compatibleOfferingCategories
-			.filter(({label}: {label: string}) =>
-				platformOfferingLabels.includes(label as ProductOfferingTypes)
+			.filter(({name}: {name: string}) =>
+				platformOfferingLabels.includes(name as ProductOfferingTypes)
 			)
 			.map(normalizeCategory);
 

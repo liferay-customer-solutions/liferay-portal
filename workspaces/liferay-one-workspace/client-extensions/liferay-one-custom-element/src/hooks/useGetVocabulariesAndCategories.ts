@@ -6,9 +6,11 @@
 import useSWR from 'swr';
 import {useMarketplaceContext} from '~/context/MarketplaceContextProvider';
 import HeadlessAdminTaxonomy from '~/services/headless/HeadlessAdminTaxonomy';
+import {getTaxonomyCategoryLabel} from '~/utils/getTaxonomyCategoryLabel';
 
 export type VocabularyCategoryOption = {
 	label: string;
+	name: string;
 	value: string;
 };
 
@@ -44,7 +46,8 @@ const useGetVocabulariesAndCategories = (vocabulariesName: string[]) => {
 				...vocabulary,
 				categories: vocabulary.taxonomyCategories.items.map(
 					(taxonomyCategory) => ({
-						label: taxonomyCategory.name,
+						label: getTaxonomyCategoryLabel(taxonomyCategory.name),
+						name: taxonomyCategory.name,
 						value: `${taxonomyCategory.id}`,
 					})
 				),

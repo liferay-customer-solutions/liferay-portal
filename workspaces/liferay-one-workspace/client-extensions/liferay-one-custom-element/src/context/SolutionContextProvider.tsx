@@ -14,6 +14,7 @@ import {useParams} from 'react-router-dom';
 import Loading from '~/components/Loading/Loading';
 import {useGetVocabulariesAndCategories} from '~/hooks/useGetVocabulariesAndCategories';
 import HeadlessCommerceAdminCatalog from '~/services/headless/HeadlessCommerceAdminCatalog';
+import {getTaxonomyCategoryLabel} from '~/utils/getTaxonomyCategoryLabel';
 import {
 	ProductSpecificationKey,
 	ProductTags,
@@ -156,17 +157,11 @@ export type SolutionInitialState = {
 	loading: boolean;
 	productId: number;
 	profile: {
-		categories: {
-			label: string;
-			value: string;
-		}[];
+		categories: VocabularyCategoryOption[];
 		description: string;
 		file: UploadedFile;
 		name: string;
-		tags: {
-			label: string;
-			value: string;
-		}[];
+		tags: VocabularyCategoryOption[];
 	};
 	references: {
 		imagesToDelete: string[];
@@ -220,7 +215,11 @@ const filterProductVocabularies = (product: Product, vocabulary: string) =>
 			(category) =>
 				category.vocabulary.toLowerCase() === vocabulary.toLowerCase()
 		)
-		.map(({id, name}) => ({label: name, value: `${id}`}));
+		.map(({id, name}) => ({
+			label: getTaxonomyCategoryLabel(name),
+			name,
+			value: `${id}`,
+		}));
 
 const reducer = (state: SolutionInitialState, action: AppActions) => {
 	switch (action.type) {
