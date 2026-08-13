@@ -6,6 +6,7 @@
 import {useNavigate} from 'react-router-dom';
 import i18n from '~/i18n';
 import {formatDate} from '~/utils/dateUtils';
+import {getProductPageURL} from '~/utils/productUtils';
 
 import PublishedProductsListView, {
 	renderAppType,
@@ -35,7 +36,10 @@ export default function PublishedApps() {
 						icon: 'view',
 						name: i18n.translate('view-details'),
 						onClick: (product: Product) =>
-							window.open(product.urls?.en_US, '_blank'),
+							window.open(
+								getProductPageURL(product.urls),
+								'_blank'
+							),
 					},
 				],
 				columns: [
