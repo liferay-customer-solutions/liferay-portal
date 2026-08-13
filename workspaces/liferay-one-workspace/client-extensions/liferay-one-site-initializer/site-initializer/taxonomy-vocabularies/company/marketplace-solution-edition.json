@@ -9,6 +9,7 @@
 	"availableLanguages": [
 		"en-US"
 	],
+	"externalReferenceCode": "MARKETPLACE_SOLUTION_EDITION",
 	"name": "marketplace-solution-edition",
 	"viewableBy": "Anyone"
 }
