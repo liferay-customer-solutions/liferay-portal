@@ -19,6 +19,8 @@ import {
 	ProductWorkflowStatusLabel,
 } from '~/utils/productUtils';
 
+import '../../PublisherDashboard.css';
+
 import './PublishedProductsListView.css';
 
 import type {
@@ -189,7 +191,7 @@ export default function PublishedProductsListView({
 	return (
 		<Page
 			description={i18n.translate(description)}
-			pageRendererProps={{className: 'border py-2 rounded-lg'}}
+			pageRendererProps={{className: 'publisher-dashboard-card py-2'}}
 			rightButton={
 				<Button
 					disabled={!catalogId}
