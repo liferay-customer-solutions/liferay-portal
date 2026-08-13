@@ -62,10 +62,10 @@ public class JiraAssetObject {
 	 * return the id of the referenced object.
 	 */
 	public String getAttributeValue(String attributeName) {
-		String attributeId = _getAttributeId(attributeName);
+		Object value = _values.get(_getAttributeId(attributeName));
 
-		if (_values.containsKey(attributeId)) {
-			return String.valueOf(_values.get(attributeId));
+		if (value != null) {
+			return String.valueOf(value);
 		}
 
 		return _getValue(_getAttributeValueJSONObject(attributeName));
