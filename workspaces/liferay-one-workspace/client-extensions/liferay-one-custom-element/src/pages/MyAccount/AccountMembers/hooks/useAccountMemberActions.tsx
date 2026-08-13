@@ -56,19 +56,11 @@ export function useAccountMemberActions({
 			body: (
 				<InviteMemberModal
 					accountExternalReferenceCode={accountExternalReferenceCode}
-					accountId={accountId}
 					mutate={mutate}
 					onClose={modalContext.onClose}
 					roleNames={roleNames}
 				/>
 			),
-			footer: [
-				cancelButton,
-				null,
-				<Button form="invite-member" key="confirm" type="submit">
-					{translate('send-invitation')}
-				</Button>,
-			],
 			header: translate('invite-member'),
 		});
 	};

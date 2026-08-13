@@ -5,7 +5,21 @@
 
 import {OneSpringBootOAuth2} from './OAuth2Client';
 
+type InvitationBody = {
+	emailAddress: string;
+	familyName: string;
+	givenName: string;
+	roleNames: string[];
+};
+
 class AccountsOAuth2 extends OneSpringBootOAuth2 {
+	async postInvitations(
+		accountExternalReferenceCode: string,
+		body: InvitationBody
+	) {
+		return this.post(`/${accountExternalReferenceCode}/invitations`, body);
+	}
+
 	async postSyncToJSM(accountExternalReferenceCode: string) {
 		return this.post(`/${accountExternalReferenceCode}/sync-to-jsm`);
 	}
