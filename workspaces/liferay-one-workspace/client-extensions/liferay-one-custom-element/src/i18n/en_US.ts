@@ -504,6 +504,7 @@ export default {
 	'file-to-download-doesnt-exist-anymore':
 		"File to download doesn't exist anymore.",
 	'filter': 'Filter',
+	'filter-by': 'Filter By',
 	'filters': 'Filters',
 	'finance-dashboard': 'Finance Dashboard',
 	'first-name': 'First Name',
