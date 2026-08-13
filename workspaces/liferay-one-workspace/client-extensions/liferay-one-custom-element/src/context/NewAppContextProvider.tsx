@@ -248,7 +248,7 @@ export type AppActions =
 	ActionMap<NewAppPayload>[keyof ActionMap<NewAppPayload>];
 
 const filterProductVocabularies = (product: Product, vocabulary: string) =>
-	product.categories
+	(product.categories ?? [])
 		.filter(
 			(category) =>
 				category.vocabulary.toLowerCase() === vocabulary.toLowerCase()
@@ -689,7 +689,7 @@ export default function NewAppContextProvider({
 				productId as string,
 				new URLSearchParams({
 					nestedFields:
-						'attachments,catalog,images,productSpecifications,productOptions,skus',
+						'attachments,catalog,categories,images,productSpecifications,productOptions,skus',
 				})
 			),
 		{

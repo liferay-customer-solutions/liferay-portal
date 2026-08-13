@@ -215,7 +215,7 @@ export type AppActions =
 	ActionMap<SolutionPayload>[keyof ActionMap<SolutionPayload>];
 
 const filterProductVocabularies = (product: Product, vocabulary: string) =>
-	product.categories
+	(product.categories ?? [])
 		.filter(
 			(category) =>
 				category.vocabulary.toLowerCase() === vocabulary.toLowerCase()
@@ -569,7 +569,8 @@ export default function SolutionContextProvider({
 		HeadlessCommerceAdminCatalog.getProduct(
 			productId as string,
 			new URLSearchParams({
-				nestedFields: 'attachments,images,productSpecifications',
+				nestedFields:
+					'attachments,categories,images,productSpecifications',
 			})
 		)
 			.then((response) => {
