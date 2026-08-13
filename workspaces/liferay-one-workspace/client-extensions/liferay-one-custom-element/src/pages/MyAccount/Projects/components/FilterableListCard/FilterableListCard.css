@@ -27,6 +27,11 @@
 		margin: 0;
 		max-width: none;
 
+		& .form-control,
+		& .input-group-inset-item {
+			border-color: var(--color-neutral-2);
+		}
+
 		& .input-group-inset-item {
 			padding-left: var(--spacer-3);
 			padding-right: var(--spacer-3);
