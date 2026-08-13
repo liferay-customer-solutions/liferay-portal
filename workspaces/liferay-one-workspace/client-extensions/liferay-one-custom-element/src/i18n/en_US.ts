@@ -104,6 +104,7 @@ export default {
 	'an-app-build-is-your-compiled-or-non-compiled-code-submitted-on-behalf-of-your-account-to-the-marketplace-once-submitted-it-will-be-reviewed-and-tested-by-our-marketplace-administrators-for-approval-in-the-marketplace':
 		'An App Build is your compiled or non-compiled code submitted on behalf of your account to the Marketplace. Once submitted, it will be reviewed and tested by our Marketplace administrators for approval in the Marketplace.',
 	'an-unexpected-error-occurred': 'An unexpected error occurred.',
+	'analytics-and-optimization': 'Analytics and Optimization',
 	'analytics-cloud-activation': 'Analytics Cloud Activation',
 	'analytics-group-id': 'Analytics Group ID',
 	'and': 'and',
@@ -213,6 +214,7 @@ export default {
 	'business-event-created-successfully':
 		'Business event created successfully.',
 	'business-events': 'Business Events',
+	'business-use': 'Business Use',
 	'buy-liferay-tokens': 'Buy Liferay Tokens',
 	'by': 'by',
 	'by-requesting-a-publisher-account-you-agree-to-the':
@@ -242,6 +244,7 @@ export default {
 	'clear-all-filters': 'Clear All Filters',
 	'click-on-browse-catalog-to-start': "Click on 'Browse Catalog' to start.",
 	'client-extension': 'Client Extension',
+	'client-extension-type': 'Client Extension Type',
 	'client-extensions': 'Client Extensions',
 	'close': 'Close',
 	'cloud-app': 'Cloud App',
@@ -256,6 +259,7 @@ export default {
 	'cloud-upload': 'Cloud Upload',
 	'cluster': 'Cluster',
 	'cluster-size': 'Cluster Size',
+	'collaboration-knowledge-sharing': 'Collaboration and Knowledge Sharing',
 	'columns': 'Columns',
 	'comment': 'Comment',
 	'comments': 'Comments',
@@ -294,6 +298,7 @@ export default {
 	'contact-your-administrator-to-become-part-of-an-account':
 		'Contact your administrator to become part of an account.',
 	'contacts': 'Contacts',
+	'content-management-operations': 'Content Management Operations',
 	'content-media-type': 'Content Media Type',
 	'content-policy': 'Content Policy',
 	'continue': 'Continue',
@@ -332,6 +337,7 @@ export default {
 	'current-version': 'Current Version',
 	'customer-account': 'Customer Account',
 	'customer-dashboard': 'Customer Dashboard',
+	'customer-data-management': 'Customer Data Management',
 	'customer-project': 'Customer Project',
 	'customers-of-the-marketplace-will-see-this-as-the-name-of-the-app-please-use-a-title-no-longer-than-50-characters-titles-longer-than-18-characters-may-be-truncated-the-app-title-may-contain-the-word-liferay-to-describe-its-use-or-intent-as-long-as-the-name-does-not-imply-official-certification-or-validation-from-liferay-inc-examples-of-permissible-names-include-exchange-connector-for-liferay-or-integration-connector-kit-for-liferay-while-liferay-mail-solution-or-liferay-management-console-would-not-be-permitted-without-explicit-approval-please-refer-to-our-trademark-policy':
 		'Customers of the Marketplace will see this as the name of the app. Please use a title no longer than 50 characters. Titles longer than 18 characters may be truncated. The app title may contain the word "Liferay" to describe its use or intent, as long as the name does not imply official certification or validation from Liferay, Inc. Examples of permissible names include "Exchange Connector for Liferay" or "Integration Connector Kit for Liferay" while "Liferay Mail Solution" or "Liferay Management Console" would not be permitted without explicit approval. Please refer to our trademark policy.',
@@ -342,6 +348,9 @@ export default {
 		'Customize Storefront Solution Details',
 	'dashboard': 'Dashboard',
 	'data-center-location': 'Data Center Location',
+	'data-modeling-and-business-logic': 'Data Modeling and Business Logic',
+	'data-modeling-process-and-business-logic':
+		'Data Modeling, Process, and Business Logic',
 	'database': 'Database',
 	'date': 'Date',
 	'date-added': 'Date Added',
@@ -399,6 +408,7 @@ export default {
 	'dxp-license-usage-type': 'DXP License Usage Type',
 	'dxp-module-based-apps-are-not-supported-on-liferay-experience-cloud-lxc':
 		'DXP module-based apps are not supported on Liferay SaaS.',
+	'e-commerce': 'E-Commerce',
 	'each': 'each',
 	'edit': 'Edit',
 	'edit-account-details': 'Edit Account Details',
@@ -463,6 +473,7 @@ export default {
 	'exit': 'Exit',
 	'exit-from-providing-app-build': 'Exit from providing app build',
 	'exp-date': 'Exp. Date',
+	'experience-management': 'Experience Management',
 	'expiration-date': 'Expiration Date',
 	'expiration-notifications': 'Expiration Notifications',
 	'expire': 'Expire',
@@ -474,6 +485,7 @@ export default {
 	'export-all-key-details-csv': 'Export All Key Details (CSV)',
 	'export-csv': 'Export CSV',
 	'extend-trial': 'Extend Trial',
+	'extensibility-and-integration': 'Extensibility and Integration',
 	'extension': 'Extension',
 	'extension-optional': 'Extension (optional)',
 	'extension-request': 'Extension Request',
@@ -506,6 +518,7 @@ export default {
 	'form': 'Form',
 	'fragment': 'Fragment',
 	'fragment-collection-of-fragments': 'Fragment/Collection of Fragments',
+	'fragments': 'Fragments',
 	'free': 'Free',
 	'friendly-workspace-url': 'Friendly Workspace URL',
 	'fulfillment-date': 'Fulfillment Date',
@@ -560,6 +573,7 @@ export default {
 		'I have read and agree to the terms and conditions above',
 	'id': 'ID',
 	'identity': 'Identity',
+	'identity-management-governance': 'Identity Management and Governance',
 	'if-the-app-is-compatible-with-different-updates-of-74-please-upload-multiple-packages-for-each-update-or-update-the-compatibility-range':
 		'If the app is compatible with different updates of 7.4, please upload multiple packages for each update or update the compatibility range.',
 	'if-there-is-no-project-admin-on-this-project-to-add-or-manage-team-members-contact-your-account-admin':
@@ -765,6 +779,7 @@ export default {
 	'my-solutions': 'My Solutions',
 	'name': 'Name',
 	'name-example-com': 'name@example.com',
+	'navigation-and-discovery': 'Navigation and Discovery',
 	'need-help-activating-this-product-check-the':
 		'Need help activating this product? Check the',
 	'need-help-getting-started?': 'Need help getting started?',
@@ -834,6 +849,7 @@ export default {
 	'number-of-purchases': 'Number of purchases',
 	'number-of-sites': 'Number of Sites',
 	'object-action': 'Object Action',
+	'object-definition': 'Object Definition',
 	'objective': 'Objective',
 	'of-service': 'of Service.',
 	'of-target': 'of target',
@@ -870,6 +886,7 @@ export default {
 	'order-status': 'Order Status',
 	'order-summary': 'Order Summary',
 	'orders': 'Orders',
+	'orders-and-fulfillment': 'Orders and Fulfillment',
 	'orders-list': 'Orders List',
 	'organization': 'Organization',
 	'other': 'Other',
@@ -891,6 +908,7 @@ export default {
 	'payment': 'Payment',
 	'payment-failed': 'Payment Failed',
 	'payment-method': 'Payment Method',
+	'payment-methods': 'Payment Methods',
 	'payment-status': 'Payment Status',
 	'payment-summary': 'Payment Summary',
 	'payments': 'Payments',
@@ -906,6 +924,7 @@ export default {
 	'personal-account': 'Personal Account',
 	'personal-information': 'Personal Information',
 	'personal-information-purpose': 'Personal Information & Purpose',
+	'personalization-and-segmentation': 'Personalization and Segmentation',
 	'phone': 'Phone',
 	'phone-number': 'Phone Number',
 	'pick-one-of-the-following-three-options-to-immediately-obtain-extra-tokens-to-foster-your-ai-hub-capabilities':

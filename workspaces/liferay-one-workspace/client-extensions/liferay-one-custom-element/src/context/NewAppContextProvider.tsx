@@ -16,6 +16,7 @@ import HeadlessCommerceAdminCatalogImpl from '~/services/headless/HeadlessCommer
 import HeadlessDelivery from '~/services/headless/HeadlessDelivery';
 import HeadlessPublisherAsset from '~/services/headless/HeadlessPublisherAsset';
 import SearchBuilder from '~/utils/SearchBuilder';
+import {getTaxonomyCategoryLabel} from '~/utils/getTaxonomyCategoryLabel';
 import {ProductSpecificationKey, ProductTags} from '~/utils/productUtils';
 
 import {useMarketplaceContext} from './MarketplaceContextProvider';
@@ -103,21 +104,12 @@ export type NewAppInitialState = {
 	};
 	productId: number;
 	profile: {
-		areas: {
-			label: string;
-			value: string;
-		}[];
-		categories: {
-			label: string;
-			value: string;
-		};
+		areas: VocabularyCategoryOption[];
+		categories: VocabularyCategoryOption;
 		description: string;
 		file: UploadedFile;
 		name: string;
-		tags: {
-			label: string;
-			value: string;
-		}[];
+		tags: VocabularyCategoryOption[];
 	};
 	references: {
 		buildsToDelete: LiferayPackage[];
@@ -215,7 +207,7 @@ const newAppInitialState: NewAppInitialState = {
 	productId: 0,
 	profile: {
 		areas: [],
-		categories: {label: '', value: ''},
+		categories: {label: '', name: '', value: ''},
 		description: '',
 		file: {} as UploadedFile,
 		name: '',
@@ -253,7 +245,11 @@ const filterProductVocabularies = (product: Product, vocabulary: string) =>
 			(category) =>
 				category.vocabulary.toLowerCase() === vocabulary.toLowerCase()
 		)
-		.map(({id, name}) => ({label: name, value: `${id}`}));
+		.map(({id, name}) => ({
+			label: getTaxonomyCategoryLabel(name),
+			name,
+			value: `${id}`,
+		}));
 
 const reducer = (state: NewAppInitialState, action: AppActions) => {
 	switch (action.type) {

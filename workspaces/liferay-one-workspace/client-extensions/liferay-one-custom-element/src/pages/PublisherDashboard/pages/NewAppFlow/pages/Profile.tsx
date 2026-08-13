@@ -210,6 +210,7 @@ const Profile = () => {
 									name: 'categories',
 									value: {
 										label: category?.label ?? '',
+										name: category?.name ?? '',
 										value: event.target.value,
 									},
 								},
@@ -245,9 +246,9 @@ const Profile = () => {
 						}`}
 						onItemsChange={(items) => {
 							const filteredValue = (
-								items as {[key: string]: string}[]
-							).filter((item) =>
-								defaultSourceItems.areas.some(
+								items as VocabularyCategoryOption[]
+							).flatMap((item) =>
+								defaultSourceItems.areas.filter(
 									(defaultItem: VocabularyCategoryOption) =>
 										defaultItem.value === item.value
 								)
@@ -282,9 +283,9 @@ const Profile = () => {
 						}`}
 						onItemsChange={(items) => {
 							const filteredValue = (
-								items as {[key: string]: string}[]
-							).filter((item) =>
-								defaultSourceItems.tags.some(
+								items as VocabularyCategoryOption[]
+							).flatMap((item) =>
+								defaultSourceItems.tags.filter(
 									(defaultItem: VocabularyCategoryOption) =>
 										defaultItem.value === item.value
 								)
