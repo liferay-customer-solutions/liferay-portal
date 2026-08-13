@@ -14,6 +14,8 @@ import {ProductWorkflowStatusCode} from '~/utils/productUtils';
 
 import {PublishMode} from '../constants';
 
+import '../../../PublisherDashboard.css';
+
 const Submit = () => {
 	const [context] = useNewAppContext();
 	const navigate = useNavigate();
@@ -39,7 +41,7 @@ const Submit = () => {
 				<hr />
 			</Section>
 
-			<div className="border p-5 rounded-lg">
+			<div className="p-5 publisher-dashboard-card">
 				<AppReview.Profile context={context} />
 				<hr />
 				<AppReview.Description

@@ -15,6 +15,8 @@ import {
 	getProductPageURL,
 } from '~/utils/productUtils';
 
+import '../PublisherDashboard.css';
+
 import './AppSummary.css';
 
 const STATUS_DOT_COLOR: Record<number, string> = {
@@ -91,7 +93,7 @@ export default function AppSummary() {
 					)}
 				</div>
 
-				<div className="border p-5 rounded-lg">
+				<div className="p-5 publisher-dashboard-card">
 					<AppReview.Profile context={context} />
 
 					<hr />
