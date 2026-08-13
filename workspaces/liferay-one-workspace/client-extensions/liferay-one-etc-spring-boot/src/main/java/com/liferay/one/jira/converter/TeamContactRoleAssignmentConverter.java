@@ -45,7 +45,7 @@ public class TeamContactRoleAssignmentConverter
 		jiraAssetObject.setAttributeValue(
 			TeamContactRoleAssignmentConstants.ATTRIBUTE_NAME_NAME,
 			_getName(
-				contactRoleExternalKey, contactExternalKey, teamExternalKey));
+				contactExternalKey, contactRoleExternalKey, teamExternalKey));
 		jiraAssetObject.setAttributeValue(
 			TeamContactRoleAssignmentConstants.
 				ATTRIBUTE_NAME_CONTACT_ROLE_EXTERNAL_KEY,
@@ -73,7 +73,7 @@ public class TeamContactRoleAssignmentConverter
 	}
 
 	private String _getName(
-		String contactRoleExternalKey, String contactExternalKey,
+		String contactExternalKey, String contactRoleExternalKey,
 		String teamExternalKey) {
 
 		return StringBundler.concat(
