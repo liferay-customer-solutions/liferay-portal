@@ -5,4 +5,9 @@
 			padding-right: var(--spacer-3);
 		}
 	}
+
+	& .form-control,
+	& .input-group-inset-item {
+		border-color: var(--color-neutral-2);
+	}
 }
