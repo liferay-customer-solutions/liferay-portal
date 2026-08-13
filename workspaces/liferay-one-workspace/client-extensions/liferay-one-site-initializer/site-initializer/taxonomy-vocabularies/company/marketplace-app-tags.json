@@ -9,6 +9,7 @@
 	"availableLanguages": [
 		"en-US"
 	],
+	"externalReferenceCode": "MARKETPLACE_APP_TAGS",
 	"name": "marketplace-app-tags",
 	"viewableBy": "Anyone"
 }
