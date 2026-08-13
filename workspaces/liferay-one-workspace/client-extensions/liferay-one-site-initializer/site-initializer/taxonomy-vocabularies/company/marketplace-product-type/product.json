@@ -3,9 +3,6 @@
 	"description_i18n": {
 		"en_US": "A product is a packaged offering available in the marketplace catalog."
 	},
-	"name": "Product",
-	"name_i18n": {
-		"en_US": "Product"
-	},
+	"name": "product",
 	"viewableBy": "Anyone"
 }

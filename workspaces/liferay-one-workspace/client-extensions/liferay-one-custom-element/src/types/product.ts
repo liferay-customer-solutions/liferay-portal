@@ -282,7 +282,7 @@ export type ProductType =
 	| 'other'
 	| 'ssa-saas';
 
-export type ProductTypeVocabulary = 'App' | 'Liferay Product' | 'Solution';
+export type ProductTypeVocabulary = 'app' | 'liferay-product' | 'solution';
 
 export type ProductUploadType = 'GitHub' | 'Liferay SaaS' | 'upload';
 

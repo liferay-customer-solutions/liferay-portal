@@ -10,9 +10,6 @@
 		"en-US"
 	],
 	"externalReferenceCode": "MARKETPLACE_AVAILABILITY",
-	"name": "Marketplace Availability",
-	"name_i18n": {
-		"en_US": "Marketplace Availability"
-	},
+	"name": "marketplace-availability",
 	"viewableBy": "Anyone"
 }

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {ProductVocabulary} from '~/enums/Product';
 import i18n from '~/i18n';
 import {ConsoleUserProject} from '~/services/spring-boot/types';
 import {ProductSpecificationKey, ProductTypeLabels} from '~/utils/productUtils';
@@ -31,7 +32,7 @@ export class DeliveryProductModel {
 			ProductTypeLabels[APP_TYPE as unknown as ProductType];
 
 		if (!type) {
-			const categories = this.getCategories('Marketplace Product Type');
+			const categories = this.getCategories(ProductVocabulary.PRODUCT_TYPE);
 
 			type = categories[0]?.name;
 		}
@@ -184,7 +185,7 @@ export class DeliveryProductModel {
 	}
 
 	public getSolutionCategories() {
-		return this.getCategories('Marketplace Solution Category');
+		return this.getCategories(ProductVocabulary.SOLUTION_CATEGORY);
 	}
 
 	public getSpecification(

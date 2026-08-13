@@ -27,7 +27,7 @@ export default function Solutions() {
 				defaultFilters={{
 					filter: `${SearchBuilder.lambda(
 						'categoryNames',
-						'Solution'
+						'solution'
 					)}`,
 				}}
 				id="administrator-solutions"

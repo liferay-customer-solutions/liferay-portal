@@ -153,9 +153,9 @@ export const ProductType = {
 export type ProductType = (typeof ProductType)[keyof typeof ProductType];
 
 export const ProductTypeVocabulary = {
-	APP: 'App',
-	LIFERAY_PRODUCT: 'Liferay Product',
-	SOLUTION: 'Solution',
+	APP: 'app',
+	LIFERAY_PRODUCT: 'liferay-product',
+	SOLUTION: 'solution',
 } as const;
 
 export type ProductTypeVocabulary =
@@ -178,15 +178,15 @@ export type ProductVersionOption =
 	(typeof ProductVersionOption)[keyof typeof ProductVersionOption];
 
 export const ProductVocabulary = {
-	APP_AREA: 'Marketplace App Category',
-	APP_CATEGORY: 'Marketplace Category',
-	APP_TAGS: 'Marketplace App Tags',
-	AVAILABILITY: 'Marketplace Availability',
-	LIFERAY_PLATFORM_OFFERING: 'Marketplace Liferay Platform Offering',
-	LIFERAY_VERSION: 'Marketplace Liferay Version',
-	PRODUCT_TYPE: 'Marketplace Product Type',
-	SOLUTION_CATEGORY: 'Marketplace Solution Category',
-	SOLUTION_TAGS: 'Marketplace Solution Tags',
+	APP_AREA: 'marketplace-app-category',
+	APP_CATEGORY: 'marketplace-category',
+	APP_TAGS: 'marketplace-app-tags',
+	AVAILABILITY: 'marketplace-availability',
+	LIFERAY_PLATFORM_OFFERING: 'marketplace-liferay-platform-offering',
+	LIFERAY_VERSION: 'marketplace-liferay-version',
+	PRODUCT_TYPE: 'marketplace-product-type',
+	SOLUTION_CATEGORY: 'marketplace-solution-category',
+	SOLUTION_TAGS: 'marketplace-solution-tags',
 } as const;
 
 export type ProductVocabulary =

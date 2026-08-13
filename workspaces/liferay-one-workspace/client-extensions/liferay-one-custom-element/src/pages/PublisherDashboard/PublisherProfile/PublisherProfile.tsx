@@ -63,8 +63,8 @@ export default function PublisherProfile() {
 	const {isLoading: isLoadingDetails, publisherDetails} =
 		usePublisherDetails(catalogId);
 
-	const appsCount = useProductCount(catalogId, 'App');
-	const solutionsCount = useProductCount(catalogId, 'Solution');
+	const appsCount = useProductCount(catalogId, 'app');
+	const solutionsCount = useProductCount(catalogId, 'solution');
 
 	const details = publisherDetails ?? {};
 

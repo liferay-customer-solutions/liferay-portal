@@ -24,7 +24,7 @@
 			],
 			"externalReferenceCode": "MARKETPLACE_APP_CATEGORY",
 			"multiValued": true,
-			"name": "Marketplace App Category",
+			"name": "marketplace-app-category",
 			"viewableBy": "Anyone"
 		},
 		{
@@ -40,7 +40,7 @@
 			],
 			"externalReferenceCode": "MARKETPLACE_APP_TAGS",
 			"multiValued": true,
-			"name": "Marketplace App Tags",
+			"name": "marketplace-app-tags",
 			"viewableBy": "Anyone"
 		},
 		{
@@ -56,7 +56,7 @@
 			],
 			"externalReferenceCode": "MARKETPLACE_AVAILABILITY",
 			"multiValued": true,
-			"name": "Marketplace Availability",
+			"name": "marketplace-availability",
 			"viewableBy": "Anyone"
 		},
 		{
@@ -72,7 +72,7 @@
 			],
 			"externalReferenceCode": "MARKETPLACE_CATEGORY",
 			"multiValued": true,
-			"name": "Marketplace Category",
+			"name": "marketplace-category",
 			"viewableBy": "Anyone"
 		},
 		{
@@ -88,7 +88,7 @@
 			],
 			"externalReferenceCode": "MARKETPLACE_LIFERAY_PLATFORM_OFFERING",
 			"multiValued": true,
-			"name": "Marketplace Liferay Platform Offering",
+			"name": "marketplace-liferay-platform-offering",
 			"viewableBy": "Anyone"
 		},
 		{
@@ -104,7 +104,7 @@
 			],
 			"externalReferenceCode": "MARKETPLACE_LIFERAY_VERSION",
 			"multiValued": true,
-			"name": "Marketplace Liferay Version",
+			"name": "marketplace-liferay-version",
 			"viewableBy": "Anyone"
 		},
 		{
@@ -120,7 +120,7 @@
 			],
 			"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE",
 			"multiValued": true,
-			"name": "Marketplace Product Type",
+			"name": "marketplace-product-type",
 			"viewableBy": "Anyone"
 		},
 		{
@@ -136,7 +136,7 @@
 			],
 			"externalReferenceCode": "MARKETPLACE_SOLUTION_CATEGORY",
 			"multiValued": true,
-			"name": "Marketplace Solution Category",
+			"name": "marketplace-solution-category",
 			"viewableBy": "Anyone"
 		},
 		{
@@ -152,7 +152,7 @@
 			],
 			"externalReferenceCode": "MARKETPLACE_SOLUTION_TAGS",
 			"multiValued": true,
-			"name": "Marketplace Solution Tags",
+			"name": "marketplace-solution-tags",
 			"viewableBy": "Anyone"
 		}
 	]
