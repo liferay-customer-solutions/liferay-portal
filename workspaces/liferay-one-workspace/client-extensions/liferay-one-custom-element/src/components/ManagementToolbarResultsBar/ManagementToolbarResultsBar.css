@@ -1,5 +1,30 @@
-.toolbar-results-container {
-	& .subnav-tbar-primary {
-		background-color: white !important;
-	}
+.management-toolbar-active-filters {
+	border-bottom: 1px solid var(--color-neutral-2);
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	padding: 12px 24px 16px;
+	width: 100%;
+}
+
+.management-toolbar-filter-tag {
+	align-items: center;
+	background-color: var(--color-neutral-1);
+	border: 1px solid var(--color-neutral-4);
+	border-radius: 4px;
+	color: var(--color-neutral-10);
+	display: inline-flex;
+	font-size: 13px;
+	gap: 6px;
+	padding: 2px 8px;
+}
+
+.management-toolbar-filter-tag-close {
+	align-items: center;
+	background-color: transparent;
+	border: 0;
+	color: var(--color-neutral-7);
+	cursor: pointer;
+	display: flex;
+	padding: 0;
 }
