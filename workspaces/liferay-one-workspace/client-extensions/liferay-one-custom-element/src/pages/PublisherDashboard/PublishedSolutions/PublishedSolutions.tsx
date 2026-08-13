@@ -38,7 +38,6 @@ export default function PublishedSolutions() {
 				],
 				columns: [
 					{
-						clickable: true,
 						id: 'name',
 						name: i18n.translate('name'),
 						render: renderProductName,

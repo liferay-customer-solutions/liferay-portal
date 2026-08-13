@@ -17,7 +17,6 @@ import {
 	ProductTypeLabels,
 	ProductWorkflowStatusCode,
 	ProductWorkflowStatusLabel,
-	getProductPageURL,
 } from '~/utils/productUtils';
 
 import './PublishedProductsListView.css';
@@ -76,12 +75,9 @@ export function renderProductName(name: Product['name'], product: Product) {
 				}}
 			/>
 
-			<a
-				className="font-weight-semi-bold ml-2 text-nowrap"
-				href={getProductPageURL(product.urls)}
-			>
+			<span className="font-weight-semi-bold ml-2 text-nowrap">
 				{name?.en_US}
-			</a>
+			</span>
 		</div>
 	);
 }
@@ -106,6 +102,17 @@ export function renderLiferayVersion(
 		specificationValue(
 			productSpecifications,
 			ProductSpecificationKey.LIFERAY_VERSION
+		) ?? '-'
+	);
+}
+
+export function renderProductVersion(
+	productSpecifications: ProductSpecification[]
+) {
+	return (
+		specificationValue(
+			productSpecifications,
+			ProductSpecificationKey.APP_VERSION
 		) ?? '-'
 	);
 }
