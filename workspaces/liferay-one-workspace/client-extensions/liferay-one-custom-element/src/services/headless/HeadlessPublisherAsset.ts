@@ -10,16 +10,16 @@ import type {PublisherAsset} from '~/types/publisherAsset';
 
 export default class HeadlessPublisherAsset {
 	static async createPublisherAsset(body: unknown) {
-		return fetcher.post<PublisherAsset>('o/c/publisherassetses', body);
+		return fetcher.post<PublisherAsset>('o/c/publisherassets', body);
 	}
 
 	static async deletePublisherAsset(id: number | string) {
-		return fetcher.delete(`o/c/publisherassetses/${id}`);
+		return fetcher.delete(`o/c/publisherassets/${id}`);
 	}
 
 	static getPublisherAssets(searchParams: URLSearchParams) {
 		return fetcher<APIResponse<PublisherAsset>>(
-			`o/c/publisherassetses?${searchParams.toString()}`
+			`o/c/publisherassets?${searchParams.toString()}`
 		);
 	}
 }
