@@ -205,10 +205,9 @@ public class AccountsRestController extends OneBaseRestController {
 				externalReferenceCode, emailAddress);
 
 		if (accountInvitation == null) {
-			accountInvitation =
-				_accountInvitationService.addAccountInvitation(
-					externalReferenceCode, emailAddress, familyName, givenName,
-					roleNames);
+			accountInvitation = _accountInvitationService.addAccountInvitation(
+				externalReferenceCode, emailAddress, familyName, givenName,
+				roleNames);
 		}
 		else {
 			accountInvitation =

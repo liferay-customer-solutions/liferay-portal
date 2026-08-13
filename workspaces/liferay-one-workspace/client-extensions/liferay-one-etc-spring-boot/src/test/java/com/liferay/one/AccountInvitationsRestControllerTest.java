@@ -68,7 +68,8 @@ public class AccountInvitationsRestControllerTest {
 		ResponseEntity<Void> responseEntity =
 			accountInvitationsRestController.getAccept(_TOKEN);
 
-		Assertions.assertEquals(HttpStatus.FOUND, responseEntity.getStatusCode());
+		Assertions.assertEquals(
+			HttpStatus.FOUND, responseEntity.getStatusCode());
 
 		Mockito.verify(
 			_userAccountService
@@ -103,10 +104,13 @@ public class AccountInvitationsRestControllerTest {
 		ResponseEntity<Void> responseEntity =
 			accountInvitationsRestController.getAccept(_TOKEN);
 
-		Assertions.assertEquals(HttpStatus.FOUND, responseEntity.getStatusCode());
+		Assertions.assertEquals(
+			HttpStatus.FOUND, responseEntity.getStatusCode());
 		Assertions.assertEquals(
 			_PORTAL_URL + "/?invitation=error",
-			String.valueOf(responseEntity.getHeaders().getLocation()));
+			String.valueOf(
+				responseEntity.getHeaders(
+				).getLocation()));
 
 		Mockito.verify(
 			_accountInvitationService, Mockito.never()
@@ -125,10 +129,13 @@ public class AccountInvitationsRestControllerTest {
 		ResponseEntity<Void> responseEntity =
 			accountInvitationsRestController.getAccept("x' or 'a' eq 'a");
 
-		Assertions.assertEquals(HttpStatus.FOUND, responseEntity.getStatusCode());
+		Assertions.assertEquals(
+			HttpStatus.FOUND, responseEntity.getStatusCode());
 		Assertions.assertEquals(
 			_PORTAL_URL + "/?invitation=invalid",
-			String.valueOf(responseEntity.getHeaders().getLocation()));
+			String.valueOf(
+				responseEntity.getHeaders(
+				).getLocation()));
 
 		Mockito.verifyNoInteractions(_accountInvitationService);
 	}
@@ -206,10 +213,13 @@ public class AccountInvitationsRestControllerTest {
 		ResponseEntity<Void> responseEntity =
 			accountInvitationsRestController.getAccept(_TOKEN);
 
-		Assertions.assertEquals(HttpStatus.FOUND, responseEntity.getStatusCode());
+		Assertions.assertEquals(
+			HttpStatus.FOUND, responseEntity.getStatusCode());
 		Assertions.assertEquals(
 			_PORTAL_URL + "/?invitation=accepted",
-			String.valueOf(responseEntity.getHeaders().getLocation()));
+			String.valueOf(
+				responseEntity.getHeaders(
+				).getLocation()));
 
 		Mockito.verifyNoInteractions(_accountService);
 	}
@@ -295,8 +305,7 @@ public class AccountInvitationsRestControllerTest {
 
 	private static final String _PORTAL_URL = "http://localhost:8080";
 
-	private static final String _TOKEN =
-		"11111111-2222-3333-4444-555555555555";
+	private static final String _TOKEN = "11111111-2222-3333-4444-555555555555";
 
 	private static final long _USER_ID = 22222;
 
