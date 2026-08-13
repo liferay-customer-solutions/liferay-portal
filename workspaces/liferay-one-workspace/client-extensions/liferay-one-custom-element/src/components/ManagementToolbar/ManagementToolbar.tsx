@@ -5,6 +5,7 @@
 
 import ClayManagementToolbar from '@clayui/management-toolbar';
 import {ReactElement, useContext} from 'react';
+import {FieldOptions} from '~/components/FormRenderer/FormRenderer';
 import {ListViewContext} from '~/components/ListView/context/ListViewContextProvider';
 import ManagementToolbarFilter from '~/components/ManagementToolbarFilters/ManagementToolbarFilters';
 import ManagementToolbarResultsBar from '~/components/ManagementToolbarResultsBar/ManagementToolbarResultsBar';
@@ -20,12 +21,14 @@ export type ManagementToolbarProps = {
 		filterSchema?: FilterSchemaOption
 	) => ReactElement;
 
+	availableFilterOptions?: FieldOptions;
 	filterSchema?: FilterSchemaOption;
 	searchVisible?: boolean;
 };
 
 const ManagementToolbar: React.FC<ManagementToolbarProps> = ({
 	actionButton,
+	availableFilterOptions,
 	filterSchema,
 	searchVisible = false,
 }) => {
@@ -37,6 +40,7 @@ const ManagementToolbar: React.FC<ManagementToolbarProps> = ({
 				<div className="d-flex justify-content-between w-100">
 					{filterSchema && (
 						<ManagementToolbarFilter
+							availableOptions={availableFilterOptions}
 							filterSchema={
 								filterSchemas[
 									filterSchema as FilterSchemaOption

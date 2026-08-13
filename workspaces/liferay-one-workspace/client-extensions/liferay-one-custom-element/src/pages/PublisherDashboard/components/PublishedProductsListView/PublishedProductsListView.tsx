@@ -3,14 +3,21 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {useMemo} from 'react';
 import openSourceIcon from '~/assets/icons/open_source.svg';
 import Button from '~/components/Button/Button';
 import EmptyState from '~/components/EmptyState/EmptyState';
+import {FieldOptions} from '~/components/FormRenderer/FormRenderer';
 import ListView, {ListViewProps} from '~/components/ListView/ListView';
 import Loading from '~/components/Loading/Loading';
 import Page from '~/components/Page/Page';
+import {useFetch} from '~/hooks/useFetch';
 import usePublisherCatalog from '~/hooks/usePublisherCatalog';
 import i18n, {Word} from '~/i18n';
+import {
+	FilterSchemaOption,
+	filterSchema as filterSchemas,
+} from '~/types/filters';
 import SearchBuilder from '~/utils/SearchBuilder';
 import {
 	ProductSpecificationKey,
@@ -36,6 +43,8 @@ export const PRODUCTS_RESOURCE = `/o/headless-commerce-admin-catalog/v1.0/produc
 		'sort': 'createDate:desc',
 	}
 )}`;
+
+const AVAILABLE_OPTIONS_PAGE_SIZE = 200;
 
 const STATUS_DOT_COLOR: Record<number, string> = {
 	[ProductWorkflowStatusCode.APPROVED]: 'var(--color-success)',
@@ -150,12 +159,51 @@ type PublishedProductsListViewProps = {
 	description: Word;
 	emptyStateDescription: Word;
 	emptyStateTitle: Word;
-	filterSchema: string;
+	filterSchema: FilterSchemaOption;
 	id: string;
 	onCtaClick?: () => void;
 	tableProps: ListViewProps<Product>['tableProps'];
 	title: Word;
 };
+
+function getAvailableFilterOptions(
+	filterSchema: FilterSchemaOption,
+	products: Product[] = []
+) {
+	const appTypes = new Set(
+		products.map((product) =>
+			specificationValue(
+				product.productSpecifications,
+				ProductSpecificationKey.APP_TYPE
+			)
+		)
+	);
+
+	const statusCodes = new Set(
+		products.map((product) => `${product.workflowStatusInfo?.code}`)
+	);
+
+	const availableValues: Record<string, Set<string | undefined>> = {
+		'specificationValues|appType': appTypes,
+		'statusCode': statusCodes,
+	};
+
+	const availableOptions: FieldOptions = {};
+
+	for (const field of filterSchemas[filterSchema].fields) {
+		const values = availableValues[field.name];
+
+		if (!values) {
+			continue;
+		}
+
+		availableOptions[field.name] = (
+			(field.options ?? []) as {label: string; value: string}[]
+		).filter(({value}) => values.has(value));
+	}
+
+	return availableOptions;
+}
 
 export default function PublishedProductsListView({
 	categoryVocabulary,
@@ -176,6 +224,22 @@ export default function PublishedProductsListView({
 	const baseFilter = catalogId
 		? buildCatalogCategoryFilter(catalogId, categoryVocabulary)
 		: undefined;
+
+	const {data: catalogProducts} = useFetch(
+		baseFilter ? PRODUCTS_RESOURCE : null,
+		{
+			params: {
+				fields: 'productSpecifications,workflowStatusInfo',
+				filter: baseFilter,
+				pageSize: AVAILABLE_OPTIONS_PAGE_SIZE,
+			},
+		}
+	);
+
+	const availableFilterOptions = useMemo(
+		() => getAvailableFilterOptions(filterSchema, catalogProducts?.items),
+		[catalogProducts, filterSchema]
+	);
 
 	if (isLoading) {
 		return <Loading className="mt-3" />;
@@ -209,6 +273,7 @@ export default function PublishedProductsListView({
 					emptyStateProps={emptyStateProps}
 					id={id}
 					managementToolbarProps={{
+						availableFilterOptions,
 						filterSchema,
 						searchVisible: true,
 						visible: true,
