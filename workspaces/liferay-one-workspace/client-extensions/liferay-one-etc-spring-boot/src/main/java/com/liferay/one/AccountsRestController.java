@@ -14,9 +14,12 @@ import com.liferay.one.jira.service.AccountAssetService;
 import com.liferay.one.jira.synchronizer.AccountSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountRoleSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountSynchronizer;
+import com.liferay.one.model.AccountInvitation;
 import com.liferay.one.okta.service.OktaService;
 import com.liferay.one.permission.AccountPermission;
 import com.liferay.one.permission.AdminPermission;
+import com.liferay.one.service.AccountInvitationEmailService;
+import com.liferay.one.service.AccountInvitationService;
 import com.liferay.one.service.AccountService;
 import com.liferay.one.service.EmailAddressValidatorService;
 import com.liferay.one.service.EntitlementService;
@@ -30,7 +33,9 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -129,6 +134,91 @@ public class AccountsRestController extends OneBaseRestController {
 		return new ResponseEntity<>(
 			_accountAssetService.getAccountObjectKey(externalReferenceCode),
 			HttpStatus.OK);
+	}
+
+	@PostMapping("/{externalReferenceCode}/invitations")
+	public void postInvitations(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable("externalReferenceCode") String externalReferenceCode,
+			@RequestBody String json)
+		throws Exception {
+
+		_accountPermission.check(externalReferenceCode, ActionKeys.UPDATE, jwt);
+
+		JSONObject jsonObject = null;
+
+		try {
+			jsonObject = new JSONObject(json);
+		}
+		catch (JSONException jsonException) {
+			throw new ResponseStatusException(
+				HttpStatus.BAD_REQUEST, "Request body is not valid JSON",
+				jsonException);
+		}
+
+		String emailAddress = jsonObject.optString("emailAddress");
+		String familyName = jsonObject.optString("familyName");
+		String givenName = jsonObject.optString("givenName");
+
+		if (Validator.isNull(emailAddress) || Validator.isNull(familyName) ||
+			Validator.isNull(givenName)) {
+
+			throw new ResponseStatusException(
+				HttpStatus.BAD_REQUEST,
+				"\"emailAddress\", \"familyName\", and \"givenName\" are " +
+					"required");
+		}
+
+		if (!Validator.isEmailAddress(emailAddress)) {
+			throw new ResponseStatusException(
+				HttpStatus.BAD_REQUEST, "Email address is not valid");
+		}
+
+		if (_emailAddressValidatorService.isLiferayDomain(emailAddress)) {
+			throw new ResponseStatusException(
+				HttpStatus.BAD_REQUEST,
+				"Email address uses a reserved Liferay domain");
+		}
+
+		Account account = _accountService.getAccount(
+			externalReferenceCode, jwt);
+
+		UserAccount userAccount =
+			_userAccountService.fetchUserAccountByEmailAddress(emailAddress);
+
+		if ((userAccount != null) &&
+			UserAccountUtil.hasAccountMembership(
+				userAccount, account.getId())) {
+
+			throw new ResponseStatusException(
+				HttpStatus.CONFLICT,
+				"The user is already a member of this account");
+		}
+
+		List<String> roleNames = _getRoleNames(
+			account.getId(), jsonObject.optJSONArray("roleNames"));
+
+		UserAccount inviterUserAccount = getMyUserAccount(jwt);
+
+		AccountInvitation accountInvitation =
+			_accountInvitationService.fetchPendingAccountInvitation(
+				externalReferenceCode, emailAddress);
+
+		if (accountInvitation == null) {
+			accountInvitation =
+				_accountInvitationService.addAccountInvitation(
+					externalReferenceCode, emailAddress, familyName, givenName,
+					roleNames);
+		}
+		else {
+			accountInvitation =
+				_accountInvitationService.updateAccountInvitation(
+					accountInvitation.getAccountInvitationId(), familyName,
+					givenName, roleNames);
+		}
+
+		_accountInvitationEmailService.sendInvitationEmail(
+			account, accountInvitation, inviterUserAccount.getName());
 	}
 
 	@PostMapping("/{externalReferenceCode}/sync-to-jsm")
@@ -357,6 +447,36 @@ public class AccountsRestController extends OneBaseRestController {
 		return accountRoleNames;
 	}
 
+	private List<String> _getRoleNames(
+			long accountId, JSONArray roleNamesJSONArray)
+		throws Exception {
+
+		List<String> roleNames = new ArrayList<>();
+
+		if ((roleNamesJSONArray == null) ||
+			(roleNamesJSONArray.length() == 0)) {
+
+			return roleNames;
+		}
+
+		Map<Long, String> allAccountRoleNames =
+			_accountService.getAccountRoleNames(accountId);
+
+		for (int i = 0; i < roleNamesJSONArray.length(); i++) {
+			String roleName = roleNamesJSONArray.getString(i);
+
+			if (!allAccountRoleNames.containsValue(roleName)) {
+				throw new ResponseStatusException(
+					HttpStatus.BAD_REQUEST,
+					"Unable to find account role " + roleName);
+			}
+
+			roleNames.add(roleName);
+		}
+
+		return roleNames;
+	}
+
 	private void _syncMembership(Account account, long userId) {
 		try {
 			_accountUserAccountSynchronizer.syncAccountUserAccountMembership(
@@ -436,6 +556,12 @@ public class AccountsRestController extends OneBaseRestController {
 
 	@Autowired
 	private AccountAssetService _accountAssetService;
+
+	@Autowired
+	private AccountInvitationEmailService _accountInvitationEmailService;
+
+	@Autowired
+	private AccountInvitationService _accountInvitationService;
 
 	@Autowired
 	private AccountPermission _accountPermission;
