@@ -11,8 +11,10 @@ import AppPublish from '~/components/AppPublish/AppPublish';
 import Checkbox from '~/components/Checkbox/Checkbox';
 import ExternalLink from '~/components/ExternalLink/ExternalLink';
 import {NewAppInitialState} from '~/context/NewAppContextProvider';
+import {usePublishMode} from '~/context/PublishModeContextProvider';
 import {useAccount} from '~/hooks/data/useAccounts';
 import i18n from '~/i18n';
+import {PublishMode} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
 
 import usePublishHeader from './hooks/usePublishHeader';
 import usePublishNavigation from './hooks/usePublishNavigation';
@@ -47,6 +49,7 @@ const BasePublishAppOutlet = ({
 
 	const [checkedUserAgreement, setCheckedUserAgreement] = useState(false);
 	const {data: account} = useAccount();
+	const mode = usePublishMode();
 
 	const {
 		activeIndex,
@@ -106,7 +109,11 @@ const BasePublishAppOutlet = ({
 			/>
 
 			<AppPublish.Body>
-				<AppPublish.Sidebar activeIndex={activeIndex} items={steps} />
+				<AppPublish.Sidebar
+					activeIndex={activeIndex}
+					items={steps}
+					navigable={mode === PublishMode.EDIT}
+				/>
 
 				<AppPublish.Content>
 					{isEditingApp && activeRoute.alertText && (
