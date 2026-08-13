@@ -9,6 +9,7 @@ import {ProductSpecificationKey} from '~/enums/Product';
 import i18n from '~/i18n';
 
 import {getValueFromDeliverySpecifications} from './getValueFromDeliverySpecifications';
+import {getSiteURL} from './siteUtils';
 
 import type {
 	DeliveryProduct,
@@ -104,6 +105,12 @@ export function getProductImageFallback(type: ProductImageFallbackCategories) {
 	};
 
 	return productImagesFallback[type] || '';
+}
+
+export function getProductPageURL(urls?: {[languageId: string]: string}) {
+	const slug = urls?.en_US;
+
+	return slug ? `${getSiteURL()}/p/${slug}` : undefined;
 }
 
 export function getProductSpecification(

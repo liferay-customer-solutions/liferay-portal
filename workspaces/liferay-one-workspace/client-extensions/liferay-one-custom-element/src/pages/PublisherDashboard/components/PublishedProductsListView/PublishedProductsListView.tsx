@@ -17,6 +17,7 @@ import {
 	ProductTypeLabels,
 	ProductWorkflowStatusCode,
 	ProductWorkflowStatusLabel,
+	getProductPageURL,
 } from '~/utils/productUtils';
 
 import './PublishedProductsListView.css';
@@ -77,7 +78,7 @@ export function renderProductName(name: Product['name'], product: Product) {
 
 			<a
 				className="font-weight-semi-bold ml-2 text-nowrap"
-				href={product.urls?.en_US}
+				href={getProductPageURL(product.urls)}
 			>
 				{name?.en_US}
 			</a>

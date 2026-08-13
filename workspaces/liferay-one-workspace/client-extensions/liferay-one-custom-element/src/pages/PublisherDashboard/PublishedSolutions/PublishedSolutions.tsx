@@ -5,6 +5,7 @@
 
 import i18n from '~/i18n';
 import {formatDate} from '~/utils/dateUtils';
+import {getProductPageURL} from '~/utils/productUtils';
 
 import PublishedProductsListView, {
 	renderProductName,
@@ -29,7 +30,10 @@ export default function PublishedSolutions() {
 						icon: 'view',
 						name: i18n.translate('view-details'),
 						onClick: (product: Product) =>
-							window.open(product.urls?.en_US, '_blank'),
+							window.open(
+								getProductPageURL(product.urls),
+								'_blank'
+							),
 					},
 				],
 				columns: [
