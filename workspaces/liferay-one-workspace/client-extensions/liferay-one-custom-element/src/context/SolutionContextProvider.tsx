@@ -11,7 +11,6 @@ import {
 	useReducer,
 } from 'react';
 import {useParams} from 'react-router-dom';
-import {breadcrumbStore} from '~/components/Breadcrumb/breadcrumbStore';
 import Loading from '~/components/Loading/Loading';
 import {useGetVocabulariesAndCategories} from '~/hooks/useGetVocabulariesAndCategories';
 import HeadlessCommerceAdminCatalog from '~/services/headless/HeadlessCommerceAdminCatalog';
@@ -575,12 +574,6 @@ export default function SolutionContextProvider({
 		)
 			.then((response) => {
 				dispatch({payload: response, type: SolutionTypes.SET_CONTEXT});
-				breadcrumbStore.send({
-					replacements: {
-						[productId]: response.name?.en_US,
-					},
-					type: 'setReplacements',
-				});
 			})
 			.catch(console.error);
 	}, [productId]);

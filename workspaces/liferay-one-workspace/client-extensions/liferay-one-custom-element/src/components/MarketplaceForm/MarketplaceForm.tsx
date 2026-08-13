@@ -10,7 +10,6 @@ import FormControl from '~/components/MarketplaceFormControl/MarketplaceFormCont
 import {MarketplaceFormHelpMessage} from '~/components/MarketplaceFormHelpMessage/MarketplaceFormHelpMessage';
 import {MarketplaceFormInput} from '~/components/MarketplaceFormInput/MarketplaceFormInput';
 import {MarketplaceFormLabel} from '~/components/MarketplaceFormLabel/MarketplaceFormLabel';
-import RichTextEditor from '~/components/MarketplaceFormRichText/MarketplaceFormRichText';
 import {SectionWithControllers} from '~/components/SectionWithControllers/SectionWithControllers';
 
 function Divider(props: React.HTMLAttributes<HTMLHRElement>) {
@@ -29,7 +28,6 @@ type FormChildrens = {
 	HelpMessage: typeof MarketplaceFormHelpMessage;
 	Input: typeof MarketplaceFormInput;
 	Label: typeof MarketplaceFormLabel;
-	RichTextEditor: typeof RichTextEditor;
 	SectionWithControllers: typeof SectionWithControllers;
 };
 
@@ -51,7 +49,6 @@ MarketplaceForm.FormControl = FormControl;
 MarketplaceForm.HelpMessage = MarketplaceFormHelpMessage;
 MarketplaceForm.Input = MarketplaceFormInput;
 MarketplaceForm.Label = MarketplaceFormLabel;
-MarketplaceForm.RichTextEditor = RichTextEditor;
 MarketplaceForm.SectionWithControllers = SectionWithControllers;
 
 export default MarketplaceForm;

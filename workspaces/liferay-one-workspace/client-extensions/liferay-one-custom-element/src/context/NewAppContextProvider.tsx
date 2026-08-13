@@ -7,7 +7,6 @@ import {filesize} from 'filesize';
 import {ReactNode, createContext, useContext, useReducer} from 'react';
 import {useParams} from 'react-router-dom';
 import useSWR from 'swr';
-import {breadcrumbStore} from '~/components/Breadcrumb/breadcrumbStore';
 import {UploadedFile} from '~/components/FileList/FileList';
 import Loading from '~/components/Loading/Loading';
 import {ProductVocabulary} from '~/enums/Product';
@@ -695,11 +694,6 @@ export default function NewAppContextProvider({
 			),
 		{
 			onSuccess: (data) => {
-				breadcrumbStore.send({
-					replacements: {[productId as string]: data.name.en_US},
-					type: 'setReplacements',
-				});
-
 				dispatch({
 					payload: data,
 					type: NewAppTypes.SET_CONTEXT,
