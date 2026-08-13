@@ -123,7 +123,7 @@ const ListViewTable = <T extends Record<string, unknown>>({
 						trigger={
 							<ButtonWithIcon
 								aria-label="actions"
-								className="btn-monospaced"
+								className="btn-monospaced text-neutral-7"
 								displayType="unstyled"
 								onClick={(event) => event.stopPropagation()}
 								symbol="ellipsis-v"
