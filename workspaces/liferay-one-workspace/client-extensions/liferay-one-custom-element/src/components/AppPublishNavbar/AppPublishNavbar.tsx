@@ -75,7 +75,7 @@ const AppPublishNavbar: React.FC<NavbarProps> = ({
 										src={appImage}
 									/>
 								) : (
-									<div className="bg-light px-5 py-3 rounded">
+									<div className="align-items-center bg-light d-flex justify-content-center new-app-tool-bar-new-app-logo-placeholder rounded">
 										<ClayIcon
 											aria-label="New App logo"
 											className="text-muted"
