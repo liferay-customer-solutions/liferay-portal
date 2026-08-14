@@ -99,6 +99,7 @@ export const ProductSpecificationKey = {
 	APP_TYPE: 'type',
 	APP_VERSION: 'latest-version',
 	APP_VERSION_NOTES: 'product-notes',
+	LAST_UPDATED_BY: 'last-updated-by',
 	LIFERAY_PRODUCT_TYPE: 'liferay-product-type',
 	LIFERAY_VERSION: 'liferay-version',
 	SOLUTION_COMPANY_DESCRIPTION: 'solution-company-description',
@@ -194,6 +195,7 @@ export type ProductVocabulary =
 
 export const ProductWorkflowStatusCode = {
 	APPROVED: 0,
+	DENIED: 4,
 	DRAFT: 2,
 	PENDING: 1,
 } as const;
@@ -252,6 +254,17 @@ export const ProductTypeLabels = {
 	[ProductType.SSA_SAAS]: 'SSA SaaS',
 } as const;
 
+export const SolutionTypeLabels = {
+	[SolutionTypes.AI_HUB]: 'AI Hub',
+	[SolutionTypes.AI_HUB_OPEN_BETA]: 'AI Hub Open Beta',
+	[SolutionTypes.ANALYTICS]: 'Analytics',
+	[SolutionTypes.CMP]: 'CMP',
+	[SolutionTypes.DSR]: 'DSR',
+	[SolutionTypes.DXP]: 'DXP',
+	[SolutionTypes.LIFERAY_DATA_PLATFORM]: 'Liferay Data Platform',
+	[SolutionTypes.PRE_BUILT_TRIAL]: 'Pre-Built Trial',
+} as const;
+
 export const ProductTypeLicenseOptions: Record<
 	ProductType,
 	ProductLicenseTier[]
@@ -278,6 +291,7 @@ export const ProductWorkflowDisplayType = {
 
 export const ProductWorkflowStatusLabel = {
 	[ProductWorkflowStatusCode.APPROVED]: i18n.translate('approved'),
+	[ProductWorkflowStatusCode.DENIED]: i18n.translate('denied'),
 	[ProductWorkflowStatusCode.DRAFT]: i18n.translate('draft'),
 	[ProductWorkflowStatusCode.PENDING]: i18n.translate('under-review'),
 };

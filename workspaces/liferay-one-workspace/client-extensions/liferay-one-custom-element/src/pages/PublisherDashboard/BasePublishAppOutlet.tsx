@@ -10,7 +10,6 @@ import {Outlet} from 'react-router-dom';
 import AppPublish from '~/components/AppPublish/AppPublish';
 import Checkbox from '~/components/Checkbox/Checkbox';
 import ExternalLink from '~/components/ExternalLink/ExternalLink';
-import {NewAppInitialState} from '~/context/NewAppContextProvider';
 import {usePublishMode} from '~/context/PublishModeContextProvider';
 import {useAccount} from '~/hooks/data/useAccounts';
 import i18n from '~/i18n';
@@ -21,21 +20,32 @@ import usePublishNavigation from './hooks/usePublishNavigation';
 
 import './BasePublishAppOutlet.css';
 
+import type {UploadedFile} from '~/components/FileList/FileList';
 import type {ProductWorkflowStatusCode} from '~/enums/Product';
 import type {AppFlowItem} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
+import type {Product} from '~/types/product';
 
-type BasePublishAppOutletProps = {
+export type PublishFlowContext = {
+	_product?: Product;
+	loading: boolean;
+	profile: {
+		file?: UploadedFile;
+		name: string;
+	};
+};
+
+type BasePublishAppOutletProps<TContext extends PublishFlowContext> = {
 	canSaveAsDraft: boolean;
 	children: ReactNode;
-	context: NewAppInitialState;
-	flowItems: AppFlowItem[];
+	context: TContext;
+	flowItems: AppFlowItem<TContext>[];
 	isEditingApp: boolean;
 	onClickExit: () => void;
 	onSave: () => Promise<void>;
 	onSaveAsDraft?: () => Promise<void>;
 };
 
-const BasePublishAppOutlet = ({
+const BasePublishAppOutlet = <TContext extends PublishFlowContext>({
 	canSaveAsDraft,
 	children,
 	context,
@@ -44,7 +54,7 @@ const BasePublishAppOutlet = ({
 	onClickExit,
 	onSave,
 	onSaveAsDraft,
-}: BasePublishAppOutletProps) => {
+}: BasePublishAppOutletProps<TContext>) => {
 	usePublishHeader();
 
 	const [checkedUserAgreement, setCheckedUserAgreement] = useState(false);

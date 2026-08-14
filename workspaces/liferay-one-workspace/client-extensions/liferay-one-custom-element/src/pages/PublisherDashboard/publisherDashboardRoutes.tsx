@@ -6,6 +6,7 @@
 import {lazy} from 'react';
 import {Navigate, Outlet} from 'react-router-dom';
 import NewAppContextProvider from '~/context/NewAppContextProvider';
+import SolutionContextProvider from '~/context/SolutionContextProvider';
 import usePublisherCatalog from '~/hooks/usePublisherCatalog';
 import {AppRoute} from '~/utils/routeUtils';
 
@@ -39,6 +40,31 @@ const LicensePrices = lazy(
 const Support = lazy(() => import('./pages/NewAppFlow/pages/Support'));
 const SubmitApp = lazy(() => import('./pages/NewAppFlow/pages/Submit'));
 
+const PublishSolutionOutlet = lazy(
+	() => import('./pages/NewSolutionFlow/PublishSolutionOutlet')
+);
+const CreateSolution = lazy(
+	() => import('./pages/NewSolutionFlow/pages/Create')
+);
+const SolutionProfile = lazy(
+	() => import('./pages/NewSolutionFlow/pages/Profile')
+);
+const SolutionHeader = lazy(
+	() => import('./pages/NewSolutionFlow/pages/Header')
+);
+const SolutionDetails = lazy(
+	() => import('./pages/NewSolutionFlow/pages/Details')
+);
+const SolutionCompanyProfile = lazy(
+	() => import('./pages/NewSolutionFlow/pages/CompanyProfile')
+);
+const SolutionContactUs = lazy(
+	() => import('./pages/NewSolutionFlow/pages/ContactUs')
+);
+const SubmitSolution = lazy(
+	() => import('./pages/NewSolutionFlow/pages/Submit')
+);
+
 function NewAppContextWrapper() {
 	const {data: catalog} = usePublisherCatalog();
 
@@ -49,7 +75,26 @@ function NewAppContextWrapper() {
 	);
 }
 
-export const PUBLISH_FLOW_PATHS = ['newapp', 'newversion'];
+function SolutionContextWrapper() {
+	const {data: catalog} = usePublisherCatalog();
+
+	return (
+		<SolutionContextProvider catalogId={catalog?.id}>
+			<Outlet />
+		</SolutionContextProvider>
+	);
+}
+
+export const PUBLISH_FLOW_PATHS = ['newapp', 'newsolution', 'newversion'];
+
+const solutionFlowRoutes: AppRoute[] = [
+	{element: <SolutionProfile />, path: 'profile'},
+	{element: <SolutionHeader />, path: 'header'},
+	{element: <SolutionDetails />, path: 'details'},
+	{element: <SolutionCompanyProfile />, path: 'company'},
+	{element: <SolutionContactUs />, path: 'contact'},
+	{element: <SubmitSolution />, path: 'submit'},
+];
 
 const appFlowRoutes: AppRoute[] = [
 	{element: <AppProfile />, path: 'profile'},
@@ -109,6 +154,25 @@ export const publisherDashboardRoutes: AppRoute[] = [
 			},
 		],
 		path: 'newapp',
+	},
+	{
+		children: [
+			{
+				children: [
+					{
+						children: [
+							{element: <CreateSolution />, index: true},
+							...solutionFlowRoutes,
+						],
+						element: <PublishSolutionOutlet />,
+						path: 'publisher',
+					},
+				],
+				element: <SolutionContextWrapper />,
+				path: ':productId?',
+			},
+		],
+		path: 'newsolution',
 	},
 	{
 		children: [

@@ -5,79 +5,63 @@
 
 import ClayButton from '@clayui/button';
 import {useModal} from '@clayui/modal';
-import {useMemo} from 'react';
 import {Link} from 'react-router-dom';
 import Modal from '~/components/Modal/Modal';
-import {useMarketplaceContext} from '~/context/MarketplaceContextProvider';
-import {useNewAppContext} from '~/context/NewAppContextProvider';
 import PublishModeContextProvider from '~/context/PublishModeContextProvider';
-import usePublishAppSubmission from '~/hooks/usePublishAppSubmission';
+import {useSolutionContext} from '~/context/SolutionContextProvider';
 import usePublishHeader from '~/hooks/usePublishHeader';
+import usePublishSolutionSubmission from '~/hooks/usePublishSolutionSubmission';
 import i18n from '~/i18n';
 import usePublishNavigation from '~/pages/PublisherDashboard/hooks/usePublishNavigation';
 import {ProductWorkflowStatusCode} from '~/utils/productUtils';
 
 import BasePublishAppOutlet from '../../BasePublishAppOutlet';
-import {APP_FLOW_ITEMS, PublishMode} from './constants';
+import {PublishMode} from '../NewAppFlow/constants';
+import {SOLUTIONS_EXIT_LINK, SOLUTION_FLOW_ITEMS} from './constants';
 
-type Context = ReturnType<typeof useNewAppContext>[0];
+import type {SolutionInitialState} from '~/context/SolutionContextProvider';
 
-const getFlowItems = (context: Context, mode: PublishMode) =>
-	APP_FLOW_ITEMS.filter(
+const getFlowItems = (context: SolutionInitialState, mode: PublishMode) =>
+	SOLUTION_FLOW_ITEMS.filter(
 		(item) => item.modes.includes(mode) && item.visible(context)
 	);
 
-const isRequiredDraftFormFilled = (context: Context) =>
-	APP_FLOW_ITEMS.filter((item) => item.saveAsDraftRequired).every(
+const isRequiredDraftFormFilled = (context: SolutionInitialState) =>
+	SOLUTION_FLOW_ITEMS.filter((item) => item.saveAsDraftRequired).every(
 		(item) => item.parseSchema && item.parseSchema(context).success
 	);
 
-const PublishAppOutlet = ({mode}: {mode?: PublishMode}) => {
+const PublishSolutionOutlet = () => {
 	usePublishHeader();
 
-	const {properties} = useMarketplaceContext();
-	const [context, dispatch] = useNewAppContext();
+	const [context, dispatch] = useSolutionContext();
 	const {observer, onOpenChange, open} = useModal();
 	const onExitModal = useModal();
 
-	const isEditAppEnabled = properties.featureFlags.includes('LPD-24546');
-
-	const isEditingApp =
+	const isEditingSolution =
 		context?._product &&
 		context._product.productStatus === ProductWorkflowStatusCode.APPROVED;
 
-	const isSubmittedApp =
+	const isSubmittedSolution =
 		!!context?._product?.productId &&
 		context._product.productStatus !== ProductWorkflowStatusCode.DRAFT;
 
-	const publishMode =
-		mode ?? (isSubmittedApp ? PublishMode.EDIT : PublishMode.CREATE);
+	const publishMode = isSubmittedSolution
+		? PublishMode.EDIT
+		: PublishMode.CREATE;
 
-	const {onSave, onSaveAsDraft} = usePublishAppSubmission(
+	const {onSave, onSaveAsDraft} = usePublishSolutionSubmission(
 		context,
-		dispatch,
-		publishMode
+		dispatch
 	);
 
-	const {activeRoute, onExit} = usePublishNavigation({
-		exitLink: '/',
+	const {onExit} = usePublishNavigation({
+		exitLink: SOLUTIONS_EXIT_LINK,
 		flowItems: getFlowItems(context, publishMode),
 	});
 
 	const canSaveAsDraft =
 		!context?._product && isRequiredDraftFormFilled(context);
-
-	const parsedSchema = useMemo(() => {
-		const parseSchema = activeRoute?.parseSchema;
-
-		if (parseSchema) {
-			return parseSchema(context);
-		}
-
-		return null;
-	}, [activeRoute, context]);
-
-	const isValidSchema = parsedSchema ? !parsedSchema.success : false;
 
 	if (context.loading) {
 		return null;
@@ -86,10 +70,10 @@ const PublishAppOutlet = ({mode}: {mode?: PublishMode}) => {
 	return (
 		<PublishModeContextProvider mode={publishMode}>
 			<BasePublishAppOutlet
-				canSaveAsDraft={isEditAppEnabled && canSaveAsDraft}
+				canSaveAsDraft={canSaveAsDraft}
 				context={context}
 				flowItems={getFlowItems(context, publishMode)}
-				isEditingApp={!!isEditingApp}
+				isEditingApp={!!isEditingSolution}
 				onClickExit={
 					canSaveAsDraft
 						? () => onOpenChange(true)
@@ -102,25 +86,28 @@ const PublishAppOutlet = ({mode}: {mode?: PublishMode}) => {
 					last={
 						<>
 							<ClayButton
-								disabled={isValidSchema || !canSaveAsDraft}
+								disabled={!canSaveAsDraft}
 								displayType="secondary"
 								onClick={() => onSaveAsDraft().then(onExit)}
 							>
 								{i18n.translate('save-as-a-draft-exit')}
 							</ClayButton>
 
-							<Link className="btn btn-primary ml-2" to="/">
+							<Link
+								className="btn btn-primary ml-2"
+								to={SOLUTIONS_EXIT_LINK}
+							>
 								{i18n.translate('exit')}
 							</Link>
 						</>
 					}
 					observer={observer}
-					title="Exit from creating an app"
+					title="Exit from creating a solution"
 					visible={open}
 				>
 					<p>
 						{i18n.translate(
-							'all-progress-and-information-related-to-the-creation-of-the-app-will-be-lost-unless-you-save-the-app-as-a-draft-do-you-still-want-to-exit'
+							'all-progress-and-information-related-to-the-creation-of-the-solution-will-be-lost-unless-you-save-the-solution-as-a-draft-do-you-still-want-to-exit'
 						)}
 					</p>
 				</Modal>
@@ -137,12 +124,12 @@ const PublishAppOutlet = ({mode}: {mode?: PublishMode}) => {
 							</ClayButton>
 						}
 						observer={onExitModal.observer}
-						title="Exit from creating an App"
+						title="Exit from creating a solution"
 						visible={onExitModal.open}
 					>
 						<p>
 							{i18n.translate(
-								'all-progress-and-information-related-to-the-creation-of-the-app-will-be-lost-do-you-still-want-to-exit'
+								'all-progress-and-information-related-to-the-creation-of-the-solution-will-be-lost-do-you-still-want-to-exit'
 							)}
 						</p>
 					</Modal>
@@ -151,4 +138,5 @@ const PublishAppOutlet = ({mode}: {mode?: PublishMode}) => {
 		</PublishModeContextProvider>
 	);
 };
-export default PublishAppOutlet;
+
+export default PublishSolutionOutlet;

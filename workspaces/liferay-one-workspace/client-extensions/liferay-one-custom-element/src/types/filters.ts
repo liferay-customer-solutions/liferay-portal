@@ -504,8 +504,8 @@ export const filterSchema: FilterSchemas = {
 				name: 'statusCode',
 				options: [
 					{
-						label: i18n.translate('approved'),
-						value: `${ProductWorkflowStatusCode.APPROVED}`,
+						label: i18n.translate('denied'),
+						value: `${ProductWorkflowStatusCode.DENIED}`,
 					},
 					{
 						label: i18n.translate('draft'),
@@ -514,6 +514,10 @@ export const filterSchema: FilterSchemas = {
 					{
 						label: i18n.translate('pending'),
 						value: `${ProductWorkflowStatusCode.PENDING}`,
+					},
+					{
+						label: i18n.translate('published'),
+						value: `${ProductWorkflowStatusCode.APPROVED}`,
 					},
 				],
 				removeQuoteMark: true,
@@ -528,8 +532,8 @@ export const filterSchema: FilterSchemas = {
 				name: 'statusCode',
 				options: [
 					{
-						label: i18n.translate('approved'),
-						value: `${ProductWorkflowStatusCode.APPROVED}`,
+						label: i18n.translate('denied'),
+						value: `${ProductWorkflowStatusCode.DENIED}`,
 					},
 					{
 						label: i18n.translate('draft'),
@@ -538,6 +542,10 @@ export const filterSchema: FilterSchemas = {
 					{
 						label: i18n.translate('pending'),
 						value: `${ProductWorkflowStatusCode.PENDING}`,
+					},
+					{
+						label: i18n.translate('published'),
+						value: `${ProductWorkflowStatusCode.APPROVED}`,
 					},
 				],
 				removeQuoteMark: true,

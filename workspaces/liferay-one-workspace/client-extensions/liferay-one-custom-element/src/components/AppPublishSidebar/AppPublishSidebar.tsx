@@ -15,7 +15,7 @@ import type {AppFlowItem} from '~/pages/PublisherDashboard/pages/NewAppFlow/cons
 
 type AppPublishSidebar = {
 	activeIndex: number;
-	items: AppFlowItem[];
+	items: Pick<AppFlowItem, 'hide' | 'label' | 'path'>[];
 	navigable?: boolean;
 };
 

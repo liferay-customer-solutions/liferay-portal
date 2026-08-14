@@ -3,9 +3,13 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {useNavigate} from 'react-router-dom';
 import i18n from '~/i18n';
 import {formatDate} from '~/utils/dateUtils';
-import {getProductPageURL} from '~/utils/productUtils';
+import {
+	ProductWorkflowStatusCode,
+	getProductPageURL,
+} from '~/utils/productUtils';
 
 import PublishedProductsListView, {
 	renderProductName,
@@ -15,6 +19,8 @@ import PublishedProductsListView, {
 import type {Product} from '~/types/product';
 
 export default function PublishedSolutions() {
+	const navigate = useNavigate();
+
 	return (
 		<PublishedProductsListView
 			categoryVocabulary="solution"
@@ -24,11 +30,26 @@ export default function PublishedSolutions() {
 			emptyStateTitle="you-havent-published-any-solutions-yet"
 			filterSchema="publisherSolutions"
 			id="publisher-published-solutions"
+			onCtaClick={() => navigate('/newsolution/publisher')}
 			tableProps={{
 				actions: [
 					{
-						icon: 'view',
-						name: i18n.translate('view-details'),
+						hidden: (product: Product) =>
+							product.productStatus ===
+							ProductWorkflowStatusCode.PENDING,
+						icon: 'pencil',
+						name: i18n.translate('edit'),
+						onClick: (product: Product) =>
+							navigate(
+								`/newsolution/${product.productId}/publisher/profile`
+							),
+					},
+					{
+						hidden: (product: Product) =>
+							product.productStatus !==
+							ProductWorkflowStatusCode.APPROVED,
+						icon: 'shortcut',
+						name: i18n.translate('open-in-marketplace'),
 						onClick: (product: Product) =>
 							window.open(
 								getProductPageURL(product.urls),
