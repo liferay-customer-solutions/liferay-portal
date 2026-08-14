@@ -12,7 +12,7 @@ import com.liferay.one.jira.converter.TeamContactRoleAssignmentConverter;
 import com.liferay.one.jira.converter.TeamConverter;
 import com.liferay.one.jira.model.JiraAssetObject;
 import com.liferay.one.jira.service.JiraAssetService;
-import com.liferay.one.jira.util.JiraSyncLock;
+import com.liferay.one.util.KeyedLock;
 import com.liferay.petra.string.StringBundler;
 
 import java.util.Date;
@@ -69,7 +69,7 @@ public class OrganizationUserAccountRoleSynchronizer {
 			String organizationExternalKey, boolean deleted)
 		throws Exception {
 
-		_jiraSyncLock.withLock(
+		_keyedLock.withLock(
 			userAccountExternalKey,
 			() -> _syncAssignmentWithinLock(
 				roleExternalKey, userAccountExternalKey,
@@ -124,7 +124,7 @@ public class OrganizationUserAccountRoleSynchronizer {
 	private JiraAssetService _jiraAssetService;
 
 	@Autowired
-	private JiraSyncLock _jiraSyncLock;
+	private KeyedLock _keyedLock;
 
 	@Autowired
 	private TeamContactRoleAssignmentConverter

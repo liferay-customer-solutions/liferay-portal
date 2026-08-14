@@ -21,11 +21,11 @@ import com.liferay.one.jira.converter.PhoneConverter;
 import com.liferay.one.jira.converter.TeamConverter;
 import com.liferay.one.jira.model.JiraAssetObject;
 import com.liferay.one.jira.service.JiraAssetService;
-import com.liferay.one.jira.util.JiraSyncLock;
 import com.liferay.one.model.EntitlementDefinition;
 import com.liferay.one.model.Property;
 import com.liferay.one.service.EntitlementService;
 import com.liferay.one.service.PropertyService;
+import com.liferay.one.util.KeyedLock;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.ListUtil;
 
@@ -46,7 +46,7 @@ import org.springframework.stereotype.Component;
 public class UserAccountSynchronizer {
 
 	public void deleteUserAccount(String externalReferenceCode) {
-		_jiraSyncLock.withLock(
+		_keyedLock.withLock(
 			externalReferenceCode,
 			() -> {
 				if (_log.isInfoEnabled()) {
@@ -87,7 +87,7 @@ public class UserAccountSynchronizer {
 	}
 
 	public void syncUserAccount(UserAccount userAccount) throws Exception {
-		_jiraSyncLock.withLock(
+		_keyedLock.withLock(
 			userAccount.getExternalReferenceCode(),
 			() -> _syncUserAccount(userAccount));
 	}
@@ -109,7 +109,7 @@ public class UserAccountSynchronizer {
 				ListUtil.fromArray(userAccount.getAccountBriefs()),
 				AccountBrief::getExternalReferenceCode));
 
-		_jiraSyncLock.withLock(
+		_keyedLock.withLock(
 			userAccount.getExternalReferenceCode(),
 			() -> _jiraAssetService.upsert(_contactConverter, jiraAssetObject));
 	}
@@ -131,7 +131,7 @@ public class UserAccountSynchronizer {
 				ListUtil.fromArray(userAccount.getOrganizationBriefs()),
 				OrganizationBrief::getExternalReferenceCode));
 
-		_jiraSyncLock.withLock(
+		_keyedLock.withLock(
 			userAccount.getExternalReferenceCode(),
 			() -> _jiraAssetService.upsert(_contactConverter, jiraAssetObject));
 	}
@@ -152,7 +152,7 @@ public class UserAccountSynchronizer {
 				_contactRoleConverter, _getRoleBriefs(userAccount),
 				RoleBrief::getExternalReferenceCode));
 
-		_jiraSyncLock.withLock(
+		_keyedLock.withLock(
 			userAccount.getExternalReferenceCode(),
 			() -> _jiraAssetService.upsert(_contactConverter, jiraAssetObject));
 	}
@@ -369,7 +369,7 @@ public class UserAccountSynchronizer {
 	private JiraAssetService _jiraAssetService;
 
 	@Autowired
-	private JiraSyncLock _jiraSyncLock;
+	private KeyedLock _keyedLock;
 
 	@Autowired
 	private OrganizationUserAccountRoleSynchronizer

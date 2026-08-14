@@ -6,9 +6,9 @@
 package com.liferay.one;
 
 import com.liferay.one.constants.AccountInvitationConstants;
-import com.liferay.one.jira.util.JiraSyncLock;
 import com.liferay.one.model.AccountInvitation;
 import com.liferay.one.service.AccountInvitationService;
+import com.liferay.one.util.KeyedLock;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.UUID;
@@ -40,7 +40,7 @@ public class AccountInvitationsRestController extends OneBaseRestController {
 			return _toResponseEntity(AccountInvitationConstants.STATUS_INVALID);
 		}
 
-		return _jiraSyncLock.withLock(
+		return _keyedLock.withLock(
 			token,
 			() -> {
 				AccountInvitation accountInvitation =
@@ -118,6 +118,6 @@ public class AccountInvitationsRestController extends OneBaseRestController {
 	private AccountInvitationService _accountInvitationService;
 
 	@Autowired
-	private JiraSyncLock _jiraSyncLock;
+	private KeyedLock _keyedLock;
 
 }

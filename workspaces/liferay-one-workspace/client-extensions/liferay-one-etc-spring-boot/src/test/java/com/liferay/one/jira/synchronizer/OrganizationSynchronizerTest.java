@@ -13,9 +13,9 @@ import com.liferay.one.jira.converter.ExternalLinkConverter;
 import com.liferay.one.jira.converter.TeamConverter;
 import com.liferay.one.jira.model.JiraAssetObject;
 import com.liferay.one.jira.service.JiraAssetService;
-import com.liferay.one.jira.util.JiraSyncLock;
 import com.liferay.one.service.PropertyService;
 import com.liferay.one.service.UserAccountService;
+import com.liferay.one.util.KeyedLock;
 
 import java.util.Collections;
 
@@ -85,7 +85,7 @@ public class OrganizationSynchronizerTest {
 		ReflectionTestUtils.setField(
 			_organizationSynchronizer, "_jiraAssetService", _jiraAssetService);
 		ReflectionTestUtils.setField(
-			_organizationSynchronizer, "_jiraSyncLock", new JiraSyncLock());
+			_organizationSynchronizer, "_keyedLock", new KeyedLock());
 		ReflectionTestUtils.setField(
 			_organizationSynchronizer,
 			"_organizationUserAccountRoleSynchronizer",

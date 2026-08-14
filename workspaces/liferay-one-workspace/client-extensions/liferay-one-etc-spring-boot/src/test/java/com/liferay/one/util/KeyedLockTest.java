@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-package com.liferay.one.jira.util;
+package com.liferay.one.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,20 +19,19 @@ import org.junit.jupiter.api.Test;
 /**
  * @author Drew Brokke
  */
-public class JiraSyncLockTest {
+public class KeyedLockTest {
 
 	@BeforeEach
 	public void setUp() {
-		_jiraSyncLock = new JiraSyncLock();
+		_keyedLock = new KeyedLock();
 	}
 
 	@Test
 	public void testWithLockIsReentrant() throws Exception {
 		List<String> events = new ArrayList<>();
 
-		_jiraSyncLock.withLock(
-			"key",
-			() -> _jiraSyncLock.withLock("key", () -> events.add("ran")));
+		_keyedLock.withLock(
+			"key", () -> _keyedLock.withLock("key", () -> events.add("ran")));
 
 		Assertions.assertEquals(Collections.singletonList("ran"), events);
 	}
@@ -41,7 +40,7 @@ public class JiraSyncLockTest {
 	public void testWithLockReleasesLockAfterException() throws Exception {
 		Exception exception = Assertions.assertThrows(
 			Exception.class,
-			() -> _jiraSyncLock.withLock(
+			() -> _keyedLock.withLock(
 				"key",
 				() -> {
 					throw new Exception("expected");
@@ -52,7 +51,7 @@ public class JiraSyncLockTest {
 		List<String> events = Collections.synchronizedList(new ArrayList<>());
 
 		Thread thread = new Thread(
-			() -> _jiraSyncLock.withLock("key", () -> events.add("ran")));
+			() -> _keyedLock.withLock("key", () -> events.add("ran")));
 
 		thread.start();
 
@@ -65,7 +64,7 @@ public class JiraSyncLockTest {
 	public void testWithLockRunsWithNullKey() throws Exception {
 		List<String> events = new ArrayList<>();
 
-		_jiraSyncLock.withLock(null, () -> events.add("ran"));
+		_keyedLock.withLock(null, () -> events.add("ran"));
 
 		Assertions.assertEquals(Collections.singletonList("ran"), events);
 	}
@@ -79,7 +78,7 @@ public class JiraSyncLockTest {
 		Thread firstThread = new Thread(
 			() -> {
 				try {
-					_jiraSyncLock.withLock(
+					_keyedLock.withLock(
 						"key",
 						() -> {
 							enteredLatch.countDown();
@@ -101,7 +100,7 @@ public class JiraSyncLockTest {
 		Assertions.assertTrue(enteredLatch.await(10, TimeUnit.SECONDS));
 
 		Thread secondThread = new Thread(
-			() -> _jiraSyncLock.withLock("key", () -> events.add("second")));
+			() -> _keyedLock.withLock("key", () -> events.add("second")));
 
 		secondThread.start();
 
@@ -117,6 +116,6 @@ public class JiraSyncLockTest {
 		Assertions.assertEquals(Arrays.asList("first", "second"), events);
 	}
 
-	private JiraSyncLock _jiraSyncLock;
+	private KeyedLock _keyedLock;
 
 }

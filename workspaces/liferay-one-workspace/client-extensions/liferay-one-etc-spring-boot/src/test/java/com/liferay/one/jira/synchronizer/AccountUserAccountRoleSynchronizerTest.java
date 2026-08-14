@@ -13,7 +13,7 @@ import com.liferay.one.jira.converter.ContactRoleConverter;
 import com.liferay.one.jira.model.JiraAssetObject;
 import com.liferay.one.jira.service.JiraAssetService;
 import com.liferay.one.jira.util.AQLUtil;
-import com.liferay.one.jira.util.JiraSyncLock;
+import com.liferay.one.util.KeyedLock;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 
@@ -82,8 +82,7 @@ public class AccountUserAccountRoleSynchronizerTest {
 			_accountUserAccountRoleSynchronizer, "_jiraAssetService",
 			_jiraAssetService);
 		ReflectionTestUtils.setField(
-			_accountUserAccountRoleSynchronizer, "_jiraSyncLock",
-			new JiraSyncLock());
+			_accountUserAccountRoleSynchronizer, "_keyedLock", new KeyedLock());
 	}
 
 	@Test

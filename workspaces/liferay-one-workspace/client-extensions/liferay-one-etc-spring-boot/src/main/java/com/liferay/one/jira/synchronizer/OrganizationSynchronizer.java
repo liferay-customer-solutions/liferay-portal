@@ -15,10 +15,10 @@ import com.liferay.one.jira.converter.ExternalLinkConverter;
 import com.liferay.one.jira.converter.TeamConverter;
 import com.liferay.one.jira.model.JiraAssetObject;
 import com.liferay.one.jira.service.JiraAssetService;
-import com.liferay.one.jira.util.JiraSyncLock;
 import com.liferay.one.model.Property;
 import com.liferay.one.service.PropertyService;
 import com.liferay.one.service.UserAccountService;
+import com.liferay.one.util.KeyedLock;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -45,7 +45,7 @@ public class OrganizationSynchronizer {
 				"Deleting organization " + externalReferenceCode + " from JSM");
 		}
 
-		_jiraSyncLock.withLock(
+		_keyedLock.withLock(
 			externalReferenceCode,
 			() -> {
 				try {
@@ -125,7 +125,7 @@ public class OrganizationSynchronizer {
 					GetterUtil.getLong(organization.getId())),
 				UserAccount::getExternalReferenceCode));
 
-		_jiraSyncLock.withLock(
+		_keyedLock.withLock(
 			organization.getExternalReferenceCode(),
 			() -> _jiraAssetService.upsert(_teamConverter, jiraAssetObject));
 
@@ -152,7 +152,7 @@ public class OrganizationSynchronizer {
 					GetterUtil.getLong(organization.getId())),
 				UserAccount::getExternalReferenceCode));
 
-		_jiraSyncLock.withLock(
+		_keyedLock.withLock(
 			organization.getExternalReferenceCode(),
 			() -> _jiraAssetService.upsert(_teamConverter, jiraAssetObject));
 	}
@@ -212,7 +212,7 @@ public class OrganizationSynchronizer {
 	private JiraAssetService _jiraAssetService;
 
 	@Autowired
-	private JiraSyncLock _jiraSyncLock;
+	private KeyedLock _keyedLock;
 
 	@Autowired
 	private OrganizationUserAccountRoleSynchronizer
