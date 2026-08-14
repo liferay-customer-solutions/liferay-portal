@@ -137,7 +137,8 @@ PASS — no changes needed
 Grouped by lens, in the criteria.md order — rule violations and verified
 /code-review hits included under their lens, never in sections of their own.
 Under --adversarial each finding carries its corroboration count
-(2/2, 1/3 verified here, …).
+(2/2, 1/3 verified here, …) as provenance, never as confidence —
+agreement between passes does not make a finding right.
 A lens with nothing to report still gets its one-line coverage statement
 here, per the Evidence rule.
 
