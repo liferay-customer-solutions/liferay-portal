@@ -71,6 +71,12 @@ Fan the mechanical parts out to subagents — "inventory every consumer of X", "
 ## Data Model Impact     (objects/fields/ERCs added or changed, or "none"; the other-repo
                           verdicts from the "other repo" research step — per hit or per
                           script, unaffected or broken and how)
+## Data Scope            (one line each: what this run WRITES in the local environment —
+                          object types and ERC families, client extensions it deploys,
+                          endpoints it calls — and what its assertions READ. Runs share one
+                          Liferay instance, so the coordinator compares this against every
+                          other live run: disjoint scopes test concurrently, overlapping ones
+                          get sequenced. Name the objects, not "various")
 ## Implementation Steps  (ordered; each step = files + change + how to verify; close with
                           a rough changed-line estimate)
 ## Test Plan             (per-AC end-to-end scenarios; regression surface — Workspace lane:
