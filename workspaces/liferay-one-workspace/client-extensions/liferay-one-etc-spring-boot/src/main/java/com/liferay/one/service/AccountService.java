@@ -270,6 +270,26 @@ public class AccountService extends OneBaseService {
 		return null;
 	}
 
+	public Map<String, Long> getAccountRoleIdsByExternalReferenceCode(
+			long accountId)
+		throws Exception {
+
+		Map<String, Long> accountRoleIds = new HashMap<>();
+
+		AccountRoleResource accountRoleResource = _buildAccountRoleResource();
+
+		Page<AccountRole> accountRolesPage =
+			accountRoleResource.getAccountAccountRolesPage(
+				accountId, null, null, Pagination.of(1, _PAGE_SIZE), null);
+
+		for (AccountRole accountRole : accountRolesPage.getItems()) {
+			accountRoleIds.put(
+				accountRole.getExternalReferenceCode(), accountRole.getId());
+		}
+
+		return accountRoleIds;
+	}
+
 	public String getAccountRoleName(long accountId, long accountRoleId)
 		throws Exception {
 
@@ -301,6 +321,26 @@ public class AccountService extends OneBaseService {
 
 		for (AccountRole accountRole : accountRolesPage.getItems()) {
 			accountRoleNames.put(accountRole.getId(), accountRole.getName());
+		}
+
+		return accountRoleNames;
+	}
+
+	public Map<String, String> getAccountRoleNamesByExternalReferenceCode(
+			long accountId)
+		throws Exception {
+
+		Map<String, String> accountRoleNames = new HashMap<>();
+
+		AccountRoleResource accountRoleResource = _buildAccountRoleResource();
+
+		Page<AccountRole> accountRolesPage =
+			accountRoleResource.getAccountAccountRolesPage(
+				accountId, null, null, Pagination.of(1, _PAGE_SIZE), null);
+
+		for (AccountRole accountRole : accountRolesPage.getItems()) {
+			accountRoleNames.put(
+				accountRole.getExternalReferenceCode(), accountRole.getName());
 		}
 
 		return accountRoleNames;

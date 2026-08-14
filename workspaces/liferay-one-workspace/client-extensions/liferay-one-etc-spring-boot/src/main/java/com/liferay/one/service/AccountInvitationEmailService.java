@@ -11,6 +11,7 @@ import com.liferay.one.model.AccountInvitation;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.net.URLEncoder;
 
@@ -32,20 +33,30 @@ public class AccountInvitationEmailService extends OneBaseService {
 
 	public void sendInvitationEmail(
 			Account account, AccountInvitation accountInvitation,
-			String inviterName)
+			String inviterName, String projectName)
 		throws Exception {
+
+		String notificationTemplateExternalReferenceCode =
+			AccountInvitationConstants.
+				NOTIFICATION_TEMPLATE_EXTERNAL_REFERENCE_CODE;
+
+		if (Validator.isNotNull(projectName)) {
+			notificationTemplateExternalReferenceCode =
+				AccountInvitationConstants.
+					PROJECT_NOTIFICATION_TEMPLATE_EXTERNAL_REFERENCE_CODE;
+		}
 
 		JSONObject processedTemplateJSONObject =
 			_notificationTemplateService.getAndProcessTemplateJSONObject(
-				AccountInvitationConstants.
-					NOTIFICATION_TEMPLATE_EXTERNAL_REFERENCE_CODE,
-				_DEFAULT_LANGUAGE_ID,
+				notificationTemplateExternalReferenceCode, _DEFAULT_LANGUAGE_ID,
 				HashMapBuilder.put(
 					"ACCEPT_URL", _getAcceptURL(accountInvitation.getToken())
 				).put(
 					"ACCOUNT_NAME", HtmlUtil.escape(account.getName())
 				).put(
 					"INVITER_NAME", HtmlUtil.escape(inviterName)
+				).put(
+					"PROJECT_NAME", HtmlUtil.escape(projectName)
 				).put(
 					"USER_FIRST_NAME",
 					HtmlUtil.escape(accountInvitation.getGivenName())
@@ -64,8 +75,7 @@ public class AccountInvitationEmailService extends OneBaseService {
 
 	private String _getAcceptURL(String token) {
 		return StringBundler.concat(
-			_invitationAcceptURL, AccountInvitationConstants.INVITATIONS_PATH,
-			AccountInvitationConstants.ACCEPT_SEGMENT, "?token=",
+			_portalURL, AccountInvitationConstants.PAGE_PATH, "?token=",
 			URLEncoder.encode(token, StandardCharsets.UTF_8));
 	}
 
@@ -74,13 +84,13 @@ public class AccountInvitationEmailService extends OneBaseService {
 	@Value("${liferay.one.provisioning.email.address.global}")
 	private String _emailAddressGlobal;
 
-	@Value("${liferay.one.invitation.accept.url}")
-	private String _invitationAcceptURL;
-
 	@Autowired
 	private NotificationQueueEntryService _notificationQueueEntryService;
 
 	@Autowired
 	private NotificationTemplateService _notificationTemplateService;
+
+	@Value("${liferay.one.portal.url}")
+	private String _portalURL;
 
 }

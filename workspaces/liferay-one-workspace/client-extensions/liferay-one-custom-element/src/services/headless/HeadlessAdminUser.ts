@@ -100,25 +100,6 @@ export default class HeadlessAdminUser {
 		);
 	}
 
-	static async postAccountUserAccount(
-		accountExternalReferenceCode: string,
-		body: Pick<UserAccount, 'emailAddress' | 'familyName' | 'givenName'>
-	) {
-		return fetcher.post<UserAccount>(
-			`/o/headless-admin-user/v1.0/accounts/by-external-reference-code/${accountExternalReferenceCode}/user-accounts`,
-			body
-		);
-	}
-
-	static async postAccountUserAccountByEmailAddress(
-		accountExternalReferenceCode: string,
-		emailAddress: string
-	) {
-		return fetcher.post<UserAccount>(
-			`/o/headless-admin-user/v1.0/accounts/by-external-reference-code/${accountExternalReferenceCode}/user-accounts/by-email-address/${emailAddress}`
-		);
-	}
-
 	static async postAddress(accountId: number, body: Record<string, unknown>) {
 		return fetcher.post(
 			`/o/headless-admin-user/v1.0/accounts/${accountId}/postal-addresses`,

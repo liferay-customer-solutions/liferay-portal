@@ -5,19 +5,48 @@
 
 import {OneSpringBootOAuth2} from './OAuth2Client';
 
+import type {AccountInvitation} from './types';
+
 type InvitationBody = {
 	emailAddress: string;
 	familyName: string;
 	givenName: string;
-	roleNames: string[];
+	projectExternalReferenceCode?: string;
+	projectRoleExternalReferenceCode?: string;
+	roleExternalReferenceCodes: string[];
 };
 
 class AccountsOAuth2 extends OneSpringBootOAuth2 {
+	async deleteInvitations(
+		accountExternalReferenceCode: string,
+		accountInvitationId: number
+	) {
+		return this.delete(
+			`/${accountExternalReferenceCode}/invitations/${accountInvitationId}`
+		);
+	}
+
+	async getInvitations(accountExternalReferenceCode: string) {
+		return this.get<AccountInvitation[]>(
+			`/${accountExternalReferenceCode}/invitations`
+		);
+	}
+
 	async postInvitations(
 		accountExternalReferenceCode: string,
 		body: InvitationBody
 	) {
 		return this.post(`/${accountExternalReferenceCode}/invitations`, body);
+	}
+
+	async postInvitationsResend(
+		accountExternalReferenceCode: string,
+		accountInvitationId: number
+	) {
+		return this.post(
+			`/${accountExternalReferenceCode}/invitations/${accountInvitationId}` +
+				'/resend'
+		);
 	}
 
 	async postSyncToJSM(accountExternalReferenceCode: string) {

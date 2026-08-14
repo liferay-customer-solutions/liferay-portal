@@ -12,6 +12,7 @@ import InviteMemberModal from '~/pages/MyAccount/AccountMembers/components/Invit
 import fetcher from '~/services/fetcher/fetcher';
 import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
 import {Liferay} from '~/services/liferay/liferay';
+import Accounts from '~/services/spring-boot/Accounts';
 
 import type {AccountMemberRow} from '~/pages/MyAccount/AccountMembers/types';
 import type {APIResponse} from '~/types/api';
@@ -196,5 +197,92 @@ export function useAccountMemberActions({
 		});
 	};
 
-	return {openEditPermissionsModal, openInviteModal, openRemoveMemberModal};
+	const openResendInvitationModal = (member: AccountMemberRow) => {
+		openModal({
+			body: (
+				<p>
+					{sub(
+						'are-you-sure-you-want-to-resend-the-invitation-to-x',
+						member.email
+					)}
+				</p>
+			),
+			header: translate('resend-invitation'),
+			onConfirm: async () => {
+				try {
+					await Promise.all(
+						member.invitationIds.map((invitationId) =>
+							Accounts.postInvitationsResend(
+								accountExternalReferenceCode,
+								invitationId
+							)
+						)
+					);
+
+					await mutate();
+
+					Liferay.Util.openToast({
+						message: translate('invitation-successfully-resent'),
+						title: translate('success'),
+					});
+				}
+				catch {
+					Liferay.Util.openToast({
+						message: translate('unable-to-resend-the-invitation'),
+						title: translate('error'),
+						type: 'danger',
+					});
+				}
+			},
+		});
+	};
+
+	const openRevokeInvitationModal = (member: AccountMemberRow) => {
+		openModal({
+			body: (
+				<p>
+					{sub(
+						'are-you-sure-you-want-to-revoke-the-invitation-for-x',
+						member.email
+					)}
+				</p>
+			),
+			header: translate('revoke-invitation'),
+			onConfirm: async () => {
+				try {
+					await Promise.all(
+						member.invitationIds.map((invitationId) =>
+							Accounts.deleteInvitations(
+								accountExternalReferenceCode,
+								invitationId
+							)
+						)
+					);
+
+					await mutate();
+
+					Liferay.Util.openToast({
+						message: translate('invitation-successfully-revoked'),
+						title: translate('success'),
+					});
+				}
+				catch {
+					Liferay.Util.openToast({
+						message: translate('unable-to-revoke-the-invitation'),
+						title: translate('error'),
+						type: 'danger',
+					});
+				}
+			},
+			status: 'danger',
+		});
+	};
+
+	return {
+		openEditPermissionsModal,
+		openInviteModal,
+		openRemoveMemberModal,
+		openResendInvitationModal,
+		openRevokeInvitationModal,
+	};
 }

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<title>Project Invitation</title>
+
+		<style data-lfr-nonce>
+			.account-invitation-body {
+				color: #54555f;
+				font-family: 'Source Sans Pro', sans-serif;
+				font-size: 16px;
+				line-height: 150%;
+			}
+
+			.account-invitation-button {
+				background: #0b5fff;
+				border-radius: 8px;
+				display: inline-block;
+				padding: 12px 24px;
+				text-decoration: none;
+			}
+
+			.account-invitation-button-text {
+				color: #fff;
+				font-size: 16px;
+				font-weight: 600;
+			}
+
+			.account-invitation-card {
+				background-color: #fff;
+				border: 1px solid #6b6c7e;
+				border-radius: 16px;
+				margin: 4rem auto;
+				max-width: 640px;
+				padding: 3rem;
+			}
+
+			.account-invitation-copy-paste-message {
+				color: #6b6c7e;
+				font-size: 14px;
+				word-break: break-all;
+			}
+
+			.account-invitation-footer {
+				color: #6b6c7e;
+				font-size: 12px;
+				margin-top: 2rem;
+			}
+
+			.account-invitation-title {
+				color: #000;
+				font-size: 30px;
+				font-weight: bolder;
+				margin: 2.5rem auto 1rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="account-invitation-card">
+			<img alt="Liferay Logo" height="58" src="[$PORTAL_URL$]/documents/d/[$GROUP_KEY$]/liferay_logo-png" />
+
+			<main class="account-invitation-body">
+				<h2 class="account-invitation-title">
+					You have been invited to [%PROJECT_NAME%]
+				</h2>
+
+				<p>
+					Hi <strong>[%USER_FIRST_NAME%]</strong>,
+				</p>
+
+				<p>
+					[%INVITER_NAME%] invited you to join the <strong>[%PROJECT_NAME%]</strong> project on <strong>[%ACCOUNT_NAME%]</strong>. Accept the invitation to get access.
+				</p>
+
+				<p>
+					<a class="account-invitation-button" href="[%ACCEPT_URL%]">
+						<span class="account-invitation-button-text">Accept Invitation</span>
+					</a>
+				</p>
+
+				<p class="account-invitation-copy-paste-message">
+					If the button does not work, copy and paste this address into your browser:
+					<br />
+					[%ACCEPT_URL%]
+				</p>
+
+				<p class="account-invitation-footer">
+					&copy; [%YEAR%] Liferay, Inc. All rights reserved.
+				</p>
+			</main>
+		</div>
+	</body>
+</html>

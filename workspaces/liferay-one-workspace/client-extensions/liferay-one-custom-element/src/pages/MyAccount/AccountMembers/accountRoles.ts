@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
+
 import type {UserAccountModel} from '~/models/UserAccountModel';
 import type {RoleBrief} from '~/types/accounts';
 
@@ -46,12 +48,51 @@ export function isPartnerRole(roleName: string) {
 	return PARTNER_ACCOUNT_ROLES.includes(roleName);
 }
 
-export function getMembershipRoleNames(roleBriefs: RoleBrief[] = []) {
-	const roleNames = new Set(roleBriefs.map(({name}) => name));
+export function sortRoleNames(roleNames: string[] = []) {
+	const uniqueRoleNames = new Set(roleNames);
 
 	return MANAGEABLE_ACCOUNT_ROLES.filter((roleName) =>
-		roleNames.has(roleName)
+		uniqueRoleNames.has(roleName)
 	);
+}
+
+export function getMembershipRoleNames(roleBriefs: RoleBrief[] = []) {
+	return sortRoleNames(roleBriefs.map(({name}) => name));
+}
+
+export async function fetchRoleExternalReferenceCodesByName(
+	accountExternalReferenceCode: string
+) {
+	const {items} = await HeadlessAdminUser.getAccountRoles(
+		accountExternalReferenceCode
+	);
+
+	return new Map(
+		items.map((accountRole) => [
+			accountRole.name,
+			accountRole.externalReferenceCode,
+		])
+	);
+}
+
+export function getRoleExternalReferenceCodes(
+	roleNames: string[],
+	roleExternalReferenceCodesByName: Map<string, string>
+) {
+	const roleExternalReferenceCodes: string[] = [];
+
+	for (const roleName of roleNames) {
+		const roleExternalReferenceCode =
+			roleExternalReferenceCodesByName.get(roleName);
+
+		if (!roleExternalReferenceCode) {
+			return null;
+		}
+
+		roleExternalReferenceCodes.push(roleExternalReferenceCode);
+	}
+
+	return roleExternalReferenceCodes;
 }
 
 export function hasAdministratorRole(roleBriefs: RoleBrief[] = []) {

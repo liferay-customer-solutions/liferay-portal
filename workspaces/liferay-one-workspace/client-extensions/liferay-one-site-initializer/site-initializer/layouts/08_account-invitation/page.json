@@ -1,0 +1,11 @@
+{
+	"friendlyURL": "/account-invitation",
+	"hidden": true,
+	"name": "Account Invitation",
+	"name_i18n": {
+		"en_US": "Account Invitation"
+	},
+	"private": false,
+	"system": false,
+	"type": "Content"
+}

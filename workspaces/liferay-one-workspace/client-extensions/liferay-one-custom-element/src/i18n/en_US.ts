@@ -167,6 +167,10 @@ export default {
 		'Are you sure you want to expire this trial? This action implies the permanent end of the test environment.',
 	'are-you-sure-you-want-to-remove-x-from-this-account':
 		'Are you sure you want to remove {0} from this account?',
+	'are-you-sure-you-want-to-resend-the-invitation-to-x':
+		'Are you sure you want to resend the invitation to {0}?',
+	'are-you-sure-you-want-to-revoke-the-invitation-for-x':
+		'Are you sure you want to revoke the invitation for {0}? They will no longer be able to join this account with it.',
 	'area': 'Area',
 	'areas': 'Areas',
 	'assign-or-update-the-account-roles-for-x':
@@ -658,6 +662,11 @@ export default {
 		'Invalid or non-existent attachment ID.',
 	'invalid-or-non-existent-ticket-number':
 		'Invalid or non-existent ticket number.',
+	'invitation-accepted': 'Invitation Accepted',
+	'invitation-expired': 'Invitation Expired',
+	'invitation-not-valid': 'Invitation Not Valid',
+	'invitation-successfully-resent': 'Invitation successfully resent.',
+	'invitation-successfully-revoked': 'Invitation successfully revoked.',
 	'invitation-successfully-sent': 'Invitation successfully sent.',
 	'invitations-successfully-sent': 'Invitations successfully sent.',
 	'invite-a-new-member-to-this-project-they-will-be-added-as-an-account-member-once-they-accept-the-invitation':
@@ -666,6 +675,7 @@ export default {
 		'Invite, manage roles, designate incident contacts.',
 	'invite-member': 'Invite Member',
 	'invite-project-member': 'Invite Project Member',
+	'invited': 'Invited',
 	'invited-members-receive-an-email-and-join-the-account-after-accepting-the-invitation':
 		'Invited members receive an email and join the account after accepting the invitation.',
 	'iot': 'IoT',
@@ -1066,8 +1076,6 @@ export default {
 	'project-admin-email': 'Project Admin Email',
 	'project-admin-name': 'Project Admin Name',
 	'project-id': 'Project ID',
-	'project-member-successfully-invited':
-		'Project member successfully invited.',
 	'project-members': 'Project Members',
 	'project-members-successfully-updated':
 		'Project members successfully updated.',
@@ -1176,6 +1184,7 @@ export default {
 	'request-sent-successfully': 'Request Sent Successfully',
 	'requested': 'Requested',
 	'requester': 'Requester',
+	'resend-invitation': 'Resend Invitation',
 	'resource-requirements': 'Resource Requirements',
 	'resource-usage': 'Resource Usage',
 	'resources': 'Resources',
@@ -1192,6 +1201,7 @@ export default {
 		'Review the information published for this app.',
 	'review-the-new-publisher-info-and-the-liferay-marketplace-terms-before-proceeding':
 		'Review the new publisher info and the Liferay Marketplace terms before proceeding.',
+	'revoke-invitation': 'Revoke Invitation',
 	'role': 'Role',
 	'roles': 'Roles',
 	'saas-demos': 'SaaS Demos',
@@ -1271,6 +1281,7 @@ export default {
 	'shared-investigator-platform': 'Shared Investigator Platform',
 	'show-less': 'Show Less',
 	'showing-x-to-x-of-x': 'Showing {0} to {1} of {2}',
+	'sign-in': 'Sign In',
 	'sign-in-with-a-different-account': 'Sign in with a Different Account',
 	'site-initializer': 'Site Initializer',
 	'sites-and-users': 'Sites and Users',
@@ -1414,6 +1425,10 @@ export default {
 	'this-feature-is-not-included-in-your-current-plan':
 		'This feature is not included in your current plan',
 	'this-field-is-required': 'This field is required.',
+	'this-invitation-has-expired-ask-an-account-administrator-to-send-you-a-new-one':
+		'This invitation has expired. Ask an account administrator to send you a new one.',
+	'this-invitation-link-is-not-valid-it-may-have-already-been-used-or-replaced-by-a-newer-invitation':
+		'This invitation link is not valid. It may have already been used or replaced by a newer invitation.',
 	'this-is-the-email-address-that-will-receive-the-ai-hub-account-management-invite':
 		'This is the email address that will receive the AI Hub account management invite.',
 	'this-is-the-first-version-of-the-app-to-be-published':
@@ -1494,6 +1509,7 @@ export default {
 	'two-factor-authentication': 'Two-Factor Authentication',
 	'type': 'Type',
 	'uat': 'UAT',
+	'unable-to-accept-the-invitation': 'Unable to accept the invitation.',
 	'unable-to-assign-roles': 'Unable to assign roles',
 	'unable-to-connect-to-file-server': 'Unable to connect to file server.',
 	'unable-to-delete-attachment': 'Unable to delete attachment.',
@@ -1504,6 +1520,8 @@ export default {
 	'unable-to-load-the-license-keys': 'Unable to load the license keys.',
 	'unable-to-remove-member': 'Unable to remove member.',
 	'unable-to-remove-roles': 'Unable to remove roles',
+	'unable-to-resend-the-invitation': 'Unable to resend the invitation.',
+	'unable-to-revoke-the-invitation': 'Unable to revoke the invitation.',
 	'unable-to-send-the-invitation-to-x':
 		'Unable to send the invitation to {0}.',
 	'unable-to-update-account-details': 'Unable to update account details',
@@ -1585,6 +1603,8 @@ export default {
 		'We couldn’t set up your environment. Please contact support.',
 	'we-understand-that-plans-change-please-let-us-know-why-the-planned-event-date-for-this-event-is-being-updated':
 		'We understand that plans change. Please let us know why the planned event date for this event is being updated.',
+	'we-were-unable-to-complete-your-invitation-try-the-link-again-or-ask-an-account-administrator-for-a-new-one':
+		'We were unable to complete your invitation. Try the link again or ask an account administrator for a new one.',
 	'we-were-unable-to-process-the-payment-for':
 		'We were unable to process the payment for',
 	'website': 'Website',
@@ -1662,6 +1682,8 @@ export default {
 		'You do not have access to upload files.',
 	'you-do-not-have-an-active-enterprise-search-subscription':
 		'You do not have an active Enterprise Search subscription.',
+	'you-have-joined-the-account-sign-in-to-get-started':
+		'You have joined the account. Sign in to get started.',
 	'you-have-reached-the-maximum-number-of-active-trials-allowed-to-start-a-new-trial-please-end-one-of-your-existing-trials-first':
 		'You have reached the maximum number of active trials allowed. To start a new trial, please end one of your existing trials first.',
 	'you-havent-published-any-apps-yet': "You haven't published any apps yet.",

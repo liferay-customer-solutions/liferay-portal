@@ -120,7 +120,8 @@
 }
 
 .project-permissions-role-menu {
-	width: var(--clay-dropdown-trigger-width, 100%);
+	max-width: none;
+	min-width: 0;
 }
 
 .project-permissions-remove-button.btn {

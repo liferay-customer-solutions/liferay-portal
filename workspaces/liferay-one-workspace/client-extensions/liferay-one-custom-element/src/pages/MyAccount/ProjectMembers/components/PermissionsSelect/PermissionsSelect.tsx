@@ -6,7 +6,7 @@
 import ClayDropDown from '@clayui/drop-down';
 import {ClayCheckbox} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
-import {useState} from 'react';
+import {useRef, useState} from 'react';
 import {translate} from '~/i18n';
 import {
 	PROJECT_ROLE_ERCS,
@@ -31,6 +31,8 @@ const PermissionsSelect = ({
 	roleExternalReferenceCode,
 }: PermissionsSelectProps) => {
 	const [active, setActive] = useState(false);
+	const [menuWidth, setMenuWidth] = useState<number>();
+	const containerRef = useRef<HTMLDivElement>(null);
 
 	const triggerLabel = [
 		roleExternalReferenceCode
@@ -42,68 +44,89 @@ const PermissionsSelect = ({
 		.join(', ');
 
 	return (
-		<ClayDropDown
-			active={active}
-			className="project-permissions-role-dropdown"
-			closeOnClick={false}
-			menuElementAttrs={{className: 'project-permissions-role-menu'}}
-			onActiveChange={setActive}
-			trigger={
-				<button
-					className="align-items-center d-flex form-control justify-content-between project-permissions-role-trigger"
-					type="button"
-				>
-					<span>{triggerLabel || translate('select-a-role')}</span>
+		<div ref={containerRef}>
+			<ClayDropDown
+				active={active}
+				className="project-permissions-role-dropdown"
+				closeOnClick={false}
+				menuElementAttrs={{
+					className: 'project-permissions-role-menu',
+					style: {width: menuWidth},
+				}}
+				onActiveChange={(nextActive) => {
+					if (nextActive) {
+						setMenuWidth(containerRef.current?.offsetWidth);
+					}
 
-					<ClayIcon symbol="caret-bottom" />
-				</button>
-			}
-		>
-			<ClayDropDown.ItemList>
-				<li className="dropdown-subheader">
-					{translate('project-roles')}
-				</li>
+					setActive(nextActive);
+				}}
+				trigger={
+					<button
+						className="align-items-center d-flex form-control justify-content-between project-permissions-role-trigger"
+						type="button"
+					>
+						<span>
+							{triggerLabel || translate('select-a-role')}
+						</span>
 
-				{PROJECT_ROLE_ERCS.map((projectRoleExternalReferenceCode) => (
-					<ClayDropDown.Item key={projectRoleExternalReferenceCode}>
-						<ClayCheckbox
-							checked={
-								roleExternalReferenceCode ===
-								projectRoleExternalReferenceCode
-							}
-							label={getProjectRoleLabel(
-								projectRoleExternalReferenceCode
-							)}
-							onChange={() =>
-								onRoleChange(projectRoleExternalReferenceCode)
-							}
-						/>
-					</ClayDropDown.Item>
-				))}
+						<ClayIcon symbol="caret-bottom" />
+					</button>
+				}
+			>
+				<ClayDropDown.ItemList>
+					<li className="dropdown-subheader">
+						{translate('project-roles')}
+					</li>
 
-				{!!availableDesignations.length && (
-					<>
-						<ClayDropDown.Divider />
-
-						<li className="dropdown-subheader">
-							{translate('cloud-contacts')}
-						</li>
-
-						{availableDesignations.map((designation) => (
-							<ClayDropDown.Item key={designation}>
+					{PROJECT_ROLE_ERCS.map(
+						(projectRoleExternalReferenceCode) => (
+							<ClayDropDown.Item
+								key={projectRoleExternalReferenceCode}
+							>
 								<ClayCheckbox
-									checked={designations.includes(designation)}
-									label={designation}
+									checked={
+										roleExternalReferenceCode ===
+										projectRoleExternalReferenceCode
+									}
+									label={getProjectRoleLabel(
+										projectRoleExternalReferenceCode
+									)}
 									onChange={() =>
-										onToggleDesignation(designation)
+										onRoleChange(
+											projectRoleExternalReferenceCode
+										)
 									}
 								/>
 							</ClayDropDown.Item>
-						))}
-					</>
-				)}
-			</ClayDropDown.ItemList>
-		</ClayDropDown>
+						)
+					)}
+
+					{!!availableDesignations.length && (
+						<>
+							<ClayDropDown.Divider />
+
+							<li className="dropdown-subheader">
+								{translate('cloud-contacts')}
+							</li>
+
+							{availableDesignations.map((designation) => (
+								<ClayDropDown.Item key={designation}>
+									<ClayCheckbox
+										checked={designations.includes(
+											designation
+										)}
+										label={designation}
+										onChange={() =>
+											onToggleDesignation(designation)
+										}
+									/>
+								</ClayDropDown.Item>
+							))}
+						</>
+					)}
+				</ClayDropDown.ItemList>
+			</ClayDropDown>
+		</div>
 	);
 };
 

@@ -47,6 +47,18 @@ public class ProjectMembershipPermission {
 			String actionId, Jwt jwt, String projectExternalReferenceCode)
 		throws Exception {
 
+		UserAccount userAccount = _userAccountService.getMyUserAccount(jwt);
+
+		for (RoleBrief roleBrief : userAccount.getRoleBriefs()) {
+			String roleBriefName = roleBrief.getName();
+
+			if (roleBriefName.equals(RoleConstants.NAME_ADMINISTRATOR) ||
+				roleBriefName.equals(RoleConstants.NAME_LIFERAY_STAFF)) {
+
+				return true;
+			}
+		}
+
 		Project project = _projectService.fetchProject(
 			projectExternalReferenceCode);
 
@@ -60,8 +72,6 @@ public class ProjectMembershipPermission {
 		if (Validator.isNull(accountExternalReferenceCode)) {
 			return false;
 		}
-
-		UserAccount userAccount = _userAccountService.getMyUserAccount(jwt);
 
 		if (_isAccountAdministrator(
 				accountExternalReferenceCode, userAccount)) {

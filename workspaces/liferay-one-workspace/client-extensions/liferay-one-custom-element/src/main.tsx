@@ -21,6 +21,7 @@ type CacheProvider = Required<SWRConfiguration>['provider'];
 type RouterComponent = React.ComponentType;
 
 const routers: Record<string, React.LazyExoticComponent<RouterComponent>> = {
+	'account-invitation': React.lazy(() => import('~/pages/AccountInvitation')),
 	'account-selector': React.lazy(
 		() => import('~/pages/AccountSelector/AccountSelectorRouter')
 	),

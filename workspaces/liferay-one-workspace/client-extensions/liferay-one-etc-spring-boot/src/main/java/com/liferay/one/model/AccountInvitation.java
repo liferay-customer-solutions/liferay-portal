@@ -7,6 +7,9 @@ package com.liferay.one.model;
 
 import com.liferay.portal.kernel.util.Validator;
 
+import java.time.Instant;
+import java.time.format.DateTimeParseException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +31,17 @@ public class AccountInvitation {
 			"accountExternalReferenceCode");
 		_accountInvitationId = jsonObject.getLong("id");
 		_emailAddress = jsonObject.optString("emailAddress");
+		_customExpirationDateInstant = _toInstant(
+			jsonObject.optString("customExpirationDate"));
 		_externalReferenceCode = jsonObject.optString("externalReferenceCode");
 		_familyName = jsonObject.optString("familyName");
 		_givenName = jsonObject.optString("givenName");
-		_roleNames = _toRoleNames(jsonObject.optString("roleNames"));
+		_projectExternalReferenceCode = jsonObject.optString(
+			"projectExternalReferenceCode");
+		_projectRoleExternalReferenceCode = jsonObject.optString(
+			"projectRoleExternalReferenceCode");
+		_roleExternalReferenceCodes = _toRoleExternalReferenceCodes(
+			jsonObject.optString("roleExternalReferenceCodes"));
 		_token = jsonObject.optString("token");
 	}
 
@@ -41,6 +51,10 @@ public class AccountInvitation {
 
 	public long getAccountInvitationId() {
 		return _accountInvitationId;
+	}
+
+	public Instant getCustomExpirationDateInstant() {
+		return _customExpirationDateInstant;
 	}
 
 	public String getEmailAddress() {
@@ -59,8 +73,16 @@ public class AccountInvitation {
 		return _givenName;
 	}
 
-	public List<String> getRoleNames() {
-		return _roleNames;
+	public String getProjectExternalReferenceCode() {
+		return _projectExternalReferenceCode;
+	}
+
+	public String getProjectRoleExternalReferenceCode() {
+		return _projectRoleExternalReferenceCode;
+	}
+
+	public List<String> getRoleExternalReferenceCodes() {
+		return _roleExternalReferenceCodes;
 	}
 
 	public String getToken() {
@@ -71,43 +93,70 @@ public class AccountInvitation {
 		return _accepted;
 	}
 
-	private List<String> _toRoleNames(String value) {
-		List<String> roleNames = new ArrayList<>();
+	public boolean isExpired() {
+		if (_customExpirationDateInstant == null) {
+			return true;
+		}
 
+		return _customExpirationDateInstant.isBefore(Instant.now());
+	}
+
+	private Instant _toInstant(String value) {
 		if (Validator.isNull(value)) {
-			return roleNames;
+			return null;
 		}
 
 		try {
-			JSONArray roleNamesJSONArray = new JSONArray(value);
+			return Instant.parse(value);
+		}
+		catch (DateTimeParseException dateTimeParseException) {
+			_log.error(
+				"Unable to read the expiration date " + value,
+				dateTimeParseException);
 
-			for (int i = 0; i < roleNamesJSONArray.length(); i++) {
-				String roleName = roleNamesJSONArray.getString(i);
+			return null;
+		}
+	}
 
-				if (Validator.isNotNull(roleName)) {
-					roleNames.add(roleName);
+	private List<String> _toRoleExternalReferenceCodes(String value) {
+		List<String> roleExternalReferenceCodes = new ArrayList<>();
+
+		if (Validator.isNull(value)) {
+			return roleExternalReferenceCodes;
+		}
+
+		try {
+			JSONArray jsonArray = new JSONArray(value);
+
+			for (int i = 0; i < jsonArray.length(); i++) {
+				String roleExternalReferenceCode = jsonArray.getString(i);
+
+				if (Validator.isNotNull(roleExternalReferenceCode)) {
+					roleExternalReferenceCodes.add(roleExternalReferenceCode);
 				}
 			}
 
-			return roleNames;
+			return roleExternalReferenceCodes;
 		}
 		catch (JSONException jsonException) {
 			if (_log.isDebugEnabled()) {
 				_log.debug(
-					"Unable to read the role names as a JSON array",
+					"Unable to read the role ERCs as a JSON array",
 					jsonException);
 			}
 		}
 
-		for (String roleName : value.split(",")) {
-			String trimmedRoleName = roleName.trim();
+		for (String roleExternalReferenceCode : value.split(",")) {
+			String trimmedRoleExternalReferenceCode =
+				roleExternalReferenceCode.trim();
 
-			if (Validator.isNotNull(trimmedRoleName)) {
-				roleNames.add(trimmedRoleName);
+			if (Validator.isNotNull(trimmedRoleExternalReferenceCode)) {
+				roleExternalReferenceCodes.add(
+					trimmedRoleExternalReferenceCode);
 			}
 		}
 
-		return roleNames;
+		return roleExternalReferenceCodes;
 	}
 
 	private static final Log _log = LogFactory.getLog(AccountInvitation.class);
@@ -115,11 +164,14 @@ public class AccountInvitation {
 	private final boolean _accepted;
 	private final String _accountExternalReferenceCode;
 	private final long _accountInvitationId;
+	private final Instant _customExpirationDateInstant;
 	private final String _emailAddress;
 	private final String _externalReferenceCode;
 	private final String _familyName;
 	private final String _givenName;
-	private final List<String> _roleNames;
+	private final String _projectExternalReferenceCode;
+	private final String _projectRoleExternalReferenceCode;
+	private final List<String> _roleExternalReferenceCodes;
 	private final String _token;
 
 }
