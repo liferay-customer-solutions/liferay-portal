@@ -5,9 +5,9 @@
 
 package com.liferay.one;
 
-import com.liferay.one.jira.util.JiraSyncLock;
 import com.liferay.one.model.AccountInvitation;
 import com.liferay.one.service.AccountInvitationService;
+import com.liferay.one.util.KeyedLock;
 
 import java.util.List;
 
@@ -238,8 +238,7 @@ public class AccountInvitationsRestControllerTest {
 			accountInvitationsRestController, "_accountInvitationService",
 			_accountInvitationService);
 		ReflectionTestUtils.setField(
-			accountInvitationsRestController, "_jiraSyncLock",
-			new JiraSyncLock());
+			accountInvitationsRestController, "_keyedLock", new KeyedLock());
 
 		return accountInvitationsRestController;
 	}

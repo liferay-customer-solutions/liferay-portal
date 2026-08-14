@@ -13,7 +13,6 @@ import com.liferay.one.jira.service.AccountAssetService;
 import com.liferay.one.jira.synchronizer.AccountSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountRoleSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountSynchronizer;
-import com.liferay.one.jira.util.JiraSyncLock;
 import com.liferay.one.model.AccountInvitation;
 import com.liferay.one.model.Project;
 import com.liferay.one.okta.model.OktaUser;
@@ -29,6 +28,7 @@ import com.liferay.one.service.ProjectService;
 import com.liferay.one.service.ProvisioningAssignmentService;
 import com.liferay.one.service.ProvisioningEmailService;
 import com.liferay.one.service.UserAccountService;
+import com.liferay.one.util.KeyedLock;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 
@@ -1408,7 +1408,7 @@ public class AccountsRestControllerTest {
 		ReflectionTestUtils.setField(
 			accountsRestController, "_entitlementService", _entitlementService);
 		ReflectionTestUtils.setField(
-			accountsRestController, "_jiraSyncLock", new JiraSyncLock());
+			accountsRestController, "_keyedLock", new KeyedLock());
 		ReflectionTestUtils.setField(
 			accountsRestController, "_oktaService", _oktaService);
 		ReflectionTestUtils.setField(

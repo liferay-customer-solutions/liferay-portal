@@ -15,7 +15,6 @@ import com.liferay.one.jira.service.AccountAssetService;
 import com.liferay.one.jira.synchronizer.AccountSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountRoleSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountSynchronizer;
-import com.liferay.one.jira.util.JiraSyncLock;
 import com.liferay.one.model.AccountInvitation;
 import com.liferay.one.model.Project;
 import com.liferay.one.okta.service.OktaService;
@@ -32,6 +31,7 @@ import com.liferay.one.service.ProvisioningAssignmentService;
 import com.liferay.one.service.ProvisioningEmailService;
 import com.liferay.one.service.UserAccountService;
 import com.liferay.one.util.FindUtil;
+import com.liferay.one.util.KeyedLock;
 import com.liferay.one.util.UserAccountUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -296,7 +296,7 @@ public class AccountsRestController extends OneBaseRestController {
 
 		UserAccount inviterUserAccount = getMyUserAccount(jwt);
 
-		AccountInvitation accountInvitation = _jiraSyncLock.withLock(
+		AccountInvitation accountInvitation = _keyedLock.withLock(
 			StringBundler.concat(
 				externalReferenceCode, "#", emailAddress, "#",
 				projectExternalReferenceCode),
@@ -345,7 +345,7 @@ public class AccountsRestController extends OneBaseRestController {
 		String projectName = _getProjectName(
 			accountInvitation.getProjectExternalReferenceCode());
 
-		AccountInvitation renewedAccountInvitation = _jiraSyncLock.withLock(
+		AccountInvitation renewedAccountInvitation = _keyedLock.withLock(
 			StringBundler.concat(
 				externalReferenceCode, "#", accountInvitation.getEmailAddress(),
 				"#", accountInvitation.getProjectExternalReferenceCode()),
@@ -823,7 +823,7 @@ public class AccountsRestController extends OneBaseRestController {
 	private EntitlementService _entitlementService;
 
 	@Autowired
-	private JiraSyncLock _jiraSyncLock;
+	private KeyedLock _keyedLock;
 
 	@Autowired
 	private OktaService _oktaService;

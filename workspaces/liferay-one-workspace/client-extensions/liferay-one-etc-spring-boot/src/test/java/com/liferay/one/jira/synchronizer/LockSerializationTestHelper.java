@@ -21,7 +21,7 @@ import org.mockito.stubbing.Answer;
 
 /**
  * Asserts that two operations serialize on a shared
- * {@link com.liferay.one.jira.util.JiraSyncLock} key: the first operation
+ * {@link com.liferay.one.jira.util.KeyedLock} key: the first operation
  * blocks inside a call stubbed with {@link #block}, the second operation is
  * started while the first is still blocked and must not record any event
  * until the first is released, and the recorded events must land in the

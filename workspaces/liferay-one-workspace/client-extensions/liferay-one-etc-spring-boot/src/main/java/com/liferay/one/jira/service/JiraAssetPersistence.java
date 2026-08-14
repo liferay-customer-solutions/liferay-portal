@@ -356,7 +356,7 @@ public class JiraAssetPersistence extends BaseJiraService {
 
 	private static final int _MAX_RETRIES = 3;
 
-	// Callers hold a JiraSyncLock stripe across the retried call, so the
+	// Callers hold a KeyedLock stripe across the retried call, so the
 	// worst case backoff must stay within a few seconds to keep unrelated
 	// syncs that hash to the same stripe from stalling
 

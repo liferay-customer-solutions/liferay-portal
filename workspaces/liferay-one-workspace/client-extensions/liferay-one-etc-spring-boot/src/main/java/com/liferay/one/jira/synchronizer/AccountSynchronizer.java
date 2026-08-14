@@ -21,7 +21,6 @@ import com.liferay.one.jira.exception.AccountNotFoundException;
 import com.liferay.one.jira.model.JiraAssetObject;
 import com.liferay.one.jira.service.JiraAssetService;
 import com.liferay.one.jira.service.JiraBusinessEventService;
-import com.liferay.one.jira.util.JiraSyncLock;
 import com.liferay.one.model.EntitlementDefinition;
 import com.liferay.one.model.Project;
 import com.liferay.one.model.ProjectMembership;
@@ -36,6 +35,7 @@ import com.liferay.one.service.PropertyService;
 import com.liferay.one.service.RoleService;
 import com.liferay.one.service.UserAccountService;
 import com.liferay.one.util.FindUtil;
+import com.liferay.one.util.KeyedLock;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
@@ -63,7 +63,7 @@ import org.springframework.stereotype.Component;
 public class AccountSynchronizer {
 
 	public void deleteAccount(String externalReferenceCode) {
-		_jiraSyncLock.withLock(
+		_keyedLock.withLock(
 			externalReferenceCode,
 			() -> {
 				if (_log.isInfoEnabled()) {
@@ -290,7 +290,7 @@ public class AccountSynchronizer {
 
 		unsafeConsumer.accept(assetObject);
 
-		_jiraSyncLock.withLock(
+		_keyedLock.withLock(
 			externalKey,
 			() -> _jiraAssetService.upsert(_accountConverter, assetObject));
 	}
@@ -537,7 +537,7 @@ public class AccountSynchronizer {
 	private JiraBusinessEventService _jiraBusinessEventService;
 
 	@Autowired
-	private JiraSyncLock _jiraSyncLock;
+	private KeyedLock _keyedLock;
 
 	@Autowired
 	private OrganizationService _organizationService;

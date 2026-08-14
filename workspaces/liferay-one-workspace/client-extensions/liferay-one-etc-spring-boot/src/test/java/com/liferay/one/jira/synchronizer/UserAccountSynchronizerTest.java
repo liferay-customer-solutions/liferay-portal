@@ -16,9 +16,9 @@ import com.liferay.one.jira.converter.PhoneConverter;
 import com.liferay.one.jira.converter.TeamConverter;
 import com.liferay.one.jira.model.JiraAssetObject;
 import com.liferay.one.jira.service.JiraAssetService;
-import com.liferay.one.jira.util.JiraSyncLock;
 import com.liferay.one.service.EntitlementService;
 import com.liferay.one.service.PropertyService;
+import com.liferay.one.util.KeyedLock;
 
 import java.util.Collections;
 
@@ -85,7 +85,7 @@ public class UserAccountSynchronizerTest {
 		ReflectionTestUtils.setField(
 			_userAccountSynchronizer, "_jiraAssetService", _jiraAssetService);
 		ReflectionTestUtils.setField(
-			_userAccountSynchronizer, "_jiraSyncLock", new JiraSyncLock());
+			_userAccountSynchronizer, "_keyedLock", new KeyedLock());
 		ReflectionTestUtils.setField(
 			_userAccountSynchronizer,
 			"_organizationUserAccountRoleSynchronizer",

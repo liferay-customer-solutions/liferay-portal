@@ -12,7 +12,7 @@ import com.liferay.one.jira.converter.TeamConverter;
 import com.liferay.one.jira.model.JiraAssetObject;
 import com.liferay.one.jira.service.JiraAssetService;
 import com.liferay.one.jira.util.AQLUtil;
-import com.liferay.one.jira.util.JiraSyncLock;
+import com.liferay.one.util.KeyedLock;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.Collections;
@@ -64,8 +64,7 @@ public class AccountOrganizationSynchronizerTest {
 			_accountOrganizationSynchronizer, "_jiraAssetService",
 			_jiraAssetService);
 		ReflectionTestUtils.setField(
-			_accountOrganizationSynchronizer, "_jiraSyncLock",
-			new JiraSyncLock());
+			_accountOrganizationSynchronizer, "_keyedLock", new KeyedLock());
 		ReflectionTestUtils.setField(
 			_accountOrganizationSynchronizer, "_teamConverter",
 			Mockito.mock(TeamConverter.class));

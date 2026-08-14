@@ -12,8 +12,8 @@ import com.liferay.one.jira.converter.ContactConverter;
 import com.liferay.one.jira.converter.ContactRoleConverter;
 import com.liferay.one.jira.model.JiraAssetObject;
 import com.liferay.one.jira.service.JiraAssetService;
-import com.liferay.one.jira.util.JiraSyncLock;
 import com.liferay.one.util.FindUtil;
+import com.liferay.one.util.KeyedLock;
 import com.liferay.petra.string.StringBundler;
 
 import java.util.Date;
@@ -142,7 +142,7 @@ public class AccountUserAccountRoleSynchronizer {
 				shouldSkipUpdateBiPredicate)
 		throws Exception {
 
-		_jiraSyncLock.withLock(
+		_keyedLock.withLock(
 			userAccountExternalKey,
 			() -> _syncAssignmentWithinLock(
 				roleExternalKey, userAccountExternalKey, accountExternalKey,
@@ -207,6 +207,6 @@ public class AccountUserAccountRoleSynchronizer {
 	private JiraAssetService _jiraAssetService;
 
 	@Autowired
-	private JiraSyncLock _jiraSyncLock;
+	private KeyedLock _keyedLock;
 
 }

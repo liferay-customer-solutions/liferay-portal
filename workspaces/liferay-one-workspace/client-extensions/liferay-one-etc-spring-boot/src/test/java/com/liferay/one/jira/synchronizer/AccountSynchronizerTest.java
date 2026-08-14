@@ -20,7 +20,6 @@ import com.liferay.one.jira.converter.TeamConverter;
 import com.liferay.one.jira.model.JiraAssetObject;
 import com.liferay.one.jira.service.JiraAssetService;
 import com.liferay.one.jira.service.JiraBusinessEventService;
-import com.liferay.one.jira.util.JiraSyncLock;
 import com.liferay.one.model.AccountSupportInfo;
 import com.liferay.one.service.CommerceOrderService;
 import com.liferay.one.service.EntitlementService;
@@ -28,6 +27,7 @@ import com.liferay.one.service.OrganizationService;
 import com.liferay.one.service.ProjectService;
 import com.liferay.one.service.PropertyService;
 import com.liferay.one.service.UserAccountService;
+import com.liferay.one.util.KeyedLock;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -151,7 +151,7 @@ public class AccountSynchronizerTest {
 			_accountSynchronizer, "_jiraBusinessEventService",
 			jiraBusinessEventService);
 		ReflectionTestUtils.setField(
-			_accountSynchronizer, "_jiraSyncLock", new JiraSyncLock());
+			_accountSynchronizer, "_keyedLock", new KeyedLock());
 		ReflectionTestUtils.setField(
 			_accountSynchronizer, "_organizationService", _organizationService);
 		ReflectionTestUtils.setField(

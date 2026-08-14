@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-package com.liferay.one.jira.util;
+package com.liferay.one.util;
 
 import com.liferay.petra.function.UnsafeRunnable;
 import com.liferay.petra.function.UnsafeSupplier;
@@ -17,9 +17,9 @@ import org.springframework.stereotype.Component;
  * @author Drew Brokke
  */
 @Component
-public class JiraSyncLock {
+public class KeyedLock {
 
-	public JiraSyncLock() {
+	public KeyedLock() {
 		for (int i = 0; i < _reentrantLocks.length; i++) {
 			_reentrantLocks[i] = new ReentrantLock();
 		}

@@ -9,7 +9,7 @@ import com.liferay.one.jira.converter.BaseJiraAssetObjectConverter;
 import com.liferay.one.jira.exception.JiraAssetObjectException;
 import com.liferay.one.jira.model.JiraAssetObject;
 import com.liferay.one.jira.util.AQLUtil;
-import com.liferay.one.jira.util.JiraSyncLock;
+import com.liferay.one.util.KeyedLock;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -52,7 +52,7 @@ public class JiraAssetService {
 			return;
 		}
 
-		_jiraSyncLock.withLock(
+		_keyedLock.withLock(
 			_getLockKey(converter, externalKey),
 			() -> _delete(converter, externalKey));
 	}
@@ -317,7 +317,7 @@ public class JiraAssetService {
 		String externalKey = jiraAssetObject.getAttributeValue(
 			converter.getExternalKeyAttributeName());
 
-		_jiraSyncLock.withLock(
+		_keyedLock.withLock(
 			_getLockKey(converter, externalKey),
 			() -> _softDelete(
 				converter, converter.getDeletedAttributeName(), externalKey,
@@ -393,7 +393,7 @@ public class JiraAssetService {
 			return;
 		}
 
-		_jiraSyncLock.withLock(
+		_keyedLock.withLock(
 			_getLockKey(converter, externalKey),
 			() -> _upsert(
 				converter, externalKey, jiraAssetObject,
@@ -404,7 +404,7 @@ public class JiraAssetService {
 		BaseJiraAssetObjectConverter converter, String externalKey,
 		Function<String, JiraAssetObject> createAssetObjectFunction) {
 
-		return _jiraSyncLock.withLock(
+		return _keyedLock.withLock(
 			_getLockKey(converter, externalKey),
 			() -> {
 				String objectId = fetchReferenceObjectId(
@@ -722,11 +722,11 @@ public class JiraAssetService {
 	@Autowired
 	private JiraAssetPersistence _jiraAssetPersistence;
 
-	// Deliberately not the shared JiraSyncLock component: the synchronizers
+	// Deliberately not the shared KeyedLock component: the synchronizers
 	// hold entity-level locks from that component around calls into this
 	// class, and nesting two lock levels on one striped pool can deadlock
 	// when unrelated keys hash to each other's stripes.
 
-	private final JiraSyncLock _jiraSyncLock = new JiraSyncLock();
+	private final KeyedLock _keyedLock = new KeyedLock();
 
 }

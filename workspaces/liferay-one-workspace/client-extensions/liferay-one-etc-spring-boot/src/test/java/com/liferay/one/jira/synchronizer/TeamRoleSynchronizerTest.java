@@ -9,7 +9,7 @@ import com.liferay.one.jira.constants.TeamRoleConstants;
 import com.liferay.one.jira.converter.TeamRoleConverter;
 import com.liferay.one.jira.model.JiraAssetObject;
 import com.liferay.one.jira.service.JiraAssetService;
-import com.liferay.one.jira.util.JiraSyncLock;
+import com.liferay.one.util.KeyedLock;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +41,7 @@ public class TeamRoleSynchronizerTest {
 		ReflectionTestUtils.setField(
 			_teamRoleSynchronizer, "_jiraAssetService", _jiraAssetService);
 		ReflectionTestUtils.setField(
-			_teamRoleSynchronizer, "_jiraSyncLock", new JiraSyncLock());
+			_teamRoleSynchronizer, "_keyedLock", new KeyedLock());
 		ReflectionTestUtils.setField(
 			_teamRoleSynchronizer, "_teamRoleConverter", _teamRoleConverter);
 	}

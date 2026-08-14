@@ -9,7 +9,7 @@ import com.liferay.one.jira.constants.TeamRoleConstants;
 import com.liferay.one.jira.converter.TeamRoleConverter;
 import com.liferay.one.jira.exception.JiraAssetObjectException;
 import com.liferay.one.jira.service.JiraAssetService;
-import com.liferay.one.jira.util.JiraSyncLock;
+import com.liferay.one.util.KeyedLock;
 import com.liferay.petra.string.StringBundler;
 
 import org.apache.commons.logging.Log;
@@ -35,7 +35,7 @@ public class TeamRoleSynchronizer {
 			return objectId;
 		}
 
-		return _jiraSyncLock.withLock(
+		return _keyedLock.withLock(
 			TeamRoleConstants.EXTERNAL_KEY_FIRST_LINE_SUPPORT,
 			() -> {
 				if (_firstLineSupportTeamRoleObjectId != null) {
@@ -85,7 +85,7 @@ public class TeamRoleSynchronizer {
 					TeamRoleConstants.EXTERNAL_KEY_FIRST_LINE_SUPPORT,
 					", recreating it"));
 
-			objectId = _jiraSyncLock.withLock(
+			objectId = _keyedLock.withLock(
 				TeamRoleConstants.EXTERNAL_KEY_FIRST_LINE_SUPPORT,
 				this::_resolveOrCreate);
 		}
@@ -120,7 +120,7 @@ public class TeamRoleSynchronizer {
 	private JiraAssetService _jiraAssetService;
 
 	@Autowired
-	private JiraSyncLock _jiraSyncLock;
+	private KeyedLock _keyedLock;
 
 	@Autowired
 	private TeamRoleConverter _teamRoleConverter;
