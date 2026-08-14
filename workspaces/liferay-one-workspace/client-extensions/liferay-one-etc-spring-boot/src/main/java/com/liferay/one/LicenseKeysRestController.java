@@ -60,6 +60,21 @@ public class LicenseKeysRestController extends OneBaseRestController {
 		}
 	}
 
+	@GetMapping("/{licenseKeyId}")
+	public LicenseKey getLicenseKey(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable("licenseKeyId") long licenseKeyId)
+		throws Exception {
+
+		LicenseKey licenseKey = _licenseKeyService.getLicenseKey(
+			jwt, licenseKeyId);
+
+		_licenseKeyPermission.check(
+			licenseKey.getAccountEntryId(), ActionKeys.VIEW, jwt);
+
+		return licenseKey;
+	}
+
 	@GetMapping("/{licenseKeyId}/download")
 	public ResponseEntity<String> getLicenseKeysDownload(
 			@AuthenticationPrincipal Jwt jwt, @PathVariable long licenseKeyId)

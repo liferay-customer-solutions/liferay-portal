@@ -59,6 +59,35 @@ public class LicenseKeysRestControllerTest {
 	}
 
 	@Test
+	public void testGetLicenseKey() throws Exception {
+		LicenseKeysRestController licenseKeysRestController =
+			_createController();
+
+		LicenseKey licenseKey = Mockito.mock(LicenseKey.class);
+
+		Mockito.when(
+			licenseKey.getAccountEntryId()
+		).thenReturn(
+			_ACCOUNT_ID
+		);
+
+		Mockito.when(
+			_licenseKeyService.getLicenseKey(Mockito.any(), Mockito.anyLong())
+		).thenReturn(
+			licenseKey
+		);
+
+		Assertions.assertSame(
+			licenseKey, licenseKeysRestController.getLicenseKey(null, 1L));
+
+		Mockito.verify(
+			_licenseKeyPermission
+		).check(
+			_ACCOUNT_ID, ActionKeys.VIEW, null
+		);
+	}
+
+	@Test
 	public void testGetLicenseKeysDownload() throws Exception {
 		LicenseKeysRestController licenseKeysRestController =
 			_createController();
@@ -322,6 +351,8 @@ public class LicenseKeysRestControllerTest {
 		Assertions.assertEquals(
 			HttpStatus.CONFLICT, responseStatusException.getStatusCode());
 	}
+
+
 
 	@Test
 	public void testPutSubscriptions() throws Exception {
