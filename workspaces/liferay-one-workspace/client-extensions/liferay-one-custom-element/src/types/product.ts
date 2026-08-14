@@ -198,12 +198,14 @@ export type ProductOptionItem = {
 
 export type ProductSpecification = {
 	id?: number;
+	label?: {[key: string]: string};
 	optionCategoryId?: number;
 	priority?: number;
 	productId?: number;
 	specificationId?: number;
 	specificationKey: string;
 	value: {[key: string]: string};
+	visible?: boolean;
 };
 
 export type SKU = {

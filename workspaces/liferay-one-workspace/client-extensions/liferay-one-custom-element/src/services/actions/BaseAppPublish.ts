@@ -108,7 +108,11 @@ export default class BaseAppPublish {
 		product: Product,
 		specificationKey: ProductSpecificationKey,
 		value: string,
-		options: {exactMatch?: boolean} = {exactMatch: false}
+		options: {
+			exactMatch?: boolean;
+			label?: string;
+			visible?: boolean;
+		} = {exactMatch: false}
 	) => {
 		const {productId, productSpecifications = []} = product;
 
@@ -134,6 +138,10 @@ export default class BaseAppPublish {
 		const result = await fn(
 			(specification ? specification.id : productId) as number,
 			{
+				...(options.label && {label: {en_US: options.label}}),
+				...(options.visible !== undefined && {
+					visible: options.visible,
+				}),
 				specificationKey,
 				value: {en_US: value},
 			}

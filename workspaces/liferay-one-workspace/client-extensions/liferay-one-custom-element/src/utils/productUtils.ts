@@ -40,6 +40,7 @@ export {
 	ProductWorkflowDisplayType,
 	ProductWorkflowStatusCode,
 	ProductWorkflowStatusLabel,
+	SolutionTypeLabels,
 	SkuOptions,
 } from '~/enums/Product';
 

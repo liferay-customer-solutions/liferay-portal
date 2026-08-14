@@ -20,19 +20,19 @@ export const PublishMode = {
 
 export type PublishMode = (typeof PublishMode)[keyof typeof PublishMode];
 
-export type AppFlowItem = {
+export type AppFlowItem<TContext = NewAppInitialState> = {
 	alertText?: string;
 	description: (isEditing?: boolean) => string;
 	hide?: boolean;
 	label: string;
 	modes: PublishMode[];
 	parseSchema?: (
-		context: NewAppInitialState
+		context: TContext
 	) => {success: boolean} & Record<string, unknown>;
 	path: string;
 	saveAsDraftRequired: boolean;
 	title: (isEditing?: boolean) => string;
-	visible: (context: NewAppInitialState) => boolean;
+	visible: (context: TContext) => boolean;
 };
 
 export const LIFERAY_VERSION_PICKLIST = 'LIFERAY-VERSIONS';

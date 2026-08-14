@@ -8,12 +8,12 @@ import {scrollToTop} from '~/utils/browserUtils';
 
 import type {AppFlowItem} from '~/pages/PublisherDashboard/pages/NewAppFlow/constants';
 
-const usePublishNavigation = ({
+const usePublishNavigation = <TContext>({
 	exitLink,
 	flowItems,
 }: {
 	exitLink: string;
-	flowItems: AppFlowItem[];
+	flowItems: AppFlowItem<TContext>[];
 }) => {
 	const location = useLocation();
 	const navigate = useNavigate();

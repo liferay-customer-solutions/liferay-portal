@@ -1,0 +1,31 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+.new-solution-form-details-add-block {
+	background-color: var(--color-brand-primary-lighten-6);
+	border-color: var(--color-brand-primary-lighten-5);
+	color: var(--color-brand-primary);
+}
+
+.new-solution-form-details-add-block:active,
+.new-solution-form-details-add-block:hover {
+	background-color: var(--color-action-primary-hover-10);
+	border-color: var(--color-action-primary-hover);
+	color: var(--color-brand-primary);
+}
+
+.new-solution-review-tag {
+	background-color: var(--color-state-info-lighten-2);
+	border-radius: var(--border-radius-sm, 4px);
+	color: var(--color-state-info-darken-2);
+	padding: 0.25rem 0.5rem;
+}
+
+.new-solution-review-logo {
+	border-radius: 0.5rem;
+	height: 3rem;
+	object-fit: cover;
+	width: 3rem;
+}

@@ -23,7 +23,6 @@ import {
 	ProductSpecificationKey,
 	ProductTypeLabels,
 	ProductWorkflowStatusCode,
-	ProductWorkflowStatusLabel,
 } from '~/utils/productUtils';
 
 import '../../PublisherDashboard.css';
@@ -47,9 +46,17 @@ export const PRODUCTS_RESOURCE = `/o/headless-commerce-admin-catalog/v1.0/produc
 const AVAILABLE_OPTIONS_PAGE_SIZE = 200;
 
 const STATUS_DOT_COLOR: Record<number, string> = {
-	[ProductWorkflowStatusCode.APPROVED]: 'var(--color-success)',
+	[ProductWorkflowStatusCode.APPROVED]: 'var(--color-state-info)',
+	[ProductWorkflowStatusCode.DENIED]: 'var(--color-state-error)',
 	[ProductWorkflowStatusCode.DRAFT]: 'var(--color-neutral-5)',
-	[ProductWorkflowStatusCode.PENDING]: 'var(--color-warning)',
+	[ProductWorkflowStatusCode.PENDING]: 'var(--color-state-warning)',
+};
+
+const STATUS_LABEL: Record<number, string> = {
+	[ProductWorkflowStatusCode.APPROVED]: i18n.translate('published'),
+	[ProductWorkflowStatusCode.DENIED]: i18n.translate('denied'),
+	[ProductWorkflowStatusCode.DRAFT]: i18n.translate('draft'),
+	[ProductWorkflowStatusCode.PENDING]: i18n.translate('pending'),
 };
 
 export function buildCatalogCategoryFilter(
@@ -146,9 +153,7 @@ export function renderProductStatus(
 				}}
 			/>
 
-			{ProductWorkflowStatusLabel[
-				workflowStatusInfo.code as keyof typeof ProductWorkflowStatusLabel
-			] ?? workflowStatusInfo.label}
+			{STATUS_LABEL[workflowStatusInfo.code] ?? workflowStatusInfo.label}
 		</span>
 	);
 }
