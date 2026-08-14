@@ -13,19 +13,24 @@ import com.liferay.one.jira.service.AccountAssetService;
 import com.liferay.one.jira.synchronizer.AccountSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountRoleSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountSynchronizer;
+import com.liferay.one.jira.util.JiraSyncLock;
 import com.liferay.one.model.AccountInvitation;
+import com.liferay.one.model.Project;
 import com.liferay.one.okta.model.OktaUser;
 import com.liferay.one.okta.service.OktaService;
 import com.liferay.one.permission.AccountPermission;
+import com.liferay.one.permission.ProjectMembershipPermission;
 import com.liferay.one.service.AccountInvitationEmailService;
 import com.liferay.one.service.AccountInvitationService;
 import com.liferay.one.service.AccountService;
 import com.liferay.one.service.EmailAddressValidatorService;
 import com.liferay.one.service.EntitlementService;
+import com.liferay.one.service.ProjectService;
 import com.liferay.one.service.ProvisioningAssignmentService;
 import com.liferay.one.service.ProvisioningEmailService;
 import com.liferay.one.service.UserAccountService;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
 
 import java.lang.reflect.Field;
 
@@ -43,6 +48,7 @@ import org.mockito.InOrder;
 import org.mockito.Mockito;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -50,6 +56,67 @@ import org.springframework.web.server.ResponseStatusException;
  * @author Ricardo Mariz
  */
 public class AccountsRestControllerTest {
+
+	@Test
+	public void testDeleteInvitationsDeletesPendingInvitation()
+		throws Exception {
+
+		AccountsRestController accountsRestController = _createController();
+
+		Mockito.when(
+			_accountInvitationService.fetchAccountInvitation(
+				_ACCOUNT_INVITATION_ID)
+		).thenReturn(
+			_createAccountInvitation(
+				false, _EXTERNAL_REFERENCE_CODE, StringPool.BLANK)
+		);
+
+		accountsRestController.deleteInvitations(
+			null, _EXTERNAL_REFERENCE_CODE, _ACCOUNT_INVITATION_ID);
+
+		Mockito.verify(
+			_accountPermission
+		).check(
+			_EXTERNAL_REFERENCE_CODE, ActionKeys.UPDATE, null
+		);
+
+		Mockito.verify(
+			_accountInvitationService
+		).deleteAccountInvitation(
+			_ACCOUNT_INVITATION_ID
+		);
+	}
+
+	@Test
+	public void testDeleteInvitationsRejectsInvitationFromAnotherAccount()
+		throws Exception {
+
+		AccountsRestController accountsRestController = _createController();
+
+		Mockito.when(
+			_accountInvitationService.fetchAccountInvitation(
+				_ACCOUNT_INVITATION_ID)
+		).thenReturn(
+			_createAccountInvitation(false, "ACC-OTHER", StringPool.BLANK)
+		);
+
+		ResponseStatusException responseStatusException =
+			Assertions.assertThrows(
+				ResponseStatusException.class,
+				() -> accountsRestController.deleteInvitations(
+					null, _EXTERNAL_REFERENCE_CODE, _ACCOUNT_INVITATION_ID));
+
+		Assertions.assertEquals(
+			HttpStatus.NOT_FOUND, responseStatusException.getStatusCode());
+
+		Mockito.verifyNoInteractions(_accountPermission);
+
+		Mockito.verify(
+			_accountInvitationService, Mockito.never()
+		).deleteAccountInvitation(
+			ArgumentMatchers.anyLong()
+		);
+	}
 
 	@Test
 	public void testDeleteUserAccountsAccountRoleResolvesRoleNameBeforeRemoving()
@@ -203,6 +270,123 @@ public class AccountsRestControllerTest {
 	}
 
 	@Test
+	public void testGetInvitationsOmitsTokenAndResolvesRoleNames()
+		throws Exception {
+
+		AccountsRestController accountsRestController = _createController();
+
+		Mockito.when(
+			_accountService.getAccount(_EXTERNAL_REFERENCE_CODE, null)
+		).thenReturn(
+			_createAccount()
+		);
+
+		Mockito.when(
+			_accountService.getAccountRoleNamesByExternalReferenceCode(
+				_ACCOUNT_ID)
+		).thenReturn(
+			Map.of("L_ACCOUNT_ADMINISTRATOR", "Account Administrator")
+		);
+
+		Mockito.when(
+			_accountInvitationService.getPendingAccountInvitations(
+				_EXTERNAL_REFERENCE_CODE)
+		).thenReturn(
+			List.of(
+				_createAccountInvitation(
+					false, _EXTERNAL_REFERENCE_CODE, StringPool.BLANK,
+					"L_ACCOUNT_ADMINISTRATOR", "C_UNKNOWN"))
+		);
+
+		ResponseEntity<String> responseEntity =
+			accountsRestController.getInvitations(
+				null, _EXTERNAL_REFERENCE_CODE);
+
+		Mockito.verify(
+			_accountPermission
+		).check(
+			_EXTERNAL_REFERENCE_CODE, ActionKeys.VIEW, null
+		);
+
+		JSONArray jsonArray = new JSONArray(responseEntity.getBody());
+
+		Assertions.assertEquals(1, jsonArray.length());
+
+		JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+		Assertions.assertFalse(jsonObject.has("token"));
+		Assertions.assertEquals(
+			_ACCOUNT_INVITATION_ID, jsonObject.getLong("id"));
+		Assertions.assertEquals(
+			_EMAIL_ADDRESS, jsonObject.getString("emailAddress"));
+
+		JSONArray roleNamesJSONArray = jsonObject.getJSONArray("roleNames");
+
+		Assertions.assertEquals(1, roleNamesJSONArray.length());
+		Assertions.assertEquals(
+			"Account Administrator", roleNamesJSONArray.getString(0));
+	}
+
+	@Test
+	public void testPostInvitationsCreatesProjectInvitation() throws Exception {
+		AccountsRestController accountsRestController = _createController();
+
+		Account account = _createAccount();
+
+		Mockito.when(
+			_accountService.getAccount(_EXTERNAL_REFERENCE_CODE, null)
+		).thenReturn(
+			account
+		);
+
+		Mockito.when(
+			_userAccountService.getMyUserAccount(null)
+		).thenReturn(
+			_createInviterUserAccount()
+		);
+
+		Mockito.when(
+			_projectService.fetchProject(_PROJECT_EXTERNAL_REFERENCE_CODE)
+		).thenReturn(
+			_createProject(_EXTERNAL_REFERENCE_CODE)
+		);
+
+		AccountInvitation accountInvitation = _createAccountInvitation();
+
+		Mockito.when(
+			_accountInvitationService.addAccountInvitation(
+				_EXTERNAL_REFERENCE_CODE, _EMAIL_ADDRESS, "Doe", "Jane",
+				_PROJECT_EXTERNAL_REFERENCE_CODE, _PROJECT_ROLE_ERC, List.of())
+		).thenReturn(
+			accountInvitation
+		);
+
+		accountsRestController.postInvitations(
+			null, _EXTERNAL_REFERENCE_CODE, _createProjectInvitationBodyJSON());
+
+		Mockito.verify(
+			_projectMembershipPermission
+		).check(
+			ActionKeys.UPDATE, null, _PROJECT_EXTERNAL_REFERENCE_CODE
+		);
+
+		Mockito.verifyNoInteractions(_accountPermission);
+
+		Mockito.verify(
+			_accountInvitationService
+		).addAccountInvitation(
+			_EXTERNAL_REFERENCE_CODE, _EMAIL_ADDRESS, "Doe", "Jane",
+			_PROJECT_EXTERNAL_REFERENCE_CODE, _PROJECT_ROLE_ERC, List.of()
+		);
+
+		Mockito.verify(
+			_accountInvitationEmailService
+		).sendInvitationEmail(
+			account, accountInvitation, "Inviter Name", "Project One"
+		);
+	}
+
+	@Test
 	public void testPostInvitationsLooksUpInviterBeforeCreatingInvitation()
 		throws Exception {
 
@@ -226,7 +410,7 @@ public class AccountsRestControllerTest {
 
 		Mockito.when(
 			_accountInvitationService.addAccountInvitation(
-				_EXTERNAL_REFERENCE_CODE, _EMAIL_ADDRESS, "Doe", "Jane",
+				_EXTERNAL_REFERENCE_CODE, _EMAIL_ADDRESS, "Doe", "Jane", "", "",
 				List.of())
 		).thenReturn(
 			accountInvitation
@@ -248,13 +432,14 @@ public class AccountsRestControllerTest {
 		inOrder.verify(
 			_accountInvitationService
 		).addAccountInvitation(
-			_EXTERNAL_REFERENCE_CODE, _EMAIL_ADDRESS, "Doe", "Jane", List.of()
+			_EXTERNAL_REFERENCE_CODE, _EMAIL_ADDRESS, "Doe", "Jane", "", "",
+			List.of()
 		);
 
 		inOrder.verify(
 			_accountInvitationEmailService
 		).sendInvitationEmail(
-			account, accountInvitation, "Inviter Name"
+			account, accountInvitation, "Inviter Name", null
 		);
 	}
 
@@ -330,6 +515,223 @@ public class AccountsRestControllerTest {
 	}
 
 	@Test
+	public void testPostInvitationsRejectsProjectFromAnotherAccount()
+		throws Exception {
+
+		AccountsRestController accountsRestController = _createController();
+
+		Mockito.when(
+			_accountService.getAccount(_EXTERNAL_REFERENCE_CODE, null)
+		).thenReturn(
+			_createAccount()
+		);
+
+		Mockito.when(
+			_projectService.fetchProject(_PROJECT_EXTERNAL_REFERENCE_CODE)
+		).thenReturn(
+			_createProject("ACC-OTHER")
+		);
+
+		ResponseStatusException responseStatusException =
+			Assertions.assertThrows(
+				ResponseStatusException.class,
+				() -> accountsRestController.postInvitations(
+					null, _EXTERNAL_REFERENCE_CODE,
+					_createProjectInvitationBodyJSON()));
+
+		Assertions.assertEquals(
+			HttpStatus.BAD_REQUEST, responseStatusException.getStatusCode());
+
+		Mockito.verifyNoInteractions(_accountInvitationService);
+	}
+
+	@Test
+	public void testPostInvitationsRejectsUnknownRoleExternalReferenceCode()
+		throws Exception {
+
+		AccountsRestController accountsRestController = _createController();
+
+		Mockito.when(
+			_accountService.getAccount(_EXTERNAL_REFERENCE_CODE, null)
+		).thenReturn(
+			_createAccount()
+		);
+
+		Mockito.when(
+			_accountService.getAccountRoleNamesByExternalReferenceCode(
+				_ACCOUNT_ID)
+		).thenReturn(
+			Map.of("L_ACCOUNT_ADMINISTRATOR", "Account Administrator")
+		);
+
+		ResponseStatusException responseStatusException =
+			Assertions.assertThrows(
+				ResponseStatusException.class,
+				() -> accountsRestController.postInvitations(
+					null, _EXTERNAL_REFERENCE_CODE,
+					_createInvitationBodyJSON("C_NOT_A_ROLE")));
+
+		Assertions.assertEquals(
+			HttpStatus.BAD_REQUEST, responseStatusException.getStatusCode());
+
+		Mockito.verifyNoInteractions(_accountInvitationService);
+	}
+
+	@Test
+	public void testPostInvitationsResendChecksProjectPermission()
+		throws Exception {
+
+		AccountsRestController accountsRestController = _createController();
+
+		Mockito.when(
+			_accountInvitationService.fetchAccountInvitation(
+				_ACCOUNT_INVITATION_ID)
+		).thenReturn(
+			_createAccountInvitation(
+				false, _EXTERNAL_REFERENCE_CODE,
+				_PROJECT_EXTERNAL_REFERENCE_CODE)
+		);
+
+		Mockito.when(
+			_accountService.getAccount(_EXTERNAL_REFERENCE_CODE, null)
+		).thenReturn(
+			_createAccount()
+		);
+
+		Mockito.when(
+			_userAccountService.getMyUserAccount(null)
+		).thenReturn(
+			_createInviterUserAccount()
+		);
+
+		Mockito.when(
+			_projectService.fetchProject(_PROJECT_EXTERNAL_REFERENCE_CODE)
+		).thenReturn(
+			_createProject(_EXTERNAL_REFERENCE_CODE)
+		);
+
+		Mockito.when(
+			_accountInvitationService.renewAccountInvitation(
+				_ACCOUNT_INVITATION_ID)
+		).thenReturn(
+			_createAccountInvitation()
+		);
+
+		accountsRestController.postInvitationsResend(
+			null, _EXTERNAL_REFERENCE_CODE, _ACCOUNT_INVITATION_ID);
+
+		Mockito.verify(
+			_projectMembershipPermission
+		).check(
+			ActionKeys.UPDATE, null, _PROJECT_EXTERNAL_REFERENCE_CODE
+		);
+
+		Mockito.verifyNoInteractions(_accountPermission);
+
+		Mockito.verify(
+			_accountInvitationEmailService
+		).sendInvitationEmail(
+			ArgumentMatchers.any(), ArgumentMatchers.any(),
+			ArgumentMatchers.eq("Inviter Name"),
+			ArgumentMatchers.eq("Project One")
+		);
+	}
+
+	@Test
+	public void testPostInvitationsResendRejectsAcceptedInvitation()
+		throws Exception {
+
+		AccountsRestController accountsRestController = _createController();
+
+		Mockito.when(
+			_accountInvitationService.fetchAccountInvitation(
+				_ACCOUNT_INVITATION_ID)
+		).thenReturn(
+			_createAccountInvitation(
+				true, _EXTERNAL_REFERENCE_CODE, StringPool.BLANK)
+		);
+
+		ResponseStatusException responseStatusException =
+			Assertions.assertThrows(
+				ResponseStatusException.class,
+				() -> accountsRestController.postInvitationsResend(
+					null, _EXTERNAL_REFERENCE_CODE, _ACCOUNT_INVITATION_ID));
+
+		Assertions.assertEquals(
+			HttpStatus.NOT_FOUND, responseStatusException.getStatusCode());
+
+		Mockito.verify(
+			_accountInvitationService, Mockito.never()
+		).renewAccountInvitation(
+			ArgumentMatchers.anyLong()
+		);
+
+		Mockito.verifyNoInteractions(_accountInvitationEmailService);
+	}
+
+	@Test
+	public void testPostInvitationsResendRenewsTokenAndSendsEmail()
+		throws Exception {
+
+		AccountsRestController accountsRestController = _createController();
+
+		Mockito.when(
+			_accountInvitationService.fetchAccountInvitation(
+				_ACCOUNT_INVITATION_ID)
+		).thenReturn(
+			_createAccountInvitation(
+				false, _EXTERNAL_REFERENCE_CODE, StringPool.BLANK)
+		);
+
+		Account account = _createAccount();
+
+		Mockito.when(
+			_accountService.getAccount(_EXTERNAL_REFERENCE_CODE, null)
+		).thenReturn(
+			account
+		);
+
+		Mockito.when(
+			_userAccountService.getMyUserAccount(null)
+		).thenReturn(
+			_createInviterUserAccount()
+		);
+
+		AccountInvitation renewedAccountInvitation = _createAccountInvitation();
+
+		Mockito.when(
+			_accountInvitationService.renewAccountInvitation(
+				_ACCOUNT_INVITATION_ID)
+		).thenReturn(
+			renewedAccountInvitation
+		);
+
+		accountsRestController.postInvitationsResend(
+			null, _EXTERNAL_REFERENCE_CODE, _ACCOUNT_INVITATION_ID);
+
+		Mockito.verify(
+			_accountPermission
+		).check(
+			_EXTERNAL_REFERENCE_CODE, ActionKeys.UPDATE, null
+		);
+
+		InOrder inOrder = Mockito.inOrder(
+			_accountInvitationService, _accountInvitationEmailService);
+
+		inOrder.verify(
+			_accountInvitationService
+		).renewAccountInvitation(
+			_ACCOUNT_INVITATION_ID
+		);
+
+		inOrder.verify(
+			_accountInvitationEmailService
+		).sendInvitationEmail(
+			account, renewedAccountInvitation, "Inviter Name", null
+		);
+	}
+
+	@Test
 	public void testPostInvitationsReusesPendingInvitation() throws Exception {
 		AccountsRestController accountsRestController = _createController();
 
@@ -351,14 +753,14 @@ public class AccountsRestControllerTest {
 
 		Mockito.when(
 			_accountInvitationService.fetchPendingAccountInvitation(
-				_EXTERNAL_REFERENCE_CODE, _EMAIL_ADDRESS)
+				_EXTERNAL_REFERENCE_CODE, _EMAIL_ADDRESS, "")
 		).thenReturn(
 			accountInvitation
 		);
 
 		Mockito.when(
 			_accountInvitationService.updateAccountInvitation(
-				_ACCOUNT_INVITATION_ID, "Doe", "Jane", List.of())
+				_ACCOUNT_INVITATION_ID, "Doe", "Jane", "", List.of())
 		).thenReturn(
 			accountInvitation
 		);
@@ -369,12 +771,13 @@ public class AccountsRestControllerTest {
 		Mockito.verify(
 			_accountInvitationService
 		).updateAccountInvitation(
-			_ACCOUNT_INVITATION_ID, "Doe", "Jane", List.of()
+			_ACCOUNT_INVITATION_ID, "Doe", "Jane", "", List.of()
 		);
 
 		Mockito.verify(
 			_accountInvitationService, Mockito.never()
 		).addAccountInvitation(
+			ArgumentMatchers.anyString(), ArgumentMatchers.anyString(),
 			ArgumentMatchers.anyString(), ArgumentMatchers.anyString(),
 			ArgumentMatchers.anyString(), ArgumentMatchers.anyString(),
 			ArgumentMatchers.anyList()
@@ -383,7 +786,52 @@ public class AccountsRestControllerTest {
 		Mockito.verify(
 			_accountInvitationEmailService
 		).sendInvitationEmail(
-			account, accountInvitation, "Inviter Name"
+			account, accountInvitation, "Inviter Name", null
+		);
+	}
+
+	@Test
+	public void testPostInvitationsStoresRoleExternalReferenceCodes()
+		throws Exception {
+
+		AccountsRestController accountsRestController = _createController();
+
+		Mockito.when(
+			_accountService.getAccount(_EXTERNAL_REFERENCE_CODE, null)
+		).thenReturn(
+			_createAccount()
+		);
+
+		Mockito.when(
+			_userAccountService.getMyUserAccount(null)
+		).thenReturn(
+			_createInviterUserAccount()
+		);
+
+		Mockito.when(
+			_accountService.getAccountRoleNamesByExternalReferenceCode(
+				_ACCOUNT_ID)
+		).thenReturn(
+			Map.of("L_ACCOUNT_ADMINISTRATOR", "Account Administrator")
+		);
+
+		Mockito.when(
+			_accountInvitationService.addAccountInvitation(
+				_EXTERNAL_REFERENCE_CODE, _EMAIL_ADDRESS, "Doe", "Jane", "", "",
+				List.of("L_ACCOUNT_ADMINISTRATOR"))
+		).thenReturn(
+			_createAccountInvitation()
+		);
+
+		accountsRestController.postInvitations(
+			null, _EXTERNAL_REFERENCE_CODE,
+			_createInvitationBodyJSON("L_ACCOUNT_ADMINISTRATOR"));
+
+		Mockito.verify(
+			_accountInvitationService
+		).addAccountInvitation(
+			_EXTERNAL_REFERENCE_CODE, _EMAIL_ADDRESS, "Doe", "Jane", "", "",
+			List.of("L_ACCOUNT_ADMINISTRATOR")
 		);
 	}
 
@@ -869,6 +1317,35 @@ public class AccountsRestControllerTest {
 			));
 	}
 
+	private AccountInvitation _createAccountInvitation(
+		boolean accepted, String accountExternalReferenceCode,
+		String projectExternalReferenceCode,
+		String... roleExternalReferenceCodes) {
+
+		return new AccountInvitation(
+			new JSONObject(
+			).put(
+				"accepted", accepted
+			).put(
+				"accountExternalReferenceCode", accountExternalReferenceCode
+			).put(
+				"emailAddress", _EMAIL_ADDRESS
+			).put(
+				"familyName", "Doe"
+			).put(
+				"givenName", "Jane"
+			).put(
+				"id", _ACCOUNT_INVITATION_ID
+			).put(
+				"projectExternalReferenceCode", projectExternalReferenceCode
+			).put(
+				"roleExternalReferenceCodes",
+				new JSONArray(
+					List.of(roleExternalReferenceCodes)
+				).toString()
+			));
+	}
+
 	private String _createBodyJSON(
 		long accountRoleId, String firstName, String lastName) {
 
@@ -931,7 +1408,14 @@ public class AccountsRestControllerTest {
 		ReflectionTestUtils.setField(
 			accountsRestController, "_entitlementService", _entitlementService);
 		ReflectionTestUtils.setField(
+			accountsRestController, "_jiraSyncLock", new JiraSyncLock());
+		ReflectionTestUtils.setField(
 			accountsRestController, "_oktaService", _oktaService);
+		ReflectionTestUtils.setField(
+			accountsRestController, "_projectMembershipPermission",
+			_projectMembershipPermission);
+		ReflectionTestUtils.setField(
+			accountsRestController, "_projectService", _projectService);
 		ReflectionTestUtils.setField(
 			accountsRestController, "_provisioningAssignmentService",
 			_provisioningAssignmentService);
@@ -944,7 +1428,9 @@ public class AccountsRestControllerTest {
 		return accountsRestController;
 	}
 
-	private String _createInvitationBodyJSON() {
+	private String _createInvitationBodyJSON(
+		String... roleExternalReferenceCodes) {
+
 		return new JSONObject(
 		).put(
 			"emailAddress", _EMAIL_ADDRESS
@@ -953,7 +1439,8 @@ public class AccountsRestControllerTest {
 		).put(
 			"givenName", "Jane"
 		).put(
-			"roleNames", new JSONArray()
+			"roleExternalReferenceCodes",
+			new JSONArray(List.of(roleExternalReferenceCodes))
 		).toString();
 	}
 
@@ -963,6 +1450,36 @@ public class AccountsRestControllerTest {
 		userAccount.setName("Inviter Name");
 
 		return userAccount;
+	}
+
+	private Project _createProject(String accountExternalReferenceCode) {
+		return new Project(
+			new JSONObject(
+			).put(
+				"externalReferenceCode", _PROJECT_EXTERNAL_REFERENCE_CODE
+			).put(
+				"name", "Project One"
+			).put(
+				"r_accountEntryToProject_accountEntryERC",
+				accountExternalReferenceCode
+			));
+	}
+
+	private String _createProjectInvitationBodyJSON() {
+		return new JSONObject(
+		).put(
+			"emailAddress", _EMAIL_ADDRESS
+		).put(
+			"familyName", "Doe"
+		).put(
+			"givenName", "Jane"
+		).put(
+			"projectExternalReferenceCode", _PROJECT_EXTERNAL_REFERENCE_CODE
+		).put(
+			"projectRoleExternalReferenceCode", _PROJECT_ROLE_ERC
+		).put(
+			"roleExternalReferenceCodes", new JSONArray()
+		).toString();
 	}
 
 	private UserAccount _createUserAccount() {
@@ -1002,6 +1519,10 @@ public class AccountsRestControllerTest {
 
 	private static final String _EXTERNAL_REFERENCE_CODE = "ACC-1";
 
+	private static final String _PROJECT_EXTERNAL_REFERENCE_CODE = "PRJCT-1";
+
+	private static final String _PROJECT_ROLE_ERC = "C_PROJECT_ADMIN";
+
 	private static final long _USER_ID = 22222;
 
 	private final AccountAssetService _accountAssetService = Mockito.mock(
@@ -1027,6 +1548,10 @@ public class AccountsRestControllerTest {
 	private final EntitlementService _entitlementService = Mockito.mock(
 		EntitlementService.class);
 	private final OktaService _oktaService = Mockito.mock(OktaService.class);
+	private final ProjectMembershipPermission _projectMembershipPermission =
+		Mockito.mock(ProjectMembershipPermission.class);
+	private final ProjectService _projectService = Mockito.mock(
+		ProjectService.class);
 	private final ProvisioningAssignmentService _provisioningAssignmentService =
 		Mockito.mock(ProvisioningAssignmentService.class);
 	private final ProvisioningEmailService _provisioningEmailService =

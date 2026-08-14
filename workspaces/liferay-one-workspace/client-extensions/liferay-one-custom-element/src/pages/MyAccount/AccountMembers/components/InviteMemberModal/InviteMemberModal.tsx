@@ -9,7 +9,11 @@ import {useFieldArray, useForm} from 'react-hook-form';
 import Button from '~/components/Button/Button';
 import {FieldBase} from '~/components/FieldBase/FieldBase';
 import i18n, {sub, translate} from '~/i18n';
-import {isPartnerRole} from '~/pages/MyAccount/AccountMembers/accountRoles';
+import {
+	fetchRoleExternalReferenceCodesByName,
+	getRoleExternalReferenceCodes,
+	isPartnerRole,
+} from '~/pages/MyAccount/AccountMembers/accountRoles';
 import AccountRolesSelect from '~/pages/MyAccount/AccountMembers/components/AccountRolesSelect/AccountRolesSelect';
 import accountSchemas, {MAX_INVITATIONS_COUNT} from '~/schema/accountSchemas';
 import FetcherError from '~/services/fetcher/FetcherError';
@@ -92,13 +96,34 @@ const InviteMemberModal = ({
 		const failedEmailAddresses: string[] = [];
 		const invitedIndexes: number[] = [];
 
+		const roleExternalReferenceCodesByName = form.invites.some(
+			(invite) => invite.roleNames.length
+		)
+			? await fetchRoleExternalReferenceCodesByName(
+					accountExternalReferenceCode
+				).catch(() => null)
+			: new Map<string, string>();
+
 		for (const [index, invite] of form.invites.entries()) {
+			const roleExternalReferenceCodes =
+				roleExternalReferenceCodesByName &&
+				getRoleExternalReferenceCodes(
+					invite.roleNames,
+					roleExternalReferenceCodesByName
+				);
+
+			if (!roleExternalReferenceCodes) {
+				failedEmailAddresses.push(invite.emailAddress);
+
+				continue;
+			}
+
 			try {
 				await Accounts.postInvitations(accountExternalReferenceCode, {
 					emailAddress: invite.emailAddress,
 					familyName: invite.familyName,
 					givenName: invite.givenName,
-					roleNames: invite.roleNames,
+					roleExternalReferenceCodes,
 				});
 
 				invitedIndexes.push(index);

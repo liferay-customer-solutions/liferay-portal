@@ -118,8 +118,8 @@
 	margin-right: 8px;
 	width: 8px;
 
-	&.account-members-status-dot-inactive {
-		background-color: #a7a9bc;
+	&.account-members-status-dot-invited {
+		background-color: #e1a325;
 	}
 }
 

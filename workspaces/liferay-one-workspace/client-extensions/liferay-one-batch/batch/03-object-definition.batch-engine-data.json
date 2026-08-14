@@ -22,6 +22,19 @@
 				"en_US": "Account Invitation"
 			},
 			"name": "AccountInvitation",
+			"objectActions": [
+				{
+					"active": true,
+					"conditionExpression": "oldValue('accepted') == FALSE AND accepted == TRUE",
+					"description": "Creates the invited user, adds them to the account with the invited roles, and adds the project membership once the invitation is accepted.",
+					"externalReferenceCode": "OA_ACCOUNT_INVITATION_ACCEPTED",
+					"name": "AccountInvitationAccepted",
+					"objectActionExecutorKey": "function#liferay-one-etc-spring-boot-object-action-account-invitation-accepted",
+					"objectActionTriggerKey": "onAfterUpdate",
+					"parameters": {
+					}
+				}
+			],
 			"objectFields": [
 				{
 					"DBType": "Boolean",
@@ -58,6 +71,28 @@
 					"state": false,
 					"system": false,
 					"type": "String"
+				},
+				{
+					"DBType": "Date",
+					"businessType": "DateTime",
+					"externalReferenceCode": "C_ACCOUNT_INVITATION_CUSTOM_EXPIRATION_DATE",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Expiration Date"
+					},
+					"name": "customExpirationDate",
+					"objectFieldSettings": [
+						{
+							"name": "timeStorage",
+							"value": "convertToUTC"
+						}
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Date"
 				},
 				{
 					"DBType": "String",
@@ -116,14 +151,50 @@
 				{
 					"DBType": "String",
 					"businessType": "Text",
-					"externalReferenceCode": "C_ACCOUNT_INVITATION_ROLE_NAMES",
+					"externalReferenceCode": "C_ACCOUNT_INVITATION_PROJECT_EXTERNAL_REFERENCE_CODE",
 					"indexed": true,
-					"indexedAsKeyword": false,
-					"indexedLanguageId": "en_US",
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
 					"label": {
-						"en_US": "Role Names"
+						"en_US": "Project ERC"
 					},
-					"name": "roleNames",
+					"name": "projectExternalReferenceCode",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ACCOUNT_INVITATION_PROJECT_ROLE_EXTERNAL_REFERENCE_CODE",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Project Role ERC"
+					},
+					"name": "projectRoleExternalReferenceCode",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ACCOUNT_INVITATION_ROLE_EXTERNAL_REFERENCE_CODES",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Role ERCs"
+					},
+					"name": "roleExternalReferenceCodes",
 					"objectFieldSettings": [
 					],
 					"required": false,
@@ -179,9 +250,9 @@
 						},
 						{
 							"label": {
-								"en_US": "Role Names"
+								"en_US": "Role ERCs"
 							},
-							"objectFieldName": "roleNames",
+							"objectFieldName": "roleExternalReferenceCodes",
 							"priority": 2
 						},
 						{
@@ -190,6 +261,20 @@
 							},
 							"objectFieldName": "accepted",
 							"priority": 3
+						},
+						{
+							"label": {
+								"en_US": "Expiration Date"
+							},
+							"objectFieldName": "customExpirationDate",
+							"priority": 4
+						},
+						{
+							"label": {
+								"en_US": "Project ERC"
+							},
+							"objectFieldName": "projectExternalReferenceCode",
+							"priority": 5
 						}
 					]
 				}

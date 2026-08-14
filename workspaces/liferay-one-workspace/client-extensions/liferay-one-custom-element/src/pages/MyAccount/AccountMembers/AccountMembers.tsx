@@ -15,24 +15,17 @@ import EmptyState from '~/components/EmptyState/EmptyState';
 import Page from '~/components/Page/Page';
 import RestrictedFeatureMessage from '~/components/RestrictedFeatureMessage/RestrictedFeatureMessage';
 import {useOneContext} from '~/context/OneContextProvider';
-import {useFetch} from '~/hooks/useFetch';
 import i18n, {sub, translate} from '~/i18n';
 import {
 	canAccessAccountMembers,
-	getMembershipRoleNames,
-	hasAdministratorRole,
 	isAccountManager,
 } from '~/pages/MyAccount/AccountMembers/accountRoles';
 import {useAccountMemberActions} from '~/pages/MyAccount/AccountMembers/hooks/useAccountMemberActions';
+import {useAccountMembers} from '~/pages/MyAccount/AccountMembers/hooks/useAccountMembers';
 import {useAccountType} from '~/pages/MyAccount/AccountMembers/hooks/useAccountType';
 import {useHasProject} from '~/pages/MyAccount/Projects/hooks/useHasProject';
-import {Liferay} from '~/services/liferay/liferay';
 
 import './AccountMembers.css';
-
-import type {AccountMemberRow} from '~/pages/MyAccount/AccountMembers/types';
-import type {Account, UserAccount} from '~/types/accounts';
-import type {APIResponse} from '~/types/api';
 
 const AVATAR_COLORS = [
 	'#2e5aac',
@@ -46,13 +39,6 @@ const AVATAR_COLORS = [
 const NO_ROLE = '__no_role__';
 
 const PAGE_SIZE_OPTIONS = [10, 20, 30, 50];
-
-const STATUS_INACTIVE = 5;
-
-type ProjectItem = {
-	externalReferenceCode: string;
-	name: string;
-};
 
 function hasImage(image?: string) {
 	return Boolean(image) && !image?.includes('img_id=0');
@@ -85,9 +71,6 @@ function UserAvatar({image, name}: {image?: string; name: string}) {
 }
 
 export default function AccountMembers() {
-	const accountId = Liferay.CommerceContext?.account?.accountId;
-	const currentUserId = Liferay.ThemeDisplay.getUserId();
-
 	const {myUserAccount, userAccountModel} = useOneContext();
 
 	const {hasProject, loading: projectsLoading} = useHasProject();
@@ -103,82 +86,33 @@ export default function AccountMembers() {
 	const canManageMembers = isAccountManager(userAccountModel);
 
 	const {
-		data: account,
-		error: accountError,
-		isLoading: accountLoading,
-	} = useFetch<Account>(
-		accountId ? `/o/headless-admin-user/v1.0/accounts/${accountId}` : null
-	);
-
-	const {
-		data,
+		account,
 		error,
-		isLoading: loading,
+		loading,
 		mutate,
-	} = useFetch<APIResponse<UserAccount>>(
-		accountId
-			? `/o/headless-admin-user/v1.0/accounts/${accountId}/user-accounts`
-			: null,
-		{params: {pageSize: -1, sort: 'givenName:asc'}}
-	);
-
-	const {data: projectData} = useFetch<APIResponse<ProjectItem>>(
-		accountId ? '/o/c/projects' : null,
-		{
-			params: {
-				fields: 'externalReferenceCode,name',
-				filter: `r_accountEntryToProject_accountEntryId eq '${accountId}'`,
-				pageSize: -1,
-			},
-		}
-	);
-
-	const projectNamesByExternalReferenceCode = useMemo(() => {
-		const map: Record<string, string> = {};
-
-		(projectData?.items ?? []).forEach((project) => {
-			map[project.externalReferenceCode] = project.name;
-		});
-
-		return map;
-	}, [projectData]);
-
-	const members = useMemo<AccountMemberRow[]>(() => {
-		return (data?.items ?? []).map((userAccount) => {
-			const accountRoleBriefs =
-				userAccount.accountBriefs?.find(
-					(accountBrief) =>
-						String(accountBrief.id) === String(accountId)
-				)?.roleBriefs ?? [];
-
-			return {
-				email: userAccount.emailAddress,
-				id: userAccount.id,
-				image: userAccount.image,
-				isAdministrator: hasAdministratorRole(accountRoleBriefs),
-				isCurrentUser: String(userAccount.id) === currentUserId,
-				name: userAccount.name,
-				roleBriefs: accountRoleBriefs,
-				roleNames: getMembershipRoleNames(accountRoleBriefs),
-				status: userAccount.status ?? 0,
-			};
-		});
-	}, [accountId, currentUserId, data]);
+		projectNamesByExternalReferenceCode,
+		rows: members,
+	} = useAccountMembers();
 
 	const adminCount = useMemo(
 		() => members.filter((member) => member.isAdministrator).length,
 		[members]
 	);
 
-	const {openEditPermissionsModal, openInviteModal, openRemoveMemberModal} =
-		useAccountMemberActions({
-			accountExternalReferenceCode: account?.externalReferenceCode ?? '',
-			accountId: accountId ?? '',
-			adminCount,
-			mutate,
-			projectNamesByExternalReferenceCode,
-			roleNames,
-		});
+	const {
+		openEditPermissionsModal,
+		openInviteModal,
+		openRemoveMemberModal,
+		openResendInvitationModal,
+		openRevokeInvitationModal,
+	} = useAccountMemberActions({
+		accountExternalReferenceCode: account?.externalReferenceCode ?? '',
+		accountId: account?.id ?? '',
+		adminCount,
+		mutate,
+		projectNamesByExternalReferenceCode,
+		roleNames,
+	});
 
 	const filteredMembers = useMemo(() => {
 		const search = keywords.trim().toLowerCase();
@@ -263,12 +197,8 @@ export default function AccountMembers() {
 				'invite-manage-roles-designate-incident-contacts'
 			)}
 			pageRendererProps={{
-				error: accountError || error,
-				isLoading:
-					accountLoading ||
-					accountTypeLoading ||
-					loading ||
-					projectsLoading,
+				error,
+				isLoading: accountTypeLoading || loading || projectsLoading,
 			}}
 		>
 			<div className="account-members-card mt-3">
@@ -388,11 +318,12 @@ export default function AccountMembers() {
 
 							<ClayTable.Body>
 								{paginatedMembers.map((member) => {
-									const isActive =
-										member.status !== STATUS_INACTIVE;
+									const isActive = member.status === 'active';
 
 									return (
-										<ClayTable.Row key={member.id}>
+										<ClayTable.Row
+											key={`${member.status}-${member.id}`}
+										>
 											<ClayTable.Cell>
 												<div className="align-items-center d-flex">
 													<UserAvatar
@@ -427,13 +358,13 @@ export default function AccountMembers() {
 														className={`account-members-status-dot${
 															isActive
 																? ''
-																: ' account-members-status-dot-inactive'
+																: ' account-members-status-dot-invited'
 														}`}
 													/>
 
 													{isActive
 														? translate('active')
-														: translate('inactive')}
+														: translate('invited')}
 												</span>
 											</ClayTable.Cell>
 
@@ -454,29 +385,59 @@ export default function AccountMembers() {
 														}
 													>
 														<ClayDropDown.ItemList>
-															<ClayDropDown.Item
-																onClick={() =>
-																	openEditPermissionsModal(
-																		member
-																	)
-																}
-															>
-																{translate(
-																	'edit-permissions'
-																)}
-															</ClayDropDown.Item>
+															{isActive ? (
+																<>
+																	<ClayDropDown.Item
+																		onClick={() =>
+																			openEditPermissionsModal(
+																				member
+																			)
+																		}
+																	>
+																		{translate(
+																			'edit-permissions'
+																		)}
+																	</ClayDropDown.Item>
 
-															<ClayDropDown.Item
-																onClick={() =>
-																	openRemoveMemberModal(
-																		member
-																	)
-																}
-															>
-																{translate(
-																	'remove'
-																)}
-															</ClayDropDown.Item>
+																	<ClayDropDown.Item
+																		onClick={() =>
+																			openRemoveMemberModal(
+																				member
+																			)
+																		}
+																	>
+																		{translate(
+																			'remove'
+																		)}
+																	</ClayDropDown.Item>
+																</>
+															) : (
+																<>
+																	<ClayDropDown.Item
+																		onClick={() =>
+																			openResendInvitationModal(
+																				member
+																			)
+																		}
+																	>
+																		{translate(
+																			'resend-invitation'
+																		)}
+																	</ClayDropDown.Item>
+
+																	<ClayDropDown.Item
+																		onClick={() =>
+																			openRevokeInvitationModal(
+																				member
+																			)
+																		}
+																	>
+																		{translate(
+																			'revoke-invitation'
+																		)}
+																	</ClayDropDown.Item>
+																</>
+															)}
 														</ClayDropDown.ItemList>
 													</ClayDropDown>
 												)}

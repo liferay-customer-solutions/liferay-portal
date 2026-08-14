@@ -5,16 +5,11 @@
 
 package com.liferay.one;
 
-import com.liferay.headless.admin.user.client.dto.v1_0.Account;
-import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
 import com.liferay.one.jira.util.JiraSyncLock;
 import com.liferay.one.model.AccountInvitation;
 import com.liferay.one.service.AccountInvitationService;
-import com.liferay.one.service.AccountService;
-import com.liferay.one.service.UserAccountService;
 
 import java.util.List;
-import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,82 +30,47 @@ import org.springframework.test.util.ReflectionTestUtils;
 public class AccountInvitationsRestControllerTest {
 
 	@Test
-	public void testGetAcceptCreatesUserAccountWithInvitedName()
-		throws Exception {
-
+	public void testGetAcceptReturnsErrorWhenUpdateFails() throws Exception {
 		AccountInvitationsRestController accountInvitationsRestController =
 			_createController();
 
 		Mockito.when(
 			_accountInvitationService.fetchAccountInvitationByToken(_TOKEN)
 		).thenReturn(
-			_createAccountInvitation(false, List.of())
+			_createAccountInvitation(false, _FUTURE_CUSTOM_EXPIRATION_DATE)
 		);
 
-		Mockito.when(
-			_accountService.getAccount(_EXTERNAL_REFERENCE_CODE)
-		).thenReturn(
-			_createAccount()
-		);
-
-		Mockito.when(
-			_userAccountService.fetchUserAccountByEmailAddress(_EMAIL_ADDRESS)
-		).thenReturn(
-			null
-		);
-
-		Mockito.when(
-			_userAccountService.addUserAccount(_EMAIL_ADDRESS, "Doe", "Jane")
-		).thenReturn(
-			_createUserAccount()
-		);
-
-		ResponseEntity<Void> responseEntity =
-			accountInvitationsRestController.getAccept(_TOKEN);
-
-		Assertions.assertEquals(
-			HttpStatus.FOUND, responseEntity.getStatusCode());
-
-		Mockito.verify(
-			_userAccountService
-		).addUserAccount(
-			_EMAIL_ADDRESS, "Doe", "Jane"
-		);
-
-		Mockito.verify(
+		Mockito.doThrow(
+			new IllegalStateException("Unable to update the invitation")
+		).when(
 			_accountInvitationService
 		).updateAccepted(
 			_ACCOUNT_INVITATION_ID
 		);
+
+		ResponseEntity<String> responseEntity =
+			accountInvitationsRestController.getAccept(_TOKEN);
+
+		Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		Assertions.assertEquals("error", _getStatus(responseEntity));
 	}
 
 	@Test
-	public void testGetAcceptRedirectsErrorWhenAcceptFails() throws Exception {
+	public void testGetAcceptReturnsExpiredInvitation() throws Exception {
 		AccountInvitationsRestController accountInvitationsRestController =
 			_createController();
 
 		Mockito.when(
 			_accountInvitationService.fetchAccountInvitationByToken(_TOKEN)
 		).thenReturn(
-			_createAccountInvitation(false, List.of())
+			_createAccountInvitation(false, _PAST_CUSTOM_EXPIRATION_DATE)
 		);
 
-		Mockito.when(
-			_accountService.getAccount(_EXTERNAL_REFERENCE_CODE)
-		).thenThrow(
-			new IllegalStateException("Unable to find the account")
-		);
-
-		ResponseEntity<Void> responseEntity =
+		ResponseEntity<String> responseEntity =
 			accountInvitationsRestController.getAccept(_TOKEN);
 
-		Assertions.assertEquals(
-			HttpStatus.FOUND, responseEntity.getStatusCode());
-		Assertions.assertEquals(
-			_PORTAL_URL + "/?invitation=error",
-			String.valueOf(
-				responseEntity.getHeaders(
-				).getLocation()));
+		Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		Assertions.assertEquals("expired", _getStatus(responseEntity));
 
 		Mockito.verify(
 			_accountInvitationService, Mockito.never()
@@ -120,82 +80,70 @@ public class AccountInvitationsRestControllerTest {
 	}
 
 	@Test
-	public void testGetAcceptRedirectsInvalidTokenWithoutLookup()
+	public void testGetAcceptReturnsExpiredWhenExpirationDateMissing()
 		throws Exception {
 
-		AccountInvitationsRestController accountInvitationsRestController =
-			_createController();
-
-		ResponseEntity<Void> responseEntity =
-			accountInvitationsRestController.getAccept("x' or 'a' eq 'a");
-
-		Assertions.assertEquals(
-			HttpStatus.FOUND, responseEntity.getStatusCode());
-		Assertions.assertEquals(
-			_PORTAL_URL + "/?invitation=invalid",
-			String.valueOf(
-				responseEntity.getHeaders(
-				).getLocation()));
-
-		Mockito.verifyNoInteractions(_accountInvitationService);
-	}
-
-	@Test
-	public void testGetAcceptResolvesRolesWithOneLookup() throws Exception {
 		AccountInvitationsRestController accountInvitationsRestController =
 			_createController();
 
 		Mockito.when(
 			_accountInvitationService.fetchAccountInvitationByToken(_TOKEN)
 		).thenReturn(
-			_createAccountInvitation(
-				false, List.of("Account Administrator", "Account Member"))
+			_createAccountInvitation(false, null)
 		);
+
+		ResponseEntity<String> responseEntity =
+			accountInvitationsRestController.getAccept(_TOKEN);
+
+		Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		Assertions.assertEquals("expired", _getStatus(responseEntity));
+
+		Mockito.verify(
+			_accountInvitationService, Mockito.never()
+		).updateAccepted(
+			ArgumentMatchers.anyLong()
+		);
+	}
+
+	@Test
+	public void testGetAcceptReturnsInvalidTokenWithoutLookup()
+		throws Exception {
+
+		AccountInvitationsRestController accountInvitationsRestController =
+			_createController();
+
+		ResponseEntity<String> responseEntity =
+			accountInvitationsRestController.getAccept("x' or 'a' eq 'a");
+
+		Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		Assertions.assertEquals("invalid", _getStatus(responseEntity));
+
+		Mockito.verifyNoInteractions(_accountInvitationService);
+	}
+
+	@Test
+	public void testGetAcceptReturnsInvalidWhenInvitationMissing()
+		throws Exception {
+
+		AccountInvitationsRestController accountInvitationsRestController =
+			_createController();
 
 		Mockito.when(
-			_accountService.getAccount(_EXTERNAL_REFERENCE_CODE)
+			_accountInvitationService.fetchAccountInvitationByToken(_TOKEN)
 		).thenReturn(
-			_createAccount()
+			null
 		);
 
-		Mockito.when(
-			_userAccountService.fetchUserAccountByEmailAddress(_EMAIL_ADDRESS)
-		).thenReturn(
-			_createUserAccount()
-		);
+		ResponseEntity<String> responseEntity =
+			accountInvitationsRestController.getAccept(_TOKEN);
 
-		Mockito.when(
-			_accountService.getAccountRoleNames(_ACCOUNT_ID)
-		).thenReturn(
-			Map.of(
-				_ACCOUNT_ROLE_ID, "Account Administrator", 55555L,
-				"Account Member")
-		);
-
-		accountInvitationsRestController.getAccept(_TOKEN);
+		Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		Assertions.assertEquals("invalid", _getStatus(responseEntity));
 
 		Mockito.verify(
-			_accountService, Mockito.times(1)
-		).getAccountRoleNames(
-			_ACCOUNT_ID
-		);
-
-		Mockito.verify(
-			_accountService, Mockito.never()
-		).fetchAccountRoleId(
-			ArgumentMatchers.anyLong(), ArgumentMatchers.anyString()
-		);
-
-		Mockito.verify(
-			_accountService
-		).addAccountUserAccountRole(
-			_ACCOUNT_ID, _ACCOUNT_ROLE_ID, _USER_ID
-		);
-
-		Mockito.verify(
-			_accountService
-		).addAccountUserAccountRole(
-			_ACCOUNT_ID, 55555L, _USER_ID
+			_accountInvitationService, Mockito.never()
+		).updateAccepted(
+			ArgumentMatchers.anyLong()
 		);
 	}
 
@@ -207,43 +155,59 @@ public class AccountInvitationsRestControllerTest {
 		Mockito.when(
 			_accountInvitationService.fetchAccountInvitationByToken(_TOKEN)
 		).thenReturn(
-			_createAccountInvitation(true, List.of())
+			_createAccountInvitation(true, _FUTURE_CUSTOM_EXPIRATION_DATE)
 		);
 
-		ResponseEntity<Void> responseEntity =
+		ResponseEntity<String> responseEntity =
 			accountInvitationsRestController.getAccept(_TOKEN);
 
-		Assertions.assertEquals(
-			HttpStatus.FOUND, responseEntity.getStatusCode());
-		Assertions.assertEquals(
-			_PORTAL_URL + "/?invitation=accepted",
-			String.valueOf(
-				responseEntity.getHeaders(
-				).getLocation()));
+		Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		Assertions.assertEquals("accepted", _getStatus(responseEntity));
 
-		Mockito.verifyNoInteractions(_accountService);
+		Mockito.verify(
+			_accountInvitationService, Mockito.never()
+		).updateAccepted(
+			ArgumentMatchers.anyLong()
+		);
 	}
 
-	private Account _createAccount() {
-		Account account = new Account();
+	@Test
+	public void testGetAcceptUpdatesAccepted() throws Exception {
+		AccountInvitationsRestController accountInvitationsRestController =
+			_createController();
 
-		account.setExternalReferenceCode(_EXTERNAL_REFERENCE_CODE);
-		account.setId(_ACCOUNT_ID);
+		Mockito.when(
+			_accountInvitationService.fetchAccountInvitationByToken(_TOKEN)
+		).thenReturn(
+			_createAccountInvitation(false, _FUTURE_CUSTOM_EXPIRATION_DATE)
+		);
 
-		return account;
+		ResponseEntity<String> responseEntity =
+			accountInvitationsRestController.getAccept(_TOKEN);
+
+		Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		Assertions.assertEquals("accepted", _getStatus(responseEntity));
+
+		Mockito.verify(
+			_accountInvitationService
+		).updateAccepted(
+			_ACCOUNT_INVITATION_ID
+		);
 	}
 
 	private AccountInvitation _createAccountInvitation(
-		boolean accepted, List<String> roleNames) {
+		boolean accepted, String customExpirationDate) {
 
 		return new AccountInvitation(
 			new JSONObject(
 			).put(
 				"accepted", accepted
 			).put(
-				"accountExternalReferenceCode", _EXTERNAL_REFERENCE_CODE
+				"accountExternalReferenceCode", "ACC-1"
 			).put(
-				"emailAddress", _EMAIL_ADDRESS
+				"customExpirationDate", customExpirationDate
+			).put(
+				"emailAddress", "jane@example.com"
 			).put(
 				"externalReferenceCode", "INV-1"
 			).put(
@@ -253,9 +217,13 @@ public class AccountInvitationsRestControllerTest {
 			).put(
 				"id", _ACCOUNT_INVITATION_ID
 			).put(
-				"roleNames",
+				"projectExternalReferenceCode", ""
+			).put(
+				"projectRoleExternalReferenceCode", ""
+			).put(
+				"roleExternalReferenceCodes",
 				new JSONArray(
-					roleNames
+					List.of()
 				).toString()
 			).put(
 				"token", _TOKEN
@@ -270,50 +238,29 @@ public class AccountInvitationsRestControllerTest {
 			accountInvitationsRestController, "_accountInvitationService",
 			_accountInvitationService);
 		ReflectionTestUtils.setField(
-			accountInvitationsRestController, "_accountService",
-			_accountService);
-		ReflectionTestUtils.setField(
 			accountInvitationsRestController, "_jiraSyncLock",
 			new JiraSyncLock());
-		ReflectionTestUtils.setField(
-			accountInvitationsRestController, "_portalURL", _PORTAL_URL);
-		ReflectionTestUtils.setField(
-			accountInvitationsRestController, "_userAccountService",
-			_userAccountService);
 
 		return accountInvitationsRestController;
 	}
 
-	private UserAccount _createUserAccount() {
-		UserAccount userAccount = new UserAccount();
+	private String _getStatus(ResponseEntity<String> responseEntity) {
+		JSONObject jsonObject = new JSONObject(responseEntity.getBody());
 
-		userAccount.setEmailAddress(_EMAIL_ADDRESS);
-		userAccount.setId(_USER_ID);
-
-		return userAccount;
+		return jsonObject.getString("status");
 	}
-
-	private static final long _ACCOUNT_ID = 11111;
 
 	private static final long _ACCOUNT_INVITATION_ID = 44444;
 
-	private static final long _ACCOUNT_ROLE_ID = 33333;
+	private static final String _FUTURE_CUSTOM_EXPIRATION_DATE =
+		"2999-01-01T00:00:00Z";
 
-	private static final String _EMAIL_ADDRESS = "jane@example.com";
-
-	private static final String _EXTERNAL_REFERENCE_CODE = "ACC-1";
-
-	private static final String _PORTAL_URL = "http://localhost:8080";
+	private static final String _PAST_CUSTOM_EXPIRATION_DATE =
+		"2000-01-01T00:00:00Z";
 
 	private static final String _TOKEN = "11111111-2222-3333-4444-555555555555";
 
-	private static final long _USER_ID = 22222;
-
 	private final AccountInvitationService _accountInvitationService =
 		Mockito.mock(AccountInvitationService.class);
-	private final AccountService _accountService = Mockito.mock(
-		AccountService.class);
-	private final UserAccountService _userAccountService = Mockito.mock(
-		UserAccountService.class);
 
 }

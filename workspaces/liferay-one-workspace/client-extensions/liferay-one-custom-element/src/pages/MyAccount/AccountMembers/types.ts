@@ -5,14 +5,17 @@
 
 import type {RoleBrief} from '~/types/accounts';
 
+export type AccountMemberStatus = 'active' | 'invited';
+
 export type AccountMemberRow = {
 	email: string;
 	id: number;
 	image?: string;
+	invitationIds: number[];
 	isAdministrator: boolean;
 	isCurrentUser: boolean;
 	name: string;
 	roleBriefs: RoleBrief[];
 	roleNames: string[];
-	status: number;
+	status: AccountMemberStatus;
 };

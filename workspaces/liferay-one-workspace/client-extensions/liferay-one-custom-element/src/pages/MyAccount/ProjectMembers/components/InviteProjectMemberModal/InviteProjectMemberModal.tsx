@@ -7,10 +7,13 @@ import {ClayInput} from '@clayui/form';
 import {useState} from 'react';
 import {FieldBase} from '~/components/FieldBase/FieldBase';
 import {translate} from '~/i18n';
+import {
+	fetchRoleExternalReferenceCodesByName,
+	getRoleExternalReferenceCodes,
+} from '~/pages/MyAccount/AccountMembers/accountRoles';
 import PermissionsSelect from '~/pages/MyAccount/ProjectMembers/components/PermissionsSelect/PermissionsSelect';
-import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
 import {Liferay} from '~/services/liferay/liferay';
-import Projects from '~/services/spring-boot/Projects';
+import Accounts from '~/services/spring-boot/Accounts';
 import {EMAIL_PATTERN} from '~/utils/formValidationUtils';
 
 import '~/pages/MyAccount/ProjectMembers/ProjectMembers.css';
@@ -84,70 +87,32 @@ const InviteProjectMemberModal = ({
 		}
 
 		try {
-			let userAccount;
+			const roleExternalReferenceCodes = selectedDesignations.length
+				? getRoleExternalReferenceCodes(
+						selectedDesignations,
+						await fetchRoleExternalReferenceCodesByName(
+							accountExternalReferenceCode
+						)
+					)
+				: [];
 
-			try {
-				userAccount = await HeadlessAdminUser.postAccountUserAccount(
-					accountExternalReferenceCode,
-					{
-						emailAddress: trimmedEmail,
-						familyName: trimmedFamilyName,
-						givenName: trimmedGivenName,
-					}
-				);
-			}
-			catch {
-				userAccount =
-					await HeadlessAdminUser.postAccountUserAccountByEmailAddress(
-						accountExternalReferenceCode,
-						trimmedEmail
-					);
+			if (!roleExternalReferenceCodes) {
+				throw new Error('Unable to find the selected account roles');
 			}
 
-			await Projects.postProjectMembership(
-				project.externalReferenceCode,
-				userAccount.id,
-				roleExternalReferenceCode
-			);
-
-			if (selectedDesignations.length) {
-				const [account, {items: accountRoles}] = await Promise.all([
-					HeadlessAdminUser.getAccountByExternalReferenceCode(
-						accountExternalReferenceCode
-					),
-					HeadlessAdminUser.getAccountRoles(
-						accountExternalReferenceCode
-					),
-				]);
-
-				const accountRoleByName = new Map(
-					accountRoles.map((accountRole) => [
-						accountRole.name,
-						accountRole,
-					])
-				);
-
-				await Promise.all(
-					selectedDesignations.map((designation) => {
-						const accountRole = accountRoleByName.get(designation);
-
-						if (!accountRole) {
-							return;
-						}
-
-						return HeadlessAdminUser.sendRoleAccountUser(
-							account.id,
-							accountRole.id,
-							userAccount.id
-						);
-					})
-				);
-			}
+			await Accounts.postInvitations(accountExternalReferenceCode, {
+				emailAddress: trimmedEmail,
+				familyName: trimmedFamilyName,
+				givenName: trimmedGivenName,
+				projectExternalReferenceCode: project.externalReferenceCode,
+				projectRoleExternalReferenceCode: roleExternalReferenceCode,
+				roleExternalReferenceCodes,
+			});
 
 			await mutate();
 
 			Liferay.Util.openToast({
-				message: translate('project-member-successfully-invited'),
+				message: translate('invitation-successfully-sent'),
 				title: translate('success'),
 			});
 

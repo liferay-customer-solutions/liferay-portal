@@ -4,8 +4,6 @@
 		"parameters": {
 			"containsHeaders": "true",
 			"createStrategy": "UPSERT",
-			"externalReferenceCode": "L_ACCOUNT",
-			"onErrorFail": "false",
 			"taskItemDelegateName": "DEFAULT",
 			"updateStrategy": "UPDATE"
 		}

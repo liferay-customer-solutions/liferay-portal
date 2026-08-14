@@ -47,6 +47,11 @@ liferay-one-etc-spring-boot-object-action-account-delete:
     oAuth2ApplicationExternalReferenceCode: liferay-one-etc-spring-boot-oaua
     resourcePath: /object/action/account/delete
     type: objectAction
+liferay-one-etc-spring-boot-object-action-account-invitation-accepted:
+    name: Liferay One Etc Spring Boot Object Action Account Invitation Accepted
+    oAuth2ApplicationExternalReferenceCode: liferay-one-etc-spring-boot-oaua
+    resourcePath: /object/action/account/invitation/accepted
+    type: objectAction
 liferay-one-etc-spring-boot-object-action-account-update:
     name: Liferay One Etc Spring Boot Object Action Account Update
     oAuth2ApplicationExternalReferenceCode: liferay-one-etc-spring-boot-oaua

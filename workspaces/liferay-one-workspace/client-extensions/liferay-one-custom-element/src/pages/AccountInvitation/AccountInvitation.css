@@ -1,0 +1,21 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2026 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+.account-invitation-page {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.account-invitation-page-content {
+	margin-bottom: 8rem;
+	margin-top: 8rem;
+	max-width: 37.5rem;
+}
+
+.account-invitation-page-icon {
+	margin-bottom: 1.5rem;
+}

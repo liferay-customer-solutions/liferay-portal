@@ -10,28 +10,37 @@ import com.liferay.headless.admin.user.client.dto.v1_0.AccountBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.RoleBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
 import com.liferay.one.constants.EntitlementConstants;
+import com.liferay.one.constants.RoleConstants;
 import com.liferay.one.jira.service.AccountAssetService;
 import com.liferay.one.jira.synchronizer.AccountSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountRoleSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountSynchronizer;
+import com.liferay.one.jira.util.JiraSyncLock;
 import com.liferay.one.model.AccountInvitation;
+import com.liferay.one.model.Project;
 import com.liferay.one.okta.service.OktaService;
 import com.liferay.one.permission.AccountPermission;
 import com.liferay.one.permission.AdminPermission;
+import com.liferay.one.permission.ProjectMembershipPermission;
 import com.liferay.one.service.AccountInvitationEmailService;
 import com.liferay.one.service.AccountInvitationService;
 import com.liferay.one.service.AccountService;
 import com.liferay.one.service.EmailAddressValidatorService;
 import com.liferay.one.service.EntitlementService;
+import com.liferay.one.service.ProjectService;
 import com.liferay.one.service.ProvisioningAssignmentService;
 import com.liferay.one.service.ProvisioningEmailService;
 import com.liferay.one.service.UserAccountService;
 import com.liferay.one.util.FindUtil;
 import com.liferay.one.util.UserAccountUtil;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Validator;
+
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -67,6 +76,20 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/accounts")
 @RestController
 public class AccountsRestController extends OneBaseRestController {
+
+	@DeleteMapping("/{externalReferenceCode}/invitations/{accountInvitationId}")
+	public void deleteInvitations(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable("externalReferenceCode") String externalReferenceCode,
+			@PathVariable("accountInvitationId") long accountInvitationId)
+		throws Exception {
+
+		AccountInvitation accountInvitation = _getPendingAccountInvitation(
+			accountInvitationId, externalReferenceCode, jwt);
+
+		_accountInvitationService.deleteAccountInvitation(
+			accountInvitation.getAccountInvitationId());
+	}
 
 	@DeleteMapping("/{externalReferenceCode}/user-accounts/{userId}")
 	public void deleteUserAccounts(
@@ -123,6 +146,34 @@ public class AccountsRestController extends OneBaseRestController {
 		}
 	}
 
+	@GetMapping("/{externalReferenceCode}/invitations")
+	public ResponseEntity<String> getInvitations(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable("externalReferenceCode") String externalReferenceCode)
+		throws Exception {
+
+		_accountPermission.check(externalReferenceCode, ActionKeys.VIEW, jwt);
+
+		Account account = _accountService.getAccount(
+			externalReferenceCode, jwt);
+
+		Map<String, String> accountRoleNames =
+			_accountService.getAccountRoleNamesByExternalReferenceCode(
+				account.getId());
+
+		JSONArray jsonArray = new JSONArray();
+
+		List<AccountInvitation> accountInvitations =
+			_accountInvitationService.getPendingAccountInvitations(
+				externalReferenceCode);
+
+		for (AccountInvitation accountInvitation : accountInvitations) {
+			jsonArray.put(_toJSONObject(accountInvitation, accountRoleNames));
+		}
+
+		return new ResponseEntity<>(jsonArray.toString(), HttpStatus.OK);
+	}
+
 	@GetMapping("/{externalReferenceCode}/jira/object-key")
 	public ResponseEntity<String> getJiraObjectKey(
 			@AuthenticationPrincipal Jwt jwt,
@@ -143,8 +194,6 @@ public class AccountsRestController extends OneBaseRestController {
 			@RequestBody String json)
 		throws Exception {
 
-		_accountPermission.check(externalReferenceCode, ActionKeys.UPDATE, jwt);
-
 		JSONObject jsonObject = null;
 
 		try {
@@ -154,6 +203,18 @@ public class AccountsRestController extends OneBaseRestController {
 			throw new ResponseStatusException(
 				HttpStatus.BAD_REQUEST, "Request body is not valid JSON",
 				jsonException);
+		}
+
+		String projectExternalReferenceCode = jsonObject.optString(
+			"projectExternalReferenceCode");
+
+		if (Validator.isNull(projectExternalReferenceCode)) {
+			_accountPermission.check(
+				externalReferenceCode, ActionKeys.UPDATE, jwt);
+		}
+		else {
+			_projectMembershipPermission.check(
+				ActionKeys.UPDATE, jwt, projectExternalReferenceCode);
 		}
 
 		String emailAddress = jsonObject.optString("emailAddress");
@@ -186,7 +247,8 @@ public class AccountsRestController extends OneBaseRestController {
 		UserAccount userAccount =
 			_userAccountService.fetchUserAccountByEmailAddress(emailAddress);
 
-		if ((userAccount != null) &&
+		if (Validator.isNull(projectExternalReferenceCode) &&
+			(userAccount != null) &&
 			UserAccountUtil.hasAccountMembership(
 				userAccount, account.getId())) {
 
@@ -195,29 +257,104 @@ public class AccountsRestController extends OneBaseRestController {
 				"The user is already a member of this account");
 		}
 
-		List<String> roleNames = _getRoleNames(
-			account.getId(), jsonObject.optJSONArray("roleNames"));
+		String projectName = null;
+		String projectRoleExternalReferenceCode = jsonObject.optString(
+			"projectRoleExternalReferenceCode");
+
+		if (Validator.isNotNull(projectExternalReferenceCode)) {
+			Project project = _projectService.fetchProject(
+				projectExternalReferenceCode);
+
+			if ((project == null) ||
+				!Objects.equals(
+					project.getAccountExternalReferenceCode(),
+					externalReferenceCode)) {
+
+				throw new ResponseStatusException(
+					HttpStatus.BAD_REQUEST,
+					"Unable to find project " + projectExternalReferenceCode +
+						" for this account");
+			}
+
+			if (!ArrayUtil.contains(
+					RoleConstants.ERCS_SUPPORT_PROJECT,
+					projectRoleExternalReferenceCode)) {
+
+				throw new ResponseStatusException(
+					HttpStatus.BAD_REQUEST,
+					"Unable to find project role " +
+						projectRoleExternalReferenceCode);
+			}
+
+			projectName = project.getName();
+		}
+
+		List<String> roleExternalReferenceCodes =
+			_getRoleExternalReferenceCodes(
+				account.getId(),
+				jsonObject.optJSONArray("roleExternalReferenceCodes"));
 
 		UserAccount inviterUserAccount = getMyUserAccount(jwt);
 
-		AccountInvitation accountInvitation =
-			_accountInvitationService.fetchPendingAccountInvitation(
-				externalReferenceCode, emailAddress);
+		AccountInvitation accountInvitation = _jiraSyncLock.withLock(
+			StringBundler.concat(
+				externalReferenceCode, "#", emailAddress, "#",
+				projectExternalReferenceCode),
+			() -> {
+				AccountInvitation pendingAccountInvitation =
+					_accountInvitationService.fetchPendingAccountInvitation(
+						externalReferenceCode, emailAddress,
+						projectExternalReferenceCode);
 
-		if (accountInvitation == null) {
-			accountInvitation = _accountInvitationService.addAccountInvitation(
-				externalReferenceCode, emailAddress, familyName, givenName,
-				roleNames);
-		}
-		else {
-			accountInvitation =
-				_accountInvitationService.updateAccountInvitation(
-					accountInvitation.getAccountInvitationId(), familyName,
-					givenName, roleNames);
-		}
+				if (pendingAccountInvitation == null) {
+					return _accountInvitationService.addAccountInvitation(
+						externalReferenceCode, emailAddress, familyName,
+						givenName, projectExternalReferenceCode,
+						projectRoleExternalReferenceCode,
+						roleExternalReferenceCodes);
+				}
+
+				return _accountInvitationService.updateAccountInvitation(
+					pendingAccountInvitation.getAccountInvitationId(),
+					familyName, givenName, projectRoleExternalReferenceCode,
+					roleExternalReferenceCodes);
+			});
 
 		_accountInvitationEmailService.sendInvitationEmail(
-			account, accountInvitation, inviterUserAccount.getName());
+			account, accountInvitation, inviterUserAccount.getName(),
+			projectName);
+	}
+
+	@PostMapping(
+		"/{externalReferenceCode}/invitations/{accountInvitationId}/resend"
+	)
+	public void postInvitationsResend(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable("externalReferenceCode") String externalReferenceCode,
+			@PathVariable("accountInvitationId") long accountInvitationId)
+		throws Exception {
+
+		AccountInvitation accountInvitation = _getPendingAccountInvitation(
+			accountInvitationId, externalReferenceCode, jwt);
+
+		Account account = _accountService.getAccount(
+			externalReferenceCode, jwt);
+
+		UserAccount inviterUserAccount = getMyUserAccount(jwt);
+
+		String projectName = _getProjectName(
+			accountInvitation.getProjectExternalReferenceCode());
+
+		AccountInvitation renewedAccountInvitation = _jiraSyncLock.withLock(
+			StringBundler.concat(
+				externalReferenceCode, "#", accountInvitation.getEmailAddress(),
+				"#", accountInvitation.getProjectExternalReferenceCode()),
+			() -> _accountInvitationService.renewAccountInvitation(
+				accountInvitation.getAccountInvitationId()));
+
+		_accountInvitationEmailService.sendInvitationEmail(
+			account, renewedAccountInvitation, inviterUserAccount.getName(),
+			projectName);
 	}
 
 	@PostMapping("/{externalReferenceCode}/sync-to-jsm")
@@ -446,34 +583,87 @@ public class AccountsRestController extends OneBaseRestController {
 		return accountRoleNames;
 	}
 
-	private List<String> _getRoleNames(
-			long accountId, JSONArray roleNamesJSONArray)
+	private AccountInvitation _getPendingAccountInvitation(
+			long accountInvitationId, String externalReferenceCode, Jwt jwt)
 		throws Exception {
 
-		List<String> roleNames = new ArrayList<>();
+		AccountInvitation accountInvitation =
+			_accountInvitationService.fetchAccountInvitation(
+				accountInvitationId);
 
-		if ((roleNamesJSONArray == null) ||
-			(roleNamesJSONArray.length() == 0)) {
+		if ((accountInvitation == null) || accountInvitation.isAccepted() ||
+			!Objects.equals(
+				accountInvitation.getAccountExternalReferenceCode(),
+				externalReferenceCode)) {
 
-			return roleNames;
+			throw new ResponseStatusException(
+				HttpStatus.NOT_FOUND,
+				"Unable to find a pending invitation " + accountInvitationId +
+					" for this account");
 		}
 
-		Map<Long, String> allAccountRoleNames =
-			_accountService.getAccountRoleNames(accountId);
+		String projectExternalReferenceCode =
+			accountInvitation.getProjectExternalReferenceCode();
 
-		for (int i = 0; i < roleNamesJSONArray.length(); i++) {
-			String roleName = roleNamesJSONArray.getString(i);
+		if (Validator.isNull(projectExternalReferenceCode)) {
+			_accountPermission.check(
+				externalReferenceCode, ActionKeys.UPDATE, jwt);
+		}
+		else {
+			_projectMembershipPermission.check(
+				ActionKeys.UPDATE, jwt, projectExternalReferenceCode);
+		}
 
-			if (!allAccountRoleNames.containsValue(roleName)) {
+		return accountInvitation;
+	}
+
+	private String _getProjectName(String projectExternalReferenceCode)
+		throws Exception {
+
+		if (Validator.isNull(projectExternalReferenceCode)) {
+			return null;
+		}
+
+		Project project = _projectService.fetchProject(
+			projectExternalReferenceCode);
+
+		if (project == null) {
+			return null;
+		}
+
+		return project.getName();
+	}
+
+	private List<String> _getRoleExternalReferenceCodes(
+			long accountId, JSONArray roleExternalReferenceCodesJSONArray)
+		throws Exception {
+
+		List<String> roleExternalReferenceCodes = new ArrayList<>();
+
+		if ((roleExternalReferenceCodesJSONArray == null) ||
+			(roleExternalReferenceCodesJSONArray.length() == 0)) {
+
+			return roleExternalReferenceCodes;
+		}
+
+		Map<String, String> accountRoleNames =
+			_accountService.getAccountRoleNamesByExternalReferenceCode(
+				accountId);
+
+		for (int i = 0; i < roleExternalReferenceCodesJSONArray.length(); i++) {
+			String roleExternalReferenceCode =
+				roleExternalReferenceCodesJSONArray.getString(i);
+
+			if (!accountRoleNames.containsKey(roleExternalReferenceCode)) {
 				throw new ResponseStatusException(
 					HttpStatus.BAD_REQUEST,
-					"Unable to find account role " + roleName);
+					"Unable to find account role " + roleExternalReferenceCode);
 			}
 
-			roleNames.add(roleName);
+			roleExternalReferenceCodes.add(roleExternalReferenceCode);
 		}
 
-		return roleNames;
+		return roleExternalReferenceCodes;
 	}
 
 	private void _syncMembership(Account account, long userId) {
@@ -485,6 +675,51 @@ public class AccountsRestController extends OneBaseRestController {
 			_log.error(
 				"Unable to sync membership for user " + userId, exception);
 		}
+	}
+
+	private JSONObject _toJSONObject(
+		AccountInvitation accountInvitation,
+		Map<String, String> accountRoleNames) {
+
+		JSONArray roleNamesJSONArray = new JSONArray();
+
+		for (String roleExternalReferenceCode :
+				accountInvitation.getRoleExternalReferenceCodes()) {
+
+			String roleName = accountRoleNames.get(roleExternalReferenceCode);
+
+			if (roleName != null) {
+				roleNamesJSONArray.put(roleName);
+			}
+		}
+
+		Instant customExpirationDateInstant =
+			accountInvitation.getCustomExpirationDateInstant();
+
+		String expirationDate = null;
+
+		if (customExpirationDateInstant != null) {
+			expirationDate = DateTimeFormatter.ISO_INSTANT.format(
+				customExpirationDateInstant);
+		}
+
+		return new JSONObject(
+		).put(
+			"emailAddress", accountInvitation.getEmailAddress()
+		).put(
+			"expirationDate", expirationDate
+		).put(
+			"familyName", accountInvitation.getFamilyName()
+		).put(
+			"givenName", accountInvitation.getGivenName()
+		).put(
+			"id", accountInvitation.getAccountInvitationId()
+		).put(
+			"projectExternalReferenceCode",
+			accountInvitation.getProjectExternalReferenceCode()
+		).put(
+			"roleNames", roleNamesJSONArray
+		);
 	}
 
 	private void _unassignContactRole(
@@ -588,7 +823,16 @@ public class AccountsRestController extends OneBaseRestController {
 	private EntitlementService _entitlementService;
 
 	@Autowired
+	private JiraSyncLock _jiraSyncLock;
+
+	@Autowired
 	private OktaService _oktaService;
+
+	@Autowired
+	private ProjectMembershipPermission _projectMembershipPermission;
+
+	@Autowired
+	private ProjectService _projectService;
 
 	@Autowired
 	private ProvisioningAssignmentService _provisioningAssignmentService;
