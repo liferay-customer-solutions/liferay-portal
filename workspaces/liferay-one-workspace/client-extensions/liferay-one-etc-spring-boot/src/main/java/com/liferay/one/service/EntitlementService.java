@@ -17,6 +17,8 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.math.BigDecimal;
+
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
@@ -196,6 +198,8 @@ public class EntitlementService extends OneBaseService {
 			startDate = startDateInstant.toString();
 		}
 
+		BigDecimal orderItemQuantity = orderItem.getQuantity();
+
 		for (EntitlementDefinition entitlementDefinition :
 				entitlementDefinitions) {
 
@@ -207,7 +211,10 @@ public class EntitlementService extends OneBaseService {
 					entitlementDefinition.getMaxQuantity(),
 					entitlementDefinition.getName(),
 					projectExternalReferenceCode,
-					entitlementDefinition.getDefaultQuantity(), startDate);
+					_multiply(
+						orderItemQuantity,
+						entitlementDefinition.getDefaultQuantity()),
+					startDate);
 
 				if (_log.isInfoEnabled()) {
 					_log.info(
@@ -551,6 +558,14 @@ public class EntitlementService extends OneBaseService {
 		}
 
 		return false;
+	}
+
+	private Double _multiply(BigDecimal orderItemQuantity, Double quantity) {
+		if ((orderItemQuantity == null) || (quantity == null)) {
+			return quantity;
+		}
+
+		return quantity * orderItemQuantity.doubleValue();
 	}
 
 	private void _patchEntitlement(
