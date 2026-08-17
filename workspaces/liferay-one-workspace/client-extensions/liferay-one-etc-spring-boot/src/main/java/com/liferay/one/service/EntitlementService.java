@@ -203,7 +203,8 @@ public class EntitlementService extends OneBaseService {
 				Entitlement entitlement = addEntitlement(
 					accountEntryId, commerceOrderItemId, contractId,
 					entitlementDefinition.getEntitlementDefinitionId(), endDate,
-					entitlementDefinition.getGrantType(), null,
+					entitlementDefinition.getGrantType(),
+					entitlementDefinition.getMaxQuantity(),
 					entitlementDefinition.getName(),
 					projectExternalReferenceCode,
 					entitlementDefinition.getDefaultQuantity(), startDate);

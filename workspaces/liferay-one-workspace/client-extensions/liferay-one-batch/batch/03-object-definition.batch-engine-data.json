@@ -2306,6 +2306,24 @@
 					"type": "String"
 				},
 				{
+					"DBType": "Double",
+					"businessType": "Decimal",
+					"externalReferenceCode": "C_ENTITLEMENT_DEFINITION_MAX_QUANTITY",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Max Quantity"
+					},
+					"name": "maxQuantity",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Double"
+				},
+				{
 					"DBType": "String",
 					"businessType": "Text",
 					"externalReferenceCode": "C_ENTITLEMENT_DEFINITION_NAME",

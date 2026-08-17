@@ -31,6 +31,7 @@ public class EntitlementDefinition {
 		_entitlementDefinitionId = jsonObject.getLong("id");
 		_externalReferenceCode = jsonObject.optString("externalReferenceCode");
 		_grantType = jsonObject.optString("grantType");
+		_maxQuantity = jsonObject.optDoubleObject("maxQuantity", null);
 		_name = jsonObject.optString("name");
 		_productOptions = _getProductOptions(jsonObject);
 		_unit = jsonObject.optString("unit");
@@ -59,6 +60,10 @@ public class EntitlementDefinition {
 
 	public String getGrantType() {
 		return _grantType;
+	}
+
+	public Double getMaxQuantity() {
+		return _maxQuantity;
 	}
 
 	public String getName() {
@@ -117,6 +122,7 @@ public class EntitlementDefinition {
 	private final long _entitlementDefinitionId;
 	private final String _externalReferenceCode;
 	private final String _grantType;
+	private final Double _maxQuantity;
 	private final String _name;
 	private final Map<String, String> _productOptions;
 	private final String _unit;
