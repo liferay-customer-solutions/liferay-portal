@@ -14,6 +14,7 @@ import com.liferay.headless.commerce.admin.order.client.resource.v1_0.OrderItemR
 import com.liferay.one.constants.CommerceOrderItemConstants;
 import com.liferay.one.salesforce.model.SalesforceOpportunityLineItem;
 import com.liferay.one.util.OrderItemUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.math.BigDecimal;
@@ -126,6 +127,17 @@ public class CommerceOrderItemService extends OneBaseService {
 			orderItem.setFinalPrice(() -> finalPrice);
 		}
 
+		if (Validator.isNotNull(
+				salesforceOpportunityLineItem.getMachineType())) {
+
+			String options = OrderItemUtil.toOptionsJSON(
+				"machinetype",
+				StringUtil.toLowerCase(
+					salesforceOpportunityLineItem.getMachineType()));
+
+			orderItem.setOptions(() -> options);
+		}
+
 		Map<String, Object> customFieldValues = _getCustomFieldValues(
 			salesforceOpportunityLineItem, stageName);
 
@@ -196,13 +208,6 @@ public class CommerceOrderItemService extends OneBaseService {
 				"effectiveEndDate", effectiveEndDateInstant.toString());
 
 			customFieldValues.put("endDate", endDateInstant.toString());
-		}
-
-		if (Validator.isNotNull(
-				salesforceOpportunityLineItem.getMachineType())) {
-
-			customFieldValues.put(
-				"machineType", salesforceOpportunityLineItem.getMachineType());
 		}
 
 		if (Validator.isNotNull(

@@ -1,0 +1,42 @@
+{
+	"configuration": {
+		"className": "com.liferay.headless.commerce.admin.catalog.dto.v1_0.Option",
+		"parameters": {
+			"containsHeaders": "true",
+			"createStrategy": "UPSERT",
+			"onErrorFail": "false",
+			"taskItemDelegateName": "DEFAULT",
+			"updateStrategy": "PARTIAL_UPDATE"
+		}
+	},
+	"items": [
+		{
+			"externalReferenceCode": "MACHINE_TYPE",
+			"fieldType": "select",
+			"key": "machineType",
+			"name": {
+				"en_US": "Machine Type"
+			},
+			"optionValues": [
+				{
+					"externalReferenceCode": "MACHINE_TYPE_HIGH",
+					"key": "high",
+					"name": {
+						"en_US": "High"
+					},
+					"priority": 1
+				},
+				{
+					"externalReferenceCode": "MACHINE_TYPE_STANDARD",
+					"key": "standard",
+					"name": {
+						"en_US": "Standard"
+					},
+					"priority": 2
+				}
+			],
+			"required": false,
+			"skuContributor": false
+		}
+	]
+}

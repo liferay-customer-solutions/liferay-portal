@@ -11,6 +11,7 @@ import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Order;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.OrderItem;
 import com.liferay.one.constants.CommerceOrderItemConstants;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.time.Instant;
@@ -104,7 +105,9 @@ public class OrderItemUtil {
 					continue;
 				}
 
-				productOptions.put(optionJSONObject.optString("key"), value);
+				productOptions.put(
+					StringUtil.toLowerCase(optionJSONObject.optString("key")),
+					value);
 			}
 		}
 		catch (JSONException jsonException) {
@@ -150,6 +153,22 @@ public class OrderItemUtil {
 
 		return !Objects.equals(
 			messageEndDateInstant, getEndDateInstant(existingOrderItem));
+	}
+
+	public static String toOptionsJSON(String key, String value) {
+		return new JSONArray(
+		).put(
+			new JSONObject(
+			).put(
+				"key", key
+			).put(
+				"value",
+				new JSONArray(
+				).put(
+					value
+				)
+			)
+		).toString();
 	}
 
 	private static Instant _getCustomFieldInstant(

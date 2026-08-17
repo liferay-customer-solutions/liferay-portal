@@ -1929,6 +1929,34 @@
 			"name": {
 				"en_US": "PaaS Experience"
 			},
+			"productOptions": [
+				{
+					"fieldType": "select",
+					"key": "machineType",
+					"name": {
+						"en_US": "Machine Type"
+					},
+					"optionExternalReferenceCode": "MACHINE_TYPE",
+					"productOptionValues": [
+						{
+							"key": "high",
+							"name": {
+								"en_US": "High"
+							},
+							"priority": 1
+						},
+						{
+							"key": "standard",
+							"name": {
+								"en_US": "Standard"
+							},
+							"priority": 2
+						}
+					],
+					"required": false,
+					"skuContributor": false
+				}
+			],
 			"productSpecifications": [
 				{
 					"specificationKey": "publisher-name",
@@ -2831,6 +2859,34 @@
 			"name": {
 				"en_US": "SaaS Experience"
 			},
+			"productOptions": [
+				{
+					"fieldType": "select",
+					"key": "machineType",
+					"name": {
+						"en_US": "Machine Type"
+					},
+					"optionExternalReferenceCode": "MACHINE_TYPE",
+					"productOptionValues": [
+						{
+							"key": "high",
+							"name": {
+								"en_US": "High"
+							},
+							"priority": 1
+						},
+						{
+							"key": "standard",
+							"name": {
+								"en_US": "Standard"
+							},
+							"priority": 2
+						}
+					],
+					"required": false,
+					"skuContributor": false
+				}
+			],
 			"productSpecifications": [
 				{
 					"specificationKey": "publisher-name",

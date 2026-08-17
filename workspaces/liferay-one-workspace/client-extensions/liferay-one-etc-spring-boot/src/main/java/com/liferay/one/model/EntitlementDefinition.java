@@ -5,6 +5,7 @@
 
 package com.liferay.one.model;
 
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.HashMap;
@@ -95,7 +96,8 @@ public class EntitlementDefinition {
 
 			for (String key : productOptionsJSONObject.keySet()) {
 				productOptions.put(
-					key, productOptionsJSONObject.optString(key));
+					StringUtil.toLowerCase(key),
+					productOptionsJSONObject.optString(key));
 			}
 		}
 		catch (JSONException jsonException) {
