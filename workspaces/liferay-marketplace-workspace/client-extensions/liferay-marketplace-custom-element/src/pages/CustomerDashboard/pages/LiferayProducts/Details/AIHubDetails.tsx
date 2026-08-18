@@ -28,7 +28,7 @@ import ActivationKeyAlert from '../Licenses/LicenseAlert';
 const activationKeyAlertStatuses = {
 	completed: {
 		description:
-			'Provisioning is complete and your subscription is now active. Access your hub via the URL below to start using your monthly token allowance.',
+			'Provisioning is complete and your subscription is now active. Access your hub via the URL below, or purchase tokens using the Buy Liferay Tokens button above to get started.',
 		title: 'Your AI Hub is Ready',
 	},
 	pending: {
@@ -164,10 +164,6 @@ const AIHubDetails = () => {
 							value:
 								aiHubForm.businessEmailAddress ??
 								aiHubApplication?.administratorEmailAddress,
-						},
-						{
-							title: i18n.translate('token-monthly-allowance'),
-							value: aiHubForm.tokenMonthlyAllowance ?? '1000',
 						},
 						{
 							title: i18n.translate('ai-hub-url'),
