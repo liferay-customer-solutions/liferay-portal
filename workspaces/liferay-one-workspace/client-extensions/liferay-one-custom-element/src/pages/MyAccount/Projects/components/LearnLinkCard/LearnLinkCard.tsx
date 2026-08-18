@@ -20,7 +20,7 @@ export default function LearnLinkCard({url}: LearnLinkCardProps) {
 					label: i18n.translate('liferay-learn'),
 					value: (
 						<a href={url} rel="noopener noreferrer" target="_blank">
-							{url}
+							{i18n.translate('documentation')}
 						</a>
 					),
 				},
