@@ -1,0 +1,79 @@
+.ldp-summary-grid {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+.ldp-summary-card {
+	background-color: var(--color-neutral-0, #fff);
+	border: 1px solid var(--color-neutral-2, #e2e2e4);
+	border-radius: 8px;
+	display: flex;
+	flex-direction: column;
+	height: 200px;
+	padding: 1.25rem;
+	width: 226px;
+}
+
+.ldp-summary-card-header {
+	align-items: flex-start;
+	display: flex;
+	gap: 0.5rem;
+	justify-content: space-between;
+}
+
+.ldp-summary-card-title {
+	color: var(--color-neutral-10, #282934);
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1.25;
+	margin: 0;
+}
+
+.ldp-summary-card-header .tooltip-base {
+	border-radius: 4px;
+	flex-shrink: 0;
+	height: 22px;
+}
+
+.ldp-summary-card-header .tooltip-base.tooltip-base-container {
+	width: 22px;
+}
+
+.ldp-summary-card-header .tooltip-icon {
+	margin-top: 0;
+}
+
+.ldp-summary-card-body {
+	margin-top: auto;
+}
+
+.ldp-summary-card-used-count {
+	color: var(--color-neutral-10, #282934);
+	display: block;
+	font-size: 37px;
+	font-weight: 700;
+	line-height: 1.1;
+}
+
+.ldp-summary-card-max-count {
+	color: var(--color-neutral-6, #82828c);
+	display: block;
+	font-size: 13px;
+	font-weight: 400;
+	margin-top: 0.25rem;
+}
+
+.ldp-summary-card-progress-bar {
+	background-color: var(--color-neutral-2, #e2e2e4);
+	border-radius: 0.25rem;
+	height: 12px;
+	margin-top: 0.75rem;
+	overflow: hidden;
+	width: 100%;
+}
+
+.ldp-summary-card-progress-bar-fill {
+	background-color: #4b9bff;
+	height: 100%;
+}

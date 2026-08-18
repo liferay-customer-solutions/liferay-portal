@@ -11,6 +11,12 @@ export type UsageMetricConfig = {
 	totalLabel: Word;
 };
 
+export type UsageSummaryMetricConfig = {
+	label: Word;
+	metric: string;
+	tooltip: Word;
+};
+
 export const EXPERIENCE_RESOURCE_METRICS: UsageMetricConfig[] = [
 	{
 		label: 'extensions-ram',
@@ -41,6 +47,32 @@ export const EXPERIENCE_RESOURCE_METRICS: UsageMetricConfig[] = [
 		label: 'logs',
 		metric: 'logStorage',
 		totalLabel: 'total-volume',
+	},
+];
+
+export const LDP_SUMMARY_METRICS: UsageSummaryMetricConfig[] = [
+	{
+		label: 'api-requests',
+		metric: 'apiRequests',
+		tooltip:
+			'report-and-export-api-calls-to-ldp-this-month-including-calls-you-initiate-on-top-of-product-functions-excludes-data-ingestion-and-liferays-own-built-in-calls-resets-monthly',
+	},
+	{
+		label: 'connectors',
+		metric: 'connectors',
+		tooltip:
+			'external-data-sources-connected-to-ldp-native-liferay-sources-dont-count',
+	},
+	{
+		label: 'active-batch-segments',
+		metric: 'activeBatchSegments',
+		tooltip: 'named-saved-active-segments-that-evaluate-on-a-schedule',
+	},
+	{
+		label: 'active-real-time-segments',
+		metric: 'activeRealTimeSegments',
+		tooltip:
+			'named-saved-active-segments-that-evaluate-in-real-time-as-events-arrive',
 	},
 ];
 

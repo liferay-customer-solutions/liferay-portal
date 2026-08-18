@@ -12,12 +12,14 @@ import ClayIcon from '@clayui/icon';
 
 interface ITooltipProps {
 	showTooltipBackground?: boolean;
+	symbol?: string;
 	tooltip?: string;
 	tooltipText?: string;
 }
 
 export function Tooltip({
 	showTooltipBackground = true,
+	symbol = 'question-circle',
 	tooltip,
 	tooltipText,
 }: ITooltipProps) {
@@ -45,7 +47,7 @@ export function Tooltip({
 					<ClayIcon
 						aria-label="tooltip"
 						className="tooltip-icon"
-						symbol="question-circle"
+						symbol={symbol}
 					/>
 				</div>
 			</div>

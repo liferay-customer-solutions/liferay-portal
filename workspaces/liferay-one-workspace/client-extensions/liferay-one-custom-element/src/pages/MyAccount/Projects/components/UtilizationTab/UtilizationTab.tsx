@@ -5,6 +5,7 @@
 
 import {isUnassignedProject} from '~/pages/MyAccount/Projects/utils/isUnassignedProject';
 
+import LDPUsageDashboard from './LDPUsageDashboard';
 import LegacyBillingBanner from './LegacyBillingBanner';
 import LegacyDashboardPreview from './LegacyDashboardPreview';
 import UsageDashboard from './UsageDashboard';
@@ -47,6 +48,18 @@ export default function UtilizationTab({
 			<UsageDashboard
 				productExternalReferenceCode={productExternalReferenceCode}
 				profile={profile}
+				projectExternalReferenceCode={projectExternalReferenceCode}
+			/>
+		);
+	}
+
+	if (
+		profile === 'usage-metrics' &&
+		!isUnassignedProject(projectExternalReferenceCode)
+	) {
+		return (
+			<LDPUsageDashboard
+				productExternalReferenceCode={productExternalReferenceCode}
 				projectExternalReferenceCode={projectExternalReferenceCode}
 			/>
 		);

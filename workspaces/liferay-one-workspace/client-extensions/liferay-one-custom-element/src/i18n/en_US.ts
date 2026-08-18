@@ -44,6 +44,8 @@ export default {
 	'activation-mode': 'Activation Mode',
 	'activation-status': 'Activation Status',
 	'active': 'Active',
+	'active-batch-segments': 'Active Batch Segments',
+	'active-real-time-segments': 'Active Real-Time Segments',
 	'activity-history': 'Activity History',
 	'actual-event-date': 'Actual Event Date',
 	'add': 'Add',
@@ -119,6 +121,7 @@ export default {
 	'annual': 'Annual',
 	'annual-target': 'Annual Target',
 	'anonymous-page-views-apv': 'Anonymous Page Views (APV)',
+	'api-requests': 'API Requests',
 	'api-requests-per-month': 'API Requests / Month',
 	'app': 'App',
 	'app-awaiting-review': 'App Awaiting Review',
@@ -312,6 +315,7 @@ export default {
 	'congratulations': 'Congratulations',
 	'connect-anyway': 'Connect Anyway',
 	'connect-your-liferay-dsr': 'Connect Your Liferay DSR',
+	'connectors': 'Connectors',
 	'consumer-products': 'Consumer Products',
 	'contact': 'Contact',
 	'contact-publisher': 'Contact Publisher',
@@ -506,6 +510,8 @@ export default {
 	'event-type': 'Event Type',
 	'events': 'Events',
 	'events-per-month': 'Events / Month',
+	'events-successfully-ingested-by-ldp-this-month-resets-monthly-add-on-buckets-raise-the-included-volume':
+		'Events successfully ingested by LDP this month. Resets monthly; add-on buckets raise the included volume.',
 	'exact-match': 'Exact Match',
 	'exclude': 'Exclude',
 	'excluding-vat': 'Excluding VAT',
@@ -531,6 +537,8 @@ export default {
 	'extension-status': 'Extension Status',
 	'extensions-ram': 'Extensions RAM',
 	'extensions-vcpu': 'Extensions vCPUs',
+	'external-data-sources-connected-to-ldp-native-liferay-sources-dont-count':
+		"External data sources connected to LDP. Native Liferay sources don't count.",
 	'external-reference-code': 'External Reference Code',
 	'extranet': 'Extranet',
 	'failed': 'Failed',
@@ -842,6 +850,10 @@ export default {
 	'my-solutions': 'My Solutions',
 	'name': 'Name',
 	'name-example-com': 'name@example.com',
+	'named-saved-active-segments-that-evaluate-in-real-time-as-events-arrive':
+		'Named, saved, active segments that evaluate in real time as events arrive.',
+	'named-saved-active-segments-that-evaluate-on-a-schedule':
+		'Named, saved, active segments that evaluate on a schedule.',
 	'navigation-and-discovery': 'Navigation and Discovery',
 	'need-help-activating-this-product-check-the':
 		'Need help activating this product? Check the',
@@ -917,6 +929,7 @@ export default {
 	'objective': 'Objective',
 	'of-service': 'of Service.',
 	'of-target': 'of target',
+	'of-x': 'of {0}',
 	'offline-payment': 'Offline Payment',
 	'offline-payments-using-the-invoice': 'Offline payments using the invoice',
 	'ok': 'OK',
@@ -1174,6 +1187,8 @@ export default {
 	'renew-license-key': 'Renew License Key',
 	'renewal-will-be-available-3-months-before-your-activation-key-expires':
 		'Renewal will be available 3 months before your activation key expires.',
+	'report-and-export-api-calls-to-ldp-this-month-including-calls-you-initiate-on-top-of-product-functions-excludes-data-ingestion-and-liferays-own-built-in-calls-resets-monthly':
+		"Report and export API calls to LDP this month, including calls you initiate on top of product functions. Excludes data ingestion and Liferay's own built-in calls. Resets monthly.",
 	'request-a-marketplace-publisher-account':
 		'Request a Marketplace Publisher Account',
 	'request-access-to-ai-hub-private-beta':
