@@ -310,7 +310,7 @@
 				{
 					"specificationKey": "project-learn-url",
 					"value": {
-						"en_US": "https://learn.liferay.com"
+						"en_US": "https://learn.liferay.com/ai-hub"
 					}
 				}
 			],
@@ -1101,7 +1101,7 @@
 				{
 					"specificationKey": "project-learn-url",
 					"value": {
-						"en_US": "https://learn.liferay.com"
+						"en_US": "https://learn.liferay.com/content-marketing-platform"
 					}
 				}
 			],
@@ -1278,7 +1278,7 @@
 				{
 					"specificationKey": "project-learn-url",
 					"value": {
-						"en_US": "https://learn.liferay.com"
+						"en_US": "https://learn.liferay.com/liferay-data-platform"
 					}
 				}
 			],
@@ -1437,7 +1437,7 @@
 				{
 					"specificationKey": "project-learn-url",
 					"value": {
-						"en_US": "https://learn.liferay.com"
+						"en_US": "https://learn.liferay.com/digital-sales-room"
 					}
 				}
 			],
@@ -1602,7 +1602,7 @@
 				{
 					"specificationKey": "project-learn-url",
 					"value": {
-						"en_US": "https://learn.liferay.com"
+						"en_US": "https://learn.liferay.com/w/dxp/getting-started/liferay-dxp-free-tier"
 					}
 				}
 			],
@@ -1684,12 +1684,6 @@
 					}
 				},
 				{
-					"specificationKey": "project-learn-url",
-					"value": {
-						"en_US": "https://learn.liferay.com"
-					}
-				},
-				{
 					"specificationKey": "product-family",
 					"value": {
 						"en_US": "Enterprise Search (Subscription)"
@@ -1764,12 +1758,6 @@
 					"specificationKey": "project-details-profile",
 					"value": {
 						"en_US": "dates-status"
-					}
-				},
-				{
-					"specificationKey": "project-learn-url",
-					"value": {
-						"en_US": "https://learn.liferay.com"
 					}
 				}
 			],
@@ -2586,12 +2574,6 @@
 					}
 				},
 				{
-					"specificationKey": "project-learn-url",
-					"value": {
-						"en_US": "https://learn.liferay.com"
-					}
-				},
-				{
 					"specificationKey": "product-family",
 					"value": {
 						"en_US": "Portal (License)"
@@ -2666,12 +2648,6 @@
 					"specificationKey": "project-details-profile",
 					"value": {
 						"en_US": "env-instance"
-					}
-				},
-				{
-					"specificationKey": "project-learn-url",
-					"value": {
-						"en_US": "https://learn.liferay.com"
 					}
 				},
 				{

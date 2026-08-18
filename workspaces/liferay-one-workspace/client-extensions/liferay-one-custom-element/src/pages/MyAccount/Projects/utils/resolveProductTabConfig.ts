@@ -60,8 +60,8 @@ export function resolveProductTabConfig({
 	const learnUrl = getSpecificationValue(product, 'project-learn-url');
 
 	const hasSupportInfo =
-		kind === 'application' &&
-		(Boolean(learnUrl) ||
+		Boolean(learnUrl) ||
+		(kind === 'application' &&
 			SUPPORT_SPECIFICATION_KEYS.some((specificationKey) =>
 				getSpecificationValue(product, specificationKey)
 			));
