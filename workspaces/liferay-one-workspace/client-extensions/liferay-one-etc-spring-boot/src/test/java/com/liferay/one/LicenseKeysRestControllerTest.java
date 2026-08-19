@@ -372,7 +372,8 @@ public class LicenseKeysRestControllerTest {
 		);
 
 		Mockito.when(
-			_licenseKeyService.getLicenseKeysByIds(new long[] {1L})
+			_licenseKeyService.getLicenseKeysByIds(
+				Mockito.any(), Mockito.any(long[].class))
 		).thenReturn(
 			Collections.singletonList(licenseKey)
 		);
@@ -462,7 +463,8 @@ public class LicenseKeysRestControllerTest {
 		);
 
 		Mockito.when(
-			_licenseKeyService.getLicenseKeysByIds(new long[] {1L})
+			_licenseKeyService.getLicenseKeysByIds(
+				Mockito.any(), Mockito.any(long[].class))
 		).thenReturn(
 			Collections.singletonList(licenseKey)
 		);

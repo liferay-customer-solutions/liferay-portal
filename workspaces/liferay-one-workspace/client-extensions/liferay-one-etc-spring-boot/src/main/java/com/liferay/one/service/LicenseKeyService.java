@@ -425,12 +425,6 @@ public class LicenseKeyService extends OneBaseService {
 			LicenseKey::new, jwt);
 	}
 
-	public List<LicenseKey> getLicenseKeysByIds(long[] licenseKeyIds)
-		throws Exception {
-
-		return getLicenseKeys(_toIdFilterString(licenseKeyIds));
-	}
-
 	public List<LicenseKey> getLicenseKeysByName(
 			boolean active, String productName, String serverId)
 		throws Exception {

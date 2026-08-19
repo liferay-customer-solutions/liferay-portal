@@ -206,7 +206,7 @@ public class LicenseKeysRestController extends OneBaseRestController {
 		long[] distinctLicenseKeyIds = _toDistinctLicenseKeyIds(licenseKeyIds);
 
 		List<LicenseKey> licenseKeys = _licenseKeyService.getLicenseKeysByIds(
-			distinctLicenseKeyIds);
+			jwt, distinctLicenseKeyIds);
 
 		_checkAllFound(licenseKeys, distinctLicenseKeyIds);
 
