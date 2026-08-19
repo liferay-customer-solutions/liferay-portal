@@ -777,13 +777,6 @@ public class LicenseKeyService extends OneBaseService {
 		return jsonObject.optInt("totalCount");
 	}
 
-	//
-
-	// The object API rejects an unquoted id with "Incompatible types", so each
-	// value is quoted. There is no in operator to lean on here.
-
-	//
-
 	private String _toIdFilterString(long[] licenseKeyIds) {
 		StringBundler sb = new StringBundler(licenseKeyIds.length * 4);
 

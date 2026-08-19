@@ -342,15 +342,6 @@ public class LicenseKeysRestController extends OneBaseRestController {
 		return licenseKeys;
 	}
 
-	//
-
-	// One filtered read rather than one read per id. Reading each key in turn
-	// cost a round trip to the object API for every id, which the account
-	// scoped export avoids by filtering, and a caller can pass any number of
-	// ids.
-
-	//
-
 	private List<LicenseKey> _getLicenseKeys(Jwt jwt, long[] licenseKeyIds)
 		throws Exception {
 
