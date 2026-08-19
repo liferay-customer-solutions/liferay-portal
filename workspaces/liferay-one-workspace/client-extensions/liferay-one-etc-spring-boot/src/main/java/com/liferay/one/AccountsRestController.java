@@ -221,7 +221,7 @@ public class AccountsRestController extends OneBaseRestController {
 
 		return ResponseEntity.ok(
 		).contentType(
-			MediaType.parseMediaType("text/csv")
+			_CONTENT_TYPE_CSV
 		).header(
 			HttpHeaders.CONTENT_DISPOSITION,
 			"attachment; filename=\"" + _licenseKeyCSVExporter.getFileName() +
@@ -830,6 +830,9 @@ public class AccountsRestController extends OneBaseRestController {
 			}
 		}
 	}
+
+	private static final MediaType _CONTENT_TYPE_CSV = MediaType.parseMediaType(
+		"text/csv");
 
 	private static final Log _log = LogFactory.getLog(
 		AccountsRestController.class);
