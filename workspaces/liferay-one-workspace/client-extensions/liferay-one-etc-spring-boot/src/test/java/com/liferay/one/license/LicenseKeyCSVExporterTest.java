@@ -138,6 +138,12 @@ public class LicenseKeyCSVExporterTest {
 			"say \"hello\", friend"
 		);
 
+		Mockito.when(
+			licenseKey.getIpAddresses()
+		).thenReturn(
+			"=1+1"
+		);
+
 		String csv = _licenseKeyCSVExporter.toCSV(
 			Collections.singletonList(licenseKey));
 
@@ -150,6 +156,14 @@ public class LicenseKeyCSVExporterTest {
 				1
 			).contains(
 				"\"say \"\"hello\"\", friend\""
+			),
+			lines.get(1));
+
+		Assertions.assertTrue(
+			lines.get(
+				1
+			).contains(
+				"\"'=1+1\""
 			),
 			lines.get(1));
 

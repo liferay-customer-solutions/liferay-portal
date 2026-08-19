@@ -78,8 +78,22 @@ public class LicenseKeyCSVExporter {
 	}
 
 	private String _escapeCSVValue(Object object) {
-		return StringUtil.replace(
+		String value = StringUtil.replace(
 			String.valueOf(object), CharPool.QUOTE, "\"\"");
+
+		if (value.isEmpty()) {
+			return value;
+		}
+
+		char c = value.charAt(0);
+
+		if ((c == CharPool.AT) || (c == CharPool.DASH) ||
+			(c == CharPool.EQUAL) || (c == CharPool.PLUS)) {
+
+			return StringPool.APOSTROPHE.concat(value);
+		}
+
+		return value;
 	}
 
 	private String _formatCSVFields(Object... objects) {
