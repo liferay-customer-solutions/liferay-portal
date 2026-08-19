@@ -10,6 +10,7 @@ import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
 import com.liferay.one.exception.CommonLicenseKeyEntitlementException;
 import com.liferay.one.exception.LicenseKeyActiveException;
 import com.liferay.one.exception.LicenseKeyValidationException;
+import com.liferay.one.exception.NoSuchAccountException;
 import com.liferay.one.exception.NoSuchLicenseKeyException;
 import com.liferay.one.exception.ProjectNotFoundException;
 import com.liferay.one.jira.exception.AccountNotFoundException;
@@ -92,6 +93,18 @@ public abstract class OneBaseRestController extends BaseRestController {
 
 		return _toResponseEntity(
 			HttpStatus.BAD_REQUEST, licenseKeyValidationException.getMessage());
+	}
+
+	@ExceptionHandler(NoSuchAccountException.class)
+	public ResponseEntity<?> handleException(
+		NoSuchAccountException noSuchAccountException) {
+
+		if (_log.isWarnEnabled()) {
+			_log.warn(noSuchAccountException);
+		}
+
+		return _toResponseEntity(
+			HttpStatus.NOT_FOUND, "The account was not found");
 	}
 
 	@ExceptionHandler(NoSuchLicenseKeyException.class)

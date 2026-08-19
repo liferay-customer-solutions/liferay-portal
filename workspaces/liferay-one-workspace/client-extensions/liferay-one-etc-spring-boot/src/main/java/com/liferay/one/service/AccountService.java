@@ -20,6 +20,7 @@ import com.liferay.headless.admin.user.client.pagination.Pagination;
 import com.liferay.headless.admin.user.client.problem.Problem;
 import com.liferay.headless.admin.user.client.resource.v1_0.AccountResource;
 import com.liferay.headless.admin.user.client.resource.v1_0.AccountRoleResource;
+import com.liferay.one.exception.NoSuchAccountException;
 import com.liferay.one.salesforce.model.SalesforceAccount;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -247,8 +248,21 @@ public class AccountService extends OneBaseService {
 			HttpHeaders.AUTHORIZATION, "Bearer " + jwt.getTokenValue()
 		).build();
 
-		return accountResource.getAccountByExternalReferenceCode(
-			externalReferenceCode);
+		try {
+			return accountResource.getAccountByExternalReferenceCode(
+				externalReferenceCode);
+		}
+		catch (Problem.ProblemException problemException) {
+			Problem problem = problemException.getProblem();
+
+			if ((problem != null) && isNotFound(problem.getStatus())) {
+				throw new NoSuchAccountException(
+					"No account exists with external reference code " +
+						externalReferenceCode);
+			}
+
+			throw problemException;
+		}
 	}
 
 	public String getAccountRoleExternalReferenceCode(
