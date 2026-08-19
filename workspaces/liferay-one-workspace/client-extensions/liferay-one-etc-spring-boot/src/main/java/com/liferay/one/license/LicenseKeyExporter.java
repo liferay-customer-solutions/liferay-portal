@@ -232,6 +232,12 @@ public class LicenseKeyExporter {
 	protected String formatFileName(String fileName) {
 		fileName = StringUtil.replace(
 			fileName, CharPool.SPACE, StringPool.BLANK);
+		fileName = StringUtil.replace(
+			fileName, CharPool.SLASH, StringPool.BLANK);
+		fileName = StringUtil.replace(
+			fileName, CharPool.BACK_SLASH, StringPool.BLANK);
+		fileName = StringUtil.replace(
+			fileName, CharPool.QUOTE, StringPool.BLANK);
 		fileName = StringUtil.toLowerCase(fileName);
 		fileName = fileName.substring(0, Math.min(fileName.length(), 251));
 

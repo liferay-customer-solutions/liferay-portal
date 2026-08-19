@@ -64,6 +64,21 @@ public class LicenseKeyExporterTest {
 	}
 
 	@Test
+	public void testGetFileNameStripsPathSeparators() {
+		Assertions.assertEquals(
+			"activation-key-dxp-7.4-......etccron.d.xml",
+			_licenseKeyExporter.getFileName(
+				"DXP", "7.4", "../../../etc/cron.d"));
+	}
+
+	@Test
+	public void testGetFileNameStripsQuotes() {
+		Assertions.assertEquals(
+			"activation-key-dxp-7.4-evil.xml",
+			_licenseKeyExporter.getFileName("DXP", "7.4", "ev\"il"));
+	}
+
+	@Test
 	public void testToXMLEscapesSpecialCharacters() throws Exception {
 		String xml = _licenseKeyExporter.toXML(
 			"TESTKEY", "Acme Corp", "Enterprise",
