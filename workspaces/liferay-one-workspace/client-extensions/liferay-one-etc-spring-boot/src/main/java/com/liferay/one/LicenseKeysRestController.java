@@ -143,6 +143,8 @@ public class LicenseKeysRestController extends OneBaseRestController {
 			@RequestParam("licenseKeyIds") long[] licenseKeyIds)
 		throws Exception {
 
+		_checkMaxLicenseKeyIds(licenseKeyIds);
+
 		List<LicenseKey> licenseKeys = _getActiveLicenseKeys(
 			jwt, licenseKeyIds);
 
@@ -169,6 +171,8 @@ public class LicenseKeysRestController extends OneBaseRestController {
 			@RequestParam("licenseKeyIds") long[] licenseKeyIds)
 		throws Exception {
 
+		_checkMaxLicenseKeyIds(licenseKeyIds);
+
 		List<LicenseKey> licenseKeys = _getActiveLicenseKeys(
 			jwt, licenseKeyIds);
 
@@ -192,6 +196,8 @@ public class LicenseKeysRestController extends OneBaseRestController {
 			@AuthenticationPrincipal Jwt jwt,
 			@RequestParam("licenseKeyIds") long[] licenseKeyIds)
 		throws Exception {
+
+		_checkMaxLicenseKeyIds(licenseKeyIds);
 
 		if (licenseKeyIds.length == 0) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -331,6 +337,15 @@ public class LicenseKeysRestController extends OneBaseRestController {
 		}
 	}
 
+	private void _checkMaxLicenseKeyIds(long[] licenseKeyIds) {
+		if (licenseKeyIds.length > _MAX_LICENSE_KEY_IDS) {
+			throw new ResponseStatusException(
+				HttpStatus.BAD_REQUEST,
+				"No more than " + _MAX_LICENSE_KEY_IDS +
+					" license keys may be requested at once");
+		}
+	}
+
 	private List<LicenseKey> _getActiveLicenseKeys(
 			Jwt jwt, long[] licenseKeyIds)
 		throws Exception {
@@ -386,6 +401,8 @@ public class LicenseKeysRestController extends OneBaseRestController {
 
 	private static final MediaType _CONTENT_TYPE_CSV = MediaType.parseMediaType(
 		"text/csv");
+
+	private static final int _MAX_LICENSE_KEY_IDS = 100;
 
 	private static final int _MAX_PAGE_SIZE = 100;
 

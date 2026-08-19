@@ -409,6 +409,25 @@ public class LicenseKeysRestControllerTest {
 	}
 
 	@Test
+	public void testGetLicenseKeysExportWhenLicenseKeyIdsExceedsTheMaximum()
+		throws Exception {
+
+		LicenseKeysRestController licenseKeysRestController =
+			_createController();
+
+		ResponseStatusException responseStatusException =
+			Assertions.assertThrows(
+				ResponseStatusException.class,
+				() -> licenseKeysRestController.getLicenseKeysExport(
+					null, new long[101]));
+
+		Assertions.assertEquals(
+			HttpStatus.BAD_REQUEST, responseStatusException.getStatusCode());
+
+		Mockito.verifyNoInteractions(_licenseKeyCSVExporter);
+	}
+
+	@Test
 	public void testGetLicenseKeysExportWhenLicenseKeyIdsIsEmpty()
 		throws Exception {
 
