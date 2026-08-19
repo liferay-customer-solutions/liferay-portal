@@ -12,6 +12,7 @@ import com.liferay.one.constants.ClassNameConstants;
 import com.liferay.one.constants.CommerceOrderConstants;
 import com.liferay.one.model.LicenseKey;
 import com.liferay.one.model.SubscriptionEntry;
+import com.liferay.one.permission.AdminPermission;
 import com.liferay.one.permission.LicenseKeyPermission;
 import com.liferay.one.service.CommerceOrderService;
 import com.liferay.one.service.LicenseKeyService;
@@ -19,6 +20,8 @@ import com.liferay.one.service.SubscriptionEntryService;
 import com.liferay.one.service.UserAccountService;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
+
+import org.json.JSONObject;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -84,6 +87,34 @@ public class LicenseKeysRestControllerTest {
 			_licenseKeyPermission
 		).check(
 			_ACCOUNT_ID, ActionKeys.VIEW, null
+		);
+	}
+
+	@Test
+	public void testGetLicenseKeys() throws Exception {
+		LicenseKeysRestController licenseKeysRestController =
+			_createController();
+
+		JSONObject pageJSONObject = new JSONObject(
+			"{\"items\": [], \"totalCount\": 0}");
+
+		Mockito.when(
+			_licenseKeyService.getLicenseKeysPage(1, 20)
+		).thenReturn(
+			pageJSONObject
+		);
+
+		ResponseEntity<String> responseEntity =
+			licenseKeysRestController.getLicenseKeys(null, 1, 20);
+
+		Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		Assertions.assertEquals(
+			pageJSONObject.toString(), responseEntity.getBody());
+
+		Mockito.verify(
+			_adminPermission
+		).check(
+			null
 		);
 	}
 
@@ -222,6 +253,58 @@ public class LicenseKeysRestControllerTest {
 	}
 
 	@Test
+	public void testGetLicenseKeysThrowsBadRequestWhenPageSizeIsOutOfRange()
+		throws Exception {
+
+		LicenseKeysRestController licenseKeysRestController =
+			_createController();
+
+		for (int pageSize : new int[] {0, -1, 101}) {
+			ResponseStatusException responseStatusException =
+				Assertions.assertThrows(
+					ResponseStatusException.class,
+					() -> licenseKeysRestController.getLicenseKeys(
+						null, 1, pageSize));
+
+			Assertions.assertEquals(
+				HttpStatus.BAD_REQUEST,
+				responseStatusException.getStatusCode());
+		}
+
+		Mockito.verify(
+			_licenseKeyService, Mockito.never()
+		).getLicenseKeysPage(
+			Mockito.anyInt(), Mockito.anyInt()
+		);
+	}
+
+	@Test
+	public void testGetLicenseKeysThrowsForbiddenWhenNotAdmin()
+		throws Exception {
+
+		LicenseKeysRestController licenseKeysRestController =
+			_createController();
+
+		Mockito.doThrow(
+			new PrincipalException()
+		).when(
+			_adminPermission
+		).check(
+			null
+		);
+
+		Assertions.assertThrows(
+			PrincipalException.class,
+			() -> licenseKeysRestController.getLicenseKeys(null, 1, 20));
+
+		Mockito.verify(
+			_licenseKeyService, Mockito.never()
+		).getLicenseKeysPage(
+			Mockito.anyInt(), Mockito.anyInt()
+		);
+	}
+
+	@Test
 	public void testGetSubscriptionsReturnsFalseWhenNotSubscribed()
 		throws Exception {
 
@@ -352,8 +435,6 @@ public class LicenseKeysRestControllerTest {
 			HttpStatus.CONFLICT, responseStatusException.getStatusCode());
 	}
 
-
-
 	@Test
 	public void testPutSubscriptions() throws Exception {
 		LicenseKeysRestController licenseKeysRestController =
@@ -472,6 +553,9 @@ public class LicenseKeysRestControllerTest {
 		);
 
 		ReflectionTestUtils.setField(
+			licenseKeysRestController, "_adminPermission", _adminPermission);
+
+		ReflectionTestUtils.setField(
 			licenseKeysRestController, "_commerceOrderService",
 			_commerceOrderService);
 
@@ -498,6 +582,8 @@ public class LicenseKeysRestControllerTest {
 
 	private static final long _USER_ID = 123L;
 
+	private final AdminPermission _adminPermission = Mockito.mock(
+		AdminPermission.class);
 	private final CommerceOrderService _commerceOrderService = Mockito.mock(
 		CommerceOrderService.class);
 	private final LicenseKeyPermission _licenseKeyPermission = Mockito.mock(

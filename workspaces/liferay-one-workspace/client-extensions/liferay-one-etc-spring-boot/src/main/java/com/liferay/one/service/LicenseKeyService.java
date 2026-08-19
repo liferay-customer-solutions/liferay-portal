@@ -410,6 +410,22 @@ public class LicenseKeyService extends OneBaseService {
 				_escapeODataString(serverId), "')"));
 	}
 
+	public JSONObject getLicenseKeysPage(int page, int pageSize)
+		throws Exception {
+
+		return new JSONObject(
+			get(
+				getAuthorization(),
+				UriComponentsBuilder.fromPath(
+					"/o/c/licensekeys"
+				).queryParam(
+					"page", page
+				).queryParam(
+					"pageSize", pageSize
+				).build(
+				).toUri()));
+	}
+
 	public boolean hasValidLicenseKeyTypeFree(String domains, String owner)
 		throws Exception {
 

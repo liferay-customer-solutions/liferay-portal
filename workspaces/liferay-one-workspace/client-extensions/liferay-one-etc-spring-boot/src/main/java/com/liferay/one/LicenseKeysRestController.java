@@ -12,6 +12,7 @@ import com.liferay.one.constants.ClassNameConstants;
 import com.liferay.one.constants.CommerceOrderConstants;
 import com.liferay.one.model.LicenseKey;
 import com.liferay.one.model.SubscriptionEntry;
+import com.liferay.one.permission.AdminPermission;
 import com.liferay.one.permission.LicenseKeyPermission;
 import com.liferay.one.service.CommerceOrderService;
 import com.liferay.one.service.LicenseKeyService;
@@ -73,6 +74,30 @@ public class LicenseKeysRestController extends OneBaseRestController {
 			licenseKey.getAccountEntryId(), ActionKeys.VIEW, jwt);
 
 		return licenseKey;
+	}
+
+	@GetMapping
+	public ResponseEntity<String> getLicenseKeys(
+			@AuthenticationPrincipal Jwt jwt, @RequestParam("page") int page,
+			@RequestParam("pageSize") int pageSize)
+		throws Exception {
+
+		_adminPermission.check(jwt);
+
+		if ((pageSize < 1) || (pageSize > _MAX_PAGE_SIZE)) {
+			throw new ResponseStatusException(
+				HttpStatus.BAD_REQUEST,
+				"The page size must be between 1 and " + _MAX_PAGE_SIZE);
+		}
+
+		return ResponseEntity.ok(
+		).contentType(
+			MediaType.APPLICATION_JSON
+		).body(
+			_licenseKeyService.getLicenseKeysPage(
+				page, pageSize
+			).toString()
+		);
 	}
 
 	@GetMapping("/{licenseKeyId}/download")
@@ -200,6 +225,11 @@ public class LicenseKeysRestController extends OneBaseRestController {
 				userAccount.getId());
 		}
 	}
+
+	private static final int _MAX_PAGE_SIZE = 100;
+
+	@Autowired
+	private AdminPermission _adminPermission;
 
 	@Autowired
 	private CommerceOrderService _commerceOrderService;
