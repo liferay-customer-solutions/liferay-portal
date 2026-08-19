@@ -399,6 +399,15 @@ public class LicenseKeyService extends OneBaseService {
 				"') and (owner eq '", _escapeODataString(owner), "')"));
 	}
 
+	public List<LicenseKey> getLicenseKeysByAccountEntryId(long accountEntryId)
+		throws Exception {
+
+		return getLicenseKeys(
+			StringBundler.concat(
+				"r_accountEntryToLicenseKey_accountEntryId eq '",
+				accountEntryId, "'"));
+	}
+
 	public List<LicenseKey> getLicenseKeysByName(
 			boolean active, String productName, String serverId)
 		throws Exception {

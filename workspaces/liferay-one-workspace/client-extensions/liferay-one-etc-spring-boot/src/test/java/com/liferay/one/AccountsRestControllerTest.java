@@ -14,16 +14,19 @@ import com.liferay.one.jira.synchronizer.AccountSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountRoleSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountSynchronizer;
 import com.liferay.one.model.AccountInvitation;
+import com.liferay.one.model.LicenseKey;
 import com.liferay.one.model.Project;
 import com.liferay.one.okta.model.OktaUser;
 import com.liferay.one.okta.service.OktaService;
 import com.liferay.one.permission.AccountPermission;
+import com.liferay.one.permission.LicenseKeyPermission;
 import com.liferay.one.permission.ProjectMembershipPermission;
 import com.liferay.one.service.AccountInvitationEmailService;
 import com.liferay.one.service.AccountInvitationService;
 import com.liferay.one.service.AccountService;
 import com.liferay.one.service.EmailAddressValidatorService;
 import com.liferay.one.service.EntitlementService;
+import com.liferay.one.service.LicenseKeyService;
 import com.liferay.one.service.ProjectService;
 import com.liferay.one.service.ProvisioningAssignmentService;
 import com.liferay.one.service.ProvisioningEmailService;
@@ -34,6 +37,7 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 
 import java.lang.reflect.Field;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -325,6 +329,37 @@ public class AccountsRestControllerTest {
 		Assertions.assertEquals(1, roleNamesJSONArray.length());
 		Assertions.assertEquals(
 			"Account Administrator", roleNamesJSONArray.getString(0));
+	}
+
+	@Test
+	public void testGetLicenseKeys() throws Exception {
+		AccountsRestController accountsRestController = _createController();
+
+		Mockito.when(
+			_accountService.getAccount(_EXTERNAL_REFERENCE_CODE, null)
+		).thenReturn(
+			_createAccount()
+		);
+
+		List<LicenseKey> licenseKeys = Collections.singletonList(
+			Mockito.mock(LicenseKey.class));
+
+		Mockito.when(
+			_licenseKeyService.getLicenseKeysByAccountEntryId(_ACCOUNT_ID)
+		).thenReturn(
+			licenseKeys
+		);
+
+		Assertions.assertSame(
+			licenseKeys,
+			accountsRestController.getLicenseKeys(
+				null, _EXTERNAL_REFERENCE_CODE));
+
+		Mockito.verify(
+			_licenseKeyPermission
+		).check(
+			_ACCOUNT_ID, ActionKeys.VIEW, null
+		);
 	}
 
 	@Test
@@ -1410,6 +1445,11 @@ public class AccountsRestControllerTest {
 		ReflectionTestUtils.setField(
 			accountsRestController, "_keyedLock", new KeyedLock());
 		ReflectionTestUtils.setField(
+			accountsRestController, "_licenseKeyPermission",
+			_licenseKeyPermission);
+		ReflectionTestUtils.setField(
+			accountsRestController, "_licenseKeyService", _licenseKeyService);
+		ReflectionTestUtils.setField(
 			accountsRestController, "_oktaService", _oktaService);
 		ReflectionTestUtils.setField(
 			accountsRestController, "_projectMembershipPermission",
@@ -1547,6 +1587,10 @@ public class AccountsRestControllerTest {
 		Mockito.mock(EmailAddressValidatorService.class);
 	private final EntitlementService _entitlementService = Mockito.mock(
 		EntitlementService.class);
+	private final LicenseKeyPermission _licenseKeyPermission = Mockito.mock(
+		LicenseKeyPermission.class);
+	private final LicenseKeyService _licenseKeyService = Mockito.mock(
+		LicenseKeyService.class);
 	private final OktaService _oktaService = Mockito.mock(OktaService.class);
 	private final ProjectMembershipPermission _projectMembershipPermission =
 		Mockito.mock(ProjectMembershipPermission.class);

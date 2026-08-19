@@ -16,16 +16,19 @@ import com.liferay.one.jira.synchronizer.AccountSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountRoleSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountSynchronizer;
 import com.liferay.one.model.AccountInvitation;
+import com.liferay.one.model.LicenseKey;
 import com.liferay.one.model.Project;
 import com.liferay.one.okta.service.OktaService;
 import com.liferay.one.permission.AccountPermission;
 import com.liferay.one.permission.AdminPermission;
+import com.liferay.one.permission.LicenseKeyPermission;
 import com.liferay.one.permission.ProjectMembershipPermission;
 import com.liferay.one.service.AccountInvitationEmailService;
 import com.liferay.one.service.AccountInvitationService;
 import com.liferay.one.service.AccountService;
 import com.liferay.one.service.EmailAddressValidatorService;
 import com.liferay.one.service.EntitlementService;
+import com.liferay.one.service.LicenseKeyService;
 import com.liferay.one.service.ProjectService;
 import com.liferay.one.service.ProvisioningAssignmentService;
 import com.liferay.one.service.ProvisioningEmailService;
@@ -185,6 +188,21 @@ public class AccountsRestController extends OneBaseRestController {
 		return new ResponseEntity<>(
 			_accountAssetService.getAccountObjectKey(externalReferenceCode),
 			HttpStatus.OK);
+	}
+
+	@GetMapping("/{externalReferenceCode}/license-keys")
+	public List<LicenseKey> getLicenseKeys(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable("externalReferenceCode") String externalReferenceCode)
+		throws Exception {
+
+		Account account = _accountService.getAccount(
+			externalReferenceCode, jwt);
+
+		_licenseKeyPermission.check(account.getId(), ActionKeys.VIEW, jwt);
+
+		return _licenseKeyService.getLicenseKeysByAccountEntryId(
+			account.getId());
 	}
 
 	@PostMapping("/{externalReferenceCode}/invitations")
@@ -824,6 +842,12 @@ public class AccountsRestController extends OneBaseRestController {
 
 	@Autowired
 	private KeyedLock _keyedLock;
+
+	@Autowired
+	private LicenseKeyPermission _licenseKeyPermission;
+
+	@Autowired
+	private LicenseKeyService _licenseKeyService;
 
 	@Autowired
 	private OktaService _oktaService;
