@@ -428,6 +428,40 @@ public class LicenseKeysRestControllerTest {
 	}
 
 	@Test
+	public void testGetLicenseKeysExportWhenLicenseKeyIdsRepeat()
+		throws Exception {
+
+		LicenseKeysRestController licenseKeysRestController =
+			_createController();
+
+		LicenseKey licenseKey = Mockito.mock(LicenseKey.class);
+
+		Mockito.when(
+			licenseKey.getAccountEntryId()
+		).thenReturn(
+			_ACCOUNT_ID
+		);
+
+		Mockito.when(
+			_licenseKeyService.getLicenseKeysByIds(new long[] {1L})
+		).thenReturn(
+			Collections.singletonList(licenseKey)
+		);
+
+		Mockito.when(
+			_licenseKeyCSVExporter.toCSV(Mockito.anyList())
+		).thenReturn(
+			"csv"
+		);
+
+		ResponseEntity<String> responseEntity =
+			licenseKeysRestController.getLicenseKeysExport(
+				null, new long[] {1L, 1L});
+
+		Assertions.assertEquals("csv", responseEntity.getBody());
+	}
+
+	@Test
 	public void testGetLicenseKeysThrowsBadRequestWhenPageSizeIsOutOfRange()
 		throws Exception {
 

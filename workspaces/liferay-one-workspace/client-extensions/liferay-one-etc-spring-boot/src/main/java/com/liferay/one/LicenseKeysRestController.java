@@ -23,7 +23,9 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.json.JSONObject;
 
@@ -195,14 +197,12 @@ public class LicenseKeysRestController extends OneBaseRestController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 
-		List<LicenseKey> licenseKeys = _licenseKeyService.getLicenseKeysByIds(
-			licenseKeyIds);
+		long[] distinctLicenseKeyIds = _toDistinctLicenseKeyIds(licenseKeyIds);
 
-		if (licenseKeys.size() < licenseKeyIds.length) {
-			throw new NoSuchLicenseKeyException(
-				"Unable to find every license key in " +
-					Arrays.toString(licenseKeyIds));
-		}
+		List<LicenseKey> licenseKeys = _licenseKeyService.getLicenseKeysByIds(
+			distinctLicenseKeyIds);
+
+		_checkAllFound(licenseKeys, distinctLicenseKeyIds);
 
 		UserAccount userAccount = getMyUserAccount(jwt);
 
@@ -320,6 +320,17 @@ public class LicenseKeysRestController extends OneBaseRestController {
 		}
 	}
 
+	private void _checkAllFound(
+			List<LicenseKey> licenseKeys, long[] licenseKeyIds)
+		throws Exception {
+
+		if (licenseKeys.size() < licenseKeyIds.length) {
+			throw new NoSuchLicenseKeyException(
+				"Unable to find every license key in " +
+					Arrays.toString(licenseKeyIds));
+		}
+	}
+
 	private List<LicenseKey> _getActiveLicenseKeys(
 			Jwt jwt, long[] licenseKeyIds)
 		throws Exception {
@@ -345,16 +356,32 @@ public class LicenseKeysRestController extends OneBaseRestController {
 	private List<LicenseKey> _getLicenseKeys(Jwt jwt, long[] licenseKeyIds)
 		throws Exception {
 
-		List<LicenseKey> licenseKeys = _licenseKeyService.getLicenseKeysByIds(
-			jwt, licenseKeyIds);
+		long[] distinctLicenseKeyIds = _toDistinctLicenseKeyIds(licenseKeyIds);
 
-		if (licenseKeys.size() < licenseKeyIds.length) {
-			throw new NoSuchLicenseKeyException(
-				"Unable to find every license key in " +
-					Arrays.toString(licenseKeyIds));
-		}
+		List<LicenseKey> licenseKeys = _licenseKeyService.getLicenseKeysByIds(
+			jwt, distinctLicenseKeyIds);
+
+		_checkAllFound(licenseKeys, distinctLicenseKeyIds);
 
 		return licenseKeys;
+	}
+
+	private long[] _toDistinctLicenseKeyIds(long[] licenseKeyIds) {
+		Set<Long> distinctLicenseKeyIds = new LinkedHashSet<>();
+
+		for (long licenseKeyId : licenseKeyIds) {
+			distinctLicenseKeyIds.add(licenseKeyId);
+		}
+
+		long[] longs = new long[distinctLicenseKeyIds.size()];
+
+		int i = 0;
+
+		for (long licenseKeyId : distinctLicenseKeyIds) {
+			longs[i++] = licenseKeyId;
+		}
+
+		return longs;
 	}
 
 	private static final MediaType _CONTENT_TYPE_CSV = MediaType.parseMediaType(
