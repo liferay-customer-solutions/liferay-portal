@@ -404,7 +404,7 @@ public class LicenseKeysRestControllerTest {
 		Mockito.verify(
 			_licenseKeyPermission
 		).check(
-			_ACCOUNT_ID, ActionKeys.VIEW, null
+			Mockito.any(), Mockito.eq(_ACCOUNT_ID), Mockito.eq(ActionKeys.VIEW)
 		);
 	}
 

@@ -204,9 +204,11 @@ public class LicenseKeysRestController extends OneBaseRestController {
 					Arrays.toString(licenseKeyIds));
 		}
 
+		UserAccount userAccount = getMyUserAccount(jwt);
+
 		for (LicenseKey licenseKey : licenseKeys) {
 			_licenseKeyPermission.check(
-				licenseKey.getAccountEntryId(), ActionKeys.VIEW, jwt);
+				userAccount, licenseKey.getAccountEntryId(), ActionKeys.VIEW);
 		}
 
 		return ResponseEntity.ok(
@@ -324,13 +326,15 @@ public class LicenseKeysRestController extends OneBaseRestController {
 
 		List<LicenseKey> licenseKeys = new ArrayList<>();
 
+		UserAccount userAccount = getMyUserAccount(jwt);
+
 		for (LicenseKey licenseKey : _getLicenseKeys(jwt, licenseKeyIds)) {
 			if (!licenseKey.isActive()) {
 				continue;
 			}
 
 			_licenseKeyPermission.check(
-				licenseKey.getAccountEntryId(), ActionKeys.VIEW, jwt);
+				userAccount, licenseKey.getAccountEntryId(), ActionKeys.VIEW);
 
 			licenseKeys.add(licenseKey);
 		}
