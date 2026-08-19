@@ -422,17 +422,23 @@ public class LicenseKeyService extends OneBaseService {
 	public JSONObject getLicenseKeysPage(int page, int pageSize)
 		throws Exception {
 
-		return new JSONObject(
-			get(
-				getAuthorization(),
-				UriComponentsBuilder.fromPath(
-					"/o/c/licensekeys"
-				).queryParam(
-					"page", page
-				).queryParam(
-					"pageSize", pageSize
-				).build(
-				).toUri()));
+		String response = get(
+			getAuthorization(),
+			UriComponentsBuilder.fromPath(
+				"/o/c/licensekeys"
+			).queryParam(
+				"page", page
+			).queryParam(
+				"pageSize", pageSize
+			).build(
+			).toUri());
+
+		if (Validator.isNull(response)) {
+			throw new Exception(
+				"Unable to read page " + page + " of the license keys");
+		}
+
+		return new JSONObject(response);
 	}
 
 	public boolean hasValidLicenseKeyTypeFree(String domains, String owner)
