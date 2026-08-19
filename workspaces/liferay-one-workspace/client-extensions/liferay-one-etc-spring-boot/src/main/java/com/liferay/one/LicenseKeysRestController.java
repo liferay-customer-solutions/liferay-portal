@@ -10,6 +10,7 @@ import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Account;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Order;
 import com.liferay.one.constants.ClassNameConstants;
 import com.liferay.one.constants.CommerceOrderConstants;
+import com.liferay.one.exception.NoSuchLicenseKeyException;
 import com.liferay.one.license.LicenseKeyCSVExporter;
 import com.liferay.one.model.LicenseKey;
 import com.liferay.one.model.SubscriptionEntry;
@@ -21,6 +22,7 @@ import com.liferay.one.service.SubscriptionEntryService;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -193,16 +195,18 @@ public class LicenseKeysRestController extends OneBaseRestController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 
-		List<LicenseKey> licenseKeys = new ArrayList<>();
+		List<LicenseKey> licenseKeys = _licenseKeyService.getLicenseKeysByIds(
+			licenseKeyIds);
 
-		for (long licenseKeyId : licenseKeyIds) {
-			LicenseKey licenseKey = _licenseKeyService.getLicenseKey(
-				licenseKeyId);
+		if (licenseKeys.size() < licenseKeyIds.length) {
+			throw new NoSuchLicenseKeyException(
+				"Unable to find every license key in " +
+					Arrays.toString(licenseKeyIds));
+		}
 
+		for (LicenseKey licenseKey : licenseKeys) {
 			_licenseKeyPermission.check(
 				licenseKey.getAccountEntryId(), ActionKeys.VIEW, jwt);
-
-			licenseKeys.add(licenseKey);
 		}
 
 		return ResponseEntity.ok(
@@ -320,10 +324,7 @@ public class LicenseKeysRestController extends OneBaseRestController {
 
 		List<LicenseKey> licenseKeys = new ArrayList<>();
 
-		for (long licenseKeyId : licenseKeyIds) {
-			LicenseKey licenseKey = _licenseKeyService.getLicenseKey(
-				jwt, licenseKeyId);
-
+		for (LicenseKey licenseKey : _getLicenseKeys(jwt, licenseKeyIds)) {
 			if (!licenseKey.isActive()) {
 				continue;
 			}
@@ -332,6 +333,30 @@ public class LicenseKeysRestController extends OneBaseRestController {
 				licenseKey.getAccountEntryId(), ActionKeys.VIEW, jwt);
 
 			licenseKeys.add(licenseKey);
+		}
+
+		return licenseKeys;
+	}
+
+	//
+
+	// One filtered read rather than one read per id. Reading each key in turn
+	// cost a round trip to the object API for every id, which the account
+	// scoped export avoids by filtering, and a caller can pass any number of
+	// ids.
+
+	//
+
+	private List<LicenseKey> _getLicenseKeys(Jwt jwt, long[] licenseKeyIds)
+		throws Exception {
+
+		List<LicenseKey> licenseKeys = _licenseKeyService.getLicenseKeysByIds(
+			jwt, licenseKeyIds);
+
+		if (licenseKeys.size() < licenseKeyIds.length) {
+			throw new NoSuchLicenseKeyException(
+				"Unable to find every license key in " +
+					Arrays.toString(licenseKeyIds));
 		}
 
 		return licenseKeys;

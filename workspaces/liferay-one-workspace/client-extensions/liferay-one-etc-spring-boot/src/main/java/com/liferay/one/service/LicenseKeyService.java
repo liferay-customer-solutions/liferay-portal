@@ -417,6 +417,20 @@ public class LicenseKeyService extends OneBaseService {
 				accountEntryId, "'"));
 	}
 
+	public List<LicenseKey> getLicenseKeysByIds(Jwt jwt, long[] licenseKeyIds)
+		throws Exception {
+
+		return getAllItems(
+			"/o/c/licensekeys", _toIdFilterString(licenseKeyIds),
+			LicenseKey::new, jwt);
+	}
+
+	public List<LicenseKey> getLicenseKeysByIds(long[] licenseKeyIds)
+		throws Exception {
+
+		return getLicenseKeys(_toIdFilterString(licenseKeyIds));
+	}
+
 	public List<LicenseKey> getLicenseKeysByName(
 			boolean active, String productName, String serverId)
 		throws Exception {
@@ -761,6 +775,29 @@ public class LicenseKeyService extends OneBaseService {
 		JSONObject jsonObject = new JSONObject(response);
 
 		return jsonObject.optInt("totalCount");
+	}
+
+	//
+
+	// The object API rejects an unquoted id with "Incompatible types", so each
+	// value is quoted. There is no in operator to lean on here.
+
+	//
+
+	private String _toIdFilterString(long[] licenseKeyIds) {
+		StringBundler sb = new StringBundler(licenseKeyIds.length * 4);
+
+		for (int i = 0; i < licenseKeyIds.length; i++) {
+			if (i > 0) {
+				sb.append(" or ");
+			}
+
+			sb.append("(id eq '");
+			sb.append(licenseKeyIds[i]);
+			sb.append("')");
+		}
+
+		return sb.toString();
 	}
 
 	private String _toISO8601(Date date) {

@@ -22,6 +22,9 @@ import com.liferay.one.service.UserAccountService;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import org.json.JSONObject;
 
 import org.junit.jupiter.api.Assertions;
@@ -198,9 +201,10 @@ public class LicenseKeysRestControllerTest {
 		);
 
 		Mockito.when(
-			_licenseKeyService.getLicenseKey(Mockito.any(), Mockito.anyLong())
+			_licenseKeyService.getLicenseKeysByIds(
+				Mockito.any(), Mockito.any(long[].class))
 		).thenReturn(
-			licenseKey
+			Arrays.asList(licenseKey, licenseKey)
 		);
 
 		Mockito.when(
@@ -327,9 +331,10 @@ public class LicenseKeysRestControllerTest {
 		);
 
 		Mockito.when(
-			_licenseKeyService.getLicenseKey(Mockito.any(), Mockito.anyLong())
+			_licenseKeyService.getLicenseKeysByIds(
+				Mockito.any(), Mockito.any(long[].class))
 		).thenReturn(
-			licenseKey
+			Collections.singletonList(licenseKey)
 		);
 
 		byte[] zip = {1, 2, 3};
@@ -367,9 +372,9 @@ public class LicenseKeysRestControllerTest {
 		);
 
 		Mockito.when(
-			_licenseKeyService.getLicenseKey(1L)
+			_licenseKeyService.getLicenseKeysByIds(new long[] {1L})
 		).thenReturn(
-			licenseKey
+			Collections.singletonList(licenseKey)
 		);
 
 		Mockito.when(
