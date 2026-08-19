@@ -70,4 +70,10 @@ public class EntitlementConstants {
 		NAME_STANDARD_8_5_SUPPORT, NAME_STRATEGIC_24_7_SUPPORT
 	};
 
+	public static final String STATE_ACTIVE = "Active";
+
+	public static final String STATE_EXPIRED = "Expired";
+
+	public static final String STATE_UNACTIVATED = "Unactivated";
+
 }

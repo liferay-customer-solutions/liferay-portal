@@ -13,6 +13,7 @@ import com.liferay.one.jira.service.AccountAssetService;
 import com.liferay.one.jira.synchronizer.AccountSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountRoleSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountSynchronizer;
+import com.liferay.one.license.LicenseKeyCSVExporter;
 import com.liferay.one.model.AccountInvitation;
 import com.liferay.one.model.LicenseKey;
 import com.liferay.one.model.Project;
@@ -51,6 +52,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -354,6 +356,56 @@ public class AccountsRestControllerTest {
 			licenseKeys,
 			accountsRestController.getLicenseKeys(
 				null, _EXTERNAL_REFERENCE_CODE));
+
+		Mockito.verify(
+			_licenseKeyPermission
+		).check(
+			_ACCOUNT_ID, ActionKeys.VIEW, null
+		);
+	}
+
+	@Test
+	public void testGetLicenseKeysExport() throws Exception {
+		AccountsRestController accountsRestController = _createController();
+
+		Mockito.when(
+			_accountService.getAccount(_EXTERNAL_REFERENCE_CODE, null)
+		).thenReturn(
+			_createAccount()
+		);
+
+		List<LicenseKey> licenseKeys = Collections.singletonList(
+			Mockito.mock(LicenseKey.class));
+
+		Mockito.when(
+			_licenseKeyService.getLicenseKeysByAccountEntryId(_ACCOUNT_ID)
+		).thenReturn(
+			licenseKeys
+		);
+
+		Mockito.when(
+			_licenseKeyCSVExporter.getFileName()
+		).thenReturn(
+			"activation-key-details.csv"
+		);
+
+		Mockito.when(
+			_licenseKeyCSVExporter.toCSV(licenseKeys)
+		).thenReturn(
+			"csv"
+		);
+
+		ResponseEntity<String> responseEntity =
+			accountsRestController.getLicenseKeysExport(
+				null, _EXTERNAL_REFERENCE_CODE);
+
+		Assertions.assertEquals("csv", responseEntity.getBody());
+
+		HttpHeaders httpHeaders = responseEntity.getHeaders();
+
+		Assertions.assertEquals(
+			"attachment; filename=\"activation-key-details.csv\"",
+			httpHeaders.getFirst(HttpHeaders.CONTENT_DISPOSITION));
 
 		Mockito.verify(
 			_licenseKeyPermission
@@ -1445,6 +1497,9 @@ public class AccountsRestControllerTest {
 		ReflectionTestUtils.setField(
 			accountsRestController, "_keyedLock", new KeyedLock());
 		ReflectionTestUtils.setField(
+			accountsRestController, "_licenseKeyCSVExporter",
+			_licenseKeyCSVExporter);
+		ReflectionTestUtils.setField(
 			accountsRestController, "_licenseKeyPermission",
 			_licenseKeyPermission);
 		ReflectionTestUtils.setField(
@@ -1587,6 +1642,8 @@ public class AccountsRestControllerTest {
 		Mockito.mock(EmailAddressValidatorService.class);
 	private final EntitlementService _entitlementService = Mockito.mock(
 		EntitlementService.class);
+	private final LicenseKeyCSVExporter _licenseKeyCSVExporter = Mockito.mock(
+		LicenseKeyCSVExporter.class);
 	private final LicenseKeyPermission _licenseKeyPermission = Mockito.mock(
 		LicenseKeyPermission.class);
 	private final LicenseKeyService _licenseKeyService = Mockito.mock(

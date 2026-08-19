@@ -7,12 +7,14 @@ package com.liferay.one.service;
 
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Order;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.OrderItem;
+import com.liferay.one.constants.EntitlementConstants;
 import com.liferay.one.exception.DuplicateEntitlementException;
 import com.liferay.one.model.Entitlement;
 import com.liferay.one.model.EntitlementDefinition;
 import com.liferay.one.util.OrderItemUtil;
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -302,6 +304,24 @@ public class EntitlementService extends OneBaseService {
 			_NESTED_FIELDS_ENTITLEMENT_DEFINITION);
 	}
 
+	public String getSubscriptionState(long accountEntryId) throws Exception {
+		String state = StringPool.BLANK;
+
+		List<Entitlement> entitlements = getEntitlements(
+			"r_accountEntryToEntitlement_accountEntryId eq '" + accountEntryId +
+				"'");
+
+		for (Entitlement entitlement : entitlements) {
+			String curState = _getEntitlementState(entitlement);
+
+			if (_getStateRank(curState) > _getStateRank(state)) {
+				state = curState;
+			}
+		}
+
+		return state;
+	}
+
 	public boolean hasEntitlement(long accountId, String... entitlementNames)
 		throws Exception {
 
@@ -488,6 +508,22 @@ public class EntitlementService extends OneBaseService {
 		return new ArrayList<>(entitlementDefinitions.values());
 	}
 
+	private String _getEntitlementState(Entitlement entitlement) {
+		if (entitlement.isExpired()) {
+			return EntitlementConstants.STATE_EXPIRED;
+		}
+
+		Instant startDateInstant = entitlement.getStartDateInstant();
+
+		if ((startDateInstant != null) &&
+			startDateInstant.isAfter(Instant.now())) {
+
+			return EntitlementConstants.STATE_UNACTIVATED;
+		}
+
+		return EntitlementConstants.STATE_ACTIVE;
+	}
+
 	private Instant _getLatestInstant(
 		Instant endDateInstant, Instant startDateInstant) {
 
@@ -513,6 +549,22 @@ public class EntitlementService extends OneBaseService {
 		}
 
 		return GetterUtil.getString(customFields.get("salesforceProjectId"));
+	}
+
+	private int _getStateRank(String state) {
+		if (state.equals(EntitlementConstants.STATE_ACTIVE)) {
+			return 3;
+		}
+
+		if (state.equals(EntitlementConstants.STATE_UNACTIVATED)) {
+			return 2;
+		}
+
+		if (state.equals(EntitlementConstants.STATE_EXPIRED)) {
+			return 1;
+		}
+
+		return 0;
 	}
 
 	private boolean _hasEntitlement(

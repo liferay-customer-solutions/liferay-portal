@@ -10,6 +10,7 @@ import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Account;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Order;
 import com.liferay.one.constants.ClassNameConstants;
 import com.liferay.one.constants.CommerceOrderConstants;
+import com.liferay.one.license.LicenseKeyCSVExporter;
 import com.liferay.one.model.LicenseKey;
 import com.liferay.one.model.SubscriptionEntry;
 import com.liferay.one.permission.AdminPermission;
@@ -353,6 +354,75 @@ public class LicenseKeysRestControllerTest {
 	}
 
 	@Test
+	public void testGetLicenseKeysExport() throws Exception {
+		LicenseKeysRestController licenseKeysRestController =
+			_createController();
+
+		LicenseKey licenseKey = Mockito.mock(LicenseKey.class);
+
+		Mockito.when(
+			licenseKey.getAccountEntryId()
+		).thenReturn(
+			_ACCOUNT_ID
+		);
+
+		Mockito.when(
+			_licenseKeyService.getLicenseKey(1L)
+		).thenReturn(
+			licenseKey
+		);
+
+		Mockito.when(
+			_licenseKeyCSVExporter.getFileName()
+		).thenReturn(
+			"activation-key-details.csv"
+		);
+
+		Mockito.when(
+			_licenseKeyCSVExporter.toCSV(Mockito.anyList())
+		).thenReturn(
+			"csv"
+		);
+
+		ResponseEntity<String> responseEntity =
+			licenseKeysRestController.getLicenseKeysExport(
+				null, new long[] {1L});
+
+		Assertions.assertEquals("csv", responseEntity.getBody());
+
+		HttpHeaders httpHeaders = responseEntity.getHeaders();
+
+		Assertions.assertEquals(
+			"attachment; filename=\"activation-key-details.csv\"",
+			httpHeaders.getFirst(HttpHeaders.CONTENT_DISPOSITION));
+
+		Mockito.verify(
+			_licenseKeyPermission
+		).check(
+			_ACCOUNT_ID, ActionKeys.VIEW, null
+		);
+	}
+
+	@Test
+	public void testGetLicenseKeysExportWhenLicenseKeyIdsIsEmpty()
+		throws Exception {
+
+		LicenseKeysRestController licenseKeysRestController =
+			_createController();
+
+		ResponseStatusException responseStatusException =
+			Assertions.assertThrows(
+				ResponseStatusException.class,
+				() -> licenseKeysRestController.getLicenseKeysExport(
+					null, new long[0]));
+
+		Assertions.assertEquals(
+			HttpStatus.NOT_FOUND, responseStatusException.getStatusCode());
+
+		Mockito.verifyNoInteractions(_licenseKeyCSVExporter);
+	}
+
+	@Test
 	public void testGetLicenseKeysThrowsBadRequestWhenPageSizeIsOutOfRange()
 		throws Exception {
 
@@ -660,6 +730,10 @@ public class LicenseKeysRestControllerTest {
 			_commerceOrderService);
 
 		ReflectionTestUtils.setField(
+			licenseKeysRestController, "_licenseKeyCSVExporter",
+			_licenseKeyCSVExporter);
+
+		ReflectionTestUtils.setField(
 			licenseKeysRestController, "_licenseKeyPermission",
 			_licenseKeyPermission);
 
@@ -686,6 +760,8 @@ public class LicenseKeysRestControllerTest {
 		AdminPermission.class);
 	private final CommerceOrderService _commerceOrderService = Mockito.mock(
 		CommerceOrderService.class);
+	private final LicenseKeyCSVExporter _licenseKeyCSVExporter = Mockito.mock(
+		LicenseKeyCSVExporter.class);
 	private final LicenseKeyPermission _licenseKeyPermission = Mockito.mock(
 		LicenseKeyPermission.class);
 	private final LicenseKeyService _licenseKeyService = Mockito.mock(

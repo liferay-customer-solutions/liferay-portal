@@ -15,6 +15,7 @@ import com.liferay.one.jira.service.AccountAssetService;
 import com.liferay.one.jira.synchronizer.AccountSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountRoleSynchronizer;
 import com.liferay.one.jira.synchronizer.AccountUserAccountSynchronizer;
+import com.liferay.one.license.LicenseKeyCSVExporter;
 import com.liferay.one.model.AccountInvitation;
 import com.liferay.one.model.LicenseKey;
 import com.liferay.one.model.Project;
@@ -60,7 +61,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -203,6 +206,31 @@ public class AccountsRestController extends OneBaseRestController {
 
 		return _licenseKeyService.getLicenseKeysByAccountEntryId(
 			account.getId());
+	}
+
+	@GetMapping("/{externalReferenceCode}/license-keys/export")
+	public ResponseEntity<String> getLicenseKeysExport(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable("externalReferenceCode") String externalReferenceCode)
+		throws Exception {
+
+		Account account = _accountService.getAccount(
+			externalReferenceCode, jwt);
+
+		_licenseKeyPermission.check(account.getId(), ActionKeys.VIEW, jwt);
+
+		return ResponseEntity.ok(
+		).contentType(
+			MediaType.parseMediaType("text/csv")
+		).header(
+			HttpHeaders.CONTENT_DISPOSITION,
+			"attachment; filename=\"" + _licenseKeyCSVExporter.getFileName() +
+				"\""
+		).body(
+			_licenseKeyCSVExporter.toCSV(
+				_licenseKeyService.getLicenseKeysByAccountEntryId(
+					account.getId()))
+		);
 	}
 
 	@PostMapping("/{externalReferenceCode}/invitations")
@@ -842,6 +870,9 @@ public class AccountsRestController extends OneBaseRestController {
 
 	@Autowired
 	private KeyedLock _keyedLock;
+
+	@Autowired
+	private LicenseKeyCSVExporter _licenseKeyCSVExporter;
 
 	@Autowired
 	private LicenseKeyPermission _licenseKeyPermission;

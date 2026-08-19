@@ -10,6 +10,7 @@ import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Account;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Order;
 import com.liferay.one.constants.ClassNameConstants;
 import com.liferay.one.constants.CommerceOrderConstants;
+import com.liferay.one.license.LicenseKeyCSVExporter;
 import com.liferay.one.model.LicenseKey;
 import com.liferay.one.model.SubscriptionEntry;
 import com.liferay.one.permission.AdminPermission;
@@ -182,6 +183,40 @@ public class LicenseKeysRestController extends OneBaseRestController {
 		);
 	}
 
+	@GetMapping("/export")
+	public ResponseEntity<String> getLicenseKeysExport(
+			@AuthenticationPrincipal Jwt jwt,
+			@RequestParam("licenseKeyIds") long[] licenseKeyIds)
+		throws Exception {
+
+		if (licenseKeyIds.length == 0) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+
+		List<LicenseKey> licenseKeys = new ArrayList<>();
+
+		for (long licenseKeyId : licenseKeyIds) {
+			LicenseKey licenseKey = _licenseKeyService.getLicenseKey(
+				licenseKeyId);
+
+			_licenseKeyPermission.check(
+				licenseKey.getAccountEntryId(), ActionKeys.VIEW, jwt);
+
+			licenseKeys.add(licenseKey);
+		}
+
+		return ResponseEntity.ok(
+		).contentType(
+			_CONTENT_TYPE_CSV
+		).header(
+			HttpHeaders.CONTENT_DISPOSITION,
+			"attachment; filename=\"" + _licenseKeyCSVExporter.getFileName() +
+				"\""
+		).body(
+			_licenseKeyCSVExporter.toCSV(licenseKeys)
+		);
+	}
+
 	@GetMapping("/subscriptions")
 	public boolean getSubscriptions(
 			@AuthenticationPrincipal Jwt jwt,
@@ -302,6 +337,9 @@ public class LicenseKeysRestController extends OneBaseRestController {
 		return licenseKeys;
 	}
 
+	private static final MediaType _CONTENT_TYPE_CSV = MediaType.parseMediaType(
+		"text/csv");
+
 	private static final int _MAX_PAGE_SIZE = 100;
 
 	@Autowired
@@ -309,6 +347,9 @@ public class LicenseKeysRestController extends OneBaseRestController {
 
 	@Autowired
 	private CommerceOrderService _commerceOrderService;
+
+	@Autowired
+	private LicenseKeyCSVExporter _licenseKeyCSVExporter;
 
 	@Autowired
 	private LicenseKeyPermission _licenseKeyPermission;
