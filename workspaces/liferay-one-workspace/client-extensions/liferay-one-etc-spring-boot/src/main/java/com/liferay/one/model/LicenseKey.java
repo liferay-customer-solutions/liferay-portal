@@ -5,6 +5,8 @@
 
 package com.liferay.one.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.Instant;
 
 import org.json.JSONObject;
@@ -92,6 +94,7 @@ public class LicenseKey {
 		return _ipAddresses;
 	}
 
+	@JsonIgnore
 	public String getKey() {
 		return _key;
 	}
