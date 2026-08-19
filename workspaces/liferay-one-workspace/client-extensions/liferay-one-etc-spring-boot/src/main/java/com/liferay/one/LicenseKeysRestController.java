@@ -124,7 +124,7 @@ public class LicenseKeysRestController extends OneBaseRestController {
 
 		return ResponseEntity.ok(
 		).contentType(
-			MediaType.APPLICATION_XML
+			MediaType.TEXT_XML
 		).header(
 			HttpHeaders.CONTENT_DISPOSITION,
 			"attachment; filename=\"" + fileName + "\""
@@ -148,7 +148,7 @@ public class LicenseKeysRestController extends OneBaseRestController {
 
 		return ResponseEntity.ok(
 		).contentType(
-			MediaType.APPLICATION_XML
+			MediaType.TEXT_XML
 		).header(
 			HttpHeaders.CONTENT_DISPOSITION,
 			"attachment; filename=\"" +

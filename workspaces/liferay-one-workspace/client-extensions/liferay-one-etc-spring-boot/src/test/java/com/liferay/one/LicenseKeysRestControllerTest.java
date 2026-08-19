@@ -167,7 +167,7 @@ public class LicenseKeysRestControllerTest {
 			"attachment; filename=\"activation-key.xml\"",
 			httpHeaders.getFirst(HttpHeaders.CONTENT_DISPOSITION));
 		Assertions.assertEquals(
-			MediaType.APPLICATION_XML, httpHeaders.getContentType());
+			MediaType.TEXT_XML, httpHeaders.getContentType());
 
 		Mockito.verify(
 			_licenseKeyPermission
@@ -227,7 +227,7 @@ public class LicenseKeysRestControllerTest {
 			"attachment; filename=\"activation-keys.xml\"",
 			httpHeaders.getFirst(HttpHeaders.CONTENT_DISPOSITION));
 		Assertions.assertEquals(
-			MediaType.APPLICATION_XML, httpHeaders.getContentType());
+			MediaType.TEXT_XML, httpHeaders.getContentType());
 	}
 
 	@Test
