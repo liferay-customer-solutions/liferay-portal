@@ -12,6 +12,7 @@ import {useDeliveryProduct} from '~/hooks/useDeliveryProduct';
 import {
 	getSpecificationValue,
 	getSpecificationValues,
+	useHasActiveExperienceOffering,
 	useProjectProducts,
 } from '~/hooks/useProjectCommerce';
 import {
@@ -61,6 +62,9 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 		products,
 	} = useProjectProducts(projectId, selectedContractERC);
 
+	const {hasActiveExperienceOffering, loading: experienceOfferingLoading} =
+		useHasActiveExperienceOffering();
+
 	const productId =
 		products.find((product) => product.externalReferenceCode === itemERC)
 			?.id ?? '';
@@ -75,7 +79,7 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 		/>
 	);
 
-	if (productsLoading || isLoading) {
+	if (experienceOfferingLoading || productsLoading || isLoading) {
 		return renderMessage('loading');
 	}
 
@@ -98,6 +102,7 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 		tabKeys,
 		utilizationProfile,
 	} = resolveProductTabConfig({
+		hasActiveExperienceOffering,
 		kind,
 		orderType: orderInfo.orderType,
 		product,

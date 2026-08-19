@@ -6,6 +6,7 @@
 import {format} from 'date-fns';
 import {useMemo} from 'react';
 import useSWR from 'swr';
+import {EXPERIENCE_OFFERING_PRODUCT_EXTERNAL_REFERENCE_CODES} from '~/enums/Product';
 import {useFetch} from '~/hooks/useFetch';
 import i18n from '~/i18n';
 import {getProductContactRoleExternalReferenceCodes} from '~/pages/MyAccount/ProjectMembers/projectRoles';
@@ -416,6 +417,47 @@ export function useAccountProducts() {
 	}, [contractsData, productsData]);
 
 	return {loading: contractsLoading || productsLoading, products};
+}
+
+export function useHasActiveExperienceOffering() {
+	const accountId = Liferay.CommerceContext?.account?.accountId;
+
+	const {
+		data,
+		error,
+		isLoading: loading,
+	} = useFetch<APIResponse<ContractNode>>(
+		accountId ? '/o/c/contracts' : null,
+		{
+			params: {
+				filter: `r_accountEntryToContract_accountEntryId eq '${accountId}'`,
+				nestedFields:
+					'commerceOrderItemToEntitlement,contractToEntitlement,entitlementDefinitionToEntitlement',
+				nestedFieldsDepth: 2,
+				pageSize: 100,
+			},
+		}
+	);
+
+	const hasActiveExperienceOffering = useMemo(
+		() =>
+			(data?.items ?? [])
+				.flatMap((contract) =>
+					toProductEntitlements(contract.contractToEntitlement)
+				)
+				.some(
+					(entitlement) =>
+						EXPERIENCE_OFFERING_PRODUCT_EXTERNAL_REFERENCE_CODES.some(
+							(code) =>
+								code ===
+								entitlement.productExternalReferenceCode
+						) &&
+						getEntitlementStatus(entitlement.endDate) === 'active'
+				),
+		[data]
+	);
+
+	return {error, hasActiveExperienceOffering, loading};
 }
 
 export function useAccountProjectContactRoles() {

@@ -39,10 +39,12 @@ export type ProductTabConfig = {
 };
 
 export function resolveProductTabConfig({
+	hasActiveExperienceOffering,
 	kind,
 	orderType,
 	product,
 }: {
+	hasActiveExperienceOffering: boolean;
 	kind: ProjectItemKind;
 	orderType?: string;
 	product: DeliveryProduct;
@@ -69,7 +71,11 @@ export function resolveProductTabConfig({
 	const tabPresent: Record<ProjectTabKey, boolean> = {
 		'activation':
 			activationProfile !== 'none' &&
-			!LICENSE_KEY_ACTIVATION_PROFILES.includes(activationProfile),
+			!LICENSE_KEY_ACTIVATION_PROFILES.includes(activationProfile) &&
+			!(
+				activationProfile === 'cloud-native' &&
+				hasActiveExperienceOffering
+			),
 		'details': true,
 		'download': downloadProfile !== 'none',
 		'environment': environmentProfile !== 'none',

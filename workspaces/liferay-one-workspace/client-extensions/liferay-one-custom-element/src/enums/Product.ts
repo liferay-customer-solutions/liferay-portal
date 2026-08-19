@@ -19,6 +19,14 @@ export const ProductEditionOption = {
 export type ProductEditionOption =
 	(typeof ProductEditionOption)[keyof typeof ProductEditionOption];
 
+export const ProductExternalReferenceCode = {
+	PAAS_EXPERIENCE: 'PRDCT-PAAS',
+	SAAS_EXPERIENCE: 'PRDCT-SAAS',
+} as const;
+
+export type ProductExternalReferenceCode =
+	(typeof ProductExternalReferenceCode)[keyof typeof ProductExternalReferenceCode];
+
 export const ProductImageFallbackCategories = {
 	PRODUCT_ICON: 'productIcon',
 	PRODUCT_IMAGE: 'productImage',
@@ -230,6 +238,12 @@ const ALL_OFFERINGS = [
 	ProductOfferingTypes.LIFERAY_SAAS,
 	ProductOfferingTypes.LIFERAY_SELF_HOSTED,
 ];
+
+export const EXPERIENCE_OFFERING_PRODUCT_EXTERNAL_REFERENCE_CODES: readonly ProductExternalReferenceCode[] =
+	[
+		ProductExternalReferenceCode.PAAS_EXPERIENCE,
+		ProductExternalReferenceCode.SAAS_EXPERIENCE,
+	];
 
 const offeringTypes = {
 	'client-extension': ALL_OFFERINGS,
