@@ -340,12 +340,12 @@ public class LicenseKeysRestController extends OneBaseRestController {
 		UserAccount userAccount = getMyUserAccount(jwt);
 
 		for (LicenseKey licenseKey : _getLicenseKeys(jwt, licenseKeyIds)) {
+			_licenseKeyPermission.check(
+				userAccount, licenseKey.getAccountEntryId(), ActionKeys.VIEW);
+
 			if (!licenseKey.isActive()) {
 				continue;
 			}
-
-			_licenseKeyPermission.check(
-				userAccount, licenseKey.getAccountEntryId(), ActionKeys.VIEW);
 
 			licenseKeys.add(licenseKey);
 		}
