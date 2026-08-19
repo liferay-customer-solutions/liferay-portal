@@ -11,6 +11,7 @@ import com.liferay.one.model.LicenseKey;
 import com.liferay.one.service.AccountService;
 import com.liferay.one.service.CommerceOrderService;
 import com.liferay.one.service.EntitlementService;
+import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.ee.license.shared.LicenseConstants;
@@ -76,12 +77,17 @@ public class LicenseKeyCSVExporter {
 		return sb.toString();
 	}
 
+	private String _escapeCSVValue(Object object) {
+		return StringUtil.replace(
+			String.valueOf(object), CharPool.QUOTE, "\"\"");
+	}
+
 	private String _formatCSVFields(Object... objects) {
 		StringBundler sb = new StringBundler((4 * objects.length) + 1);
 
 		for (int i = 0; i < objects.length; i++) {
 			sb.append(StringPool.QUOTE);
-			sb.append(objects[i]);
+			sb.append(_escapeCSVValue(objects[i]));
 			sb.append(StringPool.QUOTE);
 
 			if (i < (objects.length - 1)) {

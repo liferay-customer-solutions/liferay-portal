@@ -11,8 +11,10 @@ import com.liferay.one.model.LicenseKey;
 import com.liferay.one.service.AccountService;
 import com.liferay.one.service.CommerceOrderService;
 import com.liferay.one.service.EntitlementService;
+import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.ee.license.shared.LicenseConstants;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.Collections;
 import java.util.List;
@@ -100,6 +102,59 @@ public class LicenseKeyCSVExporterTest {
 				"\"12\",\"1.2.3.4\",\"AA:BB\",\"acme.host\",\"4\",\"null\"," +
 					"\"null\",\"Active\",\"9\",\"false\"",
 			lines.get(1));
+	}
+
+	@Test
+	public void testToCSVEscapesQuotes() throws Exception {
+		Account account = new Account();
+
+		account.setDefaultBillingAddressId(4L);
+		account.setExternalReferenceCode("ACCNT-1");
+		account.setId(_ACCOUNT_ENTRY_ID);
+
+		Mockito.when(
+			_accountService.fetchAccount(_ACCOUNT_ENTRY_ID)
+		).thenReturn(
+			account
+		);
+
+		Mockito.when(
+			_commerceOrderService.getAccountSupportInfo(_ACCOUNT_ENTRY_ID, 4L)
+		).thenReturn(
+			new AccountSupportInfo("en_US", "US")
+		);
+
+		Mockito.when(
+			_entitlementService.getSubscriptionState(_ACCOUNT_ENTRY_ID)
+		).thenReturn(
+			"Active"
+		);
+
+		LicenseKey licenseKey = _createLicenseKey("enterprise");
+
+		Mockito.when(
+			licenseKey.getHostName()
+		).thenReturn(
+			"say \"hello\", friend"
+		);
+
+		String csv = _licenseKeyCSVExporter.toCSV(
+			Collections.singletonList(licenseKey));
+
+		List<String> lines = List.of(csv.split("\n"));
+
+		Assertions.assertEquals(2, lines.size());
+
+		Assertions.assertTrue(
+			lines.get(
+				1
+			).contains(
+				"\"say \"\"hello\"\", friend\""
+			),
+			lines.get(1));
+
+		Assertions.assertEquals(
+			16, StringUtil.count(lines.get(0), CharPool.COMMA) + 1);
 	}
 
 	@Test
