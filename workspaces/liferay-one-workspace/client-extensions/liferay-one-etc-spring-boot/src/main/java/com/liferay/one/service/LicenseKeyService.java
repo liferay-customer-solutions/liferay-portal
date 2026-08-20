@@ -31,6 +31,7 @@ import java.time.temporal.ChronoUnit;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -419,6 +420,10 @@ public class LicenseKeyService extends OneBaseService {
 
 	public List<LicenseKey> getLicenseKeysByIds(Jwt jwt, long[] licenseKeyIds)
 		throws Exception {
+
+		if (licenseKeyIds.length == 0) {
+			return Collections.emptyList();
+		}
 
 		return getAllItems(
 			"/o/c/licensekeys", _toIdFilterString(licenseKeyIds),

@@ -240,6 +240,21 @@ public class LicenseKeyServiceTest {
 	}
 
 	@Test
+	public void testGetLicenseKeysByIdsWhenLicenseKeyIdsIsEmpty()
+		throws Exception {
+
+		Assertions.assertEquals(
+			Collections.emptyList(),
+			_licenseKeyService.getLicenseKeysByIds(null, new long[0]));
+
+		Mockito.verify(
+			_licenseKeyService, Mockito.never()
+		).getAllItems(
+			Mockito.anyString(), Mockito.any(), Mockito.any(), Mockito.any()
+		);
+	}
+
+	@Test
 	public void testGetLicenseKeysByNameFilter() throws Exception {
 		_licenseKeyService.getLicenseKeysByName(true, "DXP", "srv-1");
 
