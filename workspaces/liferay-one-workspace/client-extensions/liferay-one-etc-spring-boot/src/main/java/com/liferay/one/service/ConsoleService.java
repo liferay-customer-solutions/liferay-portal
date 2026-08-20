@@ -108,6 +108,19 @@ public class ConsoleService extends BaseService {
 		return _authorization;
 	}
 
+	public String getProjectsUsage(String userEmail) throws Exception {
+		return get(
+			getAuthorization(),
+			UriComponentsBuilder.fromUriString(
+				_consoleAuthURL
+			).path(
+				"/admin/user-projects-plan-usage"
+			).queryParam(
+				"userEmail", userEmail
+			).build(
+			).toUri());
+	}
+
 	public void setUpProject(
 			String cluster, boolean deployable, String dxpProjectUid,
 			String dxpVirtualInstanceId, String[] emailAddresses, long orderId,
@@ -136,6 +149,17 @@ public class ConsoleService extends BaseService {
 			deployApp(
 				_consoleAuthEmailAddress, String.valueOf(orderId), projectId);
 		}
+	}
+
+	public void uninstallApp(long orderId) throws Exception {
+		delete(
+			getAuthorization(), StringPool.BLANK,
+			UriComponentsBuilder.fromUriString(
+				_consoleAuthURL
+			).path(
+				"/apps/" + orderId
+			).build(
+			).toUri());
 	}
 
 	@Override
