@@ -35,6 +35,7 @@ export function getTotalByOrderKey(
 
 export const OrderCustomFields = {
 	CLOUD_PROJECT_NAME: 'cloudProjectName',
+	CLOUD_PROVISIONING: 'cloud-provisioning',
 	KORONEIKI_PROJECT: 'koroneiki-project',
 	ORDER_METADATA: 'order-metadata',
 	PROJECT_NAME: 'projectName',

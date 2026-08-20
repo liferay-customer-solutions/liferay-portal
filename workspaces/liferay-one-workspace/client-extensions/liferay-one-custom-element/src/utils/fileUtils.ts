@@ -5,8 +5,22 @@
 
 export {downloadFile} from './downloadFile';
 
+const sizeUnits = {
+	GB: 1000 ** 3,
+	KB: 1000,
+	MB: 1000 ** 2,
+};
+
 export function base64ToText(base64: string) {
 	return base64.split(',').at(-1);
+}
+
+export function convertSize(
+	value: number | string,
+	fromUnit: keyof typeof sizeUnits,
+	toUnit: keyof typeof sizeUnits
+) {
+	return (Number(value) * sizeUnits[fromUnit]) / sizeUnits[toUnit];
 }
 
 export function fileToBase64(file: File): Promise<ArrayBuffer | null | string> {
