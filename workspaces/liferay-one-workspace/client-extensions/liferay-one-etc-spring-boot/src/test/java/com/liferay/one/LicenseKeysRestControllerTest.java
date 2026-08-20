@@ -312,6 +312,44 @@ public class LicenseKeysRestControllerTest {
 	}
 
 	@Test
+	public void testGetLicenseKeysDownloadWhenLicenseKeyIdsExceedsTheMaximum()
+		throws Exception {
+
+		LicenseKeysRestController licenseKeysRestController =
+			_createController();
+
+		ResponseStatusException responseStatusException =
+			Assertions.assertThrows(
+				ResponseStatusException.class,
+				() -> licenseKeysRestController.getLicenseKeysDownload(
+					null, new long[101]));
+
+		Assertions.assertEquals(
+			HttpStatus.BAD_REQUEST, responseStatusException.getStatusCode());
+
+		Mockito.verifyNoInteractions(_licenseKeyService);
+	}
+
+	@Test
+	public void testGetLicenseKeysDownloadWhenLicenseKeyIdsIsEmpty()
+		throws Exception {
+
+		LicenseKeysRestController licenseKeysRestController =
+			_createController();
+
+		ResponseStatusException responseStatusException =
+			Assertions.assertThrows(
+				ResponseStatusException.class,
+				() -> licenseKeysRestController.getLicenseKeysDownload(
+					null, new long[0]));
+
+		Assertions.assertEquals(
+			HttpStatus.NOT_FOUND, responseStatusException.getStatusCode());
+
+		Mockito.verifyNoInteractions(_licenseKeyService);
+	}
+
+	@Test
 	public void testGetLicenseKeysDownloadZip() throws Exception {
 		LicenseKeysRestController licenseKeysRestController =
 			_createController();
@@ -356,6 +394,44 @@ public class LicenseKeysRestControllerTest {
 		Assertions.assertEquals(
 			"attachment; filename=\"activation-keys.zip\"",
 			httpHeaders.getFirst(HttpHeaders.CONTENT_DISPOSITION));
+	}
+
+	@Test
+	public void testGetLicenseKeysDownloadZipWhenLicenseKeyIdsExceedsTheMaximum()
+		throws Exception {
+
+		LicenseKeysRestController licenseKeysRestController =
+			_createController();
+
+		ResponseStatusException responseStatusException =
+			Assertions.assertThrows(
+				ResponseStatusException.class,
+				() -> licenseKeysRestController.getLicenseKeysDownloadZip(
+					null, new long[101]));
+
+		Assertions.assertEquals(
+			HttpStatus.BAD_REQUEST, responseStatusException.getStatusCode());
+
+		Mockito.verifyNoInteractions(_licenseKeyService);
+	}
+
+	@Test
+	public void testGetLicenseKeysDownloadZipWhenLicenseKeyIdsIsEmpty()
+		throws Exception {
+
+		LicenseKeysRestController licenseKeysRestController =
+			_createController();
+
+		ResponseStatusException responseStatusException =
+			Assertions.assertThrows(
+				ResponseStatusException.class,
+				() -> licenseKeysRestController.getLicenseKeysDownloadZip(
+					null, new long[0]));
+
+		Assertions.assertEquals(
+			HttpStatus.NOT_FOUND, responseStatusException.getStatusCode());
+
+		Mockito.verifyNoInteractions(_licenseKeyService);
 	}
 
 	@Test

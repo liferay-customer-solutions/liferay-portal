@@ -143,7 +143,7 @@ public class LicenseKeysRestController extends OneBaseRestController {
 			@RequestParam("licenseKeyIds") long[] licenseKeyIds)
 		throws Exception {
 
-		_checkMaxLicenseKeyIds(licenseKeyIds);
+		_checkLicenseKeyIds(licenseKeyIds);
 
 		List<LicenseKey> licenseKeys = _getActiveLicenseKeys(
 			jwt, licenseKeyIds);
@@ -171,7 +171,7 @@ public class LicenseKeysRestController extends OneBaseRestController {
 			@RequestParam("licenseKeyIds") long[] licenseKeyIds)
 		throws Exception {
 
-		_checkMaxLicenseKeyIds(licenseKeyIds);
+		_checkLicenseKeyIds(licenseKeyIds);
 
 		List<LicenseKey> licenseKeys = _getActiveLicenseKeys(
 			jwt, licenseKeyIds);
@@ -197,11 +197,7 @@ public class LicenseKeysRestController extends OneBaseRestController {
 			@RequestParam("licenseKeyIds") long[] licenseKeyIds)
 		throws Exception {
 
-		_checkMaxLicenseKeyIds(licenseKeyIds);
-
-		if (licenseKeyIds.length == 0) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-		}
+		_checkLicenseKeyIds(licenseKeyIds);
 
 		long[] distinctLicenseKeyIds = _toDistinctLicenseKeyIds(licenseKeyIds);
 
@@ -337,7 +333,11 @@ public class LicenseKeysRestController extends OneBaseRestController {
 		}
 	}
 
-	private void _checkMaxLicenseKeyIds(long[] licenseKeyIds) {
+	private void _checkLicenseKeyIds(long[] licenseKeyIds) {
+		if (licenseKeyIds.length == 0) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+
 		if (licenseKeyIds.length > _MAX_LICENSE_KEY_IDS) {
 			throw new ResponseStatusException(
 				HttpStatus.BAD_REQUEST,
