@@ -15,6 +15,9 @@ const OrderDetails = lazy(() => import('./Orders/OrderDetails/OrderDetails'));
 const OrderHistory = lazy(() => import('./Orders/OrderHistory/OrderHistory'));
 const Orders = lazy(() => import('./Orders/Orders'));
 const Applications = lazy(() => import('./Projects/Applications/Applications'));
+const CloudAppInstall = lazy(
+	() => import('./Projects/CloudAppInstall/CloudAppInstall')
+);
 const LicenseKeys = lazy(() => import('./Projects/LicenseKeys/LicenseKeys'));
 const LicenseKeyDetails = lazy(
 	() => import('./Projects/LicenseKeys/LicenseKeyDetails/LicenseKeyDetails')
@@ -45,6 +48,10 @@ export const projectDetailRoutes: AppRoute[] = [
 			{
 				element: <ProjectItemDetails kind="application" />,
 				path: ':applicationERC',
+			},
+			{
+				element: <CloudAppInstall />,
+				path: ':applicationERC/install/:orderId',
 			},
 			{element: <Navigate replace to="." />, path: '*'},
 		],
