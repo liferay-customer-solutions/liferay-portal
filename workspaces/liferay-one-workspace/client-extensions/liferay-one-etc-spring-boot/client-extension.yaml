@@ -15,7 +15,7 @@ liferay-one-etc-spring-boot-oahs:
         -   c_commonlicensekey.everything
         -   c_contract.everything
         -   c_entitlement.everything
-        -   c_entitlementdefinition.everything.read
+        -   c_entitlementdefinition.everything
         -   c_environment.everything
         -   c_licensekey.everything
         -   c_productversion.everything
@@ -73,6 +73,11 @@ liferay-one-etc-spring-boot-object-action-commerce-order-item-update:
     name: Liferay One Etc Spring Boot Object Action Commerce Order Item Update
     oAuth2ApplicationExternalReferenceCode: liferay-one-etc-spring-boot-oaua
     resourcePath: /object/action/commerce/order/item/update
+    type: objectAction
+liferay-one-etc-spring-boot-object-action-commerce-product-definition-update:
+    name: Liferay One Etc Spring Boot Object Action Commerce Product Definition Update
+    oAuth2ApplicationExternalReferenceCode: liferay-one-etc-spring-boot-oaua
+    resourcePath: /object/action/commerce/product/definition/update
     type: objectAction
 liferay-one-etc-spring-boot-object-action-organization-create:
     name: Liferay One Etc Spring Boot Object Action Organization Create
