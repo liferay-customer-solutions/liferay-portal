@@ -15,7 +15,11 @@ import com.liferay.one.constants.CommerceCatalogConstants;
 import com.liferay.one.constants.CommerceProductConstants;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import org.json.JSONObject;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
@@ -115,6 +119,15 @@ public class CommerceProductService extends OneBaseService {
 		return getName(_fetchProduct(externalReferenceCode));
 	}
 
+	public List<String> getCategoryExternalReferenceCodes(long id)
+		throws Exception {
+
+		return getAllItems(
+			"/o/headless-commerce-admin-catalog/v1.0/products/" + id +
+				"/categories",
+			null, jsonObject -> jsonObject.optString("externalReferenceCode"));
+	}
+
 	public String getName(Product product) {
 		if (product == null) {
 			return null;
@@ -127,6 +140,45 @@ public class CommerceProductService extends OneBaseService {
 		}
 
 		return name.get("en_US");
+	}
+
+	public List<JSONObject> getProductOptions(long id) throws Exception {
+		return getAllItems(
+			"/o/headless-commerce-admin-catalog/v1.0/products/" + id +
+				"/productOptions",
+			null, jsonObject -> jsonObject, null, "productOptionValues");
+	}
+
+	public String getSpecificationValue(long id, String specificationKey)
+		throws Exception {
+
+		List<JSONObject> productSpecificationJSONObjects = getAllItems(
+			"/o/headless-commerce-admin-catalog/v1.0/products/" + id +
+				"/productSpecifications",
+			null, jsonObject -> jsonObject);
+
+		for (JSONObject productSpecificationJSONObject :
+				productSpecificationJSONObjects) {
+
+			if (!Objects.equals(
+					specificationKey,
+					productSpecificationJSONObject.optString(
+						"specificationKey"))) {
+
+				continue;
+			}
+
+			JSONObject valueJSONObject =
+				productSpecificationJSONObject.optJSONObject("value");
+
+			if (valueJSONObject == null) {
+				return null;
+			}
+
+			return valueJSONObject.optString("en_US");
+		}
+
+		return null;
 	}
 
 	private ProductResource _buildProductResource() {

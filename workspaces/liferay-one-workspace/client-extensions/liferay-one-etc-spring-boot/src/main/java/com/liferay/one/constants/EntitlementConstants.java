@@ -31,6 +31,8 @@ public class EntitlementConstants {
 
 	public static final String NAME_GOLD_SUPPORT = "Gold Support";
 
+	public static final String NAME_LICENSE_GENERATION = "licenseGeneration";
+
 	public static final String
 		NAME_LIFERAY_CLOUD_NATIVE_DIGITAL_ACCELERATOR_BUNDLE =
 			"Liferay Cloud Native - Digital Accelerator Bundle";
