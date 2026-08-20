@@ -6,6 +6,7 @@
 import {ReactNode} from 'react';
 
 import ActivationStatusCard from '../ActivationStatusCard/ActivationStatusCard';
+import AppProvisioning from '../AppProvisioning/AppProvisioning';
 import CloudNativeActivation from '../CloudNativeActivation/CloudNativeActivation';
 import CommerceActivation from '../CommerceActivation/CommerceActivation';
 import EnterpriseSearchActivation from '../EnterpriseSearchActivation/EnterpriseSearchActivation';
@@ -15,15 +16,18 @@ import type {DeliveryProduct} from '~/types/product';
 import type {ActivationProfile} from '../../utils/resolveActivationProfile';
 
 type ActivationTabProps = {
+	orderId?: string;
 	product: DeliveryProduct;
 	profile?: ActivationProfile;
 };
 
 const ACTIVATION_CONTENT_BY_PROFILE: Record<
 	ActivationProfile,
-	(product: DeliveryProduct) => ReactNode
+	(orderId: string | undefined, product: DeliveryProduct) => ReactNode
 > = {
 	'app-licenses': () => null,
+	'app-provisioning': (orderId) =>
+		orderId ? <AppProvisioning orderId={orderId} /> : null,
 	'cloud-native': () => <CloudNativeActivation />,
 	'commerce': () => <CommerceActivation />,
 	'dxp-portal': () => null,
@@ -31,9 +35,15 @@ const ACTIVATION_CONTENT_BY_PROFILE: Record<
 	'keys-list': () => null,
 	'licenses': () => null,
 	'none': () => null,
-	'status': (product) => <ActivationStatusCard productName={product.name} />,
+	'status': (orderId, product) => (
+		<ActivationStatusCard productName={product.name} />
+	),
 };
 
-export default function ActivationTab({product, profile}: ActivationTabProps) {
-	return ACTIVATION_CONTENT_BY_PROFILE[profile ?? 'none'](product);
+export default function ActivationTab({
+	orderId,
+	product,
+	profile,
+}: ActivationTabProps) {
+	return ACTIVATION_CONTENT_BY_PROFILE[profile ?? 'none'](orderId, product);
 }
