@@ -12,6 +12,7 @@ import type {ProjectItemKind} from '../types';
 
 export type ActivationProfile =
 	| 'app-licenses'
+	| 'app-provisioning'
 	| 'cloud-native'
 	| 'commerce'
 	| 'dxp-portal'
@@ -23,6 +24,7 @@ export type ActivationProfile =
 
 const ACTIVATION_PROFILES: ActivationProfile[] = [
 	'app-licenses',
+	'app-provisioning',
 	'cloud-native',
 	'commerce',
 	'dxp-portal',
@@ -37,7 +39,7 @@ const ACTIVATION_PROFILE_BY_ORDER_TYPE: Partial<
 	Record<OrderTypes, ActivationProfile>
 > = {
 	CLIENT_EXTENSION: 'app-licenses',
-	CLOUD_APP: 'app-licenses',
+	CLOUD_APP: 'app-provisioning',
 	COMPOSITE_APP: 'app-licenses',
 	DXP_APP: 'app-licenses',
 	LOW_CODE_CONFIGURATION: 'none',

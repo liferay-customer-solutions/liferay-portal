@@ -1,0 +1,19 @@
+.provisioning-details-info-badge {
+	background: #f7f7f8;
+	color: #272833;
+}
+
+.provisioning-details-info-badge-expired {
+	background: #fbe3e3;
+	color: #da1414;
+}
+
+.provisioning-details-info-badge-installed {
+	background: #eef8ec;
+	color: #4aab3b;
+}
+
+.provisioning-details-info-badge-ready-to-install {
+	background: #e6ebf5;
+	color: #2e5aac;
+}
