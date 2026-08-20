@@ -138,6 +138,60 @@ public class LicenseKeyCSVExporterTest {
 			"say \"hello\", friend"
 		);
 
+		String csv = _licenseKeyCSVExporter.toCSV(
+			Collections.singletonList(licenseKey));
+
+		List<String> lines = List.of(csv.split("\n"));
+
+		Assertions.assertEquals(2, lines.size());
+
+		Assertions.assertTrue(
+			lines.get(
+				1
+			).contains(
+				"\"say \"\"hello\"\", friend\""
+			),
+			lines.get(1));
+	}
+
+	@Test
+	public void testToCSVHeaderColumnCount() throws Exception {
+		String csv = _licenseKeyCSVExporter.toCSV(Collections.emptyList());
+
+		List<String> lines = List.of(csv.split("\n"));
+
+		Assertions.assertEquals(
+			16, StringUtil.count(lines.get(0), CharPool.COMMA) + 1);
+	}
+
+	@Test
+	public void testToCSVNeutralizesFormulas() throws Exception {
+		Account account = new Account();
+
+		account.setDefaultBillingAddressId(4L);
+		account.setExternalReferenceCode("ACCNT-1");
+		account.setId(_ACCOUNT_ENTRY_ID);
+
+		Mockito.when(
+			_accountService.fetchAccount(_ACCOUNT_ENTRY_ID)
+		).thenReturn(
+			account
+		);
+
+		Mockito.when(
+			_commerceOrderService.getAccountSupportInfo(_ACCOUNT_ENTRY_ID, 4L)
+		).thenReturn(
+			new AccountSupportInfo("en_US", "US")
+		);
+
+		Mockito.when(
+			_entitlementService.getSubscriptionState(_ACCOUNT_ENTRY_ID)
+		).thenReturn(
+			"Active"
+		);
+
+		LicenseKey licenseKey = _createLicenseKey("enterprise");
+
 		Mockito.when(
 			licenseKey.getIpAddresses()
 		).thenReturn(
@@ -155,20 +209,9 @@ public class LicenseKeyCSVExporterTest {
 			lines.get(
 				1
 			).contains(
-				"\"say \"\"hello\"\", friend\""
-			),
-			lines.get(1));
-
-		Assertions.assertTrue(
-			lines.get(
-				1
-			).contains(
 				"\"'=1+1\""
 			),
 			lines.get(1));
-
-		Assertions.assertEquals(
-			16, StringUtil.count(lines.get(0), CharPool.COMMA) + 1);
 	}
 
 	@Test
