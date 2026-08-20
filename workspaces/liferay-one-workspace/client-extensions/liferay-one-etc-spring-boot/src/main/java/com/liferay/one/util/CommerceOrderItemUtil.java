@@ -29,7 +29,7 @@ import org.json.JSONObject;
 /**
  * @author Felipe Veloso
  */
-public class OrderItemUtil {
+public class CommerceOrderItemUtil {
 
 	public static OrderItem fetchOrderItem(
 		String externalReferenceCode, Order order) {
@@ -218,6 +218,7 @@ public class OrderItemUtil {
 				CommerceOrderItemConstants.EFFECTIVE_END_DATE_GRACE));
 	}
 
-	private static final Log _log = LogFactory.getLog(OrderItemUtil.class);
+	private static final Log _log = LogFactory.getLog(
+		CommerceOrderItemUtil.class);
 
 }

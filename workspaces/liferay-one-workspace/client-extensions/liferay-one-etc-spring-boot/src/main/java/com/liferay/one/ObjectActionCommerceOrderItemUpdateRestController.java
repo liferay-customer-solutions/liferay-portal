@@ -13,7 +13,7 @@ import com.liferay.one.okta.service.OktaService;
 import com.liferay.one.service.CommerceOrderItemService;
 import com.liferay.one.service.CommerceOrderService;
 import com.liferay.one.service.PropertyService;
-import com.liferay.one.util.OrderItemUtil;
+import com.liferay.one.util.CommerceOrderItemUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.time.Instant;
@@ -56,7 +56,7 @@ public class ObjectActionCommerceOrderItemUpdateRestController
 			name = nameMap.get("en_US");
 		}
 
-		if (!OrderItemUtil.isCanceled(orderItem) ||
+		if (!CommerceOrderItemUtil.isCanceled(orderItem) ||
 			!Objects.equals(
 				name, CommerceProductConstants.NAME_PAAS_EXPERIENCE)) {
 
@@ -119,15 +119,15 @@ public class ObjectActionCommerceOrderItemUpdateRestController
 	}
 
 	private boolean _isActiveOrderItem(OrderItem orderItem, Instant now) {
-		if (!OrderItemUtil.isApproved(orderItem)) {
+		if (!CommerceOrderItemUtil.isApproved(orderItem)) {
 			return false;
 		}
 
-		Instant endDateInstant = OrderItemUtil.getEffectiveEndDateInstant(
-			orderItem);
+		Instant endDateInstant =
+			CommerceOrderItemUtil.getEffectiveEndDateInstant(orderItem);
 
 		if (endDateInstant == null) {
-			endDateInstant = OrderItemUtil.getEndDateInstant(orderItem);
+			endDateInstant = CommerceOrderItemUtil.getEndDateInstant(orderItem);
 		}
 
 		if ((endDateInstant == null) || !endDateInstant.isBefore(now)) {

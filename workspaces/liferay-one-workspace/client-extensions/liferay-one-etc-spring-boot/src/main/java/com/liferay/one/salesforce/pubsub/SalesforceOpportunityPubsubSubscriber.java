@@ -35,7 +35,7 @@ import com.liferay.one.service.ProvisioningIssueService;
 import com.liferay.one.service.ProvisioningOrderService;
 import com.liferay.one.service.ProvisioningSubdomainService;
 import com.liferay.one.service.UserAccountService;
-import com.liferay.one.util.OrderItemUtil;
+import com.liferay.one.util.CommerceOrderItemUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -542,8 +542,10 @@ public class SalesforceOpportunityPubsubSubscriber
 
 				provisionedOrderItemCount++;
 
-				OrderItem existingOrderItem = OrderItemUtil.fetchOrderItem(
-					provisionableSalesforceOpportunityLineItem.getId(), order);
+				OrderItem existingOrderItem =
+					CommerceOrderItemUtil.fetchOrderItem(
+						provisionableSalesforceOpportunityLineItem.getId(),
+						order);
 
 				if (existingOrderItem != null) {
 					try {

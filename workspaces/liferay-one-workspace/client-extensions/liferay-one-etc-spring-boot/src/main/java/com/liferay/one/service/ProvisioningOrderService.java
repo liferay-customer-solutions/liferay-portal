@@ -8,7 +8,7 @@ package com.liferay.one.service;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Order;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.OrderItem;
 import com.liferay.one.salesforce.model.SalesforceOpportunityLineItem;
-import com.liferay.one.util.OrderItemUtil;
+import com.liferay.one.util.CommerceOrderItemUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.GetterUtil;
 
@@ -65,7 +65,7 @@ public class ProvisioningOrderService {
 
 					matched = true;
 
-					if (!OrderItemUtil.isApproved(parentOrderItem)) {
+					if (!CommerceOrderItemUtil.isApproved(parentOrderItem)) {
 						continue;
 					}
 
@@ -77,10 +77,12 @@ public class ProvisioningOrderService {
 							getServiceDateInstant();
 
 					if (Objects.equals(
-							OrderItemUtil.getEndDateInstant(parentOrderItem),
+							CommerceOrderItemUtil.getEndDateInstant(
+								parentOrderItem),
 							endDateInstant) &&
 						Objects.equals(
-							OrderItemUtil.getStartDateInstant(parentOrderItem),
+							CommerceOrderItemUtil.getStartDateInstant(
+								parentOrderItem),
 							startDateInstant)) {
 
 						continue;
@@ -97,7 +99,7 @@ public class ProvisioningOrderService {
 					}
 
 					Instant orderItemEffectiveEndDateInstant =
-						OrderItemUtil.getEffectiveEndDateInstant(
+						CommerceOrderItemUtil.getEffectiveEndDateInstant(
 							parentOrderItem);
 
 					if ((orderItemEffectiveEndDateInstant == null) ||
@@ -112,7 +114,7 @@ public class ProvisioningOrderService {
 
 						if ((endDateInstant != null) &&
 							!Objects.equals(
-								OrderItemUtil.getEndDateInstant(
+								CommerceOrderItemUtil.getEndDateInstant(
 									parentOrderItem),
 								endDateInstant)) {
 
@@ -123,7 +125,7 @@ public class ProvisioningOrderService {
 									parentOrderItem.getExternalReferenceCode(),
 									". Amended date: ", endDateInstant,
 									", original date: ",
-									OrderItemUtil.getEndDateInstant(
+									CommerceOrderItemUtil.getEndDateInstant(
 										parentOrderItem)));
 						}
 					}
@@ -181,10 +183,10 @@ public class ProvisioningOrderService {
 						continue;
 					}
 
-					Instant endDateInstant = OrderItemUtil.getEndDateInstant(
-						orderItem);
+					Instant endDateInstant =
+						CommerceOrderItemUtil.getEndDateInstant(orderItem);
 
-					if (!OrderItemUtil.isApproved(orderItem) ||
+					if (!CommerceOrderItemUtil.isApproved(orderItem) ||
 						(endDateInstant == null)) {
 
 						continue;
@@ -203,7 +205,8 @@ public class ProvisioningOrderService {
 					}
 
 					Instant effectiveEndDateInstant =
-						OrderItemUtil.getEffectiveEndDateInstant(orderItem);
+						CommerceOrderItemUtil.getEffectiveEndDateInstant(
+							orderItem);
 
 					if ((effectiveEndDateInstant != null) &&
 						renewalStartDateInstant.isBefore(

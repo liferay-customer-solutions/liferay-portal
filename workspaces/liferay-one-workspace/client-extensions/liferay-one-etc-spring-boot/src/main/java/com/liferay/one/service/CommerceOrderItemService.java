@@ -13,7 +13,7 @@ import com.liferay.headless.commerce.admin.order.client.problem.Problem;
 import com.liferay.headless.commerce.admin.order.client.resource.v1_0.OrderItemResource;
 import com.liferay.one.constants.CommerceOrderItemConstants;
 import com.liferay.one.salesforce.model.SalesforceOpportunityLineItem;
-import com.liferay.one.util.OrderItemUtil;
+import com.liferay.one.util.CommerceOrderItemUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.math.BigDecimal;
@@ -129,15 +129,15 @@ public class CommerceOrderItemService extends OneBaseService {
 		Map<String, Object> customFieldValues = _getCustomFieldValues(
 			salesforceOpportunityLineItem, stageName);
 
-		OrderItem existingOrderItem = OrderItemUtil.fetchOrderItem(
+		OrderItem existingOrderItem = CommerceOrderItemUtil.fetchOrderItem(
 			salesforceOpportunityLineItem.getId(), order);
 
 		if (existingOrderItem != null) {
-			if (OrderItemUtil.isCanceled(existingOrderItem)) {
+			if (CommerceOrderItemUtil.isCanceled(existingOrderItem)) {
 				customFieldValues.remove("customStatus");
 			}
 
-			if (!OrderItemUtil.isUpdateEffectiveEndDate(
+			if (!CommerceOrderItemUtil.isUpdateEffectiveEndDate(
 					existingOrderItem,
 					salesforceOpportunityLineItem.getEndDateInstant())) {
 

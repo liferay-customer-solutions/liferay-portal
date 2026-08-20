@@ -11,7 +11,7 @@ import com.liferay.one.constants.EntitlementConstants;
 import com.liferay.one.exception.DuplicateEntitlementException;
 import com.liferay.one.model.Entitlement;
 import com.liferay.one.model.EntitlementDefinition;
-import com.liferay.one.util.OrderItemUtil;
+import com.liferay.one.util.CommerceOrderItemUtil;
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -146,7 +146,7 @@ public class EntitlementService extends OneBaseService {
 			return;
 		}
 
-		if (OrderItemUtil.isCanceled(orderItem)) {
+		if (CommerceOrderItemUtil.isCanceled(orderItem)) {
 			if (_log.isInfoEnabled()) {
 				_log.info(
 					"Skipping entitlement generation for canceled order item " +
@@ -161,7 +161,7 @@ public class EntitlementService extends OneBaseService {
 				StringBundler.concat(
 					"(r_commerceProductToEntitlementDefinition_CProductId eq '",
 					orderItem.getProductId(), "') and (active eq true)"),
-				OrderItemUtil.getProductOptions(orderItem));
+				CommerceOrderItemUtil.getProductOptions(orderItem));
 
 		if (entitlementDefinitions.isEmpty()) {
 			if (_log.isInfoEnabled()) {
@@ -183,8 +183,8 @@ public class EntitlementService extends OneBaseService {
 		String projectExternalReferenceCode = _getProjectExternalReferenceCode(
 			order);
 
-		Instant endDateInstant = OrderItemUtil.getEndDateInstant(orderItem);
-		Instant startDateInstant = OrderItemUtil.getStartDateInstant(orderItem);
+		Instant endDateInstant = CommerceOrderItemUtil.getEndDateInstant(orderItem);
+		Instant startDateInstant = CommerceOrderItemUtil.getStartDateInstant(orderItem);
 
 		String endDate = null;
 
@@ -400,13 +400,13 @@ public class EntitlementService extends OneBaseService {
 		OrderItem orderItem = _commerceOrderItemService.fetchCommerceOrderItem(
 			commerceOrderItemId);
 
-		if ((orderItem == null) || OrderItemUtil.isCanceled(orderItem)) {
+		if ((orderItem == null) || CommerceOrderItemUtil.isCanceled(orderItem)) {
 			return;
 		}
 
-		Instant endDateInstant = OrderItemUtil.getEntitlementEndDateInstant(
+		Instant endDateInstant = CommerceOrderItemUtil.getEntitlementEndDateInstant(
 			orderItem);
-		Instant startDateInstant = OrderItemUtil.getStartDateInstant(orderItem);
+		Instant startDateInstant = CommerceOrderItemUtil.getStartDateInstant(orderItem);
 
 		List<Entitlement> entitlements = getEntitlements(commerceOrderItemId);
 
