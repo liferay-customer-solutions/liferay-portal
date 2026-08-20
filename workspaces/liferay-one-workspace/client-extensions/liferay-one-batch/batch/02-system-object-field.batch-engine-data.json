@@ -85,6 +85,19 @@
 		{
 			"externalReferenceCode": "L_COMMERCE_PRODUCT_DEFINITION",
 			"name": "CPDefinition",
+			"objectActions": [
+				{
+					"active": true,
+					"conditionExpression": "status == 0",
+					"description": "Triggers Spring Boot CX to generate an EntitlementDefinition when a marketplace app product of a license generating type is approved.",
+					"externalReferenceCode": "OA_COMMERCE_PRODUCT_DEFINITION_UPDATE",
+					"name": "CommerceProductDefinitionUpdate",
+					"objectActionExecutorKey": "function#liferay-one-etc-spring-boot-object-action-commerce-product-definition-update",
+					"objectActionTriggerKey": "onAfterUpdate",
+					"parameters": {
+					}
+				}
+			],
 			"objectFields": [
 				{
 					"DBType": "Boolean",
