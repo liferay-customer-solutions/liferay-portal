@@ -26,7 +26,11 @@ export default function LDPSummaryCard({
 	metric,
 	tooltip,
 }: LDPSummaryCardProps) {
-	const percentage = Math.min(Number(metric?.percentage ?? 0), 100);
+	const parsedPercentage = Number(metric?.percentage);
+
+	const percentage = Number.isFinite(parsedPercentage)
+		? Math.min(Math.max(parsedPercentage, 0), 100)
+		: 0;
 
 	return (
 		<div className="ldp-summary-card">

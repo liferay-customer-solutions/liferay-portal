@@ -37,9 +37,13 @@ export default function LDPUsageDashboard({
 		return <UsageUnavailableCard />;
 	}
 
+	const metrics = usageDashboard?.metrics;
+
 	if (
-		!usageDashboard?.metrics ||
-		!Object.keys(usageDashboard.metrics).length
+		!metrics ||
+		!LDP_SUMMARY_METRICS.some(
+			(metricConfig) => metrics[metricConfig.metric]
+		)
 	) {
 		return <UtilizationCard />;
 	}
@@ -50,7 +54,7 @@ export default function LDPUsageDashboard({
 				<LDPSummaryCard
 					key={metricConfig.metric}
 					label={metricConfig.label}
-					metric={usageDashboard.metrics[metricConfig.metric]}
+					metric={metrics[metricConfig.metric]}
 					tooltip={metricConfig.tooltip}
 				/>
 			))}
