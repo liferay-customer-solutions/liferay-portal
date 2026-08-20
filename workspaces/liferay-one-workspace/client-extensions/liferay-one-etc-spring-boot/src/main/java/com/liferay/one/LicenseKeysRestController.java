@@ -199,12 +199,7 @@ public class LicenseKeysRestController extends OneBaseRestController {
 
 		_checkLicenseKeyIds(licenseKeyIds);
 
-		long[] distinctLicenseKeyIds = _toDistinctLicenseKeyIds(licenseKeyIds);
-
-		List<LicenseKey> licenseKeys = _licenseKeyService.getLicenseKeysByIds(
-			jwt, distinctLicenseKeyIds);
-
-		_checkAllFound(licenseKeys, distinctLicenseKeyIds);
+		List<LicenseKey> licenseKeys = _getLicenseKeys(jwt, licenseKeyIds);
 
 		UserAccount userAccount = getMyUserAccount(jwt);
 
