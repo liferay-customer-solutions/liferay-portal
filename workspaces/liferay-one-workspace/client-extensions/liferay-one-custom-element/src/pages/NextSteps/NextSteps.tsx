@@ -263,7 +263,7 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 						const url =
 							paymentStatus === PaymentStatus.PAID
 								? isCloudApp
-									? `${getSiteURL()}/my-account#/orders`
+									? `${getSiteURL()}/my-account#/project/applications`
 									: `${getSiteURL()}/my-account#/orders`
 								: `${getSiteURL()}/marketplace/applications`;
 						Liferay.Util.navigate(url);

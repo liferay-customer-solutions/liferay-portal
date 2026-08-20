@@ -143,7 +143,7 @@ const PurchaseCompleted = ({product}: PurchaseCompletedProps) => {
 
 	const itemDetailURL = isDXPFree
 		? `${getSiteURL()}/my-account#/project/products/${product.externalReferenceCode}?tab=activation`
-		: `${getSiteURL()}/my-account#/project/applications/${orderId}?tab=${installTab}`;
+		: `${getSiteURL()}/my-account#/project/applications/${product.externalReferenceCode}?tab=${installTab}`;
 
 	const showCardIcon = !isFreeApp && hasVatId;
 
