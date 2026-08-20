@@ -48,7 +48,7 @@ public class EntitlementService extends OneBaseService {
 	public Entitlement addEntitlement(
 			long accountEntryId, long commerceOrderItemId, long contractId,
 			long entitlementDefinitionId, String endDate, String grantType,
-			Double maxQuantity, String name,
+			Double maxQuantity, String name, Map<String, String> productOptions,
 			String projectExternalReferenceCode, Double quantity,
 			String startDate)
 		throws Exception {
@@ -97,6 +97,12 @@ public class EntitlementService extends OneBaseService {
 		if (contractId > 0) {
 			entitlementJSONObject.put(
 				"r_contractToEntitlement_c_contractId", contractId);
+		}
+
+		if ((productOptions != null) && !productOptions.isEmpty()) {
+			entitlementJSONObject.put(
+				"productOptions",
+				String.valueOf(new JSONObject(productOptions)));
 		}
 
 		if (Validator.isNotNull(projectExternalReferenceCode)) {
@@ -156,12 +162,15 @@ public class EntitlementService extends OneBaseService {
 			return;
 		}
 
+		Map<String, String> productOptions =
+			CommerceOrderItemUtil.getProductOptions(orderItem);
+
 		List<EntitlementDefinition> entitlementDefinitions =
 			_entitlementDefinitionService.getEntitlementDefinitions(
 				StringBundler.concat(
 					"(r_commerceProductToEntitlementDefinition_CProductId eq '",
 					orderItem.getProductId(), "') and (active eq true)"),
-				CommerceOrderItemUtil.getProductOptions(orderItem));
+				productOptions);
 
 		if (entitlementDefinitions.isEmpty()) {
 			if (_log.isInfoEnabled()) {
@@ -183,8 +192,10 @@ public class EntitlementService extends OneBaseService {
 		String projectExternalReferenceCode = _getProjectExternalReferenceCode(
 			order);
 
-		Instant endDateInstant = CommerceOrderItemUtil.getEndDateInstant(orderItem);
-		Instant startDateInstant = CommerceOrderItemUtil.getStartDateInstant(orderItem);
+		Instant endDateInstant = CommerceOrderItemUtil.getEndDateInstant(
+			orderItem);
+		Instant startDateInstant = CommerceOrderItemUtil.getStartDateInstant(
+			orderItem);
 
 		String endDate = null;
 
@@ -206,7 +217,7 @@ public class EntitlementService extends OneBaseService {
 					accountEntryId, commerceOrderItemId, contractId,
 					entitlementDefinition.getEntitlementDefinitionId(), endDate,
 					entitlementDefinition.getGrantType(), null,
-					entitlementDefinition.getName(),
+					entitlementDefinition.getName(), productOptions,
 					projectExternalReferenceCode,
 					entitlementDefinition.getDefaultQuantity(), startDate);
 
@@ -400,13 +411,16 @@ public class EntitlementService extends OneBaseService {
 		OrderItem orderItem = _commerceOrderItemService.fetchCommerceOrderItem(
 			commerceOrderItemId);
 
-		if ((orderItem == null) || CommerceOrderItemUtil.isCanceled(orderItem)) {
+		if ((orderItem == null) ||
+			CommerceOrderItemUtil.isCanceled(orderItem)) {
+
 			return;
 		}
 
-		Instant endDateInstant = CommerceOrderItemUtil.getEntitlementEndDateInstant(
+		Instant endDateInstant =
+			CommerceOrderItemUtil.getEntitlementEndDateInstant(orderItem);
+		Instant startDateInstant = CommerceOrderItemUtil.getStartDateInstant(
 			orderItem);
-		Instant startDateInstant = CommerceOrderItemUtil.getStartDateInstant(orderItem);
 
 		List<Entitlement> entitlements = getEntitlements(commerceOrderItemId);
 

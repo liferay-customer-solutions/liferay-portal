@@ -2106,6 +2106,24 @@
 					"type": "String"
 				},
 				{
+					"DBType": "Clob",
+					"businessType": "LongText",
+					"externalReferenceCode": "C_ENTITLEMENT_PRODUCT_OPTIONS",
+					"indexed": false,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Product Options"
+					},
+					"name": "productOptions",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Clob"
+				},
+				{
 					"DBType": "Double",
 					"businessType": "Decimal",
 					"externalReferenceCode": "C_ENTITLEMENT_QUANTITY",
