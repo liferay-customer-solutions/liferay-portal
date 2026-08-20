@@ -3526,6 +3526,95 @@
 		},
 		{
 			"active": true,
+			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
+			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_APP"
+				}
+			],
+			"description": {
+				"en_US": "Sample cloud app used to exercise the directly provision cloud apps from Marketplace flow end to end."
+			},
+			"externalReferenceCode": "PRDCT-SAMPLE-CLOUD-APP",
+			"name": {
+				"en_US": "Sample Cloud App"
+			},
+			"productConfiguration": {
+				"allowBackOrder": true,
+				"displayAvailability": true,
+				"displayStockQuantity": true
+			},
+			"productSpecifications": [
+				{
+					"specificationKey": "cpu",
+					"value": {
+						"en_US": "2"
+					}
+				},
+				{
+					"specificationKey": "developer-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "latest-version",
+					"value": {
+						"en_US": "1.0"
+					}
+				},
+				{
+					"specificationKey": "license-type",
+					"value": {
+						"en_US": "Subscription"
+					}
+				},
+				{
+					"specificationKey": "price-model",
+					"value": {
+						"en_US": "Free"
+					}
+				},
+				{
+					"specificationKey": "publisher-name",
+					"value": {
+						"en_US": "Liferay, Inc."
+					}
+				},
+				{
+					"specificationKey": "ram",
+					"value": {
+						"en_US": "4"
+					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "cloud"
+					}
+				}
+			],
+			"productType": "virtual",
+			"productVirtualSettings": {
+				"activationStatus": 0,
+				"duration": 0,
+				"maxUsages": 0,
+				"termsOfUseRequired": false,
+				"useSample": false
+			},
+			"skus": [
+				{
+					"externalReferenceCode": "PRDCT-SAMPLE-CLOUD-APP",
+					"neverExpire": true,
+					"price": 0,
+					"published": true,
+					"purchasable": true,
+					"sku": "PRDCT-SAMPLE-CLOUD-APP"
+				}
+			]
+		},
+		{
+			"active": true,
 			"catalogExternalReferenceCode": "TEST_SUPPLIER_CATALOG",
 			"categories": [
 				{
