@@ -9,6 +9,7 @@ import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Order;
 import com.liferay.one.util.CloudProvisioningUtil;
 import com.liferay.one.util.KeyedLock;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,20 +40,8 @@ public class CloudAppService {
 
 				Map<String, String> customFields = _getCustomFields(order);
 
-				JSONArray cloudProvisioningJSONArray = null;
-
-				String cloudProvisioningJSON = customFields.get(
-					"cloud-provisioning");
-
-				if (cloudProvisioningJSON != null) {
-					cloudProvisioningJSONArray = new JSONArray(
-						cloudProvisioningJSON);
-				}
-				else {
-					cloudProvisioningJSONArray =
-						CloudProvisioningUtil.createCloudProvisioningJSONArray(
-							order.getOrderItems());
-				}
+				JSONArray cloudProvisioningJSONArray =
+					_getCloudProvisioningJSONArray(customFields, order);
 
 				JSONObject cloudProvisioningJSONObject = _getJSONObject(
 					cloudProvisioningJSONArray, orderId, orderItemId);
@@ -120,8 +109,8 @@ public class CloudAppService {
 
 				Map<String, String> customFields = _getCustomFields(order);
 
-				JSONArray cloudProvisioningJSONArray = new JSONArray(
-					customFields.get("cloud-provisioning"));
+				JSONArray cloudProvisioningJSONArray =
+					_getCloudProvisioningJSONArray(customFields, order);
 
 				JSONObject cloudProvisioningJSONObject = _getJSONObject(
 					cloudProvisioningJSONArray, orderId, orderItemId);
@@ -144,6 +133,19 @@ public class CloudAppService {
 				_commerceOrderService.updateOrder(
 					customFields, orderId, order.getOrderStatus());
 			});
+	}
+
+	private JSONArray _getCloudProvisioningJSONArray(
+		Map<String, String> customFields, Order order) {
+
+		String cloudProvisioningJSON = customFields.get("cloud-provisioning");
+
+		if (Validator.isNotNull(cloudProvisioningJSON)) {
+			return new JSONArray(cloudProvisioningJSON);
+		}
+
+		return CloudProvisioningUtil.createCloudProvisioningJSONArray(
+			order.getOrderItems());
 	}
 
 	private Map<String, String> _getCustomFields(Order order) {
