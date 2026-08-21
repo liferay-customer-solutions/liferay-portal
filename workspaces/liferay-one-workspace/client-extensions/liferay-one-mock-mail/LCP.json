@@ -1,0 +1,47 @@
+{
+	"cpu": 0.5,
+	"environments": {
+		"extprd": {
+			"deploy": false
+		},
+		"infra": {
+			"deploy": false
+		}
+	},
+	"id": "__PROJECT_ID__",
+	"kind": "Deployment",
+	"livenessProbe": {
+		"httpGet": {
+			"path": "/livez",
+			"port": 8025
+		},
+		"initialDelaySeconds": 15
+	},
+	"loadBalancer": {
+		"cdn": false,
+		"targetPort": 8025
+	},
+	"memory": 512,
+	"ports": [
+		{
+			"external": true,
+			"port": 1025,
+			"protocol": "TCP",
+			"targetPort": 1025
+		},
+		{
+			"external": false,
+			"port": 8025,
+			"protocol": "TCP",
+			"targetPort": 8025
+		}
+	],
+	"readinessProbe": {
+		"httpGet": {
+			"path": "/readyz",
+			"port": 8025
+		},
+		"initialDelaySeconds": 5
+	},
+	"scale": 1
+}
