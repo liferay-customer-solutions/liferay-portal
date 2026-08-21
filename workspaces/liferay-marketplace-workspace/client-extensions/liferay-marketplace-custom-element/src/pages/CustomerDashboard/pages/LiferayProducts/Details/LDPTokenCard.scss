@@ -1,0 +1,73 @@
+.ldp-token-card {
+	.detailed-card-header {
+		margin-bottom: 16px;
+
+		.detailed-card-header-icon-container {
+			background: #e7efff;
+			color: #377cff;
+		}
+	}
+
+	.ldp-token-card-copy {
+		align-items: center;
+		background: transparent;
+		border: 0;
+		color: #999aa3;
+		cursor: pointer;
+		display: flex;
+		flex-shrink: 0;
+		padding: 0;
+
+		&:hover {
+			color: #6c6c75;
+		}
+	}
+
+	.ldp-token-card-field {
+		align-items: center;
+		background: #fff;
+		border: 1px solid #b1b2b9;
+		border-radius: 8px;
+		display: flex;
+		gap: 8px;
+		padding: 12px 16px;
+	}
+
+	.ldp-token-card-input {
+		border: 0;
+		color: #282934;
+		flex: 1;
+		font-size: 16px;
+		line-height: 24px;
+		min-width: 0;
+		opacity: 0.6;
+		outline: none;
+		overflow: hidden;
+		padding: 0;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+
+		&:focus {
+			box-shadow: none;
+		}
+	}
+
+	.ldp-token-card-label {
+		color: #282934;
+		display: block;
+		font-size: 16px;
+		font-weight: 600;
+		margin-bottom: 8px;
+	}
+
+	.ldp-token-card-message {
+		color: #6c6c75;
+		font-size: 14px;
+	}
+
+	.ldp-token-card-required {
+		color: #da1414;
+		margin-left: 4px;
+		opacity: 0.8;
+	}
+}
