@@ -10,7 +10,7 @@ import type {UsageMetric} from '~/pages/MyAccount/Projects/hooks/useProjectUsage
 
 const EM_DASH = '—';
 
-function formatCount(count: number, units?: string): string {
+export function formatCount(count: number, units?: string): string {
 	const value = count.toLocaleString(
 		Liferay.ThemeDisplay.getBCP47LanguageId()
 	);

@@ -394,6 +394,7 @@ export default {
 	'date': 'Date',
 	'date-added': 'Date Added',
 	'date-created': 'Date Created',
+	'day': 'Day',
 	'deactivate': 'Deactivate',
 	'deactivate-license-key': 'Deactivate License Key',
 	'deactivate-license-key-confirmation':
@@ -655,6 +656,10 @@ export default {
 		'In the future, you will be able to submit your app source code for additional support and partnership opportunities with Liferay.',
 	'inactive': 'Inactive',
 	'incident-report-contacts': 'Incident Report Contacts',
+	'includes-1-add-on-bucket-x-on-top-of-the-y-base-allotment-per-month':
+		'Includes 1 add-on bucket (+{0}) on top of the {1} base allotment per month.',
+	'includes-x-add-on-buckets-y-on-top-of-the-z-base-allotment-per-month':
+		'Includes {0} add-on buckets (+{1}) on top of the {2} base allotment per month.',
 	'income': 'Income',
 	'incomplete': 'Incomplete',
 	'industry': 'Industry',
@@ -838,6 +843,7 @@ export default {
 	'module-based-apps-delivered-as-lpkg-files-that-the-user-can-install-to-modify-native-liferay-behavior':
 		'Module-based apps delivered as .lpkg files that the user can install to modify native Liferay behavior.',
 	'monetize-your-apps-and-solutions': 'Monetize Your Apps and Solutions',
+	'month': 'Month',
 	'monthly-inbound-and-outbound': 'Monthly Inbound and Outbound',
 	'monthly-increase': 'Monthly Increase',
 	'more-actions': 'More Actions',
@@ -1199,6 +1205,8 @@ export default {
 	'renew-license-key': 'Renew License Key',
 	'renewal-will-be-available-3-months-before-your-activation-key-expires':
 		'Renewal will be available 3 months before your activation key expires.',
+	'renews-in-1-day': 'Renews in 1 day',
+	'renews-in-x-days': 'Renews in {0} days',
 	'report-and-export-api-calls-to-ldp-this-month-including-calls-you-initiate-on-top-of-product-functions-excludes-data-ingestion-and-liferays-own-built-in-calls-resets-monthly':
 		"Report and export API calls to LDP this month, including calls you initiate on top of product functions. Excludes data ingestion and Liferay's own built-in calls. Resets monthly.",
 	'request-a-marketplace-publisher-account':
@@ -1660,6 +1668,7 @@ export default {
 	'x-apps-x-solutions': '{0} Apps · {1} Solutions',
 	'x-available-for-you': `{0} available for <b>${Liferay.ThemeDisplay.getUserEmailAddress()}</b> (you)`,
 	'x-cluster-nodes-keys': '{0} Cluster Nodes (Keys)',
+	'x-events': '/ {0} events',
 	'x-in-use': '{0} in use',
 	'x-is-a-member-of-x-on-this-account-removing-them-from-the-account-will-also-remove-their-access-to-these-projects-are-you-sure-you-want-to-proceed':
 		'{0} is a member of {1} on this account. Removing them from the account will also remove their access to these projects. Are you sure you want to proceed?',

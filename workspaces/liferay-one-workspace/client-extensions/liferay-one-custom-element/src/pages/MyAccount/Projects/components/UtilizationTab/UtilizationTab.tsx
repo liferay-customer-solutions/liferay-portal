@@ -5,6 +5,7 @@
 
 import {isUnassignedProject} from '~/pages/MyAccount/Projects/utils/isUnassignedProject';
 
+import LDPEventsWidget from './LDPEventsWidget';
 import LDPUsageDashboard from './LDPUsageDashboard';
 import LegacyBillingBanner from './LegacyBillingBanner';
 import LegacyDashboardPreview from './LegacyDashboardPreview';
@@ -58,10 +59,16 @@ export default function UtilizationTab({
 		!isUnassignedProject(projectExternalReferenceCode)
 	) {
 		return (
-			<LDPUsageDashboard
-				productExternalReferenceCode={productExternalReferenceCode}
-				projectExternalReferenceCode={projectExternalReferenceCode}
-			/>
+			<>
+				<LDPUsageDashboard
+					productExternalReferenceCode={productExternalReferenceCode}
+					projectExternalReferenceCode={projectExternalReferenceCode}
+				/>
+
+				<LDPEventsWidget
+					projectExternalReferenceCode={projectExternalReferenceCode}
+				/>
+			</>
 		);
 	}
 

@@ -11,6 +11,12 @@ const dateOptions: Intl.DateTimeFormatOptions = {
 	year: 'numeric',
 };
 
+const REFERENCE_YEAR = 2024;
+
+let monthNames: string[] | undefined;
+
+let weekdayNarrowNames: string[] | undefined;
+
 function normalize(date: Date | string) {
 	return typeof date === 'string' ? new Date(date) : date;
 }
@@ -50,6 +56,134 @@ export function formatDateTime(
 	}
 }
 
+export function formatUTCMonthYear(date: Date): string {
+	return new Intl.DateTimeFormat(Liferay.ThemeDisplay.getBCP47LanguageId(), {
+		month: 'long',
+		timeZone: 'UTC',
+		year: 'numeric',
+	}).format(date);
+}
+
 export function getLastDayOfMonth(month: number, year: number) {
 	return new Date(year, month + 1, 0).getDate();
+}
+
+export function getTodaySlashDate(): string {
+	const now = new Date();
+
+	return [
+		String(now.getMonth() + 1).padStart(2, '0'),
+		String(now.getDate()).padStart(2, '0'),
+		now.getFullYear(),
+	].join('/');
+}
+
+export function getUTCDayBounds(
+	value: string
+): {endDate: string; startDate: string} | undefined {
+	const date = parseSlashDateUTC(value);
+
+	if (!date) {
+		return undefined;
+	}
+
+	const dateString = toUTCDateString(date);
+
+	return {endDate: dateString, startDate: dateString};
+}
+
+export function getUTCMonthBounds(
+	value: string
+): {endDate: string; startDate: string} | undefined {
+	const date = parseSlashDateUTC(value);
+
+	if (!date) {
+		return undefined;
+	}
+
+	const month = date.getUTCMonth();
+	const year = date.getUTCFullYear();
+
+	return {
+		endDate: toUTCDateString(new Date(Date.UTC(year, month + 1, 0))),
+		startDate: toUTCDateString(new Date(Date.UTC(year, month, 1))),
+	};
+}
+
+export function getUTCMonthNames(): string[] {
+	if (!monthNames) {
+		const dateTimeFormat = new Intl.DateTimeFormat(
+			Liferay.ThemeDisplay.getBCP47LanguageId(),
+			{month: 'long', timeZone: 'UTC'}
+		);
+
+		monthNames = Array.from({length: 12}, (unused, month) =>
+			dateTimeFormat.format(new Date(Date.UTC(REFERENCE_YEAR, month, 1)))
+		);
+	}
+
+	return monthNames;
+}
+
+export function getUTCWeekdayNarrowNames(firstDayOfWeek = 0): string[] {
+	if (!weekdayNarrowNames) {
+		const dateTimeFormat = new Intl.DateTimeFormat(
+			Liferay.ThemeDisplay.getBCP47LanguageId(),
+			{timeZone: 'UTC', weekday: 'narrow'}
+		);
+
+		const firstOfYear = new Date(Date.UTC(REFERENCE_YEAR, 0, 1));
+
+		const firstSunday = 1 + ((7 - firstOfYear.getUTCDay()) % 7);
+
+		weekdayNarrowNames = Array.from({length: 7}, (unused, offset) =>
+			dateTimeFormat.format(
+				new Date(Date.UTC(REFERENCE_YEAR, 0, firstSunday + offset))
+			)
+		);
+	}
+
+	return weekdayNarrowNames
+		.slice(firstDayOfWeek)
+		.concat(weekdayNarrowNames.slice(0, firstDayOfWeek));
+}
+
+export function parseSlashDateUTC(value: string): Date | undefined {
+	const parts = value.split('/');
+
+	if (parts.length !== 3) {
+		return undefined;
+	}
+
+	const [month, day, year] = parts.map(Number);
+
+	if (
+		!Number.isFinite(day) ||
+		!Number.isFinite(month) ||
+		!Number.isFinite(year)
+	) {
+		return undefined;
+	}
+
+	const date = new Date(Date.UTC(year, month - 1, day));
+
+	if (
+		date.getUTCDate() !== day ||
+		date.getUTCFullYear() !== year ||
+		date.getUTCMonth() !== month - 1
+	) {
+		return undefined;
+	}
+
+	return date;
+}
+
+export function toSlashDateUTC(date: Date): string {
+	const [year, month, day] = toUTCDateString(date).split('-');
+
+	return `${month}/${day}/${year}`;
+}
+
+export function toUTCDateString(date: Date): string {
+	return date.toISOString().slice(0, 'yyyy-MM-dd'.length);
 }
