@@ -238,12 +238,12 @@ const LiferayProductsListView = () => {
 							},
 							{
 								clickable: true,
-								id: 'author',
+								id: 'account',
 								name: i18n.translate('purchased-by'),
-								render: (author, {createDate}) => (
+								render: (account, {createDate}) => (
 									<div className="d-flex flex-column">
 										<span className="dashboard-table-row-text">
-											{author}
+											{account}
 										</span>
 
 										<span className="dashboard-table-row-purchased-date text-black-50">

@@ -64,12 +64,12 @@ const AppsTable: React.FC<AppsTableProps> = ({items}) => {
 					title: i18n.translate('name'),
 				},
 				{
-					key: 'author',
-					render: (author, {createDate}) => {
+					key: 'account',
+					render: (account, {createDate}) => {
 						return (
 							<div className="d-flex flex-column">
 								<span className="dashboard-table-row-text">
-									{author}
+									{account}
 								</span>
 
 								<span className="dashboard-table-row-purchased-date">
