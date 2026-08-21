@@ -200,7 +200,20 @@ function LicenseKeyDetailsContent({
 			/>
 
 			<div className="detailed-card-container mt-3">
-				<div className="align-items-center d-flex justify-content-between">
+				<div
+					className="align-items-center d-flex"
+					style={{gap: 'var(--spacer-2)'}}
+				>
+					<ClayToggle
+						aria-label={translate('expiration-notifications')}
+						containerProps={{
+							className: 'flex-shrink-0 mb-0',
+							style: {width: 'fit-content'},
+						}}
+						onToggle={toggleSubscription}
+						toggled={subscribed}
+					/>
+
 					<span
 						style={{
 							color: 'var(--color-neutral-10)',
@@ -209,14 +222,9 @@ function LicenseKeyDetailsContent({
 					>
 						{translate('expiration-notifications')}
 					</span>
-
-					<ClayToggle
-						onToggle={toggleSubscription}
-						toggled={subscribed}
-					/>
 				</div>
 
-				<p className="mb-0 mt-2 text-neutral-7">
+				<p className="mb-0 mt-3 text-neutral-7">
 					{translate(
 						'enable-notifications-through-email-when-this-activation-key-is-about-to-expire-30-days-before-15-days-before-and-on-the-day-of-expiration-you-can-unsubscribe-at-any-time'
 					)}
