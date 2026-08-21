@@ -955,6 +955,19 @@ public class MarketplaceService extends BaseService {
 		orderResource.patchOrder(orderId, order);
 	}
 
+	public void updateOrderCustomFields(
+			Map<String, ?> customFields, long orderId)
+		throws Exception {
+
+		Order order = new Order();
+
+		order.setCustomFields(() -> customFields);
+
+		OrderResource orderResource = getOrderResource();
+
+		orderResource.patchOrder(orderId, order);
+	}
+
 	private CatalogResource _getCatalogResource() throws Exception {
 		return CatalogResource.builder(
 		).header(
