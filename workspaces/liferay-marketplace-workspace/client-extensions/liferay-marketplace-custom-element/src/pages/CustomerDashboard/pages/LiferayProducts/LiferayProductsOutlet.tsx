@@ -16,6 +16,7 @@ import {
 	isBetaOrder,
 	orderTypeDocumentationURL,
 } from '../../../../enums/Order';
+import {SolutionTypes} from '../../../../enums/Product';
 import useGetProductByOrderId from '../../../../hooks/useGetProductByOrderId';
 import i18n from '../../../../i18n';
 import {Liferay} from '../../../../liferay/liferay';
@@ -38,6 +39,22 @@ const getTabs = (data: ProductAndOrderPayload): NavbarProps['routes'] => {
 		)
 	) {
 		return [];
+	}
+
+	if (
+		data?.marketplaceDeliveryProduct?.specificationValues?.SOLUTION_TYPE ===
+		SolutionTypes.LIFERAY_DATA_PLATFORM
+	) {
+		return [
+			{
+				name: i18n.translate('details'),
+				path: '',
+			},
+			{
+				name: i18n.translate('environment'),
+				path: 'environment',
+			},
+		];
 	}
 
 	const isCMP = CMP_ORDER_TYPES.includes(

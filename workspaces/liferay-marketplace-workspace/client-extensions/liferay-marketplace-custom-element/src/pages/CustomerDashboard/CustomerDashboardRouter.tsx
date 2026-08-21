@@ -26,6 +26,7 @@ import BuyLiferayTokens from './pages/LiferayProducts/BuyLiferayTokens';
 import LiferayProduct from './pages/LiferayProducts/LiferayProduct';
 import LiferayProductsOutlet from './pages/LiferayProducts/LiferayProductsOutlet';
 import DSRWorkspace from './pages/LiferayProducts/Workspace/DSRWorkspace';
+import LDPWorkspace from './pages/LiferayProducts/Workspace/LDPWorkspace';
 import LiferayProductsListView from './pages/LiferayProducts/index';
 import Solutions from './pages/Solutions';
 import Solution from './pages/Solutions/Solution';
@@ -73,6 +74,8 @@ const CustomerDashboardRouter = () => {
 					/>
 
 					<Route element={<Download />} path="download" />
+
+					<Route element={<LDPWorkspace />} path="environment" />
 
 					<Route element={<DSRWorkspace />} path="workspace" />
 				</Route>

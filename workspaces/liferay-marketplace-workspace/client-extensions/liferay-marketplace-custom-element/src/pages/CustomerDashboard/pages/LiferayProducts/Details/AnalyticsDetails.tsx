@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import classNames from 'classnames';
 import {format} from 'date-fns';
 import {useOutletContext} from 'react-router-dom';
 
@@ -13,11 +14,13 @@ import {
 	OrderCustomFields,
 	OrderWorkflowStatusCode,
 } from '../../../../../enums/Order';
+import {SolutionTypes} from '../../../../../enums/Product';
 import i18n from '../../../../../i18n';
 import LiferayProductsAlerts from '../LiferayProductsAlerts';
+import WorkspaceInfoCard from './WorkspaceInfoCard';
 
 const AnalyticsDetails = () => {
-	const {placedOrder} = useOutletContext<any>();
+	const {marketplaceDeliveryProduct, placedOrder} = useOutletContext<any>();
 
 	const orderStatusCode = placedOrder?.orderStatusInfo
 		?.code as OrderWorkflowStatusCode;
@@ -28,16 +31,24 @@ const AnalyticsDetails = () => {
 
 	const {analyticsProject} = orderMetadata;
 
-	const allowedEmailDomains = analyticsProject?.allowedEmailDomains || [];
+	// This component is the fallback for every ADDONS order, which also covers
+	// the legacy Analytics Cloud add-on. Liferay Data Platform splits the
+	// workspace information into its own Environment tab, so only the legacy
+	// add-on keeps it alongside the details.
 
-	const incidentReportEmailAddresses =
-		analyticsProject?.incidentReportEmailAddresses || [];
+	const isLiferayDataPlatform =
+		marketplaceDeliveryProduct?.specificationValues?.SOLUTION_TYPE ===
+		SolutionTypes.LIFERAY_DATA_PLATFORM;
 
 	return (
 		<PageRenderer>
 			<LiferayProductsAlerts orderStatusCode={orderStatusCode} />
 
-			<div className="app-details-body-container">
+			<div
+				className={classNames('app-details-body-container', {
+					'mt-4': isLiferayDataPlatform,
+				})}
+			>
 				<DetailedCard
 					cardIconAltText="Details Icon"
 					cardTitle={i18n.translate('details')}
@@ -80,59 +91,9 @@ const AnalyticsDetails = () => {
 					/>
 				</DetailedCard>
 
-				<DetailedCard
-					cardIconAltText="Summary Icon"
-					cardTitle={i18n.translate('workspace-info')}
-					clayIcon="polls"
-				>
-					<QATable
-						items={[
-							{
-								title: i18n.translate('workspace-name'),
-								value: analyticsProject?.corpProjectName,
-							},
-							{
-								title: i18n.translate('workspace-owner-email'),
-								value: analyticsProject?.ownerEmailAddress,
-							},
-							{
-								title: i18n.translate('data-center-location'),
-								value: analyticsProject?.serverLocation,
-							},
-							{
-								title: i18n.translate('timezone'),
-								value: analyticsProject?.timeZone
-									?.displayTimeZone,
-							},
-							{
-								title: i18n.translate('workspace-friendly-url'),
-								value: analyticsProject?.friendlyURL,
-							},
-							{
-								title: i18n.translate('allowed-email-domains'),
-								value: allowedEmailDomains?.map(
-									(emailAddress: string) => (
-										<div key={emailAddress}>
-											{emailAddress}
-										</div>
-									)
-								),
-							},
-							{
-								title: i18n.translate(
-									'incident-report-contacts'
-								),
-								value: incidentReportEmailAddresses?.map(
-									(emailAddress: string) => (
-										<div key={emailAddress}>
-											{emailAddress}
-										</div>
-									)
-								),
-							},
-						]}
-					/>
-				</DetailedCard>
+				{!isLiferayDataPlatform && (
+					<WorkspaceInfoCard analyticsProject={analyticsProject} />
+				)}
 			</div>
 		</PageRenderer>
 	);
