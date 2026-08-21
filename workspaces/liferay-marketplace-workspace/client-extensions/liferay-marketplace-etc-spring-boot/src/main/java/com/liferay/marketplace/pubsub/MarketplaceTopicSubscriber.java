@@ -156,8 +156,8 @@ public class MarketplaceTopicSubscriber {
 		Subscriber subscriber = Subscriber.newBuilder(
 			subscriptionName,
 			new MarketplaceMessageReceiver(
-				_koroneikiService, _marketplaceService, _productKeys,
-				_provisioningHubService, topicName)
+				_koroneikiService, _marketplaceChannelERC, _marketplaceService,
+				_productKeys, _provisioningHubService, topicName)
 		).setCredentialsProvider(
 			credentialsProvider
 		).build();
@@ -182,6 +182,9 @@ public class MarketplaceTopicSubscriber {
 
 	@Autowired
 	private KoroneikiService _koroneikiService;
+
+	@Value("${liferay.marketplace.commerce.channel.external.reference.code}")
+	private String _marketplaceChannelERC;
 
 	@Autowired
 	private MarketplaceService _marketplaceService;

@@ -61,11 +61,12 @@ import org.springframework.http.HttpStatus;
 public class MarketplaceMessageReceiver implements MessageReceiver {
 
 	public MarketplaceMessageReceiver(
-		KoroneikiService koroneikiService,
+		KoroneikiService koroneikiService, String marketplaceChannelERC,
 		MarketplaceService marketplaceService, List<String> productKeys,
 		ProvisioningHubService provisioningHubService, String topicName) {
 
 		_koroneikiService = koroneikiService;
+		_marketplaceChannelERC = marketplaceChannelERC;
 		_marketplaceService = marketplaceService;
 		_productKeys = productKeys;
 		_provisioningHubService = provisioningHubService;
@@ -213,7 +214,7 @@ public class MarketplaceMessageReceiver implements MessageReceiver {
 			_marketplaceService.getChannelResource();
 
 		Channel channel = channelResource.getChannelByExternalReferenceCode(
-			_MARKETPLACE_CHANNEL);
+			_marketplaceChannelERC);
 
 		_channelId = channel.getId();
 
@@ -670,8 +671,6 @@ public class MarketplaceMessageReceiver implements MessageReceiver {
 		}
 	}
 
-	private static final String _MARKETPLACE_CHANNEL = "MARKETPLACE-CHANNEL";
-
 	private static final Log _log = LogFactory.getLog(
 		MarketplaceMessageReceiver.class);
 
@@ -680,6 +679,7 @@ public class MarketplaceMessageReceiver implements MessageReceiver {
 
 	private volatile Long _channelId;
 	private final KoroneikiService _koroneikiService;
+	private final String _marketplaceChannelERC;
 	private final MarketplaceService _marketplaceService;
 	private final List<String> _productKeys;
 	private final ProvisioningHubService _provisioningHubService;
