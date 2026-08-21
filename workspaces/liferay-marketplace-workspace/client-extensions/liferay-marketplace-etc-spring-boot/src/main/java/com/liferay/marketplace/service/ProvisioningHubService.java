@@ -77,7 +77,8 @@ public class ProvisioningHubService extends BaseService {
 			return;
 		}
 
-		if (Objects.equals(
+		if (Objects.equals(productName, "Liferay Data Platform") ||
+			Objects.equals(
 				productName, "Liferay Data Platform (Private Beta)")) {
 
 			_provisionLDP(koroneikiAccount, order);
@@ -190,6 +191,23 @@ public class ProvisioningHubService extends BaseService {
 					"serverLocation",
 					_getServerLocation(properties.get("dataCenterLocation"))
 				)));
+	}
+
+	private String _getFriendlyURL(String friendlyURL) {
+		if (Validator.isNull(friendlyURL)) {
+			return "";
+		}
+
+		friendlyURL = friendlyURL.trim(
+		).replaceAll(
+			"^/+", ""
+		);
+
+		if (Validator.isNull(friendlyURL)) {
+			return "";
+		}
+
+		return "/" + friendlyURL;
 	}
 
 	private String _getServerLocation(String dataCenterLocation) {
@@ -391,6 +409,9 @@ public class ProvisioningHubService extends BaseService {
 				"corpProjectName", koroneikiAccount.getName()
 			).put(
 				"corpProjectUuid", koroneikiAccount.getKey()
+			).put(
+				"friendlyURL",
+				_getFriendlyURL(properties.get("friendlyWorkspaceURL"))
 			).put(
 				"incidentReportEmailAddresses",
 				incidentReportEmailAddressesJSONArray
