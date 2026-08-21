@@ -210,6 +210,13 @@ public class ProvisioningHubService extends BaseService {
 		return "/" + friendlyURL;
 	}
 
+	private int _getLDPProvisioningAttempts(Order order) {
+		JSONObject orderMetadataJSONObject =
+			MarketplaceUtil.getOrderMetadataJSONObject(order);
+
+		return orderMetadataJSONObject.optInt(_LDP_PROVISIONING_ATTEMPTS);
+	}
+
 	private String _getServerLocation(String dataCenterLocation) {
 		if (Objects.equals(dataCenterLocation, "asia-south1")) {
 			return "asia-south1-ac5-c1";
@@ -393,38 +400,66 @@ public class ProvisioningHubService extends BaseService {
 			return;
 		}
 
-		String securityContactEmailAddress = properties.get(
-			"securityContactEmailAddress");
+		JSONObject analyticsProjectJSONObject =
+			_analyticsService.getCorpProjectUuidJSONObject(
+				koroneikiAccount.getKey());
 
-		JSONArray incidentReportEmailAddressesJSONArray = new JSONArray();
+		if (analyticsProjectJSONObject == null) {
+			int ldpProvisioningAttempts = _getLDPProvisioningAttempts(order);
 
-		if (Validator.isNotNull(securityContactEmailAddress)) {
-			incidentReportEmailAddressesJSONArray = new JSONArray(
-				securityContactEmailAddress.split(","));
+			if (ldpProvisioningAttempts >= _LDP_PROVISIONING_MAX_ATTEMPTS) {
+				_log.error(
+					StringBundler.concat(
+						"Unable to provision LDP for account ",
+						koroneikiAccount.getKey(), " after ",
+						ldpProvisioningAttempts, " attempts"));
+
+				return;
+			}
+
+			_updateLDPProvisioningAttempts(ldpProvisioningAttempts + 1, order);
+
+			String securityContactEmailAddress = properties.get(
+				"securityContactEmailAddress");
+
+			JSONArray incidentReportEmailAddressesJSONArray = new JSONArray();
+
+			if (Validator.isNotNull(securityContactEmailAddress)) {
+				incidentReportEmailAddressesJSONArray = new JSONArray(
+					securityContactEmailAddress.split(","));
+			}
+
+			analyticsProjectJSONObject = new JSONObject(
+				_analyticsService.provision(
+					new JSONObject(
+					).put(
+						"corpProjectName", koroneikiAccount.getName()
+					).put(
+						"corpProjectUuid", koroneikiAccount.getKey()
+					).put(
+						"friendlyURL",
+						_getFriendlyURL(properties.get("friendlyWorkspaceURL"))
+					).put(
+						"incidentReportEmailAddresses",
+						incidentReportEmailAddressesJSONArray
+					).put(
+						"name", properties.get("ldpWorkspaceName")
+					).put(
+						"ownerEmailAddress",
+						_getContactEmailAddress(
+							koroneikiAccount.getKey(),
+							securityContactEmailAddress)
+					).put(
+						"serverLocation",
+						_getServerLocation(properties.get("dataCenterLocation"))
+					)));
 		}
-
-		String analyticsProject = _analyticsService.provision(
-			new JSONObject(
-			).put(
-				"corpProjectName", koroneikiAccount.getName()
-			).put(
-				"corpProjectUuid", koroneikiAccount.getKey()
-			).put(
-				"friendlyURL",
-				_getFriendlyURL(properties.get("friendlyWorkspaceURL"))
-			).put(
-				"incidentReportEmailAddresses",
-				incidentReportEmailAddressesJSONArray
-			).put(
-				"name", properties.get("ldpWorkspaceName")
-			).put(
-				"ownerEmailAddress",
-				_getContactEmailAddress(
-					koroneikiAccount.getKey(), securityContactEmailAddress)
-			).put(
-				"serverLocation",
-				_getServerLocation(properties.get("dataCenterLocation"))
-			));
+		else if (_log.isInfoEnabled()) {
+			_log.info(
+				StringBundler.concat(
+					"Reusing the Analytics Cloud project already provisioned ",
+					"for account ", koroneikiAccount.getKey()));
+		}
 
 		_marketplaceService.completeOrder(
 			HashMapBuilder.put(
@@ -432,7 +467,7 @@ public class ProvisioningHubService extends BaseService {
 				MarketplaceUtil.getOrderMetadataJSONObject(
 					order
 				).put(
-					"analyticsProject", new JSONObject(analyticsProject)
+					"analyticsProject", analyticsProjectJSONObject
 				).toString()
 			).build(),
 			order.getId(), order.getPaymentStatus());
@@ -500,6 +535,27 @@ public class ProvisioningHubService extends BaseService {
 			).build(),
 			order.getId(), order.getPaymentStatus());
 	}
+
+	private void _updateLDPProvisioningAttempts(
+			int ldpProvisioningAttempts, Order order)
+		throws Exception {
+
+		_marketplaceService.updateOrderCustomFields(
+			HashMapBuilder.put(
+				"order-metadata",
+				MarketplaceUtil.getOrderMetadataJSONObject(
+					order
+				).put(
+					_LDP_PROVISIONING_ATTEMPTS, ldpProvisioningAttempts
+				).toString()
+			).build(),
+			order.getId());
+	}
+
+	private static final String _LDP_PROVISIONING_ATTEMPTS =
+		"ldpProvisioningAttempts";
+
+	private static final int _LDP_PROVISIONING_MAX_ATTEMPTS = 3;
 
 	private static final Log _log = LogFactory.getLog(
 		ProvisioningHubService.class);
