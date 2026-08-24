@@ -3,6 +3,31 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+.product-banner {
+	background: var(--neutral-01, #f7f7f8);
+	border-radius: 10px;
+
+	& .object-fit-cover {
+		border-radius: 8px;
+		object-fit: contain;
+	}
+
+	& .sub-text {
+		color: var(--neutral-08, #54555f);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		width: 330px;
+	}
+}
+
+.product-banner-title {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 330px;
+}
+
 .product-purchase--multi-step-nav {
 	& .multi-step-item:last-of-type .multi-step-divider {
 		display: none;

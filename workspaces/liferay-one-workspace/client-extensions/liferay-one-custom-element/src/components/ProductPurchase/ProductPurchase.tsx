@@ -148,6 +148,7 @@ type ProductPurchaseHeaderAccountProps = {
 };
 
 type ProductPurchaseHeaderProps = {
+	children?: ReactNode;
 	product: DeliveryProduct;
 	rightNode?: ReactNode;
 };
@@ -204,6 +205,7 @@ const ProductPurchaseHeaderAccount: React.FC<
 };
 
 const ProductPurchaseHeader: React.FC<ProductPurchaseHeaderProps> = ({
+	children,
 	product,
 	rightNode,
 }) => {
@@ -233,6 +235,8 @@ const ProductPurchaseHeader: React.FC<ProductPurchaseHeaderProps> = ({
 
 				{rightNode}
 			</div>
+
+			{children}
 		</div>
 	);
 };
