@@ -20,6 +20,7 @@ import UsageDonut from './UsageDonut';
 import UsageMetricCard from './UsageMetricCard';
 import UsageProgressBar from './UsageProgressBar';
 import UsageSection from './UsageSection';
+import UsageUnavailableBanner from './UsageUnavailableBanner';
 import UsageUnavailableCard from './UsageUnavailableCard';
 
 import './UsageDashboard.css';
@@ -87,6 +88,8 @@ export default function UsageDashboard({
 
 	const isExperience = profile === 'experience-dashboard';
 
+	const usageDataAvailable = usageDashboard.usageDataAvailable !== false;
+
 	return (
 		<DetailedCard
 			cardIconAltText={i18n.translate('utilization')}
@@ -94,7 +97,11 @@ export default function UsageDashboard({
 			className="mt-3"
 			clayIcon="analytics"
 		>
-			{hasOverageUsage(usageDashboard.metrics) && <OverageBanner />}
+			{!usageDataAvailable && <UsageUnavailableBanner />}
+
+			{usageDataAvailable && hasOverageUsage(usageDashboard.metrics) && (
+				<OverageBanner />
+			)}
 
 			<p className="text-neutral-7 text-small">
 				{`${i18n.translate('billing-period')}: ${formatBillingPeriod()}`}

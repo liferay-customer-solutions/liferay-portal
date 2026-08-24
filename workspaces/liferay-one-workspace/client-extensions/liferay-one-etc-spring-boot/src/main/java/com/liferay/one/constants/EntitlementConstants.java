@@ -27,12 +27,27 @@ public class EntitlementConstants {
 
 	public static final String NAME_1_PRODUCTION_POD = "1 Production Pod";
 
+	public static final String NAME_ACTIVE_BATCH_SEGMENTS =
+		"active-batch-segments";
+
+	public static final String NAME_ACTIVE_REAL_TIME_SEGMENTS =
+		"active-real-time-segments";
+
+	public static final String NAME_API_REQUESTS = "api-requests";
+
 	public static final String NAME_APV = "apv";
+
+	public static final String NAME_CONNECTORS = "connectors";
 
 	public static final String NAME_DATABASE = "database";
 
 	public static final String NAME_DOCUMENT_LIBRARY_SIZE =
 		"document-library-size";
+
+	public static final String NAME_EVENTS = "events";
+
+	public static final String NAME_EVENTS_ADD_ON_BUCKET =
+		"events-add-on-bucket";
 
 	public static final String NAME_EXTENSIONS_RAM = "extensions-ram";
 
@@ -130,6 +145,8 @@ public class EntitlementConstants {
 		NAME_PREMIUM_SUBSCRIPTION, NAME_SILVER_SUBSCRIPTION,
 		NAME_STANDARD_8_5_SUPPORT, NAME_STRATEGIC_24_7_SUPPORT
 	};
+
+	public static final long QUANTITY_EVENTS_ADD_ON_BUCKET = 200000;
 
 	public static final String STATE_ACTIVE = "Active";
 

@@ -9,6 +9,7 @@ import {LDP_SUMMARY_METRICS} from '~/pages/MyAccount/Projects/utils/usageDashboa
 
 import UtilizationCard from '../UtilizationCard/UtilizationCard';
 import LDPSummaryCard from './LDPSummaryCard';
+import UsageUnavailableBanner from './UsageUnavailableBanner';
 import UsageUnavailableCard from './UsageUnavailableCard';
 
 import './LDPSummaryCard.css';
@@ -49,15 +50,23 @@ export default function LDPUsageDashboard({
 	}
 
 	return (
-		<div className="ldp-summary-grid mt-3">
-			{LDP_SUMMARY_METRICS.map((metricConfig) => (
-				<LDPSummaryCard
-					key={metricConfig.metric}
-					label={metricConfig.label}
-					metric={metrics[metricConfig.metric]}
-					tooltip={metricConfig.tooltip}
-				/>
-			))}
-		</div>
+		<>
+			{usageDashboard?.usageDataAvailable === false && (
+				<div className="mt-3">
+					<UsageUnavailableBanner />
+				</div>
+			)}
+
+			<div className="ldp-summary-grid mt-3">
+				{LDP_SUMMARY_METRICS.map((metricConfig) => (
+					<LDPSummaryCard
+						key={metricConfig.metric}
+						label={metricConfig.label}
+						metric={metrics[metricConfig.metric]}
+						tooltip={metricConfig.tooltip}
+					/>
+				))}
+			</div>
+		</>
 	);
 }

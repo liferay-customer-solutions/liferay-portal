@@ -40,7 +40,8 @@ public class GoogleCloudFunctionService extends BaseService {
 		throws Exception {
 
 		return _handleRequest(
-			accountKey, _gcfBaseURL + _FUNCTION_PATH_COMPOSABLE_USAGE_API,
+			_gcfBaseURL + _FUNCTION_PATH_COMPOSABLE_USAGE_API,
+			"account " + accountKey,
 			UriComponentsBuilder.fromUriString(
 				_gcfBaseURL
 			).path(
@@ -56,7 +57,8 @@ public class GoogleCloudFunctionService extends BaseService {
 		throws Exception {
 
 		return _handleRequest(
-			accountKey, _gcfBaseURL + _FUNCTION_PATH_CUSTOMER_USAGE_API,
+			_gcfBaseURL + _FUNCTION_PATH_CUSTOMER_USAGE_API,
+			"account " + accountKey,
 			UriComponentsBuilder.fromUriString(
 				_gcfBaseURL
 			).path(
@@ -64,6 +66,72 @@ public class GoogleCloudFunctionService extends BaseService {
 					"/api/v1/customer/usage/accounts/{accountKey}"
 			).buildAndExpand(
 				accountKey
+			).toUri());
+	}
+
+	@Cacheable("ldpProjectEventHistory")
+	public String fetchLDPProjectEventHistory(
+			String endDate, String granularity, String salesforceProjectId,
+			String startDate)
+		throws Exception {
+
+		return _handleRequest(
+			_gcfBaseURL + _FUNCTION_PATH_LDP_METRICS_API,
+			"project " + salesforceProjectId,
+			UriComponentsBuilder.fromUriString(
+				_gcfBaseURL
+			).path(
+				_FUNCTION_PATH_LDP_METRICS_API +
+					"/api/v1/projects/{salesforceProjectId}/ldp/usage" +
+						"/event-history"
+			).queryParam(
+				"endDate", endDate
+			).queryParam(
+				"granularity", granularity
+			).queryParam(
+				"startDate", startDate
+			).buildAndExpand(
+				salesforceProjectId
+			).toUri());
+	}
+
+	@Cacheable("ldpProjectEventSummary")
+	public String fetchLDPProjectEventSummary(
+			String endDate, String salesforceProjectId, String startDate)
+		throws Exception {
+
+		return _handleRequest(
+			_gcfBaseURL + _FUNCTION_PATH_LDP_METRICS_API,
+			"project " + salesforceProjectId,
+			UriComponentsBuilder.fromUriString(
+				_gcfBaseURL
+			).path(
+				_FUNCTION_PATH_LDP_METRICS_API +
+					"/api/v1/projects/{salesforceProjectId}/ldp/usage" +
+						"/event-summary"
+			).queryParam(
+				"endDate", endDate
+			).queryParam(
+				"startDate", startDate
+			).buildAndExpand(
+				salesforceProjectId
+			).toUri());
+	}
+
+	@Cacheable("ldpProjectUsage")
+	public String fetchLDPProjectUsage(String salesforceProjectId)
+		throws Exception {
+
+		return _handleRequest(
+			_gcfBaseURL + _FUNCTION_PATH_LDP_METRICS_API,
+			"project " + salesforceProjectId,
+			UriComponentsBuilder.fromUriString(
+				_gcfBaseURL
+			).path(
+				_FUNCTION_PATH_LDP_METRICS_API +
+					"/api/v1/projects/{salesforceProjectId}/ldp/usage"
+			).buildAndExpand(
+				salesforceProjectId
 			).toUri());
 	}
 
@@ -109,7 +177,7 @@ public class GoogleCloudFunctionService extends BaseService {
 		return _idTokenProvider;
 	}
 
-	private String _handleRequest(String accountKey, String audience, URI uri)
+	private String _handleRequest(String audience, String subject, URI uri)
 		throws Exception {
 
 		String authorization = null;
@@ -119,8 +187,7 @@ public class GoogleCloudFunctionService extends BaseService {
 		}
 		catch (Exception exception) {
 			throw new GoogleCloudFunctionUnavailableException(
-				"Unable to authenticate to DataOps for account " + accountKey,
-				exception);
+				"Unable to authenticate to DataOps for " + subject, exception);
 		}
 
 		try {
@@ -131,21 +198,19 @@ public class GoogleCloudFunctionService extends BaseService {
 					HttpStatus.NOT_FOUND) {
 
 				if (_log.isInfoEnabled()) {
-					_log.info(
-						"No DataOps usage data for account " + accountKey);
+					_log.info("No DataOps usage data for " + subject);
 				}
 
 				return null;
 			}
 
 			throw new GoogleCloudFunctionUnavailableException(
-				"Unable to read DataOps usage for account " + accountKey,
+				"Unable to read DataOps usage for " + subject,
 				webClientResponseException);
 		}
 		catch (WebClientException webClientException) {
 			throw new GoogleCloudFunctionUnavailableException(
-				"Unable to reach DataOps for account " + accountKey,
-				webClientException);
+				"Unable to reach DataOps for " + subject, webClientException);
 		}
 	}
 
@@ -154,6 +219,9 @@ public class GoogleCloudFunctionService extends BaseService {
 
 	private static final String _FUNCTION_PATH_CUSTOMER_USAGE_API =
 		"/customer_usage_api";
+
+	private static final String _FUNCTION_PATH_LDP_METRICS_API =
+		"/ldp_metrics_api";
 
 	private static final Log _log = LogFactory.getLog(
 		GoogleCloudFunctionService.class);

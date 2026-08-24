@@ -20,6 +20,7 @@ export type ProjectEventUsage = {
 	baseAllotment?: number;
 	eventSummary: EventDataSource[];
 	maxCount?: number;
+	usageDataAvailable?: boolean;
 	usedCount?: number;
 };
 

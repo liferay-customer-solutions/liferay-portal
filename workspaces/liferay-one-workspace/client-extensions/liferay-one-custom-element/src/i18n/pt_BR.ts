@@ -61,6 +61,8 @@ export default {
 	'create-event': 'Criar Evento',
 	'create-new-ticket': 'Criar Novo Ticket',
 	'crm': 'CRM',
+	'current-usage-could-not-be-loaded-the-limits-shown-come-from-your-entitlements':
+		'Não foi possível carregar o uso atual. Os limites exibidos vêm dos seus direitos contratados.',
 	'current-version': 'Versão Atual',
 	'customer-data-management': 'Gestão de dados de clientes',
 	'customer-portal': 'Portal do cliente',
@@ -227,6 +229,7 @@ export default {
 	'upload': 'Enviar',
 	'usage-data-is-temporarily-unavailable-please-try-again-later':
 		'Os dados de uso estão temporariamente indisponíveis. Tente novamente mais tarde.',
+	'usage-data-not-loaded': 'Dados de Uso Não Carregados',
 	'user': 'Usuário',
 	'vr': 'RV',
 	'we-apologize-for-the-inconvenience-but-we-ve-detected-a-system-error-with-this-project':

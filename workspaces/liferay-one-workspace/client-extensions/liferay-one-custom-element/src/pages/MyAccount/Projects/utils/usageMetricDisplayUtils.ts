@@ -8,7 +8,7 @@ import {Liferay} from '~/services/liferay/liferay';
 
 import type {UsageMetric} from '~/pages/MyAccount/Projects/hooks/useProjectUsageDashboard';
 
-const EM_DASH = '—';
+export const EM_DASH = '—';
 
 export function formatCount(count: number, units?: string): string {
 	const value = count.toLocaleString(
@@ -35,7 +35,7 @@ export function formatUsageLimit(metric?: UsageMetric): string {
 }
 
 export function formatUsageUsed(metric?: UsageMetric): string {
-	if (!metric) {
+	if (metric?.usedCount === undefined) {
 		return EM_DASH;
 	}
 

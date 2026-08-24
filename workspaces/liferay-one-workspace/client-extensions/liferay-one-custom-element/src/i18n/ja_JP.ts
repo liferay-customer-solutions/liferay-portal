@@ -60,6 +60,8 @@ export default {
 	'create-event': 'イベント作成',
 	'create-new-ticket': '新規チケットの作成',
 	'crm': 'CRM',
+	'current-usage-could-not-be-loaded-the-limits-shown-come-from-your-entitlements':
+		'現在の使用状況を読み込めませんでした。表示されている上限は契約内容に基づいています。',
 	'current-version': '現在のバージョン',
 	'customer-data-management': '顧客データ管理',
 	'customer-portal': 'カスタマーポータル',
@@ -221,6 +223,7 @@ export default {
 	'upload': 'アップロード',
 	'usage-data-is-temporarily-unavailable-please-try-again-later':
 		'使用状況データは一時的に利用できません。しばらくしてから再度お試しください。',
+	'usage-data-not-loaded': '使用状況データが読み込まれていません',
 	'user': 'ユーザー',
 	'vr': 'VR',
 	'we-apologize-for-the-inconvenience-but-we-ve-detected-a-system-error-with-this-project':

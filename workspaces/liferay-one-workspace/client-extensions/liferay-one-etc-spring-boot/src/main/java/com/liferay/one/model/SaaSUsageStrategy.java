@@ -6,7 +6,6 @@
 package com.liferay.one.model;
 
 import com.liferay.one.constants.EntitlementConstants;
-import com.liferay.portal.kernel.util.Validator;
 
 import java.math.BigDecimal;
 
@@ -20,7 +19,7 @@ import org.json.JSONObject;
 public class SaaSUsageStrategy extends BaseUsageStrategy {
 
 	public SaaSUsageStrategy(String response, List<Entitlement> entitlements) {
-		super(_toUsageJSONObject(response));
+		super(response);
 
 		for (Entitlement entitlement : entitlements) {
 			String name = entitlement.getName();
@@ -100,14 +99,6 @@ public class SaaSUsageStrategy extends BaseUsageStrategy {
 			createCapacityUsageJSONObject(
 				_storageCapacityMax, _storageCapacityGiBUsed)
 		);
-	}
-
-	private static JSONObject _toUsageJSONObject(String response) {
-		if (Validator.isNull(response)) {
-			return null;
-		}
-
-		return new JSONObject(response);
 	}
 
 	private BigDecimal _anonymousPageViewsMax = BigDecimal.ZERO;

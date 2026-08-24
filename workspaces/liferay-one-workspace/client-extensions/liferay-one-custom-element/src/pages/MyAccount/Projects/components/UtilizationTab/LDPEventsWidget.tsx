@@ -11,7 +11,10 @@ import {useProjectCommerce} from '~/hooks/useProjectCommerce';
 import i18n from '~/i18n';
 import {useProjectEventUsage} from '~/pages/MyAccount/Projects/hooks/useProjectEventUsage';
 import {DATA_SOURCE_COLORS} from '~/pages/MyAccount/Projects/utils/constants';
-import {formatCount} from '~/pages/MyAccount/Projects/utils/usageMetricDisplayUtils';
+import {
+	EM_DASH,
+	formatCount,
+} from '~/pages/MyAccount/Projects/utils/usageMetricDisplayUtils';
 import {Liferay} from '~/services/liferay/liferay';
 import {
 	getTodaySlashDate,
@@ -129,8 +132,12 @@ export default function LDPEventsWidget({
 
 	const maxCount = eventUsage?.maxCount ?? 0;
 
+	const usageDataAvailable = eventUsage?.usageDataAvailable !== false;
+
 	const capPercentage =
-		monthly && maxCount > 0 ? (total / maxCount) * 100 : undefined;
+		usageDataAvailable && monthly && maxCount > 0
+			? (total / maxCount) * 100
+			: undefined;
 
 	const barDenominator =
 		monthly && maxCount > 0 ? Math.max(maxCount, summedCount) : summedCount;
@@ -231,7 +238,9 @@ export default function LDPEventsWidget({
 					<div className="ldp-events-summary">
 						<p className="ldp-events-total">
 							<span className="ldp-events-total-used">
-								{formatCount(total)}
+								{usageDataAvailable
+									? formatCount(total)
+									: EM_DASH}
 							</span>
 
 							{monthly && maxCount > 0 && (
@@ -265,6 +274,12 @@ export default function LDPEventsWidget({
 								/>
 							))}
 					</div>
+
+					{!usageDataAvailable && (
+						<p className="ldp-events-addon">
+							{i18n.translate('usage-data-not-loaded')}
+						</p>
+					)}
 
 					{monthly && addOnMessage && (
 						<p className="ldp-events-addon">{addOnMessage}</p>

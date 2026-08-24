@@ -142,6 +142,66 @@
 		},
 		{
 			"active": true,
+			"defaultQuantity": 25,
+			"displayName": "Active Batch Segments",
+			"externalReferenceCode": "C_ENT_DEF_DATA_PLATFORM_ACTIVE_BATCH_SEGMENTS",
+			"grantType": "fixed",
+			"name": "active-batch-segments",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DATA-PLATFORM",
+			"unit": "count"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 10,
+			"displayName": "Active Real-Time Segments",
+			"externalReferenceCode": "C_ENT_DEF_DATA_PLATFORM_ACTIVE_REAL_TIME_SEGMENTS",
+			"grantType": "fixed",
+			"name": "active-real-time-segments",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DATA-PLATFORM",
+			"unit": "count"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 500000,
+			"displayName": "API Requests",
+			"externalReferenceCode": "C_ENT_DEF_DATA_PLATFORM_API_REQUESTS",
+			"grantType": "fixed",
+			"name": "api-requests",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DATA-PLATFORM",
+			"unit": "count"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 10,
+			"displayName": "Connectors",
+			"externalReferenceCode": "C_ENT_DEF_DATA_PLATFORM_CONNECTORS",
+			"grantType": "fixed",
+			"name": "connectors",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DATA-PLATFORM",
+			"unit": "count"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1000000,
+			"displayName": "Events",
+			"externalReferenceCode": "C_ENT_DEF_DATA_PLATFORM_EVENTS",
+			"grantType": "fixed",
+			"name": "events",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DATA-PLATFORM",
+			"unit": "count"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Events Add-On Buckets",
+			"externalReferenceCode": "C_ENT_DEF_DATA_PLATFORM_EVENTS_ADD_ON_BUCKET",
+			"grantType": "fixed",
+			"name": "events-add-on-bucket",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DATA-PLATFORM",
+			"unit": "count"
+		},
+		{
+			"active": true,
 			"defaultQuantity": 1,
 			"displayName": "Digital Sales Room",
 			"externalReferenceCode": "C_ENT_DEF_DSR",

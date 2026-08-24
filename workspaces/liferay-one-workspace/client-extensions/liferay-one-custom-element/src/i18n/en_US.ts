@@ -367,6 +367,8 @@ export default {
 	'critical-incident-contacts': 'Critical Incident Contacts',
 	'crm': 'CRM',
 	'currency-code': 'Currency Code',
+	'current-usage-could-not-be-loaded-the-limits-shown-come-from-your-entitlements':
+		'Current usage could not be loaded. The limits shown come from your entitlements.',
 	'current-version': 'Current Version',
 	'customer-account': 'Customer Account',
 	'customer-dashboard': 'Customer Dashboard',
@@ -1595,6 +1597,7 @@ export default {
 		'Usage dashboard is not available yet.',
 	'usage-data-is-temporarily-unavailable-please-try-again-later':
 		'Usage data is temporarily unavailable. Please try again later.',
+	'usage-data-not-loaded': 'Usage Data Not Loaded',
 	'use-any-build-from-any-available-liferay-experience-cloud-account-requires-lxc-account':
 		'Use any build from any available Liferay SaaS account (requires Liferay SaaS account) ',
 	'use-any-build-from-your-computer-connecting-with-a-github-provider':

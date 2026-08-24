@@ -37,6 +37,9 @@ public class CommerceProductConstants {
 		NAME_LIFERAY_CLOUD_NATIVE_STANDARD_OPERATIONS_BUNDLE =
 			"Liferay Cloud Native - Standard Operations Bundle";
 
+	public static final String NAME_LIFERAY_DATA_PLATFORM =
+		"Liferay Data Platform";
+
 	public static final String NAME_LIFERAY_PAAS_SUBSCRIPTION_HA_PROD_ENV =
 		"Liferay PaaS Subscription - HA Prod Env";
 
@@ -84,6 +87,15 @@ public class CommerceProductConstants {
 	public static final String[] NAMES_EXPERIENCE_PRODUCTS = {
 		NAME_LIFERAY_PAAS_SUBSCRIPTION_HA_PROD_ENV, NAME_PAAS_EXPERIENCE,
 		NAME_SAAS_EXPERIENCE
+	};
+
+	public static final String[]
+		NAMES_LIFERAY_DATA_PLATFORM_ENTITLEMENT_PRODUCTS = {
+			NAME_LIFERAY_DATA_PLATFORM
+		};
+
+	public static final String[] NAMES_LIFERAY_DATA_PLATFORM_PRODUCTS = {
+		NAME_LIFERAY_DATA_PLATFORM
 	};
 
 	public static final String[] NAMES_SAAS_PLAN_ENTITLEMENT_PRODUCTS = {

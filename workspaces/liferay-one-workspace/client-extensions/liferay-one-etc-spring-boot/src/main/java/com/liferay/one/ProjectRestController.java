@@ -9,6 +9,7 @@ import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
 import com.liferay.one.constants.CommerceProductConstants;
 import com.liferay.one.constants.PropertyConstants;
 import com.liferay.one.exception.GoogleCloudFunctionUnavailableException;
+import com.liferay.one.exception.InvalidUsageParameterException;
 import com.liferay.one.exception.InvalidUsageProductException;
 import com.liferay.one.exception.ProjectNotFoundException;
 import com.liferay.one.jira.service.AccountAssetService;
@@ -19,6 +20,8 @@ import com.liferay.one.model.BaseUsageStrategy;
 import com.liferay.one.model.Entitlement;
 import com.liferay.one.model.EntitlementDefinition;
 import com.liferay.one.model.ExperienceUsageStrategy;
+import com.liferay.one.model.LDPEventUsageStrategy;
+import com.liferay.one.model.LDPUsageStrategy;
 import com.liferay.one.model.Project;
 import com.liferay.one.model.SaaSUsageStrategy;
 import com.liferay.one.permission.BusinessEventPermission;
@@ -38,6 +41,7 @@ import com.liferay.portal.kernel.util.Validator;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,30 +118,91 @@ public class ProjectRestController extends OneBaseRestController {
 		_businessEventPermission.check(
 			ActionKeys.VIEW, jwt, externalReferenceCode);
 
+		BaseUsageStrategy usageStrategy = _getUsageStrategy(
+			productExternalReferenceCode, externalReferenceCode);
+
+		if (!usageStrategy.hasUsage() && _log.isInfoEnabled()) {
+			_log.info(
+				"Unable to find DataOps usage data for project " +
+					externalReferenceCode);
+		}
+
 		JSONObject jsonObject = new JSONObject(
 		).put(
-			"metrics",
-			_getMetricsJSONObject(
-				productExternalReferenceCode, externalReferenceCode)
+			"metrics", usageStrategy.toJSONObject()
+		).put(
+			"usageDataAvailable", usageStrategy.hasUsage()
 		);
 
 		return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
 	}
 
-	@ExceptionHandler(GoogleCloudFunctionUnavailableException.class)
-	public ResponseEntity<ProblemDetail> handleException(
-		GoogleCloudFunctionUnavailableException
-			googleCloudFunctionUnavailableException) {
+	@GetMapping("/{externalReferenceCode}/usage/event-history")
+	public ResponseEntity<String> getUsageEventHistory(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable("externalReferenceCode") String externalReferenceCode,
+			@RequestParam("endDate") String endDate,
+			@RequestParam("granularity") String granularity,
+			@RequestParam("startDate") String startDate)
+		throws Exception {
 
-		_log.error(
-			"Unable to reach the DataOps usage API",
-			googleCloudFunctionUnavailableException);
+		_businessEventPermission.check(
+			ActionKeys.VIEW, jwt, externalReferenceCode);
+
+		LocalDate endLocalDate = _toLocalDate("endDate", endDate);
+		LocalDate startLocalDate = _toLocalDate("startDate", startDate);
+
+		_validateDateRange(endLocalDate, granularity, startLocalDate);
+
+		_getProject(externalReferenceCode);
+
+		return _getEventUsageResponseEntity(
+			externalReferenceCode,
+			_fetchLDPProjectEventHistory(
+				endLocalDate.toString(), granularity, externalReferenceCode,
+				startLocalDate.toString()));
+	}
+
+	@GetMapping("/{externalReferenceCode}/usage/event-summary")
+	public ResponseEntity<String> getUsageEventSummary(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable("externalReferenceCode") String externalReferenceCode,
+			@RequestParam("endDate") String endDate,
+			@RequestParam("startDate") String startDate)
+		throws Exception {
+
+		_businessEventPermission.check(
+			ActionKeys.VIEW, jwt, externalReferenceCode);
+
+		LocalDate endLocalDate = _toLocalDate("endDate", endDate);
+		LocalDate startLocalDate = _toLocalDate("startDate", startDate);
+
+		_validateDateRange(endLocalDate, startLocalDate);
+
+		_getProject(externalReferenceCode);
+
+		return _getEventUsageResponseEntity(
+			externalReferenceCode,
+			_fetchLDPProjectEventSummary(
+				endLocalDate.toString(), externalReferenceCode,
+				startLocalDate.toString()));
+	}
+
+	@ExceptionHandler(InvalidUsageParameterException.class)
+	public ResponseEntity<ProblemDetail> handleException(
+		InvalidUsageParameterException invalidUsageParameterException) {
+
+		if (_log.isWarnEnabled()) {
+			_log.warn(
+				"Unable to read usage with the given parameters",
+				invalidUsageParameterException);
+		}
 
 		return new ResponseEntity<>(
 			ProblemDetail.forStatusAndDetail(
-				HttpStatus.BAD_GATEWAY,
-				"The usage service is temporarily unavailable"),
-			HttpStatus.BAD_GATEWAY);
+				HttpStatus.BAD_REQUEST,
+				invalidUsageParameterException.getMessage()),
+			HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(InvalidUsageProductException.class)
@@ -190,6 +255,107 @@ public class ProjectRestController extends OneBaseRestController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	private BaseUsageStrategy _createUsageStrategy(
+		List<Entitlement> entitlements, String productName, String response) {
+
+		if (ArrayUtil.contains(
+				CommerceProductConstants.NAMES_EXPERIENCE_PRODUCTS,
+				productName)) {
+
+			return new ExperienceUsageStrategy(response, entitlements);
+		}
+
+		if (ArrayUtil.contains(
+				CommerceProductConstants.NAMES_LIFERAY_DATA_PLATFORM_PRODUCTS,
+				productName)) {
+
+			return new LDPUsageStrategy(response, entitlements);
+		}
+
+		return new SaaSUsageStrategy(response, entitlements);
+	}
+
+	private String _fetchLDPProjectEventHistory(
+			String endDate, String granularity,
+			String projectExternalReferenceCode, String startDate)
+		throws Exception {
+
+		try {
+			return _googleCloudFunctionService.fetchLDPProjectEventHistory(
+				endDate, granularity, projectExternalReferenceCode, startDate);
+		}
+		catch (GoogleCloudFunctionUnavailableException
+					googleCloudFunctionUnavailableException) {
+
+			_logUnavailableUsage(
+				googleCloudFunctionUnavailableException,
+				projectExternalReferenceCode);
+
+			return null;
+		}
+	}
+
+	private String _fetchLDPProjectEventSummary(
+			String endDate, String projectExternalReferenceCode,
+			String startDate)
+		throws Exception {
+
+		try {
+			return _googleCloudFunctionService.fetchLDPProjectEventSummary(
+				endDate, projectExternalReferenceCode, startDate);
+		}
+		catch (GoogleCloudFunctionUnavailableException
+					googleCloudFunctionUnavailableException) {
+
+			_logUnavailableUsage(
+				googleCloudFunctionUnavailableException,
+				projectExternalReferenceCode);
+
+			return null;
+		}
+	}
+
+	private String _fetchUsageResponse(String productName, Project project)
+		throws Exception {
+
+		String projectExternalReferenceCode =
+			project.getExternalReferenceCode();
+
+		try {
+			if (ArrayUtil.contains(
+					CommerceProductConstants.NAMES_EXPERIENCE_PRODUCTS,
+					productName)) {
+
+				LocalDate localDate = LocalDate.now(ZoneOffset.UTC);
+
+				return _googleCloudFunctionService.fetchComposableAccountUsage(
+					_getAccountKey(project),
+					localDate.format(_BILLING_PERIOD_DATE_TIME_FORMATTER));
+			}
+
+			if (ArrayUtil.contains(
+					CommerceProductConstants.
+						NAMES_LIFERAY_DATA_PLATFORM_PRODUCTS,
+					productName)) {
+
+				return _googleCloudFunctionService.fetchLDPProjectUsage(
+					projectExternalReferenceCode);
+			}
+
+			return _googleCloudFunctionService.fetchCustomerAccountUsage(
+				_getAccountKey(project));
+		}
+		catch (GoogleCloudFunctionUnavailableException
+					googleCloudFunctionUnavailableException) {
+
+			_logUnavailableUsage(
+				googleCloudFunctionUnavailableException,
+				projectExternalReferenceCode);
+
+			return null;
+		}
+	}
+
 	private UserAccount _fetchUserAccount(long userId) {
 		try {
 			return _userAccountService.getUserAccount(userId);
@@ -217,7 +383,71 @@ public class ProjectRestController extends OneBaseRestController {
 		return project.getAccountExternalReferenceCode();
 	}
 
-	private JSONObject _getMetricsJSONObject(
+	private ResponseEntity<String> _getEventUsageResponseEntity(
+			String projectExternalReferenceCode, String response)
+		throws Exception {
+
+		LDPEventUsageStrategy ldpEventUsageStrategy = new LDPEventUsageStrategy(
+			response,
+			_getUsageDashboardEntitlements(
+				CommerceProductConstants.NAME_LIFERAY_DATA_PLATFORM,
+				projectExternalReferenceCode));
+
+		if (!ldpEventUsageStrategy.hasUsage() && _log.isInfoEnabled()) {
+			_log.info(
+				"Unable to find LDP event usage data for project " +
+					projectExternalReferenceCode);
+		}
+
+		JSONObject jsonObject = ldpEventUsageStrategy.toJSONObject();
+
+		jsonObject.put("usageDataAvailable", ldpEventUsageStrategy.hasUsage());
+
+		return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
+	}
+
+	private Project _getProject(String projectExternalReferenceCode)
+		throws Exception {
+
+		Project project = _projectService.fetchProject(
+			projectExternalReferenceCode);
+
+		if (project == null) {
+			throw new ProjectNotFoundException(
+				"Unable to find project " + projectExternalReferenceCode);
+		}
+
+		return project;
+	}
+
+	private List<Entitlement> _getUsageDashboardEntitlements(
+			String dashboardProductName, String projectExternalReferenceCode)
+		throws Exception {
+
+		List<Entitlement> entitlements =
+			_entitlementService.getActiveEntitlements(
+				projectExternalReferenceCode);
+
+		if (entitlements.isEmpty() && _log.isWarnEnabled()) {
+			_log.warn(
+				"Unable to find active entitlements for project " +
+					projectExternalReferenceCode);
+		}
+
+		List<Entitlement> usageDashboardEntitlements = new ArrayList<>();
+
+		for (Entitlement entitlement : entitlements) {
+			if (_isUsageDashboardEntitlement(
+					dashboardProductName, entitlement)) {
+
+				usageDashboardEntitlements.add(entitlement);
+			}
+		}
+
+		return usageDashboardEntitlements;
+	}
+
+	private BaseUsageStrategy _getUsageStrategy(
 			String productExternalReferenceCode,
 			String projectExternalReferenceCode)
 		throws Exception {
@@ -239,6 +469,9 @@ public class ProjectRestController extends OneBaseRestController {
 				CommerceProductConstants.NAMES_EXPERIENCE_PRODUCTS,
 				productName) &&
 			!ArrayUtil.contains(
+				CommerceProductConstants.NAMES_LIFERAY_DATA_PLATFORM_PRODUCTS,
+				productName) &&
+			!ArrayUtil.contains(
 				CommerceProductConstants.NAMES_SAAS_PLAN_PRODUCTS,
 				productName)) {
 
@@ -248,78 +481,16 @@ public class ProjectRestController extends OneBaseRestController {
 					" has no usage dashboard: ", productName));
 		}
 
-		Project project = _projectService.fetchProject(
-			projectExternalReferenceCode);
+		Project project = _getProject(projectExternalReferenceCode);
 
-		if (project == null) {
-			throw new ProjectNotFoundException(
-				"Unable to find project " + projectExternalReferenceCode);
-		}
-
-		boolean experienceProduct = ArrayUtil.contains(
-			CommerceProductConstants.NAMES_EXPERIENCE_PRODUCTS, productName);
-
-		List<Entitlement> entitlements = _getUsageDashboardEntitlements(
-			experienceProduct, projectExternalReferenceCode);
-
-		BaseUsageStrategy usageStrategy = null;
-
-		if (experienceProduct) {
-			LocalDate localDate = LocalDate.now(ZoneOffset.UTC);
-
-			usageStrategy = new ExperienceUsageStrategy(
-				_googleCloudFunctionService.fetchComposableAccountUsage(
-					_getAccountKey(project),
-					localDate.format(_BILLING_PERIOD_DATE_TIME_FORMATTER)),
-				entitlements);
-		}
-		else {
-			usageStrategy = new SaaSUsageStrategy(
-				_googleCloudFunctionService.fetchCustomerAccountUsage(
-					_getAccountKey(project)),
-				entitlements);
-		}
-
-		if (usageStrategy.hasUsage()) {
-			return usageStrategy.toJSONObject();
-		}
-
-		if (_log.isInfoEnabled()) {
-			_log.info(
-				"Unable to find DataOps usage data for project " +
-					projectExternalReferenceCode);
-		}
-
-		return new JSONObject();
-	}
-
-	private List<Entitlement> _getUsageDashboardEntitlements(
-			boolean experienceProduct, String projectExternalReferenceCode)
-		throws Exception {
-
-		List<Entitlement> entitlements =
-			_entitlementService.getActiveEntitlements(
-				projectExternalReferenceCode);
-
-		if (entitlements.isEmpty() && _log.isWarnEnabled()) {
-			_log.warn(
-				"Unable to find active entitlements for project " +
-					projectExternalReferenceCode);
-		}
-
-		List<Entitlement> usageDashboardEntitlements = new ArrayList<>();
-
-		for (Entitlement entitlement : entitlements) {
-			if (_isUsageDashboardEntitlement(entitlement, experienceProduct)) {
-				usageDashboardEntitlements.add(entitlement);
-			}
-		}
-
-		return usageDashboardEntitlements;
+		return _createUsageStrategy(
+			_getUsageDashboardEntitlements(
+				productName, projectExternalReferenceCode),
+			productName, _fetchUsageResponse(productName, project));
 	}
 
 	private boolean _isUsageDashboardEntitlement(
-			Entitlement entitlement, boolean experienceProduct)
+			String dashboardProductName, Entitlement entitlement)
 		throws Exception {
 
 		EntitlementDefinition entitlementDefinition =
@@ -336,9 +507,22 @@ public class ProjectRestController extends OneBaseRestController {
 			return false;
 		}
 
-		if (experienceProduct) {
+		if (ArrayUtil.contains(
+				CommerceProductConstants.NAMES_EXPERIENCE_PRODUCTS,
+				dashboardProductName)) {
+
 			return ArrayUtil.contains(
 				CommerceProductConstants.NAMES_EXPERIENCE_ENTITLEMENT_PRODUCTS,
+				productName);
+		}
+
+		if (ArrayUtil.contains(
+				CommerceProductConstants.NAMES_LIFERAY_DATA_PLATFORM_PRODUCTS,
+				dashboardProductName)) {
+
+			return ArrayUtil.contains(
+				CommerceProductConstants.
+					NAMES_LIFERAY_DATA_PLATFORM_ENTITLEMENT_PRODUCTS,
 				productName);
 		}
 
@@ -353,6 +537,17 @@ public class ProjectRestController extends OneBaseRestController {
 		}
 
 		return false;
+	}
+
+	private void _logUnavailableUsage(
+		GoogleCloudFunctionUnavailableException
+			googleCloudFunctionUnavailableException,
+		String projectExternalReferenceCode) {
+
+		_log.error(
+			"Unable to reach the DataOps usage API for project " +
+				projectExternalReferenceCode,
+			googleCloudFunctionUnavailableException);
 	}
 
 	private void _syncAddedMembership(
@@ -476,8 +671,78 @@ public class ProjectRestController extends OneBaseRestController {
 		}
 	}
 
+	private LocalDate _toLocalDate(String name, String value) throws Exception {
+		try {
+			return LocalDate.parse(value);
+		}
+		catch (DateTimeParseException dateTimeParseException) {
+			throw new InvalidUsageParameterException(
+				StringBundler.concat(
+					"The ", name, " must use the format yyyy-MM-dd"),
+				dateTimeParseException);
+		}
+	}
+
+	private void _validateDateRange(
+			LocalDate endLocalDate, LocalDate startLocalDate)
+		throws Exception {
+
+		if (startLocalDate.isAfter(endLocalDate)) {
+			throw new InvalidUsageParameterException(
+				"The start date must not be after the end date");
+		}
+
+		LocalDate maxEndLocalDate = startLocalDate.plusYears(_MAX_YEARS);
+
+		if (maxEndLocalDate.isBefore(endLocalDate)) {
+			throw new InvalidUsageParameterException(
+				StringBundler.concat(
+					"The date range must not exceed ", _MAX_YEARS, " years"));
+		}
+	}
+
+	private void _validateDateRange(
+			LocalDate endLocalDate, String granularity,
+			LocalDate startLocalDate)
+		throws Exception {
+
+		if (!granularity.equals(_GRANULARITY_DAY) &&
+			!granularity.equals(_GRANULARITY_MONTH)) {
+
+			throw new InvalidUsageParameterException(
+				StringBundler.concat(
+					"The granularity must be ", _GRANULARITY_DAY, " or ",
+					_GRANULARITY_MONTH));
+		}
+
+		_validateDateRange(endLocalDate, startLocalDate);
+
+		if (!granularity.equals(_GRANULARITY_DAY)) {
+			return;
+		}
+
+		LocalDate maxEndLocalDate = startLocalDate.plusYears(
+			_MAX_YEARS_DAY_GRANULARITY);
+
+		if (maxEndLocalDate.isBefore(endLocalDate)) {
+			throw new InvalidUsageParameterException(
+				StringBundler.concat(
+					"The date range must not exceed ",
+					_MAX_YEARS_DAY_GRANULARITY, " year for the ",
+					_GRANULARITY_DAY, " granularity"));
+		}
+	}
+
 	private static final DateTimeFormatter _BILLING_PERIOD_DATE_TIME_FORMATTER =
 		DateTimeFormatter.ofPattern("yyyy-MM");
+
+	private static final String _GRANULARITY_DAY = "day";
+
+	private static final String _GRANULARITY_MONTH = "month";
+
+	private static final long _MAX_YEARS = 10;
+
+	private static final long _MAX_YEARS_DAY_GRANULARITY = 1;
 
 	private static final Log _log = LogFactory.getLog(
 		ProjectRestController.class);

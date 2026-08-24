@@ -85,6 +85,30 @@ public class CacheConfiguration {
 				1000
 			).build());
 		caffeineCacheManager.registerCustomCache(
+			"ldpProjectEventHistory",
+			Caffeine.newBuilder(
+			).expireAfterWrite(
+				Duration.ofHours(1)
+			).maximumSize(
+				1000
+			).build());
+		caffeineCacheManager.registerCustomCache(
+			"ldpProjectEventSummary",
+			Caffeine.newBuilder(
+			).expireAfterWrite(
+				Duration.ofHours(1)
+			).maximumSize(
+				1000
+			).build());
+		caffeineCacheManager.registerCustomCache(
+			"ldpProjectUsage",
+			Caffeine.newBuilder(
+			).expireAfterWrite(
+				Duration.ofHours(1)
+			).maximumSize(
+				1000
+			).build());
+		caffeineCacheManager.registerCustomCache(
 			"productName",
 			Caffeine.newBuilder(
 			).expireAfterWrite(

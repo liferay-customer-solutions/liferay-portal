@@ -10,6 +10,7 @@ import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
 import com.liferay.one.constants.CommerceProductConstants;
 import com.liferay.one.constants.PropertyConstants;
 import com.liferay.one.exception.GoogleCloudFunctionUnavailableException;
+import com.liferay.one.exception.InvalidUsageParameterException;
 import com.liferay.one.exception.InvalidUsageProductException;
 import com.liferay.one.exception.ProjectNotFoundException;
 import com.liferay.one.jira.synchronizer.AccountSynchronizer;
@@ -18,6 +19,8 @@ import com.liferay.one.jira.synchronizer.UserAccountSynchronizer;
 import com.liferay.one.model.BaseUsageStrategy;
 import com.liferay.one.model.Entitlement;
 import com.liferay.one.model.ExperienceUsageStrategy;
+import com.liferay.one.model.LDPEventUsageStrategy;
+import com.liferay.one.model.LDPUsageStrategy;
 import com.liferay.one.model.Project;
 import com.liferay.one.permission.BusinessEventPermission;
 import com.liferay.one.service.AccountService;
@@ -34,6 +37,7 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 import java.util.Arrays;
 import java.util.Set;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import org.junit.jupiter.api.Assertions;
@@ -201,6 +205,304 @@ public class ProjectRestControllerTest {
 	}
 
 	@Test
+	public void testGetUsageEventHistoryRejectsInvalidGranularity()
+		throws Exception {
+
+		Assertions.assertThrows(
+			InvalidUsageParameterException.class,
+			() -> _getUsageEventHistory(
+				_END_DATE, "week", _START_DATE_PREVIOUS_MONTH));
+
+		Mockito.verifyNoInteractions(_googleCloudFunctionService);
+	}
+
+	@Test
+	public void testGetUsageEventHistoryRejectsRangeAboveMaximum()
+		throws Exception {
+
+		Assertions.assertThrows(
+			InvalidUsageParameterException.class,
+			() -> _getUsageEventHistory("2027-07-28", "day", "2026-06-01"));
+
+		Assertions.assertThrows(
+			InvalidUsageParameterException.class,
+			() -> _getUsageEventHistory("2036-07-28", "month", "2026-06-01"));
+
+		Mockito.verifyNoInteractions(_googleCloudFunctionService);
+	}
+
+	@Test
+	public void testGetUsageEventHistoryRejectsUnknownProject()
+		throws Exception {
+
+		Assertions.assertThrows(
+			ProjectNotFoundException.class,
+			() -> _projectRestController.getUsageEventHistory(
+				null, _PROJECT_EXTERNAL_REFERENCE_CODE_UNKNOWN, _END_DATE,
+				"month", _START_DATE_PREVIOUS_MONTH));
+
+		Mockito.verifyNoInteractions(_googleCloudFunctionService);
+	}
+
+	@Test
+	public void testGetUsageEventHistoryReturnsHistoryWithTotals()
+		throws Exception {
+
+		_setUpProductName(_PRODUCT_NAME_LDP);
+
+		_setUpEntitlements(_createEntitlement(1, null, "events", 1000000.0));
+
+		Mockito.when(
+			_googleCloudFunctionService.fetchLDPProjectEventHistory(
+				_END_DATE, "month", _PROJECT_EXTERNAL_REFERENCE_CODE,
+				_START_DATE_PREVIOUS_MONTH)
+		).thenReturn(
+			_createLDPEventHistory()
+		);
+
+		ResponseEntity<String> responseEntity = _getUsageEventHistory(
+			_END_DATE, "month", _START_DATE_PREVIOUS_MONTH);
+
+		JSONObject jsonObject = new JSONObject(responseEntity.getBody());
+
+		Assertions.assertEquals(
+			1158,
+			jsonObject.getBigDecimal(
+				"usedCount"
+			).intValue());
+		Assertions.assertEquals(
+			1000000,
+			jsonObject.getBigDecimal(
+				"maxCount"
+			).intValue());
+
+		JSONArray eventHistoryJSONArray = jsonObject.getJSONArray(
+			LDPEventUsageStrategy.FIELD_EVENT_HISTORY);
+
+		Assertions.assertEquals(2, eventHistoryJSONArray.length());
+
+		Assertions.assertFalse(
+			jsonObject.has(LDPEventUsageStrategy.FIELD_EVENT_SUMMARY));
+	}
+
+	@Test
+	public void testGetUsageEventSummaryChecksPermissionBeforeReadingUsage()
+		throws Exception {
+
+		Mockito.doThrow(
+			new PrincipalException()
+		).when(
+			_businessEventPermission
+		).check(
+			ActionKeys.VIEW, null, _PROJECT_EXTERNAL_REFERENCE_CODE
+		);
+
+		Assertions.assertThrows(
+			PrincipalException.class,
+			() -> _getUsageEventSummary(_END_DATE, _START_DATE_PREVIOUS_MONTH));
+
+		Mockito.verifyNoInteractions(_googleCloudFunctionService);
+	}
+
+	@Test
+	public void testGetUsageEventSummaryRejectsInvalidDate() throws Exception {
+		Assertions.assertThrows(
+			InvalidUsageParameterException.class,
+			() -> _getUsageEventSummary(_END_DATE, "06/01/2026"));
+
+		Mockito.verifyNoInteractions(_googleCloudFunctionService);
+	}
+
+	@Test
+	public void testGetUsageEventSummaryRejectsRangeAboveMaximum()
+		throws Exception {
+
+		Assertions.assertThrows(
+			InvalidUsageParameterException.class,
+			() -> _getUsageEventSummary("2036-07-28", "2026-06-01"));
+
+		Mockito.verifyNoInteractions(_googleCloudFunctionService);
+	}
+
+	@Test
+	public void testGetUsageEventSummaryRejectsStartDateAfterEndDate()
+		throws Exception {
+
+		Assertions.assertThrows(
+			InvalidUsageParameterException.class,
+			() -> _getUsageEventSummary(_START_DATE_PREVIOUS_MONTH, _END_DATE));
+
+		Mockito.verifyNoInteractions(_googleCloudFunctionService);
+	}
+
+	@Test
+	public void testGetUsageEventSummaryRejectsUnknownProject()
+		throws Exception {
+
+		Assertions.assertThrows(
+			ProjectNotFoundException.class,
+			() -> _projectRestController.getUsageEventSummary(
+				null, _PROJECT_EXTERNAL_REFERENCE_CODE_UNKNOWN, _END_DATE,
+				_START_DATE_PREVIOUS_MONTH));
+
+		Mockito.verifyNoInteractions(_googleCloudFunctionService);
+	}
+
+	@Test
+	public void testGetUsageEventSummaryReturnsEntitlementsWhenDataOpsIsUnavailable()
+		throws Exception {
+
+		_setUpProductName(_PRODUCT_NAME_LDP);
+
+		_setUpEntitlements(_createEntitlement(1, null, "events", 1000000.0));
+
+		Mockito.when(
+			_googleCloudFunctionService.fetchLDPProjectEventSummary(
+				_END_DATE, _PROJECT_EXTERNAL_REFERENCE_CODE,
+				_START_DATE_PREVIOUS_MONTH)
+		).thenThrow(
+			new GoogleCloudFunctionUnavailableException()
+		);
+
+		ResponseEntity<String> responseEntity = _getUsageEventSummary(
+			_END_DATE, _START_DATE_PREVIOUS_MONTH);
+
+		Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+		JSONObject jsonObject = new JSONObject(responseEntity.getBody());
+
+		Assertions.assertEquals(
+			1000000,
+			jsonObject.getBigDecimal(
+				"maxCount"
+			).intValue());
+		Assertions.assertFalse(jsonObject.has("usedCount"));
+		Assertions.assertFalse(jsonObject.getBoolean("usageDataAvailable"));
+	}
+
+	@Test
+	public void testGetUsageEventSummaryReturnsEntitlementsWhenDataOpsReturnsNull()
+		throws Exception {
+
+		_setUpProductName(_PRODUCT_NAME_LDP);
+
+		_setUpEntitlements(_createEntitlement(1, null, "events", 1000000.0));
+
+		ResponseEntity<String> responseEntity = _getUsageEventSummary(
+			_END_DATE, _START_DATE_PREVIOUS_MONTH);
+
+		JSONObject jsonObject = new JSONObject(responseEntity.getBody());
+
+		Assertions.assertEquals(
+			1000000,
+			jsonObject.getBigDecimal(
+				"maxCount"
+			).intValue());
+		Assertions.assertFalse(jsonObject.has("usedCount"));
+		Assertions.assertFalse(
+			jsonObject.has(LDPEventUsageStrategy.FIELD_EVENT_SUMMARY));
+		Assertions.assertFalse(jsonObject.getBoolean("usageDataAvailable"));
+	}
+
+	@Test
+	public void testGetUsageEventSummaryReturnsSummaryWithAddOnBuckets()
+		throws Exception {
+
+		_setUpProductName(_PRODUCT_NAME_LDP);
+
+		_setUpEntitlements(
+			_createEntitlement(1, null, "events", 1000000.0),
+			_createEntitlement(2, null, "events-add-on-bucket", 2.0));
+
+		_setUpLDPEventSummary();
+
+		ResponseEntity<String> responseEntity = _getUsageEventSummary(
+			_END_DATE, _START_DATE_PREVIOUS_MONTH);
+
+		JSONObject jsonObject = new JSONObject(responseEntity.getBody());
+
+		Assertions.assertEquals(
+			2,
+			jsonObject.getBigDecimal(
+				"addOnBucketCount"
+			).intValue());
+		Assertions.assertEquals(
+			1000000,
+			jsonObject.getBigDecimal(
+				"baseAllotment"
+			).intValue());
+		Assertions.assertEquals(
+			1400000,
+			jsonObject.getBigDecimal(
+				"maxCount"
+			).intValue());
+		Assertions.assertEquals(
+			579,
+			jsonObject.getBigDecimal(
+				"usedCount"
+			).intValue());
+
+		JSONArray eventSummaryJSONArray = jsonObject.getJSONArray(
+			LDPEventUsageStrategy.FIELD_EVENT_SUMMARY);
+
+		Assertions.assertEquals(2, eventSummaryJSONArray.length());
+
+		JSONObject eventSummaryJSONObject = eventSummaryJSONArray.getJSONObject(
+			0);
+
+		Assertions.assertEquals(
+			"Liferay", eventSummaryJSONObject.getString("dataSourceName"));
+	}
+
+	@Test
+	public void testGetUsageEventSummaryTreatsUnlimitedBucketsAsNegativeMaxCount()
+		throws Exception {
+
+		_setUpProductName(_PRODUCT_NAME_LDP);
+
+		_setUpEntitlements(
+			_createEntitlement(1, null, "events", 1000000.0),
+			_createEntitlement(2, "unlimited", "events-add-on-bucket", null));
+
+		_setUpLDPEventSummary();
+
+		ResponseEntity<String> responseEntity = _getUsageEventSummary(
+			_END_DATE, _START_DATE_PREVIOUS_MONTH);
+
+		JSONObject jsonObject = new JSONObject(responseEntity.getBody());
+
+		Assertions.assertEquals(
+			-1,
+			jsonObject.getBigDecimal(
+				"maxCount"
+			).intValue());
+	}
+
+	@Test
+	public void testGetUsageEventSummaryTreatsUnlimitedEventsAsNegativeMaxCount()
+		throws Exception {
+
+		_setUpProductName(_PRODUCT_NAME_LDP);
+
+		_setUpEntitlements(
+			_createEntitlement(1, "unlimited", "events", null),
+			_createEntitlement(2, null, "events-add-on-bucket", 2.0));
+
+		_setUpLDPEventSummary();
+
+		ResponseEntity<String> responseEntity = _getUsageEventSummary(
+			_END_DATE, _START_DATE_PREVIOUS_MONTH);
+
+		JSONObject jsonObject = new JSONObject(responseEntity.getBody());
+
+		Assertions.assertEquals(
+			-1,
+			jsonObject.getBigDecimal(
+				"maxCount"
+			).intValue());
+	}
+
+	@Test
 	public void testGetUsageExcludesEntitlementsFromUnrelatedProducts()
 		throws Exception {
 
@@ -271,6 +573,99 @@ public class ProjectRestControllerTest {
 	}
 
 	@Test
+	public void testGetUsageLDPProfileExcludesEntitlementsFromUnrelatedProducts()
+		throws Exception {
+
+		_setUpEntitlements(
+			_createEntitlement(1, null, "api-requests", 500000.0),
+			_createEntitlement(99901, 2, null, "connectors", 10.0, null));
+
+		Mockito.when(
+			_commerceProductService.fetchProductName(99901)
+		).thenReturn(
+			CommerceProductConstants.NAME_LIFERAY_SAAS_PRO_PLAN
+		);
+
+		_setUpLDPUsage();
+
+		JSONObject metricsJSONObject = _getMetricsJSONObject(_PRODUCT_NAME_LDP);
+
+		JSONObject apiRequestsJSONObject = metricsJSONObject.getJSONObject(
+			LDPUsageStrategy.METRIC_API_REQUESTS);
+
+		Assertions.assertEquals(
+			500000,
+			apiRequestsJSONObject.getBigDecimal(
+				"maxCount"
+			).intValue());
+
+		JSONObject connectorsJSONObject = metricsJSONObject.getJSONObject(
+			LDPUsageStrategy.METRIC_CONNECTORS);
+
+		Assertions.assertEquals(
+			0,
+			connectorsJSONObject.getBigDecimal(
+				"maxCount"
+			).intValue());
+	}
+
+	@Test
+	public void testGetUsageLDPProfileReadsUsageByProject() throws Exception {
+		_setUpEntitlements();
+
+		_setUpLDPUsage();
+
+		_getMetricsJSONObject(_PRODUCT_NAME_LDP);
+
+		Mockito.verify(
+			_googleCloudFunctionService
+		).fetchLDPProjectUsage(
+			_PROJECT_EXTERNAL_REFERENCE_CODE
+		);
+	}
+
+	@Test
+	public void testGetUsageLDPProfileReturnsLDPMetrics() throws Exception {
+		_setUpEntitlements(
+			_createEntitlement(1, null, "api-requests", 500000.0),
+			_createEntitlement(2, null, "connectors", 10.0));
+
+		_setUpLDPUsage();
+
+		JSONObject metricsJSONObject = _getMetricsJSONObject(_PRODUCT_NAME_LDP);
+
+		Assertions.assertEquals(
+			Set.of(
+				"activeBatchSegments", "activeRealTimeSegments", "apiRequests",
+				"connectors"),
+			metricsJSONObject.keySet());
+
+		JSONObject apiRequestsJSONObject = metricsJSONObject.getJSONObject(
+			LDPUsageStrategy.METRIC_API_REQUESTS);
+
+		Assertions.assertEquals(
+			213123,
+			apiRequestsJSONObject.getBigDecimal(
+				"usedCount"
+			).intValue());
+		Assertions.assertEquals(
+			500000,
+			apiRequestsJSONObject.getBigDecimal(
+				"maxCount"
+			).intValue());
+
+		JSONObject activeBatchSegmentsJSONObject =
+			metricsJSONObject.getJSONObject(
+				LDPUsageStrategy.METRIC_ACTIVE_BATCH_SEGMENTS);
+
+		Assertions.assertEquals(
+			23423,
+			activeBatchSegmentsJSONObject.getBigDecimal(
+				"usedCount"
+			).intValue());
+	}
+
+	@Test
 	public void testGetUsageProfileSelectsMetricSetNotEntitlements()
 		throws Exception {
 
@@ -289,23 +684,6 @@ public class ProjectRestControllerTest {
 				"clientExtensionsCapacityRAM", "monthlyActiveLoggedInUsers",
 				"sites", "storageCapacityDocumentLibrary"),
 			metricsJSONObject.keySet());
-	}
-
-	@Test
-	public void testGetUsagePropagatesGoogleCloudFunctionUnavailable()
-		throws Exception {
-
-		_setUpEntitlements(_createEntitlement(1, null, "logs", 300.0));
-
-		Mockito.when(
-			_googleCloudFunctionService.fetchComposableAccountUsage(
-				Mockito.anyString(), Mockito.anyString())
-		).thenThrow(
-			new GoogleCloudFunctionUnavailableException()
-		);
-
-		Assertions.assertThrows(
-			GoogleCloudFunctionUnavailableException.class, this::_getUsage);
 	}
 
 	@Test
@@ -429,7 +807,7 @@ public class ProjectRestControllerTest {
 	}
 
 	@Test
-	public void testGetUsageReturnsEmptyMetricsWhenComposableUsageIsAbsent()
+	public void testGetUsageReturnsEntitlementsWhenComposableUsageIsAbsent()
 		throws Exception {
 
 		_setUpEntitlements(_createEntitlement(1, null, "logs", 300.0));
@@ -442,31 +820,103 @@ public class ProjectRestControllerTest {
 			).toString()
 		);
 
-		Assertions.assertTrue(
-			_getMetricsJSONObject(
-				_PRODUCT_NAME_EXPERIENCE
-			).isEmpty());
+		JSONObject logStorageJSONObject = _getMetricsJSONObject(
+			_PRODUCT_NAME_EXPERIENCE
+		).getJSONObject(
+			ExperienceUsageStrategy.METRIC_LOG_STORAGE
+		);
+
+		Assertions.assertEquals(
+			300,
+			logStorageJSONObject.getBigDecimal(
+				"maxCount"
+			).intValue());
+		Assertions.assertEquals(
+			BaseUsageStrategy.UNIT_GIB,
+			logStorageJSONObject.get("maxCountUnits"));
+		Assertions.assertEquals("0", logStorageJSONObject.get("percentage"));
+		Assertions.assertFalse(logStorageJSONObject.has("usedCount"));
 	}
 
 	@Test
-	public void testGetUsageReturnsEmptyMetricsWhenDataOpsReturnsNull()
+	public void testGetUsageReturnsEntitlementsWhenDataOpsReturnsNull()
 		throws Exception {
 
 		_setUpEntitlements(_createEntitlement(1, null, "logs", 300.0));
 
-		Assertions.assertTrue(_getMetricsJSONObject().isEmpty());
+		JSONObject metricsJSONObject = _getMetricsJSONObject();
+
+		Assertions.assertEquals(
+			Set.of(
+				"clientExtensionsCPU", "clientExtensionsRAM", "databaseStorage",
+				"documentLibraryAndBackupStorage", "logStorage",
+				"networkTraffic"),
+			metricsJSONObject.keySet());
+
+		JSONObject logStorageJSONObject = metricsJSONObject.getJSONObject(
+			ExperienceUsageStrategy.METRIC_LOG_STORAGE);
+
+		Assertions.assertEquals(
+			300,
+			logStorageJSONObject.getBigDecimal(
+				"maxCount"
+			).intValue());
+		Assertions.assertFalse(logStorageJSONObject.has("usedCount"));
 	}
 
 	@Test
-	public void testGetUsageReturnsEmptyMetricsWhenSaaSUsageIsNull()
+	public void testGetUsageReturnsEntitlementsWhenGoogleCloudFunctionIsUnavailable()
+		throws Exception {
+
+		_setUpEntitlements(_createEntitlement(1, null, "logs", 300.0));
+
+		Mockito.when(
+			_googleCloudFunctionService.fetchComposableAccountUsage(
+				Mockito.anyString(), Mockito.anyString())
+		).thenThrow(
+			new GoogleCloudFunctionUnavailableException()
+		);
+
+		ResponseEntity<String> responseEntity = _getUsage();
+
+		Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+		JSONObject jsonObject = new JSONObject(responseEntity.getBody());
+
+		Assertions.assertFalse(jsonObject.getBoolean("usageDataAvailable"));
+
+		JSONObject logStorageJSONObject = jsonObject.getJSONObject(
+			"metrics"
+		).getJSONObject(
+			ExperienceUsageStrategy.METRIC_LOG_STORAGE
+		);
+
+		Assertions.assertEquals(
+			300,
+			logStorageJSONObject.getBigDecimal(
+				"maxCount"
+			).intValue());
+		Assertions.assertFalse(logStorageJSONObject.has("usedCount"));
+	}
+
+	@Test
+	public void testGetUsageReturnsEntitlementsWhenSaaSUsageIsNull()
 		throws Exception {
 
 		_setUpEntitlements(_createEntitlement(1, null, "sites", 15.0));
 
-		Assertions.assertTrue(
-			_getMetricsJSONObject(
-				_PRODUCT_NAME_SAAS_PLAN
-			).isEmpty());
+		JSONObject sitesJSONObject = _getMetricsJSONObject(
+			_PRODUCT_NAME_SAAS_PLAN
+		).getJSONObject(
+			"sites"
+		);
+
+		Assertions.assertEquals(
+			15,
+			sitesJSONObject.getBigDecimal(
+				"maxCount"
+			).intValue());
+		Assertions.assertFalse(sitesJSONObject.has("usedCount"));
 	}
 
 	@Test
@@ -557,18 +1007,21 @@ public class ProjectRestControllerTest {
 	}
 
 	@Test
-	public void testHandleExceptionMapsGoogleCloudFunctionUnavailableToBadGateway() {
+	public void testHandleExceptionMapsInvalidParameterToBadRequest() {
 		ResponseEntity<ProblemDetail> responseEntity =
 			_projectRestController.handleException(
-				new GoogleCloudFunctionUnavailableException());
+				new InvalidUsageParameterException(
+					"The granularity must be day or month"));
 
 		Assertions.assertEquals(
-			HttpStatus.BAD_GATEWAY, responseEntity.getStatusCode());
+			HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
 
 		ProblemDetail problemDetail = responseEntity.getBody();
 
 		Assertions.assertEquals(
-			HttpStatus.BAD_GATEWAY.value(), problemDetail.getStatus());
+			HttpStatus.BAD_REQUEST.value(), problemDetail.getStatus());
+		Assertions.assertEquals(
+			"The granularity must be day or month", problemDetail.getDetail());
 	}
 
 	@Test
@@ -709,6 +1162,90 @@ public class ProjectRestControllerTest {
 			null);
 	}
 
+	private String _createLDPEventHistory() {
+		return new JSONObject(
+		).put(
+			"endDate", _END_DATE
+		).put(
+			"eventHistory",
+			new JSONArray(
+			).put(
+				new JSONObject(
+				).put(
+					"date", "2026-06-01"
+				).put(
+					"eventSummary", _createLDPEventSummaryJSONArray()
+				)
+			).put(
+				new JSONObject(
+				).put(
+					"date", "2026-07-01"
+				).put(
+					"eventSummary", _createLDPEventSummaryJSONArray()
+				)
+			)
+		).put(
+			"granularity", "month"
+		).put(
+			"salesforceProjectId", _PROJECT_EXTERNAL_REFERENCE_CODE
+		).put(
+			"startDate", _START_DATE_PREVIOUS_MONTH
+		).toString();
+	}
+
+	private String _createLDPEventSummary() {
+		return new JSONObject(
+		).put(
+			"endDate", _END_DATE
+		).put(
+			"eventSummary", _createLDPEventSummaryJSONArray()
+		).put(
+			"salesforceProjectId", _PROJECT_EXTERNAL_REFERENCE_CODE
+		).put(
+			"startDate", _START_DATE_PREVIOUS_MONTH
+		).toString();
+	}
+
+	private JSONArray _createLDPEventSummaryJSONArray() {
+		return new JSONArray(
+		).put(
+			new JSONObject(
+			).put(
+				"dataSourceId", "101"
+			).put(
+				"dataSourceName", "Liferay"
+			).put(
+				"eventsCount", 123
+			)
+		).put(
+			new JSONObject(
+			).put(
+				"dataSourceId", "102"
+			).put(
+				"dataSourceName", "Salesforce"
+			).put(
+				"eventsCount", 456
+			)
+		);
+	}
+
+	private String _createLDPUsage() {
+		return new JSONObject(
+		).put(
+			"activeBatchSegmentsCount", 23423
+		).put(
+			"activeRealTimeSegmentsCount", 123
+		).put(
+			"apiRequestsCount", 213123
+		).put(
+			"connectorsCount", 123
+		).put(
+			"month", "2026-07"
+		).put(
+			"salesforceProjectId", _PROJECT_EXTERNAL_REFERENCE_CODE
+		).toString();
+	}
+
 	private Project _createProject() {
 		return new Project(
 			new JSONObject(
@@ -752,6 +1289,23 @@ public class ProjectRestControllerTest {
 			_PRODUCT_EXTERNAL_REFERENCE_CODE);
 	}
 
+	private ResponseEntity<String> _getUsageEventHistory(
+			String endDate, String granularity, String startDate)
+		throws Exception {
+
+		return _projectRestController.getUsageEventHistory(
+			null, _PROJECT_EXTERNAL_REFERENCE_CODE, endDate, granularity,
+			startDate);
+	}
+
+	private ResponseEntity<String> _getUsageEventSummary(
+			String endDate, String startDate)
+		throws Exception {
+
+		return _projectRestController.getUsageEventSummary(
+			null, _PROJECT_EXTERNAL_REFERENCE_CODE, endDate, startDate);
+	}
+
 	private void _postProjectMemberships() throws Exception {
 		_projectRestController.postProjectMemberships(
 			null, _PROJECT_EXTERNAL_REFERENCE_CODE, _USER_ID,
@@ -789,6 +1343,25 @@ public class ProjectRestControllerTest {
 				_PROJECT_EXTERNAL_REFERENCE_CODE)
 		).thenReturn(
 			Arrays.asList(entitlements)
+		);
+	}
+
+	private void _setUpLDPEventSummary() throws Exception {
+		Mockito.when(
+			_googleCloudFunctionService.fetchLDPProjectEventSummary(
+				_END_DATE, _PROJECT_EXTERNAL_REFERENCE_CODE,
+				_START_DATE_PREVIOUS_MONTH)
+		).thenReturn(
+			_createLDPEventSummary()
+		);
+	}
+
+	private void _setUpLDPUsage() throws Exception {
+		Mockito.when(
+			_googleCloudFunctionService.fetchLDPProjectUsage(
+				_PROJECT_EXTERNAL_REFERENCE_CODE)
+		).thenReturn(
+			_createLDPUsage()
 		);
 	}
 
@@ -842,6 +1415,8 @@ public class ProjectRestControllerTest {
 
 	private static final long _CPRODUCT_ID = 55501;
 
+	private static final String _END_DATE = "2026-07-28";
+
 	private static final String _KORONEIKI_ACCOUNT_KEY = "abc-123-def";
 
 	private static final String _PRODUCT_EXTERNAL_REFERENCE_CODE = "PRDCT-PAAS";
@@ -849,10 +1424,18 @@ public class ProjectRestControllerTest {
 	private static final String _PRODUCT_NAME_EXPERIENCE =
 		CommerceProductConstants.NAME_PAAS_EXPERIENCE;
 
+	private static final String _PRODUCT_NAME_LDP =
+		CommerceProductConstants.NAME_LIFERAY_DATA_PLATFORM;
+
 	private static final String _PRODUCT_NAME_SAAS_PLAN =
 		CommerceProductConstants.NAME_LIFERAY_SAAS_BUSINESS_PLAN;
 
 	private static final String _PROJECT_EXTERNAL_REFERENCE_CODE = "PRJCT-004";
+
+	private static final String _PROJECT_EXTERNAL_REFERENCE_CODE_UNKNOWN =
+		"PRJCT-999";
+
+	private static final String _START_DATE_PREVIOUS_MONTH = "2026-06-01";
 
 	private static final String _USER_EXTERNAL_REFERENCE_CODE = "USER-001";
 

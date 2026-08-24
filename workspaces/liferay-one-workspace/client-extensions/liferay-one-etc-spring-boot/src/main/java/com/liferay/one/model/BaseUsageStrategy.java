@@ -36,62 +36,75 @@ public abstract class BaseUsageStrategy {
 		_usageJSONObject = usageJSONObject;
 	}
 
+	protected BaseUsageStrategy(String response) {
+		if (Validator.isNull(response)) {
+			_usageJSONObject = null;
+		}
+		else {
+			_usageJSONObject = new JSONObject(response);
+		}
+	}
+
 	protected JSONObject createCapacityUsageJSONObject(
 		BigDecimal gibMaxCount, BigDecimal gibUsedCount) {
 
+		JSONObject jsonObject = new JSONObject();
+
 		if (_isUnlimited(gibMaxCount)) {
-			return new JSONObject(
+			jsonObject.put("maxCount", _QUANTITY_UNLIMITED);
+		}
+		else {
+			jsonObject.put(
+				"maxCount", _getPromotedValue(gibMaxCount)
 			).put(
-				"maxCount", _QUANTITY_UNLIMITED
-			).put(
-				"percentage", "0"
-			).put(
-				"usedCount", _getPromotedValue(gibUsedCount)
-			).put(
-				"usedCountUnits", _getPromotedUnit(gibUsedCount)
+				"maxCountUnits", _getPromotedUnit(gibMaxCount)
 			);
 		}
 
-		BigDecimal percentage = _getPercentage(gibMaxCount, gibUsedCount);
+		if (!hasUsage()) {
+			return jsonObject.put("percentage", "0");
+		}
 
-		return new JSONObject(
-		).put(
-			"maxCount", _getPromotedValue(gibMaxCount)
-		).put(
-			"maxCountUnits", _getPromotedUnit(gibMaxCount)
-		).put(
-			"percentage", percentage.toPlainString()
-		).put(
+		jsonObject.put(
 			"usedCount", _getPromotedValue(gibUsedCount)
 		).put(
 			"usedCountUnits", _getPromotedUnit(gibUsedCount)
 		);
+
+		if (_isUnlimited(gibMaxCount)) {
+			return jsonObject.put("percentage", "0");
+		}
+
+		BigDecimal percentage = _getPercentage(gibMaxCount, gibUsedCount);
+
+		return jsonObject.put("percentage", percentage.toPlainString());
 	}
 
 	protected JSONObject createUsageJSONObject(
 		BigDecimal maxCount, BigDecimal usedCount) {
 
+		JSONObject jsonObject = new JSONObject();
+
 		if (_isUnlimited(maxCount)) {
-			return new JSONObject(
-			).put(
-				"maxCount", _QUANTITY_UNLIMITED
-			).put(
-				"percentage", "0"
-			).put(
-				"usedCount", usedCount
-			);
+			jsonObject.put("maxCount", _QUANTITY_UNLIMITED);
+		}
+		else {
+			jsonObject.put("maxCount", maxCount);
+		}
+
+		if (!hasUsage()) {
+			return jsonObject.put("percentage", "0");
+		}
+
+		jsonObject.put("usedCount", usedCount);
+
+		if (_isUnlimited(maxCount)) {
+			return jsonObject.put("percentage", "0");
 		}
 
 		BigDecimal percentage = _getPercentage(maxCount, usedCount);
 
-		return new JSONObject(
-		).put(
-			"maxCount", maxCount
-		).put(
-			"percentage", percentage.toPlainString()
-		).put(
-			"usedCount", usedCount
-		);
+		return jsonObject.put("percentage", percentage.toPlainString());
 	}
 
 	protected BigDecimal getMaxCount(

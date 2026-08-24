@@ -13,12 +13,13 @@ export type UsageMetric = {
 	maxCount: number;
 	maxCountUnits?: string;
 	percentage: string;
-	usedCount: number;
+	usedCount?: number;
 	usedCountUnits?: string;
 };
 
 export type UsageDashboard = {
 	metrics: {[key: string]: UsageMetric};
+	usageDataAvailable?: boolean;
 };
 
 export function useProjectUsageDashboard(
