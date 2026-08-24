@@ -5,7 +5,7 @@
 
 import ClayButton from '@clayui/button';
 import {useModal} from '@clayui/modal';
-import {useRef, useState} from 'react';
+import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useProperties} from '~/context/PropertiesContext';
 import useModalContext from '~/hooks/useModalContext';
@@ -64,10 +64,13 @@ const useProvisioningActions = ({
 		setLoading(true);
 
 		try {
-			await Console.uninstallApp(order.id, {
-				id: provisioningRow.id,
-				orderItemId: provisioningRow.orderItemId,
-			});
+			await Console.uninstallApp(
+				{
+					id: provisioningRow.id,
+					orderItemId: provisioningRow.orderItemId,
+				},
+				order.id
+			);
 
 			await mutateOrder();
 
@@ -161,7 +164,7 @@ const useProvisioningActions = ({
 		});
 	};
 
-	const provisioningRef = useRef([
+	const actions = [
 		{
 			action: (provisioningRow: ProvisioningRow) =>
 				onClickInstall(provisioningRow),
@@ -198,10 +201,10 @@ const useProvisioningActions = ({
 			},
 			title: i18n.translate('uninstall'),
 		},
-	]);
+	];
 
 	return {
-		actions: provisioningRef.current,
+		actions,
 		installAlertModal,
 		loading,
 		onOpenDetailsModal,

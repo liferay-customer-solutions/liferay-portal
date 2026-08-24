@@ -84,10 +84,9 @@ const ProjectSelection = ({
 
 								<p className="m-0 secondary-text">
 									{`${project.environments.length} Environments, ${project.rootProjectPlanUsage.cpu.free}CPUs, ${convertSize(
-										project.rootProjectPlanUsage.memory
-											.free,
 										'MB',
-										'GB'
+										'GB',
+										project.rootProjectPlanUsage.memory.free
 									)}GB RAM`}
 								</p>
 

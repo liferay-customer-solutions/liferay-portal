@@ -1485,7 +1485,7 @@ export default {
 	'this-product-is-no-longer-available':
 		'This product is no longer available.',
 	'this-project-has-no-extension-environments':
-		'This project has no extension environments',
+		'This project has no extension environments.',
 	'this-project-has-no-members': 'This project has no members yet.',
 	'this-project-is-on-a-legacy-billing-model':
 		'This project is on a legacy billing model.',
