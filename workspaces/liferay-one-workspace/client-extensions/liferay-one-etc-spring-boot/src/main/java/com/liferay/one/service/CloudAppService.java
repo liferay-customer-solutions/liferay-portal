@@ -14,9 +14,6 @@ import com.liferay.portal.kernel.util.Validator;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -59,8 +56,8 @@ public class CloudAppService {
 						customFields, cloudProvisioningJSONArray,
 						cloudProvisioningJSONObject, projectId);
 
-				_commerceOrderService.updateOrder(
-					customFields, orderId, order.getOrderStatus());
+				_commerceOrderService.patchOrderCustomFields(
+					orderId, customFields);
 
 				try {
 					JSONObject appJSONObject = _consoleService.deployApp(
@@ -80,21 +77,17 @@ public class CloudAppService {
 							1
 					);
 				}
-				catch (Exception exception) {
-					_log.error(
-						"Unable to install app for order " + orderId,
-						exception);
+				finally {
+					CloudProvisioningUtil.deleteDeployment(
+						temporaryDeploymentId, cloudProvisioningJSONObject);
+
+					customFields.put(
+						"cloud-provisioning",
+						cloudProvisioningJSONArray.toString());
+
+					_commerceOrderService.patchOrderCustomFields(
+						orderId, customFields);
 				}
-
-				CloudProvisioningUtil.deleteDeployment(
-					temporaryDeploymentId, cloudProvisioningJSONObject);
-
-				customFields.put(
-					"cloud-provisioning",
-					cloudProvisioningJSONArray.toString());
-
-				_commerceOrderService.updateOrder(
-					customFields, orderId, order.getOrderStatus());
 			});
 	}
 
@@ -130,8 +123,8 @@ public class CloudAppService {
 					"cloud-provisioning",
 					cloudProvisioningJSONArray.toString());
 
-				_commerceOrderService.updateOrder(
-					customFields, orderId, order.getOrderStatus());
+				_commerceOrderService.patchOrderCustomFields(
+					orderId, customFields);
 			});
 	}
 
@@ -186,8 +179,6 @@ public class CloudAppService {
 
 		return order;
 	}
-
-	private static final Log _log = LogFactory.getLog(CloudAppService.class);
 
 	@Autowired
 	private CommerceOrderService _commerceOrderService;

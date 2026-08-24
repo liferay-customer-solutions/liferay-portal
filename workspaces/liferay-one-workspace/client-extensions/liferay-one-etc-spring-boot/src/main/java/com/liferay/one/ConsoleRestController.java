@@ -5,6 +5,7 @@
 
 package com.liferay.one;
 
+import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Order;
 import com.liferay.one.constants.CommerceOrderConstants;
 import com.liferay.one.permission.CommerceOrderPermission;
@@ -12,17 +13,19 @@ import com.liferay.one.service.CloudAppService;
 import com.liferay.one.service.CommerceOrderService;
 import com.liferay.one.service.ConsoleService;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.security.auth.PrincipalException;
 
-import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -42,13 +45,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class ConsoleRestController extends OneBaseRestController {
 
 	@GetMapping("projects-usage")
-	public String getProjectsUsage(@AuthenticationPrincipal Jwt jwt)
+	public ResponseEntity<String> getProjectsUsage(
+			@AuthenticationPrincipal Jwt jwt)
 		throws Exception {
 
-		Map<String, Object> claims = jwt.getClaims();
+		UserAccount userAccount = getMyUserAccount(jwt);
 
-		return _consoleService.getProjectsUsage(
-			String.valueOf(claims.get("username")));
+		return ResponseEntity.ok(
+		).contentType(
+			MediaType.APPLICATION_JSON
+		).body(
+			_consoleService.getProjectsUsage(userAccount.getEmailAddress())
+		);
 	}
 
 	@PostMapping("provisioning/{orderId}")
@@ -88,9 +96,12 @@ public class ConsoleRestController extends OneBaseRestController {
 
 		JSONObject jsonObject = new JSONObject(json);
 
+		String projectId = jsonObject.getString("projectId");
+
+		_checkConsoleProject(jwt, projectId);
+
 		_cloudAppService.deployCloudApp(
-			orderId, jsonObject.getLong("orderItemId"),
-			jsonObject.getString("projectId"));
+			orderId, jsonObject.getLong("orderItemId"), projectId);
 
 		return ResponseEntity.ok(
 		).build();
@@ -118,6 +129,40 @@ public class ConsoleRestController extends OneBaseRestController {
 
 		return ResponseEntity.ok(
 		).build();
+	}
+
+	private void _checkConsoleProject(Jwt jwt, String projectId)
+		throws Exception {
+
+		UserAccount userAccount = getMyUserAccount(jwt);
+
+		JSONObject jsonObject = new JSONObject(
+			_consoleService.getProjectsUsage(userAccount.getEmailAddress()));
+
+		JSONArray userProjectsJSONArray = jsonObject.getJSONArray(
+			"userProjects");
+
+		for (int i = 0; i < userProjectsJSONArray.length(); i++) {
+			JSONObject userProjectJSONObject =
+				userProjectsJSONArray.getJSONObject(i);
+
+			JSONArray environmentsJSONArray =
+				userProjectJSONObject.getJSONArray("environments");
+
+			for (int j = 0; j < environmentsJSONArray.length(); j++) {
+				JSONObject environmentJSONObject =
+					environmentsJSONArray.getJSONObject(j);
+
+				if (Objects.equals(
+						environmentJSONObject.getString("projectId"),
+						projectId)) {
+
+					return;
+				}
+			}
+		}
+
+		throw new PrincipalException();
 	}
 
 	private Order _getCloudAppOrder(long orderId) throws Exception {
