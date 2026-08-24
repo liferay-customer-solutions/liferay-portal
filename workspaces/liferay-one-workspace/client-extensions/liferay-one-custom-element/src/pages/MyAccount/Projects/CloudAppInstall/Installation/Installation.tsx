@@ -24,20 +24,26 @@ type InstallationProps = {
 
 const MARKETPLACE_ADMIN_EMAIL = 'marketplace-admin@liferay.com';
 
-const statuses = {
+const getStatuses = () => ({
 	failed: {
 		bodyMessage: (
-			<span>
-				We could not install your app. Please try again. If the problem
-				continues, contact
-				<a className="mx-1" href={`mailto:${MARKETPLACE_ADMIN_EMAIL}`}>
-					{MARKETPLACE_ADMIN_EMAIL}
-				</a>
-				for assistance.
-			</span>
+			<span
+				dangerouslySetInnerHTML={{
+					__html: i18n.sub(
+						'we-could-not-install-your-app-please-try-again-if-the-problem-continues-contact-x-for-assistance',
+						[
+							`<a href="mailto:${MARKETPLACE_ADMIN_EMAIL}">${MARKETPLACE_ADMIN_EMAIL}</a>`,
+						]
+					),
+				}}
+			/>
 		),
 		icon: (
-			<ClayIcon color="red" fontSize="4rem" symbol="times-circle-full" />
+			<ClayIcon
+				className="text-danger"
+				fontSize="4rem"
+				symbol="times-circle-full"
+			/>
 		),
 		title: i18n.translate('installation-failed'),
 	},
@@ -54,14 +60,14 @@ const statuses = {
 		),
 		icon: (
 			<ClayIcon
-				color="#4AAB3B"
+				className="text-success"
 				fontSize="4rem"
 				symbol="check-circle-full"
 			/>
 		),
 		title: i18n.translate('installation-success'),
 	},
-};
+});
 
 const Installation = ({form, onClickBackToActivation}: InstallationProps) => {
 	const {cloudConsoleURL} = useProperties();
@@ -76,6 +82,8 @@ const Installation = ({form, onClickBackToActivation}: InstallationProps) => {
 	const isLoading = isSubmitting || !isSubmitted;
 
 	const status = useMemo(() => {
+		const statuses = getStatuses();
+
 		if (isLoading) {
 			return statuses.loading;
 		}
@@ -102,13 +110,15 @@ const Installation = ({form, onClickBackToActivation}: InstallationProps) => {
 					onClick: onClickBackToActivation,
 				}}
 				continueButtonProps={{
-					children: 'View App In Cloud',
+					children: i18n.translate('view-app-in-cloud'),
 					className: classNames({
 						'd-none': !isSubmitSuccessful,
 					}),
 					onClick: () =>
 						window.open(
-							`${cloudConsoleURL}/projects/${environment?.projectId}/services`
+							`${cloudConsoleURL}/projects/${environment?.projectId}/services`,
+							'_blank',
+							'noopener,noreferrer'
 						),
 				}}
 			/>

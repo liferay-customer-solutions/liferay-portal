@@ -51,13 +51,19 @@ const useProvisioningActions = ({
 	const uninstallModal = useModal();
 
 	const onClickInstall = (provisioningRow: ProvisioningRow) => {
+		if (resourceRequirements.isLoading) {
+			return;
+		}
+
 		setSelectedProvisioningRow(provisioningRow);
 
-		if (!resourceRequirements.resourceRequest?.userProjects?.length) {
+		if (!resourceRequirements.projectsUsage?.userProjects?.length) {
 			return installAlertModal.onOpenChange(true);
 		}
 
-		navigate(`install/${order.id}`);
+		navigate(
+			`install/${order.id}?orderItemId=${provisioningRow.orderItemId}`
+		);
 	};
 
 	const uninstall = async (provisioningRow: ProvisioningRow) => {
@@ -179,14 +185,12 @@ const useProvisioningActions = ({
 			title: i18n.translate('view-details'),
 		},
 		{
-			action: (provisioningRow: ProvisioningRow) => {
-				const projectId =
-					`${provisioningRow.project}-${provisioningRow.environment}`.toLowerCase();
-
+			action: (provisioningRow: ProvisioningRow) =>
 				window.open(
-					`${cloudConsoleURL}/projects/${projectId}/services`
-				);
-			},
+					`${cloudConsoleURL}/projects/${provisioningRow.projectId}/services`,
+					'_blank',
+					'noopener,noreferrer'
+				),
 			show: (provisioningRow: ProvisioningRow) =>
 				provisioningRow.status === InstallStatus.INSTALLED,
 			title: i18n.translate('go-to-cloud-console'),

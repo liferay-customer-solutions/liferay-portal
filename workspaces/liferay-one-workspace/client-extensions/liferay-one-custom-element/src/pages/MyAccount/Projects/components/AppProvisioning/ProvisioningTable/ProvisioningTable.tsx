@@ -7,7 +7,7 @@ import ClayDropDown from '@clayui/drop-down';
 import ButtonWithIcon from '~/components/ButtonWithIcon/ButtonWithIcon';
 import Loading from '~/components/Loading/Loading';
 import Table from '~/components/Table/Table';
-import i18n from '~/i18n';
+import i18n, {Word} from '~/i18n';
 
 import InstallAlertModal from '../InstallAlertModal/InstallAlertModal';
 import InstallationStatus from '../InstallationStatus/InstallationStatus';
@@ -88,30 +88,15 @@ const ProvisioningTable: React.FC<ProvisioningTableProps> = ({
 				columns={[
 					{
 						key: 'type',
-						render: (type, item) => {
-							const provisioningRow =
-								item as unknown as ProvisioningRow;
-
-							return (
-								<>
-									<div className="font-weight-bold">
-										{type as string}
-									</div>
-
-									<div>{provisioningRow.host}</div>
-								</>
-							);
-						},
+						render: (type) => (
+							<div className="font-weight-bold">
+								{type as string}
+							</div>
+						),
 						title: (
-							<>
-								<div className="text-dark">
-									{i18n.translate('type')}
-								</div>
-
-								<div className="text-black-50">
-									{i18n.translate('host-name')}
-								</div>
-							</>
+							<div className="text-dark">
+								{i18n.translate('type')}
+							</div>
 						),
 					},
 					{
@@ -151,7 +136,7 @@ const ProvisioningTable: React.FC<ProvisioningTableProps> = ({
 									<InstallationStatus
 										status={status as string}
 									>
-										{status as string}
+										{i18n.translate(status as Word)}
 									</InstallationStatus>
 
 									{provisioningRow.status ===

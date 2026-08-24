@@ -4,15 +4,22 @@
  */
 
 import {addYears, format} from 'date-fns';
-import {useEffect, useMemo, useState} from 'react';
-import {LicenseType, ProductSpecificationKey} from '~/enums/Product';
+import {useMemo} from 'react';
+import {
+	LicenseType,
+	ProductLicenseType,
+	ProductSpecificationKey,
+} from '~/enums/Product';
 import useGetProductByOrderId from '~/hooks/useGetProductByOrderId';
 import useGetResourceInfo from '~/hooks/useGetResourceInfo';
 import i18n from '~/i18n';
-import {OrderCustomFields} from '~/utils/orderUtils';
+import {parseProjectId} from '~/utils/parseProjectId';
 import {getProductSpecification} from '~/utils/productUtils';
-import {safeJSONParse} from '~/utils/safeJSONParse';
 
+import {
+	getDeploymentsByOrderItemId,
+	hasDeploymentInProgress,
+} from '../provisioning';
 import {InstallStatus} from '../types';
 
 import type {PlacedOrder} from '~/types/orders';
@@ -28,8 +35,8 @@ const ACTIVE_REFRESH_INTERVAL = 60 * 1000;
 const DEFAULT_REFRESH_INTERVAL = 240 * 1000;
 
 const getExpirationDate = (createdDate: Date, licenseType: string) => {
-	if (licenseType === 'Perpetual') {
-		return 'DNE';
+	if (licenseType === ProductLicenseType.PERPETUAL) {
+		return i18n.translate('does-not-expire');
 	}
 
 	return format(addYears(createdDate, 1), 'MMM dd, yyyy');
@@ -57,12 +64,11 @@ const getStatus = (
 };
 
 const useProvisioningData = (orderId: string) => {
-	const [refreshInterval, setRefreshInterval] = useState(
-		DEFAULT_REFRESH_INTERVAL
-	);
-
 	const {data, mutate: mutateOrder} = useGetProductByOrderId(orderId, {
-		refreshInterval,
+		refreshInterval: (latestData?: {placedOrder?: PlacedOrder}) =>
+			hasDeploymentInProgress(latestData?.placedOrder)
+				? ACTIVE_REFRESH_INTERVAL
+				: DEFAULT_REFRESH_INTERVAL,
 	});
 
 	const order = useMemo(
@@ -74,10 +80,7 @@ const useProvisioningData = (orderId: string) => {
 
 	const product = data?.product;
 
-	const resourceRequirements = useGetResourceInfo({
-		product,
-		shouldFetch: true,
-	});
+	const resourceRequirements = useGetResourceInfo();
 
 	const productLicenseType = useMemo(
 		() =>
@@ -91,39 +94,30 @@ const useProvisioningData = (orderId: string) => {
 	const provisioningTableData = useMemo(() => {
 		const items = [];
 
-		const [cloudProvisioning] = safeJSONParse<
-			{deployments: Deployment[]}[]
-		>(
-			(order.customFields ?? {})[OrderCustomFields.CLOUD_PROVISIONING] ??
-				null,
-			[{deployments: []}]
-		);
+		const deploymentsByOrderItemId = getDeploymentsByOrderItemId(order);
 
 		for (const orderItem of orderItems) {
+			const deployments =
+				deploymentsByOrderItemId.get(orderItem.id) ?? [];
+
 			for (let i = 0; i < orderItem.quantity; i++) {
-				const deployment = cloudProvisioning.deployments[i];
+				const deployment = deployments[i];
 
-				let environment = i18n.translate('not-installed');
-				let project = i18n.translate('not-installed');
-
-				if (deployment) {
-					[project, environment] = deployment.projectId.split('-');
-
-					environment = environment.toUpperCase();
-					project = project.toUpperCase();
-				}
+				const {environment, projectName} = parseProjectId(
+					deployment?.projectId
+				);
 
 				items.push({
-					environment,
+					environment: environment.toUpperCase(),
 					expirationDate: getExpirationDate(
 						new Date(order.createDate),
 						productLicenseType
 					),
-					host: '',
 					id: deployment?.id ?? i,
 					loading: deployment?.loading,
 					orderItemId: orderItem.id,
-					project,
+					project: projectName.toUpperCase(),
+					projectId: deployment?.projectId ?? '',
 					startDate: format(
 						new Date(order.createDate),
 						'MMM dd, yyyy'
@@ -136,16 +130,6 @@ const useProvisioningData = (orderId: string) => {
 
 		return items;
 	}, [order, orderItems, productLicenseType]);
-
-	useEffect(() => {
-		const refresh = provisioningTableData.some(
-			(provisioning) => provisioning.loading === true
-		);
-
-		if (refresh) {
-			setRefreshInterval(ACTIVE_REFRESH_INTERVAL);
-		}
-	}, [provisioningTableData]);
 
 	return {
 		mutateOrder,

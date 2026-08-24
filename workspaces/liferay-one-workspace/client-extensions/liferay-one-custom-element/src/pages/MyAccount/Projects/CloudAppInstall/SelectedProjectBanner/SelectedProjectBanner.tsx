@@ -4,7 +4,8 @@
  */
 
 import i18n from '~/i18n';
-import {convertSize} from '~/utils/fileUtils';
+
+import {getResourceSummary} from '../utils';
 
 import type {ConsoleUserProject} from '~/services/spring-boot/Console';
 
@@ -23,15 +24,11 @@ const SelectedProjectBanner = ({project}: SelectedProjectBannerProps) => (
 
 			<span className="align-items-end d-flex flex-column">
 				<small className="font-weight-bold m-0">
-					{project?.rootProjectId.toUpperCase()}
+					{project.rootProjectId.toUpperCase()}
 				</small>
 
 				<small className="text-nowrap">
-					{`${project?.environments.length} environments, ${project?.rootProjectPlanUsage.cpu.free} CPUs, ${convertSize(
-						'MB',
-						'GB',
-						project?.rootProjectPlanUsage.memory.free
-					)} GB RAM`}
+					{getResourceSummary(project)}
 				</small>
 			</span>
 		</div>

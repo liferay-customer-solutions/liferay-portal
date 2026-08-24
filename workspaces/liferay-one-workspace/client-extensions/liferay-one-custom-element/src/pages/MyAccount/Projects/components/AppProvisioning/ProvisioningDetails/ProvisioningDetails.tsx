@@ -7,7 +7,7 @@ import ClayIcon from '@clayui/icon';
 import ClaySticker from '@clayui/sticker';
 import classNames from 'classnames';
 import ButtonWithIcon from '~/components/ButtonWithIcon/ButtonWithIcon';
-import i18n, {Word} from '~/i18n';
+import i18n from '~/i18n';
 import {Liferay} from '~/services/liferay/liferay';
 
 import {InstallStatus} from '../types';
@@ -160,15 +160,16 @@ const ProvisioningDetails: React.FC<ProvisioningDetailsProps> = ({
 					status={provisioningRow?.status}
 					title={i18n.translate('status')}
 				>
-					{i18n.translate(provisioningRow?.status as Word)}
+					{i18n.translate(provisioningRow.status)}
 				</InfoBadge>
 
 				<InfoBadge title={i18n.translate('project')}>
-					{provisioningRow?.project}
+					{provisioningRow.project || i18n.translate('not-installed')}
 				</InfoBadge>
 
 				<InfoBadge title={i18n.translate('environment')}>
-					{provisioningRow?.environment}
+					{provisioningRow.environment ||
+						i18n.translate('not-installed')}
 				</InfoBadge>
 			</div>
 		</div>

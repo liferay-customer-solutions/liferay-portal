@@ -21,12 +21,17 @@ type ActivationTabProps = {
 	profile?: ActivationProfile;
 };
 
+type ActivationContentProps = {
+	orderId?: string;
+	product: DeliveryProduct;
+};
+
 const ACTIVATION_CONTENT_BY_PROFILE: Record<
 	ActivationProfile,
-	(orderId: string | undefined, product: DeliveryProduct) => ReactNode
+	(props: ActivationContentProps) => ReactNode
 > = {
 	'app-licenses': () => null,
-	'app-provisioning': (orderId) =>
+	'app-provisioning': ({orderId}) =>
 		orderId ? <AppProvisioning orderId={orderId} /> : null,
 	'cloud-native': () => <CloudNativeActivation />,
 	'commerce': () => <CommerceActivation />,
@@ -35,7 +40,7 @@ const ACTIVATION_CONTENT_BY_PROFILE: Record<
 	'keys-list': () => null,
 	'licenses': () => null,
 	'none': () => null,
-	'status': (orderId, product) => (
+	'status': ({product}) => (
 		<ActivationStatusCard productName={product.name} />
 	),
 };
@@ -45,5 +50,8 @@ export default function ActivationTab({
 	product,
 	profile,
 }: ActivationTabProps) {
-	return ACTIVATION_CONTENT_BY_PROFILE[profile ?? 'none'](orderId, product);
+	return ACTIVATION_CONTENT_BY_PROFILE[profile ?? 'none']({
+		orderId,
+		product,
+	});
 }

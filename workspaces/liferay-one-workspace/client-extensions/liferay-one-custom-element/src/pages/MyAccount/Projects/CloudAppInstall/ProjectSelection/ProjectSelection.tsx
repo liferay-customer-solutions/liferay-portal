@@ -6,10 +6,10 @@
 import ProductPurchase from '~/components/ProductPurchase/ProductPurchase';
 import RadioCardList from '~/components/RadioCardList/RadioCardList';
 import i18n from '~/i18n';
-import {convertSize} from '~/utils/fileUtils';
 
 import ContactSupport from '../ContactSupport/ContactSupport';
 import WizardFooter from '../WizardFooter/WizardFooter';
+import {getResourceSummary} from '../utils';
 
 import type {UseFormReturn} from 'react-hook-form';
 
@@ -83,11 +83,7 @@ const ProjectSelection = ({
 								</div>
 
 								<p className="m-0 secondary-text">
-									{`${project.environments.length} Environments, ${project.rootProjectPlanUsage.cpu.free}CPUs, ${convertSize(
-										'MB',
-										'GB',
-										project.rootProjectPlanUsage.memory.free
-									)}GB RAM`}
+									{getResourceSummary(project)}
 								</p>
 
 								{!hasExtensionEnvironment(project) && (

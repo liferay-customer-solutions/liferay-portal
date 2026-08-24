@@ -6,7 +6,7 @@
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useMemo, useState} from 'react';
 import {useForm} from 'react-hook-form';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useNavigate, useParams, useSearchParams} from 'react-router-dom';
 import {z} from 'zod';
 import Loading from '~/components/Loading/Loading';
 import ProductPurchase from '~/components/ProductPurchase/ProductPurchase';
@@ -80,6 +80,7 @@ const verifyAvailabilityToInstall = (
 const CloudAppInstall = () => {
 	const {applicationERC, orderId} = useParams();
 	const navigate = useNavigate();
+	const [searchParams] = useSearchParams();
 	const [step, setStep] = useState<InstallStep>('project');
 
 	const {data, error, isLoading} = useGetProductByOrderId(orderId as string);
@@ -91,10 +92,7 @@ const CloudAppInstall = () => {
 	const product = data?.product as DeliveryProduct;
 	const placedOrder = data?.placedOrder as PlacedOrder;
 
-	const resourceResponse = useGetResourceInfo({
-		product,
-		shouldFetch: true,
-	});
+	const {projectsUsage} = useGetResourceInfo();
 
 	const productRequirements = useMemo(
 		() => ({
@@ -114,16 +112,14 @@ const CloudAppInstall = () => {
 
 	const projects = useMemo(
 		() =>
-			resourceResponse?.resourceRequest?.userProjects.map(
-				(userProject) => ({
-					...userProject,
-					availabilityToProduct: verifyAvailabilityToInstall(
-						productRequirements,
-						userProject
-					),
-				})
-			) ?? [],
-		[productRequirements, resourceResponse?.resourceRequest?.userProjects]
+			projectsUsage?.userProjects.map((userProject) => ({
+				...userProject,
+				availabilityToProduct: verifyAvailabilityToInstall(
+					productRequirements,
+					userProject
+				),
+			})) ?? [],
+		[productRequirements, projectsUsage?.userProjects]
 	);
 
 	const project = form.watch('project');
@@ -135,13 +131,26 @@ const CloudAppInstall = () => {
 
 		setStep('installation');
 
+		const orderItemId =
+			Number(searchParams.get('orderItemId')) ||
+			placedOrder.placedOrderItems?.[0]?.id;
+
+		if (!orderItemId) {
+			throw new Error(
+				`Unable to resolve an order item for order ${placedOrder.id}`
+			);
+		}
+
 		await Console.provisioning(
-			{
-				orderItemId: placedOrder.placedOrderItems[0].id,
-				projectId: environment.projectId,
-			},
+			{orderItemId, projectId: environment.projectId},
 			placedOrder.id
 		);
+	};
+
+	const onClickInstall = () => {
+		form.handleSubmit(onSubmit)().catch((error) => {
+			console.error(error);
+		});
 	};
 
 	if (isLoading) {
@@ -162,10 +171,13 @@ const CloudAppInstall = () => {
 				product={product}
 				rightNode={
 					<div className="d-flex flex-column">
-						<div>Standard License</div>
+						<div>{i18n.translate('standard-license')}</div>
 
 						<small className="d-flex justify-content-end">
-							{`${productRequirements.cpu}CPUs, ${productRequirements.ram}GB RAM`}
+							{i18n.sub('x-cpus-x-gb-ram', [
+								productRequirements.cpu,
+								productRequirements.ram,
+							])}
 						</small>
 					</div>
 				}
@@ -209,7 +221,7 @@ const CloudAppInstall = () => {
 						form={form}
 						onClickBack={() => setStep('project')}
 						onClickCancel={onClickCancel}
-						onSubmit={form.handleSubmit(onSubmit)}
+						onSubmit={onClickInstall}
 						placedOrder={placedOrder}
 					/>
 				)}

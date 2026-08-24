@@ -4,19 +4,19 @@
  */
 
 import ClayBadge from '@clayui/badge';
+import {useMemo} from 'react';
 import ProductPurchase from '~/components/ProductPurchase/ProductPurchase';
 import RadioCardList from '~/components/RadioCardList/RadioCardList';
 import i18n from '~/i18n';
-import {OrderCustomFields} from '~/utils/orderUtils';
-import {safeJSONParse} from '~/utils/safeJSONParse';
+import {parseProjectId} from '~/utils/parseProjectId';
 
+import {getCloudProvisioning} from '../../components/AppProvisioning/provisioning';
 import ContactSupport from '../ContactSupport/ContactSupport';
 import WizardFooter from '../WizardFooter/WizardFooter';
 
 import type {UseFormReturn} from 'react-hook-form';
 import type {PlacedOrder} from '~/types/orders';
 
-import type {Provisioning} from '../../components/AppProvisioning/types';
 import type {InstallAppForm} from '../CloudAppInstall';
 
 type EnvironmentSelectionProps = {
@@ -39,20 +39,20 @@ const EnvironmentSelection = ({
 	const selectedEnvironment = form.watch('environment');
 	const selectedProject = form.watch('project');
 
-	const cloudProvisioning = safeJSONParse<Provisioning[]>(
-		(placedOrder.customFields ?? {})[
-			OrderCustomFields.CLOUD_PROVISIONING
-		] ?? null,
-		[]
+	const deployedProjectIds = useMemo(
+		() =>
+			new Set(
+				getCloudProvisioning(placedOrder).flatMap((provisioning) =>
+					(provisioning.deployments ?? []).map(
+						(deployment) => deployment.projectId
+					)
+				)
+			),
+		[placedOrder]
 	);
 
 	const isDeployed = (projectEnvironment: ProjectEnvironment) =>
-		cloudProvisioning.some((provisioning) =>
-			provisioning.deployments.some(
-				(deployment) =>
-					deployment.projectId === projectEnvironment.projectId
-			)
-		);
+		deployedProjectIds.has(projectEnvironment.projectId);
 
 	return (
 		<ProductPurchase.Shell
@@ -70,8 +70,9 @@ const EnvironmentSelection = ({
 			<RadioCardList<ProjectEnvironment>
 				contentList={(selectedProject?.environments ?? []).map(
 					(projectEnvironment, index) => {
-						const [projectName = '', environment = ''] =
-							projectEnvironment.projectId.split('-');
+						const {environment, projectName} = parseProjectId(
+							projectEnvironment.projectId
+						);
 
 						const disabled = isDeployed(projectEnvironment);
 

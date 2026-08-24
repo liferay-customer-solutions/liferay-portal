@@ -4,10 +4,10 @@
  */
 
 export const InstallStatus = {
-	EXPIRED: 'Expired',
-	IN_PROGRESS: 'In Progress',
-	INSTALLED: 'Installed',
-	READY_TO_INSTALL: 'Ready to Install',
+	EXPIRED: 'expired',
+	IN_PROGRESS: 'in-progress',
+	INSTALLED: 'installed',
+	READY_TO_INSTALL: 'ready-to-install',
 } as const;
 
 export type InstallStatus = (typeof InstallStatus)[keyof typeof InstallStatus];

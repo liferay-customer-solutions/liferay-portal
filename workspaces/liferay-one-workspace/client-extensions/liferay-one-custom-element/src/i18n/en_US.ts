@@ -673,6 +673,7 @@ export default {
 	'installation-in-progress': 'Installation in Progress',
 	'installation-status': 'Installation Status',
 	'installation-success': 'Installation Success',
+	'installed': 'Installed',
 	'instance-size': 'Instance Size',
 	'instructions': 'Instructions',
 	'insufficient-resource-requirements': 'Insufficient Resource Requirements',
@@ -1186,6 +1187,7 @@ export default {
 	'reactivate-license-key': 'Reactivate License Key',
 	'reactivate-license-key-confirmation':
 		'Are you sure you want to reactivate this license key?',
+	'ready-to-install': 'Ready to Install',
 	'reason': 'Reason',
 	'reason-for-change': 'Reason for Change',
 	'recent-orders': 'Recent Orders',
@@ -1346,6 +1348,7 @@ export default {
 	'ssa-trial-summary': 'SSA Trial Summary',
 	'ssa-trials': 'SSA Trials',
 	'ssa-trials-limit-reached': 'SSA Trials Limit Reached',
+	'standard-license': 'Standard License',
 	'standard-license-prices': 'Standard License Prices',
 	'standard-licenses-cover-the-following-dxp-environments-production-non-production-uat-and-backup-dr-for-both-standalone-and-virtual-cluster-servers':
 		'Standard licenses cover the following DXP environments: production, non-production (UAT), and backup (DR) for both standalone and virtual cluster servers.',
@@ -1630,6 +1633,7 @@ export default {
 	'view': 'View',
 	'view-all': 'View All',
 	'view-all-account-orders': 'View All Account Orders',
+	'view-app-in-cloud': 'View App in Cloud',
 	'view-details': 'View Details',
 	'view-license-details': 'View License Details',
 	'view-request': 'View Request',
@@ -1644,6 +1648,8 @@ export default {
 		'We are happy to have you interested in the Liferay Marketplace. At the moment, we are working on enhancing the experience for our customers in the Marketplace and access is invite only. If you are an existing Liferay customer, please keep an eye out for an announcement related to the new Marketplace in the coming months!',
 	'we-are-happy-to-have-you-interested-in-the-liferay-marketplace-at-the-moment-we-are-working-on-enhancing-the-experience-for-our-publishers-in-the-marketplace-if-you-are-an-existing-liferay-developer-or-partner-you-can-choose-to-join-our-pilot-group-of-publishers-to-submit-apps-to-the-marketplace-continue-to-request-a-publisher-account':
 		'We are happy to have you interested in the Liferay Marketplace. At the moment, we are working on enhancing the experience for our publishers in the Marketplace.  If you are an existing Liferay developer or partner, you can choose to join our pilot group of publishers to submit apps to the Marketplace.  Continue to request a publisher account.',
+	'we-could-not-install-your-app-please-try-again-if-the-problem-continues-contact-x-for-assistance':
+		'We could not install your app. Please try again. If the problem continues, contact {0} for assistance.',
 	'we-couldnt-set-up-your-environment-please-contact-support':
 		'We couldn’t set up your environment. Please contact support.',
 	'we-understand-that-plans-change-please-let-us-know-why-the-planned-event-date-for-this-event-is-being-updated':
@@ -1670,6 +1676,8 @@ export default {
 	'x-apps-x-solutions': '{0} Apps · {1} Solutions',
 	'x-available-for-you': `{0} available for <b>${Liferay.ThemeDisplay.getUserEmailAddress()}</b> (you)`,
 	'x-cluster-nodes-keys': '{0} Cluster Nodes (Keys)',
+	'x-cpus-x-gb-ram': '{0} CPUs, {1} GB RAM',
+	'x-environments-x-cpus-x-gb-ram': '{0} Environments, {1} CPUs, {2} GB RAM',
 	'x-events': '/ {0} events',
 	'x-in-use': '{0} in use',
 	'x-is-a-member-of-x-on-this-account-removing-them-from-the-account-will-also-remove-their-access-to-these-projects-are-you-sure-you-want-to-proceed':

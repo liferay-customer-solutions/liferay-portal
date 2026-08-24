@@ -16,6 +16,7 @@ const ContactSupport = () => {
 			<a
 				className="font-weight-semi-bold ml-1"
 				href={contactSupportURL}
+				rel="noopener noreferrer"
 				target="_blank"
 			>
 				{i18n.translate('contact-support')}
