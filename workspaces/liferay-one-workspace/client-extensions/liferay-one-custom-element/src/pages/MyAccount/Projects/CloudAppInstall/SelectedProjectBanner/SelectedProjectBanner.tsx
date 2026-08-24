@@ -28,9 +28,9 @@ const SelectedProjectBanner = ({project}: SelectedProjectBannerProps) => (
 
 				<small className="text-nowrap">
 					{`${project?.environments.length} environments, ${project?.rootProjectPlanUsage.cpu.free} CPUs, ${convertSize(
-						project?.rootProjectPlanUsage.memory.free,
 						'MB',
-						'GB'
+						'GB',
+						project?.rootProjectPlanUsage.memory.free
 					)} GB RAM`}
 				</small>
 			</span>

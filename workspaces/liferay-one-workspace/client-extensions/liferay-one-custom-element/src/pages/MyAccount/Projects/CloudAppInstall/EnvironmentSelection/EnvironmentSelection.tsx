@@ -46,18 +46,13 @@ const EnvironmentSelection = ({
 		[]
 	);
 
-	const isDeployed = (projectEnvironment: ProjectEnvironment) => {
-		const [, environment = ''] = projectEnvironment.projectId.split('-');
-
-		return cloudProvisioning.some((provisioning) =>
-			provisioning.deployments.some((deployment) => {
-				const [, deploymentEnvironment = ''] =
-					deployment.projectId.split('-');
-
-				return deploymentEnvironment === environment;
-			})
+	const isDeployed = (projectEnvironment: ProjectEnvironment) =>
+		cloudProvisioning.some((provisioning) =>
+			provisioning.deployments.some(
+				(deployment) =>
+					deployment.projectId === projectEnvironment.projectId
+			)
 		);
-	};
 
 	return (
 		<ProductPurchase.Shell

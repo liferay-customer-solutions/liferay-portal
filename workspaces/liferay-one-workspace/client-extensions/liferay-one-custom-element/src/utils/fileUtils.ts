@@ -16,9 +16,9 @@ export function base64ToText(base64: string) {
 }
 
 export function convertSize(
-	value: number | string,
 	fromUnit: keyof typeof sizeUnits,
-	toUnit: keyof typeof sizeUnits
+	toUnit: keyof typeof sizeUnits,
+	value: number | string
 ) {
 	return (Number(value) * sizeUnits[fromUnit]) / sizeUnits[toUnit];
 }

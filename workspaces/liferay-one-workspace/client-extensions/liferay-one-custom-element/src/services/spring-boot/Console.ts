@@ -32,15 +32,15 @@ class ConsoleOAuth2 extends OneSpringBootOAuth2 {
 	}
 
 	async provisioning(
-		orderId: number,
-		data: {orderItemId: number; projectId: string}
+		data: {orderItemId: number; projectId: string},
+		orderId: number
 	): Promise<void> {
 		await this.post(`/provisioning/${orderId}`, data);
 	}
 
 	async uninstallApp(
-		orderId: number,
-		data: {id: number | string; orderItemId: number}
+		data: {id: number | string; orderItemId: number},
+		orderId: number
 	): Promise<void> {
 		await this.post(`/uninstall-app/${orderId}`, data);
 	}

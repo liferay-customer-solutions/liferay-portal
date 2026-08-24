@@ -54,7 +54,7 @@ const checkResources = (
 
 	return (
 		compareResource('cpu', cpu) &&
-		compareResource('memory', convertSize(ram, 'GB', 'MB'))
+		compareResource('memory', convertSize('GB', 'MB', ram))
 	);
 };
 

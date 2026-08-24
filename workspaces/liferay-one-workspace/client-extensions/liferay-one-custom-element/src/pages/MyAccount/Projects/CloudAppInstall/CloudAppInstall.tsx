@@ -73,7 +73,7 @@ const verifyAvailabilityToInstall = (
 
 	return (
 		availableCPU >= Number(productRequirements.cpu) &&
-		availableRAM >= convertSize(productRequirements.ram, 'MB', 'GB')
+		availableRAM >= convertSize('GB', 'MB', productRequirements.ram)
 	);
 };
 
@@ -135,10 +135,13 @@ const CloudAppInstall = () => {
 
 		setStep('installation');
 
-		await Console.provisioning(placedOrder.id, {
-			orderItemId: placedOrder.placedOrderItems[0].id,
-			projectId: environment.projectId,
-		});
+		await Console.provisioning(
+			{
+				orderItemId: placedOrder.placedOrderItems[0].id,
+				projectId: environment.projectId,
+			},
+			placedOrder.id
+		);
 	};
 
 	if (isLoading) {
