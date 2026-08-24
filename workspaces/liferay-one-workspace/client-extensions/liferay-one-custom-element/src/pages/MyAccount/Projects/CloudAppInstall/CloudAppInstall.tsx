@@ -166,12 +166,12 @@ const CloudAppInstall = () => {
 						</small>
 					</div>
 				}
-			/>
-
-			{project && <SelectedProjectBanner project={project} />}
+			>
+				{project && <SelectedProjectBanner project={project} />}
+			</ProductPurchase.Header>
 
 			<ProductPurchase.Steps
-				className="mt-5 px-8"
+				className="mt-5"
 				steps={[
 					{
 						active: step === 'project',
