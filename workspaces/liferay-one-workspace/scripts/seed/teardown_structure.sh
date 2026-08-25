@@ -258,23 +258,29 @@ function _delete_roles {
 function _delete_taxonomy_vocabularies {
 
 	# Deleting a vocabulary cascades its taxonomy categories.
+	#
+	# The batch imports these into the global site (siteId L_GLOBAL in
+	# 14-taxonomy-vocabulary), not the One site, so that is where they have to be
+	# listed from. Reading them from the One site found nothing, which together
+	# with a stale file name meant this never deleted anything; the re-import
+	# upserts by external reference code, so the failure stayed invisible.
 
 	_log "Deleting taxonomy vocabularies..."
 
 	local site_id
 
-	site_id=$(_resolve_site_id)
+	site_id=$(_resolve_global_site_id)
 
 	if [[ -z ${site_id} ]]
 	then
-		_warn "Unable to resolve site \"${SITE_FRIENDLY_URL_PATH}\"; skipping taxonomy vocabularies."
+		_warn "Unable to resolve the global site; skipping taxonomy vocabularies."
 
 		return 0
 	fi
 
 	local ercs
 
-	ercs=$(_read_ercs "${BATCH_DIR}/15-taxonomy-vocabulary.batch-engine-data.json")
+	ercs=$(_read_ercs "${BATCH_DIR}/14-taxonomy-vocabulary.batch-engine-data.json")
 
 	_delete_from_collection "taxonomy vocabularies" \
 		"${LIFERAY_URL}/o/headless-admin-taxonomy/v1.0/sites/${site_id}/taxonomy-vocabularies" \

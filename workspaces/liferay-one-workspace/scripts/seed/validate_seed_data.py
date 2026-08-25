@@ -202,6 +202,11 @@ def _check_chain(report, scope):
 		order_item["externalReferenceCode"]: order_item.get("skuExternalReferenceCode")
 		for order_item in order_items
 	}
+	sku_products = {
+		sku["externalReferenceCode"]: product["externalReferenceCode"]
+		for product in scope["products"]
+		for sku in product.get("skus", [])
+	}
 	definition_products = {
 		definition["externalReferenceCode"]: definition.get(
 			"r_commerceProductToEntitlementDefinition_CProductERC"
@@ -271,7 +276,7 @@ def _check_chain(report, scope):
 					),
 				)
 
-		product = skus_of(order_item_skus.get(order_item), scope)
+		product = sku_products.get(order_item_skus.get(order_item))
 
 		if (
 			definition
@@ -939,15 +944,6 @@ def parse_date(value):
 		return datetime.datetime.fromisoformat(value.replace("Z", "+00:00"))
 	except ValueError:
 		return None
-
-
-def skus_of(sku, scope):
-	for product in scope["products"]:
-		for candidate in product.get("skus", []):
-			if candidate["externalReferenceCode"] == sku:
-				return product["externalReferenceCode"]
-
-	return None
 
 
 if __name__ == "__main__":

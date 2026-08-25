@@ -165,6 +165,13 @@ function _resolve_site_id {
 	_curl "${LIFERAY_URL}/o/headless-admin-user/v1.0/sites/by-friendly-url-path/${SITE_FRIENDLY_URL_PATH}" | _json_field "id"
 }
 
+# The global site, which is where the batch puts anything it scopes to L_GLOBAL
+# rather than to the One site.
+
+function _resolve_global_site_id {
+	_curl "${LIFERAY_URL}/o/headless-admin-user/v1.0/sites/by-friendly-url-path/global" | _json_field "id"
+}
+
 # Reads one page of a collection from stdin. Prints "id<TAB>externalReferenceCode"
 # for each matching item, then a final "COUNT <items on page>" line that the
 # caller uses to detect the last page. With no codes, every item matches.
