@@ -10,6 +10,12 @@
 		"externalReferenceCode": "C_OVERAGE_ORDER_AI_HUB_2026_07",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2026-08-30T23:59:59Z",
+					"endDate": "2026-07-31T23:59:59Z",
+					"startDate": "2026-07-01T00:00:00Z"
+				},
 				"externalReferenceCode": "C_OVERAGE_ORDER_ITEM_AI_HUB_2026_07",
 				"name": "Liferay AI Hub",
 				"quantity": 1,

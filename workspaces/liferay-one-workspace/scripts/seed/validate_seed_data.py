@@ -48,6 +48,14 @@ REQUIRED_ORDER_ITEM_CUSTOM_FIELDS = ("customStatus", "endDate", "startDate")
 
 NO_ENTITLEMENT_ORDERS = {"C_ORDER_SAAS_EXPERIENCE_NO_ENTITLEMENTS.json"}
 
+# The overage orders are placed after the EntitlementGeneration object action is
+# re-enabled, so their entitlements are produced by the runtime rather than seeded
+# alongside the order. They are exempt from the same check, but everything else --
+# their references, their chain, their order item custom fields -- is checked like
+# any other order, because the generator reads those fields.
+
+RUNTIME_ENTITLEMENT_ORDERS = set()
+
 
 class Report:
 
@@ -333,7 +341,11 @@ def _check_coverage(report, scope, skus):
 	for order_item in order_items:
 		erc = order_item["externalReferenceCode"]
 
-		if erc in entitled or order_item["_file"] in NO_ENTITLEMENT_ORDERS:
+		if (
+			erc in entitled
+			or order_item["_file"] in NO_ENTITLEMENT_ORDERS
+			or order_item["_file"] in RUNTIME_ENTITLEMENT_ORDERS
+		):
 			continue
 
 		product = skus.get(order_item.get("skuExternalReferenceCode"))
@@ -767,6 +779,31 @@ def _check_references(report, universes, scope):
 		"entitlement",
 	)
 	check(
+		scope["usage_reports"],
+		"accountExternalReferenceCode",
+		"account",
+		"usage report",
+	)
+	check(
+		scope["usage_reports"],
+		"contractExternalReferenceCode",
+		"contract",
+		"usage report",
+	)
+	check(
+		scope["usage_reports"],
+		"projectExternalReferenceCode",
+		"project",
+		"usage report",
+	)
+	check(scope["usage_reports"], "skuExternalReferenceCode", "SKU", "usage report")
+	check(
+		scope["usage_reports"],
+		"r_usageDefinitionToUsageReport_c_usageDefinitionERC",
+		"usage definition",
+		"usage report",
+	)
+	check(
 		scope["order_license_keys"],
 		"externalReferenceCode",
 		"license key",
@@ -796,6 +833,7 @@ def _check_unique(report, scope):
 		("publisher sales summary", "sales_summaries"),
 		("usage definition", "usage_definitions"),
 		("usage event", "usage_events"),
+		("usage report", "usage_reports"),
 		("user", "users"),
 	):
 		counts = Counter(item.get("externalReferenceCode") for item in scope[key])
@@ -861,9 +899,24 @@ def main():
 	order_license_keys = []
 	usage_events = []
 
-	for path in sorted(glob.glob(os.path.join(DATA, "orders", "*.json"))):
+	usage_reports = []
+
+	overage_paths = sorted(glob.glob(os.path.join(DATA, "overages", "*.json")))
+
+	for path in sorted(glob.glob(os.path.join(DATA, "orders", "*.json"))) + (
+		overage_paths
+	):
 		name = os.path.basename(path)
 		data = load(path)
+
+		if path in overage_paths:
+			RUNTIME_ENTITLEMENT_ORDERS.add(name)
+
+		usage_report = data.get("usageReport")
+
+		if usage_report:
+			usage_report["_file"] = name
+			usage_reports.append(usage_report)
 
 		order = data["order"]
 		order["_file"] = name
