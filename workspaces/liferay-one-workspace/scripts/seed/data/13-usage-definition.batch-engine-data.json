@@ -30,6 +30,24 @@
 		},
 		{
 			"aggregationType": "count",
+			"externalReferenceCode": "events-monthly",
+			"overageCurrency": "USD",
+			"overageRate": 0.0001,
+			"period": "per month",
+			"quantity": 1000000,
+			"unit": "events"
+		},
+		{
+			"aggregationType": "count",
+			"externalReferenceCode": "license-generations",
+			"overageCurrency": "USD",
+			"overageRate": 0,
+			"period": "per contract term",
+			"quantity": 100,
+			"unit": "licenses"
+		},
+		{
+			"aggregationType": "count",
 			"externalReferenceCode": "page-views-monthly",
 			"overageCurrency": "USD",
 			"overageRate": 0.001,
