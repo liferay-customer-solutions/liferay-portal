@@ -13,7 +13,7 @@
 		{
 			"accountName": "DXP Free Tier Test Account",
 			"active": true,
-			"additionalInfo": "{\"products\":[{\"externalReferenceCode\":\"PRDCT-APP\",\"name\":\"Test Application\",\"sizing\":\"16\"}]}",
+			"additionalInfo": "{\"products\": [{\"externalReferenceCode\": \"PRDCT-APP\", \"name\": \"Test Application\", \"sizing\": \"16\"}]}",
 			"complimentary": false,
 			"customExpirationDate": "2026-01-15T00:00:00Z",
 			"description": "Legacy on-premise application instance",
@@ -35,7 +35,7 @@
 		{
 			"accountName": "DXP Free Tier Test Account",
 			"active": true,
-			"additionalInfo": "{\"products\":[{\"externalReferenceCode\":\"PRDCT-APP\",\"name\":\"Test Application\",\"sizing\":\"8\"}]}",
+			"additionalInfo": "{\"products\": [{\"externalReferenceCode\": \"PRDCT-APP\", \"name\": \"Test Application\", \"sizing\": \"8\"}]}",
 			"complimentary": false,
 			"customExpirationDate": "2027-08-09T00:00:00Z",
 			"description": "Primary application cluster",
@@ -57,7 +57,7 @@
 		{
 			"accountName": "DXP Free Tier Test Account",
 			"active": false,
-			"additionalInfo": "{\"products\":[{\"externalReferenceCode\":\"PRDCT-DXP\",\"name\":\"Liferay DXP - Free Tier\",\"sizing\":\"4\"}]}",
+			"additionalInfo": "{\"products\": [{\"externalReferenceCode\": \"PRDCT-DXP\", \"name\": \"Liferay DXP - Free Tier\", \"sizing\": \"4\"}]}",
 			"complimentary": true,
 			"customExpirationDate": "2026-06-11T00:00:00Z",
 			"description": "Basic tier evaluation instance",
@@ -79,7 +79,7 @@
 		{
 			"accountName": "Content Marketing Platform Test Account",
 			"active": false,
-			"additionalInfo": "{\"products\":[{\"externalReferenceCode\":\"PRDCT-CONTENT-MARKETING\",\"name\":\"Content Marketing Platform\",\"sizing\":\"16\"}]}",
+			"additionalInfo": "{\"products\": [{\"externalReferenceCode\": \"PRDCT-CONTENT-MARKETING\", \"name\": \"Content Marketing Platform\", \"sizing\": \"16\"}]}",
 			"complimentary": false,
 			"customExpirationDate": "2026-03-01T00:00:00Z",
 			"description": "Legacy CMP cluster",
@@ -101,7 +101,7 @@
 		{
 			"accountName": "Content Marketing Platform Test Account",
 			"active": true,
-			"additionalInfo": "{\"products\":[{\"externalReferenceCode\":\"PRDCT-CONTENT-MARKETING\",\"name\":\"Content Marketing Platform\",\"sizing\":\"8\"}]}",
+			"additionalInfo": "{\"products\": [{\"externalReferenceCode\": \"PRDCT-CONTENT-MARKETING\", \"name\": \"Content Marketing Platform\", \"sizing\": \"8\"}]}",
 			"complimentary": false,
 			"customExpirationDate": "2027-08-09T00:00:00Z",
 			"description": "CMP production instance",
@@ -123,7 +123,7 @@
 		{
 			"accountName": "Content Marketing Platform Test Account",
 			"active": true,
-			"additionalInfo": "{\"products\":[{\"externalReferenceCode\":\"PRDCT-CONTENT-MARKETING\",\"name\":\"Content Marketing Platform\",\"sizing\":\"4\"}]}",
+			"additionalInfo": "{\"products\": [{\"externalReferenceCode\": \"PRDCT-CONTENT-MARKETING\", \"name\": \"Content Marketing Platform\", \"sizing\": \"4\"}]}",
 			"complimentary": false,
 			"customExpirationDate": "2026-09-20T00:00:00Z",
 			"description": "CMP staging instance",
@@ -145,7 +145,7 @@
 		{
 			"accountName": "Enterprise Plan Test Account",
 			"active": true,
-			"additionalInfo": "{\"products\":[{\"externalReferenceCode\":\"PRDCT-SAAS-ENTERPRISE-PLAN\",\"name\":\"Liferay DXP - Free Tier\",\"sizing\":\"16\"}]}",
+			"additionalInfo": "{\"products\": [{\"externalReferenceCode\": \"PRDCT-SAAS-ENTERPRISE-PLAN\", \"name\": \"Liferay DXP - Free Tier\", \"sizing\": \"16\"}]}",
 			"complimentary": false,
 			"customExpirationDate": "2027-08-09T00:00:00Z",
 			"description": "Enterprise production cluster",
@@ -167,7 +167,7 @@
 		{
 			"accountName": "DXP Free Tier Test Account",
 			"active": true,
-			"additionalInfo": "{\"products\":[{\"externalReferenceCode\":\"PRDCT-DXP\",\"name\":\"Liferay DXP - Free Tier\",\"sizing\":\"8\"}]}",
+			"additionalInfo": "{\"products\": [{\"externalReferenceCode\": \"PRDCT-DXP\", \"name\": \"Liferay DXP - Free Tier\", \"sizing\": \"8\"}]}",
 			"complimentary": true,
 			"customExpirationDate": "2029-02-20T00:00:00Z",
 			"description": "Foundation instance",
@@ -189,7 +189,7 @@
 		{
 			"accountName": "Liferay Data Platform Test Account",
 			"active": true,
-			"additionalInfo": "{\"products\":[{\"externalReferenceCode\":\"PRDCT-DATA-PLATFORM\",\"name\":\"Liferay Data Platform\",\"sizing\":\"4\"}]}",
+			"additionalInfo": "{\"products\": [{\"externalReferenceCode\": \"PRDCT-DATA-PLATFORM\", \"name\": \"Liferay Data Platform\", \"sizing\": \"4\"}]}",
 			"complimentary": false,
 			"customExpirationDate": "2025-12-01T00:00:00Z",
 			"description": "Old data platform instance",
@@ -211,7 +211,7 @@
 		{
 			"accountName": "Liferay Data Platform Test Account",
 			"active": true,
-			"additionalInfo": "{\"products\":[{\"externalReferenceCode\":\"PRDCT-DATA-PLATFORM\",\"name\":\"Liferay Data Platform\",\"sizing\":\"16\"}]}",
+			"additionalInfo": "{\"products\": [{\"externalReferenceCode\": \"PRDCT-DATA-PLATFORM\", \"name\": \"Liferay Data Platform\", \"sizing\": \"16\"}]}",
 			"complimentary": false,
 			"customExpirationDate": "2027-08-09T00:00:00Z",
 			"description": "Data platform cluster",
@@ -233,7 +233,7 @@
 		{
 			"accountName": "DXP Free Tier Test Account",
 			"active": true,
-			"additionalInfo": "{\"products\":[{\"externalReferenceCode\":\"PRDCT-DXP\",\"name\":\"Liferay DXP - Free Tier\",\"sizing\":\"8\"}]}",
+			"additionalInfo": "{\"products\": [{\"externalReferenceCode\": \"PRDCT-DXP\", \"name\": \"Liferay DXP - Free Tier\", \"sizing\": \"8\"}]}",
 			"complimentary": false,
 			"customExpirationDate": "2029-01-12T00:00:00Z",
 			"description": "Main production instance",
@@ -255,7 +255,7 @@
 		{
 			"accountName": "Portal Test Account",
 			"active": true,
-			"additionalInfo": "{\"products\":[{\"externalReferenceCode\":\"PRDCT-PORTAL\",\"name\":\"Portal EE 6.x License (Production)\",\"sizing\":\"4\"}]}",
+			"additionalInfo": "{\"products\": [{\"externalReferenceCode\": \"PRDCT-PORTAL\", \"name\": \"Portal EE 6.x License (Production)\", \"sizing\": \"4\"}]}",
 			"complimentary": false,
 			"customExpirationDate": "2026-01-15T00:00:00Z",
 			"description": "Old portal instance",
@@ -277,7 +277,7 @@
 		{
 			"accountName": "Portal Test Account",
 			"active": true,
-			"additionalInfo": "{\"products\":[{\"externalReferenceCode\":\"PRDCT-PORTAL\",\"name\":\"Portal EE 6.x License (Production)\",\"sizing\":\"16\"}]}",
+			"additionalInfo": "{\"products\": [{\"externalReferenceCode\": \"PRDCT-PORTAL\", \"name\": \"Portal EE 6.x License (Production)\", \"sizing\": \"16\"}]}",
 			"complimentary": false,
 			"customExpirationDate": "2026-08-23T00:00:00Z",
 			"description": "Portal staging instance",
@@ -299,7 +299,7 @@
 		{
 			"accountName": "Portal Test Account",
 			"active": true,
-			"additionalInfo": "{\"products\":[{\"externalReferenceCode\":\"PRDCT-PORTAL\",\"name\":\"Portal EE 6.x License (Production)\",\"sizing\":\"8\"}]}",
+			"additionalInfo": "{\"products\": [{\"externalReferenceCode\": \"PRDCT-PORTAL\", \"name\": \"Portal EE 6.x License (Production)\", \"sizing\": \"8\"}]}",
 			"complimentary": false,
 			"customExpirationDate": "2027-08-09T00:00:00Z",
 			"description": "Portal production instance",
@@ -321,7 +321,7 @@
 		{
 			"accountName": "DXP Free Tier Test Account",
 			"active": true,
-			"additionalInfo": "{\"products\":[{\"externalReferenceCode\":\"PRDCT-DXP\",\"name\":\"Liferay DXP - Free Tier\",\"sizing\":\"4\"}]}",
+			"additionalInfo": "{\"products\": [{\"externalReferenceCode\": \"PRDCT-DXP\", \"name\": \"Liferay DXP - Free Tier\", \"sizing\": \"4\"}]}",
 			"complimentary": false,
 			"customExpirationDate": "2028-02-27T00:00:00Z",
 			"description": "Primary DXP cluster",

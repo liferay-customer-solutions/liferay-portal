@@ -14,8 +14,9 @@ source ../_common.sh
 # Order -> Order Item -> Entitlement chain intact.
 #
 # Each file under data/orders/ describes one order: the order with its nested order
-# items, the entitlements granted by those order items, and the license keys
-# those entitlements unlock. Entitlements carry the order's account, contract,
+# items, the entitlements granted by those order items, the license keys those
+# entitlements unlock, and the usage events recording what those entitlements have
+# consumed. Entitlements carry the order's account, contract,
 # and project links directly (see the projectToEntitlement object
 # relationship), matching what the EntitlementGeneration object action produces
 # at runtime. This runs as a bootstrap step after Liferay is healthy and the
@@ -24,9 +25,10 @@ source ../_common.sh
 # orders reference exist.
 #
 # Orders are placed through a bounded pool of concurrent workers, since each is
-# independent of the others. The entitlements and license keys are then applied
-# in two batch engine imports (entitlements reference their order item, license
-# keys reference their entitlement), so both wait until every order exists.
+# independent of the others. The entitlements, license keys, and usage events are
+# then applied in three batch engine imports, in that order, because each layer
+# references the one before it: entitlements reference their order item, license
+# keys and usage events reference their entitlement.
 
 CHANNEL_EXTERNAL_REFERENCE_CODE="LIFERAY_ONE_CHANNEL"
 
@@ -78,6 +80,7 @@ function main {
 
 	_import_entitlements || return 1
 	_import_license_keys || return 1
+	_import_usage_events || return 1
 }
 
 # Places every order file through a bounded pool of concurrent workers. Orders
@@ -253,6 +256,20 @@ function _import_license_keys {
 	items=$(_collect_items "licenseKeys")
 
 	_run_batch_import "license keys" "/o/c/licensekeys" "PARTIAL_UPDATE" "${items}"
+}
+
+# Imports every order's usage events in one batch. An event names the entitlement
+# it draws down through the entitlementToUsageEvent relationship, so this runs
+# after the entitlements exist. The import upserts by external reference code, and
+# each event also carries a dedupe key, so a re-run neither duplicates an event nor
+# double counts consumption.
+
+function _import_usage_events {
+	local items
+
+	items=$(_collect_items "usageEvents")
+
+	_run_batch_import "usage events" "/o/c/usageevents" "UPDATE" "${items}"
 }
 
 function _populate_order {

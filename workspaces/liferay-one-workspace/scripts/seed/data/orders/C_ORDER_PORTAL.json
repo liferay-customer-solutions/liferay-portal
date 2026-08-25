@@ -54,5 +54,31 @@
 		"orderTypeExternalReferenceCode": "DXP",
 		"projectExternalReferenceCode": "PRJCT-015"
 	},
-	"purchaseOrderNumber": "PO-PORTAL"
+	"purchaseOrderNumber": "PO-PORTAL",
+	"usageEvents": [
+		{
+			"dedupeKey": "UEV-LICENSE-PORTAL_EXPIRED",
+			"eventTimestamp": "2025-01-15T00:00:00Z",
+			"externalReferenceCode": "UEV-LICENSE-PORTAL_EXPIRED",
+			"quantity": 1,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_PORTAL",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "license-generations"
+		},
+		{
+			"dedupeKey": "UEV-LICENSE-PORTAL_EXPIRING",
+			"eventTimestamp": "2025-08-23T00:00:00Z",
+			"externalReferenceCode": "UEV-LICENSE-PORTAL_EXPIRING",
+			"quantity": 1,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_PORTAL",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "license-generations"
+		},
+		{
+			"dedupeKey": "UEV-LICENSE-PORTAL_PRODUCTION",
+			"eventTimestamp": "2026-01-05T00:00:00Z",
+			"externalReferenceCode": "UEV-LICENSE-PORTAL_PRODUCTION",
+			"quantity": 1,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_PORTAL",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "license-generations"
+		}
+	]
 }

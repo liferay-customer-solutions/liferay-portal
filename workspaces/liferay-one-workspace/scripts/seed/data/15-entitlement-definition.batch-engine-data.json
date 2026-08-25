@@ -119,6 +119,17 @@
 		{
 			"active": true,
 			"defaultQuantity": 1,
+			"displayName": "Customer Management Platform",
+			"externalReferenceCode": "C_ENT_DEF_CMP",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-CMP",
+			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
 			"displayName": "Commerce",
 			"externalReferenceCode": "C_ENT_DEF_COMMERCE",
 			"grantType": "fixed",
@@ -263,6 +274,17 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ENTERPRISE-SEARCH-CLOUD",
+			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Connector to OpenSearch 2",
+			"externalReferenceCode": "C_ENT_DEF_OPENSEARCH",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-OPENSEARCH",
 			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
@@ -473,6 +495,17 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PORTAL-EWSA",
+			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Punchout",
+			"externalReferenceCode": "C_ENT_DEF_PUNCHOUT",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PUNCHOUT",
 			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
@@ -773,6 +806,28 @@
 		{
 			"active": true,
 			"defaultQuantity": 1,
+			"displayName": "Sample Marketplace App",
+			"externalReferenceCode": "C_ENT_DEF_SAMPLE_APP",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAMPLE-APP",
+			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Sample Cloud App",
+			"externalReferenceCode": "C_ENT_DEF_SAMPLE_CLOUD_APP",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAMPLE-CLOUD-APP",
+			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
 			"displayName": "Test App",
 			"externalReferenceCode": "C_ENT_DEF_TEST_APP",
 			"grantType": "fixed",
@@ -855,6 +910,28 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-THEME-PACK",
+			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Prebuilt 7 Day Trial",
+			"externalReferenceCode": "C_ENT_DEF_TRIAL",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TRIAL",
+			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
+			"unit": "boolean"
+		},
+		{
+			"active": true,
+			"defaultQuantity": 1,
+			"displayName": "Click to Chat Integration for Zendesk",
+			"externalReferenceCode": "C_ENT_DEF_ZENDESK",
+			"grantType": "fixed",
+			"name": "licenseGeneration",
+			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ZENDESK",
 			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		}

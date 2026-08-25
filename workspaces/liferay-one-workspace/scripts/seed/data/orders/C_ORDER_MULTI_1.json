@@ -15,6 +15,20 @@
 			"startDate": "2024-07-01T00:00:00Z"
 		},
 		{
+			"endDate": "2026-12-31T00:00:00Z",
+			"externalReferenceCode": "C_ENT_MULTI_1_AIHUB_AITOKENS",
+			"grantType": "fixed",
+			"maxQuantity": 50000000,
+			"name": "aiTokens",
+			"quantity": 50000000,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-025",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MULTI_1_AIHUB",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MULTI_1",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_AIHUB_TOKENS",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-025",
+			"startDate": "2024-07-01T00:00:00Z"
+		},
+		{
 			"endDate": "2026-07-01T00:00:00Z",
 			"externalReferenceCode": "C_ENT_MULTI_1_CONTENT_MARKETING",
 			"grantType": "fixed",

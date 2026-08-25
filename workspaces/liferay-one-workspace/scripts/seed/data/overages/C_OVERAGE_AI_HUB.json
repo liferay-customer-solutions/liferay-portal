@@ -36,6 +36,7 @@
 		"overageCurrency": "USD",
 		"overageQuantity": 12500000,
 		"projectExternalReferenceCode": "PRJCT-026",
+		"r_usageDefinitionToUsageReport_c_usageDefinitionERC": "ai-tokens-monthly",
 		"reviewStatus": "approved",
 		"skuExternalReferenceCode": "PRDCT-AI-HUB",
 		"targetType": "project"

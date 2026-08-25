@@ -1,0 +1,41 @@
+{
+	"entitlements": [
+		{
+			"endDate": "2027-01-15T00:00:00Z",
+			"externalReferenceCode": "C_ENT_MP_SAMPLE_CLOUD_APP",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "licenseGeneration",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-002",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MP_SAMPLE_CLOUD_APP",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAMPLE_CLOUD_APP",
+			"startDate": "2026-01-15T00:00:00Z"
+		}
+	],
+	"order": {
+		"accountExternalReferenceCode": "ACCNT-002",
+		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
+		"currencyCode": "USD",
+		"externalReferenceCode": "C_ORDER_MP_SAMPLE_CLOUD_APP",
+		"orderItems": [
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-02-14T00:00:00Z",
+					"endDate": "2027-01-15T00:00:00Z",
+					"startDate": "2026-01-15T00:00:00Z"
+				},
+				"externalReferenceCode": "C_ORDER_ITEM_MP_SAMPLE_CLOUD_APP",
+				"name": "Sample Cloud App",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-SAMPLE-CLOUD-APP",
+				"unitPrice": 0
+			}
+		],
+		"orderStatus": 0,
+		"orderTypeExternalReferenceCode": "CLOUD_APP"
+	},
+	"paymentStatus": 0,
+	"purchaseOrderNumber": "PO-MP-SAMPLE-CLOUD-APP"
+}

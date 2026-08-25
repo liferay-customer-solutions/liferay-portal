@@ -1,4 +1,6 @@
 {
+	"entitlements": [
+	],
 	"order": {
 		"accountExternalReferenceCode": "ACCNT-002",
 		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",

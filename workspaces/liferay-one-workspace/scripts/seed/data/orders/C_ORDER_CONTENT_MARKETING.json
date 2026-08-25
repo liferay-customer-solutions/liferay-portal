@@ -54,5 +54,31 @@
 		"orderTypeExternalReferenceCode": "DXP",
 		"projectExternalReferenceCode": "PRJCT-027"
 	},
-	"purchaseOrderNumber": "PO-CONTENT-MARKETING"
+	"purchaseOrderNumber": "PO-CONTENT-MARKETING",
+	"usageEvents": [
+		{
+			"dedupeKey": "UEV-LICENSE-CMP_LEGACY",
+			"eventTimestamp": "2026-01-05T00:00:00Z",
+			"externalReferenceCode": "UEV-LICENSE-CMP_LEGACY",
+			"quantity": 1,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_CONTENT_MARKETING",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "license-generations"
+		},
+		{
+			"dedupeKey": "UEV-LICENSE-CMP_PRODUCTION",
+			"eventTimestamp": "2026-01-05T00:00:00Z",
+			"externalReferenceCode": "UEV-LICENSE-CMP_PRODUCTION",
+			"quantity": 1,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_CONTENT_MARKETING",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "license-generations"
+		},
+		{
+			"dedupeKey": "UEV-LICENSE-CMP_RENEWAL",
+			"eventTimestamp": "2026-01-05T00:00:00Z",
+			"externalReferenceCode": "UEV-LICENSE-CMP_RENEWAL",
+			"quantity": 1,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_CONTENT_MARKETING",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "license-generations"
+		}
+	]
 }

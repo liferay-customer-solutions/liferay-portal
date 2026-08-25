@@ -1,0 +1,41 @@
+{
+	"entitlements": [
+		{
+			"endDate": "2027-01-15T00:00:00Z",
+			"externalReferenceCode": "C_ENT_MP_OPENSEARCH",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "licenseGeneration",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MP_OPENSEARCH",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_OPENSEARCH",
+			"startDate": "2026-01-15T00:00:00Z"
+		}
+	],
+	"order": {
+		"accountExternalReferenceCode": "ACCNT-001",
+		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
+		"currencyCode": "USD",
+		"externalReferenceCode": "C_ORDER_MP_OPENSEARCH",
+		"orderItems": [
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-02-14T00:00:00Z",
+					"endDate": "2027-01-15T00:00:00Z",
+					"startDate": "2026-01-15T00:00:00Z"
+				},
+				"externalReferenceCode": "C_ORDER_ITEM_MP_OPENSEARCH",
+				"name": "Liferay Connector to OpenSearch 2",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-OPENSEARCH",
+				"unitPrice": 0
+			}
+		],
+		"orderStatus": 0,
+		"orderTypeExternalReferenceCode": "DXP_APP"
+	},
+	"paymentStatus": 0,
+	"purchaseOrderNumber": "PO-MP-OPENSEARCH"
+}

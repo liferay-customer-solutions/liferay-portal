@@ -51,5 +51,25 @@
 		"projectExternalReferenceCode": "PRJCT-006"
 	},
 	"paymentStatus": 23,
-	"purchaseOrderNumber": "PO-APP-DEMO"
+	"purchaseOrderNumber": "PO-APP-DEMO",
+	"usageEvents": [
+		{
+			"dedupeKey": "UEV-LICENSE-APP_EXPIRED",
+			"eventTimestamp": "2026-01-05T00:00:00Z",
+			"externalReferenceCode": "UEV-LICENSE-APP_EXPIRED",
+			"quantity": 1,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_APP",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-DXP-NONPROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "license-generations"
+		},
+		{
+			"dedupeKey": "UEV-LICENSE-APP_PRODUCTION",
+			"eventTimestamp": "2026-01-05T00:00:00Z",
+			"externalReferenceCode": "UEV-LICENSE-APP_PRODUCTION",
+			"quantity": 1,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_APP",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-DXP-NONPROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "license-generations"
+		}
+	]
 }

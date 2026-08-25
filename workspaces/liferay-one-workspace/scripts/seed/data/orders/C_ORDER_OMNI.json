@@ -16,6 +16,20 @@
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_OMNI_AI_HUB_AITOKENS",
+			"grantType": "fixed",
+			"maxQuantity": 50000000,
+			"name": "aiTokens",
+			"quantity": 50000000,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_AI_HUB",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_AIHUB_TOKENS",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-001",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
 			"externalReferenceCode": "C_ENT_OMNI_ANALYTICS_CLOUD",
 			"grantType": "fixed",
 			"maxQuantity": 1,
@@ -39,6 +53,20 @@
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_CLOUD_NATIVE",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_CLOUD_NATIVE",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-001",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_OMNI_CMP",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "licenseGeneration",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_OMNI_CMP",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_OMNI",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_CMP",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-001",
 			"startDate": "2026-08-09T00:00:00Z"
 		},
@@ -292,6 +320,19 @@
 					"endDate": "2027-08-09T00:00:00Z",
 					"startDate": "2026-08-09T00:00:00Z"
 				},
+				"externalReferenceCode": "C_ORDER_ITEM_OMNI_CMP",
+				"name": "Liferay Customer Management Platform",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-CMP",
+				"unitPrice": 0
+			},
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_OMNI_COMMERCE",
 				"name": "Liferay Commerce Subscription - Prod Sizing 1",
 				"quantity": 1,
@@ -472,5 +513,34 @@
 		"orderTypeExternalReferenceCode": "DXP",
 		"projectExternalReferenceCode": "PRJCT-001"
 	},
-	"purchaseOrderNumber": "PO-OMNI"
+	"purchaseOrderNumber": "PO-OMNI",
+	"usageEvents": [
+		{
+			"dedupeKey": "UEV-OMNI_AI_HUB_AITOKENS-2026-05",
+			"eventTimestamp": "2026-05-01T00:00:00Z",
+			"externalReferenceCode": "UEV-OMNI_AI_HUB_AITOKENS-2026-05",
+			"quantity": 31000000.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_OMNI_AI_HUB_AITOKENS",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-DSR-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "ai-tokens-monthly"
+		},
+		{
+			"dedupeKey": "UEV-OMNI_AI_HUB_AITOKENS-2026-06",
+			"eventTimestamp": "2026-06-01T00:00:00Z",
+			"externalReferenceCode": "UEV-OMNI_AI_HUB_AITOKENS-2026-06",
+			"quantity": 39000000.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_OMNI_AI_HUB_AITOKENS",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-DSR-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "ai-tokens-monthly"
+		},
+		{
+			"dedupeKey": "UEV-OMNI_AI_HUB_AITOKENS-2026-07",
+			"eventTimestamp": "2026-07-01T00:00:00Z",
+			"externalReferenceCode": "UEV-OMNI_AI_HUB_AITOKENS-2026-07",
+			"quantity": 62500000.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_OMNI_AI_HUB_AITOKENS",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-DSR-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "ai-tokens-monthly"
+		}
+	]
 }

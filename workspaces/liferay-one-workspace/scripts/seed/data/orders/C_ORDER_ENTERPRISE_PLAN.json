@@ -114,5 +114,43 @@
 		"orderTypeExternalReferenceCode": "DXP",
 		"projectExternalReferenceCode": "PRJCT-010"
 	},
-	"purchaseOrderNumber": "PO-ENTERPRISE-PLAN"
+	"purchaseOrderNumber": "PO-ENTERPRISE-PLAN",
+	"usageEvents": [
+		{
+			"dedupeKey": "UEV-ENTERPRISE_PLAN_DOCUMENT_LIBRARY_SIZE-2026-05",
+			"eventTimestamp": "2026-05-01T00:00:00Z",
+			"externalReferenceCode": "UEV-ENTERPRISE_PLAN_DOCUMENT_LIBRARY_SIZE-2026-05",
+			"quantity": 186.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_ENTERPRISE_PLAN_DOCUMENT_LIBRARY_SIZE",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-ENTERPRISE-PLAN-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		},
+		{
+			"dedupeKey": "UEV-ENTERPRISE_PLAN_DOCUMENT_LIBRARY_SIZE-2026-06",
+			"eventTimestamp": "2026-06-01T00:00:00Z",
+			"externalReferenceCode": "UEV-ENTERPRISE_PLAN_DOCUMENT_LIBRARY_SIZE-2026-06",
+			"quantity": 234.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_ENTERPRISE_PLAN_DOCUMENT_LIBRARY_SIZE",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-ENTERPRISE-PLAN-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		},
+		{
+			"dedupeKey": "UEV-ENTERPRISE_PLAN_DOCUMENT_LIBRARY_SIZE-2026-07",
+			"eventTimestamp": "2026-07-01T00:00:00Z",
+			"externalReferenceCode": "UEV-ENTERPRISE_PLAN_DOCUMENT_LIBRARY_SIZE-2026-07",
+			"quantity": 282.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_ENTERPRISE_PLAN_DOCUMENT_LIBRARY_SIZE",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-ENTERPRISE-PLAN-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		},
+		{
+			"dedupeKey": "UEV-LICENSE-EP_PRODUCTION",
+			"eventTimestamp": "2026-08-09T00:00:00Z",
+			"externalReferenceCode": "UEV-LICENSE-EP_PRODUCTION",
+			"quantity": 1,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_ENTERPRISE_PLAN_DXP",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-ENTERPRISE-PLAN-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "license-generations"
+		}
+	]
 }

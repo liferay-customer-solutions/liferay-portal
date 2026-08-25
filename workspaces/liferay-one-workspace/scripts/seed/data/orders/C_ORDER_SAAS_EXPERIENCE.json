@@ -124,5 +124,34 @@
 		"orderTypeExternalReferenceCode": "DXP",
 		"projectExternalReferenceCode": "PRJCT-002"
 	},
-	"purchaseOrderNumber": "PO-SAAS-EXPERIENCE"
+	"purchaseOrderNumber": "PO-SAAS-EXPERIENCE",
+	"usageEvents": [
+		{
+			"dedupeKey": "UEV-SAAS_STORAGE-2026-05",
+			"eventTimestamp": "2026-05-01T00:00:00Z",
+			"externalReferenceCode": "UEV-SAAS_STORAGE-2026-05",
+			"quantity": 0.62,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_SAAS_STORAGE",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-SAAS-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		},
+		{
+			"dedupeKey": "UEV-SAAS_STORAGE-2026-06",
+			"eventTimestamp": "2026-06-01T00:00:00Z",
+			"externalReferenceCode": "UEV-SAAS_STORAGE-2026-06",
+			"quantity": 0.78,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_SAAS_STORAGE",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-SAAS-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		},
+		{
+			"dedupeKey": "UEV-SAAS_STORAGE-2026-07",
+			"eventTimestamp": "2026-07-01T00:00:00Z",
+			"externalReferenceCode": "UEV-SAAS_STORAGE-2026-07",
+			"quantity": 0.94,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_SAAS_STORAGE",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-SAAS-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		}
+	]
 }
