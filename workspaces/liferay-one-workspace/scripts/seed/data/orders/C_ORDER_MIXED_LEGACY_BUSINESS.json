@@ -93,6 +93,12 @@
 		"externalReferenceCode": "C_ORDER_MIXED_LEGACY_BUSINESS",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_MIXED_LEGACY_BUSINESS_BUSINESS",
 				"name": "Liferay SaaS - Business Plan",
 				"quantity": 1,
@@ -100,6 +106,12 @@
 				"unitPrice": 0
 			},
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_MIXED_LEGACY_BUSINESS_LEGACY",
 				"name": "SaaS (Legacy)",
 				"quantity": 1,

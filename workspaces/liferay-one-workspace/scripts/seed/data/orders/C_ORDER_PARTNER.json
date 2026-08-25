@@ -37,6 +37,12 @@
 		"externalReferenceCode": "C_ORDER_PARTNER",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_PARTNER_DXP",
 				"name": "Liferay DXP",
 				"quantity": 1,
@@ -44,6 +50,12 @@
 				"unitPrice": 0
 			},
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_PARTNER_SOLUTION_RESELLER",
 				"name": "Solution Partnership - Reseller Program",
 				"quantity": 1,

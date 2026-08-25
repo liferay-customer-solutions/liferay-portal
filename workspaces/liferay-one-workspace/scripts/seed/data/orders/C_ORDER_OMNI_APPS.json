@@ -79,6 +79,12 @@
 		"externalReferenceCode": "C_ORDER_OMNI_APPS",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_OMNI_TEST_APP",
 				"name": "Test App",
 				"quantity": 1,
@@ -86,6 +92,12 @@
 				"unitPrice": 0
 			},
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_OMNI_TEST_CRM_ACCELERATOR",
 				"name": "Test Supplier CRM Accelerator",
 				"quantity": 1,
@@ -93,6 +105,12 @@
 				"unitPrice": 0
 			},
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_OMNI_TEST_PARTNER_PORTAL",
 				"name": "Test Supplier Partner Portal",
 				"quantity": 1,
@@ -100,6 +118,12 @@
 				"unitPrice": 0
 			},
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_OMNI_TEST_SLACK_CONNECTOR",
 				"name": "Test Supplier Slack Connector",
 				"quantity": 1,
@@ -107,6 +131,12 @@
 				"unitPrice": 0
 			},
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_OMNI_TEST_THEME_PACK",
 				"name": "Test Supplier Theme Pack",
 				"quantity": 1,

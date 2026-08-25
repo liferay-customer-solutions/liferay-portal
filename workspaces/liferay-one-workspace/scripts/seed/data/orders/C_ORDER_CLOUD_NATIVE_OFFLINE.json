@@ -51,6 +51,12 @@
 		"externalReferenceCode": "C_ORDER_CLOUD_NATIVE_OFFLINE",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_CLOUD_NATIVE_OFFLINE",
 				"name": "Liferay Cloud Native - Standard Operations Bundle",
 				"quantity": 1,
@@ -58,6 +64,12 @@
 				"unitPrice": 0
 			},
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_CLOUD_NATIVE_OFFLINE_DSR",
 				"name": "Digital Sales Room",
 				"quantity": 1,
@@ -65,6 +77,12 @@
 				"unitPrice": 0
 			},
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_CLOUD_NATIVE_OFFLINE_PODS",
 				"name": "Up to 5 Production Pods",
 				"quantity": 1,

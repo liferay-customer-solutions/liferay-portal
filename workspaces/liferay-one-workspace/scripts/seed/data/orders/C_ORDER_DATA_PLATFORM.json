@@ -107,6 +107,12 @@
 		"externalReferenceCode": "C_ORDER_DATA_PLATFORM",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_DATA_PLATFORM",
 				"name": "Liferay Data Platform",
 				"quantity": 1,

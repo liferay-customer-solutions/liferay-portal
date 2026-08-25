@@ -51,6 +51,12 @@
 		"externalReferenceCode": "C_ORDER_MULTI_1",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2026-07-31T00:00:00Z",
+					"endDate": "2026-07-01T00:00:00Z",
+					"startDate": "2024-07-01T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_MULTI_1_CONTENT_MARKETING",
 				"name": "Content Marketing Platform",
 				"quantity": 1,
@@ -58,6 +64,12 @@
 				"unitPrice": 0
 			},
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-01-30T00:00:00Z",
+					"endDate": "2026-12-31T00:00:00Z",
+					"startDate": "2024-07-01T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_MULTI_1_AIHUB",
 				"name": "Liferay AI Hub",
 				"quantity": 1,
@@ -65,6 +77,12 @@
 				"unitPrice": 0
 			},
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-01-30T00:00:00Z",
+					"endDate": "2026-12-31T00:00:00Z",
+					"startDate": "2024-07-01T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_MULTI_1_DXP",
 				"name": "Liferay DXP",
 				"quantity": 1,

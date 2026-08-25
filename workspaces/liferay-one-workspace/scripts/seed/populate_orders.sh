@@ -145,7 +145,9 @@ with open('${file}') as file:
 # publisherToCommerceOrder object relationships, whose foreign key fields on the
 # order take the numeric object entry IDs. The order item name is denormalized
 # from the SKU on create -- sending it rejects the nested mapping -- so it is
-# kept in the file for readability and dropped here.
+# kept in the file for readability and dropped here. The order item custom
+# fields take a different shape from the plain object the file authors and are
+# applied per item afterward (see _set_order_items), so they are dropped too.
 
 order.pop('channelExternalReferenceCode', None)
 order.pop('contractExternalReferenceCode', None)
@@ -171,6 +173,7 @@ if publisher_sales_summary_id:
 		publisher_sales_summary_id)
 
 for order_item in order.get('orderItems', []):
+	order_item.pop('customFields', None)
 	order_item.pop('name', None)
 
 print(json.dumps(order))
@@ -343,7 +346,7 @@ function _populate_order {
 	order_id=$(echo "${response}" | sed '$d' | _read_field "id")
 
 	_set_order_fields "${file}" "${order_id}" "${project_name}"
-	_set_order_prices "${file}" "${order_id}"
+	_set_order_items "${file}" "${order_id}"
 	_complete_payment "${file}" "${order_id}"
 }
 
@@ -393,12 +396,21 @@ print('|'.join((
 "
 }
 
-# Reads the prices an order file authors, emitted as the order total on the first
-# line followed by one tab-separated order item external reference code and final
-# price per line. An order whose items are all priced at zero prints nothing, so
-# the caller skips it without a request.
+# Reads the per order item patch bodies an order file implies, emitted as the
+# order total on the first line followed by one tab-separated order item external
+# reference code and compact JSON body per line. The total is zero for an order
+# whose items are all priced at zero, and the caller then skips only the order
+# level price patch.
+#
+# Each body carries the item's external reference code, because a patch
+# regenerates it otherwise and the entitlement import links an entitlement to its
+# order item by that code (see _import_entitlements). It also carries the custom
+# fields the file authors, reshaped from the plain object the file uses for
+# readability into the {name, customValue: {data}} array the commerce order item
+# API expects. No tax is configured on the seeded channel, so the price with tax
+# is the price.
 
-function _read_order_prices {
+function _read_order_items {
 	local file="${1}"
 
 	python3 -c "
@@ -415,13 +427,27 @@ for order_item in order.get('orderItems', []):
 
 	total += final_price
 
-	lines.append(
-		'{}\t{:.2f}'.format(
-			order_item['externalReferenceCode'], final_price))
+	body = {'externalReferenceCode': order_item['externalReferenceCode']}
 
-if total:
-	print('{:.2f}'.format(total))
-	print('\n'.join(lines))
+	custom_fields = order_item.get('customFields') or {}
+
+	if custom_fields:
+		body['customFields'] = [
+			{'customValue': {'data': data}, 'name': name}
+			for name, data in sorted(custom_fields.items())
+		]
+
+	if final_price:
+		body['finalPrice'] = final_price
+		body['finalPriceWithTaxAmount'] = final_price
+
+	lines.append(
+		'{}\t{}'.format(
+			order_item['externalReferenceCode'],
+			json.dumps(body, separators=(',', ':'), sort_keys=True)))
+
+print('{:.2f}'.format(total))
+print('\n'.join(lines))
 "
 }
 
@@ -715,29 +741,9 @@ print(json.dumps(patch))
 	fi
 }
 
-# A PATCH regenerates the order item's external reference code unless the payload
-# carries it, and the entitlement import links an entitlement to its order item
-# by that code (see _import_entitlements), so it is sent back unchanged. No tax
-# is configured on the seeded channel, so the price with tax is the price.
-
-function _set_order_item_price {
+function _set_order_item {
 	local external_reference_code="${1}"
-	local final_price="${2}"
-
-	local payload
-
-	payload=$(python3 -c "
-import json
-import sys
-
-print(
-	json.dumps(
-		{
-			'externalReferenceCode': sys.argv[1],
-			'finalPrice': float(sys.argv[2]),
-			'finalPriceWithTaxAmount': float(sys.argv[2]),
-		}))
-" "${external_reference_code}" "${final_price}")
+	local payload="${2}"
 
 	local status
 
@@ -751,25 +757,33 @@ print(
 
 	if [[ ${status} != 2* ]]
 	then
-		echo "Unable to set the price for order item ${external_reference_code}." >&2
+		echo "Unable to set fields for order item ${external_reference_code}." >&2
 	fi
 }
 
-# Commerce prices an order from the channel price list when it is placed, so the
-# unitPrice an order item carries lands on the item but leaves the item's final
-# price and the order's total at zero. A seeded marketplace sale needs a real
-# total -- the Marketplace Finance Orders page lists only orders that have one,
-# and the Marketplace Payments page totals them per publisher -- so the prices
-# the order file authors are applied with a follow-up PATCH per order item and
-# one for the order. An order whose items are all priced at zero is left alone.
+# Applies everything an order item needs that the order placement payload does not
+# accept, in one PATCH per item.
+#
+# The entitlement generator reads an order item's term from its startDate and
+# endDate custom fields and gates on customStatus (see OrderItemUtil), so a
+# seeded item has to carry them or the runtime and the seed would disagree about
+# when a grant runs and every item would read as unapproved.
+#
+# Commerce also prices an order from the channel price list when it is placed, so
+# the unitPrice an order item carries lands on the item but leaves the item's
+# final price and the order's total at zero. A seeded marketplace sale needs a
+# real total -- the Marketplace Finance Orders page lists only orders that have
+# one, and the Marketplace Payments page totals them per publisher -- so the
+# prices ride along in the same PATCH. Only the order level total is skipped for
+# an order whose items are all priced at zero.
 
-function _set_order_prices {
+function _set_order_items {
 	local file="${1}"
 	local order_id="${2}"
 
 	local lines
 
-	mapfile -t lines < <(_read_order_prices "${file}")
+	mapfile -t lines < <(_read_order_items "${file}")
 
 	((${#lines[@]} == 0)) && return 0
 
@@ -778,12 +792,14 @@ function _set_order_prices {
 	for line in "${lines[@]:1}"
 	do
 		local external_reference_code
-		local final_price
+		local payload
 
-		IFS=$'\t' read -r external_reference_code final_price <<< "${line}"
+		IFS=$'\t' read -r external_reference_code payload <<< "${line}"
 
-		_set_order_item_price "${external_reference_code}" "${final_price}"
+		_set_order_item "${external_reference_code}" "${payload}"
 	done
+
+	[[ ${lines[0]} == "0.00" ]] && return 0
 
 	local status
 

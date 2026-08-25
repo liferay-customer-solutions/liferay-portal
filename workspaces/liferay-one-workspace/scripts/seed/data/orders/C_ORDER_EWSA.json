@@ -23,6 +23,12 @@
 		"externalReferenceCode": "C_ORDER_EWSA",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_EWSA_DXP",
 				"name": "Portal Enterprise-Wide License",
 				"quantity": 1,

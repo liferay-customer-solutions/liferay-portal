@@ -23,6 +23,12 @@
 		"externalReferenceCode": "C_ORDER_SELF_HOSTED",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_SELF_HOSTED_DXP",
 				"name": "Liferay DXP",
 				"quantity": 1,
