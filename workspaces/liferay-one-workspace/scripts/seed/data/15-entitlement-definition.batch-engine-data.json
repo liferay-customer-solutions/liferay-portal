@@ -59,7 +59,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-AI-HUB",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -81,7 +80,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ANALYTICS-CLOUD",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -92,7 +90,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-APP",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -103,7 +100,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-CLOUD-NATIVE",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -124,7 +120,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-CMP",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -135,7 +130,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-COMMERCE",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -146,7 +140,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-COMMERCE-CLOUD",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -157,7 +150,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-CONTENT-MARKETING",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -168,7 +160,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DATA-PLATFORM",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -241,7 +232,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DSR",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -252,7 +242,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DXP",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -263,7 +252,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ENTERPRISE-SEARCH",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -274,7 +262,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ENTERPRISE-SEARCH-CLOUD",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -285,7 +272,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-OPENSEARCH",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -296,7 +282,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -340,7 +325,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS-LEGACY",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -385,7 +369,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PARTNERSHIP-BASIC-RESELLER",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -396,7 +379,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PARTNERSHIP-DISTRIBUTION",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -407,7 +389,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PARTNERSHIP-RESELLER",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -418,7 +399,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PARTNERSHIP-SERVICE",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -429,7 +409,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PARTNERSHIP-SERVICE-REFERRAL",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -440,7 +419,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PARTNERSHIP-SOLUTION-RESELLER",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -451,7 +429,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PARTNERSHIP-STANDARD",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -462,7 +439,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PARTNERSHIP-TRAINING",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -473,7 +449,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PARTNERSHIP-VAR",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -484,7 +459,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PORTAL",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -495,7 +469,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PORTAL-EWSA",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -506,7 +479,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PUNCHOUT",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -517,7 +489,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -559,7 +530,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-BUSINESS-PLAN",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -632,7 +602,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-ENTERPRISE-PLAN",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -706,7 +675,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-LEGACY",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -811,7 +779,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAMPLE-APP",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -822,7 +789,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAMPLE-CLOUD-APP",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -833,7 +799,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-APP",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -844,7 +809,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-CLIENT-EXTENSION",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -855,7 +819,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-COMPOSITE-APP",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -866,7 +829,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-CRM-ACCELERATOR",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -877,7 +839,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-LOW-CODE-CONFIGURATION",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -888,7 +849,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-PARTNER-PORTAL",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -899,7 +859,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-SLACK-CONNECTOR",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -910,7 +869,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-THEME-PACK",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -921,7 +879,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TRIAL",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		},
 		{
@@ -932,7 +889,6 @@
 			"grantType": "fixed",
 			"name": "licenseGeneration",
 			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ZENDESK",
-			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "license-generations",
 			"unit": "boolean"
 		}
 	]

@@ -5,10 +5,13 @@
 
 import {useProject} from '~/context/ProjectContext';
 import {useFetch} from '~/hooks/useFetch';
+import {isUnassignedProject} from '~/pages/MyAccount/Projects/utils/isUnassignedProject';
 
 import type {APIResponse} from '~/types/api';
 
 const GRANT_TYPE_UNLIMITED = 'unlimited';
+
+const PERIOD_MONTHLY = 'per month';
 
 export type ProjectUsage = {
 	consumed: number;
@@ -20,7 +23,6 @@ export type ProjectUsage = {
 
 type EntitlementDefinitionNode = {
 	r_usageDefinitionToEntitlementDefinition_c_usageDefinitionId?: number;
-	unit?: string;
 };
 
 type EntitlementNode = {
@@ -38,6 +40,7 @@ type UsageDefinitionNode = {
 };
 
 type UsageEventNode = {
+	eventTimestamp?: string;
 	quantity?: number;
 	r_entitlementToUsageEvent_c_entitlementId?: number;
 };
@@ -48,14 +51,42 @@ type Allowance = {
 	unlimited: boolean;
 };
 
+function totalOf(events: UsageEventNode[]): number {
+	return events.reduce((total, event) => total + (event.quantity ?? 0), 0);
+}
+
+function totalOfLatestMonth(events: UsageEventNode[]): number {
+	const totalsByMonth = new Map<string, number>();
+
+	for (const event of events) {
+		const month = event.eventTimestamp?.slice(0, 7);
+
+		if (!month) {
+			continue;
+		}
+
+		totalsByMonth.set(
+			month,
+			(totalsByMonth.get(month) ?? 0) + (event.quantity ?? 0)
+		);
+	}
+
+	const latest = Array.from(totalsByMonth.keys()).sort().pop();
+
+	return latest === undefined ? 0 : totalsByMonth.get(latest) ?? 0;
+}
+
 export function useProjectUsage() {
 	const {projectId} = useProject();
 
+	const projectExternalReferenceCode =
+		projectId && !isUnassignedProject(projectId) ? projectId : undefined;
+
 	const {data: entitlementsData} = useFetch<APIResponse<EntitlementNode>>(
-		projectId ? '/o/c/entitlements' : null,
+		projectExternalReferenceCode ? '/o/c/entitlements' : null,
 		{
 			params: {
-				filter: `r_projectToEntitlement_c_projectERC eq '${projectId}'`,
+				filter: `r_projectToEntitlement_c_projectERC eq '${projectExternalReferenceCode}'`,
 				nestedFields: 'entitlementDefinition',
 				pageSize: 200,
 			},
@@ -65,11 +96,10 @@ export function useProjectUsage() {
 	const allowancesByDefinitionId = new Map<number, Allowance>();
 
 	for (const entitlement of entitlementsData?.items ?? []) {
-		const definition =
-			entitlement.r_entitlementDefinitionToEntitlement_c_entitlementDefinition;
-
 		const usageDefinitionId =
-			definition?.r_usageDefinitionToEntitlementDefinition_c_usageDefinitionId;
+			entitlement
+				.r_entitlementDefinitionToEntitlement_c_entitlementDefinition
+				?.r_usageDefinitionToEntitlementDefinition_c_usageDefinitionId;
 
 		if (!usageDefinitionId) {
 			continue;
@@ -112,7 +142,7 @@ export function useProjectUsage() {
 		{params: {filter: eventFilter, pageSize: 500}}
 	);
 
-	const consumedByEntitlementId = new Map<number, number>();
+	const eventsByEntitlementId = new Map<number, UsageEventNode[]>();
 
 	for (const event of eventsData?.items ?? []) {
 		const entitlementId = event.r_entitlementToUsageEvent_c_entitlementId;
@@ -121,11 +151,11 @@ export function useProjectUsage() {
 			continue;
 		}
 
-		consumedByEntitlementId.set(
-			entitlementId,
-			(consumedByEntitlementId.get(entitlementId) ?? 0) +
-				(event.quantity ?? 0)
-		);
+		const events = eventsByEntitlementId.get(entitlementId) ?? [];
+
+		events.push(event);
+
+		eventsByEntitlementId.set(entitlementId, events);
 	}
 
 	const usage: ProjectUsage[] = (definitionsData?.items ?? [])
@@ -133,12 +163,15 @@ export function useProjectUsage() {
 		.map((definition) => {
 			const allowance = allowancesByDefinitionId.get(definition.id)!;
 
+			const events = allowance.entitlementIds.flatMap(
+				(id) => eventsByEntitlementId.get(id) ?? []
+			);
+
 			return {
-				consumed: allowance.entitlementIds.reduce(
-					(total, id) =>
-						total + (consumedByEntitlementId.get(id) ?? 0),
-					0
-				),
+				consumed:
+					definition.period === PERIOD_MONTHLY
+						? totalOfLatestMonth(events)
+						: totalOf(events),
 				included: allowance.included,
 				period: definition.period ?? '',
 				unit: definition.unit ?? '',
