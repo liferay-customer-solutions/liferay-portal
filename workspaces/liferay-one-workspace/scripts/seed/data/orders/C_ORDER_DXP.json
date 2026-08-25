@@ -18,19 +18,19 @@
 	"licenseKeys": [
 		{
 			"externalReferenceCode": "C_LICENSE_KEY_BASIC_TIER",
-			"r_entitlementToLicenseKey_c_entitlementERC": "C_ENT_DXP_DXP"
+			"r_entitlementToLicenseKey_c_entitlementERC": "C_ENT_DXP"
 		},
 		{
 			"externalReferenceCode": "C_LICENSE_KEY_FOUNDATION",
-			"r_entitlementToLicenseKey_c_entitlementERC": "C_ENT_DXP_DXP"
+			"r_entitlementToLicenseKey_c_entitlementERC": "C_ENT_DXP"
 		},
 		{
 			"externalReferenceCode": "C_LICENSE_KEY_MAIN_INSTANCE",
-			"r_entitlementToLicenseKey_c_entitlementERC": "C_ENT_DXP_DXP"
+			"r_entitlementToLicenseKey_c_entitlementERC": "C_ENT_DXP"
 		},
 		{
 			"externalReferenceCode": "C_LICENSE_KEY_PRIMARY",
-			"r_entitlementToLicenseKey_c_entitlementERC": "C_ENT_DXP_DXP"
+			"r_entitlementToLicenseKey_c_entitlementERC": "C_ENT_DXP"
 		}
 	],
 	"order": {

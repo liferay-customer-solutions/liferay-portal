@@ -9,9 +9,9 @@
 			"quantity": 100,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-002",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_LEGACY_BUSINESS_BUSINESS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_LEGACY_BUSINESS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_DOCUMENT_LIBRARY_SIZE",
-			"r_projectToEntitlement_c_projectERC": "PRJCT-032",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-002-3",
 			"startDate": "2025-08-09T00:00:00Z"
 		},
 		{
@@ -23,9 +23,9 @@
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-002",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_LEGACY_BUSINESS_LEGACY",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_LEGACY_BUSINESS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_LEGACY",
-			"r_projectToEntitlement_c_projectERC": "PRJCT-032",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-002-3",
 			"startDate": "2025-08-09T00:00:00Z"
 		},
 		{
@@ -37,9 +37,9 @@
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-002",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_LEGACY_BUSINESS_BUSINESS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_LEGACY_BUSINESS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_MARKER",
-			"r_projectToEntitlement_c_projectERC": "PRJCT-032",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-002-3",
 			"startDate": "2025-08-09T00:00:00Z"
 		},
 		{
@@ -51,9 +51,9 @@
 			"quantity": 4,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-002",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_LEGACY_BUSINESS_BUSINESS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_LEGACY_BUSINESS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_RAM",
-			"r_projectToEntitlement_c_projectERC": "PRJCT-032",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-002-3",
 			"startDate": "2025-08-09T00:00:00Z"
 		},
 		{
@@ -65,9 +65,9 @@
 			"quantity": 15,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-002",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_LEGACY_BUSINESS_BUSINESS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_LEGACY_BUSINESS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_SITES",
-			"r_projectToEntitlement_c_projectERC": "PRJCT-032",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-002-3",
 			"startDate": "2025-08-09T00:00:00Z"
 		},
 		{
@@ -79,16 +79,16 @@
 			"quantity": 8,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-002",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_LEGACY_BUSINESS_BUSINESS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_LEGACY_BUSINESS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_VCPU",
-			"r_projectToEntitlement_c_projectERC": "PRJCT-032",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-002-3",
 			"startDate": "2025-08-09T00:00:00Z"
 		}
 	],
 	"order": {
 		"accountExternalReferenceCode": "ACCNT-002",
 		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
-		"contractExternalReferenceCode": "C_CONTRACT_BUSINESS_PLAN",
+		"contractExternalReferenceCode": "C_CONTRACT_MIXED_LEGACY_BUSINESS",
 		"currencyCode": "USD",
 		"externalReferenceCode": "C_ORDER_MIXED_LEGACY_BUSINESS",
 		"orderItems": [
@@ -109,7 +109,7 @@
 		],
 		"orderStatus": 5,
 		"orderTypeExternalReferenceCode": "DXP",
-		"projectExternalReferenceCode": "PRJCT-032"
+		"projectExternalReferenceCode": "PRJCT-002-3"
 	},
 	"purchaseOrderNumber": "PO-MIXED-LEGACY-BUSINESS"
 }

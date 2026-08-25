@@ -2,7 +2,7 @@
 	"order": {
 		"accountExternalReferenceCode": "ACCNT-002",
 		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
-		"contractExternalReferenceCode": "C_CONTRACT_SAAS_EXPERIENCE",
+		"contractExternalReferenceCode": "C_CONTRACT_SAAS_EXPERIENCE_NO_ENTITLEMENTS",
 		"currencyCode": "USD",
 		"externalReferenceCode": "C_ORDER_SAAS_EXPERIENCE_NO_ENTITLEMENTS",
 		"orderItems": [
@@ -16,7 +16,7 @@
 		],
 		"orderStatus": 5,
 		"orderTypeExternalReferenceCode": "DXP",
-		"projectExternalReferenceCode": "PRJCT-031"
+		"projectExternalReferenceCode": "PRJCT-002-2"
 	},
 	"purchaseOrderNumber": "PO-SAAS-EXPERIENCE-NO-ENTITLEMENTS"
 }

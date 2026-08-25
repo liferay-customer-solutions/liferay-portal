@@ -170,6 +170,26 @@
 			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
+			"contractTerm": 12,
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_CONTRACT_MIXED_BUSINESS_PAAS",
+			"r_accountEntryToContract_accountEntryERC": "ACCNT-004",
+			"r_projectToContract_c_projectERC": "PRJCT-033",
+			"renewalState": "auto-renew",
+			"spendLimit": 2500,
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"contractTerm": 12,
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_CONTRACT_MIXED_LEGACY_BUSINESS",
+			"r_accountEntryToContract_accountEntryERC": "ACCNT-002",
+			"r_projectToContract_c_projectERC": "PRJCT-002-3",
+			"renewalState": "auto-renew",
+			"spendLimit": 3000,
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
 			"contractTerm": 30,
 			"contractType": "initial",
 			"endDate": "2026-12-31T00:00:00Z",
@@ -323,6 +343,16 @@
 			"externalReferenceCode": "C_CONTRACT_SAAS_EXPERIENCE",
 			"r_accountEntryToContract_accountEntryERC": "ACCNT-002",
 			"r_projectToContract_c_projectERC": "PRJCT-002",
+			"renewalState": "auto-renew",
+			"spendLimit": 3500,
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"contractTerm": 12,
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_CONTRACT_SAAS_EXPERIENCE_NO_ENTITLEMENTS",
+			"r_accountEntryToContract_accountEntryERC": "ACCNT-002",
+			"r_projectToContract_c_projectERC": "PRJCT-002-2",
 			"renewalState": "auto-renew",
 			"spendLimit": 3500,
 			"startDate": "2026-08-09T00:00:00Z"

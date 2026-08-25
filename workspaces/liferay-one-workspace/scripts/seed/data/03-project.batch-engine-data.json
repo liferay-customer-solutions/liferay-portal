@@ -26,6 +26,16 @@
 			"r_accountEntryToProject_accountEntryERC": "ACCNT-002"
 		},
 		{
+			"externalReferenceCode": "PRJCT-002-2",
+			"name": "SaaS Experience Project Without Entitlements",
+			"r_accountEntryToProject_accountEntryERC": "ACCNT-002"
+		},
+		{
+			"externalReferenceCode": "PRJCT-002-3",
+			"name": "Mixed Legacy And Business Plan Project",
+			"r_accountEntryToProject_accountEntryERC": "ACCNT-002"
+		},
+		{
 			"externalReferenceCode": "PRJCT-003",
 			"name": "SaaS Legacy Project",
 			"r_accountEntryToProject_accountEntryERC": "ACCNT-003"
@@ -167,18 +177,8 @@
 		},
 		{
 			"externalReferenceCode": "PRJCT-031",
-			"name": "SaaS Experience Project Without Entitlements",
-			"r_accountEntryToProject_accountEntryERC": "ACCNT-002"
-		},
-		{
-			"externalReferenceCode": "PRJCT-031",
 			"name": "Cloud Native Pending Project",
 			"r_accountEntryToProject_accountEntryERC": "ACCNT-031"
-		},
-		{
-			"externalReferenceCode": "PRJCT-032",
-			"name": "Mixed Legacy And Business Plan Project",
-			"r_accountEntryToProject_accountEntryERC": "ACCNT-002"
 		},
 		{
 			"externalReferenceCode": "PRJCT-032",
