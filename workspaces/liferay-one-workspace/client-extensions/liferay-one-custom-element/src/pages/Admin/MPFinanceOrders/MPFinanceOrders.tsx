@@ -117,7 +117,7 @@ const MPFinanceOrders = () => {
 							name: i18n.translate('account'),
 							render: (account, {creatorEmailAddress}) => (
 								<div className="d-flex flex-column justify-content-center">
-									<p className="mb-0 pt-1">{account.name}</p>
+									<p className="mb-0 pt-1">{account?.name}</p>
 									<p className="mb-0 text-muted">
 										{creatorEmailAddress}
 									</p>
@@ -127,7 +127,7 @@ const MPFinanceOrders = () => {
 						{
 							id: 'orderItems',
 							name: i18n.translate('app'),
-							render: (orderItems) => orderItems[0].name?.en_US,
+							render: (orderItems) => orderItems[0]?.name?.en_US,
 						},
 						{
 							id: 'paymentStatusInfo',

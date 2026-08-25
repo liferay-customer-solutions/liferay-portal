@@ -234,22 +234,19 @@ const OrderDetails = () => {
 						{
 							key: 'options',
 							render: (value, {quantity}) => {
-								const [skuOption] = safeJSONParse(
-									value as string,
-									[
-										{
-											skuOptionValueKey: 'Standard',
-											skuOptionValueName: 'Standard',
-										},
-									]
-								);
+								const [skuOption] = safeJSONParse<
+									{
+										skuOptionValueKey?: string;
+										skuOptionValueName?: string;
+									}[]
+								>((value as string) || null, []);
 
 								return (
 									<div className="pt-2">
 										<div className="d-flex">
 											<img
 												alt="App Icon"
-												className="mr-2 order-details-app-icon rounded"
+												className="app-details-page-table-icon mr-2"
 												draggable={false}
 												src={product?.thumbnail}
 											/>
@@ -262,7 +259,8 @@ const OrderDetails = () => {
 												<small className="finance-dashboard-secondary-text mb-0 pb-0 text-capitalize text-muted">
 													{`${quantity} ${
 														skuOption?.skuOptionValueKey ||
-														skuOption?.skuOptionValueName
+														skuOption?.skuOptionValueName ||
+														'Standard'
 													} license`}
 												</small>
 											</span>

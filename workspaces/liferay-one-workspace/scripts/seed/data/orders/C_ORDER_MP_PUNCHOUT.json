@@ -1,0 +1,21 @@
+{
+	"order": {
+		"accountExternalReferenceCode": "ACCNT-012",
+		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
+		"currencyCode": "USD",
+		"externalReferenceCode": "C_ORDER_MP_PUNCHOUT",
+		"orderItems": [
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_MP_PUNCHOUT",
+				"name": "Liferay Commerce Connector to PunchOut2Go",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-PUNCHOUT",
+				"unitPrice": 2500
+			}
+		],
+		"orderStatus": 1,
+		"orderTypeExternalReferenceCode": "DXP_APP"
+	},
+	"paymentStatus": 4,
+	"purchaseOrderNumber": "PO-MP-PUNCHOUT"
+}

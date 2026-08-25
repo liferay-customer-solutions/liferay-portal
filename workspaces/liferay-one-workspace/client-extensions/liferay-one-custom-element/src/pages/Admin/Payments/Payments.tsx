@@ -13,18 +13,11 @@ import {Liferay} from '~/services/liferay/liferay';
 import PublisherSalesSummaries from '~/services/objects/PublisherSalesSummaries';
 import {
 	PaymentStatus as PaymentStatusCode,
+	PublisherPayoutStatus,
 	getTotalByOrderKey,
 } from '~/utils/orderUtils';
 
 import type {PublisherSalesSummaryEntry} from '~/types/publisher';
-
-export const PublisherPayoutStatus = {
-	PAID: 'paid',
-	UNPAID: 'unpaid',
-} as const;
-
-export type PublisherPayoutStatus =
-	(typeof PublisherPayoutStatus)[keyof typeof PublisherPayoutStatus];
 
 async function onClickMarkAsPaid(
 	entry: PublisherSalesSummaryEntry,
@@ -78,7 +71,7 @@ const Payments = () => {
 					searchVisible: true,
 					visible: true,
 				}}
-				resource="/o/c/publishersalessummaries?nestedFields=accountEntryToPublisher,publisherToCommerceOrder"
+				resource="/o/c/publishersalessummaries?nestedFields=accountEntryToPublisherSalesSummary,publisherToCommerceOrder"
 				tableProps={{
 					actions: [
 						{

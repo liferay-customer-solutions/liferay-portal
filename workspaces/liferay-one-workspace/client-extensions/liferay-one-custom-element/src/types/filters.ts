@@ -5,9 +5,12 @@
 
 import {Params} from 'react-router-dom';
 import i18n from '~/i18n';
-import {PublisherPayoutStatus} from '~/pages/Admin/Payments/Payments';
 import SearchBuilder, {Operators} from '~/utils/SearchBuilder';
-import {OrderWorkflowStatusCode, PaymentStatus} from '~/utils/orderUtils';
+import {
+	OrderWorkflowStatusCode,
+	PaymentStatus,
+	PublisherPayoutStatus,
+} from '~/utils/orderUtils';
 import {ProductWorkflowStatusCode} from '~/utils/productUtils';
 
 import type {ListTypeDefinition} from '~/types/listTypeDefinition';

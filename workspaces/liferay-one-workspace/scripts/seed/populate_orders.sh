@@ -131,6 +131,7 @@ function _build_order_payload {
 	local channel_id="${2}"
 	local contract_id="${3}"
 	local project_id="${4}"
+	local publisher_sales_summary_id="${5}"
 
 	python3 -c "
 import json
@@ -139,15 +140,17 @@ with open('${file}') as file:
 	order = json.load(file)['order']
 
 # channelExternalReferenceCode is not resolved on create, so the numeric
-# channelId is required. The contract and project are linked through the
-# contractToCommerceOrder and projectToCommerceOrder object relationships, whose
-# foreign key fields on the order take the numeric object entry IDs. The order
-# item name is denormalized from the SKU on create -- sending it rejects the
-# nested mapping -- so it is kept in the file for readability and dropped here.
+# channelId is required. The contract, project, and publisher sales summary are
+# linked through the contractToCommerceOrder, projectToCommerceOrder, and
+# publisherToCommerceOrder object relationships, whose foreign key fields on the
+# order take the numeric object entry IDs. The order item name is denormalized
+# from the SKU on create -- sending it rejects the nested mapping -- so it is
+# kept in the file for readability and dropped here.
 
 order.pop('channelExternalReferenceCode', None)
 order.pop('contractExternalReferenceCode', None)
 order.pop('projectExternalReferenceCode', None)
+order.pop('publisherSalesSummaryExternalReferenceCode', None)
 
 order['channelId'] = ${channel_id}
 
@@ -160,6 +163,12 @@ project_id = '${project_id}'
 
 if project_id:
 	order['r_projectToCommerceOrder_c_projectId'] = int(project_id)
+
+publisher_sales_summary_id = '${publisher_sales_summary_id}'
+
+if publisher_sales_summary_id:
+	order['r_publisherToCommerceOrder_c_publisherSalesSummaryId'] = int(
+		publisher_sales_summary_id)
 
 for order_item in order.get('orderItems', []):
 	order_item.pop('name', None)
@@ -250,11 +259,13 @@ function _populate_order {
 	local order_external_reference_code
 	local contract_external_reference_code
 	local project_external_reference_code
+	local publisher_sales_summary_external_reference_code
 
 	IFS='|' read -r \
 		order_external_reference_code \
 		contract_external_reference_code \
 		project_external_reference_code \
+		publisher_sales_summary_external_reference_code \
 		< <(_read_order_meta "${file}")
 
 	local contract_id=""
@@ -276,9 +287,16 @@ function _populate_order {
 		IFS=$'\t' read -r project_id project_name <<< "${project}"
 	fi
 
+	local publisher_sales_summary_id=""
+
+	if [[ -n ${publisher_sales_summary_external_reference_code} ]]
+	then
+		publisher_sales_summary_id=$(_resolve_publisher_sales_summary_id "${publisher_sales_summary_external_reference_code}") || return 1
+	fi
+
 	local payload
 
-	payload=$(_build_order_payload "${file}" "${channel_id}" "${contract_id}" "${project_id}")
+	payload=$(_build_order_payload "${file}" "${channel_id}" "${contract_id}" "${project_id}" "${publisher_sales_summary_id}")
 
 	# The order placement upserts by external reference code, so re-running is
 	# idempotent. A 4xx is a permanent rejection -- bad data such as an
@@ -325,6 +343,7 @@ function _populate_order {
 	order_id=$(echo "${response}" | sed '$d' | _read_field "id")
 
 	_set_order_fields "${file}" "${order_id}" "${project_name}"
+	_set_order_prices "${file}" "${order_id}"
 	_complete_payment "${file}" "${order_id}"
 }
 
@@ -347,13 +366,14 @@ except Exception:
 "
 }
 
-# Reads the three order fields the placement needs -- the order, contract, and
-# project external reference codes -- in a single parse, emitted as one
-# pipe-separated line, so an order costs one Python process here rather than three.
-# The separator is pipe rather than tab because the contract or project is
-# optional: an absent field is empty, and adjacent tabs (both being IFS
-# whitespace) would collapse on read, shifting the remaining fields into the
-# wrong variables. Pipe is not IFS whitespace, so empty fields are preserved.
+# Reads the four order fields the placement needs -- the order, contract,
+# project, and publisher sales summary external reference codes -- in a single
+# parse, emitted as one pipe-separated line, so an order costs one Python process
+# here rather than four. The separator is pipe rather than tab because every
+# field but the first is optional: an absent field is empty, and adjacent tabs
+# (both being IFS whitespace) would collapse on read, shifting the remaining
+# fields into the wrong variables. Pipe is not IFS whitespace, so empty fields
+# are preserved.
 
 function _read_order_meta {
 	local file="${1}"
@@ -368,7 +388,40 @@ print('|'.join((
 	order.get('externalReferenceCode', ''),
 	order.get('contractExternalReferenceCode', ''),
 	order.get('projectExternalReferenceCode', ''),
+	order.get('publisherSalesSummaryExternalReferenceCode', ''),
 )))
+"
+}
+
+# Reads the prices an order file authors, emitted as the order total on the first
+# line followed by one tab-separated order item external reference code and final
+# price per line. An order whose items are all priced at zero prints nothing, so
+# the caller skips it without a request.
+
+function _read_order_prices {
+	local file="${1}"
+
+	python3 -c "
+import json
+
+with open('${file}') as file:
+	order = json.load(file)['order']
+
+lines = []
+total = 0
+
+for order_item in order.get('orderItems', []):
+	final_price = order_item.get('unitPrice', 0) * order_item.get('quantity', 1)
+
+	total += final_price
+
+	lines.append(
+		'{}\t{:.2f}'.format(
+			order_item['externalReferenceCode'], final_price))
+
+if total:
+	print('{:.2f}'.format(total))
+	print('\n'.join(lines))
 "
 }
 
@@ -477,6 +530,39 @@ except Exception:
 	done
 
 	echo "Unable to resolve project ${external_reference_code}." >&2
+
+	return 1
+}
+
+# Resolves a publisher sales summary external reference code to its numeric ID,
+# which sets the publisherToCommerceOrder relationship foreign key on the order.
+# A marketplace sale is attributed to the publisher's payout for a quarter
+# through that relationship, which is what the Marketplace Payments page totals.
+
+function _resolve_publisher_sales_summary_id {
+	local external_reference_code="${1}"
+
+	local url="${LIFERAY_URL}/o/c/publishersalessummaries/by-external-reference-code/${external_reference_code}"
+
+	local attempt
+
+	for ((attempt = 1; attempt <= 60; attempt++))
+	do
+		local publisher_sales_summary_id
+
+		publisher_sales_summary_id=$(_curl "${url}" | _read_field "id" || true)
+
+		if [[ -n ${publisher_sales_summary_id} ]]
+		then
+			echo "${publisher_sales_summary_id}"
+
+			return 0
+		fi
+
+		sleep 5
+	done
+
+	echo "Unable to resolve publisher sales summary ${external_reference_code}." >&2
 
 	return 1
 }
@@ -626,6 +712,94 @@ print(json.dumps(patch))
 		echo "Set fields for order ${order_id}."
 	else
 		echo "Unable to set fields for order ${order_id}." >&2
+	fi
+}
+
+# A PATCH regenerates the order item's external reference code unless the payload
+# carries it, and the entitlement import links an entitlement to its order item
+# by that code (see _import_entitlements), so it is sent back unchanged. No tax
+# is configured on the seeded channel, so the price with tax is the price.
+
+function _set_order_item_price {
+	local external_reference_code="${1}"
+	local final_price="${2}"
+
+	local payload
+
+	payload=$(python3 -c "
+import json
+import sys
+
+print(
+	json.dumps(
+		{
+			'externalReferenceCode': sys.argv[1],
+			'finalPrice': float(sys.argv[2]),
+			'finalPriceWithTaxAmount': float(sys.argv[2]),
+		}))
+" "${external_reference_code}" "${final_price}")
+
+	local status
+
+	status=$(_curl \
+		--data "${payload}" \
+		--header "Content-Type: application/json" \
+		--output /dev/null \
+		--request PATCH \
+		--write-out "%{http_code}" \
+		"${LIFERAY_URL}/o/headless-commerce-admin-order/v1.0/orderItems/by-externalReferenceCode/${external_reference_code}" || true)
+
+	if [[ ${status} != 2* ]]
+	then
+		echo "Unable to set the price for order item ${external_reference_code}." >&2
+	fi
+}
+
+# Commerce prices an order from the channel price list when it is placed, so the
+# unitPrice an order item carries lands on the item but leaves the item's final
+# price and the order's total at zero. A seeded marketplace sale needs a real
+# total -- the Marketplace Finance Orders page lists only orders that have one,
+# and the Marketplace Payments page totals them per publisher -- so the prices
+# the order file authors are applied with a follow-up PATCH per order item and
+# one for the order. An order whose items are all priced at zero is left alone.
+
+function _set_order_prices {
+	local file="${1}"
+	local order_id="${2}"
+
+	local lines
+
+	mapfile -t lines < <(_read_order_prices "${file}")
+
+	((${#lines[@]} == 0)) && return 0
+
+	local line
+
+	for line in "${lines[@]:1}"
+	do
+		local external_reference_code
+		local final_price
+
+		IFS=$'\t' read -r external_reference_code final_price <<< "${line}"
+
+		_set_order_item_price "${external_reference_code}" "${final_price}"
+	done
+
+	local status
+
+	status=$(_curl \
+		--data "{\"subtotal\": ${lines[0]}, \"total\": ${lines[0]}}" \
+		--header "Content-Type: application/json" \
+		--output /dev/null \
+		--request PATCH \
+		--write-out "%{http_code}" \
+		"${LIFERAY_URL}/o/headless-commerce-admin-order/v1.0/orders/${order_id}" || true)
+
+	if [[ ${status} == 2* ]]
+	then
+		echo "Set prices for order ${order_id}."
+	else
+		echo "Unable to set prices for order ${order_id}." >&2
 	fi
 }
 

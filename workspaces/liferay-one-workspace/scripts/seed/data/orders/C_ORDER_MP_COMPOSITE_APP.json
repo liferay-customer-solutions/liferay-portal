@@ -1,0 +1,36 @@
+{
+	"entitlements": [
+		{
+			"endDate": "2027-01-15T00:00:00Z",
+			"externalReferenceCode": "C_ENT_MP_COMPOSITE_APP",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Test Composite App",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-002",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MP_COMPOSITE_APP",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_TEST_COMPOSITE_APP",
+			"startDate": "2026-01-15T00:00:00Z"
+		}
+	],
+	"order": {
+		"accountExternalReferenceCode": "ACCNT-002",
+		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
+		"currencyCode": "USD",
+		"externalReferenceCode": "C_ORDER_MP_COMPOSITE_APP",
+		"orderItems": [
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_MP_COMPOSITE_APP",
+				"name": "Test Composite App",
+				"quantity": 2,
+				"skuExternalReferenceCode": "PRDCT-TEST-COMPOSITE-APP",
+				"unitPrice": 750
+			}
+		],
+		"orderStatus": 0,
+		"orderTypeExternalReferenceCode": "COMPOSITE_APP",
+		"publisherSalesSummaryExternalReferenceCode": "PSS_LIFERAY_SUPPLIER_Q1_2026"
+	},
+	"paymentStatus": 0,
+	"purchaseOrderNumber": "PO-MP-COMPOSITE-APP"
+}

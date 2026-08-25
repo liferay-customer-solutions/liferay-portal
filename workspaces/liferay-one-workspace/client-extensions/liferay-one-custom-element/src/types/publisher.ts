@@ -66,7 +66,7 @@ export type PublisherSalesSummaryEntry = {
 	publisherToAccountERC: string;
 	publisherToCommerceOrder: Order[];
 	quarter: string;
-	r_accountEntryToPublisher_accountEntryERC: string;
-	r_accountEntryToPublisher_accountEntryId: number;
+	r_accountEntryToPublisherSalesSummary_accountEntryERC: string;
+	r_accountEntryToPublisherSalesSummary_accountEntryId: number;
 	scopeId: number;
 };

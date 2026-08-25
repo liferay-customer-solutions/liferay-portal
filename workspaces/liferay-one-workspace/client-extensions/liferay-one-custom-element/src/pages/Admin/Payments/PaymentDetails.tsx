@@ -22,11 +22,10 @@ import {exportToCSV} from '~/utils/exportToCSV';
 import {formatCurrency} from '~/utils/formatCurrency';
 import {
 	PaymentStatus as PaymentStatusCode,
+	PublisherPayoutStatus,
 	getTotalByOrderKey,
 } from '~/utils/orderUtils';
 import {safeJSONParse} from '~/utils/safeJSONParse';
-
-import {PublisherPayoutStatus} from './Payments';
 
 import type {AccountPostalAddresses} from '~/types/accounts';
 
@@ -333,15 +332,12 @@ const PaymentDetails = () => {
 									quantity?: number;
 									thumbnail?: string;
 								};
-								const [skuOption] = safeJSONParse(
-									placedOrderItem.options ?? null,
-									[
-										{
-											skuOptionValueKey: 'Standard',
-											skuOptionValueName: 'Standard',
-										},
-									]
-								);
+								const [skuOption] = safeJSONParse<
+									{
+										skuOptionValueKey?: string;
+										skuOptionValueName?: string;
+									}[]
+								>(placedOrderItem.options || null, []);
 
 								return (
 									<div className="pt-2">
@@ -361,7 +357,8 @@ const PaymentDetails = () => {
 												<small className="finance-dashboard-secondary-text mb-0 pb-0 text-capitalize text-muted">
 													{`${placedOrderItem.quantity} ${
 														skuOption?.skuOptionValueKey ||
-														skuOption?.skuOptionValueName
+														skuOption?.skuOptionValueName ||
+														'Standard'
 													} license`}
 												</small>
 											</span>

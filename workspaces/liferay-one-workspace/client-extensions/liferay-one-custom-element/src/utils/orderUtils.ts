@@ -73,6 +73,14 @@ export const PaymentStatus = {
 
 export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus];
 
+export const PublisherPayoutStatus = {
+	PAID: 'paid',
+	UNPAID: 'unpaid',
+} as const;
+
+export type PublisherPayoutStatus =
+	(typeof PublisherPayoutStatus)[keyof typeof PublisherPayoutStatus];
+
 export const APP_ORDER_TYPES: readonly OrderTypes[] = [
 	'CLIENT_EXTENSION',
 	'CLOUD_APP',

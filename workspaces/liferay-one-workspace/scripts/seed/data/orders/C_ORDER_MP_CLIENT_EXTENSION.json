@@ -1,0 +1,36 @@
+{
+	"entitlements": [
+		{
+			"endDate": "2027-01-15T00:00:00Z",
+			"externalReferenceCode": "C_ENT_MP_CLIENT_EXTENSION",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "Test Client Extension",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-001",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MP_CLIENT_EXTENSION",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_TEST_CLIENT_EXTENSION",
+			"startDate": "2026-01-15T00:00:00Z"
+		}
+	],
+	"order": {
+		"accountExternalReferenceCode": "ACCNT-001",
+		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
+		"currencyCode": "USD",
+		"externalReferenceCode": "C_ORDER_MP_CLIENT_EXTENSION",
+		"orderItems": [
+			{
+				"externalReferenceCode": "C_ORDER_ITEM_MP_CLIENT_EXTENSION",
+				"name": "Test Client Extension",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-TEST-CLIENT-EXTENSION",
+				"unitPrice": 1200
+			}
+		],
+		"orderStatus": 0,
+		"orderTypeExternalReferenceCode": "CLIENT_EXTENSION",
+		"publisherSalesSummaryExternalReferenceCode": "PSS_LIFERAY_SUPPLIER_Q1_2026"
+	},
+	"paymentStatus": 0,
+	"purchaseOrderNumber": "PO-MP-CLIENT-EXTENSION"
+}
