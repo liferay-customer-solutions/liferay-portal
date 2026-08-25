@@ -3,16 +3,31 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {useProject} from '~/context/ProjectContext';
 import {useFetch} from '~/hooks/useFetch';
-import {useProjectEnvironments} from '~/hooks/useProjectEnvironments';
 
 import type {APIResponse} from '~/types/api';
+
+const GRANT_TYPE_UNLIMITED = 'unlimited';
 
 export type ProjectUsage = {
 	consumed: number;
 	included: number;
 	period: string;
 	unit: string;
+	unlimited: boolean;
+};
+
+type EntitlementDefinitionNode = {
+	r_usageDefinitionToEntitlementDefinition_c_usageDefinitionId?: number;
+	unit?: string;
+};
+
+type EntitlementNode = {
+	grantType?: string;
+	id: number;
+	quantity?: number;
+	r_entitlementDefinitionToEntitlement_c_entitlementDefinition?: EntitlementDefinitionNode;
 };
 
 type UsageDefinitionNode = {
@@ -24,20 +39,67 @@ type UsageDefinitionNode = {
 
 type UsageEventNode = {
 	quantity?: number;
-	r_usageDefinitionToUsageEvent_c_usageDefinitionId?: number;
+	r_entitlementToUsageEvent_c_entitlementId?: number;
+};
+
+type Allowance = {
+	entitlementIds: number[];
+	included: number;
+	unlimited: boolean;
 };
 
 export function useProjectUsage() {
-	const {environments} = useProjectEnvironments();
+	const {projectId} = useProject();
 
-	const environmentIds = environments.map((environment) => environment.id);
+	const {data: entitlementsData} = useFetch<APIResponse<EntitlementNode>>(
+		projectId ? '/o/c/entitlements' : null,
+		{
+			params: {
+				filter: `r_projectToEntitlement_c_projectERC eq '${projectId}'`,
+				nestedFields: 'entitlementDefinition',
+				pageSize: 200,
+			},
+		}
+	);
 
-	const eventFilter = environmentIds
-		.map((id) => `r_environmentToUsageEvent_c_environmentId eq '${id}'`)
+	const allowancesByDefinitionId = new Map<number, Allowance>();
+
+	for (const entitlement of entitlementsData?.items ?? []) {
+		const definition =
+			entitlement.r_entitlementDefinitionToEntitlement_c_entitlementDefinition;
+
+		const usageDefinitionId =
+			definition?.r_usageDefinitionToEntitlementDefinition_c_usageDefinitionId;
+
+		if (!usageDefinitionId) {
+			continue;
+		}
+
+		const allowance = allowancesByDefinitionId.get(usageDefinitionId) ?? {
+			entitlementIds: [],
+			included: 0,
+			unlimited: false,
+		};
+
+		allowance.entitlementIds.push(entitlement.id);
+		allowance.included += entitlement.quantity ?? 0;
+		allowance.unlimited =
+			allowance.unlimited ||
+			entitlement.grantType === GRANT_TYPE_UNLIMITED;
+
+		allowancesByDefinitionId.set(usageDefinitionId, allowance);
+	}
+
+	const entitlementIds = Array.from(
+		allowancesByDefinitionId.values()
+	).flatMap((allowance) => allowance.entitlementIds);
+
+	const eventFilter = entitlementIds
+		.map((id) => `r_entitlementToUsageEvent_c_entitlementId eq '${id}'`)
 		.join(' or ');
 
 	const {data: definitionsData} = useFetch<APIResponse<UsageDefinitionNode>>(
-		'/o/c/usagedefinitions',
+		allowancesByDefinitionId.size ? '/o/c/usagedefinitions' : null,
 		{params: {pageSize: 200}}
 	);
 
@@ -46,35 +108,43 @@ export function useProjectUsage() {
 		error,
 		isLoading: loading,
 	} = useFetch<APIResponse<UsageEventNode>>(
-		environmentIds.length ? '/o/c/usageevents' : null,
+		entitlementIds.length ? '/o/c/usageevents' : null,
 		{params: {filter: eventFilter, pageSize: 500}}
 	);
 
-	const consumedByDefinitionId = new Map<number, number>();
+	const consumedByEntitlementId = new Map<number, number>();
 
 	for (const event of eventsData?.items ?? []) {
-		const definitionId =
-			event.r_usageDefinitionToUsageEvent_c_usageDefinitionId;
+		const entitlementId = event.r_entitlementToUsageEvent_c_entitlementId;
 
-		if (definitionId === undefined) {
+		if (entitlementId === undefined) {
 			continue;
 		}
 
-		consumedByDefinitionId.set(
-			definitionId,
-			(consumedByDefinitionId.get(definitionId) ?? 0) +
+		consumedByEntitlementId.set(
+			entitlementId,
+			(consumedByEntitlementId.get(entitlementId) ?? 0) +
 				(event.quantity ?? 0)
 		);
 	}
 
 	const usage: ProjectUsage[] = (definitionsData?.items ?? [])
-		.filter((definition) => consumedByDefinitionId.has(definition.id))
-		.map((definition) => ({
-			consumed: consumedByDefinitionId.get(definition.id) ?? 0,
-			included: definition.quantity ?? 0,
-			period: definition.period ?? '',
-			unit: definition.unit ?? '',
-		}));
+		.filter((definition) => allowancesByDefinitionId.has(definition.id))
+		.map((definition) => {
+			const allowance = allowancesByDefinitionId.get(definition.id)!;
+
+			return {
+				consumed: allowance.entitlementIds.reduce(
+					(total, id) =>
+						total + (consumedByEntitlementId.get(id) ?? 0),
+					0
+				),
+				included: allowance.included,
+				period: definition.period ?? '',
+				unit: definition.unit ?? '',
+				unlimited: allowance.unlimited,
+			};
+		});
 
 	return {error, loading, usage};
 }

@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import i18n from '~/i18n';
+
 import {DetailsSection} from '../components/SectionedDetailsCard/SectionedDetailsCard';
 
 import type {ProjectUsage} from '~/hooks/useProjectUsage';
@@ -22,9 +24,13 @@ export function buildUtilizationSections(
 		{
 			rows: usage.map((row) => ({
 				label: row.period ? `${row.unit} (${row.period})` : row.unit,
-				value: `${formatQuantity(row.consumed)} / ${formatQuantity(
-					row.included
-				)}`,
+				value: row.unlimited
+					? `${formatQuantity(row.consumed)} / ${i18n.translate(
+							'unlimited'
+						)}`
+					: `${formatQuantity(row.consumed)} / ${formatQuantity(
+							row.included
+						)}`,
 			})),
 		},
 	];
