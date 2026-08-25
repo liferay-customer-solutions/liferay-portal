@@ -15,6 +15,16 @@
 			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
+	"licenseKeys": [
+		{
+			"externalReferenceCode": "C_LICENSE_KEY_APP_EXPIRED",
+			"r_entitlementToLicenseKey_c_entitlementERC": "C_ENT_APP"
+		},
+		{
+			"externalReferenceCode": "C_LICENSE_KEY_APP_PRODUCTION",
+			"r_entitlementToLicenseKey_c_entitlementERC": "C_ENT_APP"
+		}
+	],
 	"order": {
 		"accountExternalReferenceCode": "ACCNT-006",
 		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",

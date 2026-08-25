@@ -99,6 +99,16 @@
 			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
+	"licenseKeys": [
+		{
+			"externalReferenceCode": "C_LICENSE_KEY_LDP_EXPIRED",
+			"r_entitlementToLicenseKey_c_entitlementERC": "C_ENT_DATA_PLATFORM"
+		},
+		{
+			"externalReferenceCode": "C_LICENSE_KEY_LDP_PRODUCTION",
+			"r_entitlementToLicenseKey_c_entitlementERC": "C_ENT_DATA_PLATFORM"
+		}
+	],
 	"order": {
 		"accountExternalReferenceCode": "ACCNT-028",
 		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
