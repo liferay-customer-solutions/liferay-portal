@@ -112,6 +112,21 @@
 			"availableLanguages": [
 				"en-US"
 			],
+			"externalReferenceCode": "MARKETPLACE_LISTING",
+			"name": "marketplace-listing",
+			"viewableBy": "Anyone"
+		},
+		{
+			"assetTypes": [
+				{
+					"required": false,
+					"subtype": "AllAssetSubtypes",
+					"type": "Product"
+				}
+			],
+			"availableLanguages": [
+				"en-US"
+			],
 			"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE",
 			"name": "marketplace-product-type",
 			"viewableBy": "Anyone"
