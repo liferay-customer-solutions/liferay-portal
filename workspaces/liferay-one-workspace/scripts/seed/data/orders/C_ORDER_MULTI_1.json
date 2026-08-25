@@ -15,7 +15,7 @@
 			"startDate": "2024-07-01T00:00:00Z"
 		},
 		{
-			"endDate": "2024-01-01T00:00:00Z",
+			"endDate": "2026-07-01T00:00:00Z",
 			"externalReferenceCode": "C_ENT_MULTI_1_CONTENT_MARKETING",
 			"grantType": "fixed",
 			"maxQuantity": 1,
@@ -26,7 +26,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MULTI_1",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_CONTENT_MARKETING",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-025",
-			"startDate": "2022-01-01T00:00:00Z"
+			"startDate": "2024-07-01T00:00:00Z"
 		},
 		{
 			"endDate": "2026-12-31T00:00:00Z",

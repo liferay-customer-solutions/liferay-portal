@@ -12,7 +12,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_DOCUMENT_LIBRARY_SIZE",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -26,7 +26,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_DATABASE",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -40,7 +40,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_EXTENSIONS_RAM",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -54,7 +54,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_EXTENSIONS_VCPUS",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -68,7 +68,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_LOGS",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -82,7 +82,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_STORAGE",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -96,7 +96,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_TRAFFIC_NETWORKING",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -110,7 +110,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_MARKER",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -124,7 +124,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_RAM",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -138,7 +138,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_SITES",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -152,7 +152,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_VCPU",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
 	"order": {
