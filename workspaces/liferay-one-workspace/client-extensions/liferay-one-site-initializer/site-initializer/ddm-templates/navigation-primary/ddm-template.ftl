@@ -1,12 +1,3 @@
-<#--
-Renders the site navigation menu the tag supplies as `entries`. Liferay filters
-that tree by each menu item's own permissions and resolves every link, so an
-item standing for a page the current user may not view never reaches this
-template and there is no page visibility logic here. An item is a dropdown
-parent when it has children. The headless API supplies only the presentation
-custom fields, which it resolves for the current locale.
--->
-
 <#function getCustomFieldsMaps navigationMenuItems>
 	<#local customFieldsMaps = {} />
 
@@ -33,22 +24,12 @@ custom fields, which it resolves for the current locale.
 </#function>
 
 <#function getCustomFields navItem>
-	<#-- On a site navigation menu item, getLayoutId() is the menu item id. -->
+	<#local navigationMenuItemId = navItem.getLayoutId() />
 
-	<#return (customFieldsMaps[navItem.getLayoutId()?c])!{} />
+	<#return (customFieldsMaps[navigationMenuItemId?c])!{} />
 </#function>
 
-<#assign
-	canBypassMyAccount = false
-	customFieldsMaps = {}
-	selectedSectionPlid = 0
-/>
-
-<#--
-The header fragment's JavaScript reads this to decide whether to hide the account
-menu from a user who has no account of their own. It is the one rule here that a
-page permission cannot carry.
--->
+<#assign canBypassMyAccount = false />
 
 <#attempt>
 	<#list themeDisplay.getUser().getRoles() as userRole>
@@ -67,8 +48,6 @@ page permission cannot carry.
 <#recover>
 	<#assign customFieldsMaps = {} />
 </#attempt>
-
-<#-- A section stays selected anywhere below its top level page. -->
 
 <#attempt>
 	<#assign selectedSectionPlid = themeDisplay.getLayout().getAncestorPlid() />

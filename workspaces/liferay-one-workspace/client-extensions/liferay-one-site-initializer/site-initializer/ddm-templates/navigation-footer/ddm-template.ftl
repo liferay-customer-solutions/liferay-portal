@@ -1,9 +1,3 @@
-<#--
-Renders the footer navigation menu the tag supplies as `entries`, already
-filtered by each menu item's own permissions: a section whose page the current
-user may not view, or whose every link is out of reach, does not render at all.
--->
-
 <#attempt>
 	<#list entries![] as footerNavSection>
 		<#assign footerNavItems = footerNavSection.getChildren() />
@@ -15,7 +9,7 @@ user may not view, or whose every link is out of reach, does not render at all.
 				<ul class="c-p-0 d-flex flex-column list-unstyled text-decoration-none">
 					<#list footerNavItems as footerNavItem>
 						<li<#if !footerNavItem?is_last> class="c-mb-3"</#if>>
-							<a class="c-p-0" href="${footerNavItem.getRegularURL()}"<#if ((footerNavItem.getTarget())!"")?contains("_blank")> target="_blank"</#if>>${footerNavItem.getName()}</a>
+							<a class="c-p-0" href="${footerNavItem.getRegularURL()}" ${footerNavItem.getTarget()}>${footerNavItem.getName()}</a>
 						</li>
 					</#list>
 				</ul>
