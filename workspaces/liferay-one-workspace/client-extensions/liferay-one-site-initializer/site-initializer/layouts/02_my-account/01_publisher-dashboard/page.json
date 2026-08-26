@@ -16,12 +16,17 @@
 			"actionIds": [
 				"VIEW"
 			],
+			"roleName": "Marketplace Publisher",
+			"scope": 4
+		},
+		{
+			"actionIds": [
+			],
 			"roleName": "Site Member",
 			"scope": 4
 		},
 		{
 			"actionIds": [
-				"VIEW"
 			],
 			"roleName": "User",
 			"scope": 4

@@ -41,14 +41,12 @@ the headless API, which resolves the custom fields for the current locale.
 <#assign
 	canBypassMyAccount = false
 	customFieldsMaps = {}
-	hasMarketplacePublisherRole = false
 />
 
 <#--
-Two rules the theme cannot read off a page. The account menu bypass is consumed
-by the header fragment's JavaScript. Publisher Dashboard points at a page every
-signed in user may view, so granting that page VIEW to the Marketplace Publisher
-role alone is what would retire the second rule.
+The one rule the theme cannot read off a page: the header fragment's JavaScript
+reads this to decide whether to hide the account menu from a user who has no
+account of their own.
 -->
 
 <#attempt>
@@ -59,17 +57,10 @@ role alone is what would retire the second rule.
 			<#if stringUtil.equals(userRoleName, "Administrator") || stringUtil.equals(userRoleName, "Liferay Staff")>
 				<#assign canBypassMyAccount = true />
 			</#if>
-
-			<#if stringUtil.equals(userRoleName, "Marketplace Publisher")>
-				<#assign hasMarketplacePublisherRole = true />
-			</#if>
 		</#list>
 	</#if>
 <#recover>
-	<#assign
-		canBypassMyAccount = false
-		hasMarketplacePublisherRole = false
-	/>
+	<#assign canBypassMyAccount = false />
 </#attempt>
 
 <#attempt>
@@ -190,33 +181,31 @@ role alone is what would retire the second rule.
 								preheaderText = (navTertiaryItemCustomFieldsMap["Menu Item Preheader"])!""
 							/>
 
-							<#if !(stringUtil.equals(navTertiaryItemName, "Publisher Dashboard") && !hasMarketplacePublisherRole)>
-								<li class="adt-submenu-item-content ${menuItemType?lower_case}-type grid-column-span-${childColumns}">
-									<a class="adt-submenu-item-link" href="${navTertiaryItem.getRegularURL()}"<#if ((navTertiaryItem.getTarget())!"")?contains("_blank")> target="_blank"</#if> tabindex="4">
-										<#if stringUtil.equals(menuItemType, "Image") && imageURL?has_content>
-											<img class="adt-submenu-item-image" loading="lazy" src="${imageURL}" />
+							<li class="adt-submenu-item-content ${menuItemType?lower_case}-type grid-column-span-${childColumns}">
+								<a class="adt-submenu-item-link" href="${navTertiaryItem.getRegularURL()}"<#if ((navTertiaryItem.getTarget())!"")?contains("_blank")> target="_blank"</#if> tabindex="4">
+									<#if stringUtil.equals(menuItemType, "Image") && imageURL?has_content>
+										<img class="adt-submenu-item-image" loading="lazy" src="${imageURL}" />
+									</#if>
+
+									<div class="adt-submenu-item-text">
+										<#if stringUtil.equals(menuItemType, "Image") && preheaderText?has_content>
+											<div class="adt-submenu-item-preheader color-neutral-3 font-weight-semi-bold">
+												${preheaderText}
+											</div>
 										</#if>
 
-										<div class="adt-submenu-item-text">
-											<#if stringUtil.equals(menuItemType, "Image") && preheaderText?has_content>
-												<div class="adt-submenu-item-preheader color-neutral-3 font-weight-semi-bold">
-													${preheaderText}
-												</div>
-											</#if>
-
-											<div class="adt-submenu-item-title h5" data-nav-name="${navTertiaryItemName}">
-												${navTertiaryItemName}
-											</div>
-
-											<#if descriptionText?has_content>
-												<div class="adt-submenu-item-description">
-													${descriptionText}
-												</div>
-											</#if>
+										<div class="adt-submenu-item-title h5" data-nav-name="${navTertiaryItemName}">
+											${navTertiaryItemName}
 										</div>
-									</a>
-								</li>
-							</#if>
+
+										<#if descriptionText?has_content>
+											<div class="adt-submenu-item-description">
+												${descriptionText}
+											</div>
+										</#if>
+									</div>
+								</a>
+							</li>
 						</#list>
 					</ul>
 				</#list>
