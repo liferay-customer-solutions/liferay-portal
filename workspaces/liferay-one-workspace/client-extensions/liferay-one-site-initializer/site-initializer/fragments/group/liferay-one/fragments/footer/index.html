@@ -1,5 +1,3 @@
-[#assign footerNavigationMenuId = 0 /]
-
 [#attempt]
 	[#assign footerNavigationMenuId = restClient.get("/headless-delivery/v1.0/sites/" + themeDisplay.getScopeGroupId()?c + "/navigation-menus/by-external-reference-code/LO_FOOTER_NAV").id /]
 [#recover]

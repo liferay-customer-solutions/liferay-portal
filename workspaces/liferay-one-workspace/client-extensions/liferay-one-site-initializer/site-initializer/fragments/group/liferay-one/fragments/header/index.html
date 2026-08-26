@@ -6,14 +6,6 @@
 
 [#assign uiAvatarsURL = "" /]
 
-[#--
-The navigation menu tag only filters a menu by its items' permissions when it is
-told which menu to render. Left at 0 it falls back to the page hierarchy, which
-drops hidden pages and leaves the display template to resolve links itself.
---]
-
-[#assign primaryNavigationMenuId = 0 /]
-
 [#attempt]
 	[#assign primaryNavigationMenuId = restClient.get("/headless-delivery/v1.0/sites/" + themeDisplay.getScopeGroupId()?c + "/navigation-menus/by-external-reference-code/LO_PRIMARY_NAV").id /]
 [#recover]
