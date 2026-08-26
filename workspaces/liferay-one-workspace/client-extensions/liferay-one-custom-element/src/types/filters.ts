@@ -195,7 +195,7 @@ export const filterSchema: FilterSchemas = {
 						value: `${'Workflow Action'}`,
 					},
 				],
-				type: 'select',
+				type: 'multiselect',
 			}),
 			baseFilters.dateCreated,
 			overrides(baseFilters.version, {
@@ -233,7 +233,7 @@ export const filterSchema: FilterSchemas = {
 					},
 				],
 				removeQuoteMark: true,
-				type: 'select',
+				type: 'multiselect',
 			}),
 		],
 		name: 'administratorApps',
