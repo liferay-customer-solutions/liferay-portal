@@ -19,7 +19,6 @@ import type {PublisherRequestInfo} from '~/types/publisher';
 
 export const PublisherStatusDisplayType = {
 	completed: 'success',
-	inProgress: 'info',
 	open: 'secondary',
 	rejected: 'danger',
 };

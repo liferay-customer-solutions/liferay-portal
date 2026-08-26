@@ -27,7 +27,6 @@ type PublisherSummaryContentProps = {
 
 const STATUS = {
 	completed: 'success',
-	inProgress: 'info',
 	open: 'secondary',
 	rejected: 'danger',
 };

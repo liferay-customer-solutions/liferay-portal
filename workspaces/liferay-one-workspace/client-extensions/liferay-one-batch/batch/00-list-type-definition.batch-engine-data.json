@@ -423,11 +423,6 @@
 					"name": "Completed"
 				},
 				{
-					"externalReferenceCode": "LT_REQUEST_STATUS_IN_PROGRESS",
-					"key": "inProgress",
-					"name": "In Progress"
-				},
-				{
 					"externalReferenceCode": "LT_REQUEST_STATUS_OPEN",
 					"key": "open",
 					"name": "Open"
