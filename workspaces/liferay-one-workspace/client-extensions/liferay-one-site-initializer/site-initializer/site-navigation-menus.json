@@ -4,15 +4,17 @@
 		"menuItems": [
 			{
 				"externalReferenceCode": "LO_NAV_FOOTER_MY_ACCOUNT",
+				"friendlyURL": "/my-account",
 				"menuItems": [
 					{
 						"externalReferenceCode": "LO_NAV_FOOTER_MY_ACCOUNT_PROJECT",
+						"friendlyURL": "/my-account",
 						"name_i18n": {
 							"en_US": "Project"
 						},
-						"type": "url",
-						"url": "/my-account",
-						"useNewTab": false
+						"privateLayout": false,
+						"type": "layout",
+						"useCustomName": true
 					},
 					{
 						"externalReferenceCode": "LO_NAV_FOOTER_MY_ACCOUNT_ORDERS",
@@ -45,11 +47,13 @@
 				"name_i18n": {
 					"en_US": "My Account"
 				},
-				"title": "My Account",
-				"type": "node"
+				"privateLayout": false,
+				"type": "layout",
+				"useCustomName": true
 			},
 			{
 				"externalReferenceCode": "LO_NAV_FOOTER_SUPPORT",
+				"friendlyURL": "/support",
 				"menuItems": [
 					{
 						"externalReferenceCode": "LO_NAV_FOOTER_SUPPORT_TOOLS",
@@ -62,21 +66,23 @@
 					},
 					{
 						"externalReferenceCode": "LO_NAV_FOOTER_SUPPORT_BUSINESS_EVENTS",
+						"friendlyURL": "/support/business-events",
 						"name_i18n": {
 							"en_US": "Business Events"
 						},
-						"type": "url",
-						"url": "/support/business-events",
-						"useNewTab": false
+						"privateLayout": false,
+						"type": "layout",
+						"useCustomName": true
 					},
 					{
 						"externalReferenceCode": "LO_NAV_FOOTER_SUPPORT_CUSTOMER_PORTAL_HELP",
+						"friendlyURL": "/support/customer-portal-help",
 						"name_i18n": {
 							"en_US": "One Liferay Help"
 						},
-						"type": "url",
-						"url": "/support/customer-portal-help",
-						"useNewTab": false
+						"privateLayout": false,
+						"type": "layout",
+						"useCustomName": true
 					},
 					{
 						"externalReferenceCode": "LO_NAV_FOOTER_SUPPORT_LIFERAY_LEARN",
@@ -100,63 +106,71 @@
 				"name_i18n": {
 					"en_US": "Support"
 				},
-				"title": "Support",
-				"type": "node"
+				"privateLayout": false,
+				"type": "layout",
+				"useCustomName": true
 			},
 			{
 				"externalReferenceCode": "LO_NAV_FOOTER_MARKETPLACE",
+				"friendlyURL": "/marketplace",
 				"menuItems": [
 					{
 						"externalReferenceCode": "LO_NAV_FOOTER_MARKETPLACE_OVERVIEW",
+						"friendlyURL": "/marketplace",
 						"name_i18n": {
 							"en_US": "Marketplace Overview"
 						},
-						"type": "url",
-						"url": "/marketplace",
-						"useNewTab": false
+						"privateLayout": false,
+						"type": "layout",
+						"useCustomName": true
 					},
 					{
 						"externalReferenceCode": "LO_NAV_FOOTER_MARKETPLACE_PRODUCTS_CATALOG",
+						"friendlyURL": "/marketplace/products",
 						"name_i18n": {
 							"en_US": "Products Catalog"
 						},
-						"type": "url",
-						"url": "/marketplace/products",
-						"useNewTab": false
+						"privateLayout": false,
+						"type": "layout",
+						"useCustomName": true
 					},
 					{
 						"externalReferenceCode": "LO_NAV_FOOTER_MARKETPLACE_APPLICATIONS_CATALOG",
+						"friendlyURL": "/marketplace/applications",
 						"name_i18n": {
 							"en_US": "Applications Catalog"
 						},
-						"type": "url",
-						"url": "/marketplace/applications",
-						"useNewTab": false
+						"privateLayout": false,
+						"type": "layout",
+						"useCustomName": true
 					},
 					{
 						"externalReferenceCode": "LO_NAV_FOOTER_MARKETPLACE_SOLUTIONS_CATALOG",
+						"friendlyURL": "/marketplace/solutions",
 						"name_i18n": {
 							"en_US": "Solutions Catalog"
 						},
-						"type": "url",
-						"url": "/marketplace/solutions",
-						"useNewTab": false
+						"privateLayout": false,
+						"type": "layout",
+						"useCustomName": true
 					},
 					{
 						"externalReferenceCode": "LO_NAV_FOOTER_MARKETPLACE_BECOME_A_PUBLISHER",
+						"friendlyURL": "/marketplace/become-a-publisher",
 						"name_i18n": {
 							"en_US": "Become a Publisher"
 						},
-						"type": "url",
-						"url": "/marketplace/become-a-publisher",
-						"useNewTab": false
+						"privateLayout": false,
+						"type": "layout",
+						"useCustomName": true
 					}
 				],
 				"name_i18n": {
 					"en_US": "Marketplace"
 				},
-				"title": "Marketplace",
-				"type": "node"
+				"privateLayout": false,
+				"type": "layout",
+				"useCustomName": true
 			},
 			{
 				"externalReferenceCode": "LO_NAV_FOOTER_EXPAND_CONNECT",
@@ -198,18 +212,20 @@
 		"menuItems": [
 			{
 				"externalReferenceCode": "LO_NAV_MY_ACCOUNT",
+				"friendlyURL": "/my-account",
 				"menuItems": [
 					{
 						"externalReferenceCode": "LO_NAV_MY_ACCOUNT_PROJECT_AND_ORDERS",
 						"menuItems": [
 							{
 								"externalReferenceCode": "LO_NAV_MY_ACCOUNT_PROJECTS",
+								"friendlyURL": "/my-account",
 								"name_i18n": {
 									"en_US": "Projects"
 								},
-								"type": "url",
-								"url": "/my-account",
-								"useNewTab": false
+								"privateLayout": false,
+								"type": "layout",
+								"useCustomName": true
 							},
 							{
 								"externalReferenceCode": "LO_NAV_MY_ACCOUNT_ORDERS",
@@ -250,12 +266,13 @@
 							},
 							{
 								"externalReferenceCode": "LO_NAV_MY_ACCOUNT_PUBLISHER_DASHBOARD",
+								"friendlyURL": "/my-account/publisher-dashboard",
 								"name_i18n": {
 									"en_US": "Publisher Dashboard"
 								},
-								"type": "url",
-								"url": "/my-account/publisher-dashboard",
-								"useNewTab": false
+								"privateLayout": false,
+								"type": "layout",
+								"useCustomName": true
 							}
 						],
 						"name_i18n": {
@@ -268,11 +285,13 @@
 				"name_i18n": {
 					"en_US": "My Account"
 				},
-				"title": "My Account",
-				"type": "node"
+				"privateLayout": false,
+				"type": "layout",
+				"useCustomName": true
 			},
 			{
 				"externalReferenceCode": "LO_NAV_SUPPORT",
+				"friendlyURL": "/support",
 				"menuItems": [
 					{
 						"externalReferenceCode": "LO_NAV_SUPPORT_SUPPORT",
@@ -303,27 +322,29 @@
 							},
 							{
 								"externalReferenceCode": "LO_NAV_SUPPORT_BUSINESS_EVENTS",
+								"friendlyURL": "/support/business-events",
 								"name_i18n": {
 									"en_US": "Business Events",
 									"es_ES": "Eventos de Negocio",
 									"ja_JP": "ビジネスイベント",
 									"pt_BR": "Eventos de Negócios"
 								},
-								"type": "url",
-								"url": "/support/business-events",
-								"useNewTab": false
+								"privateLayout": false,
+								"type": "layout",
+								"useCustomName": true
 							},
 							{
 								"externalReferenceCode": "LO_NAV_SUPPORT_TICKETS_ATTACHMENTS",
+								"friendlyURL": "/support/ticket-attachments",
 								"name_i18n": {
 									"en_US": "Ticket Attachments",
 									"es_ES": "Adjuntos de Ticket",
 									"ja_JP": "チケット添付ファイル",
 									"pt_BR": "Anexos de Ticket"
 								},
-								"type": "url",
-								"url": "/support/ticket-attachments",
-								"useNewTab": false
+								"privateLayout": false,
+								"type": "layout",
+								"useCustomName": true
 							}
 						],
 						"name_i18n": {
@@ -340,15 +361,16 @@
 						"menuItems": [
 							{
 								"externalReferenceCode": "LO_NAV_SUPPORT_CUSTOMER_PORTAL_HELP",
+								"friendlyURL": "/support/customer-portal-help",
 								"name_i18n": {
 									"en_US": "One Liferay Help",
 									"es_ES": "Ayuda de One Liferay",
 									"ja_JP": "One Liferayヘルプ",
 									"pt_BR": "Ajuda do One Liferay"
 								},
-								"type": "url",
-								"url": "/support/customer-portal-help",
-								"useNewTab": false
+								"privateLayout": false,
+								"type": "layout",
+								"useCustomName": true
 							},
 							{
 								"externalReferenceCode": "LO_NAV_SUPPORT_LIFERAY_LEARN",
@@ -389,15 +411,16 @@
 						"menuItems": [
 							{
 								"externalReferenceCode": "LO_NAV_SUPPORT_ANNOUNCEMENTS",
+								"friendlyURL": "/support/announcements",
 								"name_i18n": {
 									"en_US": "Announcements",
 									"es_ES": "Anuncios",
 									"ja_JP": "アナウンスメント",
 									"pt_BR": "Avisos"
 								},
-								"type": "url",
-								"url": "/support/announcements",
-								"useNewTab": false
+								"privateLayout": false,
+								"type": "layout",
+								"useCustomName": true
 							},
 							{
 								"externalReferenceCode": "LO_NAV_SUPPORT_RELEASE_NOTES",
@@ -452,23 +475,26 @@
 					"ja_JP": "サポート",
 					"pt_BR": "Suporte"
 				},
-				"title": "Support",
-				"type": "node"
+				"privateLayout": false,
+				"type": "layout",
+				"useCustomName": true
 			},
 			{
 				"externalReferenceCode": "LO_NAV_MARKETPLACE",
+				"friendlyURL": "/marketplace",
 				"menuItems": [
 					{
 						"externalReferenceCode": "LO_NAV_MARKETPLACE_LANDING_PAGE",
 						"menuItems": [
 							{
 								"externalReferenceCode": "LO_NAV_MARKETPLACE_OVERVIEW",
+								"friendlyURL": "/marketplace",
 								"name_i18n": {
 									"en_US": "Marketplace Overview"
 								},
-								"type": "url",
-								"url": "/marketplace",
-								"useNewTab": false
+								"privateLayout": false,
+								"type": "layout",
+								"useCustomName": true
 							}
 						],
 						"name_i18n": {
@@ -482,30 +508,33 @@
 						"menuItems": [
 							{
 								"externalReferenceCode": "LO_NAV_MARKETPLACE_PRODUCTS_CATALOG",
+								"friendlyURL": "/marketplace/products",
 								"name_i18n": {
 									"en_US": "Products Catalog"
 								},
-								"type": "url",
-								"url": "/marketplace/products",
-								"useNewTab": false
+								"privateLayout": false,
+								"type": "layout",
+								"useCustomName": true
 							},
 							{
 								"externalReferenceCode": "LO_NAV_MARKETPLACE_APPLICATIONS_CATALOG",
+								"friendlyURL": "/marketplace/applications",
 								"name_i18n": {
 									"en_US": "Applications Catalog"
 								},
-								"type": "url",
-								"url": "/marketplace/applications",
-								"useNewTab": false
+								"privateLayout": false,
+								"type": "layout",
+								"useCustomName": true
 							},
 							{
 								"externalReferenceCode": "LO_NAV_MARKETPLACE_SOLUTIONS_CATALOG",
+								"friendlyURL": "/marketplace/solutions",
 								"name_i18n": {
 									"en_US": "Solutions Catalog"
 								},
-								"type": "url",
-								"url": "/marketplace/solutions",
-								"useNewTab": false
+								"privateLayout": false,
+								"type": "layout",
+								"useCustomName": true
 							}
 						],
 						"name_i18n": {
@@ -518,8 +547,9 @@
 				"name_i18n": {
 					"en_US": "Marketplace"
 				},
-				"title": "Marketplace",
-				"type": "node"
+				"privateLayout": false,
+				"type": "layout",
+				"useCustomName": true
 			},
 			{
 				"externalReferenceCode": "LO_NAV_ADMIN",
@@ -598,27 +628,29 @@
 		"menuItems": [
 			{
 				"externalReferenceCode": "LO_SUPPORT_NAV_GETTING_STARTED",
+				"friendlyURL": "/support/customer-portal-help/getting-started",
 				"name_i18n": {
 					"en_US": "Getting Started",
 					"es_ES": "Primeros Pasos",
 					"ja_JP": "はじめに",
 					"pt_BR": "Primeiros Passos"
 				},
-				"type": "url",
-				"url": "/support/customer-portal-help/getting-started",
-				"useNewTab": false
+				"privateLayout": false,
+				"type": "layout",
+				"useCustomName": true
 			},
 			{
 				"externalReferenceCode": "LO_SUPPORT_NAV_USING_CUSTOMER_PORTAL",
+				"friendlyURL": "/support/customer-portal-help/using-customer-portal",
 				"name_i18n": {
 					"en_US": "Using One Liferay",
 					"es_ES": "Uso de One Liferay",
 					"ja_JP": "One Liferayの使い方",
 					"pt_BR": "Usando One Liferay"
 				},
-				"type": "url",
-				"url": "/support/customer-portal-help/using-customer-portal",
-				"useNewTab": false
+				"privateLayout": false,
+				"type": "layout",
+				"useCustomName": true
 			},
 			{
 				"externalReferenceCode": "LO_SUPPORT_NAV_ACTIVATION",

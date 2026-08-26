@@ -1,50 +1,66 @@
-<#function getCustomFieldData navigationMenuItem name>
-	<#list (navigationMenuItem.customFields)![] as customField>
-		<#if customField.name == name>
-			<#assign data = (customField.customValue.data)!"" />
+<#--
+Renders the site navigation menu the tag supplies as `entries`. Liferay filters
+that tree by each menu item's own permissions, so an item pointing at a page the
+current user may not view never reaches this template: there is no page
+visibility logic here, and every link comes back resolved by Liferay. An item is
+a dropdown parent when it has children. Only the presentation metadata comes from
+the headless API, which resolves the custom fields for the current locale.
+-->
+
+<#function getCustomFieldsMaps navigationMenuItems>
+	<#local customFieldsMaps = {} />
+
+	<#list navigationMenuItems as navigationMenuItem>
+		<#local
+			customFieldsMap = {}
+			navigationMenuItemId = (navigationMenuItem.id)!0
+		/>
+
+		<#list (navigationMenuItem.customFields)![] as customField>
+			<#local data = (customField.customValue.data)!"" />
 
 			<#if data?is_sequence>
-				<#return (data?first)!"" />
+				<#local data = (data?first)!"" />
 			</#if>
 
-			<#return data />
-		</#if>
+			<#local customFieldsMap = customFieldsMap + {(customField.name)!"": data} />
+		</#list>
+
+		<#local customFieldsMaps = customFieldsMaps + {navigationMenuItemId?c: customFieldsMap} + getCustomFieldsMaps((navigationMenuItem.navigationMenuItems)![]) />
 	</#list>
 
-	<#return "" />
+	<#return customFieldsMaps />
 </#function>
 
-<#function getNavigationMenuItemURL navigationMenuItem>
-	<#if stringUtil.equals((navigationMenuItem.type)!"", "layout")>
-		<#return (layoutFriendlyURLs[(navigationMenuItem.typeSettings.externalReferenceCode)!""])!"" />
-	</#if>
+<#function getCustomFieldsMap navItem>
+	<#-- On a site navigation menu item, getLayoutId() is the menu item id. -->
 
-	<#return (navigationMenuItem.typeSettings.url)!"" />
-</#function>
-
-<#function hasLayoutNavigationMenuItems navigationMenuItems>
-	<#list navigationMenuItems as navigationMenuItem>
-		<#if stringUtil.equals((navigationMenuItem.type)!"", "layout") || hasLayoutNavigationMenuItems((navigationMenuItem.navigationMenuItems)![])>
-			<#return true />
-		</#if>
-	</#list>
-
-	<#return false />
+	<#return (customFieldsMaps[navItem.getLayoutId()?c])!{} />
 </#function>
 
 <#assign
 	canBypassMyAccount = false
+	customFieldsMaps = {}
 	hasMarketplacePublisherRole = false
 />
+
+<#--
+Two rules the theme cannot read off a page. The account menu bypass is consumed
+by the header fragment's JavaScript. Publisher Dashboard points at a page every
+signed in user may view, so granting that page VIEW to the Marketplace Publisher
+role alone is what would retire the second rule.
+-->
 
 <#attempt>
 	<#if themeDisplay.isSignedIn()>
 		<#list themeDisplay.getUser().getRoles() as userRole>
-			<#if stringUtil.equals(userRole.getName(), "Administrator") || stringUtil.equals(userRole.getName(), "Liferay Staff")>
+			<#assign userRoleName = userRole.getName() />
+
+			<#if stringUtil.equals(userRoleName, "Administrator") || stringUtil.equals(userRoleName, "Liferay Staff")>
 				<#assign canBypassMyAccount = true />
 			</#if>
 
-			<#if stringUtil.equals(userRole.getName(), "Marketplace Publisher")>
+			<#if stringUtil.equals(userRoleName, "Marketplace Publisher")>
 				<#assign hasMarketplacePublisherRole = true />
 			</#if>
 		</#list>
@@ -58,56 +74,47 @@
 
 <#attempt>
 	<#assign navigationMenu = restClient.get("/headless-delivery/v1.0/sites/" + themeDisplay.getScopeGroupId()?c + "/navigation-menus/by-external-reference-code/LO_PRIMARY_NAV?nestedFields=customFields,navigationMenuItems") />
+
+	<#assign customFieldsMaps = getCustomFieldsMaps((navigationMenu.navigationMenuItems)![]) />
 <#recover>
-	<#assign navigationMenu = {} />
+	<#assign customFieldsMaps = {} />
 </#attempt>
 
-<#assign layoutFriendlyURLs = {} />
+<#-- A section stays highlighted anywhere below its top level page. -->
 
-<#if ((navigationMenu.navigationMenuItems)?? && hasLayoutNavigationMenuItems(navigationMenu.navigationMenuItems))>
-	<#attempt>
-		<#assign sitePages = restClient.get("/headless-delivery/v1.0/sites/" + themeDisplay.getScopeGroupId()?c + "/site-pages?fields=friendlyUrlPath,uuid&pageSize=-1") />
-
-		<#list (sitePages.items)![] as sitePage>
-			<#assign layoutFriendlyURLs = layoutFriendlyURLs + {(sitePage.uuid)!"": (sitePage.friendlyUrlPath)!""} />
-		</#list>
-	<#recover>
-		<#assign layoutFriendlyURLs = {} />
-	</#attempt>
-</#if>
-
-<#assign activeSectionName = "" />
+<#assign activeLayoutPlid = 0 />
 
 <#attempt>
-	<#assign topLayout = themeDisplay.getLayout() />
+	<#assign activeLayout = themeDisplay.getLayout() />
 
-	<#list themeDisplay.getLayout().getAncestors() as ancestorLayout>
-		<#assign topLayout = ancestorLayout />
+	<#list activeLayout.getAncestors() as ancestorLayout>
+		<#assign activeLayout = ancestorLayout />
 	</#list>
 
-	<#assign activeSectionName = topLayout.getName(locale) />
+	<#assign activeLayoutPlid = activeLayout.getPlid() />
 <#recover>
-	<#assign activeSectionName = "" />
+	<#assign activeLayoutPlid = 0 />
 </#attempt>
 
 <ul class="adt-navigation" data-account-bypass="${canBypassMyAccount?c}">
-	<#if (navigationMenu.navigationMenuItems)??>
-		<#list navigationMenu.navigationMenuItems as navPrimaryItem>
+	<#attempt>
+		<#list entries![] as navPrimaryItem>
 			<#assign
-				navPrimaryItemName = (navPrimaryItem.name)!""
-				navPrimaryItemURL = getNavigationMenuItemURL(navPrimaryItem)
-				isActiveSection = activeSectionName?has_content && stringUtil.equals(navPrimaryItemName, activeSectionName)
+				navPrimaryItemChildren = navPrimaryItem.getChildren()
+				navPrimaryItemId = navPrimaryItem.getLayoutId()
+				navPrimaryItemName = navPrimaryItem.getName()
+				navPrimaryItemPlid = (navPrimaryItem.getLayout().getPlid())!0
 			/>
 
-			<#if !navPrimaryItemName?has_content>
-			<#elseif (stringUtil.equals(navPrimaryItemName, "My Account") || stringUtil.equals(navPrimaryItemName, "Admin")) && !themeDisplay.isSignedIn()>
-			<#elseif (((navPrimaryItem.navigationMenuItems)![])?size > 0)>
+			<#assign isActiveSection = (activeLayoutPlid > 0) && (navPrimaryItemPlid == activeLayoutPlid) />
+
+			<#if navPrimaryItemChildren?has_content>
 				<div class="adt-nav-item dropdown dropdown-action<#if isActiveSection> selected</#if> w-100">
 					<button
-						aria-expanded="true"
+						aria-expanded="false"
 						class="adt-nav-text align-items-center d-flex menu-info"
 						data-toggle="liferay-dropdown"
-						id="main-menu-id"
+						id="main-menu-${navPrimaryItemId?c}"
 						tabindex="4"
 					>
 						<span class="adt-nav-title text-truncate">
@@ -118,10 +125,10 @@
 						</span>
 					</button>
 
-					<@renderNavigationDropdown navPrimaryItem />
+					<@renderNavigationDropdown navPrimaryItemChildren />
 				</div>
-			<#elseif navPrimaryItemURL?has_content>
-				<a class="adt-nav-item<#if isActiveSection> selected</#if> w-100" href="${navPrimaryItemURL}"<#if stringUtil.equals((navPrimaryItem.typeSettings.useNewTab)!"", "true")> target="_blank"</#if>>
+			<#else>
+				<a class="adt-nav-item<#if isActiveSection> selected</#if> w-100" href="${navPrimaryItem.getRegularURL()}"<#if ((navPrimaryItem.getTarget())!"")?contains("_blank")> target="_blank"</#if>>
 					<div class="adt-nav-text d-flex pr-3" tabindex="4">
 						<span class="adt-nav-title text-truncate">
 							${navPrimaryItemName}
@@ -130,23 +137,28 @@
 				</a>
 			</#if>
 		</#list>
-	</#if>
+	<#recover>
+	</#attempt>
 </ul>
 
 <#macro renderNavigationDropdown
-	navPrimaryItem
+	navSecondaryItems
 >
 	<div class="adt-submenu dropdown-menu main-menu-dropdown position-absolute pt-2">
 		<div class="adt-submenu-outer-wrapper container-fluid-max-xl">
 			<div class="adt-submenu-inner-wrapper">
-				<#list (navPrimaryItem.navigationMenuItems)![] as navSecondaryItem>
+				<#list navSecondaryItems as navSecondaryItem>
 					<#assign
-						backgroundColor = getCustomFieldData(navSecondaryItem, "Submenu Background")
-						childColumns = getCustomFieldData(navSecondaryItem, "Submenu Child Columns")
-						columnSpan = getCustomFieldData(navSecondaryItem, "Submenu Column Span")
-						imageURL = getCustomFieldData(navSecondaryItem, "Menu Item Image URL")
-						menuItemType = getCustomFieldData(navSecondaryItem, "Menu Item Type")
-						navSecondaryItemName = (navSecondaryItem.name)!""
+						navSecondaryItemChildren = navSecondaryItem.getChildren()
+						navSecondaryItemCustomFieldsMap = getCustomFieldsMap(navSecondaryItem)
+					/>
+
+					<#assign
+						backgroundColor = (navSecondaryItemCustomFieldsMap["Submenu Background"])!""
+						childColumns = (navSecondaryItemCustomFieldsMap["Submenu Child Columns"])!""
+						columnSpan = (navSecondaryItemCustomFieldsMap["Submenu Column Span"])!""
+						imageURL = (navSecondaryItemCustomFieldsMap["Menu Item Image URL"])!""
+						menuItemType = (navSecondaryItemCustomFieldsMap["Menu Item Type"])!""
 					/>
 
 					<#if childColumns?has_content>
@@ -162,22 +174,25 @@
 							<#if stringUtil.equals(menuItemType, "Image") && imageURL?has_content>
 								<img class="adt-submenu-header-image" loading="lazy" src="${imageURL}" />
 							</#if>
-							${navSecondaryItemName}
+							${navSecondaryItem.getName()}
 						</li>
 
-						<#list (navSecondaryItem.navigationMenuItems)![] as navTertiaryItem>
+						<#list navSecondaryItemChildren as navTertiaryItem>
 							<#assign
-								descriptionText = getCustomFieldData(navTertiaryItem, "Menu Item Description")
-								imageURL = getCustomFieldData(navTertiaryItem, "Menu Item Image URL")
-								menuItemType = getCustomFieldData(navTertiaryItem, "Menu Item Type")
-								navTertiaryItemName = (navTertiaryItem.name)!""
-								navTertiaryItemURL = getNavigationMenuItemURL(navTertiaryItem)
-								preheaderText = getCustomFieldData(navTertiaryItem, "Menu Item Preheader")
+								navTertiaryItemCustomFieldsMap = getCustomFieldsMap(navTertiaryItem)
+								navTertiaryItemName = navTertiaryItem.getName()
 							/>
 
-							<#if navTertiaryItemName?has_content && navTertiaryItemURL?has_content && !(stringUtil.equals(navTertiaryItemName, "Publisher Dashboard") && !hasMarketplacePublisherRole)>
+							<#assign
+								descriptionText = (navTertiaryItemCustomFieldsMap["Menu Item Description"])!""
+								imageURL = (navTertiaryItemCustomFieldsMap["Menu Item Image URL"])!""
+								menuItemType = (navTertiaryItemCustomFieldsMap["Menu Item Type"])!""
+								preheaderText = (navTertiaryItemCustomFieldsMap["Menu Item Preheader"])!""
+							/>
+
+							<#if !(stringUtil.equals(navTertiaryItemName, "Publisher Dashboard") && !hasMarketplacePublisherRole)>
 								<li class="adt-submenu-item-content ${menuItemType?lower_case}-type grid-column-span-${childColumns}">
-									<a class="adt-submenu-item-link" href="${navTertiaryItemURL}" tabindex="4">
+									<a class="adt-submenu-item-link" href="${navTertiaryItem.getRegularURL()}"<#if ((navTertiaryItem.getTarget())!"")?contains("_blank")> target="_blank"</#if> tabindex="4">
 										<#if stringUtil.equals(menuItemType, "Image") && imageURL?has_content>
 											<img class="adt-submenu-item-image" loading="lazy" src="${imageURL}" />
 										</#if>

@@ -1,21 +1,26 @@
+<#--
+Renders the footer navigation menu the tag supplies as `entries`, already
+filtered by each menu item's own permissions: a section whose page the current
+user may not view, or whose every link is out of reach, does not render at all.
+-->
+
 <#attempt>
-	<#assign navigationMenu = restClient.get("/headless-delivery/v1.0/sites/" + themeDisplay.getScopeGroupId()?c + "/navigation-menus/by-external-reference-code/LO_FOOTER_NAV?nestedFields=navigationMenuItems") />
-<#recover>
-	<#assign navigationMenu = {} />
-</#attempt>
+	<#list entries![] as footerNavSection>
+		<#assign footerNavItems = footerNavSection.getChildren() />
 
-<#if (navigationMenu.navigationMenuItems)??>
-	<#list navigationMenu.navigationMenuItems as footerNavSection>
-		<section class="c-mb-10 c-mb-lg-0 c-mb-md-10 c-px-0 col-lg-2 col-md-4 section-title">
-			<h3 class="c-mb-4 font-weight-semi-bold">${footerNavSection.name}</h3>
+		<#if footerNavItems?has_content>
+			<section class="c-mb-10 c-mb-lg-0 c-mb-md-10 c-px-0 col-lg-2 col-md-4 section-title">
+				<h3 class="c-mb-4 font-weight-semi-bold">${footerNavSection.getName()}</h3>
 
-			<ul class="c-p-0 d-flex flex-column list-unstyled text-decoration-none">
-				<#list (footerNavSection.navigationMenuItems)![] as footerNavItem>
-					<li<#if !footerNavItem?is_last> class="c-mb-3"</#if>>
-						<a class="c-p-0" href="${(footerNavItem.typeSettings.url)!""}"<#if stringUtil.equals((footerNavItem.typeSettings.useNewTab)!"", "true")> target="_blank"</#if>>${footerNavItem.name}</a>
-					</li>
-				</#list>
-			</ul>
-		</section>
+				<ul class="c-p-0 d-flex flex-column list-unstyled text-decoration-none">
+					<#list footerNavItems as footerNavItem>
+						<li<#if !footerNavItem?is_last> class="c-mb-3"</#if>>
+							<a class="c-p-0" href="${footerNavItem.getRegularURL()}"<#if ((footerNavItem.getTarget())!"")?contains("_blank")> target="_blank"</#if>>${footerNavItem.getName()}</a>
+						</li>
+					</#list>
+				</ul>
+			</section>
+		</#if>
 	</#list>
-</#if>
+<#recover>
+</#attempt>

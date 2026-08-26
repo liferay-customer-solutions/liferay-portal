@@ -1,31 +1,16 @@
 <#--
-	Vertical sidebar for the One Liferay Help section. Self-fetches the
-	"Support Navigation" menu (LO_SUPPORT_NAV) by external reference code, the
-	same pattern the primary and footer navigation templates use, so it renders
-	the curated help topics regardless of which menu the portlet has selected.
+Vertical sidebar for the One Liferay Help section. Renders the support
+navigation menu the tag supplies as `entries`, already filtered by each menu
+item's own permissions, so a topic whose page the current user may not view
+never reaches this template.
 -->
 
-<#assign
-	currentURL = ""
-	layoutFriendlyURL = ""
-/>
+<#assign activePlid = 0 />
 
 <#attempt>
-	<#assign currentURL = themeDisplay.getURLCurrent() />
+	<#assign activePlid = themeDisplay.getLayout().getPlid() />
 <#recover>
-	<#assign currentURL = "" />
-</#attempt>
-
-<#attempt>
-	<#assign layoutFriendlyURL = themeDisplay.getLayout().getFriendlyURL() />
-<#recover>
-	<#assign layoutFriendlyURL = "" />
-</#attempt>
-
-<#attempt>
-	<#assign navigationMenu = restClient.get("/headless-delivery/v1.0/sites/" + themeDisplay.getScopeGroupId()?c + "/navigation-menus/by-external-reference-code/LO_SUPPORT_NAV?nestedFields=navigationMenuItems") />
-<#recover>
-	<#assign navigationMenu = {} />
+	<#assign activePlid = 0 />
 </#attempt>
 
 <#assign
@@ -40,29 +25,34 @@
 
 <nav aria-label="One Liferay Help" class="lo-support-nav">
 	<ul class="list-unstyled mb-0">
-		<#if (navigationMenu.navigationMenuItems)??>
-			<#list navigationMenu.navigationMenuItems as navigationMenuItem>
+		<#attempt>
+			<#list entries![] as navigationMenuItem>
 				<#assign
-					navigationMenuItemURL = (navigationMenuItem.typeSettings.url)!"#"
+					navigationMenuItemName = navigationMenuItem.getName()
+					navigationMenuItemPlid = (navigationMenuItem.getLayout().getPlid())!0
+					navigationMenuItemURL = navigationMenuItem.getRegularURL()
+				/>
 
-					navigationIconSymbol = (navigationIcons[navigationMenuItem.name])!"circle"
-					navigationMenuItemActive = navigationMenuItemURL?has_content && (navigationMenuItemURL != "#") && ((currentURL?has_content && currentURL?contains(navigationMenuItemURL)) || (layoutFriendlyURL?has_content && (navigationMenuItemURL == layoutFriendlyURL || navigationMenuItemURL?ends_with(layoutFriendlyURL))))
+				<#assign
+					navigationIconSymbol = (navigationIcons[navigationMenuItemName])!"circle"
+					navigationMenuItemActive = (activePlid > 0) && (navigationMenuItemPlid == activePlid)
 				/>
 
 				<li>
 					<a
 						class="align-items-center d-flex lo-support-nav-link<#if navigationMenuItemActive> active</#if>"
-						href="${navigationMenuItemURL}"
-						<#if stringUtil.equals((navigationMenuItem.typeSettings.useNewTab)!"", "true")>target="_blank"</#if>
+						href="${navigationMenuItemURL?has_content?then(navigationMenuItemURL, "#")}"
+						<#if ((navigationMenuItem.getTarget())!"")?contains("_blank")>target="_blank"</#if>
 					>
 						<span class="align-items-center d-flex lo-support-nav-icon">
 							<svg class="lexicon-icon" role="presentation" viewBox="0 0 512 512"><use xlink:href="/o/admin-theme/images/clay/icons.svg#${navigationIconSymbol}" /></svg>
 						</span>
-						<span class="lo-support-nav-label">${navigationMenuItem.name}</span>
+						<span class="lo-support-nav-label">${navigationMenuItemName}</span>
 					</a>
 				</li>
 			</#list>
-		</#if>
+		<#recover>
+		</#attempt>
 	</ul>
 </nav>
 

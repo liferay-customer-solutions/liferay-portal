@@ -1,3 +1,11 @@
+[#assign footerNavigationMenuId = 0 /]
+
+[#attempt]
+	[#assign footerNavigationMenuId = restClient.get("/headless-delivery/v1.0/sites/" + themeDisplay.getScopeGroupId()?c + "/navigation-menus/by-external-reference-code/LO_FOOTER_NAV").id /]
+[#recover]
+	[#assign footerNavigationMenuId = 0 /]
+[/#attempt]
+
 <footer class="liferay-one-footer pb-5 pt-5">
 	<div class="container-fluid-max-xl footer-content mx-auto">
 		<div class="align-start c-my-0 d-flex justify-content-between max-nav">
@@ -23,7 +31,7 @@
 					preview=false
 					rootItemLevel=0
 					rootLayoutType="absolute"
-					siteNavigationMenuId=0
+					siteNavigationMenuId=footerNavigationMenuId
 				/]
 
 				<section class="c-px-0 footer-social">

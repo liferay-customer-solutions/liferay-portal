@@ -101,7 +101,8 @@
 													"widgetInstance": {
 														"widgetConfig": {
 															"displayStyle": "ddmTemplate_NAVIGATION_SUPPORT",
-															"displayStyleGroupId": "[$GROUP_ID$]"
+															"displayStyleGroupId": "[$GROUP_ID$]",
+															"siteNavigationMenuExternalReferenceCode": "LO_SUPPORT_NAV"
 														},
 														"widgetName": "com_liferay_site_navigation_menu_web_portlet_SiteNavigationMenuPortlet"
 													}
