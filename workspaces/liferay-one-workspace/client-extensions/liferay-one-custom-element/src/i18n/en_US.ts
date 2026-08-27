@@ -6,6 +6,7 @@
 import {Liferay} from '~/services/liferay/liferay';
 
 export default {
+	'1-data-source': '1 Data Source',
 	'1-ticket': '1 Ticket',
 	'a-license-key-for-the-entered-domain-already-exists':
 		'A license key for the entered domain already exists.',
@@ -92,6 +93,7 @@ export default {
 	'all': 'All',
 	'all-commerce-modules-are-enabled-by-default':
 		'All Commerce modules are enabled by default.',
+	'all-data-sources': 'All Data Sources',
 	'all-orders': 'All Orders',
 	'all-progress-and-information-related-to-the-creation-of-the-app-will-be-lost-do-you-still-want-to-exit':
 		'All progress and information related to the creation of the app will be lost. Do you still want to exit?',
@@ -382,6 +384,7 @@ export default {
 	'customize-solution-header': 'Customize Solution Header',
 	'customize-storefront-solutions-details':
 		'Customize Storefront Solution Details',
+	'daily': 'Daily',
 	'dashboard': 'Dashboard',
 	'data-center-location': 'Data Center Location',
 	'data-lake': 'Data Lake',
@@ -516,10 +519,13 @@ export default {
 	'eula': 'EULA',
 	'event-description': 'Event Description',
 	'event-details': 'Event Details',
+	'event-history': 'Event History',
 	'event-name': 'Event Name',
 	'event-status': 'Event Status',
 	'event-type': 'Event Type',
 	'events': 'Events',
+	'events-ingested-by-ldp-over-the-selected-period-broken-down-by-data-source':
+		'Events ingested by LDP over the selected period, broken down by data source.',
 	'events-per-month': 'Events / Month',
 	'events-successfully-ingested-by-ldp-this-month-resets-monthly-add-on-buckets-raise-the-included-volume':
 		'Events successfully ingested by LDP this month. Resets monthly; add-on buckets raise the included volume.',
@@ -582,6 +588,7 @@ export default {
 	'fragments': 'Fragments',
 	'free': 'Free',
 	'friendly-workspace-url': 'Friendly Workspace URL',
+	'from': 'From',
 	'fulfillment-date': 'Fulfillment Date',
 	'full-name': 'Full Name',
 	'future': 'Future',
@@ -847,6 +854,7 @@ export default {
 		'Module-based apps delivered as .lpkg files that the user can install to modify native Liferay behavior.',
 	'monetize-your-apps-and-solutions': 'Monetize Your Apps and Solutions',
 	'month': 'Month',
+	'monthly': 'Monthly',
 	'monthly-inbound-and-outbound': 'Monthly Inbound and Outbound',
 	'monthly-increase': 'Monthly Increase',
 	'more-actions': 'More Actions',
@@ -1435,6 +1443,8 @@ export default {
 		'The cloud app is client extension based and is compatible with a customer’s self-hosted environment.',
 	'the-cloud-app-is-client-extension-based-and-is-compatible-with-liferays-self-managed-offering':
 		'The Cloud app is client extension based and is compatible with Liferay’s Self-Managed offering.',
+	'the-daily-view-is-limited-to-the-current-and-previous-month':
+		'The daily view is limited to the current and previous month.',
 	'the-dxp-app-is-module-based-and-is-compatible-with-7-4-builds-of-liferay-dxp':
 		'The DXP app is module-based and is compatible with 7.4 builds of Liferay DXP.',
 	'the-dxp-app-is-module-based-and-is-compatible-with-7-4-builds-of-liferay-dxp-self-managed-liferay-cloud-formerly-dxp-cloud':
@@ -1452,11 +1462,17 @@ export default {
 		'The Liferay Marketplace gives you the opportunity to monetize your app or solutions from a single use case to many, while engaging with new customer opportunities and generating ongoing revenue.',
 	'the-liferay-marketplace-is-the-premier-place-for-liferay-customers-to-find-pre-built-pre-approved-app-extensions-to-quickly-extend-the-liferay-platform-to-new-and-legacy-technologies':
 		'The Liferay Marketplace is the premier place for Liferay customers to find pre-built, pre-approved app extensions to quickly extend the Liferay platform to new and legacy technologies.',
+	'the-monthly-view-supports-a-date-range-of-up-to-ten-years':
+		'The monthly view supports a date range of up to ten years.',
 	'the-order-must-be-completed-before-licensing-this-app.':
 		'The order must be completed before licensing this app.',
 	'the-published-version-is-x': 'The published version is {0}.',
 	'the-selected-project-does-not-meet-the-necessary-resource-requirements-for-this-app-please-contact-sales-to-request-additional-resources':
 		'The selected project does not meet the necessary resource requirements for this app. Please contact Sales to request additional resources.',
+	'the-start-and-end-dates-must-be-different':
+		'The start and end dates must be different.',
+	'the-start-date-must-be-earlier-than-the-end-date':
+		'The start date must be earlier than the end date.',
 	'theme': 'Theme',
 	'there-are-currently-no-open-tickets-under-this-project':
 		'There are currently no open tickets under this project.',
@@ -1512,6 +1528,7 @@ export default {
 	'times-already-extended': 'Times Already Extended',
 	'timezone': 'Timezone',
 	'title': 'Title',
+	'to': 'To',
 	'to-be-renewed': 'To be Renewed',
 	'to-generate-your-unique-activation-key-file-and-access-the-download-please-complete-your-profile-details-below-tell-us-a-bit-about-your-intended-use-to-help-us-support-your-experience':
 		'To generate your unique activation key file and access the download, please complete your profile details below. Tell us a bit about your intended use to help us support your experience',
@@ -1680,6 +1697,7 @@ export default {
 	'x-available-for-you': `{0} available for <b>${Liferay.ThemeDisplay.getUserEmailAddress()}</b> (you)`,
 	'x-cluster-nodes-keys': '{0} Cluster Nodes (Keys)',
 	'x-cpus-x-gb-ram': '{0} CPUs, {1} GB RAM',
+	'x-data-sources': '{0} Data Sources',
 	'x-environments-x-cpus-x-gb-ram': '{0} Environments, {1} CPUs, {2} GB RAM',
 	'x-events': '/ {0} events',
 	'x-in-use': '{0} in use',

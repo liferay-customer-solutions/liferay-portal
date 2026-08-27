@@ -56,6 +56,13 @@ export function formatDateTime(
 	}
 }
 
+export function formatUTCMonthShort(date: Date): string {
+	return new Intl.DateTimeFormat(Liferay.ThemeDisplay.getBCP47LanguageId(), {
+		month: 'short',
+		timeZone: 'UTC',
+	}).format(date);
+}
+
 export function formatUTCMonthYear(date: Date): string {
 	return new Intl.DateTimeFormat(Liferay.ThemeDisplay.getBCP47LanguageId(), {
 		month: 'long',
@@ -69,13 +76,7 @@ export function getLastDayOfMonth(month: number, year: number) {
 }
 
 export function getTodaySlashDate(): string {
-	const now = new Date();
-
-	return [
-		String(now.getMonth() + 1).padStart(2, '0'),
-		String(now.getDate()).padStart(2, '0'),
-		now.getFullYear(),
-	].join('/');
+	return toSlashDateUTC(new Date());
 }
 
 export function getUTCDayBounds(
@@ -176,6 +177,41 @@ export function parseSlashDateUTC(value: string): Date | undefined {
 	}
 
 	return date;
+}
+
+export function parseUTCDateString(value: string): Date | undefined {
+	const date = new Date(`${value}T00:00:00Z`);
+
+	return Number.isNaN(date.getTime()) ? undefined : date;
+}
+
+export function shiftUTCDays(value: string, days: number): string | undefined {
+	const date = parseSlashDateUTC(value);
+
+	if (!date) {
+		return undefined;
+	}
+
+	date.setUTCDate(date.getUTCDate() + days);
+
+	return toSlashDateUTC(date);
+}
+
+export function shiftUTCMonths(
+	value: string,
+	months: number
+): string | undefined {
+	const date = parseSlashDateUTC(value);
+
+	if (!date) {
+		return undefined;
+	}
+
+	return toSlashDateUTC(
+		new Date(
+			Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + months, 1)
+		)
+	);
 }
 
 export function toSlashDateUTC(date: Date): string {

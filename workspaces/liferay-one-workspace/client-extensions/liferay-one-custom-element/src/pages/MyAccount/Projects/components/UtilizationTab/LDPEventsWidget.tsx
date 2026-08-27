@@ -145,9 +145,9 @@ export default function LDPEventsWidget({
 	const dataSources = useMemo(
 		() =>
 			(eventUsage?.eventSummary ?? []).map(
-				(dataSource: EventDataSource, index) => ({
+				(dataSource: EventDataSource) => ({
 					...dataSource,
-					color: getDataSourceColor(index),
+					color: getDataSourceColor(dataSource.dataSourceId),
 					segment: barDenominator
 						? (dataSource.eventsCount / barDenominator) * 100
 						: 0,

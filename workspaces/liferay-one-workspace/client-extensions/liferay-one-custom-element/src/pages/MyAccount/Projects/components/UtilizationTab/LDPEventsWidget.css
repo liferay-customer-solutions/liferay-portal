@@ -309,3 +309,18 @@
 	padding: 0.125rem 0.375rem;
 	text-align: center;
 }
+
+.ldp-events-day-cell:disabled,
+.ldp-events-month-cell:disabled {
+	color: var(--color-neutral-4, #cdced9);
+	cursor: not-allowed;
+
+	&:hover {
+		background: none;
+	}
+}
+
+.ldp-events-period-panel-left {
+	left: 0;
+	right: auto;
+}

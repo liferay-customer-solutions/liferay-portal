@@ -15,14 +15,34 @@ import {
 import LDPEventsPeriodPicker from './LDPEventsPeriodPicker';
 
 type LDPEventsMonthPickerProps = {
+	alignment?: 'left' | 'right';
+	maxValue?: string;
+	minValue?: string;
 	onChange: (value: string) => void;
 	value: string;
 };
 
+const MONTHS_PER_YEAR = 12;
+
 export default function LDPEventsMonthPicker({
+	alignment,
+	maxValue,
+	minValue,
 	onChange,
 	value,
 }: LDPEventsMonthPickerProps) {
+	const maxDate = maxValue ? parseSlashDateUTC(maxValue) : undefined;
+
+	const maxMonthIndex = maxDate
+		? maxDate.getUTCFullYear() * MONTHS_PER_YEAR + maxDate.getUTCMonth()
+		: undefined;
+
+	const minDate = minValue ? parseSlashDateUTC(minValue) : undefined;
+
+	const minMonthIndex = minDate
+		? minDate.getUTCFullYear() * MONTHS_PER_YEAR + minDate.getUTCMonth()
+		: undefined;
+
 	const selectedDate = parseSlashDateUTC(value);
 	const selectedMonth = selectedDate?.getUTCMonth();
 	const selectedYear = selectedDate?.getUTCFullYear();
@@ -33,6 +53,7 @@ export default function LDPEventsMonthPicker({
 
 	return (
 		<LDPEventsPeriodPicker
+			alignment={alignment}
 			label={selectedDate ? formatUTCMonthYear(selectedDate) : value}
 			onStepBack={() => setYear(year - 1)}
 			onStepForward={() => setYear(year + 1)}
@@ -47,6 +68,14 @@ export default function LDPEventsMonthPicker({
 									month === selectedMonth &&
 									year === selectedYear,
 							})}
+							disabled={
+								(maxMonthIndex !== undefined &&
+									year * MONTHS_PER_YEAR + month >
+										maxMonthIndex) ||
+								(minMonthIndex !== undefined &&
+									year * MONTHS_PER_YEAR + month <
+										minMonthIndex)
+							}
 							key={monthName}
 							onClick={() => {
 								onChange(

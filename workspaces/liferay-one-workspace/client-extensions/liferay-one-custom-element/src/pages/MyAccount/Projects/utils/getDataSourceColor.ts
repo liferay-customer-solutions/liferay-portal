@@ -7,14 +7,28 @@ const DEGREES_PER_TURN = 360;
 
 const GOLDEN_ANGLE = 137.508;
 
-const LIGHTNESS = 55;
+const HASH_MODULUS = 9973;
+
+const HASH_MULTIPLIER = 31;
+
+const LIGHTNESSES = [42, 55, 68];
 
 const SATURATION = 70;
 
-export function getDataSourceColor(index: number): string {
-	const hue = (index * GOLDEN_ANGLE) % DEGREES_PER_TURN;
+export function getDataSourceColor(dataSourceId: string): string {
+	let hash = 0;
 
-	return `hsl(${hue} ${SATURATION}% ${LIGHTNESS}%)`;
+	for (let index = 0; index < dataSourceId.length; index++) {
+		hash =
+			(hash * HASH_MULTIPLIER + dataSourceId.charCodeAt(index)) %
+			HASH_MODULUS;
+	}
+
+	const hue = (hash * GOLDEN_ANGLE) % DEGREES_PER_TURN;
+
+	const lightness = LIGHTNESSES[hash % LIGHTNESSES.length];
+
+	return `hsl(${hue} ${SATURATION}% ${lightness}%)`;
 }
 
 export default getDataSourceColor;

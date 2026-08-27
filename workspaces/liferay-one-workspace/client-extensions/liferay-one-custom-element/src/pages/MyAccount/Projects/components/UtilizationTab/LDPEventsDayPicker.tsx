@@ -16,6 +16,9 @@ import {
 import LDPEventsPeriodPicker from './LDPEventsPeriodPicker';
 
 type LDPEventsDayPickerProps = {
+	alignment?: 'left' | 'right';
+	maxValue?: string;
+	minValue?: string;
 	onChange: (value: string) => void;
 	value: string;
 };
@@ -25,9 +28,16 @@ const CALENDAR_CELLS = 42;
 const FIRST_DAY_OF_WEEK = 1;
 
 export default function LDPEventsDayPicker({
+	alignment,
+	maxValue,
+	minValue,
 	onChange,
 	value,
 }: LDPEventsDayPickerProps) {
+	const maxDate = maxValue ? parseSlashDateUTC(maxValue) : undefined;
+
+	const minDate = minValue ? parseSlashDateUTC(minValue) : undefined;
+
 	const selectedDate = parseSlashDateUTC(value) ?? new Date();
 
 	const [viewMonth, setViewMonth] = useState(() =>
@@ -60,6 +70,9 @@ export default function LDPEventsDayPicker({
 
 		return {
 			date,
+			disabled:
+				(maxDate ? date.getTime() > maxDate.getTime() : false) ||
+				(minDate ? date.getTime() < minDate.getTime() : false),
 			outside: date.getUTCMonth() !== viewMonth,
 			selected: toUTCDateString(date) === selectedDateString,
 		};
@@ -67,6 +80,7 @@ export default function LDPEventsDayPicker({
 
 	return (
 		<LDPEventsPeriodPicker
+			alignment={alignment}
 			label={value}
 			onStepBack={() => shiftMonth(-1)}
 			onStepForward={() => shiftMonth(1)}
@@ -91,6 +105,7 @@ export default function LDPEventsDayPicker({
 								outside: cell.outside,
 								selected: cell.selected,
 							})}
+							disabled={cell.disabled}
 							key={toUTCDateString(cell.date)}
 							onClick={() => {
 								onChange(toSlashDateUTC(cell.date));

@@ -4,9 +4,11 @@
  */
 
 import ClayIcon from '@clayui/icon';
+import classNames from 'classnames';
 import {ReactNode, useEffect, useRef, useState} from 'react';
 
 type LDPEventsPeriodPickerProps = {
+	alignment?: 'left' | 'right';
 	children: (close: () => void) => ReactNode;
 	label: string;
 	onStepBack: () => void;
@@ -15,6 +17,7 @@ type LDPEventsPeriodPickerProps = {
 };
 
 export default function LDPEventsPeriodPicker({
+	alignment = 'right',
 	children,
 	label,
 	onStepBack,
@@ -77,7 +80,9 @@ export default function LDPEventsPeriodPicker({
 			{expanded && (
 				<div
 					aria-label={title}
-					className="ldp-events-period-panel"
+					className={classNames('ldp-events-period-panel', {
+						'ldp-events-period-panel-left': alignment === 'left',
+					})}
 					role="dialog"
 				>
 					<div className="ldp-events-period-panel-header">

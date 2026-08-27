@@ -5,6 +5,7 @@
 
 import {isUnassignedProject} from '~/pages/MyAccount/Projects/utils/isUnassignedProject';
 
+import LDPEventHistoryChart from './LDPEventHistoryChart';
 import LDPEventsWidget from './LDPEventsWidget';
 import LDPUsageDashboard from './LDPUsageDashboard';
 import LegacyBillingBanner from './LegacyBillingBanner';
@@ -66,6 +67,10 @@ export default function UtilizationTab({
 				/>
 
 				<LDPEventsWidget
+					projectExternalReferenceCode={projectExternalReferenceCode}
+				/>
+
+				<LDPEventHistoryChart
 					projectExternalReferenceCode={projectExternalReferenceCode}
 				/>
 			</>

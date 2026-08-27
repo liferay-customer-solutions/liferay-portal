@@ -6,6 +6,24 @@
 import {OneSpringBootOAuth2} from './OAuth2Client';
 
 class ProjectsOAuth2 extends OneSpringBootOAuth2 {
+	async getProjectEventHistory(
+		endDate: string,
+		granularity: string,
+		projectExternalReferenceCode: string,
+		startDate: string
+	) {
+		const searchParams = new URLSearchParams({
+			endDate,
+			granularity,
+			startDate,
+		});
+
+		return this.get(
+			`/${projectExternalReferenceCode}/usage/event-history` +
+				`?${searchParams.toString()}`
+		);
+	}
+
 	async getProjectEventUsage(
 		endDate: string,
 		projectExternalReferenceCode: string,
