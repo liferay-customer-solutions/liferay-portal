@@ -24,7 +24,6 @@ import {
 
 import LDPEventsDayPicker from './LDPEventsDayPicker';
 import LDPEventsMonthPicker from './LDPEventsMonthPicker';
-import UsageUnavailableCard from './UsageUnavailableCard';
 
 import './LDPEventsWidget.css';
 
@@ -163,10 +162,6 @@ export default function LDPEventsWidget({
 
 	const renewalDays = getRenewalDays(contract?.endDate);
 
-	if (error) {
-		return <UsageUnavailableCard />;
-	}
-
 	return (
 		<div className="ldp-events-card mt-3">
 			<div className="ldp-events-header">
@@ -184,7 +179,7 @@ export default function LDPEventsWidget({
 						/>
 					</div>
 
-					{renewalDays !== undefined && (
+					{!error && renewalDays !== undefined && (
 						<p className="ldp-events-subtitle">
 							{renewalDays === 1
 								? i18n.translate('renews-in-1-day')
@@ -227,7 +222,13 @@ export default function LDPEventsWidget({
 				</div>
 			</div>
 
-			{isLoading ? (
+			{error ? (
+				<p className="mt-3 text-neutral-7">
+					{i18n.translate(
+						'usage-data-is-temporarily-unavailable-please-try-again-later'
+					)}
+				</p>
+			) : isLoading ? (
 				<p className="mt-3 text-neutral-7">
 					{i18n.translate('loading')}
 				</p>

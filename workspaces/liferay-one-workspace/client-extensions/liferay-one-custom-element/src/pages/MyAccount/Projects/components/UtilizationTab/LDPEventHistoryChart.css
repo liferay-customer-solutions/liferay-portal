@@ -100,7 +100,7 @@
 }
 
 .ldp-event-history-message {
-	color: var(--color-neutral-6, #82828c);
-	font-size: 14px;
-	margin: 1.5rem 0 0;
+	color: var(--color-neutral-7, #6b6c7e);
+	font-size: 16px;
+	margin: 1rem 0;
 }
