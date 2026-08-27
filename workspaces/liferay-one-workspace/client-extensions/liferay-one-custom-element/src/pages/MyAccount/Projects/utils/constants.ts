@@ -147,14 +147,3 @@ export const LOGO_COLORS = [
 	'#f5b400',
 	'#ff7847',
 ];
-
-export const DATA_SOURCE_COLORS = [
-	'#00b8a3',
-	'#ff7847',
-	'#4b9fff',
-	'#f5b400',
-	'#7b61ff',
-	'#e9518a',
-	'#1b95e0',
-	'#9b59b6',
-];

@@ -10,7 +10,7 @@ import {useProject} from '~/context/ProjectContext';
 import {useProjectCommerce} from '~/hooks/useProjectCommerce';
 import i18n from '~/i18n';
 import {useProjectEventUsage} from '~/pages/MyAccount/Projects/hooks/useProjectEventUsage';
-import {DATA_SOURCE_COLORS} from '~/pages/MyAccount/Projects/utils/constants';
+import {getDataSourceColor} from '~/pages/MyAccount/Projects/utils/getDataSourceColor';
 import {
 	EM_DASH,
 	formatCount,
@@ -147,9 +147,7 @@ export default function LDPEventsWidget({
 			(eventUsage?.eventSummary ?? []).map(
 				(dataSource: EventDataSource, index) => ({
 					...dataSource,
-					color: DATA_SOURCE_COLORS[
-						index % DATA_SOURCE_COLORS.length
-					],
+					color: getDataSourceColor(index),
 					segment: barDenominator
 						? (dataSource.eventsCount / barDenominator) * 100
 						: 0,
