@@ -9,6 +9,10 @@ class CommerceOrdersOAuth2 extends OneSpringBootOAuth2 {
 	async calculateTax(orderId: number | string) {
 		await this.post(`/${orderId}/calculate-tax`);
 	}
+
+	async completeCloudApp(orderId: number | string) {
+		await this.post(`/${orderId}/complete-cloud-app`);
+	}
 }
 
 const CommerceOrders = new CommerceOrdersOAuth2('/commerce-orders');

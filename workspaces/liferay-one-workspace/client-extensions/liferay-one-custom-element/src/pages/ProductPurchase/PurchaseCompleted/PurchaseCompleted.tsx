@@ -4,6 +4,7 @@
  */
 
 import ClayButton from '@clayui/button';
+import {useEffect} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import useSWR from 'swr';
 import purchaseFailedIconUrl from '~/assets/icons/purchase_failed.svg';
@@ -16,8 +17,13 @@ import i18n from '~/i18n';
 import ProductPurchaseHeaderCards from '~/pages/ProductPurchase/components/ProductPurchaseHeaderCards/ProductPurchaseHeaderCards';
 import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
 import {Liferay} from '~/services/liferay/liferay';
+import CommerceOrders from '~/services/spring-boot/CommerceOrders';
 import {PaymentStatus} from '~/utils/orderUtils';
-import {getProductPriceModel, isDXPFreeTierProduct} from '~/utils/productUtils';
+import {
+	getProductPriceModel,
+	getProductType,
+	isDXPFreeTierProduct,
+} from '~/utils/productUtils';
 import {getSiteURL} from '~/utils/siteUtils';
 
 import type {Account} from '~/types/accounts';
@@ -39,6 +45,8 @@ const PurchaseCompleted = ({product}: PurchaseCompletedProps) => {
 
 	const {isFreeApp, isPaidApp} = getProductPriceModel(product);
 
+	const {isCloud} = getProductType(product);
+
 	const {data: order, isLoading: isOrderLoading} = usePlacedOrder(orderId, {
 		revalidateOnFocus: false,
 	});
@@ -47,6 +55,14 @@ const PurchaseCompleted = ({product}: PurchaseCompletedProps) => {
 		order?.accountId ? `/account/${order.accountId}` : null,
 		() => HeadlessAdminUser.getAccount(order!.accountId)
 	);
+
+	useEffect(() => {
+		if (!isCloud || !orderId) {
+			return;
+		}
+
+		CommerceOrders.completeCloudApp(orderId).catch(console.error);
+	}, [isCloud, orderId]);
 
 	if (!orderId) {
 		return (
