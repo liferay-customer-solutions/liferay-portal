@@ -69,7 +69,9 @@ public class ConsoleRestController extends OneBaseRestController {
 			_log.info("Provisioning order " + orderId);
 		}
 
-		_commerceOrderPermission.check(orderId, jwt);
+		UserAccount userAccount = getMyUserAccount(jwt);
+
+		_commerceOrderPermission.check(orderId, userAccount);
 
 		Order order = _getCloudAppOrder(orderId);
 
@@ -98,7 +100,7 @@ public class ConsoleRestController extends OneBaseRestController {
 
 		String projectId = jsonObject.getString("projectId");
 
-		_checkConsoleProject(jwt, projectId);
+		_checkConsoleProject(projectId, userAccount);
 
 		_cloudAppService.deployCloudApp(
 			orderId, jsonObject.getLong("orderItemId"), projectId);
@@ -131,10 +133,8 @@ public class ConsoleRestController extends OneBaseRestController {
 		).build();
 	}
 
-	private void _checkConsoleProject(Jwt jwt, String projectId)
+	private void _checkConsoleProject(String projectId, UserAccount userAccount)
 		throws Exception {
-
-		UserAccount userAccount = getMyUserAccount(jwt);
 
 		JSONObject jsonObject = new JSONObject(
 			_consoleService.getProjectsUsage(userAccount.getEmailAddress()));

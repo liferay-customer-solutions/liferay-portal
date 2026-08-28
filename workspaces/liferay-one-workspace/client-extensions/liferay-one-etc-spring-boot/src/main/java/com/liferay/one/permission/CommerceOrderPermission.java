@@ -28,13 +28,19 @@ import org.springframework.stereotype.Component;
 public class CommerceOrderPermission {
 
 	public void check(long commerceOrderId, Jwt jwt) throws Exception {
-		if (!_contains(commerceOrderId, jwt)) {
+		check(commerceOrderId, _userAccountService.getMyUserAccount(jwt));
+	}
+
+	public void check(long commerceOrderId, UserAccount userAccount)
+		throws Exception {
+
+		if (!_contains(commerceOrderId, userAccount)) {
 			throw new PrincipalException();
 		}
 	}
 
-	private boolean _contains(long commerceOrderId, Jwt jwt) throws Exception {
-		UserAccount userAccount = _userAccountService.getMyUserAccount(jwt);
+	private boolean _contains(long commerceOrderId, UserAccount userAccount)
+		throws Exception {
 
 		for (RoleBrief roleBrief : userAccount.getRoleBriefs()) {
 			String roleBriefName = roleBrief.getName();
