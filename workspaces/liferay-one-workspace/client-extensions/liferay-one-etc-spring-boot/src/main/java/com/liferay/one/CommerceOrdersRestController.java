@@ -6,6 +6,7 @@
 package com.liferay.one;
 
 import com.liferay.one.permission.CommerceOrderPermission;
+import com.liferay.one.service.CloudAppService;
 import com.liferay.one.service.CommerceOrderService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,20 @@ public class CommerceOrdersRestController extends OneBaseRestController {
 
 		_commerceOrderService.calculateTax(commerceOrderId);
 	}
+
+	@PostMapping("/{commerceOrderId}/complete-cloud-app")
+	public void postCompleteCloudApp(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable("commerceOrderId") long commerceOrderId)
+		throws Exception {
+
+		_commerceOrderPermission.check(commerceOrderId, jwt);
+
+		_cloudAppService.completeCloudAppOrder(commerceOrderId);
+	}
+
+	@Autowired
+	private CloudAppService _cloudAppService;
 
 	@Autowired
 	private CommerceOrderPermission _commerceOrderPermission;
