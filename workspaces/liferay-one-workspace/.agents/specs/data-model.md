@@ -429,9 +429,11 @@ Aggregated periodic report over UsageEvents. The report target is polymorphic 鈥
 | PK `environmentId` | long | |
 | FK `subscriptionId` | long | FK to Contract |
 | `name` | string | Reported by the environment on activation |
-| `offering` | string | `AI Hub` 路 `Cloud Native` 路 `DSR` 路 `LDP` 路 `On-Prem` 路 `PaaS` 路 `SaaS` |
+| `offering` | string | `AI Hub` 路 `Analytics Cloud` 路 `Cloud Native` 路 `DSR` 路 `LDP` 路 `On-Prem` 路 `PaaS` 路 `SaaS` |
 | `type` | string | `non-production` 路 `production` 路 `uat`; cloud only |
 | `region` | string | Cloud only; blank for on-prem |
+| `disasterRecoveryRegion` | string | Cloud only; secondary region for disaster recovery, alongside `region` |
+| `analyticsCloudOwnerEmailAddress` | string | SaaS only; Analytics Cloud workspace owner, mirrors Customer Portal's `lxc.analyticsCloudOwnersEmailAddress` |
 | `activationMode` | string | `license-key` 路 `offline` 路 `online` |
 | `status` | string | `active` 路 `deactivated` 路 `expired` |
 | `lastHeartbeatAt` | datetime | Cloud only |
@@ -441,6 +443,23 @@ Aggregated periodic report over UsageEvents. The report target is polymorphic 鈥
 | `ipAddresses` | longtext | On-prem only |
 | `macAddresses` | longtext | On-prem only |
 | `serverId` | longtext | On-prem only |
+
+---
+
+#### EnvironmentAdmin (`C_ENVIRONMENT_ADMIN`)
+
+**system:** `false`
+
+| Field | Type | Notes |
+|---|---|---|
+| PK `environmentAdminId` | long | |
+| FK `environmentId` | long | FK to Environment; cascade delete |
+| `emailAddress` | string | |
+| `firstName` | string | SaaS splits its single "first and last name" input into `firstName` and `lastName` |
+| `lastName` | string | |
+| `githubUsername` | string | PaaS only; SaaS collects no GitHub username |
+
+> One row per project admin nominated on the PaaS or SaaS activation form. The first admin is also denormalized onto Environment's `adminEmailAddress`, `adminFirstName`, `adminLastName` and `githubUsername`.
 
 ---
 
@@ -524,6 +543,7 @@ Aggregated periodic report over UsageEvents. The report target is polymorphic 鈥
 | `Entitlement` | `C_ENTITLEMENT` | `cpen` |
 | `EntitlementDefinition` | `C_ENTITLEMENT_DEFINITION` | `cped` |
 | `Environment` | `C_ENVIRONMENT` | `cpdp` |
+| `EnvironmentAdmin` | `C_ENVIRONMENT_ADMIN` | `l` |
 | `InvoiceRequest` | `C_INVOICE_REQUEST` | `cpir` |
 | `LicenseKey` | `C_LICENSE_KEY` | `cplk` |
 | `Property` | `C_PROPERTY` | `cppr` |

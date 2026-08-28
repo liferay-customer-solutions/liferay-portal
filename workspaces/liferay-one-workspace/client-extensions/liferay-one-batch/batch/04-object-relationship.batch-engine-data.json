@@ -264,6 +264,17 @@
 		},
 		{
 			"deletionType": "cascade",
+			"externalReferenceCode": "R_ENVIRONMENT_TO_ENVIRONMENT_ADMIN",
+			"label": {
+				"en_US": "Environment to Environment Admin"
+			},
+			"name": "environmentToEnvironmentAdmin",
+			"objectDefinitionExternalReferenceCode1": "C_ENVIRONMENT",
+			"objectDefinitionExternalReferenceCode2": "C_ENVIRONMENT_ADMIN",
+			"type": "oneToMany"
+		},
+		{
+			"deletionType": "cascade",
 			"externalReferenceCode": "R_ENVIRONMENT_TO_USAGE_EVENT",
 			"label": {
 				"en_US": "Environment to Usage Event"

@@ -16,7 +16,9 @@ export type ProjectEnvironment = {
 	adminLastName: string;
 	aiHubURL: string;
 	allowedEmailDomains: string;
+	analyticsCloudOwnerEmailAddress: string;
 	currentEntitlementHash: string;
+	disasterRecoveryRegion: string;
 	domains: string;
 	externalReferenceCode: string;
 	friendlyURL: string;
@@ -45,7 +47,9 @@ type EnvironmentNode = {
 	adminLastName?: string;
 	aiHubURL?: string;
 	allowedEmailDomains?: string;
+	analyticsCloudOwnerEmailAddress?: string;
 	currentEntitlementHash?: string;
+	disasterRecoveryRegion?: string;
 	domains?: string;
 	externalReferenceCode: string;
 	friendlyURL?: string;
@@ -92,7 +96,10 @@ export function useProjectEnvironments() {
 			adminLastName: node.adminLastName ?? '',
 			aiHubURL: node.aiHubURL ?? '',
 			allowedEmailDomains: node.allowedEmailDomains ?? '',
+			analyticsCloudOwnerEmailAddress:
+				node.analyticsCloudOwnerEmailAddress ?? '',
 			currentEntitlementHash: node.currentEntitlementHash ?? '',
+			disasterRecoveryRegion: node.disasterRecoveryRegion ?? '',
 			domains: node.domains ?? '',
 			externalReferenceCode: node.externalReferenceCode,
 			friendlyURL: node.friendlyURL ?? '',

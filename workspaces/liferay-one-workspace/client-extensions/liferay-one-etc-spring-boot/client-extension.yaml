@@ -17,6 +17,7 @@ liferay-one-etc-spring-boot-oahs:
         -   c_entitlement.everything
         -   c_entitlementdefinition.everything.read
         -   c_environment.everything
+        -   c_environmentadmin.everything
         -   c_licensekey.everything
         -   c_productversion.everything
         -   c_project.everything

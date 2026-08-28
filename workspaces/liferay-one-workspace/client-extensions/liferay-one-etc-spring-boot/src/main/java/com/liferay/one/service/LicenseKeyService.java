@@ -16,7 +16,6 @@ import com.liferay.one.model.SubscriptionEntry;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.ee.license.shared.LicenseConstants;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.io.ByteArrayOutputStream;
@@ -262,7 +261,7 @@ public class LicenseKeyService extends OneBaseService {
 			StringBundler.concat(
 				"(active eq ", active, ") and (complimentary eq ",
 				complimentary, ") and (orderId eq '",
-				_escapeODataString(orderId), "')"));
+				escapeODataString(orderId), "')"));
 	}
 
 	public int getAssetReceiptLicenseLicenseKeysCount(
@@ -273,7 +272,7 @@ public class LicenseKeyService extends OneBaseService {
 			StringBundler.concat(
 				"(active eq ", active, ") and (complimentary eq ",
 				complimentary, ") and (orderId eq '",
-				_escapeODataString(orderId), "')"));
+				escapeODataString(orderId), "')"));
 	}
 
 	public LicenseKey getLicenseKey(Jwt jwt, long licenseKeyId)
@@ -322,7 +321,7 @@ public class LicenseKeyService extends OneBaseService {
 		List<LicenseKey> licenseKeys = getLicenseKeys(
 			StringBundler.concat(
 				"externalReferenceCode eq '",
-				_escapeODataString(externalReferenceCode), "'"));
+				escapeODataString(externalReferenceCode), "'"));
 
 		if (licenseKeys.isEmpty()) {
 			throw new NoSuchLicenseKeyException(
@@ -376,9 +375,9 @@ public class LicenseKeyService extends OneBaseService {
 		return getLicenseKeys(
 			StringBundler.concat(
 				"(active eq ", active, ") and (orderId eq '",
-				_escapeODataString(orderId), "') and (productExternalId eq '",
-				_escapeODataString(productExternalId), "') and (serverId eq '",
-				_escapeODataString(serverId), "')"));
+				escapeODataString(orderId), "') and (productExternalId eq '",
+				escapeODataString(productExternalId), "') and (serverId eq '",
+				escapeODataString(serverId), "')"));
 	}
 
 	public List<LicenseKey> getLicenseKeys(String filterString)
@@ -393,9 +392,8 @@ public class LicenseKeyService extends OneBaseService {
 
 		return getLicenseKeys(
 			StringBundler.concat(
-				"(productExternalId eq '",
-				_escapeODataString(productExternalId), "') and (serverId eq '",
-				_escapeODataString(serverId), "')"));
+				"(productExternalId eq '", escapeODataString(productExternalId),
+				"') and (serverId eq '", escapeODataString(serverId), "')"));
 	}
 
 	public List<LicenseKey> getLicenseKeys(
@@ -404,9 +402,9 @@ public class LicenseKeyService extends OneBaseService {
 
 		return getLicenseKeys(
 			StringBundler.concat(
-				"(domains eq '", _escapeODataString(domains),
-				"') and (licenseType eq '", _escapeODataString(licenseType),
-				"') and (owner eq '", _escapeODataString(owner), "')"));
+				"(domains eq '", escapeODataString(domains),
+				"') and (licenseType eq '", escapeODataString(licenseType),
+				"') and (owner eq '", escapeODataString(owner), "')"));
 	}
 
 	public List<LicenseKey> getLicenseKeysByAccountEntryId(long accountEntryId)
@@ -437,8 +435,8 @@ public class LicenseKeyService extends OneBaseService {
 		return getLicenseKeys(
 			StringBundler.concat(
 				"(active eq ", active, ") and (productName eq '",
-				_escapeODataString(productName), "') and (serverId eq '",
-				_escapeODataString(serverId), "')"));
+				escapeODataString(productName), "') and (serverId eq '",
+				escapeODataString(serverId), "')"));
 	}
 
 	public String getLicenseKeysDownloadFileName(List<LicenseKey> licenseKeys) {
@@ -677,47 +675,47 @@ public class LicenseKeyService extends OneBaseService {
 
 		if (Validator.isNotNull(description)) {
 			conditions.add(
-				"(description eq '" + _escapeODataString(description) + "')");
+				"(description eq '" + escapeODataString(description) + "')");
 		}
 
 		if (Validator.isNotNull(hostName)) {
 			conditions.add(
-				"(hostName eq '" + _escapeODataString(hostName) + "')");
+				"(hostName eq '" + escapeODataString(hostName) + "')");
 		}
 
 		if (Validator.isNotNull(ipAddress)) {
 			conditions.add(
-				"(ipAddresses eq '" + _escapeODataString(ipAddress) + "')");
+				"(ipAddresses eq '" + escapeODataString(ipAddress) + "')");
 		}
 
 		if (Validator.isNotNull(licenseType)) {
 			conditions.add(
-				"(licenseType eq '" + _escapeODataString(licenseType) + "')");
+				"(licenseType eq '" + escapeODataString(licenseType) + "')");
 		}
 
 		if (Validator.isNotNull(macAddress)) {
 			conditions.add(
-				"(macAddresses eq '" + _escapeODataString(macAddress) + "')");
+				"(macAddresses eq '" + escapeODataString(macAddress) + "')");
 		}
 
 		if (Validator.isNotNull(owner)) {
-			conditions.add("(owner eq '" + _escapeODataString(owner) + "')");
+			conditions.add("(owner eq '" + escapeODataString(owner) + "')");
 		}
 
 		if (Validator.isNotNull(productExternalId)) {
 			conditions.add(
 				"(productExternalId eq '" +
-					_escapeODataString(productExternalId) + "')");
+					escapeODataString(productExternalId) + "')");
 		}
 
 		if (Validator.isNotNull(productName)) {
 			conditions.add(
-				"(productName eq '" + _escapeODataString(productName) + "')");
+				"(productName eq '" + escapeODataString(productName) + "')");
 		}
 
 		if (Validator.isNotNull(serverId)) {
 			conditions.add(
-				"(serverId eq '" + _escapeODataString(serverId) + "')");
+				"(serverId eq '" + escapeODataString(serverId) + "')");
 		}
 
 		if (conditions.isEmpty()) {
@@ -744,14 +742,6 @@ public class LicenseKeyService extends OneBaseService {
 			licenseKey.getOwner(), licenseKey.getProductExternalId(),
 			licenseKey.getProductName(), licenseKey.getProductVersion(),
 			licenseKey.getServerId(), licenseKey.getSizing(), startDate);
-	}
-
-	private String _escapeODataString(String value) {
-		if (value == null) {
-			return null;
-		}
-
-		return StringUtil.replace(value, '\'', "''");
 	}
 
 	private int _getCount(String filterString) throws Exception {

@@ -18,7 +18,23 @@ public class EnvironmentConstants {
 
 	public static final String ACTIVATION_STATUS_PENDING = "pending";
 
+	public static final String OFFERING_ANALYTICS_CLOUD = "Analytics Cloud";
+
 	public static final String OFFERING_CLOUD_NATIVE = "Cloud Native";
+
+	public static final String OFFERING_PAAS = "PaaS";
+
+	public static final String OFFERING_SAAS = "SaaS";
+
+	public static final String PROFILE_ANALYTICS_CLOUD = "analytics-cloud";
+
+	public static final String PROFILE_PAAS = "paas";
+
+	public static final String PROFILE_SAAS = "saas";
+
+	public static final String[] PROFILES = {
+		PROFILE_ANALYTICS_CLOUD, PROFILE_PAAS, PROFILE_SAAS
+	};
 
 	public static final String TYPE_NONPRODUCTION = "non-production";
 

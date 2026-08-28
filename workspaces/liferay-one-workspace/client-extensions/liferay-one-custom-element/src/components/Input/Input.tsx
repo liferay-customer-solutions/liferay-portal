@@ -23,7 +23,7 @@ interface IInputProps
 	required?: boolean;
 	tooltip?: string;
 	tooltipText?: string;
-	type?: 'number' | 'textarea' | 'text' | 'date';
+	type?: 'date' | 'email' | 'number' | 'text' | 'textarea';
 	value?: string;
 }
 

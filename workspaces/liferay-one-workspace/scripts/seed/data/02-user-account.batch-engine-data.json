@@ -200,6 +200,14 @@
 					]
 				},
 				{
+					"externalReferenceCode": "ACCNT-025",
+					"roleBriefs": [
+						{
+							"name": "Account Administrator"
+						}
+					]
+				},
+				{
 					"externalReferenceCode": "ACCNT-026",
 					"roleBriefs": [
 						{

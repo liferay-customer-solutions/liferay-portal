@@ -1,0 +1,24 @@
+{
+	"description": "",
+	"editorType": "richText",
+	"externalReferenceCode": "SETUP-SAAS-ENVIRONMENT",
+	"name": "Cloud | Setup SaaS Environment",
+	"recipientType": "email",
+	"recipients": [
+		{
+			"bcc": "",
+			"cc": "",
+			"from": "do-not-reply@liferay.com",
+			"fromName": {
+				"en-US": "One Liferay"
+			},
+			"to": {
+				"en-US": "cloud-provisioning@liferay.com"
+			}
+		}
+	],
+	"subject": {
+		"en_US": "Liferay SaaS Activation request for [%PROJECT_ID%]"
+	},
+	"type": "email"
+}

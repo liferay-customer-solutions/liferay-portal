@@ -17,14 +17,22 @@ import com.liferay.one.constants.ProductVersion;
 import com.liferay.one.exception.ActivationCodeAlreadyUsedException;
 import com.liferay.one.exception.AddOnsUnavailableException;
 import com.liferay.one.exception.CloudNativeEntitlementException;
+import com.liferay.one.exception.DisasterRecoveryEntitlementException;
+import com.liferay.one.exception.EnvironmentActivationAlreadyRequestedException;
 import com.liferay.one.exception.EnvironmentAlreadyActivatedException;
+import com.liferay.one.exception.EnvironmentProfileEntitlementException;
+import com.liferay.one.exception.InvalidEnvironmentAdminsException;
 import com.liferay.one.exception.NoSuchActivationCodeException;
+import com.liferay.one.exception.ProjectNotFoundException;
 import com.liferay.one.license.LicenseKeyExporter;
 import com.liferay.one.license.LicenseKeyGenerator;
 import com.liferay.one.model.Entitlement;
 import com.liferay.one.model.EntitlementDefinition;
 import com.liferay.one.model.Environment;
+import com.liferay.one.model.Project;
+import com.liferay.one.permission.EnvironmentActivationPermission;
 import com.liferay.one.service.AccountService;
+import com.liferay.one.service.CloudActivationRequestService;
 import com.liferay.one.service.CommerceProductService;
 import com.liferay.one.service.CommerceProductVirtualSettingsService;
 import com.liferay.one.service.EntitlementService;
@@ -58,9 +66,12 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -79,6 +90,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -95,6 +107,32 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("/cloud")
 @RestController
 public class CloudRestController extends OneBaseRestController {
+
+	@GetMapping(
+		"/projects/{projectExternalReferenceCode}/entitlements/disaster-recovery"
+	)
+	public ResponseEntity<String> getProjectsEntitlementsDisasterRecovery(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable String projectExternalReferenceCode)
+		throws Exception {
+
+		Project project = _environmentActivationPermission.check(
+			jwt, projectExternalReferenceCode);
+
+		if (project == null) {
+			throw new ProjectNotFoundException();
+		}
+
+		JSONObject jsonObject = new JSONObject(
+		).put(
+			"hasDisasterRecoveryEntitlement",
+			_entitlementService.hasActiveEntitlement(
+				projectExternalReferenceCode,
+				EntitlementConstants.NAME_DISASTER_RECOVERY)
+		);
+
+		return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
+	}
 
 	@ExceptionHandler(ActivationCodeAlreadyUsedException.class)
 	public ResponseEntity<?> handleException(
@@ -129,6 +167,30 @@ public class CloudRestController extends OneBaseRestController {
 			HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+	@ExceptionHandler(DisasterRecoveryEntitlementException.class)
+	public ResponseEntity<?> handleException(
+		DisasterRecoveryEntitlementException
+			disasterRecoveryEntitlementException) {
+
+		if (_log.isDebugEnabled()) {
+			_log.debug(disasterRecoveryEntitlementException);
+		}
+
+		return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+	}
+
+	@ExceptionHandler(EnvironmentActivationAlreadyRequestedException.class)
+	public ResponseEntity<?> handleException(
+		EnvironmentActivationAlreadyRequestedException
+			environmentActivationAlreadyRequestedException) {
+
+		if (_log.isDebugEnabled()) {
+			_log.debug(environmentActivationAlreadyRequestedException);
+		}
+
+		return new ResponseEntity<>(HttpStatus.CONFLICT);
+	}
+
 	@ExceptionHandler(EnvironmentAlreadyActivatedException.class)
 	public ResponseEntity<?> handleException(
 		EnvironmentAlreadyActivatedException
@@ -139,6 +201,29 @@ public class CloudRestController extends OneBaseRestController {
 		}
 
 		return new ResponseEntity<>(HttpStatus.CONFLICT);
+	}
+
+	@ExceptionHandler(EnvironmentProfileEntitlementException.class)
+	public ResponseEntity<?> handleException(
+		EnvironmentProfileEntitlementException
+			environmentProfileEntitlementException) {
+
+		if (_log.isDebugEnabled()) {
+			_log.debug(environmentProfileEntitlementException);
+		}
+
+		return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+	}
+
+	@ExceptionHandler(InvalidEnvironmentAdminsException.class)
+	public ResponseEntity<?> handleException(
+		InvalidEnvironmentAdminsException invalidEnvironmentAdminsException) {
+
+		if (_log.isWarnEnabled()) {
+			_log.warn(invalidEnvironmentAdminsException);
+		}
+
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(NoSuchActivationCodeException.class)
@@ -181,6 +266,36 @@ public class CloudRestController extends OneBaseRestController {
 		if (_log.isInfoEnabled()) {
 			_log.info("Activating environment " + environmentId);
 		}
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PostMapping("/environments/activation-request")
+	public ResponseEntity<Void> postEnvironmentsActivationRequest(
+			@AuthenticationPrincipal Jwt jwt, @RequestBody String json)
+		throws Exception {
+
+		JSONObject jsonObject = new JSONObject(json);
+
+		String environmentProfile = jsonObject.optString("environmentProfile");
+
+		String projectExternalReferenceCode = jsonObject.optString(
+			"projectExternalReferenceCode");
+
+		Project project = _environmentActivationPermission.check(
+			jwt, projectExternalReferenceCode);
+
+		if (project == null) {
+			throw new ProjectNotFoundException();
+		}
+
+		long contractId = _checkEnvironmentProfileEntitlement(
+			environmentProfile, projectExternalReferenceCode);
+
+		_cloudActivationRequestService.addActivationRequest(
+			project.getAccountId(), project.getAccountExternalReferenceCode(),
+			contractId, environmentProfile, jsonObject,
+			projectExternalReferenceCode);
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -419,6 +534,73 @@ public class CloudRestController extends OneBaseRestController {
 			publicKey);
 	}
 
+	private long _checkEnvironmentProfileEntitlement(
+			String environmentProfile, String projectExternalReferenceCode)
+		throws Exception {
+
+		if (!ArrayUtil.contains(
+				EnvironmentConstants.PROFILES, environmentProfile)) {
+
+			throw new ResponseStatusException(
+				HttpStatus.BAD_REQUEST,
+				"The environment profile is not recognized");
+		}
+
+		boolean entitled = false;
+		Set<Long> contractIds = new HashSet<>();
+
+		for (Entitlement entitlement :
+				_entitlementService.getActiveEntitlements(
+					projectExternalReferenceCode)) {
+
+			Product product = _fetchProduct(entitlement);
+
+			if (product == null) {
+				continue;
+			}
+
+			String specificationValue = _getSpecificationValue(
+				product,
+				CommerceProductConstants.
+					SPECIFICATION_KEY_PROJECT_ENVIRONMENT_PROFILE);
+
+			if (Validator.isNull(specificationValue) ||
+				!Objects.equals(environmentProfile, specificationValue)) {
+
+				continue;
+			}
+
+			entitled = true;
+
+			long contractId = entitlement.getContractId();
+
+			if (contractId > 0) {
+				contractIds.add(contractId);
+			}
+		}
+
+		if (!entitled) {
+			throw new EnvironmentProfileEntitlementException(
+				environmentProfile, projectExternalReferenceCode);
+		}
+
+		if (contractIds.size() != 1) {
+			if (_log.isWarnEnabled() && (contractIds.size() > 1)) {
+				_log.warn(
+					StringBundler.concat(
+						"Unable to resolve a single contract for project ",
+						projectExternalReferenceCode,
+						" and environment profile ", environmentProfile));
+			}
+
+			return 0;
+		}
+
+		Iterator<Long> iterator = contractIds.iterator();
+
+		return iterator.next();
+	}
+
 	private Path _createOfflineActivationBundle(
 			String dxpVersion, Environment environment)
 		throws Exception {
@@ -459,6 +641,33 @@ public class CloudRestController extends OneBaseRestController {
 		}
 
 		return path;
+	}
+
+	private Product _fetchProduct(Entitlement entitlement) throws Exception {
+		EntitlementDefinition entitlementDefinition =
+			entitlement.getEntitlementDefinition();
+
+		if (entitlementDefinition == null) {
+			return null;
+		}
+
+		long cProductId = entitlementDefinition.getCProductId();
+
+		if (cProductId <= 0) {
+			return null;
+		}
+
+		Product product = _commerceProductService.fetchProduct(cProductId);
+
+		if (product == null) {
+			_log.error(
+				StringBundler.concat(
+					"No product exists for commerce product ID ", cProductId,
+					" of entitlement definition ",
+					entitlementDefinition.getExternalReferenceCode()));
+		}
+
+		return product;
 	}
 
 	private String _generateAppLicenseXML(
@@ -615,32 +824,7 @@ public class CloudRestController extends OneBaseRestController {
 
 		List<Product> products = new ArrayList<>();
 
-		for (Entitlement entitlement : entitlements) {
-			EntitlementDefinition entitlementDefinition =
-				entitlement.getEntitlementDefinition();
-
-			if (entitlementDefinition == null) {
-				continue;
-			}
-
-			long cProductId = entitlementDefinition.getCProductId();
-
-			if (cProductId <= 0) {
-				continue;
-			}
-
-			Product product = _commerceProductService.fetchProduct(cProductId);
-
-			if (product == null) {
-				_log.error(
-					StringBundler.concat(
-						"No product exists for commerce product ID ",
-						cProductId, " of entitlement definition ",
-						entitlementDefinition.getExternalReferenceCode()));
-
-				continue;
-			}
-
+		for (Product product : _getProducts(entitlements)) {
 			if (_isCloudEnabled(product)) {
 				products.add(product);
 			}
@@ -801,6 +985,54 @@ public class CloudRestController extends OneBaseRestController {
 		return MediaType.parseMediaType(contentTypes.get(0));
 	}
 
+	private List<Product> _getProducts(List<Entitlement> entitlements)
+		throws Exception {
+
+		List<Product> products = new ArrayList<>();
+
+		for (Entitlement entitlement : entitlements) {
+			Product product = _fetchProduct(entitlement);
+
+			if (product != null) {
+				products.add(product);
+			}
+		}
+
+		return products;
+	}
+
+	private String _getSpecificationValue(
+		Product product, String specificationKey) {
+
+		ProductSpecification[] productSpecifications =
+			product.getProductSpecifications();
+
+		if (productSpecifications == null) {
+			return StringPool.BLANK;
+		}
+
+		for (ProductSpecification productSpecification :
+				productSpecifications) {
+
+			if (!Objects.equals(
+					productSpecification.getSpecificationKey(),
+					specificationKey)) {
+
+				continue;
+			}
+
+			Map<String, String> value = productSpecification.getValue();
+
+			if (value == null) {
+				return StringPool.BLANK;
+			}
+
+			return GetterUtil.getString(value.get("en_US"));
+		}
+
+		return StringPool.BLANK;
+	}
+
 	private boolean _hasAddOn(Product product, String body) throws Exception {
 		SignedJWT signedJWT = SignedJWT.parse(body);
 
@@ -848,33 +1080,10 @@ public class CloudRestController extends OneBaseRestController {
 	}
 
 	private boolean _isCloudEnabled(Product product) {
-		ProductSpecification[] productSpecifications =
-			product.getProductSpecifications();
-
-		if (productSpecifications == null) {
-			return false;
-		}
-
-		for (ProductSpecification productSpecification :
-				productSpecifications) {
-
-			if (!Objects.equals(
-					productSpecification.getSpecificationKey(),
-					CommerceProductConstants.SPECIFICATION_KEY_CLOUD_ENABLED)) {
-
-				continue;
-			}
-
-			Map<String, String> value = productSpecification.getValue();
-
-			if (value == null) {
-				return false;
-			}
-
-			return GetterUtil.getBoolean(value.get("en_US"));
-		}
-
-		return false;
+		return GetterUtil.getBoolean(
+			_getSpecificationValue(
+				product,
+				CommerceProductConstants.SPECIFICATION_KEY_CLOUD_ENABLED));
 	}
 
 	private Date _toDate(Instant instant, Date defaultDate) {
@@ -936,6 +1145,9 @@ public class CloudRestController extends OneBaseRestController {
 	private AccountService _accountService;
 
 	@Autowired
+	private CloudActivationRequestService _cloudActivationRequestService;
+
+	@Autowired
 	private CloudNativeSignatureValidator _cloudNativeSignatureValidator;
 
 	@Autowired
@@ -947,6 +1159,9 @@ public class CloudRestController extends OneBaseRestController {
 
 	@Autowired
 	private EntitlementService _entitlementService;
+
+	@Autowired
+	private EnvironmentActivationPermission _environmentActivationPermission;
 
 	@Autowired
 	private EnvironmentService _environmentService;

@@ -7,6 +7,7 @@ package com.liferay.one.service;
 
 import com.liferay.one.constants.EnvironmentConstants;
 import com.liferay.one.model.Environment;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
@@ -23,6 +24,44 @@ import org.springframework.web.util.UriComponentsBuilder;
  */
 @Component
 public class EnvironmentService extends OneBaseService {
+
+	public Environment addActivationEnvironment(
+			long accountEntryId, long contractId, JSONObject fieldsJSONObject,
+			String offering, String projectExternalReferenceCode)
+		throws Exception {
+
+		JSONObject environmentJSONObject = new JSONObject(
+		).put(
+			"activationStatus", EnvironmentConstants.ACTIVATION_STATUS_PENDING
+		).put(
+			"offering", offering
+		).put(
+			"r_accountEntryToEnvironment_accountEntryId", accountEntryId
+		).put(
+			"r_projectToEnvironment_c_projectERC", projectExternalReferenceCode
+		);
+
+		if (contractId > 0) {
+			environmentJSONObject.put(
+				"r_contractToEnvironment_c_contractId", contractId);
+		}
+
+		for (String fieldName : _ACTIVATION_FIELD_NAMES) {
+			if (fieldsJSONObject.has(fieldName)) {
+				environmentJSONObject.put(
+					fieldName, fieldsJSONObject.optString(fieldName));
+			}
+		}
+
+		String response = post(
+			getAuthorization(), environmentJSONObject.toString(),
+			UriComponentsBuilder.fromPath(
+				"/o/c/environments"
+			).build(
+			).toUri());
+
+		return new Environment(new JSONObject(response));
+	}
 
 	public Environment addCloudNativeEnvironment(
 			long accountEntryId, String activationCode,
@@ -60,6 +99,19 @@ public class EnvironmentService extends OneBaseService {
 			).toUri());
 
 		return new Environment(new JSONObject(response));
+	}
+
+	public Environment fetchActivationEnvironment(
+			long accountEntryId, String offering,
+			String projectExternalReferenceCode)
+		throws Exception {
+
+		return fetchEnvironment(
+			StringBundler.concat(
+				"(r_accountEntryToEnvironment_accountEntryId eq '",
+				accountEntryId, "') and (offering eq '", offering,
+				"') and (r_projectToEnvironment_c_projectERC eq '",
+				escapeODataString(projectExternalReferenceCode), "')"));
 	}
 
 	public Environment fetchEnvironment(String filterString) throws Exception {
@@ -155,5 +207,12 @@ public class EnvironmentService extends OneBaseService {
 			).build(
 			).toUri());
 	}
+
+	private static final String[] _ACTIVATION_FIELD_NAMES = {
+		"adminEmailAddress", "adminFirstName", "adminLastName",
+		"allowedEmailDomains", "analyticsCloudOwnerEmailAddress",
+		"disasterRecoveryRegion", "friendlyURL", "githubUsername",
+		"ownerEmailAddress", "projectId", "region", "timeZone", "workspaceName"
+	};
 
 }

@@ -41,6 +41,8 @@ public class EntitlementConstants {
 
 	public static final String NAME_DATABASE = "database";
 
+	public static final String NAME_DISASTER_RECOVERY = "disasterRecovery";
+
 	public static final String NAME_DOCUMENT_LIBRARY_SIZE =
 		"document-library-size";
 

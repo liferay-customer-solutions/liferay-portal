@@ -57,6 +57,7 @@ export default {
 	'add-a-description-of-the-file-related-to-this-ticket':
 		'Add a description of the file related to this ticket.',
 	'add-a-minimum-of-x-blocks': 'Add a minimum of {0} blocks',
+	'add-another-admin': 'Add Another Admin',
 	'add-content-block': 'Add Content Block',
 	'add-currency': 'Add Currency',
 	'add-developer-licenses': 'Add Developer Licenses',
@@ -120,12 +121,22 @@ export default {
 	'analytics': 'Analytics',
 	'analytics-and-optimization': 'Analytics and Optimization',
 	'analytics-cloud-activation': 'Analytics Cloud Activation',
+	'analytics-cloud-owner-s-email-address':
+		"Analytics Cloud Owner's Email Address",
 	'analytics-group-id': 'Analytics Group ID',
 	'and': 'and',
 	'and-the': 'and the',
 	'annual': 'Annual',
 	'annual-target': 'Annual Target',
 	'anonymous-page-views-apv': 'Anonymous Page Views (APV)',
+	'another-user-already-submitted-the-analytics-cloud-activation-request':
+		'Another user already submitted the Analytics Cloud activation request.',
+	'another-user-already-submitted-the-liferay-paas-activation-request':
+		'Another user already submitted the Liferay PaaS activation request.',
+	'another-user-already-submitted-the-liferay-saas-activation-request':
+		'Another user already submitted the Liferay SaaS activation request.',
+	'anyone-with-an-email-address-at-the-provided-domains-can-request-access-to-your-workspace-if-multiple-separate-domains-by-commas':
+		'Anyone with an email address at the provided domains can request access to your workspace. If multiple, separate domains by commas.',
 	'api-requests': 'API Requests',
 	'api-requests-per-month': 'API Requests / Month',
 	'app': 'App',
@@ -240,6 +251,8 @@ export default {
 	'business-use': 'Business Use',
 	'buy-liferay-tokens': 'Buy Liferay Tokens',
 	'by': 'by',
+	'by-checking-this-box-and-clicking-next-below-i-as-an-authorized-representative-of-x-acknowledge-that-x-accepts-the-x-terms-and-conditions-and-privacy-policy-x-these-terms-will-govern-x-s-use-of-liferay-analytics-cloud-unless-x-has-entered-into-a-separate-agreement-with-liferay-that-governs-x-s-use-of-liferay-analytics-cloud':
+		"By checking this box and clicking “Next”, below, I, as an authorized representative of {0}, acknowledge that {0} accepts the {1} Terms and Conditions and Privacy Policy. {2} These terms will govern {0}'s use of Liferay Analytics Cloud unless {0} has entered into a separate agreement with Liferay that governs {0}'s use of Liferay Analytics Cloud.",
 	'by-requesting-a-publisher-account-you-agree-to-the':
 		'By requesting a Publisher account, you agree to the',
 	'by-x': 'By {0}',
@@ -382,6 +395,7 @@ export default {
 	'customize-solution-header': 'Customize Solution Header',
 	'customize-storefront-solutions-details':
 		'Customize Storefront Solution Details',
+	'dammam-saudi-arabia': 'Dammam, Saudi Arabia',
 	'dashboard': 'Dashboard',
 	'data-center-location': 'Data Center Location',
 	'data-lake': 'Data Lake',
@@ -416,6 +430,7 @@ export default {
 	'deleting': 'Deleting',
 	'deleting-a-service-cannot-be-undone-confirm-the-deletion-before-proceeding':
 		'Deleting a service cannot be undone! Confirm the deletion before proceeding.',
+	'delhi-india': 'Delhi, India',
 	'denied': 'Denied',
 	'description': 'Description',
 	'design-the-storefront-for-your-solution-this-will-set-the-information-displayed-on-the-solutions-page-this-section-is-dedicated-to-creating-the-solutions-detail-content':
@@ -430,9 +445,14 @@ export default {
 		'Developer licenses are limited to 5 unique addresses and should not be used for full-scale production deployments.',
 	'development-framework': 'Development Framework',
 	'digital-workplace': 'Digital Workplace',
+	'disaster-recovery-data-center-location':
+		'Disaster Recovery Data Center Location',
+	'disaster-recovery-data-center-region':
+		'Disaster Recovery Data Center Region',
 	'do-not-close-this-window': 'DO NOT CLOSE THIS WINDOW',
 	'documentation': 'Documentation',
 	'does-not-expire': 'Does Not Expire',
+	'doha-qatar': 'Doha, Qatar',
 	'domain': 'Domain',
 	'domains': 'Domains',
 	'done': 'Done',
@@ -567,6 +587,7 @@ export default {
 	'filters': 'Filters',
 	'finance-dashboard': 'Finance Dashboard',
 	'financial-portal': 'Financial Portal',
+	'finish-activation': 'Finish Activation',
 	'first-name': 'First Name',
 	'for-businesses-with-a-vat-tax-number-this-account-type-support-multiple-users':
 		'For businesses with a VAT/Tax number; this account type support multiple users.',
@@ -580,6 +601,7 @@ export default {
 	'fragment': 'Fragment',
 	'fragment-collection-of-fragments': 'Fragment/Collection of Fragments',
 	'fragments': 'Fragments',
+	'frankfurt-germany': 'Frankfurt, Germany',
 	'free': 'Free',
 	'friendly-workspace-url': 'Friendly Workspace URL',
 	'fulfillment-date': 'Fulfillment Date',
@@ -594,7 +616,7 @@ export default {
 	'get-started': 'Get Started',
 	'getting-started-with-liferay-enterprise-search-article':
 		'Getting Started with Liferay Enterprise Search article.',
-	'github-username': 'Github Username',
+	'github-username': 'GitHub Username',
 	'go-back-to-marketplace': 'Go Back to Marketplace',
 	'go-live': 'Go Live',
 	'go-to-analytics-cloud': 'Go to Analytics Cloud',
@@ -604,13 +626,16 @@ export default {
 	'go-to-dashboard': 'Go to Dashboard',
 	'go-to-download': 'Go to Download',
 	'go-to-dxp': 'Go to DXP',
+	'go-to-liferay-saas': 'Go to Liferay SaaS',
 	'go-to-marketplace': 'Go to Marketplace',
 	'go-to-my-apps': 'Go to My Apps',
+	'go-to-product-console': 'Go to Product Console',
 	'go-to-ssa-trial-listing': 'Go to SSA Trial Listing',
 	'go-to-the-catalog': 'Go to the Catalog',
 	'go-to-trial': 'Go to Trial',
 	'got-it': 'Got it',
 	'government': 'Government',
+	'hamina-finland': 'Hamina, Finland',
 	'hang-tight-your-purchase-is-being-processed':
 		'Hang tight, your purchase is being processed.',
 	'header': 'Header',
@@ -703,6 +728,7 @@ export default {
 	'invited-members-receive-an-email-and-join-the-account-after-accepting-the-invitation':
 		'Invited members receive an email and join the account after accepting the invitation.',
 	'iot': 'IoT',
+	'iowa-usa': 'Iowa, USA',
 	'ip-addresses': 'IP Addresses',
 	'job-title': 'Job Title',
 	'join-an-existing-business-account-e-g-your-company-and-gain-full-access':
@@ -750,6 +776,7 @@ export default {
 		'Your use of Liferay DXP is subject to these terms and the Liferay End User License Agreement set forth at',
 	'liferay-dxp-eula-disclaimer-suffix':
 		'(these terms and the eula together form the "agreement"). Please read these terms and the Liferay End User License Agreement carefully before accessing, downloading, installing or in any way using the software. By clicking your agreement to any of these or accessing, downloading, installing or in any way using the software, you signify your assent to and acceptance of the agreement and acknowledge that you have read and you understand terms of the agreement. If you are an individual acting on behalf of an entity, you represent that you have the authority to enter into this agreement on behalf of that entity. If you do not accept the terms of this agreement, then you must not access, download, install or in any way use the software. I have read and agree to all the terms and conditions below (check all boxes).',
+	'liferay-dxp-version': 'Liferay DXP Version',
 	'liferay-end-user-agreement': 'Liferay End User Agreement',
 	'liferay-learn': 'Liferay Learn',
 	'liferay-paas': 'Liferay PaaS',
@@ -770,9 +797,13 @@ export default {
 	'login-as-a-user-that-has-access-to-a-project-or-contact-your-project-administrator-to-add-you-to-a-project.':
 		'Login as a user that has access to a project or contact your project administrator to add you to a project.',
 	'logs': 'Logs',
+	'london-england': 'London, England',
 	'low-code': 'Low-code',
 	'low-code-configuration': 'Low-Code Configuration',
 	'low-code-configurations-published': 'Low Code Configurations Published',
+	'lowercase-letters-and-numbers-only': 'Lowercase letters and numbers only.',
+	'lowercase-letters-numbers-and-dashes-only':
+		'Lowercase letters, numbers, and dashes only.',
 	'mac-addresses': 'Mac Addresses',
 	'main': 'Main',
 	'main-information': 'Main Information',
@@ -849,6 +880,7 @@ export default {
 	'month': 'Month',
 	'monthly-inbound-and-outbound': 'Monthly Inbound and Outbound',
 	'monthly-increase': 'Monthly Increase',
+	'montreal-canada': 'Montreal, Canada',
 	'more-actions': 'More Actions',
 	'more-info': 'More Info',
 	'most-purchased-apps': 'Most Purchased Apps',
@@ -859,6 +891,7 @@ export default {
 	'move-up': 'Move Up',
 	'mp-commission': 'MP Commission',
 	'multiple-projects': 'Multiple Projects',
+	'mumbai-india': 'Mumbai, India',
 	'my-account': 'My Account',
 	'my-accounts': 'My Accounts',
 	'my-apps': 'My Apps',
@@ -904,7 +937,6 @@ export default {
 	'no-contract-linked': 'No Contract Linked',
 	'no-data-found': 'No data found.',
 	'no-environment-information-yet': 'No Environment Information Yet',
-	'no-environment-yet': 'No environment yet.',
 	'no-further-edits-can-be-made-when-tickets-are-closed-please-open-a-new-support-ticket-if-assistance-is-needed':
 		'No further edits can be made when tickets are closed. Please open a new support ticket if assistance is needed.',
 	'no-history-of-activity-was-found': 'No history of activity was found.',
@@ -986,7 +1018,9 @@ export default {
 	'orders': 'Orders',
 	'orders-and-fulfillment': 'Orders and Fulfillment',
 	'orders-list': 'Orders List',
+	'oregon-usa': 'Oregon, USA',
 	'organization': 'Organization',
+	'osaka-japan': 'Osaka, Japan',
 	'other': 'Other',
 	'other-event': 'Other Event',
 	'overall-experience': 'Overall Experience',
@@ -1109,6 +1143,7 @@ export default {
 	'project': 'Project',
 	'project-admin-email': 'Project Admin Email',
 	'project-admin-name': 'Project Admin Name',
+	'project-admins': 'Project Admins',
 	'project-id': 'Project ID',
 	'project-members': 'Project Members',
 	'project-members-successfully-updated':
@@ -1203,6 +1238,7 @@ export default {
 	'remove': 'Remove',
 	'remove-all-roles': 'Remove all roles',
 	'remove-member': 'Remove Member',
+	'remove-project-admin': 'Remove Project Admin',
 	'remove-this-member': 'Remove This Member',
 	'remove-user': 'Remove User',
 	'renew': 'Renew',
@@ -1230,6 +1266,8 @@ export default {
 	'retail': 'Retail',
 	'return-to-attachments': 'Return to Attachments',
 	'return-to-marketplace': 'Return to Marketplace',
+	'return-to-the-product-activation-page-to-view-the-current-activation-status':
+		'Return to the product activation page to view the current activation status.',
 	'return-to-ticket': 'Return to Ticket',
 	'review': 'Review',
 	'review-and-accept-the-legal-agreement-between-you-and-liferay-before-proceeding-you-are-about-to-create-a-new-solution-submission':
@@ -1243,6 +1281,7 @@ export default {
 	'revoke-invitation': 'Revoke Invitation',
 	'role': 'Role',
 	'roles': 'Roles',
+	's-o-paulo-brazil': 'São Paulo, Brazil',
 	'saas-demos': 'SaaS Demos',
 	'saas-environments': 'SaaS Environments',
 	'saas-trials': 'SaaS Trials',
@@ -1314,6 +1353,9 @@ export default {
 	'send-request': 'Send Request',
 	'set-the-users-role-ssa-users-can-create-trials-while-ssa-admins-can-manage-users-roles-and-trials':
 		'Set the user’s role: SSA Users can create trials, while SSA Admins can manage users, roles, and trials.',
+	'set-up-analytics-cloud': 'Set up Analytics Cloud',
+	'set-up-liferay-paas': 'Set up Liferay PaaS',
+	'set-up-liferay-saas': 'Set up Liferay SaaS',
 	'setting-up-your-free-version-ldp': 'Setting up your Free Version LDP 🚀',
 	'settings': 'Settings',
 	'share-beta-feedback': 'Share Beta Feedback',
@@ -1385,11 +1427,13 @@ export default {
 	'support-phone-number': 'Support Phone Number',
 	'support-url': 'Support URL',
 	'supported-version': 'Supported Version',
+	'sydney-australia': 'Sydney, Australia',
 	'sync-to-jsm': 'Sync to JSM',
 	'syncing-to-jsm': 'Syncing to JSM...',
 	'system-admin-email': 'System Admin Email',
 	'system-admin-first-name': 'System Admin First Name',
 	'system-admin-last-name': 'System Admin Last Name',
+	'system-admins': 'System Admins',
 	'tags': 'Tags',
 	'tags-help-to-describe-your-app-in-the-marketplace-select-the-tags-most-relevant-to-your-app-they-can-be-changed-if-needed':
 		'Tags help to describe your app in the Marketplace. Select the tags most relevant to your app. They can be changed if needed.',
@@ -1413,6 +1457,8 @@ export default {
 	'text-images-block': 'Text Images Block',
 	'text-video-block': 'Text Video Block',
 	'thank-you-for-choosing': 'Thank you for choosing',
+	'thank-you-for-submitting-this-request':
+		'Thank you for submitting this request!',
 	'thank-you-for-trying-the-beta-version-of-this-product-your-feedback-is-essential-to-improve-the-final-release-this-survey-takes-3–5-minutes':
 		'Thank you for trying the beta version of this product! Your feedback is essential to improve the final release. This survey takes ~3–5 minutes.',
 	'thank-you-for-your': 'Thank you for your',
@@ -1457,6 +1503,10 @@ export default {
 	'the-published-version-is-x': 'The published version is {0}.',
 	'the-selected-project-does-not-meet-the-necessary-resource-requirements-for-this-app-please-contact-sales-to-request-additional-resources':
 		'The selected project does not meet the necessary resource requirements for this app. Please contact Sales to request additional resources.',
+	'the-workspace-url-must-not-have-spaces':
+		'The workspace URL must not have spaces.',
+	'the-workspace-url-should-start-with-/':
+		"The workspace URL should start with '/'.",
 	'theme': 'Theme',
 	'there-are-currently-no-open-tickets-under-this-project':
 		'There are currently no open tickets under this project.',
@@ -1472,6 +1522,7 @@ export default {
 		"This environment's Cloud Native cluster doesn't have a live connection to Liferay's provisioning service. Run {0} in your Cloud Native Environment to generate a signed activation token, then paste it below to activate this {1} environment.",
 	'this-feature-is-not-included-in-your-current-plan':
 		'This feature is not included in your current plan',
+	'this-field-exceeded-x-characters': 'This field exceeded {0} characters.',
 	'this-field-is-required': 'This field is required.',
 	'this-invitation-has-expired-ask-an-account-administrator-to-send-you-a-new-one':
 		'This invitation has expired. Ask an account administrator to send you a new one.',
@@ -1489,6 +1540,8 @@ export default {
 		'This order must be completed before downloading this app.',
 	'this-product-is-no-longer-available':
 		'This product is no longer available.',
+	'this-project-does-not-have-an-active-subscription-for-this-product-contact-your-liferay-sales-representative':
+		'This project does not have an active subscription for this product. Contact your Liferay sales representative.',
 	'this-project-has-no-extension-environments':
 		'This project has no extension environments.',
 	'this-project-has-no-members': 'This project has no members yet.',
@@ -1526,6 +1579,7 @@ export default {
 	'token-unavailable': 'Token Unavailable',
 	'tokens': 'Tokens',
 	'tokens-amount': 'Tokens Amount',
+	'tokyo-japan': 'Tokyo, Japan',
 	'topic': 'Topic',
 	'topics': 'Topics',
 	'total': 'Total',
@@ -1655,6 +1709,12 @@ export default {
 		'We could not install your app. Please try again. If the problem continues, contact {0} for assistance.',
 	'we-couldnt-set-up-your-environment-please-contact-support':
 		'We couldn’t set up your environment. Please contact support.',
+	'we-ll-need-a-few-details-to-finish-building-your-liferay-paas-environment':
+		'We’ll need a few details to finish building your Liferay PaaS environment.',
+	'we-ll-need-a-few-details-to-finish-creating-your-analytics-cloud-workspace':
+		'We’ll need a few details to finish creating your Analytics Cloud workspace.',
+	'we-ll-need-a-few-details-to-finish-creating-your-liferay-saas-workspace':
+		'We’ll need a few details to finish creating your Liferay SaaS workspace.',
 	'we-understand-that-plans-change-please-let-us-know-why-the-planned-event-date-for-this-event-is-being-updated':
 		'We understand that plans change. Please let us know why the planned event date for this event is being updated.',
 	'we-were-unable-to-complete-your-invitation-try-the-link-again-or-ask-an-account-administrator-for-a-new-one':
@@ -1752,16 +1812,24 @@ export default {
 		'You need Administrator or Requester role on this project to download a file.',
 	'you-need-administrator-or-requester-role-on-this-project-to-upload-a-file':
 		'You need Administrator or Requester role on this project to upload a file.',
+	'you-need-administrator-role-on-this-project-to-submit-this-form':
+		'You need Administrator role on this project to submit this form.',
 	'you-will-receive-an-invoice-via-email-with-all-the-details-needed-to-complete-your-payment-after-you-complete-the-payment-you-can-activate-your-license-from-the-customer-dashboard':
 		'You will receive an invoice via email with all the details needed to complete your payment. After you complete the payment, you can activate your license from the customer dashboard.',
 	'you-will-receive-an-invoice-via-email-with-the-instructions-to-complete-your-bank-transfer-payment':
 		'You will receive an invoice via email with the instructions to complete your bank transfer payment.',
 	'your-ai-hub-is-ready': 'Your AI Hub is Ready',
+	'your-analytics-cloud-workspace-will-be-provisioned-in-1-2-business-days-an-email-will-be-sent-once-your-workspace-is-ready':
+		'Your Analytics Cloud workspace will be provisioned in 1-2 business days. An email will be sent once your workspace is ready.',
 	'your-attachment-is-uploaded-however-we-encountered-a-problem-posting-your-comment-the-system-is-automatically-retrying-to-send-it':
 		'Your attachment is uploaded, however we encountered a problem posting your comment. The system is automatically retrying to send it.',
 	'your-current-liferay-version': 'Your Current Liferay Version',
 	'your-free-activation-key-has-been-generated':
 		'Your free activation key has been generated!',
+	'your-liferay-paas-project-will-be-provisioned-in-2-3-business-days-at-that-time-liferay-paas-administrators-will-receive-several-onboarding-emails-giving-them-access-to-all-the-liferay-paas-environments-and-tools-included-in-your-subscription':
+		'Your Liferay PaaS project will be provisioned in 2-3 business days. At that time, Liferay PaaS Administrators will receive several onboarding emails, giving them access to all the Liferay PaaS environments and tools included in your subscription.',
+	'your-liferay-saas-project-will-be-provisioned-within-5-business-days-an-email-will-be-sent-once-your-project-is-ready':
+		'Your Liferay SaaS project will be provisioned within 5 business days. An email will be sent once your project is ready.',
 	'your-order-id-is': 'Your Order ID is:',
 	'your-peak-usage-for-this-billing-period-exceeded-your-entitlement-limits-overage-charges-may-apply':
 		'Your peak usage for this billing period exceeded your entitlement limits. Overage charges may apply.',
@@ -1772,4 +1840,5 @@ export default {
 	'zip-area-code': 'Zip/Area Code',
 	'zip-files-must-be-in-universal-file-format-archive-luffa-the-specially-structured-zip-encoded-archive-used-to-package-client-extension-project-outputs-this-format-must-support-the-following-use-cases-deliver-batch-engine-data-files-compatible-with-all-deployment-targets-deliver-dxp-configuration-resource-compatible-with-all-deployment-targets-deliver-static-resources-compatible-with-all-deployment-targets-deliver-the-infrastructure-metadata-necessary-to-deploy-to-lxc-sm-for-more-information-see':
 		'ZIP Files must be in universal file format archive (LUFFA) - the specially structured, ZIP encoded archive used to package client extension project outputs This format must support the following use cases: deliver batch engine data files compatible with all deployment targets deliver DXP configuration resource compatible with all deployment targets deliver static resources compatible with all deployment targets deliver the infrastructure metadata necessary to deploy to Liferay PaaS for more information see: ',
+	'zurich-switzerland': 'Zurich, Switzerland',
 } as const;

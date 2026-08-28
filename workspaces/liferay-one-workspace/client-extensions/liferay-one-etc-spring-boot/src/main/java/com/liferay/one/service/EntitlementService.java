@@ -292,7 +292,7 @@ public class EntitlementService extends OneBaseService {
 
 		return _getActiveEntitlements(
 			"r_projectToEntitlement_c_projectERC eq '" +
-				projectExternalReferenceCode + "'");
+				escapeODataString(projectExternalReferenceCode) + "'");
 	}
 
 	public List<Entitlement> getEntitlements(long commerceOrderItemId)
@@ -342,6 +342,23 @@ public class EntitlementService extends OneBaseService {
 		return state;
 	}
 
+	public boolean hasActiveEntitlement(
+			String projectExternalReferenceCode, String... entitlementNames)
+		throws Exception {
+
+		if (entitlementNames.length == 0) {
+			return false;
+		}
+
+		List<Entitlement> entitlements = _getActiveEntitlements(
+			_getEntitlementNamesFilterString(
+				"r_projectToEntitlement_c_projectERC eq '" +
+					escapeODataString(projectExternalReferenceCode) + "'",
+				entitlementNames));
+
+		return !entitlements.isEmpty();
+	}
+
 	public boolean hasEntitlement(long accountId, String... entitlementNames)
 		throws Exception {
 
@@ -356,7 +373,7 @@ public class EntitlementService extends OneBaseService {
 
 		return _hasEntitlement(
 			"r_projectToEntitlement_c_projectERC eq '" +
-				projectExternalReferenceCode + "'",
+				escapeODataString(projectExternalReferenceCode) + "'",
 			entitlementNames);
 	}
 
@@ -528,6 +545,30 @@ public class EntitlementService extends OneBaseService {
 		return new ArrayList<>(entitlementDefinitions.values());
 	}
 
+	private String _getEntitlementNamesFilterString(
+		String filterString, String... entitlementNames) {
+
+		StringBundler sb = new StringBundler((entitlementNames.length * 3) + 4);
+
+		sb.append("(");
+		sb.append(filterString);
+		sb.append(") and (");
+
+		for (int i = 0; i < entitlementNames.length; i++) {
+			if (i > 0) {
+				sb.append(" or ");
+			}
+
+			sb.append("name eq '");
+			sb.append(escapeODataString(entitlementNames[i]));
+			sb.append("'");
+		}
+
+		sb.append(")");
+
+		return sb.toString();
+	}
+
 	private String _getEntitlementState(Entitlement entitlement) {
 		if (entitlement.isExpired()) {
 			return EntitlementConstants.STATE_EXPIRED;
@@ -595,25 +636,8 @@ public class EntitlementService extends OneBaseService {
 			return false;
 		}
 
-		StringBundler sb = new StringBundler();
-
-		sb.append("(");
-		sb.append(filterString);
-		sb.append(") and (");
-
-		for (int i = 0; i < entitlementNames.length; i++) {
-			if (i > 0) {
-				sb.append(" or ");
-			}
-
-			sb.append("name eq '");
-			sb.append(entitlementNames[i]);
-			sb.append("'");
-		}
-
-		sb.append(")");
-
-		List<Entitlement> entitlements = getEntitlements(sb.toString());
+		List<Entitlement> entitlements = getEntitlements(
+			_getEntitlementNamesFilterString(filterString, entitlementNames));
 
 		for (Entitlement entitlement : entitlements) {
 			if (!entitlement.isExpired()) {

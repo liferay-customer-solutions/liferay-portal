@@ -23,17 +23,29 @@
 			"tokenMonthlyAllowance": "1000"
 		},
 		{
+			"activationStatus": "pending",
+			"externalReferenceCode": "ENV-ANALYTICS-PENDING",
+			"offering": "Analytics Cloud",
+			"ownerEmailAddress": "owner@pending.example.com",
+			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-025",
+			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_MULTI_2",
+			"r_projectToEnvironment_c_projectERC": "PRJCT-025",
+			"region": "Oregon, USA",
+			"workspaceName": "analytics-pending"
+		},
+		{
 			"activationMode": "online",
 			"activationStatus": "active",
 			"allowedEmailDomains": "omni.example.com",
+			"disasterRecoveryRegion": "São Paulo, Brazil",
 			"externalReferenceCode": "ENV-ANALYTICS-PROD",
 			"friendlyURL": "/analytics-omni",
-			"offering": "SaaS",
+			"offering": "Analytics Cloud",
 			"ownerEmailAddress": "owner@omni.example.com",
 			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-013",
 			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_ANALYTICS_CLOUD",
 			"r_projectToEnvironment_c_projectERC": "PRJCT-013",
-			"region": "us-central1",
+			"region": "Oregon, USA",
 			"timeZone": "UTC-06:00",
 			"workspaceName": "analytics-omni"
 		},
@@ -185,11 +197,27 @@
 			"workspaceName": "enterprise-ldp"
 		},
 		{
+			"activationStatus": "pending",
+			"adminEmailAddress": "admin@pending.example.com",
+			"adminFirstName": "Alan",
+			"adminLastName": "Turing",
+			"disasterRecoveryRegion": "tokyo-japan",
+			"externalReferenceCode": "ENV-PAAS-PENDING",
+			"githubUsername": "aturing",
+			"offering": "PaaS",
+			"projectId": "paaspending",
+			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-005",
+			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_PAAS_LEGACY",
+			"r_projectToEnvironment_c_projectERC": "PRJCT-005",
+			"region": "iowa-usa"
+		},
+		{
 			"activationMode": "online",
 			"activationStatus": "active",
 			"adminEmailAddress": "admin@paas.example.com",
 			"adminFirstName": "Ada",
 			"adminLastName": "Lovelace",
+			"disasterRecoveryRegion": "frankfurt-germany",
 			"externalReferenceCode": "ENV-PAAS-PROD",
 			"githubUsername": "adalovelace",
 			"offering": "PaaS",
@@ -197,7 +225,7 @@
 			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-004",
 			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
 			"r_projectToEnvironment_c_projectERC": "PRJCT-004",
-			"region": "us-east1"
+			"region": "iowa-usa"
 		},
 		{
 			"activationMode": "license-key",
@@ -211,18 +239,33 @@
 			"r_projectToEnvironment_c_projectERC": "PRJCT-015"
 		},
 		{
+			"activationStatus": "pending",
+			"adminEmailAddress": "admin@pendingsaas.example.com",
+			"adminFirstName": "Barbara",
+			"adminLastName": "Liskov",
+			"analyticsCloudOwnerEmailAddress": "ac-owner@pendingsaas.example.com",
+			"externalReferenceCode": "ENV-SAAS-PENDING",
+			"offering": "SaaS",
+			"projectId": "saaspending",
+			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-010",
+			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_ENTERPRISE_PLAN",
+			"r_projectToEnvironment_c_projectERC": "PRJCT-010",
+			"region": "Europe"
+		},
+		{
 			"activationMode": "online",
 			"activationStatus": "active",
 			"adminEmailAddress": "admin@saas.example.com",
 			"adminFirstName": "Grace",
 			"adminLastName": "Hopper",
+			"analyticsCloudOwnerEmailAddress": "ac-owner@saas.example.com",
 			"externalReferenceCode": "ENV-SAAS-PROD",
 			"offering": "SaaS",
 			"projectId": "saas-omni",
 			"r_accountEntryToEnvironment_accountEntryERC": "ACCNT-002",
 			"r_contractToEnvironment_c_contractERC": "C_CONTRACT_SAAS_EXPERIENCE",
 			"r_projectToEnvironment_c_projectERC": "PRJCT-002",
-			"region": "eu-west1"
+			"region": "Europe"
 		}
 	]
 }

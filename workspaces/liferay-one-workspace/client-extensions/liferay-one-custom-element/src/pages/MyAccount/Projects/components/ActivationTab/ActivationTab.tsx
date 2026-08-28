@@ -11,17 +11,23 @@ import CloudNativeActivation from '../CloudNativeActivation/CloudNativeActivatio
 import CommerceActivation from '../CommerceActivation/CommerceActivation';
 import EnterpriseSearchActivation from '../EnterpriseSearchActivation/EnterpriseSearchActivation';
 
+import type {ProjectContract} from '~/hooks/useProjectCommerce';
 import type {DeliveryProduct} from '~/types/product';
 
 import type {ActivationProfile} from '../../utils/resolveActivationProfile';
+import type {EnvironmentProfile} from '../../utils/resolveEnvironmentProfile';
 
 type ActivationTabProps = {
+	contract?: ProjectContract;
+	environmentProfile?: EnvironmentProfile;
 	orderId?: string;
 	product: DeliveryProduct;
 	profile?: ActivationProfile;
 };
 
 type ActivationContentProps = {
+	contract?: ProjectContract;
+	environmentProfile?: EnvironmentProfile;
 	orderId?: string;
 	product: DeliveryProduct;
 };
@@ -40,17 +46,25 @@ const ACTIVATION_CONTENT_BY_PROFILE: Record<
 	'keys-list': () => null,
 	'licenses': () => null,
 	'none': () => null,
-	'status': ({product}) => (
-		<ActivationStatusCard productName={product.name} />
+	'status': ({contract, environmentProfile, product}) => (
+		<ActivationStatusCard
+			contract={contract}
+			environmentProfile={environmentProfile}
+			productName={product.name}
+		/>
 	),
 };
 
 export default function ActivationTab({
+	contract,
+	environmentProfile,
 	orderId,
 	product,
 	profile,
 }: ActivationTabProps) {
 	return ACTIVATION_CONTENT_BY_PROFILE[profile ?? 'none']({
+		contract,
+		environmentProfile,
 		orderId,
 		product,
 	});

@@ -42,6 +42,14 @@ import org.springframework.web.util.UriComponentsBuilder;
  */
 public abstract class OneBaseService extends BaseService {
 
+	protected String escapeODataString(String value) {
+		if (value == null) {
+			return null;
+		}
+
+		return StringUtil.replace(value, '\'', "''");
+	}
+
 	protected String fetch(String authorization, URI uri) {
 		try {
 			return get(authorization, uri);

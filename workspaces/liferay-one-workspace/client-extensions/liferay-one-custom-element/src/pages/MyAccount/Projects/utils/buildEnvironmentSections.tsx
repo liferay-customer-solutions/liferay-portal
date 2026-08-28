@@ -33,6 +33,10 @@ const ENVIRONMENT_FIELDS_BY_PROFILE: Partial<
 			value: (environment) => environment.region,
 		},
 		{
+			label: 'disaster-recovery-data-center-location',
+			value: (environment) => environment.disasterRecoveryRegion,
+		},
+		{
 			label: 'workspace-friendly-url',
 			value: (environment) => environment.friendlyURL,
 		},
@@ -46,7 +50,12 @@ const ENVIRONMENT_FIELDS_BY_PROFILE: Partial<
 		{label: 'project-id', value: (environment) => environment.projectId},
 		{
 			label: 'primary-data-center-region',
-			value: (environment) => environment.region,
+			value: (environment) => i18n.translate(environment.region as Word),
+		},
+		{
+			label: 'disaster-recovery-data-center-region',
+			value: (environment) =>
+				i18n.translate(environment.disasterRecoveryRegion as Word),
 		},
 		{
 			label: 'system-admin-email',
@@ -76,6 +85,10 @@ const ENVIRONMENT_FIELDS_BY_PROFILE: Partial<
 		{
 			label: 'project-admin-email',
 			value: (environment) => environment.adminEmailAddress,
+		},
+		{
+			label: 'analytics-cloud-owner-s-email-address',
+			value: (environment) => environment.analyticsCloudOwnerEmailAddress,
 		},
 	],
 	'workspace': [

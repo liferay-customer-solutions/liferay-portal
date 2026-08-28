@@ -49,10 +49,10 @@ function parseQuarterlyVersion(productVersion: string) {
 		: null;
 }
 
-export function useDXPProductVersions() {
+export function useDXPProductVersions(enabled = true) {
 	const {data, isLoading: loading} = useFetch<
 		APIResponse<ProductVersionNode>
-	>('/o/c/productversions', {
+	>(enabled ? '/o/c/productversions' : null, {
 		params: {
 			filter: FILTER,
 			pageSize: -1,

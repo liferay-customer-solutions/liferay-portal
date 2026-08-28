@@ -116,6 +116,9 @@ public class CommerceProductConstants {
 	public static final String SPECIFICATION_KEY_CLOUD_ENABLED =
 		"cloud-enabled";
 
+	public static final String SPECIFICATION_KEY_PROJECT_ENVIRONMENT_PROFILE =
+		"project-environment-profile";
+
 	public static final String TYPE_SIMPLE = "simple";
 
 }

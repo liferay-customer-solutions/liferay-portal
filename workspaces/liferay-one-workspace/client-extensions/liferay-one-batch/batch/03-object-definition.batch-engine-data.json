@@ -2629,6 +2629,24 @@
 				{
 					"DBType": "String",
 					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_ANALYTICS_CLOUD_OWNER_EMAIL_ADDRESS",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Analytics Cloud Owner Email Address"
+					},
+					"name": "analyticsCloudOwnerEmailAddress",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
 					"externalReferenceCode": "C_ENVIRONMENT_CURRENT_ENTITLEMENT_HASH",
 					"indexed": true,
 					"indexedAsKeyword": true,
@@ -2637,6 +2655,24 @@
 						"en_US": "Current Entitlement Hash"
 					},
 					"name": "currentEntitlementHash",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_DISASTER_RECOVERY_REGION",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Disaster Recovery Region"
+					},
+					"name": "disasterRecoveryRegion",
 					"objectFieldSettings": [
 					],
 					"required": false,
@@ -3045,6 +3081,158 @@
 			},
 			"system": false,
 			"titleObjectFieldName": "hostName"
+		},
+		{
+			"active": true,
+			"className": "com.liferay.object.model.ObjectDefinition#C_ENVIRONMENT_ADMIN",
+			"enableCategorization": false,
+			"enableComments": false,
+			"enableObjectEntryHistory": false,
+			"externalReferenceCode": "C_ENVIRONMENT_ADMIN",
+			"friendlyURLSeparator": "l",
+			"label": {
+				"en_US": "Environment Admin"
+			},
+			"name": "EnvironmentAdmin",
+			"objectFields": [
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_ADMIN_EMAIL_ADDRESS",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Email Address"
+					},
+					"name": "emailAddress",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_ADMIN_FIRST_NAME",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "First Name"
+					},
+					"name": "firstName",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_ADMIN_GITHUB_USERNAME",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "GitHub Username"
+					},
+					"name": "githubUsername",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
+					"externalReferenceCode": "C_ENVIRONMENT_ADMIN_LAST_NAME",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Last Name"
+					},
+					"name": "lastName",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				}
+			],
+			"objectFolderExternalReferenceCode": "C_LIFERAY_ONE_FOLDER",
+			"objectRelationships": [
+			],
+			"objectValidationRules": [
+			],
+			"objectViews": [
+				{
+					"defaultObjectView": true,
+					"name": {
+						"en_US": "Default View"
+					},
+					"objectDefinitionExternalReferenceCode": "C_ENVIRONMENT_ADMIN",
+					"objectViewColumns": [
+						{
+							"label": {
+								"en_US": "ERC"
+							},
+							"objectFieldName": "externalReferenceCode",
+							"priority": 0
+						},
+						{
+							"label": {
+								"en_US": "Email Address"
+							},
+							"objectFieldName": "emailAddress",
+							"priority": 1
+						},
+						{
+							"label": {
+								"en_US": "First Name"
+							},
+							"objectFieldName": "firstName",
+							"priority": 2
+						},
+						{
+							"label": {
+								"en_US": "Last Name"
+							},
+							"objectFieldName": "lastName",
+							"priority": 3
+						},
+						{
+							"label": {
+								"en_US": "GitHub Username"
+							},
+							"objectFieldName": "githubUsername",
+							"priority": 4
+						}
+					]
+				}
+			],
+			"panelCategoryKey": "applications_menu.applications.content",
+			"pluralLabel": {
+				"en_US": "Environment Admins"
+			},
+			"portlet": true,
+			"restContextPath": "/o/c/environmentadmins",
+			"scope": "company",
+			"status": {
+				"code": 0,
+				"label": "approved",
+				"label_i18n": "Approved"
+			},
+			"system": false,
+			"titleObjectFieldName": "emailAddress"
 		},
 		{
 			"active": true,

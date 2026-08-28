@@ -207,6 +207,42 @@
 			"name": "Entitlement Status"
 		},
 		{
+			"externalReferenceCode": "LT_ENVIRONMENT_PRIMARY_REGION",
+			"listTypeEntries": [
+				{
+					"externalReferenceCode": "LT_ENVIRONMENT_PRIMARY_REGION_ASIA_PACIFIC",
+					"key": "asiaPacific",
+					"name": "Asia Pacific"
+				},
+				{
+					"externalReferenceCode": "LT_ENVIRONMENT_PRIMARY_REGION_EAST_ASIA",
+					"key": "eastAsia",
+					"name": "East Asia"
+				},
+				{
+					"externalReferenceCode": "LT_ENVIRONMENT_PRIMARY_REGION_EUROPE",
+					"key": "europe",
+					"name": "Europe"
+				},
+				{
+					"externalReferenceCode": "LT_ENVIRONMENT_PRIMARY_REGION_NORTH_AMERICA",
+					"key": "northAmerica",
+					"name": "North America"
+				},
+				{
+					"externalReferenceCode": "LT_ENVIRONMENT_PRIMARY_REGION_SAUDI_ARABIA",
+					"key": "saudiArabia",
+					"name": "Saudi Arabia"
+				},
+				{
+					"externalReferenceCode": "LT_ENVIRONMENT_PRIMARY_REGION_SOUTH_AMERICA",
+					"key": "southAmerica",
+					"name": "South America"
+				}
+			],
+			"name": "Environment Primary Region"
+		},
+		{
 			"externalReferenceCode": "LT_ENVIRONMENT_TYPE",
 			"listTypeEntries": [
 				{

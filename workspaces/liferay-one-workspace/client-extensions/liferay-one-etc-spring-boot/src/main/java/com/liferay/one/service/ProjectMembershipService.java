@@ -173,7 +173,7 @@ public class ProjectMembershipService extends OneBaseService {
 		StringBundler sb = new StringBundler(8);
 
 		sb.append("(r_projectToProjectMembership_c_projectERC eq '");
-		sb.append(projectExternalReferenceCode);
+		sb.append(escapeODataString(projectExternalReferenceCode));
 		sb.append("') and (r_userToProjectMembership_userId eq '");
 		sb.append(userId);
 		sb.append("')");

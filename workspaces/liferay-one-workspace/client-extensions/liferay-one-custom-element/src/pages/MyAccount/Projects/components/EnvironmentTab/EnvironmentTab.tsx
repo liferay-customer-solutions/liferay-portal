@@ -24,7 +24,7 @@ type EnvironmentTabProps = {
 const ENVIRONMENT_OFFERING_BY_PROFILE: Record<EnvironmentProfile, string> = {
 	'ac-token': 'DSR',
 	'ai-hub': 'AI Hub',
-	'analytics-cloud': 'SaaS',
+	'analytics-cloud': 'Analytics Cloud',
 	'none': '',
 	'paas': 'PaaS',
 	'saas': 'SaaS',
