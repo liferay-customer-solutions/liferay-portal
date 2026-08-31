@@ -141,23 +141,60 @@ public class AccountsRestController extends OneBaseRestController {
 
 		_accountPermission.check(externalReferenceCode, ActionKeys.UPDATE, jwt);
 
+		_deleteUserAccountAccountRole(
+			_accountService.getAccount(externalReferenceCode, jwt),
+			accountRoleId, externalReferenceCode, jwt, userId);
+	}
+
+	/**
+	 * Ports
+	 * <code>AccountResourceImpl#deleteAccountContactByEmailAddresContactEmailAddressRole</code>
+	 * from <code>osb-provisioning-rest-impl</code>. The path mirrors the assign
+	 * side, <code>postUserAccountsByEmailAddressAccountRoles</code>, rather
+	 * than the legacy <code>/contacts/{email}/roles/{names}</code> shape.
+	 *
+	 * <p>
+	 * The legacy contact role vocabulary does not carry over. Legacy took an
+	 * array of contact role names and validated Koroneiki specific pairings of
+	 * <code>ContactRoleConstants.NAME_PARTNER_MANAGER</code> and
+	 * <code>NAME_SUPPORT_ADMINISTRATOR</code> along with support seat counts.
+	 * Liferay One addresses roles by account role id and has no contact role
+	 * equivalent, so this takes the single role of the existing by user id
+	 * endpoint.
+	 * </p>
+	 */
+	@DeleteMapping(
+		"/{externalReferenceCode}/user-accounts/by-email-address" +
+			"/{emailAddress}/account-roles/{accountRoleId}"
+	)
+	public void deleteUserAccountsByEmailAddressAccountRole(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable("externalReferenceCode") String externalReferenceCode,
+			@PathVariable("emailAddress") String emailAddress,
+			@PathVariable("accountRoleId") long accountRoleId)
+		throws Exception {
+
+		_accountPermission.check(externalReferenceCode, ActionKeys.UPDATE, jwt);
+
 		Account account = _accountService.getAccount(
 			externalReferenceCode, jwt);
 
-		AccountRole accountRole = _accountRoleService.fetchAccountRole(
-			accountRoleId);
+		UserAccount userAccount =
+			_userAccountService.fetchUserAccountByEmailAddress(emailAddress);
 
-		_accountService.removeAccountUserAccountRole(
-			accountRoleId, externalReferenceCode, jwt, userId);
+		if ((userAccount == null) ||
+			!UserAccountUtil.hasAccountMembership(
+				userAccount, account.getId())) {
 
-		_unassignContactRole(account, accountRoleId, userId);
-
-		_syncMembership(account, userId);
-
-		if (accountRole != null) {
-			_provisioningAssignmentService.unassignAccountRole(
-				account, userId, accountRole.getName());
+			throw new ResponseStatusException(
+				HttpStatus.NOT_FOUND,
+				"No account member exists with the email address " +
+					emailAddress);
 		}
+
+		_deleteUserAccountAccountRole(
+			account, accountRoleId, externalReferenceCode, jwt,
+			userAccount.getId());
 	}
 
 	@GetMapping("/{externalReferenceCode}/invitations")
@@ -581,6 +618,33 @@ public class AccountsRestController extends OneBaseRestController {
 
 		_oktaService.createContact(
 			emailAddress, firstName, StringPool.BLANK, lastName);
+	}
+
+	/**
+	 * Extracted from <code>deleteUserAccountsAccountRole</code> so the by user
+	 * id and by email address paths unassign identically. Legacy reached the
+	 * same effect through
+	 * <code>AccountWebService#unassignContactRolesByEmailAddress</code>.
+	 */
+	private void _deleteUserAccountAccountRole(
+			Account account, long accountRoleId, String externalReferenceCode,
+			Jwt jwt, long userId)
+		throws Exception {
+
+		AccountRole accountRole = _accountRoleService.fetchAccountRole(
+			accountRoleId);
+
+		_accountService.removeAccountUserAccountRole(
+			accountRoleId, externalReferenceCode, jwt, userId);
+
+		_unassignContactRole(account, accountRoleId, userId);
+
+		_syncMembership(account, userId);
+
+		if (accountRole != null) {
+			_provisioningAssignmentService.unassignAccountRole(
+				account, userId, accountRole.getName());
+		}
 	}
 
 	private Map<Long, String> _getAccountRoleNames(
