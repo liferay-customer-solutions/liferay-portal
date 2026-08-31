@@ -42,6 +42,7 @@ export type ProjectProduct = {
 	name: string;
 	publisher: string;
 	saleType: string;
+	skuExternalReferenceCode?: string;
 	specifications: DeliveryProductSpecification[];
 	startDate: string;
 	status: string;
@@ -54,8 +55,8 @@ type EntitlementNode = {
 	};
 	endDate?: string;
 	entitlementDefinitionToEntitlement?: {
-		commerceProductToEntitlementDefinitionERC?: string;
 		displayName?: string;
+		skuExternalReferenceCode?: string;
 	};
 	externalReferenceCode: string;
 	name: string;
@@ -82,8 +83,8 @@ type ProjectNode = {
 type ProductEntitlement = {
 	endDate?: string;
 	orderExternalReferenceCode?: string;
-	productExternalReferenceCode?: string;
 	projectExternalReferenceCode?: string;
+	skuExternalReferenceCode?: string;
 	startDate?: string;
 };
 
@@ -152,14 +153,34 @@ function toProductEntitlements(
 			orderExternalReferenceCode:
 				entitlement.commerceOrderItemToEntitlement
 					?.orderExternalReferenceCode,
-			productExternalReferenceCode:
-				entitlement.entitlementDefinitionToEntitlement
-					?.commerceProductToEntitlementDefinitionERC,
 			projectExternalReferenceCode:
 				entitlement.r_projectToEntitlement_c_projectERC,
+			skuExternalReferenceCode:
+				entitlement.entitlementDefinitionToEntitlement
+					?.skuExternalReferenceCode,
 			startDate: entitlement.startDate,
 		}))
-		.filter((entitlement) => entitlement.productExternalReferenceCode);
+		.filter((entitlement) => entitlement.skuExternalReferenceCode);
+}
+
+function toProductsBySkuExternalReferenceCode(
+	products: DeliveryProduct[]
+): Map<string, DeliveryProduct> {
+	const productsBySkuExternalReferenceCode = new Map<
+		string,
+		DeliveryProduct
+	>();
+
+	products.forEach((product) =>
+		(product.skus ?? []).forEach((sku) =>
+			productsBySkuExternalReferenceCode.set(
+				sku.externalReferenceCode,
+				product
+			)
+		)
+	);
+
+	return productsBySkuExternalReferenceCode;
 }
 
 export function getSpecificationValue(
@@ -387,20 +408,16 @@ export function useAccountProducts() {
 		useChannelProducts();
 
 	const products = useMemo<DeliveryProduct[]>(() => {
-		const productsByExternalReferenceCode = new Map(
-			(productsData?.items ?? []).map((product) => [
-				product.externalReferenceCode,
-				product,
-			])
-		);
+		const productsBySkuExternalReferenceCode =
+			toProductsBySkuExternalReferenceCode(productsData?.items ?? []);
 
 		const accountProducts = new Map<string, DeliveryProduct>();
 
 		(contractsData?.items ?? []).forEach((contract) => {
 			toProductEntitlements(contract.contractToEntitlement).forEach(
 				(entitlement) => {
-					const product = productsByExternalReferenceCode.get(
-						entitlement.productExternalReferenceCode as string
+					const product = productsBySkuExternalReferenceCode.get(
+						entitlement.skuExternalReferenceCode as string
 					);
 
 					if (product) {
@@ -439,25 +456,40 @@ export function useHasActiveExperienceOffering() {
 		}
 	);
 
-	const hasActiveExperienceOffering = useMemo(
-		() =>
-			(data?.items ?? [])
-				.flatMap((contract) =>
-					toProductEntitlements(contract.contractToEntitlement)
-				)
-				.some(
-					(entitlement) =>
-						EXPERIENCE_OFFERING_PRODUCT_EXTERNAL_REFERENCE_CODES.some(
-							(code) =>
-								code ===
-								entitlement.productExternalReferenceCode
-						) &&
-						getEntitlementStatus(entitlement.endDate) === 'active'
-				),
-		[data]
-	);
+	const {
+		data: productsData,
+		error: productsError,
+		isLoading: productsLoading,
+	} = useChannelProducts();
 
-	return {error, hasActiveExperienceOffering, loading};
+	const hasActiveExperienceOffering = useMemo(() => {
+		const productsBySkuExternalReferenceCode =
+			toProductsBySkuExternalReferenceCode(productsData?.items ?? []);
+
+		return (data?.items ?? [])
+			.flatMap((contract) =>
+				toProductEntitlements(contract.contractToEntitlement)
+			)
+			.some((entitlement) => {
+				const product = productsBySkuExternalReferenceCode.get(
+					entitlement.skuExternalReferenceCode as string
+				);
+
+				return (
+					!!product &&
+					EXPERIENCE_OFFERING_PRODUCT_EXTERNAL_REFERENCE_CODES.some(
+						(code) => code === product.externalReferenceCode
+					) &&
+					getEntitlementStatus(entitlement.endDate) === 'active'
+				);
+			});
+	}, [data, productsData]);
+
+	return {
+		error: error ?? productsError,
+		hasActiveExperienceOffering,
+		loading: loading || productsLoading,
+	};
 }
 
 export function useAccountProjectContactRoles() {
@@ -479,12 +511,8 @@ export function useAccountProjectContactRoles() {
 		useChannelProducts();
 
 	const contactRoleExternalReferenceCodesByProjectId = useMemo(() => {
-		const productsByExternalReferenceCode = new Map(
-			(productsData?.items ?? []).map((product) => [
-				product.externalReferenceCode,
-				product,
-			])
-		);
+		const productsBySkuExternalReferenceCode =
+			toProductsBySkuExternalReferenceCode(productsData?.items ?? []);
 
 		const externalReferenceCodesByProjectId = new Map<
 			number,
@@ -504,8 +532,8 @@ export function useAccountProjectContactRoles() {
 
 			toProductEntitlements(contract.contractToEntitlement).forEach(
 				(entitlement) => {
-					const product = productsByExternalReferenceCode.get(
-						entitlement.productExternalReferenceCode as string
+					const product = productsBySkuExternalReferenceCode.get(
+						entitlement.skuExternalReferenceCode as string
 					);
 
 					if (!product) {
@@ -585,19 +613,15 @@ export function useProjectProducts(
 	} = useChannelProducts();
 
 	const products = useMemo<ProjectProduct[]>(() => {
-		const productsByExternalReferenceCode = new Map(
-			(productsData?.items ?? []).map((product) => [
-				product.externalReferenceCode,
-				product,
-			])
-		);
+		const productsBySkuExternalReferenceCode =
+			toProductsBySkuExternalReferenceCode(productsData?.items ?? []);
 
 		const seenProductKeys = new Set<string>();
 
 		return entitlements
-			.map((entitlement) => {
-				const product = productsByExternalReferenceCode.get(
-					entitlement.productExternalReferenceCode as string
+			.map((entitlement): ProjectProduct | null => {
+				const product = productsBySkuExternalReferenceCode.get(
+					entitlement.skuExternalReferenceCode as string
 				);
 
 				if (!product) {
@@ -619,6 +643,8 @@ export function useProjectProducts(
 					name: product.name,
 					publisher: getSpecificationValue(product, 'publisher-name'),
 					saleType: getSpecificationValue(product, 'price-model'),
+					skuExternalReferenceCode:
+						entitlement.skuExternalReferenceCode,
 					specifications: product.productSpecifications ?? [],
 					startDate: entitlement.startDate
 						? format(new Date(entitlement.startDate), 'MMM d, yyyy')
@@ -636,7 +662,7 @@ export function useProjectProducts(
 					return false;
 				}
 
-				const productKey = `${product.externalReferenceCode}|${product.startDate}|${product.endDate}`;
+				const productKey = `${product.externalReferenceCode}|${product.skuExternalReferenceCode}|${product.startDate}|${product.endDate}`;
 
 				if (seenProductKeys.has(productKey)) {
 					return false;
