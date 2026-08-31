@@ -13,7 +13,7 @@ name: commerce-catalogs
 
 When programmatically managing products, follow these strict architectural findings:
 
-- **The ERC mandate**: the `externalReferenceCode` (ERC) is the only reliable identifier for a product. Always use the ERC based endpoints (e.g., `/products/by-externalReferenceCode/{ERC}`) for `PATCH`, `DELETE`, and subresource operations to avoid `404 NOT FOUND` errors.
+- **The ERC mandate**: the `externalReferenceCode` (ERC) is the only reliable identifier for a product or SKU. Product ERCs are source-specific; the SKU ERC is the Salesforce `Product2.Id` and is the key shared with Salesforce. Always use the ERC based endpoints (e.g., `/products/by-externalReferenceCode/{ERC}`) for `PATCH`, `DELETE`, and subresource operations to avoid `404 NOT FOUND` errors.
 - **Product options**: options (size, color, etc.) are global, prerequisite entities. They must be created via the global `options` endpoint *before* you can link them to a specific product.
 - **Specifications**: do not use nested `POST` endpoints for specifications. Instead, `PATCH` the product itself via its ERC and supply a `productSpecifications` array containing the `specificationKey` and `value`.
 

@@ -6,17 +6,18 @@
 package com.liferay.one.service;
 
 import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.Product;
-import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.ProductConfiguration;
-import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.ProductShippingConfiguration;
 import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.Sku;
 import com.liferay.headless.commerce.admin.catalog.client.problem.Problem;
 import com.liferay.headless.commerce.admin.catalog.client.resource.v1_0.ProductResource;
-import com.liferay.one.constants.CommerceCatalogConstants;
-import com.liferay.one.constants.CommerceProductConstants;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -27,71 +28,26 @@ import org.springframework.stereotype.Component;
 @Component
 public class CommerceProductService extends OneBaseService {
 
-	public void addOrUpdateProduct(
-			String description, String externalReferenceCode, String name)
-		throws Exception {
+	public void deactivateProduct(String salesforceProductId) throws Exception {
+		Sku sku = _updateSku(false, salesforceProductId);
 
-		ProductResource productResource = _buildProductResource();
+		if (sku == null) {
+			_logMissingSku(salesforceProductId);
 
-		Product product = new Product();
-
-		product.setActive(() -> Boolean.TRUE);
-		product.setCatalogExternalReferenceCode(
-			() ->
-				CommerceCatalogConstants.
-					EXTERNAL_REFERENCE_CODE_LIFERAY_INC_CATALOG);
-		product.setDescription(
-			() -> Collections.singletonMap("en_US", description));
-		product.setExternalReferenceCode(() -> externalReferenceCode);
-		product.setName(() -> Collections.singletonMap("en_US", name));
-		product.setProductType(() -> CommerceProductConstants.TYPE_SIMPLE);
-
-		ProductShippingConfiguration productShippingConfiguration =
-			new ProductShippingConfiguration();
-
-		productShippingConfiguration.setShippable(() -> Boolean.FALSE);
-
-		ProductConfiguration productConfiguration = new ProductConfiguration();
-
-		productConfiguration.setProductShippingConfiguration(
-			() -> productShippingConfiguration);
-
-		product.setProductConfiguration(() -> productConfiguration);
-
-		product.setShippingConfiguration(() -> productShippingConfiguration);
-
-		Sku sku = new Sku();
-
-		sku.setExternalReferenceCode(() -> externalReferenceCode);
-		sku.setNeverExpire(() -> Boolean.TRUE);
-		sku.setPublished(() -> Boolean.TRUE);
-		sku.setPurchasable(() -> Boolean.TRUE);
-		sku.setSku(() -> externalReferenceCode);
-
-		product.setSkus(() -> new Sku[] {sku});
-
-		productResource.putProductByExternalReferenceCode(
-			externalReferenceCode, product);
-	}
-
-	public void deactivateProduct(String externalReferenceCode)
-		throws Exception {
-
-		Product existingProduct = _fetchProduct(externalReferenceCode);
-
-		if (existingProduct == null) {
 			return;
 		}
 
-		ProductResource productResource = _buildProductResource();
+		if (_hasPublishedSku(sku.getProductId())) {
+			return;
+		}
+
+		ProductResource productResource = buildProductResource();
 
 		Product product = new Product();
 
 		product.setActive(() -> Boolean.FALSE);
-		product.setExternalReferenceCode(() -> externalReferenceCode);
 
-		productResource.patchProductByExternalReferenceCode(
-			externalReferenceCode, product);
+		productResource.patchProduct(sku.getProductId(), product);
 	}
 
 	@Cacheable("product")
@@ -129,7 +85,34 @@ public class CommerceProductService extends OneBaseService {
 		return name.get("en_US");
 	}
 
-	private ProductResource _buildProductResource() {
+	public void updateProduct(
+			String description, String name, String salesforceProductId)
+		throws Exception {
+
+		Sku sku = _updateSku(true, salesforceProductId);
+
+		if (sku == null) {
+			_logMissingSku(salesforceProductId);
+
+			return;
+		}
+
+		ProductResource productResource = buildProductResource();
+
+		Product product = new Product();
+
+		product.setActive(() -> Boolean.TRUE);
+
+		if (_hasSingleSku(sku.getProductId())) {
+			product.setDescription(
+				() -> Collections.singletonMap("en_US", description));
+			product.setName(() -> Collections.singletonMap("en_US", name));
+		}
+
+		productResource.patchProduct(sku.getProductId(), product);
+	}
+
+	protected ProductResource buildProductResource() {
 		return ProductResource.builder(
 		).endpoint(
 			getDXPEndpointAddress(), lxcDXPServerProtocol
@@ -141,7 +124,7 @@ public class CommerceProductService extends OneBaseService {
 	}
 
 	private Product _fetchProduct(long id) throws Exception {
-		ProductResource productResource = _buildProductResource();
+		ProductResource productResource = buildProductResource();
 
 		try {
 			return productResource.getProduct(id);
@@ -160,7 +143,7 @@ public class CommerceProductService extends OneBaseService {
 	private Product _fetchProduct(String externalReferenceCode)
 		throws Exception {
 
-		ProductResource productResource = _buildProductResource();
+		ProductResource productResource = buildProductResource();
 
 		try {
 			return productResource.getProductByExternalReferenceCode(
@@ -176,5 +159,49 @@ public class CommerceProductService extends OneBaseService {
 			throw problemException;
 		}
 	}
+
+	private boolean _hasPublishedSku(long productId) throws Exception {
+		for (Sku sku : _commerceSkuService.getSkus(productId)) {
+			if (Boolean.TRUE.equals(sku.getPublished())) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private boolean _hasSingleSku(long productId) throws Exception {
+		List<Sku> skus = _commerceSkuService.getSkus(productId);
+
+		if (skus.size() == 1) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private void _logMissingSku(String salesforceProductId) {
+		if (_log.isWarnEnabled()) {
+			_log.warn(
+				"No SKU exists for Salesforce product " + salesforceProductId);
+		}
+	}
+
+	private Sku _updateSku(boolean published, String salesforceProductId)
+		throws Exception {
+
+		Sku sku = new Sku();
+
+		sku.setPublished(() -> published);
+		sku.setPurchasable(() -> published);
+
+		return _commerceSkuService.patchSku(salesforceProductId, sku);
+	}
+
+	private static final Log _log = LogFactory.getLog(
+		CommerceProductService.class);
+
+	@Autowired
+	private CommerceSkuService _commerceSkuService;
 
 }

@@ -24,8 +24,6 @@ public class EntitlementDefinition {
 
 	public EntitlementDefinition(JSONObject jsonObject) {
 		_active = jsonObject.optBoolean("active");
-		_cProductId = jsonObject.optLong(
-			"r_commerceProductToEntitlementDefinition_CProductId");
 		_defaultQuantity = jsonObject.optDoubleObject("defaultQuantity", null);
 		_displayName = jsonObject.optString("displayName");
 		_entitlementDefinitionId = jsonObject.getLong("id");
@@ -34,12 +32,10 @@ public class EntitlementDefinition {
 		_maxQuantity = jsonObject.optDoubleObject("maxQuantity", null);
 		_name = jsonObject.optString("name");
 		_productOptions = _getProductOptions(jsonObject);
+		_skuExternalReferenceCode = jsonObject.optString(
+			"skuExternalReferenceCode");
 		_unit = jsonObject.optString("unit");
 		_usageDefinitionId = jsonObject.optLong("usageDefinitionId");
-	}
-
-	public long getCProductId() {
-		return _cProductId;
 	}
 
 	public Double getDefaultQuantity() {
@@ -72,6 +68,10 @@ public class EntitlementDefinition {
 
 	public Map<String, String> getProductOptions() {
 		return _productOptions;
+	}
+
+	public String getSkuExternalReferenceCode() {
+		return _skuExternalReferenceCode;
 	}
 
 	public String getUnit() {
@@ -116,7 +116,6 @@ public class EntitlementDefinition {
 		EntitlementDefinition.class);
 
 	private final boolean _active;
-	private final long _cProductId;
 	private final Double _defaultQuantity;
 	private final String _displayName;
 	private final long _entitlementDefinitionId;
@@ -125,6 +124,7 @@ public class EntitlementDefinition {
 	private final Double _maxQuantity;
 	private final String _name;
 	private final Map<String, String> _productOptions;
+	private final String _skuExternalReferenceCode;
 	private final String _unit;
 	private final long _usageDefinitionId;
 

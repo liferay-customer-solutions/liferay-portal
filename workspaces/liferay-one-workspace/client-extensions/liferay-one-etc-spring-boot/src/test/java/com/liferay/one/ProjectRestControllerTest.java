@@ -25,6 +25,7 @@ import com.liferay.one.model.Project;
 import com.liferay.one.permission.BusinessEventPermission;
 import com.liferay.one.service.AccountService;
 import com.liferay.one.service.CommerceProductService;
+import com.liferay.one.service.CommerceSkuService;
 import com.liferay.one.service.EntitlementService;
 import com.liferay.one.service.GoogleCloudFunctionService;
 import com.liferay.one.service.ProjectMembershipService;
@@ -75,6 +76,8 @@ public class ProjectRestControllerTest {
 		ReflectionTestUtils.setField(
 			_projectRestController, "_commerceProductService",
 			_commerceProductService);
+		ReflectionTestUtils.setField(
+			_projectRestController, "_commerceSkuService", _commerceSkuService);
 		ReflectionTestUtils.setField(
 			_projectRestController, "_entitlementService", _entitlementService);
 		ReflectionTestUtils.setField(
@@ -508,10 +511,14 @@ public class ProjectRestControllerTest {
 
 		_setUpEntitlements(
 			_createEntitlement(1, null, "sites", 5.0),
-			_createEntitlement(99901, 2, null, "vcpu", 16.0, null));
+			_createEntitlement(
+				2, null, "vcpu", 16.0, _SKU_EXTERNAL_REFERENCE_CODE_UNRELATED,
+				null));
+
+		_setUpUnrelatedProduct();
 
 		Mockito.when(
-			_commerceProductService.fetchProductName(99901)
+			_commerceProductService.fetchProductName(_CPRODUCT_ID_UNRELATED)
 		).thenReturn(
 			"Liferay PaaS Instance - Backup L"
 		);
@@ -578,10 +585,14 @@ public class ProjectRestControllerTest {
 
 		_setUpEntitlements(
 			_createEntitlement(1, null, "api-requests", 500000.0),
-			_createEntitlement(99901, 2, null, "connectors", 10.0, null));
+			_createEntitlement(
+				2, null, "connectors", 10.0,
+				_SKU_EXTERNAL_REFERENCE_CODE_UNRELATED, null));
+
+		_setUpUnrelatedProduct();
 
 		Mockito.when(
-			_commerceProductService.fetchProductName(99901)
+			_commerceProductService.fetchProductName(_CPRODUCT_ID_UNRELATED)
 		).thenReturn(
 			CommerceProductConstants.NAME_LIFERAY_SAAS_PRO_PLAN
 		);
@@ -983,10 +994,10 @@ public class ProjectRestControllerTest {
 	public void testGetUsageUpscalesTebibyteLimits() throws Exception {
 		_setUpEntitlements(
 			_createEntitlement(
-				_CPRODUCT_ID, 1, null, "storage", 1.0,
+				1, null, "storage", 1.0, _SKU_EXTERNAL_REFERENCE_CODE,
 				BaseUsageStrategy.UNIT_TIB),
 			_createEntitlement(
-				_CPRODUCT_ID, 2, null, "logs", 300.0,
+				2, null, "logs", 300.0, _SKU_EXTERNAL_REFERENCE_CODE,
 				BaseUsageStrategy.UNIT_GIB));
 
 		_setUpComposableUsage();
@@ -1118,8 +1129,17 @@ public class ProjectRestControllerTest {
 	}
 
 	private Entitlement _createEntitlement(
-		long cProductId, long entitlementDefinitionId, String grantType,
-		String name, Double quantity, String unit) {
+		long entitlementDefinitionId, String grantType, String name,
+		Double quantity) {
+
+		return _createEntitlement(
+			entitlementDefinitionId, grantType, name, quantity,
+			_SKU_EXTERNAL_REFERENCE_CODE, null);
+	}
+
+	private Entitlement _createEntitlement(
+		long entitlementDefinitionId, String grantType, String name,
+		Double quantity, String skuExternalReferenceCode, String unit) {
 
 		JSONObject jsonObject = new JSONObject(
 		).put(
@@ -1128,8 +1148,7 @@ public class ProjectRestControllerTest {
 			).put(
 				"id", entitlementDefinitionId
 			).put(
-				"r_commerceProductToEntitlementDefinition_CProductId",
-				cProductId
+				"skuExternalReferenceCode", skuExternalReferenceCode
 			).put(
 				"unit", unit
 			)
@@ -1151,15 +1170,6 @@ public class ProjectRestControllerTest {
 		}
 
 		return new Entitlement(jsonObject);
-	}
-
-	private Entitlement _createEntitlement(
-		long entitlementDefinitionId, String grantType, String name,
-		Double quantity) {
-
-		return _createEntitlement(
-			_CPRODUCT_ID, entitlementDefinitionId, grantType, name, quantity,
-			null);
 	}
 
 	private String _createLDPEventHistory() {
@@ -1367,6 +1377,12 @@ public class ProjectRestControllerTest {
 
 	private void _setUpProductName(String productName) throws Exception {
 		Mockito.when(
+			_commerceSkuService.fetchProductId(_SKU_EXTERNAL_REFERENCE_CODE)
+		).thenReturn(
+			_CPRODUCT_ID
+		);
+
+		Mockito.when(
 			_commerceProductService.fetchProductName(_CPRODUCT_ID)
 		).thenReturn(
 			productName
@@ -1377,6 +1393,15 @@ public class ProjectRestControllerTest {
 				_PRODUCT_EXTERNAL_REFERENCE_CODE)
 		).thenReturn(
 			productName
+		);
+	}
+
+	private void _setUpUnrelatedProduct() throws Exception {
+		Mockito.when(
+			_commerceSkuService.fetchProductId(
+				_SKU_EXTERNAL_REFERENCE_CODE_UNRELATED)
+		).thenReturn(
+			_CPRODUCT_ID_UNRELATED
 		);
 	}
 
@@ -1415,6 +1440,8 @@ public class ProjectRestControllerTest {
 
 	private static final long _CPRODUCT_ID = 55501;
 
+	private static final long _CPRODUCT_ID_UNRELATED = 99901;
+
 	private static final String _END_DATE = "2026-07-28";
 
 	private static final String _KORONEIKI_ACCOUNT_KEY = "abc-123-def";
@@ -1435,6 +1462,11 @@ public class ProjectRestControllerTest {
 	private static final String _PROJECT_EXTERNAL_REFERENCE_CODE_UNKNOWN =
 		"PRJCT-999";
 
+	private static final String _SKU_EXTERNAL_REFERENCE_CODE = "SKU-001";
+
+	private static final String _SKU_EXTERNAL_REFERENCE_CODE_UNRELATED =
+		"SKU-999";
+
 	private static final String _START_DATE_PREVIOUS_MONTH = "2026-06-01";
 
 	private static final String _USER_EXTERNAL_REFERENCE_CODE = "USER-001";
@@ -1453,6 +1485,8 @@ public class ProjectRestControllerTest {
 		Mockito.mock(BusinessEventPermission.class);
 	private final CommerceProductService _commerceProductService = Mockito.mock(
 		CommerceProductService.class);
+	private final CommerceSkuService _commerceSkuService = Mockito.mock(
+		CommerceSkuService.class);
 	private final EntitlementService _entitlementService = Mockito.mock(
 		EntitlementService.class);
 	private final GoogleCloudFunctionService _googleCloudFunctionService =

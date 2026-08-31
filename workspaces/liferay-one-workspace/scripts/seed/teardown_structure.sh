@@ -404,6 +404,13 @@ for item in items:
 	if source and name:
 		groups.setdefault(source, []).append(name)
 
+# Relationships removed from the batch file still exist on instances that were
+# seeded before the removal. List them here so the object definitions they
+# connect can still be deleted.
+
+groups.setdefault('L_COMMERCE_PRODUCT_DEFINITION', []).append(
+	'commerceProductToEntitlementDefinition')
+
 for source, names in groups.items():
 	print('{}\t{}'.format(source, ' '.join(names)))
 "

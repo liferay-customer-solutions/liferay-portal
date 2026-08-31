@@ -137,7 +137,7 @@ Finance/A/R-set hard hold; overrides spend limits.
 | Field | Type | Notes |
 |---|---|---|
 | PK `CProductId` | long | |
-| `externalReferenceCode` | string | Salesforce Product2.Id (18-char); OOTB key for marketplace |
+| `externalReferenceCode` | string | Source-specific (`PRDCT-*` for seeded and Marketplace products). Not a lookup key; the Salesforce key lives on the SKU. Salesforce events never create products; they only update the SKU carrying the Salesforce ID |
 | `catalog` | string | `Liferay` · `AccountEntry` |
 | `name` | string | |
 | `description` | string | |
@@ -208,6 +208,24 @@ Finance/A/R-set hard hold; overrides spend limits.
 | Product Type |
 | Solution Category |
 | Solution Tags |
+
+---
+
+#### Commerce SKU (CPInstance)
+
+**system:** `true`
+
+The sellable unit. A product has one or more SKUs; each SKU maps one to one to a Salesforce `Product2`, which is Salesforce's sellable unit (`PricebookEntry` and `OpportunityLineItem` hang off it). Marketplace products such as AI Hub have one SKU per plan; migrated Salesforce products have exactly one.
+
+| Field | Type | Notes |
+|---|---|---|
+| PK `CPInstanceId` | long | |
+| FK `CProductId` | long | Parent product |
+| `externalReferenceCode` | string | The only cross-system key; order items, price entries, and entitlement definitions reference the SKU by this value. Salesforce `Product2.Id` (18-char) for migrated Salesforce products; `PRDCT-*` (matching the parent product) for seeded and Marketplace single-SKU products |
+| `sku` | string | SKU code |
+| `skuOptions` | list | Plan, sizing, and license options that distinguish SKUs of one product |
+
+Liferay Commerce has no system object definition for CPInstance, so custom objects cannot hold an object relationship to a SKU. They store `skuExternalReferenceCode` as a text field instead.
 
 ---
 
@@ -316,20 +334,20 @@ The `endDate` is the grant's effective end. After a realignment amendment it may
 
 **system:** `false`
 
-Product-level entitlement template. One CProduct → many EntitlementDefinitions. When a CommerceOrderItem is created for a product, one Entitlement is auto-generated per active EntitlementDefinition for that product.
+SKU-level entitlement template. One SKU → many EntitlementDefinitions. When a CommerceOrderItem is created for a SKU, one Entitlement is auto-generated per active EntitlementDefinition for that SKU.
 
 | Field | Type | Notes |
 |---|---|---|
 | PK `entitlementDefinitionId` | long | |
 | `externalReferenceCode` | string | e.g. `dxp-cloud-standard-database-size` |
-| FK `CProductId` | long | 1 product to many EntitlementDefinitions |
+| `skuExternalReferenceCode` | string | ERC of the granting SKU (Salesforce `Product2.Id`); a text field because CPInstance has no system object definition |
 | `name` | string | e.g. `database-size`, `vcpu`, `maxServers`, `licenseGeneration` |
 | `displayName` | string | Human-readable, e.g. `Database Storage`, `License Generation` |
 | `unit` | string | GB · vCPU · count · requests · seats · boolean |
 | `defaultQuantity` | double | Default; overridden at order item level via `sizing` |
 | `grantType` | string | `fixed` · `rollover` · `metered` · `prepaid` |
 | FK `usageDefinitionId` | long | Nullable; only for metered/usage-type entitlements |
-| `machineType` | string | `Standard` · `High` · null |
+| `productOptions` | string | JSON map of SKU option key/value pairs the order item must carry for this definition to apply; empty matches any |
 | `active` | boolean | Default `true`; set `false` to deprecate without deleting |
 
 **License generation:** Presence of an EntitlementDefinition with `name = 'licenseGeneration'` (`grantType = fixed`, `unit = boolean`) indicates the product can generate license keys. This replaces the old boolean `licenses` flag on products.
@@ -555,5 +573,4 @@ Aggregated periodic report over UsageEvents. The report target is polymorphic �
 
 ## See Also
 
-- [`api.md`](./api.md) — headless conventions and custom REST contracts
-- [`integrations/salesforce.md`](./integrations/salesforce.md) — Salesforce-owned objects and inbound Pub/Sub
+- [`workspace.md`](./workspace.md) — workspace layout and client extensions

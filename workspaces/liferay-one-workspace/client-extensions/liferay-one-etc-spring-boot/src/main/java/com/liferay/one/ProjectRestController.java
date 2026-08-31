@@ -27,6 +27,7 @@ import com.liferay.one.model.SaaSUsageStrategy;
 import com.liferay.one.permission.BusinessEventPermission;
 import com.liferay.one.service.AccountService;
 import com.liferay.one.service.CommerceProductService;
+import com.liferay.one.service.CommerceSkuService;
 import com.liferay.one.service.EntitlementService;
 import com.liferay.one.service.GoogleCloudFunctionService;
 import com.liferay.one.service.ProjectMembershipService;
@@ -500,8 +501,15 @@ public class ProjectRestController extends OneBaseRestController {
 			return false;
 		}
 
+		Long productId = _commerceSkuService.fetchProductId(
+			entitlementDefinition.getSkuExternalReferenceCode());
+
+		if (productId == null) {
+			return false;
+		}
+
 		String productName = _commerceProductService.fetchProductName(
-			entitlementDefinition.getCProductId());
+			productId);
 
 		if (Validator.isNull(productName)) {
 			return false;
@@ -765,6 +773,9 @@ public class ProjectRestController extends OneBaseRestController {
 
 	@Autowired
 	private CommerceProductService _commerceProductService;
+
+	@Autowired
+	private CommerceSkuService _commerceSkuService;
 
 	@Autowired
 	private EntitlementService _entitlementService;

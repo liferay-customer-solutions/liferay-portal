@@ -24,6 +24,7 @@ import com.liferay.one.service.AccountService;
 import com.liferay.one.service.CloudActivationRequestService;
 import com.liferay.one.service.CommerceProductService;
 import com.liferay.one.service.CommerceProductVirtualSettingsService;
+import com.liferay.one.service.CommerceSkuService;
 import com.liferay.one.service.EntitlementService;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 
@@ -62,6 +63,7 @@ public class CloudRestControllerTest {
 		_commerceProductService = Mockito.mock(CommerceProductService.class);
 		_commerceProductVirtualSettingsService = Mockito.mock(
 			CommerceProductVirtualSettingsService.class);
+		_commerceSkuService = Mockito.mock(CommerceSkuService.class);
 		_entitlementService = Mockito.mock(EntitlementService.class);
 		_environmentActivationPermission = Mockito.mock(
 			EnvironmentActivationPermission.class);
@@ -71,6 +73,12 @@ public class CloudRestControllerTest {
 		Account account = new Account();
 
 		account.setName("Acme");
+
+		Mockito.when(
+			_commerceSkuService.fetchProductId(_SKU_EXTERNAL_REFERENCE_CODE)
+		).thenReturn(
+			_C_PRODUCT_ID
+		);
 
 		Mockito.when(
 			_accountService.fetchAccount(_ACCOUNT_ID)
@@ -102,6 +110,8 @@ public class CloudRestControllerTest {
 		ReflectionTestUtils.setField(
 			_cloudRestController, "_commerceProductVirtualSettingsService",
 			_commerceProductVirtualSettingsService);
+		ReflectionTestUtils.setField(
+			_cloudRestController, "_commerceSkuService", _commerceSkuService);
 		ReflectionTestUtils.setField(
 			_cloudRestController, "_entitlementService", _entitlementService);
 		ReflectionTestUtils.setField(
@@ -271,8 +281,10 @@ public class CloudRestControllerTest {
 				_PROJECT_EXTERNAL_REFERENCE_CODE)
 		).thenReturn(
 			List.of(
-				_createEntitlement(_C_PRODUCT_ID, _CONTRACT_ID),
-				_createEntitlement(_C_PRODUCT_ID, _CONTRACT_ID + 1))
+				_createProductEntitlement(
+					_SKU_EXTERNAL_REFERENCE_CODE, _CONTRACT_ID),
+				_createProductEntitlement(
+					_SKU_EXTERNAL_REFERENCE_CODE, _CONTRACT_ID + 1))
 		);
 
 		Mockito.when(
@@ -342,7 +354,7 @@ public class CloudRestControllerTest {
 			_entitlementService.getActiveEntitlements(
 				_PROJECT_EXTERNAL_REFERENCE_CODE)
 		).thenReturn(
-			List.of(_createEntitlement(_C_PRODUCT_ID))
+			List.of(_createProductEntitlement(_SKU_EXTERNAL_REFERENCE_CODE))
 		);
 
 		Mockito.when(
@@ -404,7 +416,7 @@ public class CloudRestControllerTest {
 			_entitlementService.getActiveEntitlements(
 				_PROJECT_EXTERNAL_REFERENCE_CODE)
 		).thenReturn(
-			List.of(_createEntitlement(_C_PRODUCT_ID))
+			List.of(_createProductEntitlement(_SKU_EXTERNAL_REFERENCE_CODE))
 		);
 
 		Mockito.when(
@@ -429,7 +441,7 @@ public class CloudRestControllerTest {
 			_entitlementService.getActiveEntitlements(
 				_PROJECT_EXTERNAL_REFERENCE_CODE)
 		).thenReturn(
-			List.of(_createEntitlement(_C_PRODUCT_ID))
+			List.of(_createProductEntitlement(_SKU_EXTERNAL_REFERENCE_CODE))
 		);
 
 		Mockito.when(
@@ -462,29 +474,6 @@ public class CloudRestControllerTest {
 		);
 
 		return jsonObject.toString();
-	}
-
-	private Entitlement _createEntitlement(long cProductId) {
-		return _createEntitlement(cProductId, _CONTRACT_ID);
-	}
-
-	private Entitlement _createEntitlement(long cProductId, long contractId) {
-		return new Entitlement(
-			new JSONObject(
-			).put(
-				"entitlementDefinitionToEntitlement",
-				new JSONObject(
-				).put(
-					"id", 1L
-				).put(
-					"r_commerceProductToEntitlementDefinition_CProductId",
-					cProductId
-				)
-			).put(
-				"id", 1L
-			).put(
-				"r_contractToEntitlement_c_contractId", contractId
-			));
 	}
 
 	private Entitlement _createEntitlement(String name, double quantity) {
@@ -537,6 +526,33 @@ public class CloudRestControllerTest {
 		return product;
 	}
 
+	private Entitlement _createProductEntitlement(
+		String skuExternalReferenceCode) {
+
+		return _createProductEntitlement(
+			skuExternalReferenceCode, _CONTRACT_ID);
+	}
+
+	private Entitlement _createProductEntitlement(
+		String skuExternalReferenceCode, long contractId) {
+
+		return new Entitlement(
+			new JSONObject(
+			).put(
+				"entitlementDefinitionToEntitlement",
+				new JSONObject(
+				).put(
+					"id", 1L
+				).put(
+					"skuExternalReferenceCode", skuExternalReferenceCode
+				)
+			).put(
+				"id", 1L
+			).put(
+				"r_contractToEntitlement_c_contractId", contractId
+			));
+	}
+
 	private Project _createProject() {
 		return new Project(
 			new JSONObject(
@@ -571,12 +587,15 @@ public class CloudRestControllerTest {
 
 	private static final String _PROJECT_EXTERNAL_REFERENCE_CODE = "PRJCT-005";
 
+	private static final String _SKU_EXTERNAL_REFERENCE_CODE = "SKU-3000";
+
 	private AccountService _accountService;
 	private CloudActivationRequestService _cloudActivationRequestService;
 	private CloudRestController _cloudRestController;
 	private CommerceProductService _commerceProductService;
 	private CommerceProductVirtualSettingsService
 		_commerceProductVirtualSettingsService;
+	private CommerceSkuService _commerceSkuService;
 	private EntitlementService _entitlementService;
 	private EnvironmentActivationPermission _environmentActivationPermission;
 	private LicenseKeyExporter _licenseKeyExporter;

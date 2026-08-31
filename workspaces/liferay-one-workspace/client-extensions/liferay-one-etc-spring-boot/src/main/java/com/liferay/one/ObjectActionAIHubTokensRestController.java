@@ -12,7 +12,6 @@ import com.liferay.headless.commerce.admin.order.client.dto.v1_0.OrderItem;
 import com.liferay.one.constants.CommerceOrderConstants;
 import com.liferay.one.service.AIHubService;
 import com.liferay.one.service.CommerceOrderService;
-import com.liferay.one.service.CommerceSkuService;
 import com.liferay.one.service.CountryService;
 import com.liferay.one.service.SalesforceService;
 import com.liferay.one.service.UserAccountService;
@@ -128,8 +127,7 @@ public class ObjectActionAIHubTokensRestController extends BaseRestController {
 			null, order.getId(),
 			CommerceOrderConstants.ORDER_PAYMENT_STATUS_COMPLETED);
 
-		_setUpSalesforceOpportunity(
-			aiHubApplicationJSONObject, order, orderItem);
+		_setUpSalesforceOpportunity(aiHubApplicationJSONObject, order);
 	}
 
 	private String _getSalesforceProjectId(
@@ -175,8 +173,7 @@ public class ObjectActionAIHubTokensRestController extends BaseRestController {
 	}
 
 	private void _setUpSalesforceOpportunity(
-			JSONObject aiHubApplicationJSONObject, Order order,
-			OrderItem orderItem)
+			JSONObject aiHubApplicationJSONObject, Order order)
 		throws Exception {
 
 		order.setCustomFields(
@@ -196,7 +193,6 @@ public class ObjectActionAIHubTokensRestController extends BaseRestController {
 				_countryService.getCountryByA2(
 					billingAddress.getCountryISOCode()),
 				"Subscription", order,
-				_commerceSkuService.getSku(orderItem.getSkuId()),
 				_userAccountService.getUserAccountByEmailAddress(
 					order.getCreatorEmailAddress()));
 
@@ -225,9 +221,6 @@ public class ObjectActionAIHubTokensRestController extends BaseRestController {
 
 	@Autowired
 	private CommerceOrderService _commerceOrderService;
-
-	@Autowired
-	private CommerceSkuService _commerceSkuService;
 
 	@Autowired
 	private CountryService _countryService;

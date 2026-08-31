@@ -7,7 +7,6 @@ package com.liferay.one.salesforce.pubsub;
 
 import com.liferay.headless.admin.user.client.dto.v1_0.Account;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
-import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.Sku;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Order;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.OrderItem;
 import com.liferay.one.constants.CommerceOrderConstants;
@@ -525,9 +524,7 @@ public class SalesforceOpportunityPubsubSubscriber
 			String product2Id =
 				provisionableSalesforceOpportunityLineItem.getProduct2Id();
 
-			Sku sku = _commerceSkuService.fetchSku(product2Id);
-
-			if (sku == null) {
+			if (_commerceSkuService.fetchSku(product2Id) == null) {
 				_addWarning(
 					warningMessages,
 					"Unable to find SKU for Salesforce product " + product2Id);

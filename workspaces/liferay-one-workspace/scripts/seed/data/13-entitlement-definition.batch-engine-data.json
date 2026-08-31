@@ -17,7 +17,7 @@
 			"externalReferenceCode": "C_ENT_DEF_ADDON_COMMERCE_RECOMMENDATIONS",
 			"grantType": "fixed",
 			"name": "productRecommendations",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ADDON-COMMERCE-RECOMMENDATIONS",
+			"skuExternalReferenceCode": "PRDCT-ADDON-COMMERCE-RECOMMENDATIONS",
 			"unit": "boolean"
 		},
 		{
@@ -27,7 +27,7 @@
 			"externalReferenceCode": "C_ENT_DEF_ADDON_DISASTER_RECOVERY",
 			"grantType": "fixed",
 			"name": "disasterRecovery",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ADDON-DISASTER-RECOVERY",
+			"skuExternalReferenceCode": "PRDCT-ADDON-DISASTER-RECOVERY",
 			"unit": "boolean"
 		},
 		{
@@ -37,7 +37,7 @@
 			"externalReferenceCode": "C_ENT_DEF_ADDON_STORAGE",
 			"grantType": "fixed",
 			"name": "storage",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ADDON-STORAGE",
+			"skuExternalReferenceCode": "PRDCT-ADDON-STORAGE",
 			"unit": "GB"
 		},
 		{
@@ -47,7 +47,7 @@
 			"externalReferenceCode": "C_ENT_DEF_ADDON_VCPU",
 			"grantType": "fixed",
 			"name": "vcpu",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ADDON-VCPU",
+			"skuExternalReferenceCode": "PRDCT-ADDON-VCPU",
 			"unit": "vCPU"
 		},
 		{
@@ -57,7 +57,7 @@
 			"externalReferenceCode": "C_ENT_DEF_AIHUB",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-AI-HUB",
+			"skuExternalReferenceCode": "PRDCT-AI-HUB",
 			"unit": "boolean"
 		},
 		{
@@ -67,7 +67,7 @@
 			"externalReferenceCode": "C_ENT_DEF_ANALYTICS_CLOUD",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ANALYTICS-CLOUD",
+			"skuExternalReferenceCode": "PRDCT-ANALYTICS-CLOUD",
 			"unit": "boolean"
 		},
 		{
@@ -77,7 +77,7 @@
 			"externalReferenceCode": "C_ENT_DEF_APP",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-APP",
+			"skuExternalReferenceCode": "PRDCT-APP",
 			"unit": "boolean"
 		},
 		{
@@ -87,7 +87,7 @@
 			"externalReferenceCode": "C_ENT_DEF_CLOUD_NATIVE",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-CLOUD-NATIVE",
+			"skuExternalReferenceCode": "PRDCT-CLOUD-NATIVE",
 			"unit": "boolean"
 		},
 		{
@@ -97,7 +97,7 @@
 			"externalReferenceCode": "C_ENT_DEF_CLOUD_NATIVE_PODS",
 			"grantType": "fixed",
 			"name": "production-pods",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-CLOUD-NATIVE-PODS",
+			"skuExternalReferenceCode": "PRDCT-CLOUD-NATIVE-PODS",
 			"unit": "count"
 		},
 		{
@@ -107,7 +107,7 @@
 			"externalReferenceCode": "C_ENT_DEF_COMMERCE",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-COMMERCE",
+			"skuExternalReferenceCode": "PRDCT-COMMERCE",
 			"unit": "boolean"
 		},
 		{
@@ -117,7 +117,7 @@
 			"externalReferenceCode": "C_ENT_DEF_COMMERCE_CLOUD",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-COMMERCE-CLOUD",
+			"skuExternalReferenceCode": "PRDCT-COMMERCE-CLOUD",
 			"unit": "boolean"
 		},
 		{
@@ -127,7 +127,7 @@
 			"externalReferenceCode": "C_ENT_DEF_CONTENT_MARKETING",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-CONTENT-MARKETING",
+			"skuExternalReferenceCode": "PRDCT-CONTENT-MARKETING",
 			"unit": "boolean"
 		},
 		{
@@ -137,7 +137,7 @@
 			"externalReferenceCode": "C_ENT_DEF_DATA_PLATFORM",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DATA-PLATFORM",
+			"skuExternalReferenceCode": "PRDCT-DATA-PLATFORM",
 			"unit": "boolean"
 		},
 		{
@@ -147,7 +147,7 @@
 			"externalReferenceCode": "C_ENT_DEF_DATA_PLATFORM_ACTIVE_BATCH_SEGMENTS",
 			"grantType": "fixed",
 			"name": "active-batch-segments",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DATA-PLATFORM",
+			"skuExternalReferenceCode": "PRDCT-DATA-PLATFORM",
 			"unit": "count"
 		},
 		{
@@ -157,7 +157,7 @@
 			"externalReferenceCode": "C_ENT_DEF_DATA_PLATFORM_ACTIVE_REAL_TIME_SEGMENTS",
 			"grantType": "fixed",
 			"name": "active-real-time-segments",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DATA-PLATFORM",
+			"skuExternalReferenceCode": "PRDCT-DATA-PLATFORM",
 			"unit": "count"
 		},
 		{
@@ -167,7 +167,7 @@
 			"externalReferenceCode": "C_ENT_DEF_DATA_PLATFORM_API_REQUESTS",
 			"grantType": "fixed",
 			"name": "api-requests",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DATA-PLATFORM",
+			"skuExternalReferenceCode": "PRDCT-DATA-PLATFORM",
 			"unit": "count"
 		},
 		{
@@ -177,7 +177,7 @@
 			"externalReferenceCode": "C_ENT_DEF_DATA_PLATFORM_CONNECTORS",
 			"grantType": "fixed",
 			"name": "connectors",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DATA-PLATFORM",
+			"skuExternalReferenceCode": "PRDCT-DATA-PLATFORM",
 			"unit": "count"
 		},
 		{
@@ -187,7 +187,7 @@
 			"externalReferenceCode": "C_ENT_DEF_DATA_PLATFORM_EVENTS",
 			"grantType": "fixed",
 			"name": "events",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DATA-PLATFORM",
+			"skuExternalReferenceCode": "PRDCT-DATA-PLATFORM",
 			"unit": "count"
 		},
 		{
@@ -197,7 +197,7 @@
 			"externalReferenceCode": "C_ENT_DEF_DATA_PLATFORM_EVENTS_ADD_ON_BUCKET",
 			"grantType": "fixed",
 			"name": "events-add-on-bucket",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DATA-PLATFORM",
+			"skuExternalReferenceCode": "PRDCT-DATA-PLATFORM",
 			"unit": "count"
 		},
 		{
@@ -207,7 +207,7 @@
 			"externalReferenceCode": "C_ENT_DEF_DSR",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DSR",
+			"skuExternalReferenceCode": "PRDCT-DSR",
 			"unit": "boolean"
 		},
 		{
@@ -217,7 +217,7 @@
 			"externalReferenceCode": "C_ENT_DEF_DXP",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-DXP",
+			"skuExternalReferenceCode": "PRDCT-DXP",
 			"unit": "boolean"
 		},
 		{
@@ -227,7 +227,7 @@
 			"externalReferenceCode": "C_ENT_DEF_ENTERPRISE_SEARCH",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ENTERPRISE-SEARCH",
+			"skuExternalReferenceCode": "PRDCT-ENTERPRISE-SEARCH",
 			"unit": "boolean"
 		},
 		{
@@ -237,7 +237,7 @@
 			"externalReferenceCode": "C_ENT_DEF_ENTERPRISE_SEARCH_CLOUD",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-ENTERPRISE-SEARCH-CLOUD",
+			"skuExternalReferenceCode": "PRDCT-ENTERPRISE-SEARCH-CLOUD",
 			"unit": "boolean"
 		},
 		{
@@ -247,7 +247,7 @@
 			"externalReferenceCode": "C_ENT_DEF_PAAS",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS",
+			"skuExternalReferenceCode": "PRDCT-PAAS",
 			"unit": "boolean"
 		},
 		{
@@ -258,7 +258,7 @@
 			"grantType": "fixed",
 			"name": "database",
 			"productOptions": "{\"machineType\": \"standard\"}",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS",
+			"skuExternalReferenceCode": "PRDCT-PAAS",
 			"unit": "GiB"
 		},
 		{
@@ -269,7 +269,7 @@
 			"grantType": "fixed",
 			"name": "extensions-ram",
 			"productOptions": "{\"machineType\": \"standard\"}",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS",
+			"skuExternalReferenceCode": "PRDCT-PAAS",
 			"unit": "GiB"
 		},
 		{
@@ -280,7 +280,7 @@
 			"grantType": "fixed",
 			"name": "extensions-vcpus",
 			"productOptions": "{\"machineType\": \"standard\"}",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS",
+			"skuExternalReferenceCode": "PRDCT-PAAS",
 			"unit": "vCPU"
 		},
 		{
@@ -290,7 +290,7 @@
 			"externalReferenceCode": "C_ENT_DEF_PAAS_LEGACY",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS-LEGACY",
+			"skuExternalReferenceCode": "PRDCT-PAAS-LEGACY",
 			"unit": "boolean"
 		},
 		{
@@ -301,7 +301,7 @@
 			"grantType": "fixed",
 			"name": "logs",
 			"productOptions": "{\"machineType\": \"standard\"}",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS",
+			"skuExternalReferenceCode": "PRDCT-PAAS",
 			"unit": "GiB"
 		},
 		{
@@ -312,7 +312,7 @@
 			"grantType": "fixed",
 			"name": "storage",
 			"productOptions": "{\"machineType\": \"standard\"}",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS",
+			"skuExternalReferenceCode": "PRDCT-PAAS",
 			"unit": "TiB"
 		},
 		{
@@ -323,7 +323,7 @@
 			"grantType": "fixed",
 			"name": "traffic-networking",
 			"productOptions": "{\"machineType\": \"standard\"}",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PAAS",
+			"skuExternalReferenceCode": "PRDCT-PAAS",
 			"unit": "TiB"
 		},
 		{
@@ -333,7 +333,7 @@
 			"externalReferenceCode": "C_ENT_DEF_PARTNERSHIP_BASIC_RESELLER",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PARTNERSHIP-BASIC-RESELLER",
+			"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-BASIC-RESELLER",
 			"unit": "boolean"
 		},
 		{
@@ -343,7 +343,7 @@
 			"externalReferenceCode": "C_ENT_DEF_PARTNERSHIP_DISTRIBUTION",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PARTNERSHIP-DISTRIBUTION",
+			"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-DISTRIBUTION",
 			"unit": "boolean"
 		},
 		{
@@ -353,7 +353,7 @@
 			"externalReferenceCode": "C_ENT_DEF_PARTNERSHIP_RESELLER",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PARTNERSHIP-RESELLER",
+			"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-RESELLER",
 			"unit": "boolean"
 		},
 		{
@@ -363,7 +363,7 @@
 			"externalReferenceCode": "C_ENT_DEF_PARTNERSHIP_SERVICE",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PARTNERSHIP-SERVICE",
+			"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-SERVICE",
 			"unit": "boolean"
 		},
 		{
@@ -373,7 +373,7 @@
 			"externalReferenceCode": "C_ENT_DEF_PARTNERSHIP_SERVICE_REFERRAL",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PARTNERSHIP-SERVICE-REFERRAL",
+			"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-SERVICE-REFERRAL",
 			"unit": "boolean"
 		},
 		{
@@ -383,7 +383,7 @@
 			"externalReferenceCode": "C_ENT_DEF_PARTNERSHIP_SOLUTION_RESELLER",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PARTNERSHIP-SOLUTION-RESELLER",
+			"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-SOLUTION-RESELLER",
 			"unit": "boolean"
 		},
 		{
@@ -393,7 +393,7 @@
 			"externalReferenceCode": "C_ENT_DEF_PARTNERSHIP_STANDARD",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PARTNERSHIP-STANDARD",
+			"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-STANDARD",
 			"unit": "boolean"
 		},
 		{
@@ -403,7 +403,7 @@
 			"externalReferenceCode": "C_ENT_DEF_PARTNERSHIP_TRAINING",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PARTNERSHIP-TRAINING",
+			"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-TRAINING",
 			"unit": "boolean"
 		},
 		{
@@ -413,7 +413,7 @@
 			"externalReferenceCode": "C_ENT_DEF_PARTNERSHIP_VAR",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PARTNERSHIP-VAR",
+			"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-VAR",
 			"unit": "boolean"
 		},
 		{
@@ -423,7 +423,7 @@
 			"externalReferenceCode": "C_ENT_DEF_PORTAL",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PORTAL",
+			"skuExternalReferenceCode": "PRDCT-PORTAL",
 			"unit": "boolean"
 		},
 		{
@@ -433,7 +433,7 @@
 			"externalReferenceCode": "C_ENT_DEF_PORTAL_EWSA",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-PORTAL-EWSA",
+			"skuExternalReferenceCode": "PRDCT-PORTAL-EWSA",
 			"unit": "boolean"
 		},
 		{
@@ -443,7 +443,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS",
+			"skuExternalReferenceCode": "PRDCT-SAAS",
 			"unit": "boolean"
 		},
 		{
@@ -453,7 +453,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_APV_1M",
 			"grantType": "fixed",
 			"name": "apv",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-APV-1M"
+			"skuExternalReferenceCode": "PRDCT-SAAS-APV-1M"
 		},
 		{
 			"active": true,
@@ -462,7 +462,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_BUSINESS_DOCUMENT_LIBRARY_SIZE",
 			"grantType": "fixed",
 			"name": "document-library-size",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-BUSINESS-PLAN",
+			"skuExternalReferenceCode": "PRDCT-SAAS-BUSINESS-PLAN",
 			"unit": "GB"
 		},
 		{
@@ -472,7 +472,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_BUSINESS_MARKER",
 			"grantType": "fixed",
 			"name": "liferay-saas-business",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-BUSINESS-PLAN",
+			"skuExternalReferenceCode": "PRDCT-SAAS-BUSINESS-PLAN",
 			"unit": "boolean"
 		},
 		{
@@ -482,7 +482,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_BUSINESS_PLAN",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-BUSINESS-PLAN",
+			"skuExternalReferenceCode": "PRDCT-SAAS-BUSINESS-PLAN",
 			"unit": "boolean"
 		},
 		{
@@ -492,7 +492,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_BUSINESS_RAM",
 			"grantType": "fixed",
 			"name": "ram",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-BUSINESS-PLAN",
+			"skuExternalReferenceCode": "PRDCT-SAAS-BUSINESS-PLAN",
 			"unit": "GB"
 		},
 		{
@@ -502,7 +502,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_BUSINESS_SITES",
 			"grantType": "fixed",
 			"name": "sites",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-BUSINESS-PLAN",
+			"skuExternalReferenceCode": "PRDCT-SAAS-BUSINESS-PLAN",
 			"unit": "count"
 		},
 		{
@@ -512,7 +512,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_BUSINESS_VCPU",
 			"grantType": "fixed",
 			"name": "vcpu",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-BUSINESS-PLAN",
+			"skuExternalReferenceCode": "PRDCT-SAAS-BUSINESS-PLAN",
 			"unit": "vCPU"
 		},
 		{
@@ -523,7 +523,7 @@
 			"grantType": "fixed",
 			"name": "database",
 			"productOptions": "{\"machineType\": \"standard\"}",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS",
+			"skuExternalReferenceCode": "PRDCT-SAAS",
 			"unit": "GiB"
 		},
 		{
@@ -533,7 +533,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_ENTERPRISE_DOCUMENT_LIBRARY_SIZE",
 			"grantType": "fixed",
 			"name": "document-library-size",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-ENTERPRISE-PLAN",
+			"skuExternalReferenceCode": "PRDCT-SAAS-ENTERPRISE-PLAN",
 			"unit": "GB"
 		},
 		{
@@ -543,7 +543,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_ENTERPRISE_MARKER",
 			"grantType": "fixed",
 			"name": "liferay-saas-enterprise",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-ENTERPRISE-PLAN",
+			"skuExternalReferenceCode": "PRDCT-SAAS-ENTERPRISE-PLAN",
 			"unit": "boolean"
 		},
 		{
@@ -553,7 +553,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_ENTERPRISE_PLAN",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-ENTERPRISE-PLAN",
+			"skuExternalReferenceCode": "PRDCT-SAAS-ENTERPRISE-PLAN",
 			"unit": "boolean"
 		},
 		{
@@ -563,7 +563,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_ENTERPRISE_RAM",
 			"grantType": "fixed",
 			"name": "ram",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-ENTERPRISE-PLAN",
+			"skuExternalReferenceCode": "PRDCT-SAAS-ENTERPRISE-PLAN",
 			"unit": "GB"
 		},
 		{
@@ -573,7 +573,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_ENTERPRISE_SITES",
 			"grantType": "unlimited",
 			"name": "sites",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-ENTERPRISE-PLAN",
+			"skuExternalReferenceCode": "PRDCT-SAAS-ENTERPRISE-PLAN",
 			"unit": "count"
 		},
 		{
@@ -583,7 +583,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_ENTERPRISE_VCPU",
 			"grantType": "fixed",
 			"name": "vcpu",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-ENTERPRISE-PLAN",
+			"skuExternalReferenceCode": "PRDCT-SAAS-ENTERPRISE-PLAN",
 			"unit": "vCPU"
 		},
 		{
@@ -594,7 +594,7 @@
 			"grantType": "fixed",
 			"name": "extensions-ram",
 			"productOptions": "{\"machineType\": \"standard\"}",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS",
+			"skuExternalReferenceCode": "PRDCT-SAAS",
 			"unit": "GiB"
 		},
 		{
@@ -605,7 +605,7 @@
 			"grantType": "fixed",
 			"name": "extensions-vcpus",
 			"productOptions": "{\"machineType\": \"standard\"}",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS",
+			"skuExternalReferenceCode": "PRDCT-SAAS",
 			"unit": "vCPU"
 		},
 		{
@@ -615,7 +615,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_EXTRA_STORAGE_DL",
 			"grantType": "fixed",
 			"name": "document-library-size",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-EXTRA-STORAGE-DL",
+			"skuExternalReferenceCode": "PRDCT-SAAS-EXTRA-STORAGE-DL",
 			"unit": "GB"
 		},
 		{
@@ -625,7 +625,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_LEGACY",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-LEGACY",
+			"skuExternalReferenceCode": "PRDCT-SAAS-LEGACY",
 			"unit": "boolean"
 		},
 		{
@@ -636,7 +636,7 @@
 			"grantType": "fixed",
 			"name": "logs",
 			"productOptions": "{\"machineType\": \"standard\"}",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS",
+			"skuExternalReferenceCode": "PRDCT-SAAS",
 			"unit": "GiB"
 		},
 		{
@@ -646,7 +646,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_MALU_2500",
 			"grantType": "fixed",
 			"name": "malu",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-MALU-2500"
+			"skuExternalReferenceCode": "PRDCT-SAAS-MALU-2500"
 		},
 		{
 			"active": true,
@@ -655,7 +655,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_PRO_DOCUMENT_LIBRARY_SIZE",
 			"grantType": "fixed",
 			"name": "document-library-size",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-PRO-PLAN",
+			"skuExternalReferenceCode": "PRDCT-SAAS-PRO-PLAN",
 			"unit": "GB"
 		},
 		{
@@ -665,7 +665,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_PRO_MARKER",
 			"grantType": "fixed",
 			"name": "liferay-saas-pro",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-PRO-PLAN",
+			"skuExternalReferenceCode": "PRDCT-SAAS-PRO-PLAN",
 			"unit": "boolean"
 		},
 		{
@@ -675,7 +675,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_PRO_RAM",
 			"grantType": "fixed",
 			"name": "ram",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-PRO-PLAN",
+			"skuExternalReferenceCode": "PRDCT-SAAS-PRO-PLAN",
 			"unit": "GB"
 		},
 		{
@@ -685,7 +685,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_PRO_SITES",
 			"grantType": "fixed",
 			"name": "sites",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-PRO-PLAN",
+			"skuExternalReferenceCode": "PRDCT-SAAS-PRO-PLAN",
 			"unit": "count"
 		},
 		{
@@ -695,7 +695,7 @@
 			"externalReferenceCode": "C_ENT_DEF_SAAS_PRO_VCPU",
 			"grantType": "fixed",
 			"name": "vcpu",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS-PRO-PLAN",
+			"skuExternalReferenceCode": "PRDCT-SAAS-PRO-PLAN",
 			"unit": "vCPU"
 		},
 		{
@@ -706,7 +706,7 @@
 			"grantType": "fixed",
 			"name": "storage",
 			"productOptions": "{\"machineType\": \"standard\"}",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS",
+			"skuExternalReferenceCode": "PRDCT-SAAS",
 			"unit": "TiB"
 		},
 		{
@@ -717,7 +717,7 @@
 			"grantType": "fixed",
 			"name": "traffic-networking",
 			"productOptions": "{\"machineType\": \"standard\"}",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-SAAS",
+			"skuExternalReferenceCode": "PRDCT-SAAS",
 			"unit": "TiB"
 		},
 		{
@@ -727,7 +727,7 @@
 			"externalReferenceCode": "C_ENT_DEF_TEST_APP",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-APP",
+			"skuExternalReferenceCode": "PRDCT-TEST-APP",
 			"unit": "boolean"
 		},
 		{
@@ -737,7 +737,7 @@
 			"externalReferenceCode": "C_ENT_DEF_TEST_CLIENT_EXTENSION",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-CLIENT-EXTENSION",
+			"skuExternalReferenceCode": "PRDCT-TEST-CLIENT-EXTENSION",
 			"unit": "boolean"
 		},
 		{
@@ -747,7 +747,7 @@
 			"externalReferenceCode": "C_ENT_DEF_TEST_COMPOSITE_APP",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-COMPOSITE-APP",
+			"skuExternalReferenceCode": "PRDCT-TEST-COMPOSITE-APP",
 			"unit": "boolean"
 		},
 		{
@@ -757,7 +757,7 @@
 			"externalReferenceCode": "C_ENT_DEF_TEST_CRM_ACCELERATOR",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-CRM-ACCELERATOR",
+			"skuExternalReferenceCode": "PRDCT-TEST-CRM-ACCELERATOR",
 			"unit": "boolean"
 		},
 		{
@@ -767,7 +767,7 @@
 			"externalReferenceCode": "C_ENT_DEF_TEST_LOW_CODE_CONFIGURATION",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-LOW-CODE-CONFIGURATION",
+			"skuExternalReferenceCode": "PRDCT-TEST-LOW-CODE-CONFIGURATION",
 			"unit": "boolean"
 		},
 		{
@@ -777,7 +777,7 @@
 			"externalReferenceCode": "C_ENT_DEF_TEST_PARTNER_PORTAL",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-PARTNER-PORTAL",
+			"skuExternalReferenceCode": "PRDCT-TEST-PARTNER-PORTAL",
 			"unit": "boolean"
 		},
 		{
@@ -787,7 +787,7 @@
 			"externalReferenceCode": "C_ENT_DEF_TEST_SLACK_CONNECTOR",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-SLACK-CONNECTOR",
+			"skuExternalReferenceCode": "PRDCT-TEST-SLACK-CONNECTOR",
 			"unit": "boolean"
 		},
 		{
@@ -797,7 +797,7 @@
 			"externalReferenceCode": "C_ENT_DEF_TEST_THEME_PACK",
 			"grantType": "fixed",
 			"name": "licenseGeneration",
-			"r_commerceProductToEntitlementDefinition_CProductERC": "PRDCT-TEST-THEME-PACK",
+			"skuExternalReferenceCode": "PRDCT-TEST-THEME-PACK",
 			"unit": "boolean"
 		}
 	]

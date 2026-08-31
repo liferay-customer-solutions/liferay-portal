@@ -158,11 +158,14 @@ public class EntitlementService extends OneBaseService {
 			return;
 		}
 
+		String skuExternalReferenceCode =
+			orderItem.getSkuExternalReferenceCode();
+
 		List<EntitlementDefinition> entitlementDefinitions =
 			_entitlementDefinitionService.getEntitlementDefinitions(
 				StringBundler.concat(
-					"(r_commerceProductToEntitlementDefinition_CProductId eq '",
-					orderItem.getProductId(), "') and (active eq true)"),
+					"(skuExternalReferenceCode eq '", skuExternalReferenceCode,
+					"') and (active eq true)"),
 				OrderItemUtil.getProductOptions(orderItem));
 
 		if (entitlementDefinitions.isEmpty()) {
@@ -170,8 +173,8 @@ public class EntitlementService extends OneBaseService {
 				_log.info(
 					StringBundler.concat(
 						"Skipping order item ", commerceOrderItemId,
-						": no active entitlement definitions matched product ",
-						orderItem.getProductId()));
+						" because no active entitlement definitions matched ",
+						"SKU ", skuExternalReferenceCode));
 			}
 
 			return;

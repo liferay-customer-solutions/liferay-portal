@@ -2362,6 +2362,24 @@
 				{
 					"DBType": "String",
 					"businessType": "Text",
+					"externalReferenceCode": "C_ENTITLEMENT_DEFINITION_SKU_EXTERNAL_REFERENCE_CODE",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "SKU External Reference Code"
+					},
+					"name": "skuExternalReferenceCode",
+					"objectFieldSettings": [
+					],
+					"required": true,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
+					"businessType": "Text",
 					"externalReferenceCode": "C_ENTITLEMENT_DEFINITION_UNIT",
 					"indexed": true,
 					"indexedAsKeyword": true,

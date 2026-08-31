@@ -14,9 +14,6 @@ import com.liferay.client.extension.util.spring.boot3.service.BaseService;
 import com.liferay.headless.admin.address.client.dto.v1_0.Country;
 import com.liferay.headless.admin.address.client.dto.v1_0.Region;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
-import com.liferay.headless.commerce.admin.catalog.client.custom.field.CustomField;
-import com.liferay.headless.commerce.admin.catalog.client.custom.field.CustomValue;
-import com.liferay.headless.commerce.admin.catalog.client.dto.v1_0.Sku;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Account;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.BillingAddress;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Order;
@@ -51,13 +48,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class SalesforceService extends BaseService {
 
 	public JSONObject postSalesforceOpportunity(
-			Country country, String licenseType, Order order, Sku sku,
+			Country country, String licenseType, Order order,
 			UserAccount userAccount)
 		throws Exception {
 
 		JSONObject salesforceOpportunityJSONObject =
 			_getSalesforceOpportunityJSONObject(
-				country, licenseType, order, sku, userAccount);
+				country, licenseType, order, userAccount);
 
 		try {
 			String response = post(
@@ -86,6 +83,43 @@ public class SalesforceService extends BaseService {
 
 			return null;
 		}
+	}
+
+	protected JSONArray getLineItemsJSONArray(String licenseType, Order order) {
+		JSONArray jsonArray = new JSONArray();
+
+		for (OrderItem orderItem : order.getOrderItems()) {
+			JSONObject jsonObject = new JSONObject();
+
+			if (!Objects.equals(
+					order.getOrderTypeExternalReferenceCode(),
+					"AI_HUB_TOKEN")) {
+
+				jsonObject.put(
+					"endDate",
+					_format(
+						CommerceOrderUtil.getOrderPurchaseEndDate(
+							licenseType,
+							CommerceOrderUtil.getSkuOptionValue(
+								"license-usage-type", orderItem.getOptions())))
+				).put(
+					"startDate", _format(order.getCreateDate())
+				);
+			}
+
+			jsonArray.put(
+				jsonObject.put(
+					"orderType", "New"
+				).put(
+					"productId", orderItem.getSkuExternalReferenceCode()
+				).put(
+					"quantity", orderItem.getQuantity()
+				).put(
+					"unitPrice", orderItem.getUnitPrice()
+				));
+		}
+
+		return jsonArray;
 	}
 
 	private String _format(Date date) {
@@ -165,63 +199,6 @@ public class SalesforceService extends BaseService {
 			"street",
 			billingAddress.getStreet1() + " " + billingAddress.getStreet2()
 		);
-	}
-
-	private JSONArray _getLineItemsJSONArray(
-		String licenseType, Order order, Sku sku) {
-
-		String productId = null;
-
-		for (CustomField customField : sku.getCustomFields()) {
-			if (Objects.equals(
-					customField.getName(), "salesforce-product-id")) {
-
-				CustomValue customValue = customField.getCustomValue();
-
-				Object data = customValue.getData();
-
-				if (data != null) {
-					productId = data.toString();
-				}
-
-				break;
-			}
-		}
-
-		JSONArray jsonArray = new JSONArray();
-
-		for (OrderItem orderItem : order.getOrderItems()) {
-			JSONObject jsonObject = new JSONObject();
-
-			if (!Objects.equals(
-					order.getOrderTypeExternalReferenceCode(),
-					"AI_HUB_TOKEN")) {
-
-				jsonObject.put(
-					"endDate",
-					_format(
-						CommerceOrderUtil.getOrderPurchaseEndDate(
-							licenseType,
-							CommerceOrderUtil.getSkuOptionValue(
-								"license-usage-type", orderItem.getOptions())))
-				).put(
-					"startDate", _format(order.getCreateDate())
-				);
-			}
-
-			jsonArray.put(
-				jsonObject.put(
-					"orderType", "New"
-				).put(
-					"productId", productId
-				).put(
-					"quantity", orderItem.getQuantity()
-				).put(
-					"unitPrice", orderItem.getUnitPrice()
-				));
-		}
-
-		return jsonArray;
 	}
 
 	private String _getPaymentMethodType(Order order) {
@@ -345,7 +322,7 @@ public class SalesforceService extends BaseService {
 	}
 
 	private JSONObject _getSalesforceOpportunityJSONObject(
-		Country country, String licenseType, Order order, Sku sku,
+		Country country, String licenseType, Order order,
 		UserAccount userAccount) {
 
 		return new JSONObject(
@@ -356,7 +333,7 @@ public class SalesforceService extends BaseService {
 		).put(
 			"closeDate", _format(order.getCreateDate())
 		).put(
-			"lineItems", _getLineItemsJSONArray(licenseType, order, sku)
+			"lineItems", getLineItemsJSONArray(licenseType, order)
 		).put(
 			"marketplaceDealId", order.getId()
 		).put(

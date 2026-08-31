@@ -187,17 +187,6 @@
 		},
 		{
 			"deletionType": "disassociate",
-			"externalReferenceCode": "R_COMMERCE_PRODUCT_TO_ENTITLEMENT_DEFINITION",
-			"label": {
-				"en_US": "Commerce Product to Entitlement Definition"
-			},
-			"name": "commerceProductToEntitlementDefinition",
-			"objectDefinitionExternalReferenceCode1": "L_COMMERCE_PRODUCT_DEFINITION",
-			"objectDefinitionExternalReferenceCode2": "C_ENTITLEMENT_DEFINITION",
-			"type": "oneToMany"
-		},
-		{
-			"deletionType": "disassociate",
 			"externalReferenceCode": "R_COMMERCE_PRODUCT_TO_LICENSE_KEY",
 			"label": {
 				"en_US": "Commerce Product to License Key"

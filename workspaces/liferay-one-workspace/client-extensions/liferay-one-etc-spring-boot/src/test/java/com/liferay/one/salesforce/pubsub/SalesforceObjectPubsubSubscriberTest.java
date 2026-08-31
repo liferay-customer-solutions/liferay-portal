@@ -95,7 +95,7 @@ public class SalesforceObjectPubsubSubscriberTest {
 
 		Mockito.verify(
 			_commerceProductService, Mockito.never()
-		).addOrUpdateProduct(
+		).updateProduct(
 			Mockito.any(), Mockito.any(), Mockito.any()
 		);
 	}
@@ -172,7 +172,7 @@ public class SalesforceObjectPubsubSubscriberTest {
 		).doNothing(
 		).when(
 			_commerceProductService
-		).addOrUpdateProduct(
+		).updateProduct(
 			Mockito.any(), Mockito.any(), Mockito.any()
 		);
 
@@ -195,14 +195,14 @@ public class SalesforceObjectPubsubSubscriberTest {
 
 		Mockito.verify(
 			_commerceProductService, Mockito.times(2)
-		).addOrUpdateProduct(
+		).updateProduct(
 			Mockito.any(), Mockito.any(), Mockito.any()
 		);
 
 		Mockito.verify(
 			_commerceProductService
-		).addOrUpdateProduct(
-			Mockito.any(), Mockito.any(), Mockito.eq("Gadget")
+		).updateProduct(
+			Mockito.any(), Mockito.eq("Gadget"), Mockito.any()
 		);
 	}
 
@@ -351,7 +351,7 @@ public class SalesforceObjectPubsubSubscriberTest {
 			new Exception("Unable to add or update product")
 		).when(
 			_commerceProductService
-		).addOrUpdateProduct(
+		).updateProduct(
 			Mockito.any(), Mockito.any(), Mockito.any()
 		);
 
@@ -508,8 +508,8 @@ public class SalesforceObjectPubsubSubscriberTest {
 
 		Mockito.verify(
 			_commerceProductService
-		).addOrUpdateProduct(
-			"A description", _PRODUCT_2_ID, "Widget"
+		).updateProduct(
+			"A description", "Widget", _PRODUCT_2_ID
 		);
 	}
 

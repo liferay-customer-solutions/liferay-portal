@@ -35,6 +35,7 @@ import com.liferay.one.service.AccountService;
 import com.liferay.one.service.CloudActivationRequestService;
 import com.liferay.one.service.CommerceProductService;
 import com.liferay.one.service.CommerceProductVirtualSettingsService;
+import com.liferay.one.service.CommerceSkuService;
 import com.liferay.one.service.EntitlementService;
 import com.liferay.one.service.EnvironmentService;
 import com.liferay.one.util.CloudNativeSignatureValidator;
@@ -651,18 +652,26 @@ public class CloudRestController extends OneBaseRestController {
 			return null;
 		}
 
-		long cProductId = entitlementDefinition.getCProductId();
+		Long productId = _commerceSkuService.fetchProductId(
+			entitlementDefinition.getSkuExternalReferenceCode());
 
-		if (cProductId <= 0) {
+		if (productId == null) {
+			_log.error(
+				StringBundler.concat(
+					"No SKU exists with external reference code ",
+					entitlementDefinition.getSkuExternalReferenceCode(),
+					" for entitlement definition ",
+					entitlementDefinition.getExternalReferenceCode()));
+
 			return null;
 		}
 
-		Product product = _commerceProductService.fetchProduct(cProductId);
+		Product product = _commerceProductService.fetchProduct(productId);
 
 		if (product == null) {
 			_log.error(
 				StringBundler.concat(
-					"No product exists for commerce product ID ", cProductId,
+					"No product exists for commerce product ID ", productId,
 					" of entitlement definition ",
 					entitlementDefinition.getExternalReferenceCode()));
 		}
@@ -1156,6 +1165,9 @@ public class CloudRestController extends OneBaseRestController {
 	@Autowired
 	private CommerceProductVirtualSettingsService
 		_commerceProductVirtualSettingsService;
+
+	@Autowired
+	private CommerceSkuService _commerceSkuService;
 
 	@Autowired
 	private EntitlementService _entitlementService;
