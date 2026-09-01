@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import FetcherError from '~/services/fetcher/FetcherError';
 import fetcher from '~/services/fetcher/fetcher';
 import {Liferay} from '~/services/liferay/liferay';
 
@@ -56,6 +57,14 @@ export default class HeadlessCommerceDeliveryCart {
 				callbackURL
 			)}`
 		);
+
+		if (!response.ok) {
+			const error = new FetcherError('Unable to get the payment URL');
+
+			error.status = response.status;
+
+			throw error;
+		}
 
 		return response.text();
 	}
