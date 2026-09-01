@@ -181,6 +181,7 @@ const zodSchema = {
 	}),
 	activationKey: z.object({
 		...personalInformationSchema,
+		companyName: z.string().min(3, 'Company name is required'),
 		domain: z.string().min(3, 'Domain is required'),
 		notifyMeAboutProducts: z.boolean(),
 		purpose: z.string().min(3, 'Purpose is required'),

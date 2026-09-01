@@ -96,7 +96,7 @@ const ActivationKeyFormDXP = () => {
 	) => {
 		const [firstName, ...lastName] = form.fullName.split(' ');
 
-		triggerSubmit({
+		return triggerSubmit({
 			Company: form.companyName,
 			Country: form.country,
 			Email: form.businessEmailAddress,
@@ -138,7 +138,7 @@ const ActivationKeyFormDXP = () => {
 		}
 
 		try {
-			submitMarketoForm(form);
+			await submitMarketoForm(form);
 
 			const productPurchase = new ProductPurchaseDXPTypeFree(
 				selectedAccount,
@@ -238,6 +238,7 @@ const ActivationKeyFormDXP = () => {
 							placeholder={i18n.translate(
 								'enter-your-company-name'
 							)}
+							required
 						/>
 					</ClayInput.GroupItem>
 				</ClayInput.Group>

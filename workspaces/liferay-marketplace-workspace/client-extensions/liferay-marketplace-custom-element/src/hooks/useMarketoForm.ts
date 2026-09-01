@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
+
+import {waitTimeout} from '../utils/util';
 
 type MktoForms2 = {
 	loadForm: (
@@ -34,6 +36,7 @@ export type useMarketoProps = {
 const defaultMktoForms2 = window.MktoForms2;
 
 const baseURL = `//pages.liferay.com`;
+const MARKETO_SUBMIT_TIMEOUT = 8000;
 const MUNCHKIN_ID = '212-DQY-814';
 
 const useMarketo = ({
@@ -46,17 +49,42 @@ const useMarketo = ({
 	const [started, setStarted] = useState(false);
 	const [formLoaded, setFormLoaded] = useState(false);
 	const [MktoForms2, setMktoForms2] = useState(defaultMktoForms2);
+	const submitResolveRef = useRef<(submitted: boolean) => void>();
 
-	function triggerSubmit(values: unknown) {
+	function triggerSubmit(values: unknown): Promise<boolean> {
 		if (!form || !started) {
 			console.error('Marketo form is not available');
 
-			return;
+			return Promise.resolve(false);
 		}
+
+		const submitted = new Promise<boolean>((resolve) => {
+			submitResolveRef.current = resolve;
+		});
 
 		form.vals(values);
 
 		form.submit();
+
+		// The submission is only confirmed by the onSuccess callback below. The
+		// timeout keeps the caller from waiting forever when Marketo never
+		// answers, so the purchase always moves on.
+
+		return Promise.race([
+			submitted,
+			waitTimeout(MARKETO_SUBMIT_TIMEOUT).then(() => {
+				if (submitResolveRef.current) {
+					submitResolveRef.current = undefined;
+
+					console.error(
+						'Marketo form submission was not confirmed',
+						formId
+					);
+				}
+
+				return false;
+			}),
+		]);
 	}
 
 	useEffect(() => {
@@ -118,6 +146,10 @@ const useMarketo = ({
 
 					// eslint-disable-next-line no-console
 					console.info('Submitting Marketo form', formId);
+
+					submitResolveRef.current?.(true);
+
+					submitResolveRef.current = undefined;
 
 					onSubmit?.();
 
