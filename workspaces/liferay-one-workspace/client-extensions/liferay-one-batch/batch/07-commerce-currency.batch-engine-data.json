@@ -52,16 +52,6 @@
 		},
 		{
 			"active": true,
-			"code": "HUF",
-			"externalReferenceCode": "HUF",
-			"name": {
-				"en_US": "Hungarian Forint"
-			},
-			"primary": false,
-			"rate": 1.0
-		},
-		{
-			"active": true,
 			"code": "INR",
 			"externalReferenceCode": "INR",
 			"name": {
@@ -76,16 +66,6 @@
 			"externalReferenceCode": "JPY",
 			"name": {
 				"en_US": "Japanese Yen"
-			},
-			"primary": false,
-			"rate": 1.0
-		},
-		{
-			"active": true,
-			"code": "NZD",
-			"externalReferenceCode": "NZD",
-			"name": {
-				"en_US": "New Zealand Dollar"
 			},
 			"primary": false,
 			"rate": 1.0
