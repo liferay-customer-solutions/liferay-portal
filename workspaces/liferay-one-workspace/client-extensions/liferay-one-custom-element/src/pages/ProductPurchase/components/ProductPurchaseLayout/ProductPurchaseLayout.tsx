@@ -18,7 +18,6 @@ import ProductPurchaseApp from '~/services/commerce/ProductPurchaseApp';
 import ProductPurchaseLDP, {
 	LDPSettings,
 } from '~/services/commerce/ProductPurchaseLDP';
-import HeadlessCommerceDeliveryCart from '~/services/headless/HeadlessCommerceDeliveryCart';
 import {Liferay} from '~/services/liferay/liferay';
 import {getProductPriceModel, isLDPProduct} from '~/utils/productUtils';
 
@@ -162,12 +161,7 @@ const ProductPurchaseLayout = ({
 
 				if (payment.type === PaymentMethodType.PAY_NOW) {
 					window.location.href =
-						await HeadlessCommerceDeliveryCart.getPaymentMethodURL(
-							cart.id,
-							`${
-								window.location.href.split('#')[0]
-							}#/purchase-completed?orderId=${cart.id}`
-						);
+						await productPurchase.getPaymentNextStepsLink(cart);
 
 					return;
 				}
