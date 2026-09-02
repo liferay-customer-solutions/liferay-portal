@@ -35,7 +35,7 @@ const LicenseCard = ({sku}: LicenseCardProps) => {
 		cartItems.find((item) => item.skuId === sku.id)?.quantity ||
 		MIN_QUANTITY;
 
-	const skuOption = sku.skuOptions.find((skuOption) =>
+	const skuOption = (sku.skuOptions ?? []).find((skuOption) =>
 		[
 			'base-license-usage-type',
 			'cloud-license-usage-type',
