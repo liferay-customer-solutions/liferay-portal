@@ -113,41 +113,43 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 				: 'continue-to-download'
 			: 'go-to-the-catalog';
 
+	const paymentFailedBody = (
+		<Header
+			description={
+				<span>
+					<p className="text-center">
+						We&apos;re sorry, but your PayPal payment for{' '}
+						<strong>{productName}</strong> could not be processed.
+						Please try again or use a different PayPal account.
+					</p>
+					<p className="d-flex justify-content-center m-0 next-step-page-text-bold">
+						Need help?&nbsp;{' '}
+						<a href="mailto:marketplace-admin@liferay.com">
+							marketplace-admin@liferay.com
+						</a>
+					</p>
+				</span>
+			}
+			icon={
+				<span className="d-flex justify-content-center">
+					<img
+						alt="payment pending icon"
+						draggable="false"
+						src={timesCircleIcon}
+					/>
+				</span>
+			}
+			title={
+				<span className="d-flex justify-content-center mb-5 next-step-page-title">
+					{i18n.translate('purchase-failed')}
+				</span>
+			}
+		/>
+	);
+
 	const nextStepBody: Record<number, ReactElement> = {
-		[PaymentStatus.FAILED]: (
-			<Header
-				description={
-					<span>
-						<p className="text-center">
-							We&apos;re sorry, but your PayPal payment for{' '}
-							<strong>{productName}</strong> could not be
-							processed. Please try again or use a different
-							PayPal account.
-						</p>
-						<p className="d-flex justify-content-center m-0 next-step-page-text-bold">
-							Need help?&nbsp;{' '}
-							<a href="mailto:marketplace-admin@liferay.com">
-								marketplace-admin@liferay.com
-							</a>
-						</p>
-					</span>
-				}
-				icon={
-					<span className="d-flex justify-content-center">
-						<img
-							alt="payment pending icon"
-							draggable="false"
-							src={timesCircleIcon}
-						/>
-					</span>
-				}
-				title={
-					<span className="d-flex justify-content-center mb-5 next-step-page-title">
-						{i18n.translate('purchase-failed')}
-					</span>
-				}
-			/>
-		),
+		[PaymentStatus.CANCELED]: paymentFailedBody,
+		[PaymentStatus.FAILED]: paymentFailedBody,
 		[PaymentStatus.PAID]: (
 			<Header
 				description={
