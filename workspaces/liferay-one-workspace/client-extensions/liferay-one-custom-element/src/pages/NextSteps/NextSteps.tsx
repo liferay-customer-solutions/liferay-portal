@@ -6,7 +6,7 @@
 import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
-import {ReactElement} from 'react';
+import {ReactElement, useEffect} from 'react';
 import {HashRouter} from 'react-router-dom';
 import useSWR from 'swr';
 import checkCircleIcon from '~/assets/icons/check_circle_icon.svg';
@@ -19,6 +19,7 @@ import useGetProductByOrderId from '~/hooks/useGetProductByOrderId';
 import i18n from '~/i18n';
 import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
 import {Liferay} from '~/services/liferay/liferay';
+import CommerceOrders from '~/services/spring-boot/CommerceOrders';
 import {getAccountImage} from '~/utils/getAccountImage';
 import {
 	getProductCategoriesByVocabularyName,
@@ -96,6 +97,14 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 
 	const isCloudApp =
 		placedOrder?.orderTypeExternalReferenceCode === OrderTypes.CLOUD_APP;
+
+	useEffect(() => {
+		if (!isCloudApp || !orderId) {
+			return;
+		}
+
+		CommerceOrders.completeCloudApp(orderId).catch(console.error);
+	}, [isCloudApp, orderId]);
 
 	const continueButtonKey =
 		paymentStatus === PaymentStatus.PAID
