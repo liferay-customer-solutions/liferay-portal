@@ -523,7 +523,7 @@
 				{
 					"specificationKey": "type",
 					"value": {
-						"en_US": "app"
+						"en_US": "dxp"
 					}
 				}
 			],
@@ -532,7 +532,7 @@
 				{
 					"externalReferenceCode": "PRDCT-APP",
 					"neverExpire": true,
-					"price": 0,
+					"price": 99,
 					"published": true,
 					"purchasable": true,
 					"sku": "PRDCT-APP",
@@ -3817,7 +3817,7 @@
 				{
 					"specificationKey": "type",
 					"value": {
-						"en_US": "app"
+						"en_US": "client-extension"
 					}
 				}
 			],
@@ -3826,7 +3826,7 @@
 				{
 					"externalReferenceCode": "PRDCT-TEST-CLIENT-EXTENSION",
 					"neverExpire": true,
-					"price": 0,
+					"price": 99,
 					"published": true,
 					"purchasable": true,
 					"sku": "PRDCT-TEST-CLIENT-EXTENSION",
@@ -3890,7 +3890,7 @@
 				{
 					"specificationKey": "type",
 					"value": {
-						"en_US": "app"
+						"en_US": "composite-app"
 					}
 				}
 			],
@@ -3899,7 +3899,7 @@
 				{
 					"externalReferenceCode": "PRDCT-TEST-COMPOSITE-APP",
 					"neverExpire": true,
-					"price": 0,
+					"price": 99,
 					"published": true,
 					"purchasable": true,
 					"sku": "PRDCT-TEST-COMPOSITE-APP",
@@ -4095,7 +4095,7 @@
 				{
 					"specificationKey": "type",
 					"value": {
-						"en_US": "app"
+						"en_US": "low-code-configuration"
 					}
 				}
 			],
@@ -4104,7 +4104,7 @@
 				{
 					"externalReferenceCode": "PRDCT-TEST-LOW-CODE-CONFIGURATION",
 					"neverExpire": true,
-					"price": 0,
+					"price": 99,
 					"published": true,
 					"purchasable": true,
 					"sku": "PRDCT-TEST-LOW-CODE-CONFIGURATION",
