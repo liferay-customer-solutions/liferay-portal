@@ -36,6 +36,7 @@ export default {
 	'activate': 'Activate',
 	'activated': 'Activated',
 	'activating': 'Activating...',
+	'activating-liferay-commerce': 'Activating Liferay Commerce',
 	'activation': 'Activation',
 	'activation-code': 'Activation Code',
 	'activation-codes': 'Activation Codes',
@@ -345,6 +346,7 @@ export default {
 	'contact-publisher': 'Contact Publisher',
 	'contact-sales': 'Contact Sales',
 	'contact-support': 'Contact Support',
+	'contact-the-support-team': 'contact the Support team.',
 	'contact-us': 'Contact Us',
 	'contact-your-administrator-to-become-part-of-an-account':
 		'Contact your administrator to become part of an account.',
@@ -605,8 +607,10 @@ export default {
 		'For businesses with a VAT/Tax number; this account type support multiple users. It also possible to join an already existing business account',
 	'for-individuals-without-a-vat-tax-number-this-account-support-single-user-only':
 		'For individuals without a VAT/Tax number; this account support single user only.',
-	'for-instructions-on-how-to-setup-your-software-read':
-		'For instructions on how to setup your software, please read the',
+	'for-instructions-on-how-to-setup-your-liferay-enterprise-search-software-please-read-the':
+		'For instructions on how to setup your Liferay Enterprise Search software, please read the',
+	'for-more-information-about-the-availability-of-your-x-activation-keys-please':
+		' For more information about the availability of your {0} activation keys, please ',
 	'form': 'Form',
 	'fragment': 'Fragment',
 	'fragment-collection-of-fragments': 'Fragment/Collection of Fragments',
@@ -684,6 +688,8 @@ export default {
 		'If you are requesting the account on behalf of a business, please note the business name.',
 	'if-you-could-choose-3-top-priorities-for-improvements-what-would-they-be':
 		'If you could choose 3 top priorities for improvements, what would they be?',
+	'if-you-need-more-information-about-the-availability-of-your-x-activation-keys-please-ask-one-of-your-administrator-team-members-to-update-your-permissions-so-you-can-contact-liferay-support-alternatively-team-members-with-administrator-or-requester-role-can-submit-a-support-ticket-on-your-behalf':
+		' If you need more information about the availability of your {0} activation keys, please ask one of your Administrator team members to update your permissions, so you can contact Liferay Support. Alternatively, team members with Administrator or Requester role can submit a support ticket on your behalf.',
 	'images': 'Images',
 	'important-images-will-be-displayed-following-the-numerical-order-above':
 		'Important: Images will be displayed following the numerical order above.',
@@ -759,7 +765,8 @@ export default {
 	'last-update': 'Last Update',
 	'last-year': 'Last Year',
 	'learn-more': 'Learn More',
-	'learn-more-about-app-configuration': 'Learn more about App Configuration',
+	'learn-more-about-app-configuration':
+		'Learn more about app configuration.',
 	'learn-more-about-app-resource-requirements':
 		'Learn more about App Resource Requirements',
 	'learn-more-about-becoming-a-liferay-customer':
@@ -890,6 +897,7 @@ export default {
 	'monthly-increase': 'Monthly Increase',
 	'montreal-canada': 'Montreal, Canada',
 	'more-actions': 'More Actions',
+	'more-details': 'More details:',
 	'more-info': 'More Info',
 	'most-purchased-apps': 'Most Purchased Apps',
 	'most-purchased-products': 'Most Purchased Products',
@@ -1010,6 +1018,7 @@ export default {
 		'Only ZIP files are allowed. Max file size is 500MB.',
 	'oops-something-went-wrong': 'Oops! Something went wrong.',
 	'open': 'Open',
+	'open-a-support-ticket': 'open a support ticket',
 	'open-in-marketplace': 'Open in Marketplace',
 	'order-confirmation': 'Order Confirmation',
 	'order-date': 'Order Date',
@@ -1325,8 +1334,8 @@ export default {
 	'select-account': 'Select Account',
 	'select-an-account-to-view-this-page':
 		'Select an account to view this page.',
-	'select-an-active-enterprise-search-subscription-to-download-the-activation-key':
-		'Select an active Liferay Enterprise Search subscription to download the activation key.',
+	'select-an-active-liferay-x-subscription-to-download-the-activation-key':
+		'Select an active Liferay {0} subscription to download the activation key',
 	'select-an-option': 'Select an Option',
 	'select-areas': 'Select Areas',
 	'select-categories': 'Select Categories',
@@ -1514,6 +1523,8 @@ export default {
 	'the-order-must-be-completed-before-licensing-this-app.':
 		'The order must be completed before licensing this app.',
 	'the-published-version-is-x': 'The published version is {0}.',
+	'the-requested-activation-key-is-not-yet-available':
+		'The requested activation key is not yet available.',
 	'the-selected-project-does-not-meet-the-necessary-resource-requirements-for-this-app-please-contact-sales-to-request-additional-resources':
 		'The selected project does not meet the necessary resource requirements for this app. Please contact Sales to request additional resources.',
 	'the-start-and-end-dates-must-be-different':
@@ -1590,8 +1601,8 @@ export default {
 		'To generate your unique activation key file, please provide the technical specifications required below. These details are used exclusively to configure the software for your environment and ensure hardware compatibility.',
 	'to-join-an-existing-business-account-pleasecontact-your-administrator-who-can-add-you-once-added-you-will-automatically-become-part-of-that-account-and-will-be-able-to-manage-it-and-make-purchases-on-markeplace':
 		'To join an existing business account, please contact your administrator, who can add you. Once added, you will automatically become part of that account and will be able to manage it and make purchases on Markeplace.',
-	'to-request-a-new-or-replacement-activation-key-open-a-support-ticket':
-		'To request a new or replacement activation key, open a support ticket.',
+	'to-request-a-new-or-replacement-activation-key-please':
+		'To request a new or replacement activation key, please',
 	'token-monthly-allowance': 'Token Monthly Allowance',
 	'token-past-purchases': 'Token Past Purchases',
 	'token-unavailable': 'Token Unavailable',
@@ -1817,8 +1828,8 @@ export default {
 		'You do not have access to this page.',
 	'you-do-not-have-access-to-upload-files':
 		'You do not have access to upload files.',
-	'you-do-not-have-an-active-enterprise-search-subscription':
-		'You do not have an active Enterprise Search subscription.',
+	'you-do-not-have-an-active-liferay-x-subscription':
+		'You do not have an active Liferay {0} subscription.',
 	'you-have-joined-the-account-sign-in-to-get-started':
 		'You have joined the account. Sign in to get started.',
 	'you-have-reached-the-maximum-number-of-active-trials-allowed-to-start-a-new-trial-please-end-one-of-your-existing-trials-first':

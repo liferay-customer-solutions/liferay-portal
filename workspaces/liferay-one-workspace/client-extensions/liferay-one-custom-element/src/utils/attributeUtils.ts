@@ -6,6 +6,7 @@
 export const baseAttributes = [
 	'accountId',
 	'analyticsCloudURL',
+	'articleGettingStartedWithLiferayEnterpriseSearchURL',
 	'cloudConsoleURL',
 	'contactSupportURL',
 	'endUserLicenseAgreement',

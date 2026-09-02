@@ -7,6 +7,7 @@ export default {
 	'1-ticket': '1 Ticket',
 	'accelerator': 'Acelerador',
 	'actions': 'Ações',
+	'activating-liferay-commerce': 'Ativando o Liferay Commerce',
 	'activity-history': 'Histórico de Atividades',
 	'actual-event-date': 'Data Real do Evento',
 	'add-a-description-of-the-file-related-to-this-ticket':
@@ -67,6 +68,7 @@ export default {
 	'comment': 'Comentário',
 	'community-platform': 'Plataforma de comunidade',
 	'consumer-products': 'Produtos de consumo',
+	'contact-the-support-team': 'entre em contato com nossa equipe de suporte.',
 	'content-management-operations': 'Gestão de conteúdo e operações',
 	'create-business-event': 'Criar Evento de Negócio',
 	'create-event': 'Criar Evento',
@@ -94,6 +96,7 @@ export default {
 		'Região do Centro de Dados de Recuperação de Desastres',
 	'doha-qatar': 'Doha, Catar',
 	'download': 'Baixar',
+	'download-key': 'Baixar chave',
 	'drag-and-drop-to-upload-or': 'Arraste e solte para fazer upload ou',
 	'ecm': 'ECM',
 	'edit-event': 'Editar Evento',
@@ -119,8 +122,14 @@ export default {
 	'filters': 'Filtros',
 	'financial-portal': 'Portal financeiro',
 	'finish-activation': 'Concluir Ativação',
+	'for-instructions-on-how-to-setup-your-liferay-enterprise-search-software-please-read-the':
+		'Para obter instruções sobre como configurar o software Liferay Enterprise Search, ler:',
+	'for-more-information-about-the-availability-of-your-x-activation-keys-please':
+		' Para obter mais informações sobre a disponibilidade das suas chaves de ativação de {0}, por favor ',
 	'frankfurt-germany': 'Frankfurt, Alemanha',
 	'gamification': 'Gamificação',
+	'getting-started-with-liferay-enterprise-search-article':
+		'Artigo de introdução ao Liferay Enterprise Search.',
 	'go-live': 'Go Live',
 	'go-to-liferay-saas': 'Ir para o Liferay SaaS',
 	'go-to-product-console': 'Ir ao Console do Produto',
@@ -129,6 +138,8 @@ export default {
 	'healthcare': 'Saúde',
 	'higher-education': 'Ensino superior',
 	'identity-management-and-governance': 'Gestão de identidade e governança',
+	'if-you-need-more-information-about-the-availability-of-your-x-activation-keys-please-ask-one-of-your-administrator-team-members-to-update-your-permissions-so-you-can-contact-liferay-support-alternatively-team-members-with-administrator-or-requester-role-can-submit-a-support-ticket-on-your-behalf':
+		' Se você precisar de mais informações sobre a disponibilidade das suas chaves de ativação de {0}, peça a um dos membros da sua equipe com papel de Administrador para atualizar suas permissões, para que você possa entrar em contato com o Suporte da Liferay. Como alternativa, membros da equipe com papel de Administrador ou Solicitante podem enviar um ticket de suporte em seu nome.',
 	'industry': 'Setor',
 	'insurance': 'Seguros',
 	'intranet': 'Intranet',
@@ -138,6 +149,8 @@ export default {
 	'iowa-usa': 'Iowa, EUA',
 	'knowledge-management': 'Gestão do conhecimento',
 	'kpis': 'KPIs',
+	'learn-more-about-app-configuration':
+		'Saiba mais sobre a configuração de aplicativos.',
 	'leave-a-comment': 'Deixe um Comentário',
 	'life-sciences': 'Ciências da vida',
 	'liferay-dxp-version': 'Versão do Liferay DXP',
@@ -160,6 +173,7 @@ export default {
 	'mm-dd-yyyy': 'MM-DD-AAAA',
 	'monthly-inbound-and-outbound': 'Entradas e Saídas Mensais',
 	'montreal-canada': 'Montreal, Canadá',
+	'more-details': 'Mais detalhes:',
 	'mumbai-india': 'Mumbai, índia',
 	'navigation-and-discovery': 'Navegação e descoberta',
 	'new-version': 'Nova Versão',
@@ -175,6 +189,7 @@ export default {
 	'once-canceled-no-further-edits-can-be-made-to-this-event':
 		'Uma vez cancelado, não será possível fazer mais edições neste evento.',
 	'open': 'Aberto',
+	'open-a-support-ticket': 'abra um ticket de suporte',
 	'orders-and-fulfillment': 'Pedidos e fulfillment',
 	'oregon-usa': 'Óregon, EUA',
 	'osaka-japan': 'Osaca, Japão',
@@ -226,6 +241,8 @@ export default {
 	'select-a-file': 'Selecione um arquivo ',
 	'select-a-local-file-to-upload-only-one-file-can-be-attached-at-a-time':
 		'Selecione um arquivo local para fazer upload. Apenas um arquivo pode ser anexado por vez',
+	'select-an-active-liferay-x-subscription-to-download-the-activation-key':
+		'Selecione uma assinatura ativa do Liferay {0} para baixar a chave de ativação',
 	'select-the-option': 'Selecione a Opção',
 	'select-the-project-and-ticket-you-want-to-attach-a-file-to':
 		'Selecione o projeto e o chamado ao qual deseja anexar um arquivo.',
@@ -237,6 +254,8 @@ export default {
 		'Plataforma compartilhada de investigadores',
 	'sites-and-users': 'Sites e Usuários',
 	'storage': 'Armazenamento',
+	'subscription': 'Assinatura',
+	'subscription-term': 'Termo de assinatura',
 	'supplier-portal': 'Portal do fornecedor',
 	'sydney-australia': 'Sydney, Australia',
 	'system-admins': 'Administradores do Sistema',
@@ -246,6 +265,8 @@ export default {
 	'the-changes-were-saved-successfully':
 		'As alterações foram salvas com sucesso.',
 	'the-file-may-have-been-deleted': 'O arquivo pode ter sido excluído.',
+	'the-requested-activation-key-is-not-yet-available':
+		'A chave de ativação solicitada ainda não está disponível.',
 	'the-workspace-url-must-not-have-spaces':
 		'A URL do ambiente de trabalho não deve ter espaços.',
 	'the-workspace-url-should-start-with-/':
@@ -263,6 +284,8 @@ export default {
 	'tickets-impacting-this-event': 'Tickets que Impactam Este Evento',
 	'time': 'Horário',
 	'time-zone': 'Fuso Horário',
+	'to-request-a-new-or-replacement-activation-key-please':
+		'Para solicitar uma chave de ativação nova ou substituta, por favor favor',
 	'tokyo-japan': 'Tóquio, Japão',
 	'total-ram': 'RAM Total',
 	'total-storage': 'Armazenamento Total',
@@ -301,8 +324,8 @@ export default {
 	'x-tickets': '{0} Tickets',
 	'you-do-not-have-access-to-upload-files':
 		'Você não tem acesso para enviar arquivos.',
-	'you-do-not-have-an-active-enterprise-search-subscription':
-		'Você não tem uma assinatura ativa do Enterprise Search.',
+	'you-do-not-have-an-active-liferay-x-subscription':
+		'Você não tem uma assinatura ativa do Liferay {0}.',
 	'you-need-administrator-or-requester-role-on-this-project-to-upload-a-file':
 		'Você precisa ter o papel de Administrador ou Solicitante neste projeto para enviar um arquivo.',
 	'you-need-administrator-role-on-this-project-to-submit-this-form':

@@ -8,7 +8,7 @@ import {
 	filterSchema as filterSchemas,
 } from '~/types/filters';
 import CreateFilters from '~/utils/CreateFilters';
-import {downloadFile} from '~/utils/downloadFile';
+import {downloadFile} from '~/utils/downloadFileUtils';
 
 import {OneSpringBootOAuth2} from './OAuth2Client';
 

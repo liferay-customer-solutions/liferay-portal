@@ -46,15 +46,13 @@ type ProjectItemDetailsProps = {
 
 export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 	const {applicationERC, productERC} = useParams();
-	const {projectId, projects, selectedContractERC} = useProject();
+	const {project, projectId, selectedContractERC} = useProject();
 
 	const itemERC = productERC ?? applicationERC ?? '';
 
 	const projectName = isUnassignedProject(projectId)
 		? undefined
-		: projects.find(
-				(project) => project.externalReferenceCode === projectId
-			)?.name;
+		: project?.name;
 
 	const {
 		contract,

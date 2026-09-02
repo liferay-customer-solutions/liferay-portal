@@ -13,6 +13,7 @@ import type {APIResponse} from '~/types/api';
 type ProjectAPIItem = {
 	externalReferenceCode: string;
 	id: number;
+	liferayVersion?: string;
 	name: string;
 };
 
@@ -73,6 +74,7 @@ export function useUserProjects(): {
 		.map((item) => ({
 			externalReferenceCode: item.externalReferenceCode,
 			id: item.id,
+			liferayVersion: item.liferayVersion,
 			name: item.name,
 		}));
 

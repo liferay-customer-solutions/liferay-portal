@@ -20,6 +20,7 @@ export type ProjectTabKey = (typeof PROJECT_TAB_KEYS)[number];
 export type UserProject = {
 	externalReferenceCode: string;
 	id: number;
+	liferayVersion?: string;
 	name: string;
 	unassigned?: boolean;
 };

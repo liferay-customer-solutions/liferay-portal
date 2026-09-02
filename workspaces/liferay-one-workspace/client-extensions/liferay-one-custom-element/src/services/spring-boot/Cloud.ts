@@ -4,7 +4,7 @@
  */
 
 import FetcherError from '~/services/fetcher/FetcherError';
-import {downloadFile} from '~/utils/downloadFile';
+import {downloadFile} from '~/utils/downloadFileUtils';
 
 import {OneSpringBootOAuth2} from './OAuth2Client';
 

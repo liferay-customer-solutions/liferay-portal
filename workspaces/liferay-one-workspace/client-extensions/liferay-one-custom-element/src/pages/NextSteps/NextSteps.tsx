@@ -16,6 +16,7 @@ import timesCircleIcon from '~/assets/icons/times_circle_icon.svg';
 import {AccountAndAppCard} from '~/components/AccountAndAppCard/AccountAndAppCard';
 import {Header} from '~/components/Header/Header';
 import {PageRenderer} from '~/components/Page/Page';
+import {LearnLinks} from '~/enums/Learn';
 import useGetProductByOrderId from '~/hooks/useGetProductByOrderId';
 import i18n from '~/i18n';
 import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
@@ -295,7 +296,7 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 			{paymentStatus === PaymentStatus.PAID && (
 				<div className="d-flex justify-content-center next-step-page-learn-more">
 					<a
-						href="https://learn.liferay.com/w/dxp/development/marketplace"
+						href={LearnLinks.MARKETPLACE}
 						target="_blank"
 					>
 						{i18n.translate('learn-more-about-app-configuration')}

@@ -172,8 +172,8 @@ function LicenseKeyUploadsPanel({productGroup}: LicenseKeyUploadsPanelProps) {
 					onClick: async () => {
 						try {
 							await CommonLicenseKeys.downloadCommonLicenseKey(
-								row.id,
-								row.name
+								row.name,
+								row.id
 							);
 						}
 						catch {

@@ -11,6 +11,7 @@ import type {RoleBrief} from '~/types/accounts';
 export const ACCOUNT_ADMINISTRATOR = 'Account Administrator';
 export const ACCOUNT_BUYER = 'Account Buyer';
 export const ACCOUNT_MEMBER = 'Account Member';
+export const ACCOUNT_REQUESTER = 'Account Requester';
 export const PARTNER_ACCOUNT_ADMIN = 'Partner Account Admin';
 export const PARTNER_MANAGER = 'Partner Manager';
 export const PARTNER_MARKETING_USER = 'Partner Marketing User';

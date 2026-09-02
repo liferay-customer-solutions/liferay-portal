@@ -24,6 +24,7 @@ import {
 
 type ProjectContextValue = {
 	loading: boolean;
+	project?: UserProject;
 	projectId: string;
 	projects: UserProject[];
 	selectedContractERC?: string;
@@ -64,6 +65,11 @@ export function ProjectProvider({children}: {children: ReactNode}) {
 
 	const projectId = projectERC ?? '';
 
+	const project = useMemo(
+		() => projects.find((item) => item.externalReferenceCode === projectId),
+		[projectId, projects]
+	);
+
 	const [selectedContractERC, setSelectedContractERC] = useState<string>();
 
 	useEffect(() => {
@@ -101,6 +107,7 @@ export function ProjectProvider({children}: {children: ReactNode}) {
 		<ProjectContext.Provider
 			value={{
 				loading,
+				project,
 				projectId,
 				projects,
 				selectedContractERC,

@@ -39,3 +39,7 @@ export function sanitizeStringForURL(text: string) {
 		.replace(/-+/g, '-')
 		.replace(/^-|-$/g, '');
 }
+
+export function toAlphanumericLowerCase(text: string) {
+	return text.replaceAll(/[^a-zA-Z0-9]/g, '').toLowerCase();
+}

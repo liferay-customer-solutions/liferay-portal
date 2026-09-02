@@ -32,7 +32,7 @@ class OAuth2Client {
 		return this.oAuth2ClientPromise;
 	}
 
-	private async parseError(response: Response | Error) {
+	protected async parseError(response: Response | Error) {
 		if (response instanceof Response && !response.ok) {
 			const error = new FetcherError(
 				'An error occurred while fetching the data.'

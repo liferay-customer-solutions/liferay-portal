@@ -7,6 +7,7 @@ export default {
 	'1-ticket': '1 チケット',
 	'accelerator': 'アクセラレーター',
 	'actions': '操作',
+	'activating-liferay-commerce': 'Liferay Commerceの有効化',
 	'activity-history': '活動の履歴',
 	'actual-event-date': '実際のイベント日',
 	'add-a-description-of-the-file-related-to-this-ticket':
@@ -66,6 +67,7 @@ export default {
 	'comment': 'コメント',
 	'community-platform': 'コミュニティプラットフォーム',
 	'consumer-products': '消費財',
+	'contact-the-support-team': 'サポートチームにお問い合わせください。',
 	'content-management-operations': 'コンテンツ管理と運用',
 	'create-business-event': 'ビジネスイベントを作成',
 	'create-event': 'イベント作成',
@@ -92,6 +94,7 @@ export default {
 		'災害復旧データセンターのリージョン',
 	'doha-qatar': 'ドーハ、カタール',
 	'download': 'ダウンロード',
+	'download-key': 'キーのダウンロード',
 	'drag-and-drop-to-upload-or': 'ファイルをアップロードする、または',
 	'ecm': 'ECM',
 	'edit-event': 'イベントの編集',
@@ -117,8 +120,14 @@ export default {
 	'filters': 'フィルター',
 	'financial-portal': '金融ポータル',
 	'finish-activation': 'アクティベーションの完了',
+	'for-instructions-on-how-to-setup-your-liferay-enterprise-search-software-please-read-the':
+		'Liferay Enterprise Search ソフトウェアのセットアップ方法については、',
+	'for-more-information-about-the-availability-of-your-x-activation-keys-please':
+		' {0} のアクティベーションキーの提供状況について詳しくは、',
 	'frankfurt-germany': 'フランクフルト、ドイツ',
 	'gamification': 'ゲーミフィケーション',
+	'getting-started-with-liferay-enterprise-search-article':
+		'「Liferay Enterprise Searchを始めるにあたって」をお読みください。',
 	'go-live': 'Go Live',
 	'go-to-liferay-saas': 'Liferay SaaS に移動',
 	'go-to-product-console': '製品コンソールに移動',
@@ -127,6 +136,8 @@ export default {
 	'healthcare': 'ヘルスケア',
 	'higher-education': '高等教育',
 	'identity-management-and-governance': 'アイデンティティ管理とガバナンス',
+	'if-you-need-more-information-about-the-availability-of-your-x-activation-keys-please-ask-one-of-your-administrator-team-members-to-update-your-permissions-so-you-can-contact-liferay-support-alternatively-team-members-with-administrator-or-requester-role-can-submit-a-support-ticket-on-your-behalf':
+		' {0} のアクティベーションキーの提供状況について詳しくは、チームの管理者に依頼して権限を更新してもらい、Liferay サポートにお問い合わせください。または、管理者または申請者のロールを持つチームメンバーが代わりにサポートチケットを送信することもできます。',
 	'industry': '業界',
 	'insurance': '保険',
 	'intranet': 'イントラネット',
@@ -135,6 +146,7 @@ export default {
 	'iowa-usa': 'アイオワ、アメリカ',
 	'knowledge-management': 'ナレッジ管理',
 	'kpis': 'KPI',
+	'learn-more-about-app-configuration': 'アプリの設定の詳細はこちら。',
 	'leave-a-comment': 'コメントを残す',
 	'life-sciences': 'ライフサイエンス',
 	'liferay-dxp-version': 'Liferay DXP バージョン',
@@ -156,6 +168,7 @@ export default {
 	'mm-dd-yyyy': 'MM-DD-YYYY',
 	'monthly-inbound-and-outbound': '月間インバウンドおよびアウトバウンド',
 	'montreal-canada': 'モントリオール、カナダ',
+	'more-details': '詳細:',
 	'mumbai-india': 'ムンバイ、インド',
 	'navigation-and-discovery': 'ナビゲーションと発見',
 	'new-version': '新しいバージョン',
@@ -170,6 +183,7 @@ export default {
 	'once-canceled-no-further-edits-can-be-made-to-this-event':
 		'一度キャンセルすると、これ以上、このイベントを編集できなくなります。',
 	'open': 'オープン',
+	'open-a-support-ticket': 'サポートチケットを作成してください。',
 	'orders-and-fulfillment': '注文とフルフィルメント',
 	'oregon-usa': 'オレゴン、アメリカ',
 	'osaka-japan': '大阪、日本',
@@ -222,6 +236,8 @@ export default {
 	'select-a-file': 'ファイルを選択',
 	'select-a-local-file-to-upload-only-one-file-can-be-attached-at-a-time':
 		'アップロードするローカルファイルを選択します。一度に添付できるファイルは1つだけです。',
+	'select-an-active-liferay-x-subscription-to-download-the-activation-key':
+		'ライセンス認証キーをダウンロードするには有効な Liferay {0} のサブスクリプションを選択してください',
 	'select-the-option': 'オプションの選択',
 	'select-the-project-and-ticket-you-want-to-attach-a-file-to':
 		'ファイルを添付するプロジェクトとチケットを選択してください。',
@@ -232,6 +248,8 @@ export default {
 	'shared-investigator-platform': '共有治験責任医師プラットフォーム',
 	'sites-and-users': 'サイトとユーザー',
 	'storage': 'ストレージ',
+	'subscription': 'サブスクリプション',
+	'subscription-term': 'サブスクリプションの期間',
 	'supplier-portal': 'サプライヤーポータル',
 	'sydney-australia': 'シドニー、オーストラリア',
 	'system-admins': 'システム管理者',
@@ -240,6 +258,8 @@ export default {
 		'申請を送信していただきありがとうございます。',
 	'the-changes-were-saved-successfully': '変更点は正常に保存されました。',
 	'the-file-may-have-been-deleted': 'ファイルが削除された可能性があります。',
+	'the-requested-activation-key-is-not-yet-available':
+		'リクエストされたアクティベーションキーはまだ利用できません。',
 	'the-workspace-url-must-not-have-spaces':
 		'ワークスペースの URL にはスペースを含めないでください。',
 	'the-workspace-url-should-start-with-/':
@@ -258,6 +278,8 @@ export default {
 	'tickets-impacting-this-event': 'このイベントに影響するチケット',
 	'time': '時間',
 	'time-zone': 'タイムゾーン',
+	'to-request-a-new-or-replacement-activation-key-please':
+		'新しいアクティベーションキーまたは交換用のアクティベーション キーをリクエストするには',
 	'tokyo-japan': '東京、日本',
 	'total-ram': '合計RAM',
 	'total-storage': '合計ストレージ',
@@ -295,8 +317,8 @@ export default {
 	'x-tickets': '{0} チケット',
 	'you-do-not-have-access-to-upload-files':
 		'ファイルをアップロードする権限がない',
-	'you-do-not-have-an-active-enterprise-search-subscription':
-		'有効なEnterprise Searchサブスクリプションがありません。',
+	'you-do-not-have-an-active-liferay-x-subscription':
+		'有効な Liferay {0} サブスクリプションがありません。',
 	'you-need-administrator-or-requester-role-on-this-project-to-upload-a-file':
 		'ファイルをアップロードするには、このプロジェクトの管理者または要求者のロールが必要です。',
 	'you-need-administrator-role-on-this-project-to-submit-this-form':

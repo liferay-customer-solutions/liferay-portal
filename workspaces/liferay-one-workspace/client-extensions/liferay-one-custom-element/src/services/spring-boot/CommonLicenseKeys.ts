@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {downloadFile} from '~/utils/downloadFile';
+import {downloadBlob} from '~/utils/downloadFileUtils';
 
 import {OneSpringBootOAuth2} from './OAuth2Client';
 
@@ -24,12 +24,16 @@ class CommonLicenseKeysOAuth2 extends OneSpringBootOAuth2 {
 		await this.delete(`/${id}`);
 	}
 
-	async downloadCommonLicenseKey(id: number, name: string) {
+	async downloadCommonLicenseKey(fileName: string, id: number) {
 		const response = await this.get<Response>(`/${id}/download`, {
 			earlyReturn: true,
 		});
 
-		await downloadFile(name, response);
+		if (!response.ok) {
+			await this.parseError(response);
+		}
+
+		downloadBlob(fileName, await response.blob());
 	}
 
 	getCommonLicenseKeys({

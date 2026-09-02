@@ -4,33 +4,60 @@
  */
 
 import ClayTable from '@clayui/table';
+import {useMemo} from 'react';
 import {DetailedCard} from '~/components/DetailedCard/DetailedCard';
+import {useProject} from '~/context/ProjectContext';
+import {useProperties} from '~/context/PropertiesContext';
+import {LearnLinks} from '~/enums/Learn';
 import {Word, translate} from '~/i18n';
+import ActivationKeyDownload from '~/pages/MyAccount/Projects/components/ActivationKeyDownload/ActivationKeyDownload';
+import requiresActivationKey from '~/pages/MyAccount/Projects/utils/requiresActivationKey';
 
 type CommerceInstructionRow = {
 	detail?: Word;
 	instructions: Word;
+	linkLabel?: Word;
+	linkURL?: string;
 	version: string;
 };
 
-const COMMERCE_INSTRUCTIONS: CommerceInstructionRow[] = [
-	{
-		instructions: 'all-commerce-modules-are-enabled-by-default',
-		version: 'DXP 7.4 GA1+',
-	},
-	{
-		detail: 'commerce-is-activated-using-a-portal-property-see-the-documentation-for-details',
-		instructions: 'commerce-is-activated-using-a-portal-property',
-		version: 'DXP 7.3 FP3/SP2+',
-	},
-	{
-		detail: 'to-request-a-new-or-replacement-activation-key-open-a-support-ticket',
-		instructions: 'commerce-requires-an-activation-key',
-		version: 'DXP 7.3 FP2/SP1',
-	},
-];
-
 export default function CommerceActivation() {
+	const {project} = useProject();
+	const {contactSupportURL} = useProperties();
+
+	const commerceInstructions: CommerceInstructionRow[] = useMemo(
+		() => [
+			{
+				instructions: 'all-commerce-modules-are-enabled-by-default',
+				version: 'DXP 7.4 GA1+',
+			},
+			{
+				detail: 'more-details',
+				instructions: 'commerce-is-activated-using-a-portal-property',
+				linkLabel: 'activating-liferay-commerce',
+				linkURL: LearnLinks.ACTIVATING_LIFERAY_COMMERCE_ENTERPRISE,
+				version: 'DXP 7.3 FP3/SP2+',
+			},
+			{
+				detail: 'to-request-a-new-or-replacement-activation-key-please',
+				instructions: 'commerce-requires-an-activation-key',
+				linkLabel: 'open-a-support-ticket',
+				linkURL: contactSupportURL,
+				version: 'DXP 7.3 FP2/SP1',
+			},
+		],
+		[contactSupportURL]
+	);
+
+	if (requiresActivationKey(project?.liferayVersion)) {
+		return (
+			<ActivationKeyDownload
+				productGroup="COMMERCE"
+				productTitle="Commerce"
+			/>
+		);
+	}
+
 	return (
 		<DetailedCard
 			cardIconAltText={translate('activation-keys')}
@@ -52,7 +79,7 @@ export default function CommerceActivation() {
 				</ClayTable.Head>
 
 				<ClayTable.Body>
-					{COMMERCE_INSTRUCTIONS.map((row) => (
+					{commerceInstructions.map((row) => (
 						<ClayTable.Row key={row.version}>
 							<ClayTable.Cell>
 								<span className="text-neutral-7">
@@ -66,7 +93,16 @@ export default function CommerceActivation() {
 
 									{row.detail && (
 										<span className="list-card-subtext">
-											{translate(row.detail)}
+											{translate(row.detail)}{' '}
+											{row.linkURL && row.linkLabel && (
+												<a
+													href={row.linkURL}
+													rel="noopener noreferrer"
+													target="_blank"
+												>
+													{translate(row.linkLabel)}
+												</a>
+											)}
 										</span>
 									)}
 								</span>

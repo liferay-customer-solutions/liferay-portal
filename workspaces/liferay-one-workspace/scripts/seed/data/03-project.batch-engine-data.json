@@ -82,6 +82,7 @@
 		},
 		{
 			"externalReferenceCode": "PRJCT-012",
+			"liferayVersion": "DXP 7.2",
 			"name": "Commerce Project",
 			"r_accountEntryToProject_accountEntryERC": "ACCNT-012"
 		},
@@ -142,6 +143,7 @@
 		},
 		{
 			"externalReferenceCode": "PRJCT-023",
+			"liferayVersion": "DXP 7.4",
 			"name": "Commerce Cloud Project",
 			"r_accountEntryToProject_accountEntryERC": "ACCNT-023"
 		},
