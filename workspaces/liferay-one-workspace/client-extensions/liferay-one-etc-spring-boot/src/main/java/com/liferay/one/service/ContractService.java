@@ -60,6 +60,22 @@ public class ContractService extends OneBaseService {
 			).toUri());
 	}
 
+	public Contract fetchContract(long contractId) throws Exception {
+		String response = fetch(
+			getAuthorization(),
+			UriComponentsBuilder.fromPath(
+				"/o/c/contracts/{contractId}"
+			).buildAndExpand(
+				contractId
+			).toUri());
+
+		if (Validator.isNull(response)) {
+			return null;
+		}
+
+		return new Contract(new JSONObject(response));
+	}
+
 	public Contract fetchContractByExternalReferenceCode(
 			String externalReferenceCode)
 		throws Exception {
