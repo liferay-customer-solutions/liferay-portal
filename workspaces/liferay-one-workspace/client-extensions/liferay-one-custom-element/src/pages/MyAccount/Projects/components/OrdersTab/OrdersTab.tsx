@@ -22,13 +22,11 @@ function matchesSearch(order: ProjectOrder, search: string): boolean {
 }
 
 export default function OrdersTab() {
-	const {projectId, projects} = useProject();
+	const {project} = useProject();
 	const {accountERC} = useParams();
 	const navigate = useNavigate();
 
-	const projectName = projects.find(
-		(project) => project.externalReferenceCode === projectId
-	)?.name;
+	const projectName = project?.name;
 
 	const {orders} = useProjectOrders(projectName);
 

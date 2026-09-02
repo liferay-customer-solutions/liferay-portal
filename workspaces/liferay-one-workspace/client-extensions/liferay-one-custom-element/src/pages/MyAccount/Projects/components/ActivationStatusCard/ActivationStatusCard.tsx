@@ -111,7 +111,7 @@ export default function ActivationStatusCard({
 	environmentProfile,
 	productName,
 }: ActivationStatusCardProps) {
-	const {projectId, projects} = useProject();
+	const {project, projectId} = useProject();
 	const {
 		environments,
 		loading: environmentsLoading,
@@ -160,9 +160,7 @@ export default function ActivationStatusCard({
 			? getCloudConsoleURL(cloudActivationProfile, environment)
 			: '';
 
-	const projectName =
-		projects.find((project) => project.externalReferenceCode === projectId)
-			?.name ?? '';
+	const projectName = project?.name ?? '';
 
 	return (
 		<div className="mt-3">

@@ -21,13 +21,11 @@ import {isUnassignedProject} from '~/pages/MyAccount/Projects/utils/isUnassigned
 
 export default function Applications() {
 	const navigate = useNavigate();
-	const {projectId, projects} = useProject();
+	const {project, projectId} = useProject();
 
 	const projectName = isUnassignedProject(projectId)
 		? undefined
-		: projects.find(
-				(project) => project.externalReferenceCode === projectId
-			)?.name;
+		: project?.name;
 
 	const {applications, error, loading, orderIdByProductName} =
 		useProjectApplications(projectId, projectName);
