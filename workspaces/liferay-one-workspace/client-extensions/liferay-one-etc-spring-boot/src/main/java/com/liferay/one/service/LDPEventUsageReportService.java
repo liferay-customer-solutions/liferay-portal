@@ -37,6 +37,7 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
@@ -119,6 +120,26 @@ public class LDPEventUsageReportService {
 					"Generated ", generatedCount, " of ",
 					entitlementsByProject.size(),
 					" LDP event usage reports for ", yearMonth));
+		}
+	}
+
+	@Scheduled(
+		cron = "${liferay.one.ldp.event.usage.report.cron}", zone = "UTC"
+	)
+	public void scheduledGenerateUsageReports() {
+		YearMonth yearMonth = YearMonth.now(
+			ZoneOffset.UTC
+		).minusMonths(
+			1
+		);
+
+		try {
+			generateUsageReports(yearMonth);
+		}
+		catch (Exception exception) {
+			_log.error(
+				"Unable to generate LDP event usage reports for " + yearMonth,
+				exception);
 		}
 	}
 
