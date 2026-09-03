@@ -81,7 +81,7 @@
 			}
 		],
 		"orderStatus": 5,
-		"orderTypeExternalReferenceCode": "SSA_SAAS",
+		"orderTypeExternalReferenceCode": "SALESFORCE",
 		"projectExternalReferenceCode": "PRJCT-001-2"
 	},
 	"purchaseOrderNumber": "PO-OMNI-2"
