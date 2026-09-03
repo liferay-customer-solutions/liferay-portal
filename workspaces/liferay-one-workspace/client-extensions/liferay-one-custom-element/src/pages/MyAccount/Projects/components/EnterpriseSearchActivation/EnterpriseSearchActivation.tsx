@@ -50,7 +50,7 @@ export default function EnterpriseSearchActivation() {
 	useEffect(() => {
 		if (error && !notEntitled) {
 			Liferay.Util.openToast({
-				message: translate('unable-to-load-the-license-keys'),
+				message: translate('unable-to-load-the-activation-keys'),
 				type: 'danger',
 			});
 		}
@@ -96,7 +96,7 @@ export default function EnterpriseSearchActivation() {
 		}
 		catch {
 			Liferay.Util.openToast({
-				message: translate('unable-to-download-the-license-key'),
+				message: translate('unable-to-download-the-activation-key'),
 				type: 'danger',
 			});
 		}

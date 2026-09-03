@@ -273,10 +273,10 @@ export default {
 	'unable-to-connect-to-file-server':
 		'No es posible conectarse al servidor de archivos',
 	'unable-to-delete-attachment': 'No se pudo eliminar el adjunto.',
-	'unable-to-download-the-license-key':
-		'No se pudo descargar la clave de licencia.',
-	'unable-to-load-the-license-keys':
-		'No se pudieron cargar las claves de licencia.',
+	'unable-to-download-the-activation-key':
+		'No se pudo descargar la clave de activación.',
+	'unable-to-load-the-activation-keys':
+		'No se pudieron cargar las claves de activación.',
 	'unlimited': 'Ilimitado',
 	'upgrade': 'Actualización',
 	'upload': 'Subir',

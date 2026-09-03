@@ -84,7 +84,7 @@ const ActivationKeyForm = () => {
 			if (error instanceof FetcherError && error.status === 409) {
 				setError('domain', {
 					message: i18n.translate(
-						'a-license-key-for-the-entered-domain-already-exists'
+						'an-activation-key-for-the-entered-domain-already-exists'
 					),
 				});
 

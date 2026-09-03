@@ -39,8 +39,8 @@ export function useLicenseKeyActions({
 
 	function handleDeactivate(row: ProjectActivationKey) {
 		openModal({
-			body: translate('deactivate-license-key-confirmation'),
-			header: translate('deactivate-license-key'),
+			body: translate('deactivate-activation-key-confirmation'),
+			header: translate('deactivate-activation-key'),
 			onConfirm: async () => {
 				await LicenseKeyObject.deactivateLicenseKey(row.id);
 
@@ -59,8 +59,8 @@ export function useLicenseKeyActions({
 
 	function handleReactivate(row: ProjectActivationKey) {
 		openModal({
-			body: translate('reactivate-license-key-confirmation'),
-			header: translate('reactivate-license-key'),
+			body: translate('reactivate-activation-key-confirmation'),
+			header: translate('reactivate-activation-key'),
 			onConfirm: async () => {
 				await LicenseKeyObject.reactivateLicenseKey(row.id);
 
@@ -83,7 +83,7 @@ export function useLicenseKeyActions({
 					}
 				/>
 			),
-			header: translate('new-license-key'),
+			header: translate('new-activation-key'),
 			size: 'lg',
 		});
 	}
@@ -120,7 +120,7 @@ export function useLicenseKeyActions({
 					}
 				/>
 			),
-			header: translate('renew-license-key'),
+			header: translate('renew-activation-key'),
 			size: 'lg',
 		});
 	}

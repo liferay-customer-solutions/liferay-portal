@@ -268,9 +268,10 @@ export default {
 	'try-again-later': '後でもう一度試してください。',
 	'unable-to-connect-to-file-server': 'ファイルサーバーに接続できない',
 	'unable-to-delete-attachment': '添付ファイルを削除できませんでした。',
-	'unable-to-download-the-license-key':
-		'ライセンスキーをダウンロードできませんでした。',
-	'unable-to-load-the-license-keys': 'ライセンスキーを読み込めませんでした。',
+	'unable-to-download-the-activation-key':
+		'アクティベーションキーをダウンロードできませんでした。',
+	'unable-to-load-the-activation-keys':
+		'アクティベーションキーを読み込めませんでした。',
 	'unlimited': '無制限',
 	'upgrade': 'アップグレード',
 	'upload': 'アップロード',

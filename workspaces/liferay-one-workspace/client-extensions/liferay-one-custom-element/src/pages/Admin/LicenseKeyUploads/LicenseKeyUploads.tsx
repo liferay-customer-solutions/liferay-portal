@@ -77,7 +77,7 @@ function LicenseKeyUploadsPanel({productGroup}: LicenseKeyUploadsPanelProps) {
 	useEffect(() => {
 		if (error) {
 			Liferay.Util.openToast({
-				message: i18n.translate('unable-to-load-the-license-keys'),
+				message: i18n.translate('unable-to-load-the-activation-keys'),
 				type: 'danger',
 			});
 		}
@@ -115,7 +115,9 @@ function LicenseKeyUploadsPanel({productGroup}: LicenseKeyUploadsPanelProps) {
 			await mutate();
 
 			Liferay.Util.openToast({
-				message: i18n.translate('license-keys-uploaded-successfully'),
+				message: i18n.translate(
+					'activation-keys-uploaded-successfully'
+				),
 				type: 'success',
 			});
 		}
@@ -142,7 +144,7 @@ function LicenseKeyUploadsPanel({productGroup}: LicenseKeyUploadsPanelProps) {
 			await mutate();
 
 			Liferay.Util.openToast({
-				message: i18n.translate('license-key-deleted-successfully'),
+				message: i18n.translate('activation-key-deleted-successfully'),
 				type: 'success',
 			});
 		}
@@ -177,7 +179,7 @@ function LicenseKeyUploadsPanel({productGroup}: LicenseKeyUploadsPanelProps) {
 						catch {
 							Liferay.Util.openToast({
 								message: i18n.translate(
-									'unable-to-download-the-license-key'
+									'unable-to-download-the-activation-key'
 								),
 								type: 'danger',
 							});
@@ -290,7 +292,7 @@ function LicenseKeyUploadsPanel({productGroup}: LicenseKeyUploadsPanelProps) {
 				visible={deleteModal.open}
 			>
 				{i18n.translate(
-					'are-you-sure-you-want-to-delete-this-common-license-key'
+					'are-you-sure-you-want-to-delete-this-common-activation-key'
 				)}
 			</Modal>
 		</>
@@ -316,7 +318,7 @@ export default function LicenseKeyUploads() {
 	}
 
 	return (
-		<Page title={i18n.translate('license-key-uploads')}>
+		<Page title={i18n.translate('activation-key-uploads')}>
 			<ClayTabs
 				active={Math.max(0, TABS.indexOf(activeTab))}
 				className="mb-4"

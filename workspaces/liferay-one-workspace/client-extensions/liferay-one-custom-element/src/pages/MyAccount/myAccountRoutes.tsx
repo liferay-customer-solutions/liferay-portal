@@ -64,8 +64,8 @@ export const projectDetailRoutes: AppRoute[] = [
 			{element: <LicenseKeyDetails />, path: ':licenseKeyERC'},
 			{element: <Navigate replace to="." />, path: '*'},
 		],
-		nav: {icon: 'key-horizontal', label: 'License Keys'},
-		path: 'license-keys',
+		nav: {icon: 'key-horizontal', label: 'Activation Keys'},
+		path: 'activation-keys',
 	},
 	{element: <Navigate replace to="products" />, path: '*'},
 ];

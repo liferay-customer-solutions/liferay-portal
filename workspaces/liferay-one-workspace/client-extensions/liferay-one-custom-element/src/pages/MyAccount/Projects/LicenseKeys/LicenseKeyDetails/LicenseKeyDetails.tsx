@@ -40,7 +40,7 @@ export default function LicenseKeyDetails() {
 
 	return (
 		<div className="w-100">
-			<BackLink path="..">{translate('license-keys')}</BackLink>
+			<BackLink path="..">{translate('activation-keys')}</BackLink>
 
 			{loading ? (
 				<div className="p-4 text-neutral-7">{translate('loading')}</div>
@@ -196,7 +196,7 @@ function LicenseKeyDetailsContent({
 				icon="key-horizontal"
 				iconPosition="right"
 				rows={detailsRows}
-				title="license-key-details"
+				title="activation-key-details"
 			/>
 
 			<div className="detailed-card-container mt-3">

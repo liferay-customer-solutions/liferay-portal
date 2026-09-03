@@ -234,10 +234,10 @@ export default function LicenseKeys() {
 	return (
 		<Page
 			description={i18n.translate(
-				'manage-the-license-keys-within-your-project'
+				'manage-the-activation-keys-within-your-project'
 			)}
 			pageRendererProps={{isLoading: loading}}
-			title={i18n.translate('license-keys')}
+			title={i18n.translate('activation-keys')}
 		>
 			<FilterableListCard
 				action={

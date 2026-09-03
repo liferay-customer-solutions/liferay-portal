@@ -135,7 +135,7 @@ export const adminSchemas = {
 		description: z
 			.string()
 			.min(3)
-			.max(100, {message: 'Invalid license name'}),
+			.max(100, {message: 'Invalid activation key name'}),
 		hostname: z.string().optional().or(z.literal('')),
 		ipAddress: z.string().refine((value) => checkRegExp(ipv4Regex, value), {
 			message: 'Invalid IP address',

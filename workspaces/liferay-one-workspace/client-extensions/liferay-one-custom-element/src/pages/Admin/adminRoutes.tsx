@@ -127,8 +127,8 @@ export const adminRoutes: AppRoute[] = [
 	},
 	{
 		element: <LicenseKeyUploads />,
-		nav: {icon: 'password-policies', label: 'License Key Uploads'},
-		path: 'license-key-uploads',
+		nav: {icon: 'password-policies', label: 'Activation Key Uploads'},
+		path: 'activation-key-uploads',
 	},
 
 	{element: <Navigate replace to="." />, path: '*'},

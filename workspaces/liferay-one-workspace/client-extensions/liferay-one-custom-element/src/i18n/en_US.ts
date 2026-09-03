@@ -8,8 +8,6 @@ import {Liferay} from '~/services/liferay/liferay';
 export default {
 	'1-data-source': '1 Data Source',
 	'1-ticket': '1 Ticket',
-	'a-license-key-for-the-entered-domain-already-exists':
-		'A license key for the entered domain already exists.',
 	'a-request-will-be-sent-to-deactivate-the-selected-activation-key-from-now-on-it-will-be-hidden-and-no-longer-visible':
 		'A request will be sent to deactivate the selected activation key. From now on, it will be hidden and no longer visible.',
 	'a-role-is-required': 'A role is required.',
@@ -43,9 +41,15 @@ export default {
 	'activation-codes': 'Activation Codes',
 	'activation-key': 'Activation Key',
 	'activation-key-creation': 'Activation Key Creation',
+	'activation-key-deleted-successfully':
+		'Activation key deleted successfully.',
+	'activation-key-details': 'Activation Key Details',
 	'activation-key-server-details': 'Activation Key Server Details',
+	'activation-key-uploads': 'Activation Key Uploads',
 	'activation-keys': 'Activation Keys',
 	'activation-keys-list': 'Activation Keys List',
+	'activation-keys-uploaded-successfully':
+		'Activation keys uploaded successfully.',
 	'activation-mode': 'Activation Mode',
 	'activation-status': 'Activation Status',
 	'activation-token': 'Activation Token',
@@ -115,6 +119,8 @@ export default {
 	'almost-there-setup-liferay-saas-by-finishing-the-activation-form':
 		'Almost there! Setup Liferay SaaS by finishing the activation form.',
 	'amount': 'Amount',
+	'an-activation-key-for-the-entered-domain-already-exists':
+		'An activation key for the entered domain already exists.',
 	'an-administrator-of-the-marketplace-will-review-your-request-shortly-if-you-have-questions-regarding-your-submission-please-email':
 		'An administrator of the Marketplace will review your request shortly. If you have questions regarding your submission, please email.',
 	'an-app-build-is-your-compiled-or-non-compiled-code-submitted-on-behalf-of-your-account-to-the-marketplace-once-submitted-it-will-be-reviewed-and-tested-by-our-marketplace-administrators-for-approval-in-the-marketplace':
@@ -180,8 +186,8 @@ export default {
 		'Are there any support tickets impacting this event?',
 	'are-you-sure-you-want-to-delete-this-attachment':
 		'Are you sure you want to delete this attachment?',
-	'are-you-sure-you-want-to-delete-this-common-license-key':
-		'Are you sure you want to delete this common license key?',
+	'are-you-sure-you-want-to-delete-this-common-activation-key':
+		'Are you sure you want to delete this common activation key?',
 	'are-you-sure-you-want-to-expire-this-trial-this-action-implies-the-permanent-end-of-the-test-environment':
 		'Are you sure you want to expire this trial? This action implies the permanent end of the test environment.',
 	'are-you-sure-you-want-to-remove-x-from-this-account':
@@ -368,9 +374,9 @@ export default {
 		'Create a DXP App to be delivered as a download.',
 	'create-a-new-marketplace-acccount-or-join-an-already-existing-one':
 		'Create a new Marketplace acccount or join an already existing one',
+	'create-activation-key': 'Create Activation Key',
 	'create-business-event': 'Create Business Event',
 	'create-event': 'Create Event',
-	'create-license-key': 'Create License Key',
 	'create-new-licenses-and-they-will-show-up-here':
 		'Create new licenses and they will show up here.',
 	'create-new-ticket': 'Create New Ticket',
@@ -413,9 +419,9 @@ export default {
 	'date-created': 'Date Created',
 	'day': 'Day',
 	'deactivate': 'Deactivate',
-	'deactivate-license-key': 'Deactivate License Key',
-	'deactivate-license-key-confirmation':
-		'Are you sure you want to deactivate this license key?',
+	'deactivate-activation-key': 'Deactivate Activation Key',
+	'deactivate-activation-key-confirmation':
+		'Are you sure you want to deactivate this activation key?',
 	'deactivated': 'Deactivated',
 	'decline': 'Decline',
 	'define-company-profile-information-for-your-solution-this-will-inform-users-about-this-versions-updates-on-the-storefront':
@@ -458,10 +464,10 @@ export default {
 	'domains': 'Domains',
 	'done': 'Done',
 	'download': 'Download',
+	'download-activation-key': 'Download Activation Key',
 	'download-app': 'Download App',
 	'download-in-progress': 'Download in Progress',
 	'download-key': 'Download Key',
-	'download-license-key': 'Download License Key',
 	'download-offline-activation-bundle': 'Download Offline Activation Bundle',
 	'download-your-activation-key-file-below-and-upload-it-to-the-dedicated-portal-within-your-dxp-environment-to-get-started':
 		'Download your activation key file below and upload it to the dedicated portal within your DXP environment to get started.',
@@ -759,11 +765,6 @@ export default {
 		'Learn more about becoming a Liferay Customer',
 	'leave-a-comment': 'Leave a Comment',
 	'license': 'License',
-	'license-key-deleted-successfully': 'License key deleted successfully.',
-	'license-key-details': 'License Key Details',
-	'license-key-uploads': 'License Key Uploads',
-	'license-keys': 'License Keys',
-	'license-keys-uploaded-successfully': 'License keys uploaded successfully.',
 	'license-price': 'License Price',
 	'license-prices': 'License Prices',
 	'license-selection': 'License Selection',
@@ -819,6 +820,7 @@ export default {
 	'make-sure-the-ticket-number-is-correct':
 		'Make sure the ticket number is correct.',
 	'manage': 'Manage',
+	'manage-activation-keys': 'Manage Activation Key(s)',
 	'manage-all-your-app-purchases-and-subscriptions-in-one-place-read-other-users-reviews-get-notifications-when-updates-are-available-and-get-the-most-out-of-our-apps-catalog':
 		'Manage all your app purchases and subscriptions in one place, read other users’ reviews, get notifications when updates are available, and get the most out of our Apps catalog.',
 	'manage-all-your-apps-in-one-place': 'Manage All Your Apps in One Place',
@@ -830,7 +832,6 @@ export default {
 	'manage-and-publish-solutions-on-the-marketplace':
 		'Manage and publish solutions on the Marketplace',
 	'manage-app': 'Manage App',
-	'manage-license-keys': 'Manage License Key(s)',
 	'manage-lxc-sm-users': 'Manage LXC - SM Users',
 	'manage-members-and-access-for-ssa-accounts':
 		'Manage members and access for SSA accounts.',
@@ -841,10 +842,10 @@ export default {
 	'manage-roles': 'Manage Roles',
 	'manage-roles-and-permissions-of-users-within-each-product':
 		'Manage roles and permissions of users within each product.',
+	'manage-the-activation-keys-within-your-project':
+		'Manage the activation keys within your project',
 	'manage-the-applications-within-your-project':
 		'Manage the applications within your project',
-	'manage-the-license-keys-within-your-project':
-		'Manage the license keys within your project',
 	'manage-the-members-of-x': 'Manage the members of {0}.',
 	'manage-the-products-within-your-project':
 		'Manage the products within your project',
@@ -921,7 +922,6 @@ export default {
 	'new-app': 'New App',
 	'new-attachment': 'New Attachment',
 	'new-key': 'New Key',
-	'new-license-key': 'New License Key',
 	'new-potential-expiration-date': 'New Potential Expiration Date',
 	'new-projects-using-marketplace-apps':
 		'New Projects Using Marketplace Apps',
@@ -1227,9 +1227,9 @@ export default {
 	'rapid-development': 'Rapid Development',
 	'rate-from-1-poor-to-5-excellent': 'Rate from 1 (poor) to 5 (excellent)',
 	'reactivate': 'Reactivate',
-	'reactivate-license-key': 'Reactivate License Key',
-	'reactivate-license-key-confirmation':
-		'Are you sure you want to reactivate this license key?',
+	'reactivate-activation-key': 'Reactivate Activation Key',
+	'reactivate-activation-key-confirmation':
+		'Are you sure you want to reactivate this activation key?',
 	'ready-to-install': 'Ready to Install',
 	'reason': 'Reason',
 	'reason-for-change': 'Reason for Change',
@@ -1248,7 +1248,7 @@ export default {
 	'remove-this-member': 'Remove This Member',
 	'remove-user': 'Remove User',
 	'renew': 'Renew',
-	'renew-license-key': 'Renew License Key',
+	'renew-activation-key': 'Renew Activation Key',
 	'renewal-will-be-available-3-months-before-your-activation-key-expires':
 		'Renewal will be available 3 months before your activation key expires.',
 	'renews-in-1-day': 'Renews in 1 day',
@@ -1632,11 +1632,12 @@ export default {
 	'unable-to-assign-roles': 'Unable to assign roles',
 	'unable-to-connect-to-file-server': 'Unable to connect to file server.',
 	'unable-to-delete-attachment': 'Unable to delete attachment.',
-	'unable-to-download-the-license-key': 'Unable to download the license key.',
-	'unable-to-download-your-license-file-please-try-again-and-or-contact-support-via-the-manage-menu-on-the-dashboard':
-		'Unable to download your license file.  Please try again and/or contact support via the manage menu on the dashboard.',
+	'unable-to-download-the-activation-key':
+		'Unable to download the activation key.',
+	'unable-to-download-your-activation-key-file-please-try-again-and-or-contact-support-via-the-manage-menu-on-the-dashboard':
+		'Unable to download your activation key file. Please try again and/or contact support via the manage menu on the dashboard.',
 	'unable-to-invite-project-member': 'Unable to invite project member.',
-	'unable-to-load-the-license-keys': 'Unable to load the license keys.',
+	'unable-to-load-the-activation-keys': 'Unable to load the activation keys.',
 	'unable-to-remove-member': 'Unable to remove member.',
 	'unable-to-remove-roles': 'Unable to remove roles',
 	'unable-to-resend-the-invitation': 'Unable to resend the invitation.',
