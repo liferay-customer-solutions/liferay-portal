@@ -2,6 +2,20 @@
 	"entitlements": [
 		{
 			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_PARTNER_BASIC_RESELLER",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "licenseGeneration",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-016",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_PARTNER_BASIC_RESELLER",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PARTNER",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PARTNERSHIP_BASIC_RESELLER",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-016",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
 			"externalReferenceCode": "C_ENT_PARTNER_DXP",
 			"grantType": "fixed",
 			"maxQuantity": 1,
@@ -12,7 +26,21 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PARTNER",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DXP",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-016",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_PARTNER_RESELLER",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "licenseGeneration",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-016",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_PARTNER_RESELLER",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PARTNER",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PARTNERSHIP_RESELLER",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-016",
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -26,7 +54,21 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PARTNER",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PARTNERSHIP_SOLUTION_RESELLER",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-016",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_PARTNER_STANDARD",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "licenseGeneration",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-016",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_PARTNER_STANDARD",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PARTNER",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PARTNERSHIP_STANDARD",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-016",
+			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
 	"order": {
@@ -37,6 +79,25 @@
 		"externalReferenceCode": "C_ORDER_PARTNER",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
+				"externalReferenceCode": "C_ORDER_ITEM_PARTNER_BASIC_RESELLER",
+				"name": "Basic Reseller Partnership",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-BASIC-RESELLER",
+				"unitPrice": 0
+			},
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_PARTNER_DXP",
 				"name": "Liferay DXP",
 				"quantity": 1,
@@ -44,10 +105,42 @@
 				"unitPrice": 0
 			},
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
+				"externalReferenceCode": "C_ORDER_ITEM_PARTNER_RESELLER",
+				"name": "Reseller Partnership",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-RESELLER",
+				"unitPrice": 0
+			},
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_PARTNER_SOLUTION_RESELLER",
 				"name": "Solution Partnership - Reseller Program",
 				"quantity": 1,
 				"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-SOLUTION-RESELLER",
+				"unitPrice": 0
+			},
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
+				"externalReferenceCode": "C_ORDER_ITEM_PARTNER_STANDARD",
+				"name": "Partner - Standard",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-STANDARD",
 				"unitPrice": 0
 			}
 		],

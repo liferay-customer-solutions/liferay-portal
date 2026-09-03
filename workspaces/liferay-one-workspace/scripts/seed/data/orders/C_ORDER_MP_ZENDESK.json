@@ -2,14 +2,14 @@
 	"entitlements": [
 		{
 			"endDate": "2027-01-15T00:00:00Z",
-			"externalReferenceCode": "C_ENT_MP_PUNCHOUT",
+			"externalReferenceCode": "C_ENT_MP_ZENDESK",
 			"grantType": "fixed",
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-012",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MP_PUNCHOUT",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PUNCHOUT",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MP_ZENDESK",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ZENDESK",
 			"startDate": "2026-01-15T00:00:00Z"
 		}
 	],
@@ -17,7 +17,7 @@
 		"accountExternalReferenceCode": "ACCNT-012",
 		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
 		"currencyCode": "USD",
-		"externalReferenceCode": "C_ORDER_MP_PUNCHOUT",
+		"externalReferenceCode": "C_ORDER_MP_ZENDESK",
 		"orderItems": [
 			{
 				"customFields": {
@@ -26,16 +26,16 @@
 					"endDate": "2027-01-15T00:00:00Z",
 					"startDate": "2026-01-15T00:00:00Z"
 				},
-				"externalReferenceCode": "C_ORDER_ITEM_MP_PUNCHOUT",
-				"name": "Liferay Commerce Connector to PunchOut2Go",
+				"externalReferenceCode": "C_ORDER_ITEM_MP_ZENDESK",
+				"name": "Liferay Click to Chat Integration for Zendesk",
 				"quantity": 1,
-				"skuExternalReferenceCode": "PRDCT-PUNCHOUT",
-				"unitPrice": 2500
+				"skuExternalReferenceCode": "PRDCT-ZENDESK",
+				"unitPrice": 0
 			}
 		],
-		"orderStatus": 1,
+		"orderStatus": 0,
 		"orderTypeExternalReferenceCode": "DXP_APP"
 	},
-	"paymentStatus": 4,
-	"purchaseOrderNumber": "PO-MP-PUNCHOUT"
+	"paymentStatus": 0,
+	"purchaseOrderNumber": "PO-MP-ZENDESK"
 }

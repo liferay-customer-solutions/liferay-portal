@@ -8,11 +8,11 @@
 			"name": "apv",
 			"quantity": 1000000,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-008",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_BUSINESS_PLAN_DXP",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_BUSINESS_PLAN_APV",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_APV_1M",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-008",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -26,7 +26,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_DOCUMENT_LIBRARY_SIZE",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-008",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -40,7 +40,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_PLAN",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-008",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -50,11 +50,11 @@
 			"name": "document-library-size",
 			"quantity": 100,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-008",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_BUSINESS_PLAN_DXP",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_BUSINESS_PLAN_EXTRA_STORAGE",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_EXTRA_STORAGE_DL",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-008",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -64,11 +64,11 @@
 			"name": "malu",
 			"quantity": 2500,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-008",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_BUSINESS_PLAN_DXP",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_BUSINESS_PLAN_MALU",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_MALU_2500",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-008",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -82,7 +82,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_MARKER",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-008",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -96,7 +96,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_RAM",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-008",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -110,7 +110,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_SITES",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-008",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -124,7 +124,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_BUSINESS_PLAN",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_VCPU",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-008",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
 	"order": {
@@ -135,10 +135,55 @@
 		"externalReferenceCode": "C_ORDER_BUSINESS_PLAN",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
+				"externalReferenceCode": "C_ORDER_ITEM_BUSINESS_PLAN_APV",
+				"name": "Liferay SaaS - Entitlements for up to 1,000,000 APVs",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-SAAS-APV-1M",
+				"unitPrice": 0
+			},
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_BUSINESS_PLAN_DXP",
 				"name": "Liferay SaaS - Business Plan",
 				"quantity": 1,
 				"skuExternalReferenceCode": "PRDCT-SAAS-BUSINESS-PLAN",
+				"unitPrice": 0
+			},
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
+				"externalReferenceCode": "C_ORDER_ITEM_BUSINESS_PLAN_EXTRA_STORAGE",
+				"name": "Liferay SaaS - 100GB Extra Storage (Document Library)",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-SAAS-EXTRA-STORAGE-DL",
+				"unitPrice": 0
+			},
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
+				"externalReferenceCode": "C_ORDER_ITEM_BUSINESS_PLAN_MALU",
+				"name": "Liferay SaaS - Entitlements for up to 2,500 MALUs",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-SAAS-MALU-2500",
 				"unitPrice": 0
 			}
 		],
@@ -146,5 +191,88 @@
 		"orderTypeExternalReferenceCode": "DXP",
 		"projectExternalReferenceCode": "PRJCT-008"
 	},
-	"purchaseOrderNumber": "PO-BUSINESS-PLAN"
+	"purchaseOrderNumber": "PO-BUSINESS-PLAN",
+	"usageEvents": [
+		{
+			"dedupeKey": "UEV-BUSINESS_PLAN_APV-2026-05",
+			"eventTimestamp": "2026-05-01T00:00:00Z",
+			"externalReferenceCode": "UEV-BUSINESS_PLAN_APV-2026-05",
+			"quantity": 620000.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_BUSINESS_PLAN_APV",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-BUSINESS-PLAN-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "page-views-monthly"
+		},
+		{
+			"dedupeKey": "UEV-BUSINESS_PLAN_APV-2026-06",
+			"eventTimestamp": "2026-06-01T00:00:00Z",
+			"externalReferenceCode": "UEV-BUSINESS_PLAN_APV-2026-06",
+			"quantity": 780000.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_BUSINESS_PLAN_APV",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-BUSINESS-PLAN-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "page-views-monthly"
+		},
+		{
+			"dedupeKey": "UEV-BUSINESS_PLAN_APV-2026-07",
+			"eventTimestamp": "2026-07-01T00:00:00Z",
+			"externalReferenceCode": "UEV-BUSINESS_PLAN_APV-2026-07",
+			"quantity": 940000.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_BUSINESS_PLAN_APV",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-BUSINESS-PLAN-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "page-views-monthly"
+		},
+		{
+			"dedupeKey": "UEV-BUSINESS_PLAN_DOCUMENT_LIBRARY_SIZE-2026-05",
+			"eventTimestamp": "2026-05-01T00:00:00Z",
+			"externalReferenceCode": "UEV-BUSINESS_PLAN_DOCUMENT_LIBRARY_SIZE-2026-05",
+			"quantity": 62.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_BUSINESS_PLAN_DOCUMENT_LIBRARY_SIZE",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-BUSINESS-PLAN-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		},
+		{
+			"dedupeKey": "UEV-BUSINESS_PLAN_DOCUMENT_LIBRARY_SIZE-2026-06",
+			"eventTimestamp": "2026-06-01T00:00:00Z",
+			"externalReferenceCode": "UEV-BUSINESS_PLAN_DOCUMENT_LIBRARY_SIZE-2026-06",
+			"quantity": 78.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_BUSINESS_PLAN_DOCUMENT_LIBRARY_SIZE",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-BUSINESS-PLAN-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		},
+		{
+			"dedupeKey": "UEV-BUSINESS_PLAN_DOCUMENT_LIBRARY_SIZE-2026-07",
+			"eventTimestamp": "2026-07-01T00:00:00Z",
+			"externalReferenceCode": "UEV-BUSINESS_PLAN_DOCUMENT_LIBRARY_SIZE-2026-07",
+			"quantity": 94.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_BUSINESS_PLAN_DOCUMENT_LIBRARY_SIZE",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-BUSINESS-PLAN-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		},
+		{
+			"dedupeKey": "UEV-BUSINESS_PLAN_EXTRA_STORAGE-2026-05",
+			"eventTimestamp": "2026-05-01T00:00:00Z",
+			"externalReferenceCode": "UEV-BUSINESS_PLAN_EXTRA_STORAGE-2026-05",
+			"quantity": 62.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_BUSINESS_PLAN_EXTRA_STORAGE",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-BUSINESS-PLAN-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		},
+		{
+			"dedupeKey": "UEV-BUSINESS_PLAN_EXTRA_STORAGE-2026-06",
+			"eventTimestamp": "2026-06-01T00:00:00Z",
+			"externalReferenceCode": "UEV-BUSINESS_PLAN_EXTRA_STORAGE-2026-06",
+			"quantity": 78.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_BUSINESS_PLAN_EXTRA_STORAGE",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-BUSINESS-PLAN-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		},
+		{
+			"dedupeKey": "UEV-BUSINESS_PLAN_EXTRA_STORAGE-2026-07",
+			"eventTimestamp": "2026-07-01T00:00:00Z",
+			"externalReferenceCode": "UEV-BUSINESS_PLAN_EXTRA_STORAGE-2026-07",
+			"quantity": 94.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_BUSINESS_PLAN_EXTRA_STORAGE",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-BUSINESS-PLAN-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		}
+	]
 }

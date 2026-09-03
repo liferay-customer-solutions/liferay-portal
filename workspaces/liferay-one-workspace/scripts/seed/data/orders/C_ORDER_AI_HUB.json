@@ -12,7 +12,21 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_AI_HUB",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_AIHUB",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-026",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_AI_HUB_AITOKENS",
+			"grantType": "fixed",
+			"maxQuantity": 50000000,
+			"name": "aiTokens",
+			"quantity": 50000000,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-026",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_AI_HUB",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_AI_HUB",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_AIHUB_TOKENS",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-026",
+			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
 	"order": {
@@ -23,6 +37,12 @@
 		"externalReferenceCode": "C_ORDER_AI_HUB",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_AI_HUB",
 				"name": "Liferay AI Hub",
 				"quantity": 1,
@@ -34,5 +54,34 @@
 		"orderTypeExternalReferenceCode": "DXP",
 		"projectExternalReferenceCode": "PRJCT-026"
 	},
-	"purchaseOrderNumber": "PO-AI-HUB"
+	"purchaseOrderNumber": "PO-AI-HUB",
+	"usageEvents": [
+		{
+			"dedupeKey": "UEV-AI_HUB_AITOKENS-2026-05",
+			"eventTimestamp": "2026-05-01T00:00:00Z",
+			"externalReferenceCode": "UEV-AI_HUB_AITOKENS-2026-05",
+			"quantity": 31000000.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_AI_HUB_AITOKENS",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-AI-HUB-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "ai-tokens-monthly"
+		},
+		{
+			"dedupeKey": "UEV-AI_HUB_AITOKENS-2026-06",
+			"eventTimestamp": "2026-06-01T00:00:00Z",
+			"externalReferenceCode": "UEV-AI_HUB_AITOKENS-2026-06",
+			"quantity": 39000000.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_AI_HUB_AITOKENS",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-AI-HUB-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "ai-tokens-monthly"
+		},
+		{
+			"dedupeKey": "UEV-AI_HUB_AITOKENS-2026-07",
+			"eventTimestamp": "2026-07-01T00:00:00Z",
+			"externalReferenceCode": "UEV-AI_HUB_AITOKENS-2026-07",
+			"quantity": 62500000.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_AI_HUB_AITOKENS",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-AI-HUB-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "ai-tokens-monthly"
+		}
+	]
 }

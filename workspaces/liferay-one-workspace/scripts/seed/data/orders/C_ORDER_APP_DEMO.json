@@ -12,7 +12,17 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_DXP",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_APP",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-006",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
+		}
+	],
+	"licenseKeys": [
+		{
+			"externalReferenceCode": "C_LICENSE_KEY_APP_EXPIRED",
+			"r_entitlementToLicenseKey_c_entitlementERC": "C_ENT_APP"
+		},
+		{
+			"externalReferenceCode": "C_LICENSE_KEY_APP_PRODUCTION",
+			"r_entitlementToLicenseKey_c_entitlementERC": "C_ENT_APP"
 		}
 	],
 	"order": {
@@ -23,6 +33,12 @@
 		"externalReferenceCode": "C_ORDER_APP_DEMO",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_APP",
 				"name": "Test Application",
 				"quantity": 1,
@@ -35,5 +51,25 @@
 		"projectExternalReferenceCode": "PRJCT-006"
 	},
 	"paymentStatus": 23,
-	"purchaseOrderNumber": "PO-APP-DEMO"
+	"purchaseOrderNumber": "PO-APP-DEMO",
+	"usageEvents": [
+		{
+			"dedupeKey": "UEV-LICENSE-APP_EXPIRED",
+			"eventTimestamp": "2026-01-05T00:00:00Z",
+			"externalReferenceCode": "UEV-LICENSE-APP_EXPIRED",
+			"quantity": 1,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_APP",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-DXP-NONPROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "license-generations"
+		},
+		{
+			"dedupeKey": "UEV-LICENSE-APP_PRODUCTION",
+			"eventTimestamp": "2026-01-05T00:00:00Z",
+			"externalReferenceCode": "UEV-LICENSE-APP_PRODUCTION",
+			"quantity": 1,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_APP",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-DXP-NONPROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "license-generations"
+		}
+	]
 }

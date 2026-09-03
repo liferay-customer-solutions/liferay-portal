@@ -12,7 +12,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_LEGACY",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_LEGACY",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-005",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -22,11 +22,11 @@
 			"name": "disasterRecovery",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-005",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_PAAS_LEGACY",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_PAAS_LEGACY_ADDON_DISASTER_RECOVERY",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_LEGACY",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ADDON_DISASTER_RECOVERY",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-005",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
 	"order": {
@@ -37,10 +37,29 @@
 		"externalReferenceCode": "C_ORDER_PAAS_LEGACY",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_PAAS_LEGACY",
 				"name": "Liferay PaaS Subscription - HA Prod Env",
 				"quantity": 1,
 				"skuExternalReferenceCode": "PRDCT-PAAS-LEGACY",
+				"unitPrice": 0
+			},
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
+				"externalReferenceCode": "C_ORDER_ITEM_PAAS_LEGACY_ADDON_DISASTER_RECOVERY",
+				"name": "Disaster Recovery Add-on",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-ADDON-DISASTER-RECOVERY",
 				"unitPrice": 0
 			}
 		],

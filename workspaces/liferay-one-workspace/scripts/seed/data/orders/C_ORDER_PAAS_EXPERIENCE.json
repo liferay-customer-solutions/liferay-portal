@@ -12,7 +12,63 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-004",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_PAAS_ADDON_DISASTER_RECOVERY",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "disasterRecovery",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-004",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_PAAS_ADDON_DISASTER_RECOVERY",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ADDON_DISASTER_RECOVERY",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-004",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_PAAS_ADDON_RECOMMENDATIONS",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "productRecommendations",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-004",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_PAAS_ADDON_RECOMMENDATIONS",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ADDON_COMMERCE_RECOMMENDATIONS",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-004",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_PAAS_ADDON_STORAGE",
+			"grantType": "fixed",
+			"maxQuantity": 100,
+			"name": "storage",
+			"quantity": 100,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-004",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_PAAS_ADDON_STORAGE",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ADDON_STORAGE",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-004",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_PAAS_ADDON_VCPU",
+			"grantType": "fixed",
+			"maxQuantity": 4,
+			"name": "vcpu",
+			"quantity": 4,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-004",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_PAAS_ADDON_VCPU",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ADDON_VCPU",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-004",
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -26,21 +82,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_DATABASE",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-004",
-			"startDate": "2025-08-09T00:00:00Z"
-		},
-		{
-			"endDate": "2027-08-09T00:00:00Z",
-			"externalReferenceCode": "C_ENT_PAAS_EXPERIENCE_DISASTER_RECOVERY",
-			"grantType": "fixed",
-			"maxQuantity": 1,
-			"name": "disasterRecovery",
-			"quantity": 1,
-			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-004",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_PAAS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
-			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ADDON_DISASTER_RECOVERY",
-			"r_projectToEntitlement_c_projectERC": "PRJCT-004",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -54,7 +96,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_EXTENSIONS_RAM",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-004",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -68,7 +110,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_EXTENSIONS_VCPUS",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-004",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -82,7 +124,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_LOGS",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-004",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -96,7 +138,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_STORAGE",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-004",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -110,7 +152,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_TRAFFIC_NETWORKING",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-004",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
 	"order": {
@@ -121,10 +163,68 @@
 		"externalReferenceCode": "C_ORDER_PAAS_EXPERIENCE",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_PAAS",
 				"name": "PaaS Experience",
 				"quantity": 1,
 				"skuExternalReferenceCode": "PRDCT-PAAS",
+				"unitPrice": 0
+			},
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
+				"externalReferenceCode": "C_ORDER_ITEM_PAAS_ADDON_DISASTER_RECOVERY",
+				"name": "Disaster Recovery Add-on",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-ADDON-DISASTER-RECOVERY",
+				"unitPrice": 0
+			},
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
+				"externalReferenceCode": "C_ORDER_ITEM_PAAS_ADDON_RECOMMENDATIONS",
+				"name": "Commerce Product Recommendations",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-ADDON-COMMERCE-RECOMMENDATIONS",
+				"unitPrice": 0
+			},
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
+				"externalReferenceCode": "C_ORDER_ITEM_PAAS_ADDON_STORAGE",
+				"name": "Additional Storage (100 GB)",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-ADDON-STORAGE",
+				"unitPrice": 0
+			},
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
+				"externalReferenceCode": "C_ORDER_ITEM_PAAS_ADDON_VCPU",
+				"name": "Additional vCPU",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-ADDON-VCPU",
 				"unitPrice": 0
 			}
 		],
@@ -132,5 +232,61 @@
 		"orderTypeExternalReferenceCode": "DXP",
 		"projectExternalReferenceCode": "PRJCT-004"
 	},
-	"purchaseOrderNumber": "PO-PAAS-EXPERIENCE"
+	"purchaseOrderNumber": "PO-PAAS-EXPERIENCE",
+	"usageEvents": [
+		{
+			"dedupeKey": "UEV-PAAS_ADDON_STORAGE-2026-05",
+			"eventTimestamp": "2026-05-01T00:00:00Z",
+			"externalReferenceCode": "UEV-PAAS_ADDON_STORAGE-2026-05",
+			"quantity": 62.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_PAAS_ADDON_STORAGE",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-PAAS-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		},
+		{
+			"dedupeKey": "UEV-PAAS_ADDON_STORAGE-2026-06",
+			"eventTimestamp": "2026-06-01T00:00:00Z",
+			"externalReferenceCode": "UEV-PAAS_ADDON_STORAGE-2026-06",
+			"quantity": 78.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_PAAS_ADDON_STORAGE",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-PAAS-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		},
+		{
+			"dedupeKey": "UEV-PAAS_ADDON_STORAGE-2026-07",
+			"eventTimestamp": "2026-07-01T00:00:00Z",
+			"externalReferenceCode": "UEV-PAAS_ADDON_STORAGE-2026-07",
+			"quantity": 94.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_PAAS_ADDON_STORAGE",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-PAAS-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		},
+		{
+			"dedupeKey": "UEV-PAAS_STORAGE-2026-05",
+			"eventTimestamp": "2026-05-01T00:00:00Z",
+			"externalReferenceCode": "UEV-PAAS_STORAGE-2026-05",
+			"quantity": 0.62,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_PAAS_STORAGE",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-PAAS-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		},
+		{
+			"dedupeKey": "UEV-PAAS_STORAGE-2026-06",
+			"eventTimestamp": "2026-06-01T00:00:00Z",
+			"externalReferenceCode": "UEV-PAAS_STORAGE-2026-06",
+			"quantity": 0.78,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_PAAS_STORAGE",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-PAAS-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		},
+		{
+			"dedupeKey": "UEV-PAAS_STORAGE-2026-07",
+			"eventTimestamp": "2026-07-01T00:00:00Z",
+			"externalReferenceCode": "UEV-PAAS_STORAGE-2026-07",
+			"quantity": 0.94,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_PAAS_STORAGE",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-PAAS-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "storage-gb"
+		}
+	]
 }

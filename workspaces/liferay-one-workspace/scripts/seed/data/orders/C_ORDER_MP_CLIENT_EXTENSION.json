@@ -20,6 +20,12 @@
 		"externalReferenceCode": "C_ORDER_MP_CLIENT_EXTENSION",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-02-14T00:00:00Z",
+					"endDate": "2027-01-15T00:00:00Z",
+					"startDate": "2026-01-15T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_MP_CLIENT_EXTENSION",
 				"name": "Test Client Extension",
 				"quantity": 1,

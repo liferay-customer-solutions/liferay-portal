@@ -12,7 +12,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_CLOUD_NATIVE_PENDING",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_CLOUD_NATIVE",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-031",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
 	"order": {
@@ -23,6 +23,12 @@
 		"externalReferenceCode": "C_ORDER_CLOUD_NATIVE_PENDING",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_CLOUD_NATIVE_PENDING",
 				"name": "Liferay Cloud Native - Standard Operations Bundle",
 				"quantity": 1,

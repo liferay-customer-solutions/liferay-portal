@@ -12,7 +12,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_COMMERCE_CLOUD",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_COMMERCE_CLOUD",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-023",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
 	"order": {
@@ -23,6 +23,12 @@
 		"externalReferenceCode": "C_ORDER_COMMERCE_CLOUD",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_COMMERCE_CLOUD",
 				"name": "Commerce Cloud Business Solution Bundle",
 				"quantity": 1,

@@ -12,7 +12,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_DATA_PLATFORM",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DATA_PLATFORM",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-028",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -26,7 +26,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_DATA_PLATFORM",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DATA_PLATFORM_ACTIVE_BATCH_SEGMENTS",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-028",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -40,7 +40,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_DATA_PLATFORM",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DATA_PLATFORM_ACTIVE_REAL_TIME_SEGMENTS",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-028",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -54,7 +54,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_DATA_PLATFORM",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DATA_PLATFORM_API_REQUESTS",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-028",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -68,7 +68,7 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_DATA_PLATFORM",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DATA_PLATFORM_CONNECTORS",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-028",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -82,21 +82,31 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_DATA_PLATFORM",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DATA_PLATFORM_EVENTS",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-028",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
 			"externalReferenceCode": "C_ENT_DATA_PLATFORM_EVENTS_ADD_ON_BUCKET",
 			"grantType": "fixed",
-			"maxQuantity": 2,
+			"maxQuantity": 1,
 			"name": "events-add-on-bucket",
-			"quantity": 2,
+			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-028",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_DATA_PLATFORM",
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_DATA_PLATFORM",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DATA_PLATFORM_EVENTS_ADD_ON_BUCKET",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-028",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
+		}
+	],
+	"licenseKeys": [
+		{
+			"externalReferenceCode": "C_LICENSE_KEY_LDP_EXPIRED",
+			"r_entitlementToLicenseKey_c_entitlementERC": "C_ENT_DATA_PLATFORM"
+		},
+		{
+			"externalReferenceCode": "C_LICENSE_KEY_LDP_PRODUCTION",
+			"r_entitlementToLicenseKey_c_entitlementERC": "C_ENT_DATA_PLATFORM"
 		}
 	],
 	"order": {
@@ -107,6 +117,12 @@
 		"externalReferenceCode": "C_ORDER_DATA_PLATFORM",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_DATA_PLATFORM",
 				"name": "Liferay Data Platform",
 				"quantity": 1,
@@ -118,5 +134,79 @@
 		"orderTypeExternalReferenceCode": "DXP",
 		"projectExternalReferenceCode": "PRJCT-028"
 	},
-	"purchaseOrderNumber": "PO-DATA-PLATFORM"
+	"purchaseOrderNumber": "PO-DATA-PLATFORM",
+	"usageEvents": [
+		{
+			"dedupeKey": "UEV-DATA_PLATFORM_API_REQUESTS-2026-05",
+			"eventTimestamp": "2026-05-01T00:00:00Z",
+			"externalReferenceCode": "UEV-DATA_PLATFORM_API_REQUESTS-2026-05",
+			"quantity": 310000.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_DATA_PLATFORM_API_REQUESTS",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-LDP-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "api-requests-monthly"
+		},
+		{
+			"dedupeKey": "UEV-DATA_PLATFORM_API_REQUESTS-2026-06",
+			"eventTimestamp": "2026-06-01T00:00:00Z",
+			"externalReferenceCode": "UEV-DATA_PLATFORM_API_REQUESTS-2026-06",
+			"quantity": 390000.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_DATA_PLATFORM_API_REQUESTS",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-LDP-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "api-requests-monthly"
+		},
+		{
+			"dedupeKey": "UEV-DATA_PLATFORM_API_REQUESTS-2026-07",
+			"eventTimestamp": "2026-07-01T00:00:00Z",
+			"externalReferenceCode": "UEV-DATA_PLATFORM_API_REQUESTS-2026-07",
+			"quantity": 470000.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_DATA_PLATFORM_API_REQUESTS",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-LDP-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "api-requests-monthly"
+		},
+		{
+			"dedupeKey": "UEV-DATA_PLATFORM_EVENTS-2026-05",
+			"eventTimestamp": "2026-05-01T00:00:00Z",
+			"externalReferenceCode": "UEV-DATA_PLATFORM_EVENTS-2026-05",
+			"quantity": 620000.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_DATA_PLATFORM_EVENTS",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-LDP-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "events-monthly"
+		},
+		{
+			"dedupeKey": "UEV-DATA_PLATFORM_EVENTS-2026-06",
+			"eventTimestamp": "2026-06-01T00:00:00Z",
+			"externalReferenceCode": "UEV-DATA_PLATFORM_EVENTS-2026-06",
+			"quantity": 780000.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_DATA_PLATFORM_EVENTS",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-LDP-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "events-monthly"
+		},
+		{
+			"dedupeKey": "UEV-DATA_PLATFORM_EVENTS-2026-07",
+			"eventTimestamp": "2026-07-01T00:00:00Z",
+			"externalReferenceCode": "UEV-DATA_PLATFORM_EVENTS-2026-07",
+			"quantity": 940000.0,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_DATA_PLATFORM_EVENTS",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-LDP-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "events-monthly"
+		},
+		{
+			"dedupeKey": "UEV-LICENSE-LDP_EXPIRED",
+			"eventTimestamp": "2026-01-05T00:00:00Z",
+			"externalReferenceCode": "UEV-LICENSE-LDP_EXPIRED",
+			"quantity": 1,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_DATA_PLATFORM",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-LDP-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "license-generations"
+		},
+		{
+			"dedupeKey": "UEV-LICENSE-LDP_PRODUCTION",
+			"eventTimestamp": "2026-01-05T00:00:00Z",
+			"externalReferenceCode": "UEV-LICENSE-LDP_PRODUCTION",
+			"quantity": 1,
+			"r_entitlementToUsageEvent_c_entitlementERC": "C_ENT_DATA_PLATFORM",
+			"r_environmentToUsageEvent_c_environmentERC": "ENV-LDP-PROD",
+			"r_usageDefinitionToUsageEvent_c_usageDefinitionERC": "license-generations"
+		}
+	]
 }

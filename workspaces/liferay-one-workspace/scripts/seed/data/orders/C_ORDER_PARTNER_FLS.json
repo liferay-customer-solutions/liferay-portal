@@ -12,7 +12,49 @@
 			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PARTNER_FLS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_DXP",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-017",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_PARTNER_FLS_SERVICE",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "licenseGeneration",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-017",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_PARTNER_FLS_SERVICE",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PARTNER_FLS",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PARTNERSHIP_SERVICE",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-017",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_PARTNER_FLS_SERVICE_REFERRAL",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "licenseGeneration",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-017",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_PARTNER_FLS_SERVICE_REFERRAL",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PARTNER_FLS",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PARTNERSHIP_SERVICE_REFERRAL",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-017",
+			"startDate": "2026-08-09T00:00:00Z"
+		},
+		{
+			"endDate": "2027-08-09T00:00:00Z",
+			"externalReferenceCode": "C_ENT_PARTNER_FLS_TRAINING",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "licenseGeneration",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-017",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_PARTNER_FLS_TRAINING",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PARTNER_FLS",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PARTNERSHIP_TRAINING",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-017",
+			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
 	"order": {
@@ -23,10 +65,55 @@
 		"externalReferenceCode": "C_ORDER_PARTNER_FLS",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_PARTNER_FLS_DXP",
 				"name": "Liferay DXP",
 				"quantity": 1,
 				"skuExternalReferenceCode": "PRDCT-DXP",
+				"unitPrice": 0
+			},
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
+				"externalReferenceCode": "C_ORDER_ITEM_PARTNER_FLS_SERVICE",
+				"name": "Service Partnership",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-SERVICE",
+				"unitPrice": 0
+			},
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
+				"externalReferenceCode": "C_ORDER_ITEM_PARTNER_FLS_SERVICE_REFERRAL",
+				"name": "Service Partnership - Referral Program",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-SERVICE-REFERRAL",
+				"unitPrice": 0
+			},
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
+				"externalReferenceCode": "C_ORDER_ITEM_PARTNER_FLS_TRAINING",
+				"name": "Training Partnership",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-TRAINING",
 				"unitPrice": 0
 			}
 		],

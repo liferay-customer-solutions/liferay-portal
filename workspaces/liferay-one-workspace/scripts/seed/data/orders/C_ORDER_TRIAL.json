@@ -1,0 +1,43 @@
+{
+	"entitlements": [
+		{
+			"endDate": "2027-01-15T00:00:00Z",
+			"externalReferenceCode": "C_ENT_TRIAL",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "licenseGeneration",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-030",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_TRIAL",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_TRIAL",
+			"r_projectToEntitlement_c_projectERC": "PRJCT-030",
+			"startDate": "2026-01-15T00:00:00Z"
+		}
+	],
+	"order": {
+		"accountExternalReferenceCode": "ACCNT-030",
+		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
+		"currencyCode": "USD",
+		"externalReferenceCode": "C_ORDER_TRIAL",
+		"orderItems": [
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-02-14T00:00:00Z",
+					"endDate": "2027-01-15T00:00:00Z",
+					"startDate": "2026-01-15T00:00:00Z"
+				},
+				"externalReferenceCode": "C_ORDER_ITEM_TRIAL",
+				"name": "Liferay Prebuilt 7 Day Trial",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-TRIAL",
+				"unitPrice": 0
+			}
+		],
+		"orderStatus": 0,
+		"orderTypeExternalReferenceCode": "SOLUTIONS7",
+		"projectExternalReferenceCode": "PRJCT-030"
+	},
+	"paymentStatus": 0,
+	"purchaseOrderNumber": "PO-TRIAL"
+}

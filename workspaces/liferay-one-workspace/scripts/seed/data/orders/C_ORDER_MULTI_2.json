@@ -37,6 +37,12 @@
 		"externalReferenceCode": "C_ORDER_MULTI_2",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-07-30T00:00:00Z",
+					"endDate": "2027-06-30T00:00:00Z",
+					"startDate": "2025-07-01T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_MULTI_2_DSR",
 				"name": "Digital Sales Room",
 				"quantity": 1,
@@ -44,6 +50,12 @@
 				"unitPrice": 0
 			},
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-07-30T00:00:00Z",
+					"endDate": "2027-06-30T00:00:00Z",
+					"startDate": "2025-07-01T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_MULTI_2_DXP",
 				"name": "Liferay DXP",
 				"quantity": 1,

@@ -9,10 +9,10 @@
 			"quantity": 100,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-004",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_BUSINESS_PAAS_BUSINESS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_DOCUMENT_LIBRARY_SIZE",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -23,10 +23,10 @@
 			"quantity": 100,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-004",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_BUSINESS_PAAS_PAAS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_DATABASE",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -36,11 +36,11 @@
 			"name": "disasterRecovery",
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-004",
-			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_BUSINESS_PAAS_PAAS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_BUSINESS_PAAS_ADDON_DISASTER_RECOVERY",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_ADDON_DISASTER_RECOVERY",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -51,10 +51,10 @@
 			"quantity": 2,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-004",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_BUSINESS_PAAS_PAAS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_EXTENSIONS_RAM",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -65,10 +65,10 @@
 			"quantity": 3,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-004",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_BUSINESS_PAAS_PAAS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_EXTENSIONS_VCPUS",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -79,10 +79,10 @@
 			"quantity": 300,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-004",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_BUSINESS_PAAS_PAAS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_LOGS",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -93,10 +93,10 @@
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-004",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_BUSINESS_PAAS_PAAS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_STORAGE",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -107,10 +107,10 @@
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-004",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_BUSINESS_PAAS_PAAS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_PAAS_TRAFFIC_NETWORKING",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -121,10 +121,10 @@
 			"quantity": 1,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-004",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_BUSINESS_PAAS_BUSINESS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_MARKER",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -135,10 +135,10 @@
 			"quantity": 4,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-004",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_BUSINESS_PAAS_BUSINESS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_RAM",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -149,10 +149,10 @@
 			"quantity": 15,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-004",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_BUSINESS_PAAS_BUSINESS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_SITES",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		},
 		{
 			"endDate": "2027-08-09T00:00:00Z",
@@ -163,20 +163,39 @@
 			"quantity": 8,
 			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-004",
 			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MIXED_BUSINESS_PAAS_BUSINESS",
-			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_PAAS_EXPERIENCE",
+			"r_contractToEntitlement_c_contractERC": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_SAAS_BUSINESS_VCPU",
 			"r_projectToEntitlement_c_projectERC": "PRJCT-033",
-			"startDate": "2025-08-09T00:00:00Z"
+			"startDate": "2026-08-09T00:00:00Z"
 		}
 	],
 	"order": {
 		"accountExternalReferenceCode": "ACCNT-004",
 		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
-		"contractExternalReferenceCode": "C_CONTRACT_PAAS_EXPERIENCE",
+		"contractExternalReferenceCode": "C_CONTRACT_MIXED_BUSINESS_PAAS",
 		"currencyCode": "USD",
 		"externalReferenceCode": "C_ORDER_MIXED_BUSINESS_PAAS",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
+				"externalReferenceCode": "C_ORDER_ITEM_MIXED_BUSINESS_PAAS_ADDON_DISASTER_RECOVERY",
+				"name": "Disaster Recovery Add-on",
+				"quantity": 1,
+				"skuExternalReferenceCode": "PRDCT-ADDON-DISASTER-RECOVERY",
+				"unitPrice": 0
+			},
+			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_MIXED_BUSINESS_PAAS_BUSINESS",
 				"name": "Liferay SaaS - Business Plan",
 				"quantity": 1,
@@ -184,6 +203,12 @@
 				"unitPrice": 0
 			},
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-09-08T00:00:00Z",
+					"endDate": "2027-08-09T00:00:00Z",
+					"startDate": "2026-08-09T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_MIXED_BUSINESS_PAAS_PAAS",
 				"name": "PaaS Experience",
 				"quantity": 1,

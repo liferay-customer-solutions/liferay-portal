@@ -1,4 +1,18 @@
 {
+	"entitlements": [
+		{
+			"endDate": "2027-01-15T00:00:00Z",
+			"externalReferenceCode": "C_ENT_MP_LOW_CODE_CONFIGURATION",
+			"grantType": "fixed",
+			"maxQuantity": 1,
+			"name": "licenseGeneration",
+			"quantity": 1,
+			"r_accountEntryToEntitlement_accountEntryERC": "ACCNT-008",
+			"r_commerceOrderItemToEntitlement_commerceOrderItemERC": "C_ORDER_ITEM_MP_LOW_CODE_CONFIGURATION",
+			"r_entitlementDefinitionToEntitlement_c_entitlementDefinitionERC": "C_ENT_DEF_TEST_LOW_CODE_CONFIGURATION",
+			"startDate": "2026-01-15T00:00:00Z"
+		}
+	],
 	"order": {
 		"accountExternalReferenceCode": "ACCNT-008",
 		"channelExternalReferenceCode": "LIFERAY_ONE_CHANNEL",
@@ -6,6 +20,12 @@
 		"externalReferenceCode": "C_ORDER_MP_LOW_CODE_CONFIGURATION",
 		"orderItems": [
 			{
+				"customFields": {
+					"customStatus": "Approved",
+					"effectiveEndDate": "2027-02-14T00:00:00Z",
+					"endDate": "2027-01-15T00:00:00Z",
+					"startDate": "2026-01-15T00:00:00Z"
+				},
 				"externalReferenceCode": "C_ORDER_ITEM_MP_LOW_CODE_CONFIGURATION",
 				"name": "Test Low-Code Configuration",
 				"quantity": 1,

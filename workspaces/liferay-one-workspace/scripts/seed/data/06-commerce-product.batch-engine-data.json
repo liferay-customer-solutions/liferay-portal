@@ -179,6 +179,9 @@
 			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
 			"categories": [
 				{
+					"externalReferenceCode": "MARKETPLACE_LISTING_LISTED"
+				},
+				{
 					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
 				}
 			],
@@ -1029,6 +1032,9 @@
 			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
 			"categories": [
 				{
+					"externalReferenceCode": "MARKETPLACE_LISTING_LISTED"
+				},
+				{
 					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
 				}
 			],
@@ -1187,6 +1193,9 @@
 			"active": true,
 			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
 			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_LISTING_LISTED"
+				},
 				{
 					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
 				}
@@ -1365,6 +1374,9 @@
 			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
 			"categories": [
 				{
+					"externalReferenceCode": "MARKETPLACE_LISTING_LISTED"
+				},
+				{
 					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
 				}
 			],
@@ -1529,6 +1541,9 @@
 			"active": true,
 			"catalogExternalReferenceCode": "LIFERAY_INC_CATALOG",
 			"categories": [
+				{
+					"externalReferenceCode": "MARKETPLACE_LISTING_LISTED"
+				},
 				{
 					"externalReferenceCode": "MARKETPLACE_PRODUCT_TYPE_LIFERAY_PRODUCT"
 				}
