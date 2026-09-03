@@ -41,22 +41,15 @@ export type ProductTabConfig = {
 export function resolveProductTabConfig({
 	hasActiveExperienceOffering,
 	kind,
-	orderType,
 	product,
 }: {
 	hasActiveExperienceOffering: boolean;
 	kind: ProjectItemKind;
-	orderType?: string;
 	product: DeliveryProduct;
 }): ProductTabConfig {
-	const activationProfile = resolveActivationProfile({
-		kind,
-		orderType,
-		product,
-	});
-
+	const activationProfile = resolveActivationProfile({kind, product});
 	const detailsProfile = resolveDetailsProfile({kind, product});
-	const downloadProfile = resolveDownloadProfile({kind, orderType, product});
+	const downloadProfile = resolveDownloadProfile({kind, product});
 	const environmentProfile = resolveEnvironmentProfile(product);
 	const utilizationProfile = resolveUtilizationProfile(product);
 	const learnUrl = getSpecificationValue(product, 'project-learn-url');

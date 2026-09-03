@@ -523,7 +523,7 @@
 				{
 					"specificationKey": "type",
 					"value": {
-						"en_US": "app"
+						"en_US": "dxp"
 					}
 				}
 			],
@@ -2858,6 +2858,12 @@
 					"value": {
 						"en_US": "https://www.liferay.com/support"
 					}
+				},
+				{
+					"specificationKey": "type",
+					"value": {
+						"en_US": "dxp"
+					}
 				}
 			],
 			"productType": "virtual",
@@ -3817,7 +3823,7 @@
 				{
 					"specificationKey": "type",
 					"value": {
-						"en_US": "app"
+						"en_US": "client-extension"
 					}
 				}
 			],
@@ -3890,7 +3896,7 @@
 				{
 					"specificationKey": "type",
 					"value": {
-						"en_US": "app"
+						"en_US": "composite-app"
 					}
 				}
 			],
@@ -4095,7 +4101,7 @@
 				{
 					"specificationKey": "type",
 					"value": {
-						"en_US": "app"
+						"en_US": "low-code-configuration"
 					}
 				}
 			],

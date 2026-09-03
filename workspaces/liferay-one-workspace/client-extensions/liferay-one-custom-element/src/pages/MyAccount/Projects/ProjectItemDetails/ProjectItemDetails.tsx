@@ -101,12 +101,7 @@ export default function ProjectItemDetails({kind}: ProjectItemDetailsProps) {
 		learnUrl,
 		tabKeys,
 		utilizationProfile,
-	} = resolveProductTabConfig({
-		hasActiveExperienceOffering,
-		kind,
-		orderType: orderInfo.orderType,
-		product,
-	});
+	} = resolveProductTabConfig({hasActiveExperienceOffering, kind, product});
 
 	const tabContent: Record<ProjectTabKey, () => ReactNode> = {
 		'activation': () => (

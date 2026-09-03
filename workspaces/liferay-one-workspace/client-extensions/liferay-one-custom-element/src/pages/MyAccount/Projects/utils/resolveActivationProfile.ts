@@ -5,10 +5,12 @@
 
 import {getSpecificationValue} from '~/hooks/useProjectCommerce';
 
-import type {OrderTypes} from '~/types/orders';
+import {getAppType} from './getAppType';
+
 import type {DeliveryProduct} from '~/types/product';
 
 import type {ProjectItemKind} from '../types';
+import type {AppType} from './getAppType';
 
 export type ActivationProfile =
 	| 'app-licenses'
@@ -35,15 +37,13 @@ const ACTIVATION_PROFILES: ActivationProfile[] = [
 	'status',
 ];
 
-const ACTIVATION_PROFILE_BY_ORDER_TYPE: Partial<
-	Record<OrderTypes, ActivationProfile>
-> = {
-	CLIENT_EXTENSION: 'app-licenses',
-	CLOUD_APP: 'app-provisioning',
-	COMPOSITE_APP: 'app-licenses',
-	DXP_APP: 'app-licenses',
-	LOW_CODE_CONFIGURATION: 'none',
-	OTHER: 'none',
+const ACTIVATION_PROFILE_BY_APP_TYPE: Record<AppType, ActivationProfile> = {
+	'client-extension': 'app-licenses',
+	'cloud': 'app-provisioning',
+	'composite-app': 'app-licenses',
+	'dxp': 'app-licenses',
+	'low-code-configuration': 'none',
+	'other': 'none',
 };
 
 function isActivationProfile(value: string): value is ActivationProfile {
@@ -52,27 +52,29 @@ function isActivationProfile(value: string): value is ActivationProfile {
 
 export function resolveActivationProfile({
 	kind,
-	orderType,
 	product,
 }: {
 	kind: ProjectItemKind;
-	orderType?: string;
 	product: DeliveryProduct;
 }): ActivationProfile {
-	if (kind === 'application') {
-		return (
-			(orderType &&
-				ACTIVATION_PROFILE_BY_ORDER_TYPE[orderType as OrderTypes]) ||
-			'app-licenses'
-		);
-	}
-
 	const profile = getSpecificationValue(
 		product,
 		'project-activation-profile'
 	);
 
-	return isActivationProfile(profile) ? profile : 'none';
+	if (isActivationProfile(profile)) {
+		return profile;
+	}
+
+	if (kind === 'application') {
+		const appType = getAppType(product);
+
+		return appType
+			? ACTIVATION_PROFILE_BY_APP_TYPE[appType]
+			: 'app-licenses';
+	}
+
+	return 'none';
 }
 
 export default resolveActivationProfile;

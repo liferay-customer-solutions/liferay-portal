@@ -5,48 +5,51 @@
 
 import {getSpecificationValue} from '~/hooks/useProjectCommerce';
 
+import {getAppType} from './getAppType';
 import {resolveProfile} from './resolveProfile';
 
-import type {OrderTypes} from '~/types/orders';
 import type {DeliveryProduct} from '~/types/product';
 
 import type {ProjectItemKind} from '../types';
+import type {AppType} from './getAppType';
 
 export type DownloadProfile = 'app' | 'bundle' | 'none';
 
 const DOWNLOAD_PROFILES: DownloadProfile[] = ['app', 'bundle', 'none'];
 
-const DOWNLOAD_PROFILE_BY_ORDER_TYPE: Partial<
-	Record<OrderTypes, DownloadProfile>
-> = {
-	CLIENT_EXTENSION: 'app',
-	COMPOSITE_APP: 'app',
-	DXP_APP: 'app',
-	LOW_CODE_CONFIGURATION: 'app',
+const DOWNLOAD_PROFILE_BY_APP_TYPE: Record<AppType, DownloadProfile> = {
+	'client-extension': 'app',
+	'cloud': 'none',
+	'composite-app': 'app',
+	'dxp': 'app',
+	'low-code-configuration': 'app',
+	'other': 'none',
 };
 
 export function resolveDownloadProfile({
 	kind,
-	orderType,
 	product,
 }: {
 	kind: ProjectItemKind;
-	orderType?: string;
 	product: DeliveryProduct;
 }): DownloadProfile {
-	if (kind === 'application') {
-		return (
-			(orderType &&
-				DOWNLOAD_PROFILE_BY_ORDER_TYPE[orderType as OrderTypes]) ||
-			'none'
-		);
-	}
-
-	return resolveProfile(
+	const profile = resolveProfile(
 		getSpecificationValue(product, 'project-download-profile'),
 		DOWNLOAD_PROFILES,
 		'none'
 	);
+
+	if (profile !== 'none') {
+		return profile;
+	}
+
+	if (kind === 'application') {
+		const appType = getAppType(product);
+
+		return appType ? DOWNLOAD_PROFILE_BY_APP_TYPE[appType] : 'none';
+	}
+
+	return 'none';
 }
 
 export default resolveDownloadProfile;
