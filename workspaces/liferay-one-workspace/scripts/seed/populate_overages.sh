@@ -56,8 +56,9 @@ function main {
 }
 
 # Strips the fields the commerce order create does not accept -- the external
-# reference codes resolved to numeric IDs, the customFields applied by a later
-# PATCH, and the order item name denormalized from the SKU -- and sets the
+# reference codes resolved to numeric IDs, the order and order item customFields
+# applied by a later PATCH, and the order item name denormalized from the SKU --
+# and sets the
 # channel, contract, and project foreign keys. The audit link back to the usage
 # report that generated this overage is not set here: it lives on the report as
 # its plain commerceOrderId field, set once this order exists (see
@@ -89,6 +90,7 @@ if project_id:
 	order['r_projectToCommerceOrder_c_projectId'] = int(project_id)
 
 for order_item in order.get('orderItems', []):
+	order_item.pop('customFields', None)
 	order_item.pop('name', None)
 
 print(json.dumps(order))
@@ -228,6 +230,7 @@ function _populate_overage {
 	order_id=$(echo "${response}" | sed '$d' | _read_field "id")
 
 	_set_order_fields "${file}" "${order_id}" "${project_name}"
+	_set_order_items "${file}"
 
 	# The usage report is the audit trail behind this overage order; it records the
 	# order's numeric ID in its commerceOrderId field, so it is created once the
@@ -403,6 +406,64 @@ except Exception:
 # purchaseOrderNumber in the overage file once the order exists. projectName is a
 # denormalized read cache derived from the project linked authoritatively through
 # the projectToCommerceOrder relationship.
+
+# Applies each order item's custom fields, which the order create does not accept.
+# The entitlement generator reads an order item's term from its startDate and
+# endDate custom fields and gates on customStatus (see OrderItemUtil), and unlike
+# the seeded orders the entitlements behind an overage are generated at runtime by
+# the EntitlementGeneration object action -- so without these the grant it creates
+# has no term at all. The external reference code is sent back because a PATCH
+# regenerates it otherwise.
+
+function _set_order_items {
+	local file="${1}"
+
+	local line
+
+	while IFS=$'\t' read -r external_reference_code payload
+	do
+		[[ -z ${external_reference_code} ]] && continue
+
+		local status
+
+		status=$(_curl \
+			--data "${payload}" \
+			--header "Content-Type: application/json" \
+			--output /dev/null \
+			--request PATCH \
+			--write-out "%{http_code}" \
+			"${LIFERAY_URL}/o/headless-commerce-admin-order/v1.0/orderItems/by-externalReferenceCode/${external_reference_code}" || true)
+
+		if [[ ${status} != 2* ]]
+		then
+			echo "Unable to set fields for overage order item ${external_reference_code}." >&2
+		fi
+	done < <(python3 -c "
+import json
+
+with open('${file}') as file:
+	order = json.load(file)['order']
+
+for order_item in order.get('orderItems', []):
+	custom_fields = order_item.get('customFields') or {}
+
+	if not custom_fields:
+		continue
+
+	body = {
+		'customFields': [
+			{'customValue': {'data': data}, 'name': name}
+			for name, data in sorted(custom_fields.items())
+		],
+		'externalReferenceCode': order_item['externalReferenceCode'],
+	}
+
+	print(
+		'{}\t{}'.format(
+			order_item['externalReferenceCode'],
+			json.dumps(body, separators=(',', ':'), sort_keys=True)))
+")
+}
 
 function _set_order_fields {
 	local file="${1}"

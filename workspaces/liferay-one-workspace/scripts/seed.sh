@@ -14,6 +14,22 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 # by exporting the relevant LIFERAY_* variables before invoking this script.
 
 function main {
+
+	# Every import below runs with ON_ERROR_CONTINUE, and a scoped object batch
+	# endpoint silently drops an entry whose relationship points at something
+	# that does not exist, so a broken reference costs nothing at import time and
+	# surfaces much later as an empty tab. Validating first turns that into an
+	# immediate failure.
+
+	echo "Validating seed data."
+
+	if ! ./seed/validate_seed_data.py
+	then
+		echo "Refusing to seed invalid data." >&2
+
+		return 1
+	fi
+
 	echo "Seeding test data."
 	./seed/seed_test_data.sh
 
