@@ -41,6 +41,9 @@ public class RoleConstants {
 
 	public static final String NAME_LIFERAY_STAFF = "Liferay Staff";
 
+	public static final String NAME_PARTNER_ACCOUNT_ADMIN =
+		"Partner Account Admin";
+
 	public static final String NAME_PARTNER_MANAGER = "Partner Manager";
 
 	public static final String NAME_PARTNER_MARKETING_USER =
@@ -76,11 +79,13 @@ public class RoleConstants {
 	};
 
 	public static final String[] NAMES_SUPPORT_ACCOUNT = {
-		NAME_ACCOUNT_ADMINISTRATOR, NAME_ACCOUNT_MEMBER, NAME_ACCOUNT_REQUESTER
+		NAME_ACCOUNT_ADMINISTRATOR, NAME_ACCOUNT_MEMBER, NAME_ACCOUNT_REQUESTER,
+		NAME_PARTNER_ACCOUNT_ADMIN, NAME_PARTNER_MANAGER
 	};
 
 	public static final String[] NAMES_SUPPORT_ACCOUNT_TICKET = {
-		NAME_ACCOUNT_ADMINISTRATOR, NAME_ACCOUNT_REQUESTER
+		NAME_ACCOUNT_ADMINISTRATOR, NAME_ACCOUNT_REQUESTER,
+		NAME_PARTNER_ACCOUNT_ADMIN, NAME_PARTNER_MANAGER
 	};
 
 }

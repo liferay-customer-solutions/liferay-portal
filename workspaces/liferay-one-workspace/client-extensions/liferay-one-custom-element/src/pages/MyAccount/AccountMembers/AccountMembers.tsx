@@ -18,7 +18,7 @@ import {useOneContext} from '~/context/OneContextProvider';
 import i18n, {sub, translate} from '~/i18n';
 import {
 	canAccessAccountMembers,
-	isAccountManager,
+	canManageAccountMembers,
 } from '~/pages/MyAccount/AccountMembers/accountRoles';
 import {useAccountMemberActions} from '~/pages/MyAccount/AccountMembers/hooks/useAccountMemberActions';
 import {useAccountMembers} from '~/pages/MyAccount/AccountMembers/hooks/useAccountMembers';
@@ -83,7 +83,7 @@ export default function AccountMembers() {
 	const [filterActive, setFilterActive] = useState(false);
 	const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
 
-	const canManageMembers = isAccountManager(userAccountModel);
+	const canManageMembers = canManageAccountMembers(userAccountModel);
 
 	const {
 		account,
