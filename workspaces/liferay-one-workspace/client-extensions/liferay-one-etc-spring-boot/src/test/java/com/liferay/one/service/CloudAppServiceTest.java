@@ -49,96 +49,6 @@ public class CloudAppServiceTest {
 	}
 
 	@Test
-	public void testCompleteCloudAppOrderCompletesFreeOrder() throws Exception {
-		_whenFetchCommerceOrder(
-			_createOrder(
-				new HashMap<>(), CommerceOrderConstants.ORDER_STATUS_PENDING,
-				"CLOUD_APP",
-				CommerceOrderConstants.ORDER_PAYMENT_STATUS_NOT_REQUIRED));
-
-		_cloudAppService.completeCloudAppOrder(_ORDER_ID);
-
-		Mockito.verify(
-			_commerceOrderService
-		).completeOrder(
-			_ORDER_ID, CommerceOrderConstants.ORDER_PAYMENT_STATUS_NOT_REQUIRED
-		);
-	}
-
-	@Test
-	public void testCompleteCloudAppOrderCompletesPaidOrder() throws Exception {
-		_whenFetchCommerceOrder(
-			_createOrder(
-				new HashMap<>(),
-				CommerceOrderConstants.ORDER_STATUS_IN_PROGRESS, "CLOUD_APP",
-				CommerceOrderConstants.ORDER_PAYMENT_STATUS_COMPLETED));
-
-		_cloudAppService.completeCloudAppOrder(_ORDER_ID);
-
-		Mockito.verify(
-			_commerceOrderService
-		).completeOrder(
-			_ORDER_ID, CommerceOrderConstants.ORDER_PAYMENT_STATUS_COMPLETED
-		);
-	}
-
-	@Test
-	public void testCompleteCloudAppOrderSkipsCartWithPendingPayment()
-		throws Exception {
-
-		_whenFetchCommerceOrder(
-			_createOrder(
-				new HashMap<>(), CommerceOrderConstants.ORDER_STATUS_OPEN,
-				"CLOUD_APP", _PAYMENT_STATUS_PENDING));
-
-		_cloudAppService.completeCloudAppOrder(_ORDER_ID);
-
-		Mockito.verify(
-			_commerceOrderService, Mockito.never()
-		).completeOrder(
-			ArgumentMatchers.anyLong(), ArgumentMatchers.anyInt()
-		);
-	}
-
-	@Test
-	public void testCompleteCloudAppOrderSkipsCompletedOrder()
-		throws Exception {
-
-		_whenFetchCommerceOrder(
-			_createOrder(
-				new HashMap<>(), CommerceOrderConstants.ORDER_STATUS_COMPLETED,
-				"CLOUD_APP",
-				CommerceOrderConstants.ORDER_PAYMENT_STATUS_NOT_REQUIRED));
-
-		_cloudAppService.completeCloudAppOrder(_ORDER_ID);
-
-		Mockito.verify(
-			_commerceOrderService, Mockito.never()
-		).completeOrder(
-			ArgumentMatchers.anyLong(), ArgumentMatchers.anyInt()
-		);
-	}
-
-	@Test
-	public void testCompleteCloudAppOrderSkipsOtherOrderType()
-		throws Exception {
-
-		_whenFetchCommerceOrder(
-			_createOrder(
-				new HashMap<>(), CommerceOrderConstants.ORDER_STATUS_PENDING,
-				"DXP_APP",
-				CommerceOrderConstants.ORDER_PAYMENT_STATUS_NOT_REQUIRED));
-
-		_cloudAppService.completeCloudAppOrder(_ORDER_ID);
-
-		Mockito.verify(
-			_commerceOrderService, Mockito.never()
-		).completeOrder(
-			ArgumentMatchers.anyLong(), ArgumentMatchers.anyInt()
-		);
-	}
-
-	@Test
 	public void testDeployCloudAppRecordsDeployment() throws Exception {
 		Map<String, String> customFields = new HashMap<>();
 
@@ -343,8 +253,6 @@ public class CloudAppServiceTest {
 	private static final long _ORDER_ID = 1000L;
 
 	private static final long _ORDER_ITEM_ID = 2000L;
-
-	private static final int _PAYMENT_STATUS_PENDING = 1;
 
 	private static final String _PROJECT_ID = "omnitest-prd";
 

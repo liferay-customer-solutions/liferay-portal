@@ -6,7 +6,6 @@
 package com.liferay.one;
 
 import com.liferay.one.permission.CommerceOrderPermission;
-import com.liferay.one.service.CloudAppService;
 import com.liferay.one.service.CommerceOrderService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +42,7 @@ public class CommerceOrdersRestController extends OneBaseRestController {
 
 		_commerceOrderPermission.check(commerceOrderId, jwt);
 
-		_cloudAppService.completeCloudAppOrder(commerceOrderId);
+		_commerceOrderService.completeSettledOrder(commerceOrderId);
 	}
 
 	@PostMapping("/{commerceOrderId}/complete-settled")
@@ -56,9 +55,6 @@ public class CommerceOrdersRestController extends OneBaseRestController {
 
 		_commerceOrderService.completeSettledOrder(commerceOrderId);
 	}
-
-	@Autowired
-	private CloudAppService _cloudAppService;
 
 	@Autowired
 	private CommerceOrderPermission _commerceOrderPermission;
