@@ -188,7 +188,7 @@
 			}
 		],
 		"orderStatus": 5,
-		"orderTypeExternalReferenceCode": "DXP",
+		"orderTypeExternalReferenceCode": "SALESFORCE",
 		"projectExternalReferenceCode": "PRJCT-008"
 	},
 	"purchaseOrderNumber": "PO-BUSINESS-PLAN",

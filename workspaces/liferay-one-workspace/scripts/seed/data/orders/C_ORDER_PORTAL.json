@@ -51,7 +51,7 @@
 			}
 		],
 		"orderStatus": 5,
-		"orderTypeExternalReferenceCode": "DXP",
+		"orderTypeExternalReferenceCode": "SALESFORCE",
 		"projectExternalReferenceCode": "PRJCT-015"
 	},
 	"purchaseOrderNumber": "PO-PORTAL",

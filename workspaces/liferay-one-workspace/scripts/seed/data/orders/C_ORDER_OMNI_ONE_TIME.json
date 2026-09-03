@@ -35,7 +35,7 @@
 			}
 		],
 		"orderStatus": 5,
-		"orderTypeExternalReferenceCode": "DXP",
+		"orderTypeExternalReferenceCode": "SALESFORCE",
 		"projectExternalReferenceCode": "PRJCT-001"
 	},
 	"purchaseOrderNumber": "PO-OMNI-ONE-TIME"

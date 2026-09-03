@@ -64,7 +64,7 @@
 			}
 		],
 		"orderStatus": 5,
-		"orderTypeExternalReferenceCode": "DXP",
+		"orderTypeExternalReferenceCode": "SALESFORCE",
 		"projectExternalReferenceCode": "PRJCT-013"
 	},
 	"purchaseOrderNumber": "PO-ANALYTICS-CLOUD"

@@ -23,7 +23,7 @@
 			}
 		],
 		"orderStatus": 5,
-		"orderTypeExternalReferenceCode": "DXP",
+		"orderTypeExternalReferenceCode": "SALESFORCE",
 		"projectExternalReferenceCode": "PRJCT-002-2"
 	},
 	"purchaseOrderNumber": "PO-SAAS-EXPERIENCE-NO-ENTITLEMENTS"

@@ -24,7 +24,7 @@
 			}
 		],
 		"orderStatus": 5,
-		"orderTypeExternalReferenceCode": "DXP",
+		"orderTypeExternalReferenceCode": "SALESFORCE",
 		"projectExternalReferenceCode": "PRJCT-026"
 	},
 	"purchaseOrderNumber": "PO-OVERAGE-AI-HUB-2026-07",

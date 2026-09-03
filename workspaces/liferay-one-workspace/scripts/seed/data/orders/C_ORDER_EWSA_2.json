@@ -37,7 +37,7 @@
 			}
 		],
 		"orderStatus": 5,
-		"orderTypeExternalReferenceCode": "DXP",
+		"orderTypeExternalReferenceCode": "SALESFORCE",
 		"projectExternalReferenceCode": "PRJCT-019-2"
 	},
 	"purchaseOrderNumber": "PO-EWSA-2"

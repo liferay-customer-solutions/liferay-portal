@@ -167,6 +167,18 @@
 		{
 			"active": true,
 			"description": {
+				"en_US": "Designates that the order originated in Salesforce."
+			},
+			"displayOrder": 14,
+			"externalReferenceCode": "SALESFORCE",
+			"name": {
+				"en_US": "Salesforce"
+			},
+			"neverExpire": true
+		},
+		{
+			"active": true,
+			"description": {
 				"en_US": "Designates that the order contains a 7-day solution trial."
 			},
 			"displayOrder": 12,

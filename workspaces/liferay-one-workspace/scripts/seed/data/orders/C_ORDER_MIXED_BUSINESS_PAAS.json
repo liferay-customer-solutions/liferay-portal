@@ -217,7 +217,7 @@
 			}
 		],
 		"orderStatus": 5,
-		"orderTypeExternalReferenceCode": "DXP",
+		"orderTypeExternalReferenceCode": "SALESFORCE",
 		"projectExternalReferenceCode": "PRJCT-033"
 	},
 	"purchaseOrderNumber": "PO-MIXED-BUSINESS-PAAS"

@@ -118,7 +118,7 @@
 			}
 		],
 		"orderStatus": 5,
-		"orderTypeExternalReferenceCode": "DXP",
+		"orderTypeExternalReferenceCode": "SALESFORCE",
 		"projectExternalReferenceCode": "PRJCT-017"
 	},
 	"purchaseOrderNumber": "PO-PARTNER-FLS"

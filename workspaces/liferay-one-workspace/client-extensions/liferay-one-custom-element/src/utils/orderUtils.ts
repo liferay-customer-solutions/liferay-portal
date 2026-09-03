@@ -96,6 +96,7 @@ export const LIFERAY_PRODUCT_ORDER_TYPES: readonly OrderTypes[] = [
 	'CMP_BETA',
 	'DXP',
 	'LDP',
+	'SALESFORCE',
 ];
 
 export const orderTypeLabel = {
@@ -112,6 +113,7 @@ export const orderTypeLabel = {
 	LDP: 'Liferay Data Platform',
 	LOW_CODE_CONFIGURATION: 'Low-Code Configuration',
 	OTHER: 'Other',
+	SALESFORCE: 'Salesforce',
 	SOLUTIONS7: 'Solutions 7',
 	SOLUTIONS30: 'Solutions 30',
 	SSA_SAAS: 'SSA SaaS',
@@ -164,6 +166,7 @@ export function getOrderStatusLabel(order: PlacedOrder) {
 		'CMP_BETA',
 		'DSR',
 		'DXP',
+		'SALESFORCE',
 	];
 
 	if (

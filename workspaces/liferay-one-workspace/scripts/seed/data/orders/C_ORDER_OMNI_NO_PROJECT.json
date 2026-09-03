@@ -36,7 +36,7 @@
 			}
 		],
 		"orderStatus": 5,
-		"orderTypeExternalReferenceCode": "DXP"
+		"orderTypeExternalReferenceCode": "SALESFORCE"
 	},
 	"purchaseOrderNumber": "PO-OMNI-NO-PROJECT"
 }

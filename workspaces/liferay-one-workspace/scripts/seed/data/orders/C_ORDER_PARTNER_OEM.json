@@ -91,7 +91,7 @@
 			}
 		],
 		"orderStatus": 5,
-		"orderTypeExternalReferenceCode": "DXP",
+		"orderTypeExternalReferenceCode": "SALESFORCE",
 		"projectExternalReferenceCode": "PRJCT-018"
 	},
 	"purchaseOrderNumber": "PO-PARTNER-OEM"

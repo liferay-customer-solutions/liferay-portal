@@ -37,7 +37,7 @@
 			}
 		],
 		"orderStatus": 5,
-		"orderTypeExternalReferenceCode": "DXP",
+		"orderTypeExternalReferenceCode": "SALESFORCE",
 		"projectExternalReferenceCode": "PRJCT-011"
 	},
 	"purchaseOrderNumber": "PO-SELF-HOSTED"
