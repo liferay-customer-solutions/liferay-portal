@@ -13,6 +13,10 @@ class CommerceOrdersOAuth2 extends OneSpringBootOAuth2 {
 	async completeCloudApp(orderId: number | string) {
 		await this.post(`/${orderId}/complete-cloud-app`);
 	}
+
+	async completeSettled(orderId: number | string) {
+		await this.post(`/${orderId}/complete-settled`);
+	}
 }
 
 const CommerceOrders = new CommerceOrdersOAuth2('/commerce-orders');

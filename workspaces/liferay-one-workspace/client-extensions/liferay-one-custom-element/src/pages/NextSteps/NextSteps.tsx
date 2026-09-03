@@ -99,12 +99,20 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 		placedOrder?.orderTypeExternalReferenceCode === OrderTypes.CLOUD_APP;
 
 	useEffect(() => {
-		if (!isCloudApp || !orderId) {
+		if (!orderId) {
 			return;
 		}
 
-		CommerceOrders.completeCloudApp(orderId).catch(console.error);
-	}, [isCloudApp, orderId]);
+		if (isCloudApp) {
+			CommerceOrders.completeCloudApp(orderId).catch(console.error);
+
+			return;
+		}
+
+		if (paymentStatus === PaymentStatus.PAID) {
+			CommerceOrders.completeSettled(orderId).catch(console.error);
+		}
+	}, [isCloudApp, orderId, paymentStatus]);
 
 	const continueButtonKey =
 		paymentStatus === PaymentStatus.PAID
