@@ -4,8 +4,10 @@
  */
 
 import {differenceInDays, format} from 'date-fns';
+import {useProject} from '~/context/ProjectContext';
 import {useFetch} from '~/hooks/useFetch';
 import {Word} from '~/i18n';
+import {isUnassignedProject} from '~/pages/MyAccount/Projects/utils/isUnassignedProject';
 import {Liferay} from '~/services/liferay/liferay';
 
 import type {APIResponse} from '~/types/api';
@@ -154,11 +156,18 @@ function getProducts(additionalInfo?: string): ProjectActivationKeyProduct[] {
 }
 
 export function useProjectActivationKeys(productName?: string) {
+	const {projectId} = useProject();
+
 	const accountId = Liferay.CommerceContext.account?.accountId;
 
-	const filters = [
-		`r_accountEntryToLicenseKey_accountEntryId eq '${accountId}'`,
-	];
+	const projectExternalReferenceCode =
+		projectId && !isUnassignedProject(projectId) ? projectId : undefined;
+
+	const scope = projectExternalReferenceCode
+		? `r_projectToLicenseKey_c_projectERC eq '${projectExternalReferenceCode}'`
+		: `r_accountEntryToLicenseKey_accountEntryId eq '${accountId}'`;
+
+	const filters = [scope];
 
 	if (productName) {
 		filters.push(`productName eq '${productName}'`);
@@ -170,7 +179,7 @@ export function useProjectActivationKeys(productName?: string) {
 		isLoading: loading,
 		revalidate,
 	} = useFetch<APIResponse<LicenseKeyNode>>(
-		accountId ? '/o/c/licensekeys' : null,
+		projectExternalReferenceCode || accountId ? '/o/c/licensekeys' : null,
 		{
 			params: {
 				filter: filters.join(' and '),
