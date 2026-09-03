@@ -3,10 +3,12 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {ClayButtonWithIcon} from '@clayui/button';
 import {ClayRadio} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 import {ReactNode} from 'react';
+import i18n from '~/i18n';
 
 import './RadioCard.css';
 
@@ -17,6 +19,7 @@ type RadioCardProps = {
 	disabled?: boolean;
 	icon?: string;
 	onChange: () => void;
+	onRemove?: () => void;
 	selected: boolean;
 	title?: string;
 	tooltip?: string;
@@ -29,6 +32,7 @@ const RadioCard = ({
 	disabled,
 	icon,
 	onChange,
+	onRemove,
 	selected,
 	title,
 	tooltip,
@@ -36,7 +40,11 @@ const RadioCard = ({
 	<div
 		className={classNames(
 			'border p-3 product-purchase-radio-card rounded',
-			{disabled, selected},
+			{
+				'align-items-center d-flex justify-content-between': !!onRemove,
+				disabled,
+				selected,
+			},
 			className
 		)}
 		onClick={disabled ? undefined : onChange}
@@ -66,6 +74,20 @@ const RadioCard = ({
 				</div>
 			)}
 		</div>
+
+		{onRemove && (
+			<ClayButtonWithIcon
+				aria-label={i18n.translate('remove')}
+				displayType="unstyled"
+				onClick={(event) => {
+					event.stopPropagation();
+
+					onRemove();
+				}}
+				size="sm"
+				symbol="trash"
+			/>
+		)}
 	</div>
 );
 

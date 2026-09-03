@@ -10,6 +10,7 @@ export type BillingAddress = {
 	country?: string;
 	countryISOCode?: string;
 	description?: string;
+	id?: number;
 	name?: string;
 	phoneNumber?: string;
 	regionISOCode?: string;

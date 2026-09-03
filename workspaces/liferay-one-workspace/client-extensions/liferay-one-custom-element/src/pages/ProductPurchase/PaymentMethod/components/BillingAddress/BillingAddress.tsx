@@ -11,6 +11,8 @@ import {useProductPurchaseLayoutContext} from '~/pages/ProductPurchase/component
 import useAccountAddresses from '~/pages/ProductPurchase/hooks/useAccountAddresses';
 import useCommerceRegions from '~/pages/ProductPurchase/hooks/useCommerceRegions';
 import HeadlessAdminUser from '~/services/headless/HeadlessAdminUser';
+import HeadlessCommerceAdminAccount from '~/services/headless/HeadlessCommerceAdminAccount';
+import {Liferay} from '~/services/liferay/liferay';
 
 import BillingAddressForm from '../BillingAddressForm/BillingAddressForm';
 import getPostalAddressDescription from './utils/getPostalAddressDescription';
@@ -97,6 +99,32 @@ const BillingAddress = ({
 		setBillingAddress(newBillingAddress);
 	};
 
+	const removeAddress = async (address: BillingAddressType) => {
+		if (!address.id) {
+			return;
+		}
+
+		try {
+			await HeadlessCommerceAdminAccount.deleteAccountAddress(address.id);
+
+			await mutate();
+
+			if (selectedAddress === address.name) {
+				setSelectedAddress('');
+
+				setBillingAddress(mapPostalAddressToBillingAddress());
+			}
+		}
+		catch (error) {
+			console.error(error);
+
+			Liferay.Util.openToast({
+				message: i18n.translate('an-unexpected-error-occurred'),
+				type: 'danger',
+			});
+		}
+	};
+
 	const saveAddress = async (billingAddress: BillingAddressType) => {
 		const country = countries.find(
 			(commerceCountry) => commerceCountry.a2 === billingAddress.country
@@ -140,6 +168,11 @@ const BillingAddress = ({
 						description={description}
 						key={index}
 						onChange={() => onSelectAddress(address)}
+						onRemove={
+							hideNewAddressButton
+								? undefined
+								: () => removeAddress(address)
+						}
 						selected={selectedAddress === address.name}
 						title={title}
 					/>
