@@ -45,7 +45,7 @@
 			}
 		],
 		"orderStatus": 5,
-		"orderTypeExternalReferenceCode": "DXP_APP",
+		"orderTypeExternalReferenceCode": "DXP",
 		"projectExternalReferenceCode": "PRJCT-013"
 	},
 	"purchaseOrderNumber": "PO-ANALYTICS-CLOUD"

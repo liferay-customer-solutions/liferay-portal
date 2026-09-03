@@ -515,6 +515,12 @@
 					}
 				},
 				{
+					"specificationKey": "project-item-kind",
+					"value": {
+						"en_US": "application"
+					}
+				},
+				{
 					"specificationKey": "publisher-name",
 					"value": {
 						"en_US": "Liferay, Inc."
@@ -1912,6 +1918,12 @@
 					}
 				},
 				{
+					"specificationKey": "project-item-kind",
+					"value": {
+						"en_US": "application"
+					}
+				},
+				{
 					"specificationKey": "publisher-name",
 					"value": {
 						"en_US": "Liferay, Inc."
@@ -2830,6 +2842,12 @@
 					}
 				},
 				{
+					"specificationKey": "project-item-kind",
+					"value": {
+						"en_US": "application"
+					}
+				},
+				{
 					"specificationKey": "publisher-name",
 					"value": {
 						"en_US": "Liferay, Inc."
@@ -3565,6 +3583,12 @@
 					"value": {
 						"en_US": "Free"
 					}
+				},
+				{
+					"specificationKey": "project-item-kind",
+					"value": {
+						"en_US": "application"
+					}
 				}
 			],
 			"productType": "virtual",
@@ -3635,6 +3659,12 @@
 					"specificationKey": "price-model",
 					"value": {
 						"en_US": "Free"
+					}
+				},
+				{
+					"specificationKey": "project-item-kind",
+					"value": {
+						"en_US": "application"
 					}
 				},
 				{
@@ -3731,6 +3761,12 @@
 					}
 				},
 				{
+					"specificationKey": "project-item-kind",
+					"value": {
+						"en_US": "application"
+					}
+				},
+				{
 					"specificationKey": "publisher-name",
 					"value": {
 						"en_US": "Test Supplier"
@@ -3815,6 +3851,12 @@
 					}
 				},
 				{
+					"specificationKey": "project-item-kind",
+					"value": {
+						"en_US": "application"
+					}
+				},
+				{
 					"specificationKey": "publisher-name",
 					"value": {
 						"en_US": "Liferay, Inc."
@@ -3885,6 +3927,12 @@
 					"specificationKey": "product-icon",
 					"value": {
 						"en_US": "app"
+					}
+				},
+				{
+					"specificationKey": "project-item-kind",
+					"value": {
+						"en_US": "application"
 					}
 				},
 				{
@@ -3991,6 +4039,12 @@
 					}
 				},
 				{
+					"specificationKey": "project-item-kind",
+					"value": {
+						"en_US": "application"
+					}
+				},
+				{
 					"specificationKey": "publisher-name",
 					"value": {
 						"en_US": "Test Supplier"
@@ -4090,6 +4144,12 @@
 					"specificationKey": "product-icon",
 					"value": {
 						"en_US": "app"
+					}
+				},
+				{
+					"specificationKey": "project-item-kind",
+					"value": {
+						"en_US": "application"
 					}
 				},
 				{
@@ -4193,6 +4253,12 @@
 					"specificationKey": "price-model",
 					"value": {
 						"en_US": "Free"
+					}
+				},
+				{
+					"specificationKey": "project-item-kind",
+					"value": {
+						"en_US": "application"
 					}
 				},
 				{
@@ -4319,6 +4385,12 @@
 					}
 				},
 				{
+					"specificationKey": "project-item-kind",
+					"value": {
+						"en_US": "application"
+					}
+				},
+				{
 					"specificationKey": "publisher-name",
 					"value": {
 						"en_US": "Test Supplier"
@@ -4421,6 +4493,12 @@
 					"specificationKey": "price-model",
 					"value": {
 						"en_US": "Free"
+					}
+				},
+				{
+					"specificationKey": "project-item-kind",
+					"value": {
+						"en_US": "application"
 					}
 				},
 				{
@@ -4544,6 +4622,12 @@
 					"specificationKey": "product-type",
 					"value": {
 						"en_US": "ssa-saas"
+					}
+				},
+				{
+					"specificationKey": "project-item-kind",
+					"value": {
+						"en_US": "application"
 					}
 				},
 				{
@@ -4691,6 +4775,12 @@
 					"specificationKey": "price-model",
 					"value": {
 						"en_US": "Bundled"
+					}
+				},
+				{
+					"specificationKey": "project-item-kind",
+					"value": {
+						"en_US": "application"
 					}
 				},
 				{

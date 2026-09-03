@@ -12,8 +12,8 @@ import {
 	useChannelProducts,
 } from '~/hooks/useProjectCommerce';
 import {getProjectName, useProjectOrders} from '~/hooks/useProjectOrders';
-import {isApplicationOrderType} from '~/pages/MyAccount/Projects/utils/isApplicationOrderType';
 import {isUnassignedProject} from '~/pages/MyAccount/Projects/utils/isUnassignedProject';
+import {resolveProjectItemKind} from '~/pages/MyAccount/Projects/utils/resolveProjectItemKind';
 
 export function useProjectApplications(
 	projectId: string,
@@ -49,15 +49,14 @@ export function useProjectApplications(
 		>();
 
 		for (const order of scopedOrders) {
-			if (!isApplicationOrderType(order.orderTypeExternalReferenceCode)) {
-				continue;
-			}
-
 			for (const item of order.placedOrderItems ?? []) {
 				const product = productsByProductId.get(item.productId);
 
 				if (
 					!product ||
+					resolveProjectItemKind(
+						product.productSpecifications ?? []
+					) !== 'application' ||
 					applicationsByExternalReferenceCode.has(
 						product.externalReferenceCode
 					)

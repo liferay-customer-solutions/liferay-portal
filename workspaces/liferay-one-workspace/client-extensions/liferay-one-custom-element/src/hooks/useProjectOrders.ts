@@ -99,25 +99,6 @@ export function useProjectOrders(projectName?: string) {
 	return {error, loading: isLoading, orders, placedOrders};
 }
 
-export function getOrderTypeByProductName(
-	placedOrders: PlacedOrder[]
-): Map<string, string> {
-	const orderTypeByProductName = new Map<string, string>();
-
-	for (const placedOrder of placedOrders) {
-		for (const placedOrderItem of placedOrder.placedOrderItems ?? []) {
-			if (!orderTypeByProductName.has(placedOrderItem.name)) {
-				orderTypeByProductName.set(
-					placedOrderItem.name,
-					placedOrder.orderTypeExternalReferenceCode ?? ''
-				);
-			}
-		}
-	}
-
-	return orderTypeByProductName;
-}
-
 export function getProductOrderInfo(
 	placedOrders: PlacedOrder[],
 	productName: string

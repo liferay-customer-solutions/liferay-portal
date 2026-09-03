@@ -427,6 +427,19 @@
 		},
 		{
 			"description": {
+				"en_US": "Selects whether the project dashboard lists this product under products or applications."
+			},
+			"facetable": false,
+			"key": "project-item-kind",
+			"optionCategory": {
+				"externalReferenceCode": "PRODUCT_METADATA"
+			},
+			"title": {
+				"en_US": "Project Item Kind"
+			}
+		},
+		{
+			"description": {
 				"en_US": "The learn page URL shown on the project dashboard help and support tab for this product."
 			},
 			"facetable": false,

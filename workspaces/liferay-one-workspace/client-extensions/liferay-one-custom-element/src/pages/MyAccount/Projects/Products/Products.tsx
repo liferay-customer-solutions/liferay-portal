@@ -8,10 +8,6 @@ import {useMemo} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useProject} from '~/context/ProjectContext';
 import {ProjectProduct, useProjectProducts} from '~/hooks/useProjectCommerce';
-import {
-	getOrderTypeByProductName,
-	useProjectOrders,
-} from '~/hooks/useProjectOrders';
 import i18n from '~/i18n';
 import {
 	ListColumn,
@@ -23,37 +19,25 @@ import ProductListPage, {
 } from '~/pages/MyAccount/Projects/components/ProductListPage/ProductListPage';
 import {getLogoColor} from '~/pages/MyAccount/Projects/utils/getLogoColor';
 import {getProductIcon} from '~/pages/MyAccount/Projects/utils/getProductIcon';
-import {isApplicationOrderType} from '~/pages/MyAccount/Projects/utils/isApplicationOrderType';
-import {isUnassignedProject} from '~/pages/MyAccount/Projects/utils/isUnassignedProject';
+import {resolveProjectItemKind} from '~/pages/MyAccount/Projects/utils/resolveProjectItemKind';
 
 export default function Products() {
 	const navigate = useNavigate();
-	const {projectId, projects, selectedContractERC} = useProject();
-
-	const projectName = isUnassignedProject(projectId)
-		? undefined
-		: projects.find(
-				(project) => project.externalReferenceCode === projectId
-			)?.name;
+	const {projectId, selectedContractERC} = useProject();
 
 	const {error, loading, products} = useProjectProducts(
 		projectId,
 		selectedContractERC
 	);
 
-	const {loading: ordersLoading, placedOrders} =
-		useProjectOrders(projectName);
-
-	const projectProducts = useMemo(() => {
-		const orderTypeByProductName = getOrderTypeByProductName(placedOrders);
-
-		return products.filter(
-			(product) =>
-				!isApplicationOrderType(
-					orderTypeByProductName.get(product.name)
-				)
-		);
-	}, [placedOrders, products]);
+	const projectProducts = useMemo(
+		() =>
+			products.filter(
+				(product) =>
+					resolveProjectItemKind(product.specifications) === 'product'
+			),
+		[products]
+	);
 
 	const filters = useMemo<ListFilter<ProjectProduct>[]>(() => {
 		const types = Array.from(
@@ -128,7 +112,7 @@ export default function Products() {
 			error={error}
 			filters={filters}
 			items={projectProducts}
-			loading={loading || ordersLoading}
+			loading={loading}
 			onItemClick={(product) => navigate(product.externalReferenceCode)}
 			title="products"
 		/>
