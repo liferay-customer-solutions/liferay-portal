@@ -327,8 +327,6 @@ public class AccountsRestController extends OneBaseRestController {
 		Account account = _accountService.getAccount(
 			externalReferenceCode, jwt);
 
-		_validateInvitation(emailAddress, familyName, givenName);
-
 		UserAccount userAccount =
 			_userAccountService.fetchUserAccountByEmailAddress(emailAddress);
 
@@ -351,6 +349,8 @@ public class AccountsRestController extends OneBaseRestController {
 
 			_validateAccountInvitation(account, userAccount);
 		}
+
+		_validateInvitation(emailAddress, familyName, givenName);
 
 		List<String> roleExternalReferenceCodes =
 			_getRoleExternalReferenceCodes(
@@ -956,11 +956,28 @@ public class AccountsRestController extends OneBaseRestController {
 				HttpStatus.BAD_REQUEST, "Email address is not valid");
 		}
 
-		if (_emailAddressValidatorService.isLiferayDomain(emailAddress)) {
-			throw new ResponseStatusException(
-				HttpStatus.BAD_REQUEST,
-				"Email address uses a reserved Liferay domain");
+		if (!_emailAddressValidatorService.isLiferayDomain(emailAddress)) {
+			return;
 		}
+
+		try {
+			if (_oktaService.fetchContactByEmailAddress(emailAddress) != null) {
+				return;
+			}
+		}
+		catch (Exception exception) {
+			_log.error(
+				"Unable to look up the Okta contact for " + emailAddress,
+				exception);
+
+			throw new ResponseStatusException(
+				HttpStatus.SERVICE_UNAVAILABLE,
+				"Unable to verify the Liferay contact for " + emailAddress);
+		}
+
+		throw new ResponseStatusException(
+			HttpStatus.BAD_REQUEST,
+			"No Liferay contact exists for " + emailAddress);
 	}
 
 	private void _validateProjectInvitation(

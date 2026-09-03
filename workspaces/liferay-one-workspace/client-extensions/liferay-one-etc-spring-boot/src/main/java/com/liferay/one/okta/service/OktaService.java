@@ -12,6 +12,10 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
+import io.netty.channel.ChannelOption;
+
+import java.time.Duration;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -27,8 +31,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import reactor.netty.http.client.HttpClient;
 
 /**
  * @author Karoline Silva
@@ -156,9 +163,9 @@ public class OktaService {
 
 		HttpStatusCode httpStatusCode = responseEntity.getStatusCode();
 
-		int statusCode = httpStatusCode.value();
+		if (!httpStatusCode.is2xxSuccessful() ||
+			Validator.isNull(responseEntity.getBody())) {
 
-		if ((statusCode == 404) || Validator.isNull(responseEntity.getBody())) {
 			return null;
 		}
 
@@ -316,6 +323,15 @@ public class OktaService {
 	protected void init() {
 		_webClient = _webClientBuilder.baseUrl(
 			"https://" + _host
+		).clientConnector(
+			new ReactorClientHttpConnector(
+				HttpClient.create(
+				).option(
+					ChannelOption.CONNECT_TIMEOUT_MILLIS,
+					_CONNECT_TIMEOUT_MILLIS
+				).responseTimeout(
+					Duration.ofMillis(_RESPONSE_TIMEOUT_MILLIS)
+				))
 		).defaultHeader(
 			HttpHeaders.AUTHORIZATION, "SSWS " + _apiToken
 		).build();
@@ -342,6 +358,10 @@ public class OktaService {
 
 		return null;
 	}
+
+	private static final int _CONNECT_TIMEOUT_MILLIS = 5000;
+
+	private static final int _RESPONSE_TIMEOUT_MILLIS = 10000;
 
 	private static final String _URL_API_REST_GROUPS = "/api/v1/groups/";
 

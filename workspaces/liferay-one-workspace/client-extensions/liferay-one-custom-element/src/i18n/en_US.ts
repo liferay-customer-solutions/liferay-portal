@@ -1548,6 +1548,10 @@ export default {
 		'This is the first version of the app to be published.',
 	'this-key-is-expired-and-cannot-be-downloaded':
 		'This key is expired and cannot be downloaded.',
+	'this-liferay-contact-could-not-be-verified-please-try-again':
+		'This Liferay contact could not be verified. Please try again.',
+	'this-liferay-contact-does-not-exist-please-enter-a-correct-email-address':
+		'This Liferay contact does not exist. Please enter a correct email address.',
 	'this-may-restrict-the-functionality-available-to-you':
 		'This may restrict the functionality available to you.',
 	'this-order-must-be-completed-before-downloading-this-app.':

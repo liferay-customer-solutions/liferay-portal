@@ -19,10 +19,17 @@ import accountSchemas, {MAX_INVITATIONS_COUNT} from '~/schema/accountSchemas';
 import FetcherError from '~/services/fetcher/FetcherError';
 import {Liferay} from '~/services/liferay/liferay';
 import Accounts from '~/services/spring-boot/Accounts';
+import Contacts from '~/services/spring-boot/Contacts';
 
 import '../../AccountMembers.css';
 
 import type {InviteMembersForm} from '~/schema/accountSchemas';
+
+const CONTACT_ERROR_KEYS = {
+	unknown:
+		'this-liferay-contact-does-not-exist-please-enter-a-correct-email-address',
+	unverified: 'this-liferay-contact-could-not-be-verified-please-try-again',
+} as const;
 
 const createEmptyInvite = () => ({
 	emailAddress: '',
@@ -49,6 +56,7 @@ const InviteMemberModal = ({
 		formState: {errors, isSubmitting},
 		handleSubmit,
 		register,
+		setError,
 		setValue,
 		watch,
 	} = useForm<InviteMembersForm>({
@@ -89,6 +97,28 @@ const InviteMemberModal = ({
 
 	const onSubmit = async (form: InviteMembersForm) => {
 		if (isSubmitting) {
+			return;
+		}
+
+		const contactErrors = await Promise.all(
+			form.invites.map((invite) =>
+				Contacts.getValidate(invite.emailAddress).then(
+					(validContact) =>
+						validContact ? null : CONTACT_ERROR_KEYS.unknown,
+					() => CONTACT_ERROR_KEYS.unverified
+				)
+			)
+		);
+
+		if (contactErrors.some(Boolean)) {
+			contactErrors.forEach((contactError, index) => {
+				if (contactError) {
+					setError(`invites.${index}.emailAddress`, {
+						message: translate(contactError),
+					});
+				}
+			});
+
 			return;
 		}
 
