@@ -58,16 +58,25 @@ function main {
 	echo "Deleting the One site."
 	_delete_site
 
+	# Both redeploys clean first. Liferay only reprocesses a client extension
+	# when the deployed archive actually changes, and deploy on its own copies a
+	# byte identical zip whenever the assemble tasks are up to date -- which they
+	# are on a second reset, or on the first one after a manual deploy. Nothing
+	# is then imported or provisioned, and the waits below, which watch for that
+	# work to start, never see it and spin until they time out.
+
 	echo "Redeploying the batch import."
 	SINCE="$(date +%s)"
 
-	./gradlew ":client-extensions:liferay-one-batch:deploy" \
+	./gradlew ":client-extensions:liferay-one-batch:clean" \
+		":client-extensions:liferay-one-batch:deploy" \
 		-Ddeploy.docker.container.id="${container_id}"
 
 	_wait_for_batch_imports
 
 	echo "Redeploying the site initializer."
-	./gradlew ":client-extensions:liferay-one-site-initializer:deploy" \
+	./gradlew ":client-extensions:liferay-one-site-initializer:clean" \
+		":client-extensions:liferay-one-site-initializer:deploy" \
 		-Ddeploy.docker.container.id="${container_id}"
 
 	_wait_for_site_initializer

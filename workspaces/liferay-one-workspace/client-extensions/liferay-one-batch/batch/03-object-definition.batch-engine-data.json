@@ -2394,24 +2394,6 @@
 					"state": false,
 					"system": false,
 					"type": "String"
-				},
-				{
-					"DBType": "Long",
-					"businessType": "LongInteger",
-					"externalReferenceCode": "C_ENTITLEMENT_DEFINITION_USAGE_DEFINITION_ID",
-					"indexed": true,
-					"indexedAsKeyword": true,
-					"indexedLanguageId": "",
-					"label": {
-						"en_US": "Usage Definition ID"
-					},
-					"name": "usageDefinitionId",
-					"objectFieldSettings": [
-					],
-					"required": false,
-					"state": false,
-					"system": false,
-					"type": "Long"
 				}
 			],
 			"objectFolderExternalReferenceCode": "C_LIFERAY_ONE_FOLDER",

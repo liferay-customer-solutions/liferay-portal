@@ -35,7 +35,6 @@ public class EntitlementDefinition {
 		_skuExternalReferenceCode = jsonObject.optString(
 			"skuExternalReferenceCode");
 		_unit = jsonObject.optString("unit");
-		_usageDefinitionId = jsonObject.optLong("usageDefinitionId");
 	}
 
 	public Double getDefaultQuantity() {
@@ -76,10 +75,6 @@ public class EntitlementDefinition {
 
 	public String getUnit() {
 		return _unit;
-	}
-
-	public long getUsageDefinitionId() {
-		return _usageDefinitionId;
 	}
 
 	public boolean isActive() {
@@ -126,6 +121,5 @@ public class EntitlementDefinition {
 	private final Map<String, String> _productOptions;
 	private final String _skuExternalReferenceCode;
 	private final String _unit;
-	private final long _usageDefinitionId;
 
 }

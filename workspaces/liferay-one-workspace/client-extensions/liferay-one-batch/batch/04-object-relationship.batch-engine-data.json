@@ -253,6 +253,17 @@
 		},
 		{
 			"deletionType": "cascade",
+			"externalReferenceCode": "R_ENTITLEMENT_TO_USAGE_EVENT",
+			"label": {
+				"en_US": "Entitlement to Usage Event"
+			},
+			"name": "entitlementToUsageEvent",
+			"objectDefinitionExternalReferenceCode1": "C_ENTITLEMENT",
+			"objectDefinitionExternalReferenceCode2": "C_USAGE_EVENT",
+			"type": "oneToMany"
+		},
+		{
+			"deletionType": "cascade",
 			"externalReferenceCode": "R_ENVIRONMENT_TO_ENVIRONMENT_ADMIN",
 			"label": {
 				"en_US": "Environment to Environment Admin"
@@ -478,6 +489,17 @@
 			"name": "publisherToCommerceOrder",
 			"objectDefinitionExternalReferenceCode1": "C_PUBLISHER_SALES_SUMMARY",
 			"objectDefinitionExternalReferenceCode2": "L_COMMERCE_ORDER",
+			"type": "oneToMany"
+		},
+		{
+			"deletionType": "prevent",
+			"externalReferenceCode": "R_USAGE_DEFINITION_TO_ENTITLEMENT_DEFINITION",
+			"label": {
+				"en_US": "Usage Definition to Entitlement Definition"
+			},
+			"name": "usageDefinitionToEntitlementDefinition",
+			"objectDefinitionExternalReferenceCode1": "C_USAGE_DEFINITION",
+			"objectDefinitionExternalReferenceCode2": "C_ENTITLEMENT_DEFINITION",
 			"type": "oneToMany"
 		},
 		{

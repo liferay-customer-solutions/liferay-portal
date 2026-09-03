@@ -1,0 +1,9 @@
+{
+	"description": "Listed",
+	"description_i18n": {
+		"en_US": "Listed"
+	},
+	"externalReferenceCode": "MARKETPLACE_LISTING_LISTED",
+	"name": "listed",
+	"viewableBy": "Anyone"
+}
