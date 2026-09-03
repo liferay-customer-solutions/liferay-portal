@@ -34,7 +34,6 @@ export type ProjectContract = {
 };
 
 export type ProjectProduct = {
-	categoryNames: string[];
 	description: string;
 	endDate: string;
 	externalReferenceCode: string;
@@ -212,7 +211,7 @@ export function useChannelProducts() {
 			new URLSearchParams({
 				'accountId': '-1',
 				'images.accountId': '-1',
-				'nestedFields': 'categories,images,productSpecifications,skus',
+				'nestedFields': 'images,productSpecifications,skus',
 				'pageSize': '100',
 				'skus.accountId': '-1',
 				'skus.currencyCode':
@@ -628,12 +627,7 @@ export function useProjectProducts(
 					return null;
 				}
 
-				const categoryNames = (product.categories ?? []).map(
-					(category) => category.name
-				);
-
 				return {
-					categoryNames,
 					description: product.description,
 					endDate: entitlement.endDate
 						? format(new Date(entitlement.endDate), 'MMM d, yyyy')

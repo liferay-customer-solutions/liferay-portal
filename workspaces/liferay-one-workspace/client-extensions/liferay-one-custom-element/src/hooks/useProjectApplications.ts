@@ -12,7 +12,7 @@ import {
 	useChannelProducts,
 } from '~/hooks/useProjectCommerce';
 import {getProjectName, useProjectOrders} from '~/hooks/useProjectOrders';
-import {PRODUCT_CATEGORY} from '~/pages/MyAccount/Projects/utils/constants';
+import {isApplicationOrderType} from '~/pages/MyAccount/Projects/utils/isApplicationOrderType';
 import {isUnassignedProject} from '~/pages/MyAccount/Projects/utils/isUnassignedProject';
 
 export function useProjectApplications(
@@ -49,19 +49,15 @@ export function useProjectApplications(
 		>();
 
 		for (const order of scopedOrders) {
+			if (!isApplicationOrderType(order.orderTypeExternalReferenceCode)) {
+				continue;
+			}
+
 			for (const item of order.placedOrderItems ?? []) {
 				const product = productsByProductId.get(item.productId);
 
-				if (!product) {
-					continue;
-				}
-
-				const categoryNames = (product.categories ?? []).map(
-					(category) => category.name
-				);
-
 				if (
-					!categoryNames.includes(PRODUCT_CATEGORY.APP) ||
+					!product ||
 					applicationsByExternalReferenceCode.has(
 						product.externalReferenceCode
 					)
@@ -72,7 +68,6 @@ export function useProjectApplications(
 				applicationsByExternalReferenceCode.set(
 					product.externalReferenceCode,
 					{
-						categoryNames,
 						description: product.description,
 						endDate: '',
 						externalReferenceCode: product.externalReferenceCode,

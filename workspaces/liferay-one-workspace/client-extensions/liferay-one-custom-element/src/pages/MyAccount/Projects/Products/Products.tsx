@@ -8,6 +8,10 @@ import {useMemo} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useProject} from '~/context/ProjectContext';
 import {ProjectProduct, useProjectProducts} from '~/hooks/useProjectCommerce';
+import {
+	getOrderTypeByProductName,
+	useProjectOrders,
+} from '~/hooks/useProjectOrders';
 import i18n from '~/i18n';
 import {
 	ListColumn,
@@ -17,30 +21,43 @@ import ProductListPage, {
 	statusColumn,
 	statusFilter,
 } from '~/pages/MyAccount/Projects/components/ProductListPage/ProductListPage';
-import {PRODUCT_CATEGORY} from '~/pages/MyAccount/Projects/utils/constants';
 import {getLogoColor} from '~/pages/MyAccount/Projects/utils/getLogoColor';
 import {getProductIcon} from '~/pages/MyAccount/Projects/utils/getProductIcon';
+import {isApplicationOrderType} from '~/pages/MyAccount/Projects/utils/isApplicationOrderType';
+import {isUnassignedProject} from '~/pages/MyAccount/Projects/utils/isUnassignedProject';
 
 export default function Products() {
 	const navigate = useNavigate();
-	const {projectId, selectedContractERC} = useProject();
+	const {projectId, projects, selectedContractERC} = useProject();
+
+	const projectName = isUnassignedProject(projectId)
+		? undefined
+		: projects.find(
+				(project) => project.externalReferenceCode === projectId
+			)?.name;
 
 	const {error, loading, products} = useProjectProducts(
 		projectId,
 		selectedContractERC
 	);
 
-	const liferayProducts = useMemo(
-		() =>
-			products.filter((product) =>
-				product.categoryNames.includes(PRODUCT_CATEGORY.LIFERAY_PRODUCT)
-			),
-		[products]
-	);
+	const {loading: ordersLoading, placedOrders} =
+		useProjectOrders(projectName);
+
+	const projectProducts = useMemo(() => {
+		const orderTypeByProductName = getOrderTypeByProductName(placedOrders);
+
+		return products.filter(
+			(product) =>
+				!isApplicationOrderType(
+					orderTypeByProductName.get(product.name)
+				)
+		);
+	}, [placedOrders, products]);
 
 	const filters = useMemo<ListFilter<ProjectProduct>[]>(() => {
 		const types = Array.from(
-			new Set(liferayProducts.map((product) => product.type))
+			new Set(projectProducts.map((product) => product.type))
 		).sort();
 
 		return [
@@ -50,9 +67,9 @@ export default function Products() {
 				matches: (product, values) => values.includes(product.type),
 				options: types.map((type) => ({label: type, value: type})),
 			},
-			statusFilter(liferayProducts),
+			statusFilter(projectProducts),
 		];
-	}, [liferayProducts]);
+	}, [projectProducts]);
 
 	const columns: ListColumn<ProjectProduct>[] = [
 		{
@@ -110,8 +127,8 @@ export default function Products() {
 			emptyLabel="no-products-yet"
 			error={error}
 			filters={filters}
-			items={liferayProducts}
-			loading={loading}
+			items={projectProducts}
+			loading={loading || ordersLoading}
 			onItemClick={(product) => navigate(product.externalReferenceCode)}
 			title="products"
 		/>
