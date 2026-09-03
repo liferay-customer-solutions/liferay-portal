@@ -1,0 +1,18 @@
+{
+	"object-actions": [
+		{
+			"active": true,
+			"conditionExpression": "orderStatus == 1",
+			"externalReferenceCode": "OA_COMMERCE_ORDER_UPDATE",
+			"label": {
+				"en_US": "Commerce Order Update"
+			},
+			"name": "CommerceOrderUpdate",
+			"objectActionExecutorKey": "function#liferay-one-etc-spring-boot-object-action-commerce-order-update",
+			"objectActionTriggerKey": "onAfterUpdate",
+			"parameters": {
+			}
+		}
+	],
+	"objectDefinitionId": "[$OBJECT_DEFINITION_ID:CommerceOrder$]"
+}

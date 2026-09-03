@@ -22,8 +22,10 @@ import com.liferay.one.model.AccountSupportInfo;
 import com.liferay.one.salesforce.model.SalesforceOpportunity;
 import com.liferay.one.salesforce.model.SalesforceOpportunityLineItem;
 import com.liferay.one.salesforce.model.SalesforceProject;
+import com.liferay.one.util.KeyedLock;
 import com.liferay.one.util.SupportLanguageUtil;
 import com.liferay.one.util.SupportRegionUtil;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.math.BigDecimal;
@@ -42,7 +44,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpHeaders;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -126,6 +132,66 @@ public class CommerceOrderService extends OneBaseService {
 				order.getOrderTypeExternalReferenceCode(), "AI_HUB")) {
 
 			_provisionAiHub(order);
+		}
+	}
+
+	public void completeSettledOrder(long orderId) throws Exception {
+		_keyedLock.withLock(
+			"order-completion#" + orderId,
+			() -> {
+				Order order = fetchCommerceOrder(orderId);
+
+				if ((order == null) ||
+					!Objects.equals(
+						order.getOrderStatus(),
+						CommerceOrderConstants.ORDER_STATUS_PENDING)) {
+
+					return;
+				}
+
+				String orderTypeExternalReferenceCode =
+					order.getOrderTypeExternalReferenceCode();
+
+				if ((orderTypeExternalReferenceCode == null) ||
+					!_completableOrderTypeExternalReferenceCodes.contains(
+						orderTypeExternalReferenceCode)) {
+
+					if (_log.isInfoEnabled()) {
+						_log.info(
+							StringBundler.concat(
+								"Unable to complete order ", orderId,
+								" because its order type is not completed on ",
+								"payment"));
+					}
+
+					return;
+				}
+
+				Integer paymentStatus = _awaitSettledPaymentStatus(
+					order, orderId);
+
+				if (paymentStatus == null) {
+					if (_log.isInfoEnabled()) {
+						_log.info(
+							StringBundler.concat(
+								"Unable to complete order ", orderId,
+								" because its payment is still pending"));
+					}
+
+					return;
+				}
+
+				completeOrder(orderId, paymentStatus);
+			});
+	}
+
+	public void completeSettledOrders() throws Exception {
+		List<Order> orders = getOrders(
+			"(orderStatus/any(x:x eq 1)) and ((paymentStatus eq 0) or " +
+				"(paymentStatus eq 23))");
+
+		for (Order order : orders) {
+			completeSettledOrder(order.getId());
 		}
 	}
 
@@ -230,6 +296,19 @@ public class CommerceOrderService extends OneBaseService {
 		}
 
 		return orders;
+	}
+
+	@Async
+	@EventListener(ApplicationReadyEvent.class)
+	public void onApplicationReady() {
+		try {
+			completeSettledOrders();
+		}
+		catch (Exception exception) {
+			_log.error(
+				"Unable to complete settled orders on application startup",
+				exception);
+		}
 	}
 
 	public void patchOrderCustomFields(
@@ -351,6 +430,34 @@ public class CommerceOrderService extends OneBaseService {
 		}
 
 		return orderResource.postOrder(order);
+	}
+
+	private Integer _awaitSettledPaymentStatus(Order order, long orderId)
+		throws Exception {
+
+		Integer paymentStatus = _getSettledPaymentStatus(order);
+
+		for (long retryDelayMillis : _settledPaymentRetryDelays) {
+			if (paymentStatus != null) {
+				return paymentStatus;
+			}
+
+			Thread.sleep(retryDelayMillis);
+
+			order = fetchCommerceOrder(orderId);
+
+			if ((order == null) ||
+				!Objects.equals(
+					order.getOrderStatus(),
+					CommerceOrderConstants.ORDER_STATUS_PENDING)) {
+
+				return null;
+			}
+
+			paymentStatus = _getSettledPaymentStatus(order);
+		}
+
+		return paymentStatus;
 	}
 
 	private CurrencyResource _buildCurrencyResource() {
@@ -566,6 +673,22 @@ public class CommerceOrderService extends OneBaseService {
 		return null;
 	}
 
+	private Integer _getSettledPaymentStatus(Order order) {
+		Integer paymentStatus = order.getPaymentStatus();
+
+		if (Objects.equals(
+				paymentStatus,
+				CommerceOrderConstants.ORDER_PAYMENT_STATUS_COMPLETED) ||
+			Objects.equals(
+				paymentStatus,
+				CommerceOrderConstants.ORDER_PAYMENT_STATUS_NOT_REQUIRED)) {
+
+			return paymentStatus;
+		}
+
+		return null;
+	}
+
 	private BigDecimal _getTotal(
 		List<SalesforceOpportunityLineItem> salesforceOpportunityLineItems) {
 
@@ -726,6 +849,10 @@ public class CommerceOrderService extends OneBaseService {
 	private static final Log _log = LogFactory.getLog(
 		CommerceOrderService.class);
 
+	private static final Set<String>
+		_completableOrderTypeExternalReferenceCodes = Set.of(
+			"CLIENT_EXTENSION", "CLOUD_APP", "COMPOSITE_APP", "DXP_APP",
+			"LOW_CODE_CONFIGURATION", "OTHER");
 	private static final Set<String> _europeanCountryISOCodes = Set.of(
 		"AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR",
 		"HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO",
@@ -740,7 +867,15 @@ public class CommerceOrderService extends OneBaseService {
 	private CommerceOrderItemService _commerceOrderItemService;
 
 	@Autowired
+	private KeyedLock _keyedLock;
+
+	@Autowired
 	private PostalAddressService _postalAddressService;
+
+	@Value(
+		"${liferay.one.commerce.order.settled.payment.retry.delays:2000,5000,10000}"
+	)
+	private long[] _settledPaymentRetryDelays;
 
 	@Autowired
 	private UserAccountService _userAccountService;

@@ -83,6 +83,11 @@ liferay-one-etc-spring-boot-object-action-commerce-order-item-update:
     oAuth2ApplicationExternalReferenceCode: liferay-one-etc-spring-boot-oaua
     resourcePath: /object/action/commerce/order/item/update
     type: objectAction
+liferay-one-etc-spring-boot-object-action-commerce-order-update:
+    name: Liferay One Etc Spring Boot Object Action Commerce Order Update
+    oAuth2ApplicationExternalReferenceCode: liferay-one-etc-spring-boot-oaua
+    resourcePath: /object/action/commerce/order/update
+    type: objectAction
 liferay-one-etc-spring-boot-object-action-organization-create:
     name: Liferay One Etc Spring Boot Object Action Organization Create
     oAuth2ApplicationExternalReferenceCode: liferay-one-etc-spring-boot-oaua

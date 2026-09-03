@@ -46,6 +46,17 @@ public class CommerceOrdersRestController extends OneBaseRestController {
 		_cloudAppService.completeCloudAppOrder(commerceOrderId);
 	}
 
+	@PostMapping("/{commerceOrderId}/complete-settled")
+	public void postCompleteSettled(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable("commerceOrderId") long commerceOrderId)
+		throws Exception {
+
+		_commerceOrderPermission.check(commerceOrderId, jwt);
+
+		_commerceOrderService.completeSettledOrder(commerceOrderId);
+	}
+
 	@Autowired
 	private CloudAppService _cloudAppService;
 
