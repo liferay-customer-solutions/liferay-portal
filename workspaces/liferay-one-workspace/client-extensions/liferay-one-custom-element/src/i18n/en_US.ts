@@ -753,6 +753,7 @@ export default {
 	'last-update': 'Last Update',
 	'last-year': 'Last Year',
 	'learn-more': 'Learn More',
+	'learn-more-about-app-configuration': 'Learn more about App Configuration',
 	'learn-more-about-app-resource-requirements':
 		'Learn more about App Resource Requirements',
 	'learn-more-about-becoming-a-liferay-customer':
@@ -911,6 +912,7 @@ export default {
 	'named-saved-active-segments-that-evaluate-on-a-schedule':
 		'Named, saved, active segments that evaluate on a schedule.',
 	'navigation-and-discovery': 'Navigation and Discovery',
+	'need-help': 'Need help?',
 	'need-help-activating-this-product-check-the':
 		'Need help activating this product? Check the',
 	'need-help-getting-started?': 'Need help getting started?',
@@ -1468,6 +1470,8 @@ export default {
 	'thank-you-for-trying-the-beta-version-of-this-product-your-feedback-is-essential-to-improve-the-final-release-this-survey-takes-3–5-minutes':
 		'Thank you for trying the beta version of this product! Your feedback is essential to improve the final release. This survey takes ~3–5 minutes.',
 	'thank-you-for-your': 'Thank you for your',
+	'thank-you-for-your-order-we-have-registered-your-request-and-will-send-you-the-invoice-by-email-with-all-the-details-to-complete-your-payment-check-your-spam-or-promotions-folder-if-you-dont-see-it-in-your-inbox-your-order-is-currently-pending-payment':
+		"Thank you for your order. We have registered your request and will send you the invoice by email with all the details to complete your payment. Check your Spam or Promotions folder if you don't see it in your inbox. Your order is currently pending payment.",
 	'thank-you-for-your-request': 'Thank You for Your Request!',
 	'the-account-was-successfully-synced-to-jsm':
 		'The account was successfully synced to JSM.',

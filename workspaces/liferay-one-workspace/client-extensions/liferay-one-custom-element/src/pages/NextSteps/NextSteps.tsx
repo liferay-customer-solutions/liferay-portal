@@ -118,12 +118,16 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 			description={
 				<span>
 					<p className="text-center">
-						We&apos;re sorry, but your PayPal payment for{' '}
-						<strong>{productName}</strong> could not be processed.
-						Please try again or use a different PayPal account.
+						{i18n.translate(
+							'we-were-unable-to-process-the-payment-for'
+						)}{' '}
+						<strong>{productName}</strong>.{' '}
+						{i18n.translate(
+							'please-review-your-payment-details-and-try-again'
+						)}
 					</p>
 					<p className="d-flex justify-content-center m-0 next-step-page-text-bold">
-						Need help?&nbsp;{' '}
+						{i18n.translate('need-help')}&nbsp;{' '}
 						<a href="mailto:marketplace-admin@liferay.com">
 							marketplace-admin@liferay.com
 						</a>
@@ -155,15 +159,15 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 				description={
 					<span>
 						<p className="mb-4 text-center">
-							Thank you for choosing{' '}
-							<strong>{productName}</strong>. Your purchase has
-							been successfully processed. To continue, please
-							click the button below to download or install the
-							app.
+							{i18n.translate('thank-you-for-choosing')}{' '}
+							<strong>{productName}</strong>.{' '}
+							{i18n.translate(
+								'your-purchase-has-been-successfully-processed-to-continue-please-click-the-button-below-to-download-or-install-the-app'
+							)}
 						</p>
 
 						<p className="align-items-end d-flex justify-content-center mb-0">
-							Your Order ID is: &nbsp;
+							{i18n.translate('your-order-id-is')} &nbsp;
 							<a
 								className="next-step-page-text-bold"
 								href={`${getSiteURL()}/my-account#/orders`}
@@ -196,15 +200,12 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 				description={
 					<span>
 						<p className="text-center">
-							Thank you for your order. We have registered your
-							request and will send you the invoice by email with
-							all the details to complete your payment. Check your
-							Spam or Promotions folder if you don&apos;t see it
-							in your inbox. Your order is currently{' '}
-							<strong>pending payment</strong>.
+							{i18n.translate(
+								'thank-you-for-your-order-we-have-registered-your-request-and-will-send-you-the-invoice-by-email-with-all-the-details-to-complete-your-payment-check-your-spam-or-promotions-folder-if-you-dont-see-it-in-your-inbox-your-order-is-currently-pending-payment'
+							)}
 						</p>
 						<p className="d-flex justify-content-center m-0 next-step-page-text-bold">
-							Need help?&nbsp;{' '}
+							{i18n.translate('need-help')}&nbsp;{' '}
 							<a href="mailto:marketplace-admin@liferay.com">
 								marketplace-admin@liferay.com
 							</a>
@@ -290,7 +291,7 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 						href="https://learn.liferay.com/w/dxp/development/marketplace"
 						target="_blank"
 					>
-						Learn more about App Configuration
+						{i18n.translate('learn-more-about-app-configuration')}
 					</a>
 				</div>
 			)}
