@@ -70,7 +70,17 @@ function main {
 		echo "Unable to resolve the EntitlementGeneration object action; placing orders with it enabled." >&2
 	fi
 
-	_place_orders "${channel_id}" || return 1
+	# An order that fails to place costs only the entitlements of that one order,
+	# which the scoped batch endpoint drops along with it. Every other order's
+	# entitlements, license keys, and usage events are still there to import, so a
+	# failed order is recorded and the imports run anyway. Returning early instead
+	# left the whole environment with no entitlement layer at all -- and so with
+	# empty project product, utilization, and activation tabs -- because a single
+	# order out of nearly sixty lost a race with a busy instance.
+
+	local status=0
+
+	_place_orders "${channel_id}" || status=1
 
 	# A remote token can expire (15 minutes) during a long order phase, so refresh
 	# it before the batch imports. This re-mints a fresh token in OAuth mode and is
@@ -78,37 +88,48 @@ function main {
 
 	_acquire_oauth_token
 
-	_import_entitlements || return 1
-	_import_license_keys || return 1
-	_import_usage_events || return 1
+	_import_entitlements || status=1
+	_import_license_keys || status=1
+	_import_usage_events || status=1
+
+	return "${status}"
 }
 
 # Places every order file through a bounded pool of concurrent workers. Orders
 # are mutually independent -- each references accounts, projects, contracts, and
 # products that already exist -- so they can be created in parallel. The pool
 # width is capped so a slow remote environment is not overwhelmed; override it
-# with SEED_ORDER_PARALLELISM. A single order failure is counted and the rest
-# continue, and the count is surfaced at the end.
+# with SEED_ORDER_PARALLELISM. A single order failure does not stop the rest, and
+# every order that failed is named at the end.
+#
+# A worker is a background job, so it cannot report back through a variable. Each
+# one appends its own file name to a temporary file instead, which also means the
+# summary can name the orders that failed rather than only count them -- a count
+# alone leaves no way to tell which entitlements are missing afterward.
 
 function _place_orders {
 	local channel_id="${1}"
 
 	local max_parallel="${SEED_ORDER_PARALLELISM:-6}"
 
-	local failures=0
+	local failures_file
+
+	failures_file=$(mktemp)
+
 	local running=0
 
 	local file
 
 	for file in "${ORDERS_DIR}"/*.json
 	do
-		_populate_order "${file}" "${channel_id}" &
+		_populate_order "${file}" "${channel_id}" ||
+			echo "${file}" >> "${failures_file}" &
 
 		running=$((running + 1))
 
 		if ((running >= max_parallel))
 		then
-			wait -n || failures=$((failures + 1))
+			wait -n || true
 
 			running=$((running - 1))
 		fi
@@ -116,17 +137,34 @@ function _place_orders {
 
 	while ((running > 0))
 	do
-		wait -n || failures=$((failures + 1))
+		wait -n || true
 
 		running=$((running - 1))
 	done
 
-	if ((failures > 0))
-	then
-		echo "Unable to populate ${failures} order(s)." >&2
+	local failures
 
-		return 1
+	failures=$(wc -l < "${failures_file}")
+
+	if ((failures == 0))
+	then
+		rm -f "${failures_file}"
+
+		return 0
 	fi
+
+	_warn "Unable to populate ${failures} order(s):"
+
+	local failed_file
+
+	while read -r failed_file
+	do
+		_warn "  ${failed_file}"
+	done < "${failures_file}"
+
+	rm -f "${failures_file}"
+
+	return 1
 }
 
 function _build_order_payload {
@@ -270,6 +308,53 @@ function _import_usage_events {
 	items=$(_collect_items "usageEvents")
 
 	_run_batch_import "usage events" "/o/c/usageevents" "UPDATE" "${items}"
+}
+
+# Prints the external reference code of every entry under a scoped object
+# endpoint, one per line. The collection is paged rather than read with
+# pageSize=-1, because these objects grow with the environment and an unbounded
+# read against a populated remote instance is a very different request from the
+# one it is on a freshly seeded local bundle. A short page ends the walk, and the
+# page cap stops a paging bug from spinning forever.
+
+function _list_external_reference_codes {
+	local rest_context_path="${1}"
+
+	local page_size=200
+
+	local page
+
+	for ((page = 1; page <= 50; page++))
+	do
+		local external_reference_codes
+
+		external_reference_codes=$(_curl \
+			"${LIFERAY_URL}${rest_context_path}?fields=externalReferenceCode&page=${page}&pageSize=${page_size}" |
+			python3 -c "
+import json
+import sys
+
+try:
+	items = json.load(sys.stdin).get('items', [])
+except Exception:
+	items = []
+
+for item in items:
+	print(item.get('externalReferenceCode', ''))
+")
+
+		if [[ -z ${external_reference_codes} ]]
+		then
+			return 0
+		fi
+
+		echo "${external_reference_codes}"
+
+		if (($(echo "${external_reference_codes}" | wc -l) < page_size))
+		then
+			return 0
+		fi
+	done
 }
 
 function _populate_order {
@@ -677,7 +762,9 @@ function _run_batch_import {
 		return 1
 	fi
 
-	_wait_for_batch_import "${import_task_id}" "${label}" "${count}"
+	_wait_for_batch_import "${import_task_id}" "${label}" "${count}" || return 1
+
+	_verify_batch_import "${label}" "${rest_context_path}" "${items}"
 }
 
 function _set_object_action_active {
@@ -834,6 +921,73 @@ function _set_order_items {
 	else
 		echo "Unable to set prices for order ${order_id}." >&2
 	fi
+}
+
+# Reports the entries an import asked for that are not in the collection
+# afterward. A scoped object batch endpoint drops an entry whose relationship
+# points at something that does not exist, and it drops it silently: the import
+# task still reaches COMPLETED, still counts the entry as processed, and still
+# reports no failed items. Nothing is wrong with the entry itself, so
+# validate_seed_data cannot catch it either -- the reference is dangling only in
+# this environment, because whatever it points at failed to be created here. The
+# import is the last place the loss is still cheap to see, so the codes are
+# compared here rather than left to surface as an empty tab.
+
+function _verify_batch_import {
+	local label="${1}"
+	local rest_context_path="${2}"
+	local items="${3}"
+
+	local found
+
+	found=$(_list_external_reference_codes "${rest_context_path}")
+
+	# An unreadable listing -- an expired token, a blip on the way back -- yields
+	# no codes at all, which compares as though every entry had been dropped.
+	# Report that the check could not run rather than raise a false alarm against
+	# an import that may well have been fine.
+
+	if [[ -z ${found} ]]
+	then
+		_warn "Unable to list the ${label} to confirm the import kept them all."
+
+		return 0
+	fi
+
+	local missing
+
+	missing=$(python3 -c "
+import json
+import sys
+
+expected = [
+	item['externalReferenceCode']
+	for item in json.loads(sys.argv[1])
+	if item.get('externalReferenceCode')
+]
+
+found = set(sys.stdin.read().split())
+
+for external_reference_code in expected:
+	if external_reference_code not in found:
+		print(external_reference_code)
+" "${items}" <<< "${found}")
+
+	if [[ -z ${missing} ]]
+	then
+		return 0
+	fi
+
+	_warn "The import dropped $(echo "${missing}" | wc -l) of the ${label}, which means a relationship on each points at something this environment does not have:"
+
+	local external_reference_code
+
+	while read -r external_reference_code
+	do
+		_warn "  ${external_reference_code}"
+	done <<< "${missing}"
+
+	return 1
 }
 
 function _wait_for_batch_import {

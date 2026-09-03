@@ -13,6 +13,8 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 # described by the workspace .env. bootstrap.sh pins them to localhost basic auth
 # by exporting the relevant LIFERAY_* variables before invoking this script.
 
+FAILED_STEPS=()
+
 function main {
 
 	# Every import below runs with ON_ERROR_CONTINUE, and a scoped object batch
@@ -30,35 +32,60 @@ function main {
 		return 1
 	fi
 
-	echo "Seeding test data."
-	./seed/seed_test_data.sh
+	_run "Seeding test data." ./seed/seed_test_data.sh
+	_run "Ensuring product SKUs." ./seed/ensure_product_skus.sh
+	_run "Seeding journal articles." ./seed/seed_journal_articles.sh
+	_run "Activating seeded user accounts." ./seed/activate_user_accounts.sh
+	_run "Assigning user group and role memberships." ./seed/assign_user_memberships.sh
+	_run "Assigning users to their accounts." ./seed/assign_account_users.sh
+	_run "Linking supplier accounts to commerce catalogs." ./seed/link_commerce_catalogs.sh
+	_run "Creating publisher details." ./seed/create_publisher_details.sh
+	_run "Populating orders, order items, and entitlements." ./seed/populate_orders.sh
+	_run "Populating overage usage reports and orders." ./seed/populate_overages.sh
 
-	echo "Ensuring product SKUs."
-	./seed/ensure_product_skus.sh
+	_report
+}
 
-	echo "Seeding journal articles."
-	./seed/seed_journal_articles.sh
+function _report {
+	if ((${#FAILED_STEPS[@]} == 0))
+	then
+		echo "Seeding finished."
 
-	echo "Activating seeded user accounts."
-	./seed/activate_user_accounts.sh
+		return 0
+	fi
 
-	echo "Assigning user group and role memberships."
-	./seed/assign_user_memberships.sh
+	echo "Seeding finished with ${#FAILED_STEPS[@]} failed step(s):" >&2
 
-	echo "Assigning users to their accounts."
-	./seed/assign_account_users.sh
+	local failed_step
 
-	echo "Linking supplier accounts to commerce catalogs."
-	./seed/link_commerce_catalogs.sh
+	for failed_step in "${FAILED_STEPS[@]}"
+	do
+		echo "  ${failed_step}" >&2
+	done
 
-	echo "Creating publisher details."
-	./seed/create_publisher_details.sh
+	return 1
+}
 
-	echo "Populating orders, order items, and entitlements."
-	./seed/populate_orders.sh
+# Runs one seed step and remembers whether it failed. Every step upserts and each
+# one is independently useful, so a failure does not stop the run -- a step that
+# needs an earlier one will fail on its own. What a failure must not do is pass
+# unnoticed, which is what happened while these were called bare: the exit status
+# went nowhere, the run reported success, and the missing rows were found days
+# later in the UI.
 
-	echo "Populating overage usage reports and orders."
-	./seed/populate_overages.sh
+function _run {
+	local message="${1}"
+
+	shift
+
+	echo "${message}"
+
+	if "${@}"
+	then
+		return 0
+	fi
+
+	FAILED_STEPS+=("${message} (${*})")
 }
 
 main "${@}"
