@@ -24,13 +24,11 @@
 		<#attempt>
 			<#list entries![] as navigationMenuItem>
 				<#assign
-					navigationMenuItemLayout = (navigationMenuItem.getLayout())!
 					navigationMenuItemName = navigationMenuItem.getName()
+					navigationMenuItemPlid = (navigationMenuItem.getLayout().getPlid())!0
 					navigationMenuItemURL = navigationMenuItem.getRegularURL()
 
 					navigationIconSymbol = (navigationIcons[navigationMenuItemName])!"circle"
-					navigationMenuItemPlid = (navigationMenuItemLayout.getPlid())!0
-
 					navigationMenuItemActive = (activePlid > 0) && (navigationMenuItemPlid == activePlid)
 				/>
 

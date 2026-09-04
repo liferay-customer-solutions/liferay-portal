@@ -70,9 +70,9 @@
 		<#list entries![] as navPrimaryItem>
 			<#assign
 				navPrimaryItemChildren = navPrimaryItem.getChildren()
-				navPrimaryItemLayout = (navPrimaryItem.getLayout())!
+				navPrimaryItemPlid = (navPrimaryItem.getLayout().getPlid())!0
 
-				navPrimaryItemSelected = (selectedSectionPlid > 0) && (((navPrimaryItemLayout.getPlid())!0) == selectedSectionPlid)
+				navPrimaryItemSelected = (selectedSectionPlid > 0) && (navPrimaryItemPlid == selectedSectionPlid)
 			/>
 
 			<#if navPrimaryItemChildren?has_content>

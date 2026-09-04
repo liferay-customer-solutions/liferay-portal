@@ -1,8 +1,6 @@
 <div>
 	<#assign
-		selectedSortTermDisplayContext = (sortDisplayContext.getSelectedSortTermDisplayContext())!
-
-		sortTermLabel = (selectedSortTermDisplayContext.getLabel())!"relevance"
+		sortTermLabel = (sortDisplayContext.getSelectedSortTermDisplayContext().getLabel())!"relevance"
 	/>
 
 	<div class="form-group-item">
