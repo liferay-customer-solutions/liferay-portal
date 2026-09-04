@@ -19,6 +19,7 @@ public class Project {
 			"r_accountEntryToProject_accountEntryId");
 		_externalReferenceCode = jsonObject.optString("externalReferenceCode");
 		_name = jsonObject.optString("name");
+		_projectId = jsonObject.optLong("id");
 	}
 
 	public String getAccountExternalReferenceCode() {
@@ -37,9 +38,14 @@ public class Project {
 		return _name;
 	}
 
+	public long getProjectId() {
+		return _projectId;
+	}
+
 	private final String _accountExternalReferenceCode;
 	private final long _accountId;
 	private final String _externalReferenceCode;
 	private final String _name;
+	private final long _projectId;
 
 }

@@ -5,11 +5,14 @@
 
 package com.liferay.one.service;
 
+import com.liferay.one.constants.EntitlementConstants;
 import com.liferay.one.model.EntitlementDefinition;
+import com.liferay.petra.string.StringBundler;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.stereotype.Component;
 
@@ -32,6 +35,34 @@ public class EntitlementDefinitionService extends OneBaseService {
 		}
 
 		return entitlementDefinitions.get(0);
+	}
+
+	/**
+	 * The definition of the overage bucket sold for a usage definition. Every
+	 * way of buying a metric hangs off the same usage definition, so the
+	 * overage bucket is the sibling definition typed as an overage. It is what
+	 * names the SKU an overage order is placed against.
+	 */
+	public EntitlementDefinition fetchOverageEntitlementDefinition(
+			long usageDefinitionId)
+		throws Exception {
+
+		for (EntitlementDefinition entitlementDefinition :
+				getEntitlementDefinitions(
+					StringBundler.concat(
+						"r_usageDefinitionToEntitlementDefinition_",
+						"c_usageDefinitionId eq '", usageDefinitionId, "'"))) {
+
+			if (entitlementDefinition.isActive() &&
+				Objects.equals(
+					entitlementDefinition.getType(),
+					EntitlementConstants.TYPE_OVERAGE)) {
+
+				return entitlementDefinition;
+			}
+		}
+
+		return null;
 	}
 
 	public List<EntitlementDefinition> getEntitlementDefinitions(

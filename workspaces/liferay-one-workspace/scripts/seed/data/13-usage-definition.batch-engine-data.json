@@ -31,8 +31,9 @@
 		{
 			"aggregationType": "count",
 			"externalReferenceCode": "events-monthly",
+			"overageBucketSize": 200000,
 			"overageCurrency": "USD",
-			"overageRate": 0.0001,
+			"overageRate": 20.0,
 			"period": "per month",
 			"quantity": 1000000,
 			"unit": "events"

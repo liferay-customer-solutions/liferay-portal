@@ -298,6 +298,24 @@ public class EntitlementService extends OneBaseService {
 				escapeODataString(projectExternalReferenceCode) + "'");
 	}
 
+	public List<Entitlement> getEntitlements(
+			Instant endInstant, Collection<String> names, Instant startInstant)
+		throws Exception {
+
+		if (names.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		List<String> statements = TransformUtil.transform(
+			names, name -> "name eq '" + escapeODataString(name) + "'");
+
+		return getEntitlements(
+			StringBundler.concat(
+				"(endDate eq null or endDate ge ", startInstant, ") and (",
+				StringUtil.merge(statements, " or "),
+				") and (startDate eq null or startDate lt ", endInstant, ")"));
+	}
+
 	public List<Entitlement> getEntitlements(long commerceOrderItemId)
 		throws Exception {
 

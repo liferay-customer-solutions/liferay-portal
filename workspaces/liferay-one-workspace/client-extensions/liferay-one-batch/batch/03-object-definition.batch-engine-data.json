@@ -2379,6 +2379,26 @@
 				},
 				{
 					"DBType": "String",
+					"businessType": "Picklist",
+					"defaultValue": "subscription",
+					"externalReferenceCode": "C_ENTITLEMENT_DEFINITION_TYPE",
+					"indexed": true,
+					"indexedAsKeyword": true,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Type"
+					},
+					"listTypeDefinitionExternalReferenceCode": "LT_ENTITLEMENT_DEFINITION_TYPE",
+					"name": "type",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "String"
+				},
+				{
+					"DBType": "String",
 					"businessType": "Text",
 					"externalReferenceCode": "C_ENTITLEMENT_DEFINITION_UNIT",
 					"indexed": true,
@@ -2450,6 +2470,13 @@
 							},
 							"objectFieldName": "grantType",
 							"priority": 5
+						},
+						{
+							"label": {
+								"en_US": "Type"
+							},
+							"objectFieldName": "type",
+							"priority": 6
 						}
 					]
 				}
@@ -7127,6 +7154,24 @@
 					"type": "String"
 				},
 				{
+					"DBType": "Double",
+					"businessType": "Decimal",
+					"externalReferenceCode": "C_USAGE_DEFINITION_OVERAGE_BUCKET_SIZE",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Overage Bucket Size"
+					},
+					"name": "overageBucketSize",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Double"
+				},
+				{
 					"DBType": "String",
 					"businessType": "Text",
 					"externalReferenceCode": "C_USAGE_DEFINITION_OVERAGE_CURRENCY",
@@ -7271,6 +7316,13 @@
 							},
 							"objectFieldName": "overageCurrency",
 							"priority": 5
+						},
+						{
+							"label": {
+								"en_US": "Overage Bucket Size"
+							},
+							"objectFieldName": "overageBucketSize",
+							"priority": 6
 						}
 					]
 				}
@@ -7639,6 +7691,42 @@
 					"type": "Double"
 				},
 				{
+					"DBType": "Double",
+					"businessType": "Decimal",
+					"externalReferenceCode": "C_USAGE_REPORT_OVERAGE_BUCKET_QUANTITY",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Overage Bucket Quantity"
+					},
+					"name": "overageBucketQuantity",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Double"
+				},
+				{
+					"DBType": "Double",
+					"businessType": "Decimal",
+					"externalReferenceCode": "C_USAGE_REPORT_OVERAGE_BUCKET_SIZE",
+					"indexed": true,
+					"indexedAsKeyword": false,
+					"indexedLanguageId": "",
+					"label": {
+						"en_US": "Overage Bucket Size"
+					},
+					"name": "overageBucketSize",
+					"objectFieldSettings": [
+					],
+					"required": false,
+					"state": false,
+					"system": false,
+					"type": "Double"
+				},
+				{
 					"DBType": "String",
 					"businessType": "Text",
 					"externalReferenceCode": "C_USAGE_REPORT_OVERAGE_CURRENCY",
@@ -7866,6 +7954,13 @@
 							},
 							"objectFieldName": "generatedAt",
 							"priority": 7
+						},
+						{
+							"label": {
+								"en_US": "Overage Bucket Quantity"
+							},
+							"objectFieldName": "overageBucketQuantity",
+							"priority": 8
 						}
 					]
 				}

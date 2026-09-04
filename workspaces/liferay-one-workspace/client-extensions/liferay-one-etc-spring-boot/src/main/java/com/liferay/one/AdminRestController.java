@@ -9,9 +9,14 @@ import com.liferay.one.jira.synchronizer.TeamRoleSynchronizer;
 import com.liferay.one.permission.AdminPermission;
 import com.liferay.one.pubsub.Message;
 import com.liferay.one.pubsub.subscriber.BasePubsubSubscriber;
+import com.liferay.one.service.LDPEventUsageReportService;
 import com.liferay.petra.string.CharPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+
+import java.time.YearMonth;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeParseException;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -30,6 +35,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -91,6 +97,36 @@ public class AdminRestController extends OneBaseRestController {
 		return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
 	}
 
+	@PostMapping("/ldp/event-usage-reports/generate")
+	public ResponseEntity<String> postLDPEventUsageReportsGenerate(
+			@AuthenticationPrincipal Jwt jwt,
+			@RequestParam(required = false) String yearMonth)
+		throws Exception {
+
+		_adminPermission.check(jwt);
+
+		YearMonth reportYearMonth = null;
+
+		try {
+			reportYearMonth = _getYearMonth(yearMonth);
+		}
+		catch (DateTimeParseException dateTimeParseException) {
+			throw new ResponseStatusException(
+				HttpStatus.BAD_REQUEST,
+				"Year month must use the format yyyy-MM: " + yearMonth,
+				dateTimeParseException);
+		}
+
+		_ldpEventUsageReportService.generateUsageReports(reportYearMonth);
+
+		JSONObject jsonObject = new JSONObject(
+		).put(
+			"yearMonth", String.valueOf(reportYearMonth)
+		);
+
+		return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
+	}
+
 	@PostMapping("/pubsub/dispatch")
 	public ResponseEntity<Void> postPubsubDispatch(
 			@AuthenticationPrincipal Jwt jwt, @RequestBody String json)
@@ -142,6 +178,20 @@ public class AdminRestController extends OneBaseRestController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	private YearMonth _getYearMonth(String yearMonthString)
+		throws DateTimeParseException {
+
+		if (Validator.isNull(yearMonthString)) {
+			return YearMonth.now(
+				ZoneOffset.UTC
+			).minusMonths(
+				1
+			);
+		}
+
+		return YearMonth.parse(yearMonthString);
+	}
+
 	private Map<String, String> _parseAttributes(String attributes) {
 		Map<String, String> attributesMap = new LinkedHashMap<>();
 
@@ -169,6 +219,9 @@ public class AdminRestController extends OneBaseRestController {
 	@Autowired(required = false)
 	private List<BasePubsubSubscriber> _basePubsubSubscribers =
 		Collections.emptyList();
+
+	@Autowired
+	private LDPEventUsageReportService _ldpEventUsageReportService;
 
 	@Autowired
 	private TeamRoleSynchronizer _teamRoleSynchronizer;

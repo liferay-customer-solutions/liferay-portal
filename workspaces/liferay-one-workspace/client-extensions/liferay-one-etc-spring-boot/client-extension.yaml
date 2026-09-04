@@ -34,6 +34,8 @@ liferay-one-etc-spring-boot-oahs:
         -   c_subscriptionentry.everything
         -   c_ticketattachment.everything
         -   c_trialextensionrequest.everything
+        -   c_usagedefinition.everything.read
+        -   c_usagereport.everything
     type: oAuthApplicationHeadlessServer
 liferay-one-etc-spring-boot-oaua:
     .serviceAddress: localhost:58081

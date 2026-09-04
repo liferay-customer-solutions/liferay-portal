@@ -156,4 +156,10 @@ public class EntitlementConstants {
 
 	public static final String STATE_UNACTIVATED = "Unactivated";
 
+	public static final String TYPE_COMMITMENT = "commitment";
+
+	public static final String TYPE_OVERAGE = "overage";
+
+	public static final String TYPE_SUBSCRIPTION = "subscription";
+
 }
