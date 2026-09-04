@@ -175,6 +175,27 @@
 			"name": "Contract Type"
 		},
 		{
+			"externalReferenceCode": "LT_ENTITLEMENT_DEFINITION_TYPE",
+			"listTypeEntries": [
+				{
+					"externalReferenceCode": "LT_ENTITLEMENT_DEFINITION_TYPE_COMMITMENT",
+					"key": "commitment",
+					"name": "Commitment"
+				},
+				{
+					"externalReferenceCode": "LT_ENTITLEMENT_DEFINITION_TYPE_OVERAGE",
+					"key": "overage",
+					"name": "Overage"
+				},
+				{
+					"externalReferenceCode": "LT_ENTITLEMENT_DEFINITION_TYPE_SUBSCRIPTION",
+					"key": "subscription",
+					"name": "Subscription"
+				}
+			],
+			"name": "Entitlement Definition Type"
+		},
+		{
 			"externalReferenceCode": "LT_ENTITLEMENT_RULE_TYPE",
 			"listTypeEntries": [
 				{
