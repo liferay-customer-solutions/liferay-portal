@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -49,6 +50,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpHeaders;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -136,62 +138,87 @@ public class CommerceOrderService extends OneBaseService {
 	}
 
 	public void completeSettledOrder(long orderId) throws Exception {
-		_keyedLock.withLock(
-			"order-completion#" + orderId,
-			() -> {
-				Order order = fetchCommerceOrder(orderId);
+		if (!_inFlightOrderIds.add(orderId)) {
+			return;
+		}
 
-				if ((order == null) ||
-					!Objects.equals(
-						order.getOrderStatus(),
-						CommerceOrderConstants.ORDER_STATUS_PENDING)) {
+		try {
+			Order order = fetchCommerceOrder(orderId);
 
-					return;
+			if (order == null) {
+				return;
+			}
+
+			String orderTypeExternalReferenceCode =
+				order.getOrderTypeExternalReferenceCode();
+
+			if ((orderTypeExternalReferenceCode == null) ||
+				!_completableOrderTypeExternalReferenceCodes.contains(
+					orderTypeExternalReferenceCode)) {
+
+				if (_log.isDebugEnabled()) {
+					_log.debug(
+						StringBundler.concat(
+							"Unable to complete order ", orderId,
+							" because its order type does not complete on ",
+							"payment"));
 				}
 
-				String orderTypeExternalReferenceCode =
-					order.getOrderTypeExternalReferenceCode();
+				return;
+			}
 
-				if ((orderTypeExternalReferenceCode == null) ||
-					!_completableOrderTypeExternalReferenceCodes.contains(
-						orderTypeExternalReferenceCode)) {
+			if (_awaitSettledPaymentStatus(order, orderId) == null) {
+				return;
+			}
 
-					if (_log.isInfoEnabled()) {
-						_log.info(
-							StringBundler.concat(
-								"Unable to complete order ", orderId,
-								" because its order type is not completed on ",
-								"payment"));
+			_keyedLock.withLock(
+				"order-completion#" + orderId,
+				() -> {
+					Order settledOrder = fetchCommerceOrder(orderId);
+
+					if (settledOrder == null) {
+						return;
 					}
 
-					return;
-				}
+					Integer paymentStatus = _getSettledPaymentStatus(
+						settledOrder);
 
-				Integer paymentStatus = _awaitSettledPaymentStatus(
-					order, orderId);
+					if ((paymentStatus == null) ||
+						!_isCompletableOrderStatus(settledOrder)) {
 
-				if (paymentStatus == null) {
-					if (_log.isInfoEnabled()) {
-						_log.info(
-							StringBundler.concat(
-								"Unable to complete order ", orderId,
-								" because its payment is still pending"));
+						return;
 					}
 
-					return;
-				}
-
-				completeOrder(orderId, paymentStatus);
-			});
+					completeOrder(orderId, paymentStatus);
+				});
+		}
+		finally {
+			_inFlightOrderIds.remove(orderId);
+		}
 	}
 
+	@Scheduled(cron = "0 0 0 * * *")
 	public void completeSettledOrders() throws Exception {
 		List<Order> orders = getOrders(
-			"(orderStatus/any(x:x eq 1)) and ((paymentStatus eq 0) or " +
-				"(paymentStatus eq 23))");
+			StringBundler.concat(
+				"(orderStatus/any(x:x eq ",
+				CommerceOrderConstants.ORDER_STATUS_PENDING,
+				") or orderStatus/any(x:x eq ",
+				CommerceOrderConstants.ORDER_STATUS_PROCESSING,
+				")) and ((paymentStatus eq ",
+				CommerceOrderConstants.ORDER_PAYMENT_STATUS_COMPLETED,
+				") or (paymentStatus eq ",
+				CommerceOrderConstants.ORDER_PAYMENT_STATUS_NOT_REQUIRED,
+				"))"));
 
 		for (Order order : orders) {
-			completeSettledOrder(order.getId());
+			try {
+				completeSettledOrder(order.getId());
+			}
+			catch (Exception exception) {
+				_log.error(
+					"Unable to complete order " + order.getId(), exception);
+			}
 		}
 	}
 
@@ -435,29 +462,52 @@ public class CommerceOrderService extends OneBaseService {
 	private Integer _awaitSettledPaymentStatus(Order order, long orderId)
 		throws Exception {
 
-		Integer paymentStatus = _getSettledPaymentStatus(order);
+		int retryIndex = 0;
 
-		for (long retryDelayMillis : _settledPaymentRetryDelays) {
-			if (paymentStatus != null) {
-				return paymentStatus;
+		while (true) {
+			if (_isCompletableOrderStatus(order)) {
+				Integer paymentStatus = _getSettledPaymentStatus(order);
+
+				if (paymentStatus != null) {
+					return paymentStatus;
+				}
+			}
+			else if (!_isTransitionalOrderStatus(order)) {
+				return null;
 			}
 
-			Thread.sleep(retryDelayMillis);
-
-			order = fetchCommerceOrder(orderId);
-
-			if ((order == null) ||
-				!Objects.equals(
-					order.getOrderStatus(),
-					CommerceOrderConstants.ORDER_STATUS_PENDING)) {
+			if (retryIndex >= _settledPaymentRetryDelays.length) {
+				if (_isCompletableOrderStatus(order) && _log.isInfoEnabled()) {
+					_log.info(
+						StringBundler.concat(
+							"Unable to complete order ", orderId,
+							" because its payment is still pending"));
+				}
 
 				return null;
 			}
 
-			paymentStatus = _getSettledPaymentStatus(order);
-		}
+			try {
+				Thread.sleep(_settledPaymentRetryDelays[retryIndex++]);
+			}
+			catch (InterruptedException interruptedException) {
+				if (_log.isDebugEnabled()) {
+					_log.debug(interruptedException);
+				}
 
-		return paymentStatus;
+				Thread thread = Thread.currentThread();
+
+				thread.interrupt();
+
+				return null;
+			}
+
+			order = fetchCommerceOrder(orderId);
+
+			if (order == null) {
+				return null;
+			}
+		}
 	}
 
 	private CurrencyResource _buildCurrencyResource() {
@@ -718,6 +768,20 @@ public class CommerceOrderService extends OneBaseService {
 		return total;
 	}
 
+	private boolean _isCompletableOrderStatus(Order order) {
+		Integer orderStatus = order.getOrderStatus();
+
+		if (Objects.equals(
+				orderStatus, CommerceOrderConstants.ORDER_STATUS_PENDING) ||
+			Objects.equals(
+				orderStatus, CommerceOrderConstants.ORDER_STATUS_PROCESSING)) {
+
+			return true;
+		}
+
+		return false;
+	}
+
 	private boolean _isTaxApplicable(
 		Account account, BillingAddress billingAddress) {
 
@@ -729,6 +793,20 @@ public class CommerceOrderService extends OneBaseService {
 
 		if (Objects.equals(account.getType(), _ACCOUNT_TYPE_PERSON)) {
 			return _europeanCountryISOCodes.contains(countryISOCode);
+		}
+
+		return false;
+	}
+
+	private boolean _isTransitionalOrderStatus(Order order) {
+		Integer orderStatus = order.getOrderStatus();
+
+		if (Objects.equals(
+				orderStatus, CommerceOrderConstants.ORDER_STATUS_IN_PROGRESS) ||
+			Objects.equals(
+				orderStatus, CommerceOrderConstants.ORDER_STATUS_OPEN)) {
+
+			return true;
 		}
 
 		return false;
@@ -865,6 +943,8 @@ public class CommerceOrderService extends OneBaseService {
 
 	@Autowired
 	private CommerceOrderItemService _commerceOrderItemService;
+
+	private final Set<Long> _inFlightOrderIds = ConcurrentHashMap.newKeySet();
 
 	@Autowired
 	private KeyedLock _keyedLock;

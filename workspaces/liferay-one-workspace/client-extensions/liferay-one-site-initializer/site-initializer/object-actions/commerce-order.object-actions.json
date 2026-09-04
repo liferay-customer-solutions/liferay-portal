@@ -2,7 +2,7 @@
 	"object-actions": [
 		{
 			"active": true,
-			"conditionExpression": "orderStatus == 1",
+			"conditionExpression": "",
 			"externalReferenceCode": "OA_COMMERCE_ORDER_UPDATE",
 			"label": {
 				"en_US": "Commerce Order Update"

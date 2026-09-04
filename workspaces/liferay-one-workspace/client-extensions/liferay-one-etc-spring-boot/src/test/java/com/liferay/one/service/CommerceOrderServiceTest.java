@@ -42,6 +42,37 @@ public class CommerceOrderServiceTest {
 	}
 
 	@Test
+	public void testCompleteSettledOrderCompletesOrderCheckedOutDuringRetry()
+		throws Exception {
+
+		ReflectionTestUtils.setField(
+			_commerceOrderService, "_settledPaymentRetryDelays",
+			new long[] {0, 0});
+
+		Mockito.doReturn(
+			_createOrder(
+				CommerceOrderConstants.ORDER_STATUS_OPEN, "CLOUD_APP",
+				_PAYMENT_STATUS_PENDING)
+		).doReturn(
+			_createOrder(
+				CommerceOrderConstants.ORDER_STATUS_PENDING, "CLOUD_APP",
+				CommerceOrderConstants.ORDER_PAYMENT_STATUS_NOT_REQUIRED)
+		).when(
+			_commerceOrderService
+		).fetchCommerceOrder(
+			_ORDER_ID
+		);
+
+		_commerceOrderService.completeSettledOrder(_ORDER_ID);
+
+		Mockito.verify(
+			_commerceOrderService
+		).completeOrder(
+			_ORDER_ID, CommerceOrderConstants.ORDER_PAYMENT_STATUS_NOT_REQUIRED
+		);
+	}
+
+	@Test
 	public void testCompleteSettledOrderCompletesPaidOrder() throws Exception {
 		_whenFetchCommerceOrder(
 			_createOrder(
@@ -72,6 +103,24 @@ public class CommerceOrderServiceTest {
 			_commerceOrderService
 		).completeOrder(
 			_ORDER_ID, CommerceOrderConstants.ORDER_PAYMENT_STATUS_NOT_REQUIRED
+		);
+	}
+
+	@Test
+	public void testCompleteSettledOrderCompletesProcessingOrder()
+		throws Exception {
+
+		_whenFetchCommerceOrder(
+			_createOrder(
+				CommerceOrderConstants.ORDER_STATUS_PROCESSING, "DXP_APP",
+				CommerceOrderConstants.ORDER_PAYMENT_STATUS_COMPLETED));
+
+		_commerceOrderService.completeSettledOrder(_ORDER_ID);
+
+		Mockito.verify(
+			_commerceOrderService
+		).completeOrder(
+			_ORDER_ID, CommerceOrderConstants.ORDER_PAYMENT_STATUS_COMPLETED
 		);
 	}
 
@@ -140,6 +189,18 @@ public class CommerceOrderServiceTest {
 	}
 
 	@Test
+	public void testCompleteSettledOrderSkipsOpenCart() throws Exception {
+		_whenFetchCommerceOrder(
+			_createOrder(
+				CommerceOrderConstants.ORDER_STATUS_OPEN, "CLOUD_APP",
+				_PAYMENT_STATUS_PENDING));
+
+		_commerceOrderService.completeSettledOrder(_ORDER_ID);
+
+		_verifyNeverCompleted();
+	}
+
+	@Test
 	public void testCompleteSettledOrderSkipsOrderCanceledDuringRetry()
 		throws Exception {
 
@@ -167,6 +228,29 @@ public class CommerceOrderServiceTest {
 	}
 
 	@Test
+	public void testCompleteSettledOrderSkipsOrderCompletedWhileAwaitingLock()
+		throws Exception {
+
+		Mockito.doReturn(
+			_createOrder(
+				CommerceOrderConstants.ORDER_STATUS_PENDING, "DXP_APP",
+				CommerceOrderConstants.ORDER_PAYMENT_STATUS_COMPLETED)
+		).doReturn(
+			_createOrder(
+				CommerceOrderConstants.ORDER_STATUS_COMPLETED, "DXP_APP",
+				CommerceOrderConstants.ORDER_PAYMENT_STATUS_COMPLETED)
+		).when(
+			_commerceOrderService
+		).fetchCommerceOrder(
+			_ORDER_ID
+		);
+
+		_commerceOrderService.completeSettledOrder(_ORDER_ID);
+
+		_verifyNeverCompleted();
+	}
+
+	@Test
 	public void testCompleteSettledOrderSkipsOrderWithoutOrderType()
 		throws Exception {
 
@@ -176,6 +260,30 @@ public class CommerceOrderServiceTest {
 				CommerceOrderConstants.ORDER_PAYMENT_STATUS_COMPLETED));
 
 		_commerceOrderService.completeSettledOrder(_ORDER_ID);
+
+		_verifyNeverCompleted();
+	}
+
+	@Test
+	public void testCompleteSettledOrderSkipsPaymentPendingThroughEveryRetry()
+		throws Exception {
+
+		ReflectionTestUtils.setField(
+			_commerceOrderService, "_settledPaymentRetryDelays",
+			new long[] {0, 0});
+
+		_whenFetchCommerceOrder(
+			_createOrder(
+				CommerceOrderConstants.ORDER_STATUS_PENDING, "DXP_APP",
+				_PAYMENT_STATUS_PENDING));
+
+		_commerceOrderService.completeSettledOrder(_ORDER_ID);
+
+		Mockito.verify(
+			_commerceOrderService, Mockito.times(3)
+		).fetchCommerceOrder(
+			_ORDER_ID
+		);
 
 		_verifyNeverCompleted();
 	}
@@ -241,9 +349,64 @@ public class CommerceOrderServiceTest {
 
 		Mockito.verify(
 			_commerceOrderService
+		).getOrders(
+			"(orderStatus/any(x:x eq 1) or orderStatus/any(x:x eq 10)) and " +
+				"((paymentStatus eq 0) or (paymentStatus eq 23))"
+		);
+
+		Mockito.verify(
+			_commerceOrderService
 		).completeSettledOrder(
 			_ORDER_ID
 		);
+
+		Mockito.verify(
+			_commerceOrderService
+		).completeSettledOrder(
+			_ORDER_ID + 1
+		);
+	}
+
+	@Test
+	public void testCompleteSettledOrdersSweepsPastFailingOrder()
+		throws Exception {
+
+		Order order1 = _createOrder(
+			CommerceOrderConstants.ORDER_STATUS_PENDING, "DXP_APP",
+			CommerceOrderConstants.ORDER_PAYMENT_STATUS_COMPLETED);
+
+		order1.setId(_ORDER_ID);
+
+		Order order2 = _createOrder(
+			CommerceOrderConstants.ORDER_STATUS_PENDING, "CLOUD_APP",
+			CommerceOrderConstants.ORDER_PAYMENT_STATUS_NOT_REQUIRED);
+
+		order2.setId(_ORDER_ID + 1);
+
+		Mockito.doReturn(
+			List.of(order1, order2)
+		).when(
+			_commerceOrderService
+		).getOrders(
+			ArgumentMatchers.anyString()
+		);
+
+		Mockito.doThrow(
+			new Exception()
+		).when(
+			_commerceOrderService
+		).completeSettledOrder(
+			_ORDER_ID
+		);
+
+		Mockito.doNothing(
+		).when(
+			_commerceOrderService
+		).completeSettledOrder(
+			_ORDER_ID + 1
+		);
+
+		_commerceOrderService.completeSettledOrders();
 
 		Mockito.verify(
 			_commerceOrderService
