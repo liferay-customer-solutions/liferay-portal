@@ -19,6 +19,7 @@
 			"maxQuantity": 1,
 			"name": "productRecommendations",
 			"skuExternalReferenceCode": "PRDCT-ADDON-COMMERCE-RECOMMENDATIONS",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -30,6 +31,7 @@
 			"maxQuantity": 1,
 			"name": "disasterRecovery",
 			"skuExternalReferenceCode": "PRDCT-ADDON-DISASTER-RECOVERY",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -42,6 +44,7 @@
 			"name": "storage",
 			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "storage-gb",
 			"skuExternalReferenceCode": "PRDCT-ADDON-STORAGE",
+			"type": "subscription",
 			"unit": "GB"
 		},
 		{
@@ -53,6 +56,7 @@
 			"maxQuantity": 4,
 			"name": "vcpu",
 			"skuExternalReferenceCode": "PRDCT-ADDON-VCPU",
+			"type": "subscription",
 			"unit": "vCPU"
 		},
 		{
@@ -64,6 +68,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-AI-HUB",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -76,6 +81,7 @@
 			"name": "aiTokens",
 			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "ai-tokens-monthly",
 			"skuExternalReferenceCode": "PRDCT-AI-HUB",
+			"type": "subscription",
 			"unit": "tokens"
 		},
 		{
@@ -87,6 +93,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-ANALYTICS-CLOUD",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -98,6 +105,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-APP",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -109,6 +117,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-CLOUD-NATIVE",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -120,6 +129,7 @@
 			"maxQuantity": 5,
 			"name": "production-pods",
 			"skuExternalReferenceCode": "PRDCT-CLOUD-NATIVE-PODS",
+			"type": "subscription",
 			"unit": "count"
 		},
 		{
@@ -131,6 +141,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-CMP",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -142,6 +153,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-COMMERCE",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -153,6 +165,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-COMMERCE-CLOUD",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -164,6 +177,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-CONTENT-MARKETING",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -175,6 +189,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-DATA-PLATFORM",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -186,6 +201,7 @@
 			"maxQuantity": 25,
 			"name": "active-batch-segments",
 			"skuExternalReferenceCode": "PRDCT-DATA-PLATFORM",
+			"type": "subscription",
 			"unit": "count"
 		},
 		{
@@ -197,6 +213,7 @@
 			"maxQuantity": 10,
 			"name": "active-real-time-segments",
 			"skuExternalReferenceCode": "PRDCT-DATA-PLATFORM",
+			"type": "subscription",
 			"unit": "count"
 		},
 		{
@@ -209,6 +226,7 @@
 			"name": "api-requests",
 			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "api-requests-monthly",
 			"skuExternalReferenceCode": "PRDCT-DATA-PLATFORM",
+			"type": "subscription",
 			"unit": "count"
 		},
 		{
@@ -220,6 +238,7 @@
 			"maxQuantity": 10,
 			"name": "connectors",
 			"skuExternalReferenceCode": "PRDCT-DATA-PLATFORM",
+			"type": "subscription",
 			"unit": "count"
 		},
 		{
@@ -232,6 +251,7 @@
 			"name": "events",
 			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "events-monthly",
 			"skuExternalReferenceCode": "PRDCT-DATA-PLATFORM",
+			"type": "subscription",
 			"unit": "count"
 		},
 		{
@@ -242,7 +262,9 @@
 			"grantType": "fixed",
 			"maxQuantity": 1,
 			"name": "events-add-on-bucket",
-			"skuExternalReferenceCode": "PRDCT-DATA-PLATFORM",
+			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "events-monthly",
+			"skuExternalReferenceCode": "PRDCT-ADDON-DATA-PLATFORM-EVENTS-BUCKET",
+			"type": "overage",
 			"unit": "count"
 		},
 		{
@@ -254,6 +276,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-DSR",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -265,6 +288,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-DXP",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -276,6 +300,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-ENTERPRISE-SEARCH",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -287,6 +312,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-ENTERPRISE-SEARCH-CLOUD",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -298,6 +324,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-OPENSEARCH",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -309,6 +336,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-PAAS",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -321,6 +349,7 @@
 			"name": "database",
 			"productOptions": "{\"machineType\": \"standard\"}",
 			"skuExternalReferenceCode": "PRDCT-PAAS",
+			"type": "subscription",
 			"unit": "GiB"
 		},
 		{
@@ -333,6 +362,7 @@
 			"name": "extensions-ram",
 			"productOptions": "{\"machineType\": \"standard\"}",
 			"skuExternalReferenceCode": "PRDCT-PAAS",
+			"type": "subscription",
 			"unit": "GiB"
 		},
 		{
@@ -345,6 +375,7 @@
 			"name": "extensions-vcpus",
 			"productOptions": "{\"machineType\": \"standard\"}",
 			"skuExternalReferenceCode": "PRDCT-PAAS",
+			"type": "subscription",
 			"unit": "vCPU"
 		},
 		{
@@ -356,6 +387,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-PAAS-LEGACY",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -368,6 +400,7 @@
 			"name": "logs",
 			"productOptions": "{\"machineType\": \"standard\"}",
 			"skuExternalReferenceCode": "PRDCT-PAAS",
+			"type": "subscription",
 			"unit": "GiB"
 		},
 		{
@@ -381,6 +414,7 @@
 			"productOptions": "{\"machineType\": \"standard\"}",
 			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "storage-gb",
 			"skuExternalReferenceCode": "PRDCT-PAAS",
+			"type": "subscription",
 			"unit": "TiB"
 		},
 		{
@@ -393,6 +427,7 @@
 			"name": "traffic-networking",
 			"productOptions": "{\"machineType\": \"standard\"}",
 			"skuExternalReferenceCode": "PRDCT-PAAS",
+			"type": "subscription",
 			"unit": "TiB"
 		},
 		{
@@ -404,6 +439,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-BASIC-RESELLER",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -415,6 +451,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-DISTRIBUTION",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -426,6 +463,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-RESELLER",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -437,6 +475,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-SERVICE",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -448,6 +487,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-SERVICE-REFERRAL",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -459,6 +499,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-SOLUTION-RESELLER",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -470,6 +511,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-STANDARD",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -481,6 +523,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-TRAINING",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -492,6 +535,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-PARTNERSHIP-VAR",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -503,6 +547,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-PORTAL",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -514,6 +559,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-PORTAL-EWSA",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -525,6 +571,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-PUNCHOUT",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -536,6 +583,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-SAAS",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -547,7 +595,8 @@
 			"maxQuantity": 1000000,
 			"name": "apv",
 			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "page-views-monthly",
-			"skuExternalReferenceCode": "PRDCT-SAAS-APV-1M"
+			"skuExternalReferenceCode": "PRDCT-SAAS-APV-1M",
+			"type": "subscription"
 		},
 		{
 			"active": true,
@@ -559,6 +608,7 @@
 			"name": "document-library-size",
 			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "storage-gb",
 			"skuExternalReferenceCode": "PRDCT-SAAS-BUSINESS-PLAN",
+			"type": "subscription",
 			"unit": "GB"
 		},
 		{
@@ -570,6 +620,7 @@
 			"maxQuantity": 1,
 			"name": "liferay-saas-business",
 			"skuExternalReferenceCode": "PRDCT-SAAS-BUSINESS-PLAN",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -581,6 +632,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-SAAS-BUSINESS-PLAN",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -592,6 +644,7 @@
 			"maxQuantity": 4,
 			"name": "ram",
 			"skuExternalReferenceCode": "PRDCT-SAAS-BUSINESS-PLAN",
+			"type": "subscription",
 			"unit": "GB"
 		},
 		{
@@ -603,6 +656,7 @@
 			"maxQuantity": 15,
 			"name": "sites",
 			"skuExternalReferenceCode": "PRDCT-SAAS-BUSINESS-PLAN",
+			"type": "subscription",
 			"unit": "count"
 		},
 		{
@@ -614,6 +668,7 @@
 			"maxQuantity": 8,
 			"name": "vcpu",
 			"skuExternalReferenceCode": "PRDCT-SAAS-BUSINESS-PLAN",
+			"type": "subscription",
 			"unit": "vCPU"
 		},
 		{
@@ -626,6 +681,7 @@
 			"name": "database",
 			"productOptions": "{\"machineType\": \"standard\"}",
 			"skuExternalReferenceCode": "PRDCT-SAAS",
+			"type": "subscription",
 			"unit": "GiB"
 		},
 		{
@@ -638,6 +694,7 @@
 			"name": "document-library-size",
 			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "storage-gb",
 			"skuExternalReferenceCode": "PRDCT-SAAS-ENTERPRISE-PLAN",
+			"type": "subscription",
 			"unit": "GB"
 		},
 		{
@@ -649,6 +706,7 @@
 			"maxQuantity": 1,
 			"name": "liferay-saas-enterprise",
 			"skuExternalReferenceCode": "PRDCT-SAAS-ENTERPRISE-PLAN",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -660,6 +718,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-SAAS-ENTERPRISE-PLAN",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -671,6 +730,7 @@
 			"maxQuantity": 6,
 			"name": "ram",
 			"skuExternalReferenceCode": "PRDCT-SAAS-ENTERPRISE-PLAN",
+			"type": "subscription",
 			"unit": "GB"
 		},
 		{
@@ -681,6 +741,7 @@
 			"grantType": "unlimited",
 			"name": "sites",
 			"skuExternalReferenceCode": "PRDCT-SAAS-ENTERPRISE-PLAN",
+			"type": "subscription",
 			"unit": "count"
 		},
 		{
@@ -692,6 +753,7 @@
 			"maxQuantity": 12,
 			"name": "vcpu",
 			"skuExternalReferenceCode": "PRDCT-SAAS-ENTERPRISE-PLAN",
+			"type": "subscription",
 			"unit": "vCPU"
 		},
 		{
@@ -704,6 +766,7 @@
 			"name": "extensions-ram",
 			"productOptions": "{\"machineType\": \"standard\"}",
 			"skuExternalReferenceCode": "PRDCT-SAAS",
+			"type": "subscription",
 			"unit": "GiB"
 		},
 		{
@@ -716,6 +779,7 @@
 			"name": "extensions-vcpus",
 			"productOptions": "{\"machineType\": \"standard\"}",
 			"skuExternalReferenceCode": "PRDCT-SAAS",
+			"type": "subscription",
 			"unit": "vCPU"
 		},
 		{
@@ -728,6 +792,7 @@
 			"name": "document-library-size",
 			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "storage-gb",
 			"skuExternalReferenceCode": "PRDCT-SAAS-EXTRA-STORAGE-DL",
+			"type": "subscription",
 			"unit": "GB"
 		},
 		{
@@ -739,6 +804,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-SAAS-LEGACY",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -751,6 +817,7 @@
 			"name": "logs",
 			"productOptions": "{\"machineType\": \"standard\"}",
 			"skuExternalReferenceCode": "PRDCT-SAAS",
+			"type": "subscription",
 			"unit": "GiB"
 		},
 		{
@@ -761,7 +828,8 @@
 			"grantType": "fixed",
 			"maxQuantity": 2500,
 			"name": "malu",
-			"skuExternalReferenceCode": "PRDCT-SAAS-MALU-2500"
+			"skuExternalReferenceCode": "PRDCT-SAAS-MALU-2500",
+			"type": "subscription"
 		},
 		{
 			"active": true,
@@ -773,6 +841,7 @@
 			"name": "document-library-size",
 			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "storage-gb",
 			"skuExternalReferenceCode": "PRDCT-SAAS-PRO-PLAN",
+			"type": "subscription",
 			"unit": "GB"
 		},
 		{
@@ -784,6 +853,7 @@
 			"maxQuantity": 1,
 			"name": "liferay-saas-pro",
 			"skuExternalReferenceCode": "PRDCT-SAAS-PRO-PLAN",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -795,6 +865,7 @@
 			"maxQuantity": 1,
 			"name": "ram",
 			"skuExternalReferenceCode": "PRDCT-SAAS-PRO-PLAN",
+			"type": "subscription",
 			"unit": "GB"
 		},
 		{
@@ -806,6 +877,7 @@
 			"maxQuantity": 2,
 			"name": "sites",
 			"skuExternalReferenceCode": "PRDCT-SAAS-PRO-PLAN",
+			"type": "subscription",
 			"unit": "count"
 		},
 		{
@@ -817,6 +889,7 @@
 			"maxQuantity": 1,
 			"name": "vcpu",
 			"skuExternalReferenceCode": "PRDCT-SAAS-PRO-PLAN",
+			"type": "subscription",
 			"unit": "vCPU"
 		},
 		{
@@ -830,6 +903,7 @@
 			"productOptions": "{\"machineType\": \"standard\"}",
 			"r_usageDefinitionToEntitlementDefinition_c_usageDefinitionERC": "storage-gb",
 			"skuExternalReferenceCode": "PRDCT-SAAS",
+			"type": "subscription",
 			"unit": "TiB"
 		},
 		{
@@ -842,6 +916,7 @@
 			"name": "traffic-networking",
 			"productOptions": "{\"machineType\": \"standard\"}",
 			"skuExternalReferenceCode": "PRDCT-SAAS",
+			"type": "subscription",
 			"unit": "TiB"
 		},
 		{
@@ -853,6 +928,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-SAMPLE-APP",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -864,6 +940,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-SAMPLE-CLOUD-APP",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -875,6 +952,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-TEST-APP",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -886,6 +964,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-TEST-CLIENT-EXTENSION",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -897,6 +976,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-TEST-COMPOSITE-APP",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -908,6 +988,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-TEST-CRM-ACCELERATOR",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -919,6 +1000,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-TEST-LOW-CODE-CONFIGURATION",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -930,6 +1012,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-TEST-PARTNER-PORTAL",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -941,6 +1024,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-TEST-SLACK-CONNECTOR",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -952,6 +1036,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-TEST-THEME-PACK",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -963,6 +1048,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-TRIAL",
+			"type": "subscription",
 			"unit": "boolean"
 		},
 		{
@@ -974,6 +1060,7 @@
 			"maxQuantity": 1,
 			"name": "licenseGeneration",
 			"skuExternalReferenceCode": "PRDCT-ZENDESK",
+			"type": "subscription",
 			"unit": "boolean"
 		}
 	]

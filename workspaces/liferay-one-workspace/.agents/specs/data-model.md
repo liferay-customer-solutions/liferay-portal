@@ -347,8 +347,11 @@ SKU-level entitlement template. One SKU → many EntitlementDefinitions. When a 
 | `defaultQuantity` | double | Default; overridden at order item level via `sizing` |
 | `grantType` | string | `fixed` · `rollover` · `metered` · `prepaid` |
 | FK `usageDefinitionId` | long | Nullable; only for metered/usage-type entitlements |
+| `type` | string | Picklist: `subscription` · `commitment` · `overage` (`LT_ENTITLEMENT_DEFINITION_TYPE`), default `subscription` |
 | `productOptions` | string | JSON map of SKU option key/value pairs the order item must carry for this definition to apply; empty matches any |
 | `active` | boolean | Default `true`; set `false` to deprecate without deleting |
+
+**Entitlement type.** One product can sell the same metric several ways, so every way of buying it is its own EntitlementDefinition hanging off the same UsageDefinition, distinguished by `type`. A `subscription` definition grants the base allotment, a `commitment` definition grants a contracted minimum, and an `overage` definition is the bucket sold to cover consumption past the allotment. Only the `overage` definition names the SKU an overage order is placed against, which is how `EntitlementDefinitionService.fetchOverageEntitlementDefinition` finds it: given a UsageDefinition, it takes the active sibling definition typed `overage`. The LDP events metric is the first to use this — `events-monthly` parents both `C_ENT_DEF_DATA_PLATFORM_EVENTS` (`subscription`) and `C_ENT_DEF_DATA_PLATFORM_EVENTS_ADD_ON_BUCKET` (`overage`).
 
 **License generation:** Presence of an EntitlementDefinition with `name = 'licenseGeneration'` (`grantType = fixed`, `unit = boolean`) indicates the product can generate license keys. This replaces the old boolean `licenses` flag on products.
 
@@ -382,8 +385,11 @@ SKU-level entitlement template. One SKU → many EntitlementDefinitions. When a 
 | `aggregationType` | string | count / sum. Renamed from `aggregation`: a field literally named `aggregation` collides with Liferay's reserved OData aggregation term and generates an empty DB column name, so the object fails to publish (`CREATE TABLE` syntax error). |
 | `period` | string | Per month, day, hour |
 | `quantity` | double | Base unit quantity |
-| `overageRate` | double | |
+| `overageBucketSize` | double | Units of the metric one overage bucket covers, e.g. 200,000 events. Set only on metrics whose overage is sold in buckets |
+| `overageRate` | double | Cost of one overage bucket when `overageBucketSize` is set |
 | `overageCurrency` | string | USD / EUR / JPY |
+
+**Bucket priced overage.** Overage is not billed per unit consumed; it is billed in whole buckets, because a bucket is the smallest quantity that can go on an order. `overageBucketSize` is how many units one bucket covers and `overageRate` is what one bucket costs, so a metric with a 200,000 event bucket and 300,000 events of overage bills two buckets, not 1.5. The rounding lives in `UsageDefinition.getOverageBucketQuantity`, which returns 0 for a metric with no bucket size — a UsageDefinition without one cannot be billed, and `LDPEventUsageReportService` refuses to run rather than pricing at zero.
 
 ---
 
@@ -409,7 +415,7 @@ SKU-level entitlement template. One SKU → many EntitlementDefinitions. When a 
 
 Aggregated periodic report over UsageEvents. The report target is polymorphic — a report can roll up at any level (project, contract, order, environment), expressed via `targetType` + `targetClassName` + `targetPK`, mirroring the `Property` pattern. A `usageDefinitionToUsageReport` and a `projectToUsageReport` relationship provide the primary FK rollups: usage reports are children of the project they belong to (the dashboard is project-scoped, and `projectToContract` still reaches the contract in one hop). `commerceOrderId` is a denormalized plain field — not a relationship FK — holding the standalone overage order this report generated, as an audit trail. It is deliberately a plain field rather than a `usageReportToCommerceOrder` relationship: a navigable edge into the system CommerceOrder object puts a cycle through the object entry OData entity model, which throws `IllegalArgumentException: Name is null` and 500s every `/o/c/...` endpoint that embeds it (projects, contracts).
 
-**Consumption-based billing workflow (E24 / LPD-88265).** On the first of every month `UsageReportService` (in `liferay-one-etc-spring-boot`, `@Scheduled` cron `liferay.one.usage.report.cron`) queries the datawarehouse — mocked for now — for the prior month's metered consumption, compares each metered entitlement's usage against its allotment, and records every overage as a UsageReport in the `readyForReview` state. `reviewStatus` is a picklist **state field** (`Ready for Review` → `Approved` · `Completed`) backed by `LT_USAGE_REPORT_REVIEW_STATUS`; a reviewer works reports in the Liferay Objects admin UI. Setting a report to `Approved` (invoice needed) fires the `UsageReportApproved` `onAfterUpdate` object action → `ObjectActionUsageReportApprovedRestController`, which creates the standalone overage commerce order (order line = `overageQuantity` × the UsageDefinition's `overageRate`), writes its id back to `commerceOrderId`, and pushes it to Salesforce as an opportunity, mirroring the AI Hub token purchasing flow. Setting a report to `Completed` (no invoice needed) is terminal and creates nothing. The controller is idempotent: it no-ops unless `reviewStatus` is `approved` and `commerceOrderId` is unset. The `accountExternalReferenceCode`, `contractExternalReferenceCode`, and `skuExternalReferenceCode` fields are denormalized onto the report so the object action can build the order without traversing relationships over headless.
+**Consumption-based billing workflow (E24 / LPD-88265).** On the first of every month `UsageReportService` (in `liferay-one-etc-spring-boot`, `@Scheduled` cron `liferay.one.usage.report.cron`) queries the datawarehouse — mocked for now — for the prior month's metered consumption, compares each metered entitlement's usage against its allotment, and records every overage as a UsageReport in the `readyForReview` state. `reviewStatus` is a picklist **state field** (`Ready for Review` → `Approved` · `Completed`) backed by `LT_USAGE_REPORT_REVIEW_STATUS`; a reviewer works reports in the Liferay Objects admin UI. Setting a report to `Approved` (invoice needed) fires the `UsageReportApproved` `onAfterUpdate` object action → `ObjectActionUsageReportApprovedRestController`, which creates the standalone overage commerce order (order line = `overageBucketQuantity` of the `skuExternalReferenceCode` bucket SKU), writes its id back to `commerceOrderId`, and pushes it to Salesforce as an opportunity, mirroring the AI Hub token purchasing flow. Setting a report to `Completed` (no invoice needed) is terminal and creates nothing. The controller is idempotent: it no-ops unless `reviewStatus` is `approved` and `commerceOrderId` is unset. The `accountExternalReferenceCode`, `contractExternalReferenceCode`, and `skuExternalReferenceCode` fields are denormalized onto the report so the object action can build the order without traversing relationships over headless.
 
 | Field | Type | Notes |
 |---|---|---|
@@ -420,11 +426,13 @@ Aggregated periodic report over UsageEvents. The report target is polymorphic �
 | `commerceOrderId` | long | Denormalized audit link to the generated overage order; not a relationship FK |
 | `accountExternalReferenceCode` | string | Denormalized; order-build input for the approved action |
 | `contractExternalReferenceCode` | string | Denormalized; order-build input for the approved action |
-| `skuExternalReferenceCode` | string | Denormalized; the product SKU billed on the overage order |
+| `skuExternalReferenceCode` | string | Denormalized; the overage bucket SKU billed on the overage order, from the `overage` EntitlementDefinition |
 | `aggregateQuantity` | double | Consumed quantity in the period |
 | `entitledQuantity` | double | Allotted quantity for the period |
-| `overageQuantity` | double | `aggregateQuantity − entitledQuantity` |
-| `overageAmount` | double | Billed amount: `overageQuantity` × UsageDefinition `overageRate` |
+| `overageQuantity` | double | `aggregateQuantity − entitledQuantity`, in the metric's own unit |
+| `overageBucketQuantity` | double | Whole overage buckets billed: `ceil(overageQuantity ÷ overageBucketSize)`. This is the order line quantity |
+| `overageBucketSize` | double | The bucket size in force when the report was generated, snapshotted so a later rate change cannot rewrite history |
+| `overageAmount` | double | Billed amount: `overageBucketQuantity` × UsageDefinition `overageRate` |
 | `overageCurrency` | string | USD / EUR / JPY, from the UsageDefinition |
 | `targetType` | string | `project` · `contract` · `order` · `environment` |
 | `targetClassName` | string | Denormalized class name of the report target |
