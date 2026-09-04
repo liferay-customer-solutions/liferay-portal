@@ -43,28 +43,6 @@ export default function PublishedApps() {
 					},
 					{
 						hidden: (product: Product) =>
-							product.productStatus ===
-							ProductWorkflowStatusCode.PENDING,
-						icon: 'pencil',
-						name: i18n.translate('edit'),
-						onClick: (product: Product) =>
-							navigate(
-								`/newapp/${product.productId}/publisher/profile`
-							),
-					},
-					{
-						hidden: (product: Product) =>
-							product.productStatus !==
-							ProductWorkflowStatusCode.APPROVED,
-						icon: 'plus',
-						name: i18n.translate('add-new-version'),
-						onClick: (product: Product) =>
-							navigate(
-								`/newversion/${product.productId}/publisher/build`
-							),
-					},
-					{
-						hidden: (product: Product) =>
 							product.productStatus !==
 							ProductWorkflowStatusCode.APPROVED,
 						icon: 'shortcut',

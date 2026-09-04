@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {useNavigate, useParams} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import AppReview from '~/components/AppReview/AppReview';
 import Button from '~/components/Button/Button';
 import Page from '~/components/Page/Page';
@@ -28,7 +28,6 @@ const STATUS_DOT_COLOR: Record<number, string> = {
 export default function AppSummary() {
 	const [context] = useNewAppContext();
 	const navigate = useNavigate();
-	const {productId} = useParams();
 
 	const product = context._product;
 
@@ -45,24 +44,12 @@ export default function AppSummary() {
 			)}
 			pageRendererProps={{isLoading: context.loading}}
 			rightButton={
-				<div className="d-flex">
-					<Button
-						className="mr-3"
-						displayType="secondary"
-						onClick={() => navigate('/published-apps')}
-					>
-						{i18n.translate('back')}
-					</Button>
-
-					<Button
-						displayType="primary"
-						onClick={() =>
-							navigate(`/newapp/${productId}/publisher/profile`)
-						}
-					>
-						{i18n.translate('edit')}
-					</Button>
-				</div>
+				<Button
+					displayType="secondary"
+					onClick={() => navigate('/published-apps')}
+				>
+					{i18n.translate('back')}
+				</Button>
 			}
 			title={context.profile.name}
 		>
