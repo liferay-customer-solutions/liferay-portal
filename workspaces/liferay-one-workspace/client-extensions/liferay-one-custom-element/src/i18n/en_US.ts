@@ -1102,8 +1102,6 @@ export default {
 		'Please review before submitting. Once sent, you will not be able to edit any information until this submission is fully reviewed by Liferay.',
 	'please-review-the-order-summary-below-and-flag-the-checkbox-to-complete-your-purchase':
 		'Please review the order summary below and flag the checkbox to complete your purchase',
-	'please-review-your-payment-details-and-try-again':
-		'Please review your payment details and try again.',
 	'please-select-a-user-for-every-new-member':
 		'Please select a user for every new member.',
 	'please-select-an-actual-event-date-that-has-already-occurred-or-is-today':
@@ -1464,7 +1462,8 @@ export default {
 	'text-block': 'Text Block',
 	'text-images-block': 'Text Images Block',
 	'text-video-block': 'Text Video Block',
-	'thank-you-for-choosing': 'Thank you for choosing',
+	'thank-you-for-choosing-x-your-purchase-has-been-successfully-processed-to-continue-please-click-the-button-below-to-download-or-install-the-app':
+		'Thank you for choosing <b>{0}</b>. Your purchase has been successfully processed. To continue, please click the button below to download or install the app.',
 	'thank-you-for-submitting-this-request':
 		'Thank you for submitting this request!',
 	'thank-you-for-trying-the-beta-version-of-this-product-your-feedback-is-essential-to-improve-the-final-release-this-survey-takes-3–5-minutes':
@@ -1738,8 +1737,8 @@ export default {
 		'We understand that plans change. Please let us know why the planned event date for this event is being updated.',
 	'we-were-unable-to-complete-your-invitation-try-the-link-again-or-ask-an-account-administrator-for-a-new-one':
 		'We were unable to complete your invitation. Try the link again or ask an account administrator for a new one.',
-	'we-were-unable-to-process-the-payment-for':
-		'We were unable to process the payment for',
+	'we-were-unable-to-process-the-payment-for-x-please-review-your-payment-details-and-try-again':
+		'We were unable to process the payment for <b>{0}</b>. Please review your payment details and try again.',
 	'website': 'Website',
 	'weve-sent-the-order-form-to-your-email-via-docusign-please-review-sign-and-return-it-to-confirm-your-subscription-once-received-well-provision-your-ai-hub-and-notify-you-by-email':
 		'We’ve sent the order form to your email via DocuSign. Please review, sign, and return it to confirm your subscription — once received, we’ll provision your AI Hub and notify you by email.',
@@ -1853,8 +1852,6 @@ export default {
 	'your-order-id-is': 'Your Order ID is:',
 	'your-peak-usage-for-this-billing-period-exceeded-your-entitlement-limits-overage-charges-may-apply':
 		'Your peak usage for this billing period exceeded your entitlement limits. Overage charges may apply.',
-	'your-purchase-has-been-successfully-processed-to-continue-please-click-the-button-below-to-download-or-install-the-app':
-		'Your purchase has been successfully processed. To continue, please click the button below to download or install the app.',
 	'your-request-completed-successfully':
 		'Your request completed successfully',
 	'zip-area-code': 'Zip/Area Code',

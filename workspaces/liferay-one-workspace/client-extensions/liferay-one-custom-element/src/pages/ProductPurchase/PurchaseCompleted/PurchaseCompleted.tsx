@@ -4,6 +4,7 @@
  */
 
 import ClayButton from '@clayui/button';
+import DOMPurify from 'dompurify';
 import {useEffect} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import useSWR from 'swr';
@@ -114,15 +115,17 @@ const PurchaseCompleted = ({product}: PurchaseCompletedProps) => {
 					{i18n.translate('payment-failed')}
 				</h1>
 
-				<p className="mt-3 text-center text-muted">
-					{i18n.translate(
-						'we-were-unable-to-process-the-payment-for'
-					)}{' '}
-					<strong>{product.name}</strong>.{' '}
-					{i18n.translate(
-						'please-review-your-payment-details-and-try-again'
-					)}
-				</p>
+				<p
+					className="mt-3 text-center text-muted"
+					dangerouslySetInnerHTML={{
+						__html: DOMPurify.sanitize(
+							i18n.sub(
+								'we-were-unable-to-process-the-payment-for-x-please-review-your-payment-details-and-try-again',
+								[product.name]
+							)
+						),
+					}}
+				/>
 
 				<p className="mt-4 text-center">
 					{i18n.translate('your-order-id-is')}{' '}
@@ -188,13 +191,17 @@ const PurchaseCompleted = ({product}: PurchaseCompletedProps) => {
 					: i18n.translate('purchase-completed')}
 			</h1>
 
-			<p className="mt-3 text-center text-muted">
-				{i18n.translate('thank-you-for-choosing')}{' '}
-				<strong>{product.name}</strong>.{' '}
-				{i18n.translate(
-					'your-purchase-has-been-successfully-processed-to-continue-please-click-the-button-below-to-download-or-install-the-app'
-				)}
-			</p>
+			<p
+				className="mt-3 text-center text-muted"
+				dangerouslySetInnerHTML={{
+					__html: DOMPurify.sanitize(
+						i18n.sub(
+							'thank-you-for-choosing-x-your-purchase-has-been-successfully-processed-to-continue-please-click-the-button-below-to-download-or-install-the-app',
+							[product.name]
+						)
+					),
+				}}
+			/>
 
 			<p className="mt-4 text-center">
 				{i18n.translate('your-order-id-is')}{' '}

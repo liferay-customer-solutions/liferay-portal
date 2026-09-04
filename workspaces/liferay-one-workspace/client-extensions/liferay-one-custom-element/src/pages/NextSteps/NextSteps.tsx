@@ -6,6 +6,7 @@
 import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
+import DOMPurify from 'dompurify';
 import {ReactElement, useEffect} from 'react';
 import {HashRouter} from 'react-router-dom';
 import useSWR from 'swr';
@@ -117,15 +118,17 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 		<Header
 			description={
 				<span>
-					<p className="text-center">
-						{i18n.translate(
-							'we-were-unable-to-process-the-payment-for'
-						)}{' '}
-						<strong>{productName}</strong>.{' '}
-						{i18n.translate(
-							'please-review-your-payment-details-and-try-again'
-						)}
-					</p>
+					<p
+						className="text-center"
+						dangerouslySetInnerHTML={{
+							__html: DOMPurify.sanitize(
+								i18n.sub(
+									'we-were-unable-to-process-the-payment-for-x-please-review-your-payment-details-and-try-again',
+									[productName]
+								)
+							),
+						}}
+					/>
 					<p className="d-flex justify-content-center m-0 next-step-page-text-bold">
 						{i18n.translate('need-help')}&nbsp;{' '}
 						<a href="mailto:marketplace-admin@liferay.com">
@@ -158,13 +161,17 @@ export function NextStepsBody(props: NextStepsBodyProps) {
 			<Header
 				description={
 					<span>
-						<p className="mb-4 text-center">
-							{i18n.translate('thank-you-for-choosing')}{' '}
-							<strong>{productName}</strong>.{' '}
-							{i18n.translate(
-								'your-purchase-has-been-successfully-processed-to-continue-please-click-the-button-below-to-download-or-install-the-app'
-							)}
-						</p>
+						<p
+							className="mb-4 text-center"
+							dangerouslySetInnerHTML={{
+								__html: DOMPurify.sanitize(
+									i18n.sub(
+										'thank-you-for-choosing-x-your-purchase-has-been-successfully-processed-to-continue-please-click-the-button-below-to-download-or-install-the-app',
+										[productName]
+									)
+								),
+							}}
+						/>
 
 						<p className="align-items-end d-flex justify-content-center mb-0">
 							{i18n.translate('your-order-id-is')} &nbsp;
