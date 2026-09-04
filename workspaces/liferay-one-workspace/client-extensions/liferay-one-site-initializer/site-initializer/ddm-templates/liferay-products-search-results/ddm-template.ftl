@@ -43,8 +43,7 @@
 						categories = getSpecificationValues("product-metadata", "liferay-products-categories", entry.getCPDefinitionId())
 						developerName = getSpecificationValue("product-metadata", "developer-name", entry.getCPDefinitionId())
 						productDescription = stringUtil.shorten(htmlUtil.stripHtml(entry.getDescription()!""), 160, "...")
-						productIcon = getSpecificationValue("product-metadata", "product-icon", entry.getCPDefinitionId(), "liferay_waffle")
-						productImage = "/documents/d" + themeDisplay.getScopeGroup().getFriendlyURL() + "/" + productIcon + "-svg"
+						productImage = cpContentHelper.getDefaultImageFileURL(-1, entry.getCPDefinitionId())
 					/>
 
 					<a class="card d-flex flex-column overflow-hidden text-dark text-decoration-none" href="${cpContentHelper.getFriendlyURL(entry, themeDisplay)}">

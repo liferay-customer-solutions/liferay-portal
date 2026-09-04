@@ -43,8 +43,7 @@
 						priceModel = getSpecificationValue("pricing-licensing-terms", "price-model", entry.getCPDefinitionId())
 						productDescription = stringUtil.shorten(htmlUtil.stripHtml(entry.getDescription()!""), 120, "...")
 						productId = entry.getCPDefinitionId()
-						productIcon = getSpecificationValue("product-metadata", "product-icon", productId, "liferay_waffle")
-						productImage = "/documents/d" + themeDisplay.getScopeGroup().getFriendlyURL() + "/" + productIcon + "-svg"
+						productImage = cpContentHelper.getDefaultImageFileURL(-1, productId)
 
 						categoriesListSize = 0
 						principalCategory = ""

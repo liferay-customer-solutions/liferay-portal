@@ -324,19 +324,6 @@
 		},
 		{
 			"description": {
-				"en_US": "This is the file name (without extension) of the product card icon served from the site documents."
-			},
-			"facetable": false,
-			"key": "product-icon",
-			"optionCategory": {
-				"externalReferenceCode": "PRODUCT_METADATA"
-			},
-			"title": {
-				"en_US": "Product Icon"
-			}
-		},
-		{
-			"description": {
 				"en_US": "These are general notes about the app or solution."
 			},
 			"facetable": false,

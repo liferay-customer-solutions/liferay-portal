@@ -84,12 +84,16 @@
 
 					[#assign productDescription = stringUtil.shorten(htmlUtil.stripHtml(product.description!""), 140, "...") /]
 
-					[#assign productIcon = getSpecificationValue("product-icon", "liferay_waffle") /]
+					[#assign productImage = product.urlImage!"" /]
+
+					[#if productImage?contains("/o/")]
+						[#assign productImage = "/o/" + productImage?keep_after("/o/") /]
+					[/#if]
 
 					<a class="app-card d-flex flex-column mb-0 one-card position-relative publisher-profile-app-card text-dark text-decoration-none" href="/p/${product.slug}" target="_self">
 						<div class="card-image-title-container d-flex">
 							<div class="image-container mr-2 rounded">
-								<img alt="${product.name}" class="app-search-image" draggable="false" height="48" lazy="true" src="/documents/d${themeDisplay.getScopeGroup().getFriendlyURL()}/${productIcon}-svg" width="48" />
+								<img alt="${product.name}" class="app-search-image" draggable="false" height="48" lazy="true" src="${productImage}" width="48" />
 							</div>
 
 							<div class="d-flex flex-column w-100">
