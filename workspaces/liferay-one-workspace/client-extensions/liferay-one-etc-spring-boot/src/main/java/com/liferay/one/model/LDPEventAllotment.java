@@ -13,13 +13,16 @@ import java.util.Objects;
 /**
  * The number of Liferay Data Platform events a project is entitled to, rolled
  * up from its <code>events</code> and <code>events-add-on-bucket</code>
- * entitlements.
+ * entitlements. An add-on bucket entitlement counts buckets, so its quantity
+ * is multiplied by the bucket size the usage definition declares.
  *
  * @author Drew Brokke
  */
 public class LDPEventAllotment {
 
-	public LDPEventAllotment(List<Entitlement> entitlements) {
+	public LDPEventAllotment(
+		List<Entitlement> entitlements, long overageBucketSize) {
+
 		long addOnBucketCount = 0;
 		long baseQuantity = 0;
 		boolean unlimited = false;
@@ -63,6 +66,8 @@ public class LDPEventAllotment {
 			}
 		}
 
+		_overageBucketSize = overageBucketSize;
+
 		_addOnBucketCount = addOnBucketCount;
 		_baseQuantity = baseQuantity;
 		_unlimited = unlimited;
@@ -73,8 +78,7 @@ public class LDPEventAllotment {
 	}
 
 	public long getAddOnQuantity() {
-		return _addOnBucketCount *
-			EntitlementConstants.QUANTITY_EVENTS_ADD_ON_BUCKET;
+		return _addOnBucketCount * _overageBucketSize;
 	}
 
 	public long getBaseQuantity() {
@@ -91,6 +95,7 @@ public class LDPEventAllotment {
 
 	private final long _addOnBucketCount;
 	private final long _baseQuantity;
+	private final long _overageBucketSize;
 	private final boolean _unlimited;
 
 }

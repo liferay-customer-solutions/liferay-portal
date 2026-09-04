@@ -61,12 +61,30 @@ public class LDPEventUsageReportService {
 					EXTERNAL_REFERENCE_CODE_EVENTS_MONTHLY);
 
 		if ((usageDefinition == null) ||
-			(usageDefinition.getOverageRate() == null)) {
+			(usageDefinition.getOverageRate() == null) ||
+			!usageDefinition.hasOverageBucketSize()) {
 
 			_log.error(
-				"Unable to find an overage rate for usage definition " +
+				StringBundler.concat(
+					"Unable to find an overage bucket size and rate for usage ",
+					"definition ",
 					UsageDefinitionConstants.
-						EXTERNAL_REFERENCE_CODE_EVENTS_MONTHLY);
+						EXTERNAL_REFERENCE_CODE_EVENTS_MONTHLY));
+
+			return;
+		}
+
+		EntitlementDefinition overageEntitlementDefinition =
+			_entitlementDefinitionService.fetchOverageEntitlementDefinition(
+				usageDefinition.getUsageDefinitionId());
+
+		if (overageEntitlementDefinition == null) {
+			_log.error(
+				StringBundler.concat(
+					"Unable to find an overage entitlement definition for ",
+					"usage definition ",
+					UsageDefinitionConstants.
+						EXTERNAL_REFERENCE_CODE_EVENTS_MONTHLY));
 
 			return;
 		}
@@ -98,6 +116,7 @@ public class LDPEventUsageReportService {
 			try {
 				if (_generateUsageReport(
 						endInstant, entry.getValue(),
+						overageEntitlementDefinition,
 						projectExternalReferenceCode, startInstant,
 						usageDefinition, yearMonth)) {
 
@@ -196,12 +215,16 @@ public class LDPEventUsageReportService {
 
 	private boolean _generateUsageReport(
 			Instant endInstant, List<Entitlement> entitlements,
+			EntitlementDefinition overageEntitlementDefinition,
 			String projectExternalReferenceCode, Instant startInstant,
 			UsageDefinition usageDefinition, YearMonth yearMonth)
 		throws Exception {
 
+		long overageBucketSize = usageDefinition.getOverageBucketSize(
+		).longValue();
+
 		LDPEventAllotment ldpEventAllotment = new LDPEventAllotment(
-			entitlements);
+			entitlements, overageBucketSize);
 
 		if (ldpEventAllotment.isUnlimited()) {
 			if (_log.isInfoEnabled()) {
@@ -259,13 +282,16 @@ public class LDPEventUsageReportService {
 			_fetchContractExternalReferenceCode(entitlements), startInstant,
 			endInstant.minusMillis(1), ldpEventAllotment.getEntitledQuantity(),
 			externalReferenceCode, project,
-			_getSkuExternalReferenceCode(entitlements), usageDefinition);
+			overageEntitlementDefinition.getSkuExternalReferenceCode(),
+			usageDefinition);
 
 		if (_log.isInfoEnabled()) {
 			_log.info(
 				StringBundler.concat(
 					"Generated usage report ", externalReferenceCode, " with ",
-					usageReport.getOverageQuantity(), " overage events"));
+					usageReport.getOverageQuantity(), " overage events in ",
+					usageReport.getOverageBucketQuantity(),
+					" overage buckets"));
 		}
 
 		return true;
@@ -309,24 +335,6 @@ public class LDPEventUsageReportService {
 			"_", yearMonth.format(_yearMonthDateTimeFormatter));
 	}
 
-	private String _getSkuExternalReferenceCode(
-		List<Entitlement> entitlements) {
-
-		for (Entitlement entitlement : entitlements) {
-			EntitlementDefinition entitlementDefinition =
-				entitlement.getEntitlementDefinition();
-
-			if ((entitlementDefinition != null) &&
-				Validator.isNotNull(
-					entitlementDefinition.getSkuExternalReferenceCode())) {
-
-				return entitlementDefinition.getSkuExternalReferenceCode();
-			}
-		}
-
-		return null;
-	}
-
 	private static final String _EXTERNAL_REFERENCE_CODE_PREFIX =
 		"C_USAGE_REPORT_";
 
@@ -341,6 +349,9 @@ public class LDPEventUsageReportService {
 
 	@Autowired
 	private ContractService _contractService;
+
+	@Autowired
+	private EntitlementDefinitionService _entitlementDefinitionService;
 
 	@Autowired
 	private EntitlementService _entitlementService;

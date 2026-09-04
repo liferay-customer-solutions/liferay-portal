@@ -33,6 +33,10 @@ public class UsageReport {
 			jsonObject.optString("generatedAt"));
 		_generatorClassName = jsonObject.optString("generatorClassName");
 		_overageAmount = jsonObject.optDoubleObject("overageAmount", null);
+		_overageBucketQuantity = jsonObject.optDoubleObject(
+			"overageBucketQuantity", null);
+		_overageBucketSize = jsonObject.optDoubleObject(
+			"overageBucketSize", null);
 		_overageCurrency = jsonObject.optString("overageCurrency");
 		_overageQuantity = jsonObject.optDoubleObject("overageQuantity", null);
 		_projectId = jsonObject.optLong("r_projectToUsageReport_c_projectId");
@@ -89,6 +93,14 @@ public class UsageReport {
 
 	public Double getOverageAmount() {
 		return _overageAmount;
+	}
+
+	public Double getOverageBucketQuantity() {
+		return _overageBucketQuantity;
+	}
+
+	public Double getOverageBucketSize() {
+		return _overageBucketSize;
 	}
 
 	public String getOverageCurrency() {
@@ -161,6 +173,8 @@ public class UsageReport {
 	private final Instant _generatedAtInstant;
 	private final String _generatorClassName;
 	private final Double _overageAmount;
+	private final Double _overageBucketQuantity;
+	private final Double _overageBucketSize;
 	private final String _overageCurrency;
 	private final Double _overageQuantity;
 	private final long _projectId;

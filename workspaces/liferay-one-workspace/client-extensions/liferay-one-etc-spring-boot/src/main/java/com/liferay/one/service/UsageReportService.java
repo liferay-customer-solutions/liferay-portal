@@ -48,14 +48,6 @@ public class UsageReportService extends OneBaseService {
 		double overageQuantity = Math.max(
 			aggregateQuantity - entitledQuantity, 0);
 
-		// TODO LPD-99837: The overage amount assumes a per unit rate. Product
-		// has not yet decided whether LDP events overage is priced per event or
-		// per 200,000 event add-on bucket. Per bucket pricing would round the
-		// overage quantity up to whole buckets here before multiplying.
-
-		double overageAmount =
-			overageQuantity * usageDefinition.getOverageRate();
-
 		String reviewStatus = REVIEW_STATUS_COMPLETED;
 
 		if (overageQuantity > 0) {
@@ -65,7 +57,10 @@ public class UsageReportService extends OneBaseService {
 		return addUsageReport(
 			project.getAccountExternalReferenceCode(), aggregateQuantity,
 			contractExternalReferenceCode, dateFromInstant, dateToInstant,
-			entitledQuantity, externalReferenceCode, overageAmount,
+			entitledQuantity, externalReferenceCode,
+			usageDefinition.getOverageAmount(overageQuantity),
+			usageDefinition.getOverageBucketQuantity(overageQuantity),
+			usageDefinition.getOverageBucketSize(),
 			usageDefinition.getOverageCurrency(), overageQuantity,
 			project.getProjectId(), reviewStatus, skuExternalReferenceCode,
 			usageDefinition.getUsageDefinitionId());
@@ -96,6 +91,7 @@ public class UsageReportService extends OneBaseService {
 			String contractExternalReferenceCode, Instant dateFromInstant,
 			Instant dateToInstant, double entitledQuantity,
 			String externalReferenceCode, double overageAmount,
+			double overageBucketQuantity, Double overageBucketSize,
 			String overageCurrency, double overageQuantity, long projectId,
 			String reviewStatus, String skuExternalReferenceCode,
 			long usageDefinitionId)
@@ -126,6 +122,10 @@ public class UsageReportService extends OneBaseService {
 			"generatorClassName", UsageReportService.class.getName()
 		).put(
 			"overageAmount", overageAmount
+		).put(
+			"overageBucketQuantity", overageBucketQuantity
+		).put(
+			"overageBucketSize", overageBucketSize
 		).put(
 			"overageCurrency", overageCurrency
 		).put(
