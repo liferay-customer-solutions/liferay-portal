@@ -1,0 +1,74 @@
+{
+	admin off
+	auto_https off
+}
+
+# Routing only. Every response body is a JSON file that generate-fixtures.sh
+# writes during the image build, so the numbers live in one editable place --
+# the data block at the top of that script -- rather than inline here.
+
+:80 {
+	log {
+		output stdout
+		format console
+	}
+
+	header Metadata-Flavor Google
+
+	root * /etc/gcf-mock
+
+	@identity path /computeMetadata/v1/instance/service-accounts/default/identity
+
+	handle @identity {
+		respond "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Im1vY2sifQ.eyJhdWQiOiJodHRwOi8vZ2NmLW1vY2svbGRwX21ldHJpY3NfYXBpIiwiYXpwIjoibW9jayIsImVtYWlsIjoiZ2NmLW1vY2tAbGlmZXJheS1vbmUuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJleHAiOjE4OTM0NTYwMDAsImlhdCI6MTc1NjY4NDgwMCwiaXNzIjoiaHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tIiwic3ViIjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwIn0.bW9jay1zaWduYXR1cmU" 200
+	}
+
+	@token path /computeMetadata/v1/instance/service-accounts/default/token
+
+	handle @token {
+		header Content-Type application/json
+		respond `{"access_token": "mock-access-token", "expires_in": 3599, "token_type": "Bearer"}` 200
+	}
+
+	@serviceAccounts path /computeMetadata/v1/instance/service-accounts/*
+
+	handle @serviceAccounts {
+		header Content-Type application/json
+		respond `{"default": {"aliases": ["default"], "email": "gcf-mock@liferay-one.iam.gserviceaccount.com", "scopes": ["https://www.googleapis.com/auth/cloud-platform"]}}` 200
+	}
+
+	@projectId path /computeMetadata/v1/project/project-id
+
+	handle @projectId {
+		respond "liferay-one-mock" 200
+	}
+
+	@eventHistory path_regexp ^/ldp_metrics_api/api/v1/projects/[^/]+/ldp/usage/event-history$
+
+	handle @eventHistory {
+		header Content-Type application/json
+		rewrite * /event-history.json
+		file_server
+	}
+
+	@eventSummary path_regexp ^/ldp_metrics_api/api/v1/projects/[^/]+/ldp/usage/event-summary$
+
+	handle @eventSummary {
+		header Content-Type application/json
+		rewrite * /event-summary-{http.request.uri.query.startDate}.json
+		try_files {path} /event-summary-empty.json
+		file_server
+	}
+
+	@usage path_regexp ^/ldp_metrics_api/api/v1/projects/[^/]+/ldp/usage$
+
+	handle @usage {
+		header Content-Type application/json
+		rewrite * /usage.json
+		file_server
+	}
+
+	handle {
+		respond "gcf-mock" 200
+	}
+}

@@ -3,8 +3,7 @@
 		"className": "com.liferay.headless.commerce.admin.catalog.dto.v1_0.Currency",
 		"parameters": {
 			"containsHeaders": "true",
-			"createStrategy": "UPSERT",
-			"onErrorFail": "false",
+			"createStrategy": "INSERT",
 			"taskItemDelegateName": "DEFAULT",
 			"updateStrategy": "PARTIAL_UPDATE"
 		}
@@ -12,82 +11,11 @@
 	"items": [
 		{
 			"active": true,
-			"code": "AUD",
-			"externalReferenceCode": "AUD",
-			"name": {
-				"en_US": "Australian Dollar"
-			},
-			"primary": false,
-			"rate": 1.0
-		},
-		{
-			"active": true,
-			"code": "BRL",
-			"externalReferenceCode": "BRL",
-			"name": {
-				"en_US": "Brazilian Real"
-			},
-			"primary": false,
-			"rate": 1.0
-		},
-		{
-			"active": true,
-			"code": "EUR",
-			"externalReferenceCode": "EUR",
-			"name": {
-				"en_US": "Euro"
-			},
-			"primary": false,
-			"rate": 1.0
-		},
-		{
-			"active": true,
-			"code": "GBP",
-			"externalReferenceCode": "GBP",
-			"name": {
-				"en_US": "British Pound"
-			},
-			"primary": false,
-			"rate": 1.0
-		},
-		{
-			"active": true,
-			"code": "INR",
-			"externalReferenceCode": "INR",
-			"name": {
-				"en_US": "Indian Rupee"
-			},
-			"primary": false,
-			"rate": 1.0
-		},
-		{
-			"active": true,
-			"code": "JPY",
-			"externalReferenceCode": "JPY",
-			"name": {
-				"en_US": "Japanese Yen"
-			},
-			"primary": false,
-			"rate": 1.0
-		},
-		{
-			"active": true,
 			"code": "SGD",
 			"externalReferenceCode": "SGD",
 			"name": {
 				"en_US": "Singapore Dollar"
 			},
-			"primary": false,
-			"rate": 1.0
-		},
-		{
-			"active": true,
-			"code": "USD",
-			"externalReferenceCode": "USD",
-			"name": {
-				"en_US": "US Dollar"
-			},
-			"primary": true,
 			"rate": 1.0
 		}
 	]

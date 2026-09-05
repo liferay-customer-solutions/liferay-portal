@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 
 import java.util.Arrays;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -208,6 +209,40 @@ public class ProjectRestControllerTest {
 	}
 
 	@Test
+	public void testGetUsageEventHistoryForwardsTheRequestedDatesUnchanged()
+		throws Exception {
+
+		TimeZone timeZone = TimeZone.getDefault();
+
+		// A day boundary resolved in the JVM's zone rather than UTC shifts the
+		// forwarded date by one. The zone has to sit behind UTC for that to
+		// show: converting a UTC start of day into a zone ahead of it lands on
+		// the same date and hides the bug.
+
+		TimeZone.setDefault(TimeZone.getTimeZone("Pacific/Midway"));
+
+		try {
+			_setUpProductName(_PRODUCT_NAME_LDP);
+
+			_setUpEntitlements(
+				_createEntitlement(1, null, "events", 1000000.0));
+
+			_getUsageEventHistory(
+				_END_DATE, "month", _START_DATE_PREVIOUS_MONTH);
+
+			Mockito.verify(
+				_googleCloudFunctionService
+			).fetchLDPProjectEventHistory(
+				_END_DATE, "month", _PROJECT_EXTERNAL_REFERENCE_CODE,
+				_START_DATE_PREVIOUS_MONTH
+			);
+		}
+		finally {
+			TimeZone.setDefault(timeZone);
+		}
+	}
+
+	@Test
 	public void testGetUsageEventHistoryRejectsInvalidGranularity()
 		throws Exception {
 
@@ -286,6 +321,52 @@ public class ProjectRestControllerTest {
 
 		Assertions.assertFalse(
 			jsonObject.has(LDPEventUsageStrategy.FIELD_EVENT_SUMMARY));
+	}
+
+	@Test
+	public void testGetUsageEventSummaryAcceptsARangeOfExactlyOneDay()
+		throws Exception {
+
+		_setUpProductName(_PRODUCT_NAME_LDP);
+
+		_setUpEntitlements(_createEntitlement(1, null, "events", 1000000.0));
+
+		_getUsageEventSummary(_END_DATE, _END_DATE);
+
+		// An end date the range treats as exclusive would leave a single day
+		// empty, so the same date on both sides has to be a valid request.
+
+		Mockito.verify(
+			_googleCloudFunctionService
+		).fetchLDPProjectEventSummary(
+			_END_DATE, _PROJECT_EXTERNAL_REFERENCE_CODE, _END_DATE
+		);
+	}
+
+	@Test
+	public void testGetUsageEventSummaryAcceptsTheMaximumRange()
+		throws Exception {
+
+		_setUpProductName(_PRODUCT_NAME_LDP);
+
+		_setUpEntitlements(_createEntitlement(1, null, "events", 1000000.0));
+
+		// Ten years to the day is the documented limit, so the bound itself is
+		// allowed and only the day after it is rejected.
+
+		_getUsageEventSummary("2036-06-01", _START_DATE_PREVIOUS_MONTH);
+
+		Mockito.verify(
+			_googleCloudFunctionService
+		).fetchLDPProjectEventSummary(
+			"2036-06-01", _PROJECT_EXTERNAL_REFERENCE_CODE,
+			_START_DATE_PREVIOUS_MONTH
+		);
+
+		Assertions.assertThrows(
+			InvalidUsageParameterException.class,
+			() -> _getUsageEventSummary(
+				"2036-06-02", _START_DATE_PREVIOUS_MONTH));
 	}
 
 	@Test

@@ -1,0 +1,24 @@
+{
+	"cpu": 0.1,
+	"deploy": false,
+	"id": "__PROJECT_ID__",
+	"kind": "Deployment",
+	"livenessProbe": {
+		"httpGet": {
+			"path": "/",
+			"port": 80
+		}
+	},
+	"loadBalancer": {
+		"targetPort": 80
+	},
+	"memory": 64,
+	"readinessProbe": {
+		"httpGet": {
+			"path": "/",
+			"port": 80
+		},
+		"initialDelaySeconds": 2
+	},
+	"scale": 1
+}
